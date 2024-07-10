@@ -2,6 +2,7 @@ export type Colors = {
     primary: string;
     secondary: string;
     secondaryLighter: string;
+    tertiary: string;
     error: string;
     warning: string;
     info: string;
@@ -16,6 +17,7 @@ export type Colors = {
     primary: '#ff9800',
     secondary: '#9e9e9e', 
     secondaryLighter: '#f0f0f0', 
+    tertiary: '#ffffff',
     error: '#b00020',
     warning: '#fbc02d',
     info: '#2196f3',
@@ -23,7 +25,7 @@ export type Colors = {
     background: '#ffffff',
     surface: '#f5f5f5',
     textPrimary: '#000000',
-    textSecondary: '#757575',
+    textSecondary: '#ffffff',
   };
   
   export default colors;

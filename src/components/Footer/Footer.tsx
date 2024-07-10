@@ -5,7 +5,7 @@ import colors from "../../utils/colors";
 
 const FooterContainer = styled(Box)(({ theme }) => ({
   backgroundColor: colors.primary,
-  color: "#fff",
+  color: colors.textSecondary,
   padding: theme.spacing(2),
   textAlign: "center",
 }));

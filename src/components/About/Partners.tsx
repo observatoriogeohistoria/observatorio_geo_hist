@@ -1,6 +1,15 @@
 import React from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import { styled } from "@mui/system";
+import ufuLogo from "../../assets/about/partners/ufu.png";
+import fapemigLogo from "../../assets/about/partners/fapemig.png";
+import cnpqLogo from "../../assets/about/partners/cnpq.png";
+import capesLogo from "../../assets/about/partners/capes.png";
+import facedLogo from "../../assets/about/partners/faced.png";
+import ppgedLogo from "../../assets/about/partners/ppged.png";
+import proppLogo from "../../assets/about/partners/propp.png";
+import proexcLogo from "../../assets/about/partners/proexc.png";
+import colors from "../../utils/colors";
 
 const Section = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -15,29 +24,25 @@ const Image = styled("img")(({ theme }) => ({
 
 const Partners: React.FC = () => {
   const partners = [
-    { name: "UFU", logo: "ufu.png" },
-    { name: "FAPEMIG", logo: "fapemig.png" },
-    { name: "CNPq", logo: "cnpq.png" },
-    { name: "CAPES", logo: "capes.png" },
-    { name: "FACED", logo: "faced.png" },
-    { name: "PPGED", logo: "ppged.png" },
-    { name: "ProPP", logo: "propp.png" },
-    { name: "PROEXC", logo: "proexc.png" },
+    { name: "UFU", logo: ufuLogo },
+    { name: "FAPEMIG", logo: fapemigLogo },
+    { name: "CNPq", logo: cnpqLogo },
+    { name: "CAPES", logo: capesLogo },
+    { name: "FACED", logo: facedLogo },
+    { name: "PPGED", logo: ppgedLogo },
+    { name: "ProPP", logo: proppLogo },
+    { name: "PROEXC", logo: proexcLogo },
   ];
 
   return (
     <Section>
       <Typography variant="h3">PARCEIROS</Typography>
       <Grid container spacing={2} justifyContent="center">
-        {partners.map((partner, index) => {
-          const image = `../../assets/about/partners/capes.png`;
-
-          return (
-            <Grid item key={index} xs={12} sm={6} md={4}>
-              <Image src={image} alt={partner.name} />
-            </Grid>
-          );
-        })}
+        {partners.map((partner, index) => (
+          <Grid item key={index} xs={12} sm={6} md={4}>
+            <Image src={partner.logo} alt={partner.name} />
+          </Grid>
+        ))}
       </Grid>
     </Section>
   );

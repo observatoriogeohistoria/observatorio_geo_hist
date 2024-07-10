@@ -3,22 +3,25 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import WhoWeAreImage from "../../assets/about/whoe-we-are.png";
+import colors from "../../utils/colors";
 
 const SectionWithBackground = styled(Box)(({ theme }) => ({
   backgroundImage: `url(${WhoWeAreImage})`,
   backgroundSize: "cover",
   backgroundPosition: "center",
-  color: "#fff",
+  color: colors.textSecondary,
   padding: theme.spacing(4),
   textAlign: "center",
   minHeight: "60vh",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
 }));
 
 const Text = styled(Typography)(({ theme }) => ({
-  margin: theme.spacing(2, 0),
+  margin: "32px auto",
   maxWidth: "800px",
-  marginLeft: "auto",
-  marginRight: "auto",
 }));
 
 const WhoWeAre: React.FC = () => {
