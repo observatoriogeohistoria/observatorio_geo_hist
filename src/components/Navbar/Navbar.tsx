@@ -1,103 +1,84 @@
-import { AppBar, Toolbar, Button, Box } from "@mui/material";
+import React, { useState } from "react";
 import { styled } from "@mui/system";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import LogoImage from "../../assets/logo.png";
+import { navItems } from "./NavItems";
+import Dropdown from "../Dropdown/Dropdown";
 import colors from "../../utils/colors";
-import { NavLink } from "react-router-dom";
-import DropdownMenu from "../DropdownMenu/DropdownMenu";
+import Logo from "../../assets/logo.png";
 
-const NavbarContainer = styled(AppBar)(({ theme }) => ({
+const Header = styled("header")({
+  width: "100%",
+  height: "144px",
   backgroundColor: colors.background,
+  position: "sticky",
+  top: 0,
+});
+
+const NavbarContainer = styled("div")({
+  width: "60%",
+  height: "100%",
+  margin: "0 auto",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
+const NavbarLogo = styled("img")(({ theme }) => ({
+  width: "100%",
+  maxWidth: "400px",
+  margin: theme.spacing(2, 0),
 }));
 
-const Logo = styled("img")(({ theme }) => ({
-  height: 96,
-  marginRight: theme.spacing(2),
-}));
+const Menus = styled("ul")({
+  display: "flex",
+  alignItems: "center",
+  listStyle: "none",
+});
 
-const SocialButton = styled(Button)(({ theme }) => ({
-  color: colors.secondary,
-  fontSize: "40px",
+const MenuItem = styled("div")({
+  position: "relative",
+  borderRadius: "4px",
+
   "&:hover": {
-    backgroundColor: colors.secondaryLighter,
+    color: colors.tertiary,
+    backgroundColor: colors.primary,
+    cursor: "pointer",
   },
-}));
+});
 
-const NavLinkStyled = styled(NavLink)(({ theme }) => ({
-  color: colors.secondary,
-  textDecoration: "none",
-  marginRight: theme.spacing(2),
-  "&.active": {
-    color: colors.primary,
-    fontWeight: "bold",
-  },
-}));
+const MenuLink = styled("div")({
+  width: "100%",
+  fontSize: "2rem",
+  padding: "8px 16px",
+  cursor: "pointer",
+});
 
 const Navbar = () => {
-  const historySubsections = [
-    { path: "publicacoes", label: "Publicações" },
-    { path: "biblioteca", label: "Biblioteca" },
-  ];
-
-  const geographySubsections = [
-    { path: "pesquisas", label: "Pesquisas" },
-    { path: "recursos", label: "Recursos" },
-  ];
+  const [dropdown, setDropdown] = useState<number | null>(null);
 
   return (
-    <NavbarContainer position="static">
-      <Toolbar>
-        <Logo src={LogoImage} alt="Logo" />
-        <Box display="flex" justifyContent="center" flexGrow={1}>
-          <Box
-            sx={{
-              margin: "0 48px",
-            }}
-          >
-            <NavLinkStyled to="/" end>
-              {({ isActive }) => (
-                <div className={isActive ? "active" : ""}>SOBRE</div>
-              )}
-            </NavLinkStyled>
-          </Box>
-          <DropdownMenu
-            section="historia"
-            label="HISTÓRIA"
-            subsections={historySubsections}
-          />
-          <DropdownMenu
-            section="geografia"
-            label="GEOGRAFIA"
-            subsections={geographySubsections}
-          />
-        </Box>
-        <Box display="flex" justifyContent="flex-end">
-          <SocialButton
-            aria-label="Instagram"
-            href="https://www.instagram.com"
-            rel="noopener noreferrer"
-          >
-            <InstagramIcon fontSize="inherit" />
-          </SocialButton>
-          <SocialButton
-            aria-label="Facebook"
-            href="https://www.facebook.com"
-            rel="noopener noreferrer"
-          >
-            <FacebookIcon fontSize="inherit" />
-          </SocialButton>
-          <SocialButton
-            aria-label="WhatsApp"
-            href="https://wa.me/your-number"
-            rel="noopener noreferrer"
-          >
-            <WhatsAppIcon fontSize="inherit" />
-          </SocialButton>
-        </Box>
-      </Toolbar>
-    </NavbarContainer>
+    <>
+      <Header>
+        <NavbarContainer>
+          <NavbarLogo src={Logo} alt="Logo" />
+          <Menus>
+            {navItems.map((item, index) => {
+              return (
+                <MenuItem
+                  key={item.id}
+                  onMouseEnter={() => setDropdown(item.id)}
+                  onMouseLeave={() => setDropdown(null)}
+                >
+                  <MenuLink>{item.title}</MenuLink>
+                  {dropdown === item.id && (
+                    <Dropdown submenuItems={item.subMenu ?? []} />
+                  )}
+                </MenuItem>
+              );
+            })}
+          </Menus>
+        </NavbarContainer>
+      </Header>
+    </>
   );
 };
 

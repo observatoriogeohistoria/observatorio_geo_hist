@@ -9,7 +9,6 @@ import facedLogo from "../../assets/about/partners/faced.png";
 import ppgedLogo from "../../assets/about/partners/ppged.png";
 import proppLogo from "../../assets/about/partners/propp.png";
 import proexcLogo from "../../assets/about/partners/proexc.png";
-import colors from "../../utils/colors";
 
 const Section = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
