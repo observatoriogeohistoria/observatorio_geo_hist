@@ -1,9 +1,9 @@
-import React from "react";
 import { Box } from "@mui/material";
-import WhoWeAre from "../components/About/WhoWeAre";
+import React from "react";
 import OurHistory from "../components/About/OurHistory";
-import Team from "../components/About/Team";
 import Partners from "../components/About/Partners";
+import Team from "../components/About/Team";
+import WhoWeAre from "../components/About/WhoWeAre";
 
 const About: React.FC = () => {
   return (

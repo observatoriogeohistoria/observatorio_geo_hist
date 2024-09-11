@@ -1,33 +1,52 @@
-// src/components/QuemSomos.tsx
-import React from "react";
 import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import WhoWeAreImage from "../../assets/about/whoe-we-are.png";
-import colors from "../../utils/colors";
+import React from "react";
+import WhoWeAreImage from "../../assets/about/who-we-are.png";
 
-const SectionWithBackground = styled(Box)(({ theme }) => ({
-  backgroundImage: `url(${WhoWeAreImage})`,
+const Section = styled(Box)(({ theme }) => ({
+  height: `calc(100vh - 144px)`,
+
   backgroundSize: "cover",
   backgroundPosition: "center",
-  color: colors.textSecondary,
-  padding: theme.spacing(4),
-  textAlign: "center",
-  minHeight: "60vh",
+
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
+
+  textAlign: "center",
+
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: `url(${WhoWeAreImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    opacity: 0.4,
+    zIndex: -1,
+  },
+}));
+
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.contrastText,
 }));
 
 const Text = styled(Typography)(({ theme }) => ({
-  margin: "32px auto",
+  margin: `${theme.spacing(4)} auto`,
   maxWidth: "800px",
+  color: theme.palette.secondary.main,
+  fontWeight: (theme.typography as any).fontWeightMedium,
+  textAlign: "justify",
 }));
 
 const WhoWeAre: React.FC = () => {
   return (
-    <SectionWithBackground>
-      <Typography variant="h3">QUEM SOMOS</Typography>
+    <Section id="WhoWeAre">
+      <CustomTypography variant="h2">QUEM SOMOS</CustomTypography>
       <Text variant="body1">
         O Observatório de Ensino de História e Geografia é um espaço digital que
         possibilita o acesso, compartilhamento, a colaboração e a produção de
@@ -42,7 +61,7 @@ const WhoWeAre: React.FC = () => {
         professores e profissionais que atuam no campo do ensino de História,
         Geografia e áreas afins.
       </Text>
-    </SectionWithBackground>
+    </Section>
   );
 };
 

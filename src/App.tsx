@@ -1,10 +1,11 @@
-import { Box, styled } from "@mui/material";
+import { Box, styled, ThemeProvider } from "@mui/material";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import About from "./pages/About";
-import History from "./pages/History";
 import Geography from "./pages/Geograph";
+import History from "./pages/History";
+import { theme } from "./utils/theme";
 
 const AppContainer = styled(Box)({
   display: "flex",
@@ -20,19 +21,21 @@ const Content = styled(Box)({
 
 function App() {
   return (
-    <Router>
-      <AppContainer>
-        <Navbar />
-        <Content>
-          <Routes>
-            <Route path="/" element={<About />} />
-            <Route path="/historia" element={<History />} />
-            <Route path="/geografia" element={<Geography />} />
-          </Routes>
-        </Content>
-        <Footer />
-      </AppContainer>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <AppContainer>
+          <Navbar />
+          <Content>
+            <Routes>
+              <Route path="/" element={<About />} />
+              <Route path="/historia" element={<History />} />
+              <Route path="/geografia" element={<Geography />} />
+            </Routes>
+          </Content>
+          <Footer />
+        </AppContainer>
+      </Router>
+    </ThemeProvider>
   );
 }
 

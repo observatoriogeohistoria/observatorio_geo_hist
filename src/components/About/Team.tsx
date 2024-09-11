@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import React from "react";
 
 const Section = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -14,7 +14,7 @@ const Team: React.FC = () => {
   ];
 
   return (
-    <Section>
+    <Section id="Team">
       <Typography variant="h3">EQUIPE</Typography>
       <Grid container spacing={2} justifyContent="center">
         {teamMembers.map((member, index) => (

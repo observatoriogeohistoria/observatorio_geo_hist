@@ -1,24 +1,37 @@
-import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import ufuLogo from "../../assets/about/partners/ufu.png";
-import fapemigLogo from "../../assets/about/partners/fapemig.png";
-import cnpqLogo from "../../assets/about/partners/cnpq.png";
+import React from "react";
 import capesLogo from "../../assets/about/partners/capes.png";
+import cnpqLogo from "../../assets/about/partners/cnpq.png";
 import facedLogo from "../../assets/about/partners/faced.png";
+import fapemigLogo from "../../assets/about/partners/fapemig.png";
 import ppgedLogo from "../../assets/about/partners/ppged.png";
-import proppLogo from "../../assets/about/partners/propp.png";
 import proexcLogo from "../../assets/about/partners/proexc.png";
+import proppLogo from "../../assets/about/partners/propp.png";
+import ufuLogo from "../../assets/about/partners/ufu.png";
 
-const Section = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(4),
+const Section = styled("div")(({ theme }) => ({
   textAlign: "center",
 }));
 
+const CardsContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: theme.spacing(4),
+  margin: `${theme.spacing(8)} auto`,
+}));
+
+const Card = styled("div")(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderRadius: "4px",
+  backgroundColor: theme.palette.background.default,
+  boxShadow: "0 0 8px rgba(0, 0, 0, 0.1)",
+}));
+
 const Image = styled("img")(({ theme }) => ({
-  width: "100%",
-  maxWidth: "200px",
-  margin: theme.spacing(2, 0),
+  width: "200px",
 }));
 
 const Partners: React.FC = () => {
@@ -34,15 +47,15 @@ const Partners: React.FC = () => {
   ];
 
   return (
-    <Section>
+    <Section id="Partners">
       <Typography variant="h3">PARCEIROS</Typography>
-      <Grid container spacing={2} justifyContent="center">
+      <CardsContainer>
         {partners.map((partner, index) => (
-          <Grid item key={index} xs={12} sm={6} md={4}>
+          <Card key={index}>
             <Image src={partner.logo} alt={partner.name} />
-          </Grid>
+          </Card>
         ))}
-      </Grid>
+      </CardsContainer>
     </Section>
   );
 };

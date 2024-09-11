@@ -14,22 +14,22 @@ export const navItems: NavItem[] = [
       {
         id: 1,
         title: "Quem Somos",
-        path: "/WhoWeAre",
+        path: "#WhoWeAre",
       },
       {
         id: 2,
         title: "Nossa História",
-        path: "/OurHistory",
+        path: "#OurHistory",
       },
       {
         id: 3,
         title: "Equipe",
-        path: "/Team",
+        path: "#Team",
       },
       {
         id: 4,
         title: "Parceiros",
-        path: "/Partners",
+        path: "#Partners",
       },
     ],
   },

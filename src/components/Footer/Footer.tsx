@@ -1,11 +1,10 @@
-import React from "react";
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import colors from "../../utils/colors";
+import React from "react";
 
 const FooterContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: colors.primary,
-  color: colors.textSecondary,
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
   padding: theme.spacing(2),
   textAlign: "center",
 }));
