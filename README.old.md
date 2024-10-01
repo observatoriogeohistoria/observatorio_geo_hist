@@ -1,1 +1,0 @@
-# observatorio-geo-hist
