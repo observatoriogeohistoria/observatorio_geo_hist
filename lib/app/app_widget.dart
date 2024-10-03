@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:observatorio_geo_hist/app/app_router.dart';
 
 class AppWidget extends StatefulWidget {
   const AppWidget({super.key});
@@ -19,20 +19,16 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
-    Modular.to.addListener(navigationListener);
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   Future<void> dispose() async {
-    Modular.to.removeListener(navigationListener);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  void navigationListener() {
-    // Modular.get<LoggerService>().log('[NAV]: ${Modular.to.path}');
-  }
+  void navigationListener() {}
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +41,16 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         }
       },
       child: MaterialApp.router(
-        title: 'Observatório de História e Geografia',
-        debugShowCheckedModeBanner: false,
-        scrollBehavior: const CustomScrollBehavior(),
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('pt', 'BR')],
-        routerConfig: Modular.routerConfig,
-      ),
+          title: 'Observatório de História e Geografia',
+          debugShowCheckedModeBanner: false,
+          scrollBehavior: const CustomScrollBehavior(),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('pt', 'BR')],
+          routerConfig: AppRouter.router),
     );
   }
 }

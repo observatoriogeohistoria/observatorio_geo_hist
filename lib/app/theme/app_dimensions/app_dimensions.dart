@@ -10,7 +10,7 @@ class AppDimensions {
     large: 24.0,
   );
 
-  DimensionStyle borderRadius = const DimensionStyle._(
+  DimensionStyle radius = const DimensionStyle._(
     small: 4.0,
     medium: 8.0,
     large: 12.0,

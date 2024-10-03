@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:observatorio_geo_hist/app/app_module.dart';
+import 'package:get_it/get_it.dart';
+import 'package:observatorio_geo_hist/app/app_setup.dart';
 import 'package:observatorio_geo_hist/app/app_widget.dart';
 
-Future<void> main() async {
+final GetIt locator = GetIt.instance;
+
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(
-    ModularApp(
-      module: AppModule(),
-      child: const AppWidget(),
-    ),
-  );
+  AppSetup.setup();
+  runApp(const AppWidget());
 }
