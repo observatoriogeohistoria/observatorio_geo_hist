@@ -1,9 +1,10 @@
 part of '../app_theme.dart';
 
 class AppTypography {
-  const AppTypography._();
+  AppTypography._();
+  static AppTypography get instance => AppTypography._();
 
-  static const TypographyStyle headline = TypographyStyle._(
+  TypographyStyle headline = const TypographyStyle._(
     small: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w400,
@@ -21,7 +22,7 @@ class AppTypography {
     ),
   );
 
-  static const TypographyStyle body = TypographyStyle._(
+  TypographyStyle body = const TypographyStyle._(
     small: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,

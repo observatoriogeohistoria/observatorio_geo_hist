@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBfgmUiYcZCC5mOih-h0LM2-m664nL5K5E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>415910016951</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.observatorioGeoHist</string>
+	<key>PROJECT_ID</key>
+	<string>observatorio-geo-hist</string>
+	<key>STORAGE_BUCKET</key>
+	<string>observatorio-geo-hist.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:415910016951:ios:d0d25de6411f04de4e9a32</string>
+</dict>
+</plist>
