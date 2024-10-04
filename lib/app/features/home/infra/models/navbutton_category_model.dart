@@ -8,7 +8,7 @@ class NavButtonCategoryModel extends Equatable {
     this.collaborateOption = false,
   });
 
-  final int key;
+  final String key;
   final String title;
   final String backgroundImgUrl;
   final bool collaborateOption;
@@ -18,7 +18,7 @@ class NavButtonCategoryModel extends Equatable {
 
   factory NavButtonCategoryModel.fromJson(Map<String, dynamic> json) {
     return NavButtonCategoryModel(
-      key: json['key'] as int,
+      key: json['key'] as String,
       title: json['title'] as String,
       backgroundImgUrl: json['backgroundImgUrl'] as String,
       collaborateOption: json['collaborateOption'] as bool,
@@ -35,7 +35,7 @@ class NavButtonCategoryModel extends Equatable {
   }
 
   NavButtonCategoryModel copyWith({
-    int? key,
+    String? key,
     String? title,
     String? backgroundImgUrl,
     bool? collaborateOption,

@@ -12,18 +12,20 @@ abstract class HomeStoreBase with Store {
   HomeStoreBase(this._repository);
 
   @observable
-  List<NavButtonCategoryModel> historyCategories = [];
+  ObservableList<NavButtonCategoryModel> historyCategories = ObservableList();
 
   @observable
-  List<NavButtonCategoryModel> geographyCategories = [];
+  ObservableList<NavButtonCategoryModel> geographyCategories = ObservableList();
 
   @action
   Future<void> fetchHistoryCategories() async {
     final result = await _repository.fetchHistoryCategories();
 
     result.fold(
-      (failure) => print(failure),
-      (categories) => historyCategories = categories,
+      (error) => print(error),
+      (categories) {
+        historyCategories = categories.asObservable();
+      },
     );
   }
 
@@ -32,8 +34,10 @@ abstract class HomeStoreBase with Store {
     final result = await _repository.fetchGeographyCategories();
 
     result.fold(
-      (failure) => print(failure),
-      (categories) => geographyCategories = categories,
+      (error) => print(error),
+      (categories) {
+        geographyCategories = categories.asObservable();
+      },
     );
   }
 }

@@ -13,13 +13,13 @@ mixin _$HomeStore on HomeStoreBase, Store {
       Atom(name: 'HomeStoreBase.historyCategories', context: context);
 
   @override
-  List<NavButtonCategoryModel> get historyCategories {
+  ObservableList<NavButtonCategoryModel> get historyCategories {
     _$historyCategoriesAtom.reportRead();
     return super.historyCategories;
   }
 
   @override
-  set historyCategories(List<NavButtonCategoryModel> value) {
+  set historyCategories(ObservableList<NavButtonCategoryModel> value) {
     _$historyCategoriesAtom.reportWrite(value, super.historyCategories, () {
       super.historyCategories = value;
     });
@@ -29,13 +29,13 @@ mixin _$HomeStore on HomeStoreBase, Store {
       Atom(name: 'HomeStoreBase.geographyCategories', context: context);
 
   @override
-  List<NavButtonCategoryModel> get geographyCategories {
+  ObservableList<NavButtonCategoryModel> get geographyCategories {
     _$geographyCategoriesAtom.reportRead();
     return super.geographyCategories;
   }
 
   @override
-  set geographyCategories(List<NavButtonCategoryModel> value) {
+  set geographyCategories(ObservableList<NavButtonCategoryModel> value) {
     _$geographyCategoriesAtom.reportWrite(value, super.geographyCategories, () {
       super.geographyCategories = value;
     });

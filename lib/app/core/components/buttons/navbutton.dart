@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/overlay/navbar_overlay_entry.dart';
-import 'package:observatorio_geo_hist/app/core/utils/models/navbutton_item.dart';
+import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class NavButton extends StatefulWidget {

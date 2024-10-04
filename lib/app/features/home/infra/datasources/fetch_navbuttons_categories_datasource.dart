@@ -49,7 +49,7 @@ class FetchNavButtonsCategoriesDatasourceImpl implements FetchNavButtonsCategori
 
       return categories;
     } catch (exception) {
-      _loggerService.error('Error fetching history categories: $exception');
+      _loggerService.error('Error fetching geography categories: $exception');
       throw const FetchGeographyCategoriesException();
     }
   }

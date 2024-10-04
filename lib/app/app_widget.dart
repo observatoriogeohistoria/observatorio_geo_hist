@@ -16,6 +16,7 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 

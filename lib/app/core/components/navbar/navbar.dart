@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/navbutton.dart';
-import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
+import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
-import 'package:observatorio_geo_hist/app/core/utils/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class Navbar extends StatelessWidget {
-  const Navbar({super.key});
+  const Navbar({
+    required this.options,
+    super.key,
+  });
+
+  final List<NavButtonItem> options;
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +32,16 @@ class Navbar extends StatelessWidget {
                   width: width * 0.3,
                 ),
 
-                // Navbar Options
                 Row(
-                  children: [
-                    NavButton(text: 'SOBRE', onPressed: () {}),
-                    NavButton(text: 'EXPOGEO', onPressed: () {}),
-                    NavButton(
-                      text: 'HISTÓRIA',
-                      onPressed: () {},
-                      options: [
-                        NavButtonItem(title: 'Opinião', route: AppRoutes.posts),
-                      ],
-                    ),
-                    NavButton(
-                      text: 'GEOGRAFIA',
-                      onPressed: () {},
-                      options: [
-                        NavButtonItem(title: 'Opinião', route: AppRoutes.posts),
-                      ],
-                    ),
-                  ],
+                  children: options.map((option) {
+                    return NavButton(
+                      text: option.title,
+                      onPressed: () {
+                        Navigator.pushNamed(context, option.route);
+                      },
+                      options: option.options,
+                    );
+                  }).toList(),
                 ),
               ],
             ),

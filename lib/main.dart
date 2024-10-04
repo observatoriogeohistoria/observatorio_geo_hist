@@ -1,12 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
 import 'package:observatorio_geo_hist/app/app_widget.dart';
+import 'package:observatorio_geo_hist/firebase_options.dart';
 
 final GetIt locator = GetIt.instance;
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   AppSetup.setup();
   runApp(const AppWidget());
