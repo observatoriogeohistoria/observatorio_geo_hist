@@ -12,8 +12,6 @@ abstract class GeneralState<T> extends Equatable {
     R Function()? success,
     R Function(T data)? successWithData,
   }) {
-    print(this);
-
     if (this is GeneralInitialState<T>) {
       return initial();
     } else if (this is GeneralLoadingState<T>) {

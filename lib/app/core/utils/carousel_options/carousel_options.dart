@@ -1,0 +1,13 @@
+import 'package:carousel_slider/carousel_slider.dart';
+
+CarouselOptions carouselOptions = CarouselOptions(
+  height: 100,
+  aspectRatio: 16 / 9,
+  viewportFraction: 0.3,
+  enableInfiniteScroll: true,
+  autoPlay: true,
+  autoPlayInterval: const Duration(milliseconds: 3000),
+  autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+  // enlargeCenterPage: true,
+  // enlargeFactor: 0.5,
+);

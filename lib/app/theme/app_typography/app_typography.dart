@@ -4,21 +4,23 @@ class AppTypography {
   AppTypography._();
   static AppTypography get instance => AppTypography._();
 
+  static const fontFamily = 'Dosis';
+
   TypographyStyle headline = const TypographyStyle._(
     small: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w400,
-      color: Colors.black,
+      fontFamily: fontFamily,
     ),
     medium: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.w400,
-      color: Colors.black,
+      fontFamily: fontFamily,
     ),
     large: TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.w400,
-      color: Colors.black,
+      fontSize: 48,
+      fontWeight: FontWeight.w600,
+      fontFamily: fontFamily,
     ),
   );
 
@@ -26,17 +28,17 @@ class AppTypography {
     small: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
-      color: Colors.black,
+      fontFamily: fontFamily,
     ),
     medium: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w400,
-      color: Colors.black,
+      fontFamily: fontFamily,
     ),
     large: TextStyle(
       fontSize: 18,
-      fontWeight: FontWeight.w400,
-      color: Colors.black,
+      fontWeight: FontWeight.w500,
+      fontFamily: fontFamily,
     ),
   );
 }

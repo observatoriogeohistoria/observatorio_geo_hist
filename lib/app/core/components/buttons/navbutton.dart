@@ -1,81 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/overlay/navbar_overlay_entry.dart';
-import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class NavButton extends StatefulWidget {
   const NavButton({
-    super.key,
     required this.text,
     required this.onPressed,
-    this.options,
+    required this.menuChildren,
+    super.key,
   });
 
   final String text;
-  final VoidCallback onPressed;
-  final List<NavButtonItem>? options;
+  final Function()? onPressed;
+  final List<NavButton>? menuChildren;
 
   @override
   State<NavButton> createState() => _NavButtonState();
 }
 
 class _NavButtonState extends State<NavButton> {
-  final controller = WidgetStatesController();
-  final GlobalKey _buttonKey = GlobalKey();
+  WidgetStatesController controller = WidgetStatesController();
+  GlobalKey menuKey = GlobalKey();
 
-  OverlayEntry? overlayEntry;
+  bool isMenuVisible = false;
+  bool hasMenu() => (widget.menuChildren?.isNotEmpty ?? false);
 
-  void showOverlay(BuildContext context) {
-    final renderBox = _buttonKey.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox == null) return;
+  void showMenus(BuildContext context) async {
+    final render = menuKey.currentContext!.findRenderObject() as RenderBox;
 
-    final buttonPosition = renderBox.localToGlobal(Offset.zero);
-    final buttonSize = renderBox.size;
+    setState(() => isMenuVisible = true);
 
-    overlayEntry = navbarOverlayEntry(
-      buttonPosition: buttonPosition,
-      buttonSize: buttonSize,
-      options: widget.options ?? [],
-      removeOverlay: removeOverlay,
-    );
-
-    Overlay.of(context).insert(overlayEntry!);
-  }
-
-  void removeOverlay() {
-    overlayEntry?.remove();
-    overlayEntry = null;
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        render.localToGlobal(Offset.zero).dx,
+        render.localToGlobal(Offset.zero).dy + 50,
+        double.infinity,
+        double.infinity,
+      ),
+      items: widget.menuChildren!.map((e) {
+        return PopupMenuItem(child: e);
+      }).toList(),
+    ).then((value) {
+      setState(() => isMenuVisible = false);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-      child: ValueListenableBuilder(
-        valueListenable: controller,
-        builder: (context, states, _) {
-          return ElevatedButton(
-            key: _buttonKey,
+    return Container(
+      key: menuKey,
+      padding: EdgeInsets.all(AppTheme.dimensions.space.small),
+      child: Row(
+        children: [
+          TextButton(
             statesController: controller,
-            onPressed: () {},
-            onHover: (value) {
-              if (widget.options?.isEmpty ?? true) return;
-              value ? showOverlay(context) : removeOverlay();
-            },
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(AppTheme.colors.white),
+              overlayColor: WidgetStateProperty.all(
+                !hasMenu() ? Colors.transparent : AppTheme.colors.gray.withOpacity(0.1),
+              ),
               shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+                  borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
                 ),
               ),
+              foregroundColor: WidgetStateProperty.resolveWith(
+                (states) => states.contains(WidgetState.hovered)
+                    ? AppTheme.colors.orange
+                    : AppTheme.colors.black,
+              ),
             ),
-            child: Text(
-              widget.text,
-              style: AppTheme.typography.headline.medium,
+            onPressed: () {
+              hasMenu() ? showMenus(context) : widget.onPressed?.call();
+            },
+            child: Text(widget.text),
+          ),
+          if (hasMenu())
+            Icon(
+              isMenuVisible ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+              color: AppTheme.colors.black,
             ),
-          );
-        },
+        ],
       ),
     );
   }

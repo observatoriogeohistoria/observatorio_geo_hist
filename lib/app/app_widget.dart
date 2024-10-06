@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:observatorio_geo_hist/app/app_router.dart';
+import 'package:observatorio_geo_hist/app/app_setup.dart';
+import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 
 class AppWidget extends StatefulWidget {
   const AppWidget({super.key});
@@ -13,6 +15,8 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
+  late FetchCategoriesStore fetchCategoriesStore;
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +25,10 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
     WidgetsBinding.instance.addObserver(this);
+
+    fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
+    fetchCategoriesStore.fetchHistoryCategories();
+    fetchCategoriesStore.fetchGeographyCategories();
   }
 
   @override
