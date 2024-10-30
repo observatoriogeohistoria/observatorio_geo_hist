@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/team_member_page.dart';
@@ -25,8 +24,13 @@ class AppRouter {
       GoRoute(
         path: '/posts/:area/:category',
         builder: (BuildContext context, GoRouterState state) {
-          CategoryModel category = state.extra as CategoryModel;
-          return PostsPage(category: category);
+          final area = state.pathParameters['area'] ?? 'defaultArea';
+          final categoryKey = state.pathParameters['category'] ?? 'defaultCategory';
+
+          return PostsPage(
+            area: area,
+            categoryKey: categoryKey,
+          );
         },
       ),
     ],

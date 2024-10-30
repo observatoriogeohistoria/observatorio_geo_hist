@@ -40,4 +40,9 @@ abstract class FetchCategoriesStoreBase with Store {
       },
     );
   }
+
+  CategoryModel getCategoryByAreaAndKey(String area, String key) {
+    final categories = area == 'historia' ? historyCategories : geographyCategories;
+    return categories.firstWhere((category) => category.key == key);
+  }
 }

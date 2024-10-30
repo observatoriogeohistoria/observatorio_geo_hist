@@ -41,6 +41,8 @@ dependencies:
   go_router: ^14.2.8
   carousel_slider: ^5.0.0
   url_launcher_web: ^2.3.3
+  cached_network_image: ^3.4.1
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:

@@ -85,12 +85,15 @@ class _NavbarState extends State<Navbar> {
                   return Row(
                     children: getNavButtonItens().map(
                       (option) {
-                        final hasMenu = (option.options?.isEmpty ?? true);
+                        final noOptions = (option.options?.isEmpty ?? true);
 
                         return NavButton(
                           text: option.title,
-                          onPressed: hasMenu ? () => print('HEY') : null,
-                          menuChildren: hasMenu
+                          onPressed: () {
+                            if (!noOptions) return;
+                            GoRouter.of(context).replace(option.route!);
+                          },
+                          menuChildren: noOptions
                               ? null
                               : option.options!.map(
                                   (suboption) {
