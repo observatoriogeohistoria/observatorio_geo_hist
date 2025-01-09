@@ -22,7 +22,12 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
           .where('published', isEqualTo: true)
           .get();
 
-      final docs = querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      final docs = querySnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+
       List<PostModel> posts = docs.map((member) => PostModel.fromJson(member)).toList();
 
       return posts;

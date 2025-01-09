@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/repositories/fetch_team_repository.dart';
@@ -17,9 +18,14 @@ abstract class FetchTeamStoreBase with Store {
   @action
   Future<void> fetchTeam() async {
     final result = await _repository.fetchTeam();
+
     result.fold(
       (failure) {},
-      (team) => this.team = ObservableList.of(team),
+      (team) => this.team = team.asObservable(),
     );
+  }
+
+  TeamMemberModel? getTeamMemberById(String id) {
+    return team.firstWhereOrNull((member) => member.id == id);
   }
 }

@@ -1,0 +1,92 @@
+import 'dart:convert';
+import 'dart:html' as html;
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+
+class MarkdownText extends StatelessWidget {
+  final String text;
+
+  const MarkdownText({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String formatText(String text) {
+      RegExp regExp = RegExp(r'\[(\d+)\]');
+
+      return text.replaceAllMapped(regExp, (match) {
+        int count = int.parse(match.group(1)!);
+        return '\n' * count;
+      });
+    }
+
+    String formattedText = formatText(text);
+
+    return Markdown(
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      data: formattedText,
+      styleSheet: MarkdownStyleSheet(
+        code: AppTheme.typography.body.medium.copyWith(
+          color: AppTheme.colors.orange,
+        ),
+        strong: AppTheme.typography.body.medium.copyWith(
+          color: AppTheme.colors.orange,
+        ),
+        p: AppTheme.typography.body.medium.copyWith(
+          color: AppTheme.colors.black,
+        ),
+        h1: AppTheme.typography.title.large.copyWith(
+          color: AppTheme.colors.orange,
+        ),
+        h2: AppTheme.typography.title.medium.copyWith(
+          color: AppTheme.colors.gray,
+        ),
+        h3: AppTheme.typography.title.small.copyWith(
+          color: AppTheme.colors.gray,
+        ),
+        h6: AppTheme.typography.body.medium.copyWith(
+          color: Colors.transparent,
+          height: 0.5,
+          fontSize: 0.5,
+        ),
+      ),
+      onTapLink: (text, url, title) {
+        if (url == null) return;
+        html.window.open(url, 'new tab');
+      },
+      imageBuilder: (uri, title, alt) {
+        final str = uri.toString();
+        final isSvgImage = isSvg(str);
+
+        if (str.startsWith("data:image")) {
+          try {
+            Uint8List bytes = decodeBase64Image(str);
+            return isSvgImage ? SvgPicture.memory(bytes) : Image.memory(bytes);
+          } catch (e) {
+            return const SizedBox();
+          }
+        } else {
+          return isSvgImage ? SvgPicture.network(uri.toString()) : Image.network(uri.toString());
+        }
+      },
+    );
+  }
+}
+
+bool isSvg(String base64Data) {
+  if (base64Data.startsWith("data:image/svg+xml")) return true;
+  return false;
+}
+
+Uint8List decodeBase64Image(String dataUri) {
+  final base64Data = dataUri.split(",")[1];
+  return base64Decode(base64Data);
+}

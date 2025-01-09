@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
@@ -35,24 +39,31 @@ class _HomePageState extends State<HomePage> {
           children: [
             const Navbar(),
             const WhoWeAre(),
-            Observer(builder: (context) {
-              if (fetchTeamStore.team.isEmpty) {
-                return const SizedBox.shrink();
-              }
-
-              // TODO: Remove this code
-              List<T> multiplyListItems<T>(List<T> originalList, int times) {
-                List<T> newList = [];
-                for (var item in originalList) {
-                  for (int i = 0; i < times; i++) {
-                    newList.add(item);
-                  }
+            const OurHistory(),
+            const AppDivider(),
+            Observer(
+              builder: (context) {
+                if (fetchTeamStore.team.isEmpty) {
+                  return const SizedBox.shrink();
                 }
-                return newList;
-              }
 
-              return Team(team: multiplyListItems(fetchTeamStore.team, 10));
-            }),
+                // TODO: Remove this code
+                List<T> multiplyListItems<T>(List<T> originalList, int times) {
+                  List<T> newList = [];
+                  for (var item in originalList) {
+                    for (int i = 0; i < times; i++) {
+                      newList.add(item);
+                    }
+                  }
+                  return newList;
+                }
+
+                return Team(team: multiplyListItems(fetchTeamStore.team, 10));
+              },
+            ),
+            const AppDivider(),
+            const Partners(),
+            const ContactUs(),
             const Footer(),
           ],
         ),

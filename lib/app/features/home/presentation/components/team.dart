@@ -18,18 +18,22 @@ class Team extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: AppTheme.dimensions.space.large,
         vertical: AppTheme.dimensions.space.large,
       ),
       child: Column(
         children: [
-          TitleWidget(
-            title: 'EQUIPE',
-            color: AppTheme.colors.orange,
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppTheme.dimensions.space.large,
+            ),
+            child: TitleWidget(
+              title: 'EQUIPE',
+              color: AppTheme.colors.orange,
+            ),
           ),
-          SizedBox(height: AppTheme.dimensions.space.xlarge),
+          SizedBox(height: AppTheme.dimensions.space.large),
           CarouselSlider.builder(
-            options: carouselOptions,
+            options: carouselOptions(12 / 1),
             itemCount: team.length,
             itemBuilder: (context, index, realIndex) {
               final member = team[index];
@@ -39,11 +43,12 @@ class Team extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     GoRouter.of(context).go(
-                      '/team-member/${member.name}',
+                      '/team-member/${member.id}',
                       extra: member,
                     );
                   },
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         member.name.toUpperCase(),
@@ -54,7 +59,7 @@ class Team extends StatelessWidget {
                       ),
                       Text(
                         member.role,
-                        style: AppTheme.typography.headline.medium.copyWith(
+                        style: AppTheme.typography.title.medium.copyWith(
                           color: AppTheme.colors.gray,
                         ),
                       ),

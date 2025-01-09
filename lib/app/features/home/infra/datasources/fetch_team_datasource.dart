@@ -18,7 +18,12 @@ class FetchTeamDatasourceImpl implements FetchTeamDatasource {
     try {
       QuerySnapshot querySnapshot = await _firestore.collection('team').get();
 
-      final docs = querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      final docs = querySnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+
       List<TeamMemberModel> team = docs.map((member) => TeamMemberModel.fromJson(member)).toList();
 
       return team;

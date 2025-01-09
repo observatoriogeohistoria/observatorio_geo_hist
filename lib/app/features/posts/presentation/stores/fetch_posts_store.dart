@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/infra/models/post_model.dart';
@@ -20,7 +21,11 @@ abstract class FetchPostsStoreBase with Store {
     final result = await _repository.fetchPosts(category);
     result.fold(
       (failure) {},
-      (posts) => this.posts = ObservableList.of(posts),
+      (posts) => this.posts = posts.asObservable(),
     );
+  }
+
+  PostModel? getPostById(String id) {
+    return posts.firstWhereOrNull((element) => element.id == id);
   }
 }

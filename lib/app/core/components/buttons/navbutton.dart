@@ -56,7 +56,7 @@ class _NavButtonState extends State<NavButton> {
             statesController: controller,
             style: ButtonStyle(
               overlayColor: WidgetStateProperty.all(
-                !hasMenu() ? Colors.transparent : AppTheme.colors.gray.withOpacity(0.1),
+                !hasMenu() ? Colors.transparent : AppTheme.colors.gray.withValues(alpha: 0.1),
               ),
               shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(

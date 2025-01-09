@@ -17,7 +17,7 @@ class PrimaryButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.hovered)) {
-            return AppTheme.colors.orange.withOpacity(0.8);
+            return AppTheme.colors.orange.withValues(alpha: 0.8);
           }
           return AppTheme.colors.orange;
         }),
@@ -36,7 +36,7 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         text,
-        style: AppTheme.typography.headline.medium.copyWith(
+        style: AppTheme.typography.title.medium.copyWith(
           color: AppTheme.colors.white,
         ),
       ),

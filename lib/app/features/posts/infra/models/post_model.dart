@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class PostModel extends Equatable {
   const PostModel({
+    required this.id,
     required this.title,
     required this.subtitle,
     required this.markdownContent,
@@ -10,6 +11,7 @@ class PostModel extends Equatable {
     required this.authors,
   });
 
+  final String id;
   final String title;
   final String subtitle;
   final String markdownContent;
@@ -19,6 +21,7 @@ class PostModel extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         title,
         subtitle,
         markdownContent,
@@ -29,6 +32,7 @@ class PostModel extends Equatable {
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
+      id: json['id'] as String,
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
       markdownContent: json['markdownContent'] as String,

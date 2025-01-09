@@ -1,8 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 
-CarouselOptions carouselOptions = CarouselOptions(
-  height: 100,
-  aspectRatio: 16 / 9,
+CarouselOptions carouselOptions(double aspectRatio) => CarouselOptions(
+  aspectRatio: aspectRatio,
   viewportFraction: 0.3,
   enableInfiniteScroll: true,
   autoPlay: true,

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/infra/repositories/fetch_categories_repository.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -41,8 +42,10 @@ abstract class FetchCategoriesStoreBase with Store {
     );
   }
 
-  CategoryModel getCategoryByAreaAndKey(String area, String key) {
+  CategoryModel? getCategoryByAreaAndKey(String area, String key) {
+    if (area != 'historia' && area != 'geografia') return null;
+
     final categories = area == 'historia' ? historyCategories : geographyCategories;
-    return categories.firstWhere((category) => category.key == key);
+    return categories.firstWhereOrNull((category) => category.area == area && category.key == key);
   }
 }
