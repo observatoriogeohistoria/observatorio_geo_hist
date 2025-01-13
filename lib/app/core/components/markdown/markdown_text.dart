@@ -41,7 +41,7 @@ class MarkdownText extends StatelessWidget {
           color: AppTheme.colors.orange,
         ),
         p: AppTheme.typography.body.medium.copyWith(
-          color: AppTheme.colors.black,
+          color: AppTheme.colors.darkGray,
         ),
         h1: AppTheme.typography.title.large.copyWith(
           color: AppTheme.colors.orange,

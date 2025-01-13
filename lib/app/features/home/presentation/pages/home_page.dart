@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppTheme.colors.white,
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const Navbar(),
             const WhoWeAre(),

@@ -13,10 +13,15 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: AppTheme.typography.headline.large.copyWith(
-        color: color ?? AppTheme.colors.white,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppTheme.dimensions.space.large,
+      ),
+      child: Text(
+        title,
+        style: AppTheme.typography.headline.large.copyWith(
+          color: color ?? AppTheme.colors.white,
+        ),
       ),
     );
   }

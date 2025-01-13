@@ -81,39 +81,41 @@ class _NavbarState extends State<Navbar> {
                   '${AppAssets.images}/logo.png',
                   width: width * 0.3,
                 ),
-                Observer(builder: (context) {
-                  return Row(
-                    children: getNavButtonItens().map(
-                      (option) {
-                        final noOptions = (option.options?.isEmpty ?? true);
+                Observer(
+                  builder: (context) {
+                    return Row(
+                      children: getNavButtonItens().map(
+                        (option) {
+                          final noOptions = (option.options?.isEmpty ?? true);
 
-                        return NavButton(
-                          text: option.title,
-                          onPressed: () {
-                            if (!noOptions) return;
-                            GoRouter.of(context).replace(option.route!);
-                          },
-                          menuChildren: noOptions
-                              ? null
-                              : option.options!.map(
-                                  (suboption) {
-                                    return NavButton(
-                                      text: suboption.title,
-                                      onPressed: () {
-                                        GoRouter.of(context).go(
-                                          '/posts/${suboption.category!.area}/${suboption.category!.key}',
-                                          extra: suboption.category,
-                                        );
-                                      },
-                                      menuChildren: const [],
-                                    );
-                                  },
-                                ).toList(),
-                        );
-                      },
-                    ).toList(),
-                  );
-                }),
+                          return NavButton(
+                            text: option.title,
+                            onPressed: () {
+                              if (!noOptions) return;
+                              GoRouter.of(context).replace(option.route!);
+                            },
+                            menuChildren: noOptions
+                                ? null
+                                : option.options!.map(
+                                    (suboption) {
+                                      return NavButton(
+                                        text: suboption.title,
+                                        onPressed: () {
+                                          GoRouter.of(context).go(
+                                            '/posts/${suboption.category!.area}/${suboption.category!.key}',
+                                            extra: suboption.category,
+                                          );
+                                        },
+                                        menuChildren: const [],
+                                      );
+                                    },
+                                  ).toList(),
+                          );
+                        },
+                      ).toList(),
+                    );
+                  },
+                ),
               ],
             ),
           ),

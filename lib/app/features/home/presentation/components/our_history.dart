@@ -42,7 +42,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
               Text(
                 firstText,
                 style: AppTheme.typography.body.medium.copyWith(
-                  color: AppTheme.colors.black,
+                  color: AppTheme.colors.darkGray,
                 ),
               ),
               space,
@@ -55,7 +55,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
                   Text(
                     'Foto: Antônio César Ortega',
                     style: AppTheme.typography.body.small.copyWith(
-                      color: AppTheme.colors.black,
+                      color: AppTheme.colors.darkGray,
                     ),
                   ),
                 ],
@@ -64,7 +64,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
               Text(
                 secondText,
                 style: AppTheme.typography.body.medium.copyWith(
-                  color: AppTheme.colors.black,
+                  color: AppTheme.colors.darkGray,
                 ),
               ),
             ],

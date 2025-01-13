@@ -94,7 +94,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                               member.description,
                               textAlign: TextAlign.justify,
                               style: AppTheme.typography.body.large.copyWith(
-                                color: AppTheme.colors.black,
+                                color: AppTheme.colors.darkGray,
                               ),
                             ),
                             if (member.lattesUrl.isNotEmpty)

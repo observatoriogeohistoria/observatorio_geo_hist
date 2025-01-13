@@ -9,8 +9,8 @@ class AppColors {
 
   Color amber = const Color(0xfffcb900);
   Color white = const Color(0xffffffff);
-  Color black = const Color(0xff000000);
 
-  Color lightGray = const Color.fromARGB(255, 240, 240, 240);
-  Color gray = const Color(0xffabb8c3);
+  Color lightGray = const Color(0xFFF0F0F0);
+  Color gray = const Color(0xFFABB8C3);
+  Color darkGray = const Color.fromARGB(255, 53, 53, 53);
 }
