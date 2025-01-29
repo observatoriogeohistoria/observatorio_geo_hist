@@ -4,7 +4,7 @@ class AppColors {
   AppColors._();
   static AppColors get instance => AppColors._();
 
-  Color lightOrange = const Color(0xffffa726);
+  Color lightOrange = const Color.fromARGB(255, 255, 146, 67);
   Color orange = const Color(0xffff6900);
 
   Color amber = const Color(0xfffcb900);

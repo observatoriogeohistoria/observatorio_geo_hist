@@ -13,6 +13,8 @@ class AppTextField extends StatefulWidget {
     this.maxLines = 3,
     this.keyboardType = TextInputType.text,
     this.inputFormatters = const [],
+    this.obscureText = false,
+    this.validator,
     super.key,
   });
 
@@ -25,6 +27,8 @@ class AppTextField extends StatefulWidget {
   final int? maxLines;
   final TextInputType keyboardType;
   final List<TextInputFormatter> inputFormatters;
+  final bool obscureText;
+  final String? Function(String?)? validator;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -35,17 +39,19 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: widget.controller,
       focusNode: _focusNode,
       enabled: !widget.isDisabled,
       readOnly: widget.isDisabled,
       scrollPadding: widget.scrollPadding,
       minLines: widget.minLines,
-      maxLines: widget.maxLines,
+      maxLines: widget.obscureText ? 1 : widget.maxLines,
       keyboardType: widget.keyboardType,
       inputFormatters: widget.inputFormatters,
       onTapOutside: (_) => _focusNode.unfocus(),
+      obscureText: widget.obscureText,
+      validator: widget.validator,
       decoration: InputDecoration(
         suffixIconConstraints: const BoxConstraints(
           minHeight: 32,

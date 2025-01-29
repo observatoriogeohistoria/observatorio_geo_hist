@@ -27,6 +27,8 @@ scripts:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   flutter_localizations:
     sdk: flutter
 
@@ -46,6 +48,7 @@ dependencies:
   google_fonts: ^6.2.1
   collection: ^1.18.0
   flutter_markdown: ^0.7.5
+  firebase_auth: ^5.4.1
 
 dev_dependencies:
   flutter_test:

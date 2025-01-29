@@ -50,16 +50,17 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         }
       },
       child: MaterialApp.router(
-          title: 'Observatório de História e Geografia',
-          debugShowCheckedModeBanner: false,
-          scrollBehavior: const CustomScrollBehavior(),
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [Locale('pt', 'BR')],
-          routerConfig: AppRouter.router),
+        title: 'Observatório de História e Geografia',
+        debugShowCheckedModeBanner: false,
+        scrollBehavior: const CustomScrollBehavior(),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('pt', 'BR')],
+        routerConfig: AppRouter.router,
+      ),
     );
   }
 }
