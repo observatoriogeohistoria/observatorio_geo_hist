@@ -19,7 +19,7 @@ class FirebaseAuthDatasourceImpl implements FirebaseAuthDatasource {
     try {
       UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: "taina@gmail.com",
-        password: "123456",
+        password: "Amanh3c3r*",
       );
       return userCredential.user;
     } catch (exception) {

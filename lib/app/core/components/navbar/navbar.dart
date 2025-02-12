@@ -17,13 +17,12 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  late FetchCategoriesStore store;
+  late final FetchCategoriesStore store = AppSetup.getIt.get<FetchCategoriesStore>();
 
   @override
   void initState() {
     super.initState();
 
-    store = AppSetup.getIt.get<FetchCategoriesStore>();
     store.fetchHistoryCategories();
     store.fetchGeographyCategories();
   }

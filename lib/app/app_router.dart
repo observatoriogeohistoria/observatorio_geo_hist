@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/panel_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/contact_us_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/team_member_page.dart';
@@ -80,6 +81,12 @@ class AppRouter {
         path: '/admin',
         builder: (BuildContext context, GoRouterState state) {
           return const SigninPage();
+        },
+      ),
+      GoRoute(
+        path: '/admin/panel',
+        builder: (BuildContext context, GoRouterState state) {
+          return const PanelPage();
         },
       ),
     ],

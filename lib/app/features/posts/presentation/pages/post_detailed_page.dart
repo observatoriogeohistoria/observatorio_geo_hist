@@ -29,8 +29,8 @@ class PostDetailedPage extends StatefulWidget {
 }
 
 class _PostDetailedPageState extends State<PostDetailedPage> {
-  late final FetchCategoriesStore fetchCategoriesStore;
-  late final FetchPostsStore fetchPostsStore;
+  late final FetchCategoriesStore fetchCategoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
+  late final FetchPostsStore fetchPostsStore = HomeSetup.getIt<FetchPostsStore>();
 
   List<ReactionDisposer> reactions = [];
 
@@ -42,9 +42,6 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
   @override
   void initState() {
     super.initState();
-
-    fetchCategoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
-    fetchPostsStore = HomeSetup.getIt<FetchPostsStore>();
 
     setupReactions();
     updateData();

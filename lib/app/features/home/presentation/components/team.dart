@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/utils/carousel_options/carousel_options.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
@@ -55,8 +56,7 @@ class _TeamState extends State<Team> {
                   itemBuilder: (context, index, realIndex) {
                     final member = widget.team[index];
 
-                    return MouseRegion(
-                      cursor: SystemMouseCursors.click,
+                    return AppMouseRegion(
                       child: GestureDetector(
                         onTap: () {
                           GoRouter.of(context).go(

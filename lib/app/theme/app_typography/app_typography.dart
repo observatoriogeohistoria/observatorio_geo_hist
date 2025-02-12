@@ -68,6 +68,27 @@ class AppTypography {
       height: 24 / 22,
     ),
   );
+
+  TypographyStyle label = TypographyStyle._(
+    small: GoogleFonts.dosis(
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      letterSpacing: 0.35,
+      height: 16 / 12,
+    ),
+    medium: GoogleFonts.dosis(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.2,
+      height: 18 / 14,
+    ),
+    large: GoogleFonts.dosis(
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.2,
+      height: 20 / 18,
+    ),
+  );
 }
 
 class TypographyStyle {

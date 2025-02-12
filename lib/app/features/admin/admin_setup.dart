@@ -4,6 +4,8 @@ import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/log
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/datasources/firebase_auth_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/repositories/auth_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/sidebar_setup.dart';
 
 class AdminSetup {
   static final GetIt getIt = GetIt.instance;
@@ -19,5 +21,11 @@ class AdminSetup {
     getIt.registerLazySingleton<AuthStore>(
       () => AuthStore(getIt<AuthRepository>()),
     );
+
+    // Panel
+    PanelSetup.setup();
+
+    // Sidebar Navigation
+    SidebarSetup.setup();
   }
 }

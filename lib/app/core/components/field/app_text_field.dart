@@ -15,6 +15,7 @@ class AppTextField extends StatefulWidget {
     this.inputFormatters = const [],
     this.obscureText = false,
     this.validator,
+    this.suffixIcon,
     super.key,
   });
 
@@ -29,6 +30,7 @@ class AppTextField extends StatefulWidget {
   final List<TextInputFormatter> inputFormatters;
   final bool obscureText;
   final String? Function(String?)? validator;
+  final Widget? suffixIcon;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -53,6 +55,10 @@ class _AppTextFieldState extends State<AppTextField> {
       obscureText: widget.obscureText,
       validator: widget.validator,
       decoration: InputDecoration(
+        suffixIcon: Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+          child: widget.suffixIcon,
+        ),
         suffixIconConstraints: const BoxConstraints(
           minHeight: 32,
           minWidth: 32,
@@ -67,26 +73,20 @@ class _AppTextFieldState extends State<AppTextField> {
           horizontal: AppTheme.dimensions.space.small,
           vertical: AppTheme.dimensions.space.medium,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-          borderSide: BorderSide(
-            color: AppTheme.colors.gray,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-          borderSide: BorderSide(
-            width: AppTheme.dimensions.stroke.small,
-            color: AppTheme.colors.orange,
-          ),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-          borderSide: BorderSide(
-            color: AppTheme.colors.gray,
-          ),
-        ),
+        enabledBorder: _buildBorder(AppTheme.colors.gray),
+        focusedBorder: _buildBorder(AppTheme.colors.orange),
+        focusedErrorBorder: _buildBorder(AppTheme.colors.red),
+        disabledBorder: _buildBorder(AppTheme.colors.gray),
+        errorBorder: _buildBorder(AppTheme.colors.red),
       ),
     );
   }
+
+  OutlineInputBorder _buildBorder(Color color) => OutlineInputBorder(
+        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+        borderSide: BorderSide(
+          width: AppTheme.dimensions.stroke.small,
+          color: color,
+        ),
+      );
 }

@@ -13,4 +13,6 @@ class AppColors {
   Color lightGray = const Color(0xFFF0F0F0);
   Color gray = const Color(0xFFABB8C3);
   Color darkGray = const Color.fromARGB(255, 53, 53, 53);
+
+  Color red = const Color(0xFFE53935);
 }

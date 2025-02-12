@@ -15,7 +15,7 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
-  late FetchCategoriesStore fetchCategoriesStore;
+  late final FetchCategoriesStore fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
 
   @override
   void initState() {
@@ -26,7 +26,6 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addObserver(this);
 
-    fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
     fetchCategoriesStore.fetchHistoryCategories();
     fetchCategoriesStore.fetchGeographyCategories();
   }

@@ -16,13 +16,12 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
-  late FetchTeamStore fetchTeamStore;
+  late final FetchTeamStore fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
 
   @override
   void initState() {
     super.initState();
 
-    fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
     fetchTeamStore.fetchTeam();
   }
 

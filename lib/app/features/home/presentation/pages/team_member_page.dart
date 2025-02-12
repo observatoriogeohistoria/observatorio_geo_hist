@@ -23,7 +23,7 @@ class TeamMemberPage extends StatefulWidget {
 }
 
 class _TeamMemberPageState extends State<TeamMemberPage> {
-  late FetchTeamStore fetchTeamStore;
+  late final FetchTeamStore fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
 
   List<ReactionDisposer> reactions = [];
   ValueNotifier<TeamMemberModel?> teamMemberNotifier = ValueNotifier(null);
@@ -32,9 +32,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
   void initState() {
     super.initState();
 
-    fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
     teamMemberNotifier = ValueNotifier(fetchTeamStore.getTeamMemberById(widget.memberId));
-
     setupReactions();
   }
 

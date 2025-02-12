@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/image_from_url/image_from_url.dart';
+import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/infra/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -19,8 +20,7 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final border = BorderSide(color: AppTheme.colors.lightGray);
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
+    return AppMouseRegion(
       child: GestureDetector(
         onTap: () => GoRouter.of(context).go('/posts/${category.area}/${category.key}/${post.id}'),
         child: Container(

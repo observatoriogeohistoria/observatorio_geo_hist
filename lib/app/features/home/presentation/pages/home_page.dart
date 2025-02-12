@@ -20,13 +20,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late FetchTeamStore fetchTeamStore;
+  late final FetchTeamStore fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
 
   @override
   void initState() {
     super.initState();
 
-    fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
     fetchTeamStore.fetchTeam();
   }
 

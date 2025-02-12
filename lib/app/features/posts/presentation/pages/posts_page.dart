@@ -30,8 +30,8 @@ class PostsPage extends StatefulWidget {
 }
 
 class _PostsPageState extends State<PostsPage> {
-  late final FetchCategoriesStore fetchCategoriesStore;
-  late final FetchPostsStore fetchPostsStore;
+  late final FetchCategoriesStore fetchCategoriesStore = PostsSetup.getIt<FetchCategoriesStore>();
+  late final FetchPostsStore fetchPostsStore = PostsSetup.getIt<FetchPostsStore>();
 
   List<ReactionDisposer> reactions = [];
   ValueNotifier<CategoryModel?> categoryNotifier = ValueNotifier(null);
@@ -41,9 +41,6 @@ class _PostsPageState extends State<PostsPage> {
   @override
   void initState() {
     super.initState();
-
-    fetchCategoriesStore = PostsSetup.getIt<FetchCategoriesStore>();
-    fetchPostsStore = PostsSetup.getIt<FetchPostsStore>();
 
     setupReactions();
     updateData();
