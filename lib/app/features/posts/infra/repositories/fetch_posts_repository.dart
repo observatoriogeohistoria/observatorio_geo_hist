@@ -1,5 +1,5 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:observatorio_geo_hist/app/core/errors/failures/failures.dart';
+import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/infra/datasources/fetch_posts_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/posts/infra/errors/exceptions.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
-import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/models/sidebar_item.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class SidebarMenuItem extends StatelessWidget {
@@ -8,11 +7,14 @@ class SidebarMenuItem extends StatelessWidget {
     required this.item,
     required this.onClicked,
     required this.isCollapsed,
+    required this.isSelected,
     super.key,
   });
 
   final SidebarItem item;
   final VoidCallback onClicked;
+
+  final bool isSelected;
   final bool isCollapsed;
 
   @override
@@ -31,21 +33,28 @@ class SidebarMenuItem extends StatelessWidget {
         child: InkWell(
           onTap: onClicked,
           mouseCursor: SystemMouseCursors.click,
-          hoverColor: isCollapsed ? Colors.transparent : AppTheme.colors.gray,
+          hoverColor: isCollapsed ? Colors.transparent : AppTheme.colors.lightGray,
           borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
           child: isCollapsed
               ? icon
-              : Row(
-                  children: [
-                    icon,
-                    SizedBox(width: AppTheme.dimensions.space.medium),
-                    Text(
-                      item.title,
-                      style: AppTheme.typography.title.medium.copyWith(
-                        color: AppTheme.colors.darkGray,
+              : Container(
+                  padding: EdgeInsets.all(AppTheme.dimensions.space.medium),
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppTheme.colors.lightGray : Colors.transparent,
+                    borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+                  ),
+                  child: Row(
+                    children: [
+                      icon,
+                      SizedBox(width: AppTheme.dimensions.space.medium),
+                      Text(
+                        item.title,
+                        style: AppTheme.typography.title.medium.copyWith(
+                          color: AppTheme.colors.darkGray,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
         ),
       ),

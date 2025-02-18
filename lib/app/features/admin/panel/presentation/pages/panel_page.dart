@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mobx/mobx.dart';
+import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
+import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_navigation.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+
+class PanelPage extends StatefulWidget {
+  const PanelPage({super.key});
+
+  @override
+  State<PanelPage> createState() => _PanelPageState();
+}
+
+class _PanelPageState extends State<PanelPage> {
+  late final SidebarStore sidebarStore = PanelSetup.getIt<SidebarStore>();
+  late final AuthStore authStore = AdminSetup.getIt<AuthStore>();
+
+  List<ReactionDisposer> _reactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    authStore.currentUser();
+
+    _reactions = [
+      reaction((_) => authStore.state, (AuthState state) {
+        if (state.user == null) {
+          GoRouter.of(context).go('/admin');
+        }
+
+        if (state.logoutState is LogoutStateSuccess) {
+          GoRouter.of(context).go('/admin');
+        }
+
+        if (state.logoutState is LogoutStateError) {
+          final loginState = state.loginState as LoginStateError;
+          Messenger.showError(context, AuthFailure.toMessage(loginState.failure));
+        }
+      }),
+    ];
+  }
+
+  @override
+  void dispose() {
+    for (var reaction in _reactions) {
+      reaction();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: const Sidebar(),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: AppTheme.colors.white),
+        backgroundColor: AppTheme.colors.orange,
+        title: Text(
+          'PAINEL ADMINISTRATIVO',
+          style: AppTheme.typography.headline.small.copyWith(
+            color: AppTheme.colors.white,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+            child: IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: authStore.logout,
+            ),
+          ),
+        ],
+        centerTitle: true,
+      ),
+    );
+  }
+}

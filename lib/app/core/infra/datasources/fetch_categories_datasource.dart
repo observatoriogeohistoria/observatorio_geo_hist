@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:observatorio_geo_hist/app/core/errors/exceptions/fetch_categories_exceptions.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 
@@ -33,9 +32,9 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
           .toList();
 
       return categories;
-    } catch (exception) {
-      _loggerService.error('Error fetching history categories: $exception');
-      throw const FetchCategoriesException();
+    } catch (exception, stackTrace) {
+      _loggerService.error('Error fetching history categories: $exception', stackTrace: stackTrace);
+      rethrow;
     }
   }
 
@@ -58,9 +57,10 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
           .toList();
 
       return categories;
-    } catch (exception) {
-      _loggerService.error('Error fetching geography categories: $exception');
-      throw const FetchCategoriesException();
+    } catch (exception, stackTrace) {
+      _loggerService.error('Error fetching geography categories: $exception',
+          stackTrace: stackTrace);
+      rethrow;
     }
   }
 }

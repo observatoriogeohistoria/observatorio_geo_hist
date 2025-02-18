@@ -15,4 +15,6 @@ class AppColors {
   Color darkGray = const Color.fromARGB(255, 53, 53, 53);
 
   Color red = const Color(0xFFE53935);
+  Color green = const Color(0xFF43A047);
+  Color blue = const Color(0xFF1E88E5);
 }

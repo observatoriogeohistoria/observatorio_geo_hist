@@ -4,7 +4,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart'
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_header.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_menu_item.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/toggle_collpase_button.dart';
-import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/models/sidebar_item.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -22,12 +22,6 @@ class _SidebarState extends State<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      const SidebarItem(title: 'Usuários', icon: Icons.people),
-      const SidebarItem(title: 'Mídias', icon: Icons.perm_media),
-      const SidebarItem(title: 'Posts', icon: Icons.post_add_outlined),
-    ];
-
     return Observer(
       builder: (context) {
         final isCollapsed = sidebarStore.isCollapsed;
@@ -35,12 +29,16 @@ class _SidebarState extends State<Sidebar> {
         return Drawer(
           width: isCollapsed ? widthWhenCollapsed : null,
           child: Container(
-            color: AppTheme.colors.lightGray,
+            color: AppTheme.colors.white,
             child: Column(
               children: [
                 SidebarHeader(isCollapsed: isCollapsed),
                 SizedBox(height: AppTheme.dimensions.space.large),
-                _buildItems(items: items, isCollapsed: isCollapsed),
+                _buildItems(
+                  items: SidebarItem.values,
+                  selectedItem: sidebarStore.selectedItem,
+                  isCollapsed: isCollapsed,
+                ),
                 const Spacer(),
                 ToggleCollpaseButton(
                   onTap: sidebarStore.toggleCollapse,
@@ -56,6 +54,7 @@ class _SidebarState extends State<Sidebar> {
 
   Widget _buildItems({
     required List<SidebarItem> items,
+    required SidebarItem? selectedItem,
     bool isCollapsed = false,
   }) {
     return ListView.separated(
@@ -63,13 +62,20 @@ class _SidebarState extends State<Sidebar> {
       shrinkWrap: true,
       itemCount: items.length,
       separatorBuilder: (context, index) => Padding(
-        padding: EdgeInsets.symmetric(vertical: AppTheme.dimensions.space.medium),
+        padding: EdgeInsets.symmetric(
+          vertical:
+              isCollapsed ? AppTheme.dimensions.space.medium : AppTheme.dimensions.space.xsmall,
+        ),
         child: Divider(color: AppTheme.colors.gray),
       ),
       itemBuilder: (context, index) {
         return SidebarMenuItem(
           item: items[index],
-          onClicked: () {},
+          onClicked: () {
+            sidebarStore.selectItem(items[index]);
+            Navigator.of(context).pop();
+          },
+          isSelected: items[index] == sidebarStore.selectedItem,
           isCollapsed: isCollapsed,
         );
       },

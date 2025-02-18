@@ -1,4 +1,4 @@
-import 'package:observatorio_geo_hist/app/core/errors/failures/failures.dart';
+import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
 
 class FetchPostsFailure extends Failure {
   const FetchPostsFailure(

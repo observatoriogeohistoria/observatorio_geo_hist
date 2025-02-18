@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
-import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/exceptions.dart';
 
 abstract class FirebaseAuthDatasource {
   Future<User?> signIn(String email, String password);
   Future<void> signOut();
+  Future<User?> currentUser();
   Stream<User?> authStateChanges();
 }
 
@@ -17,14 +17,14 @@ class FirebaseAuthDatasourceImpl implements FirebaseAuthDatasource {
   @override
   Future<User?> signIn(String email, String password) async {
     try {
-      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
-        email: "taina@gmail.com",
-        password: "Amanh3c3r*",
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
       );
       return userCredential.user;
-    } catch (exception) {
-      _loggerService.error('Error signing in: $exception');
-      throw const FirebaseSignInException();
+    } catch (exception, stackTrace) {
+      _loggerService.error('Error signing in: $exception', stackTrace: stackTrace);
+      rethrow;
     }
   }
 
@@ -32,10 +32,15 @@ class FirebaseAuthDatasourceImpl implements FirebaseAuthDatasource {
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
-    } catch (exception) {
-      _loggerService.error('Error signing out: $exception');
-      throw const FirebaseSignOutException();
+    } catch (exception, stackTrace) {
+      _loggerService.error('Error signing out: $exception', stackTrace: stackTrace);
+      rethrow;
     }
+  }
+
+  @override
+  Future<User?> currentUser() async {
+    return _firebaseAuth.currentUser;
   }
 
   @override

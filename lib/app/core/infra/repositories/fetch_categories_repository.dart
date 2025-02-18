@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:observatorio_geo_hist/app/core/errors/exceptions/fetch_categories_exceptions.dart';
-import 'package:observatorio_geo_hist/app/core/errors/failures/failures.dart';
-import 'package:observatorio_geo_hist/app/core/errors/failures/fetch_categories_failures.dart';
+import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
+import 'package:observatorio_geo_hist/app/core/errors/fetch_categories_failures.dart';
 import 'package:observatorio_geo_hist/app/core/infra/datasources/fetch_categories_datasource.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 
@@ -20,8 +19,8 @@ class FetchCategoriesRepositoryImpl implements FetchCategoriesRepository {
     try {
       final categories = await _datasource.fetchHistoryCategories();
       return Right(categories);
-    } on FetchCategoriesException catch (error) {
-      return Left(FetchCategoriesFailure(error.message));
+    } catch (error) {
+      return const Left(FetchCategoriesFailure());
     }
   }
 
@@ -30,8 +29,8 @@ class FetchCategoriesRepositoryImpl implements FetchCategoriesRepository {
     try {
       final categories = await _datasource.fetchGeographyCategories();
       return Right(categories);
-    } on FetchCategoriesException catch (error) {
-      return Left(FetchCategoriesFailure(error.message));
+    } catch (error) {
+      return const Left(FetchCategoriesFailure());
     }
   }
 }

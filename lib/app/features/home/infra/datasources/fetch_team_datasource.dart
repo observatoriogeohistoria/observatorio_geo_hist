@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
-import 'package:observatorio_geo_hist/app/features/home/infra/errors/exceptions.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 
 abstract class FetchTeamDatasource {
@@ -27,9 +26,9 @@ class FetchTeamDatasourceImpl implements FetchTeamDatasource {
       List<TeamMemberModel> team = docs.map((member) => TeamMemberModel.fromJson(member)).toList();
 
       return team;
-    } catch (exception) {
-      _loggerService.error('Error fetching team: $exception');
-      throw const FetchTeamException();
+    } catch (exception, stackTrace) {
+      _loggerService.error('Error fetching team: $exception', stackTrace: stackTrace);
+      rethrow;
     }
   }
 }

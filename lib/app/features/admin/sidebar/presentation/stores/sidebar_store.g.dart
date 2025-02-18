@@ -25,6 +25,22 @@ mixin _$SidebarStore on SidebarStoreBase, Store {
     });
   }
 
+  late final _$selectedItemAtom =
+      Atom(name: 'SidebarStoreBase.selectedItem', context: context);
+
+  @override
+  SidebarItem get selectedItem {
+    _$selectedItemAtom.reportRead();
+    return super.selectedItem;
+  }
+
+  @override
+  set selectedItem(SidebarItem value) {
+    _$selectedItemAtom.reportWrite(value, super.selectedItem, () {
+      super.selectedItem = value;
+    });
+  }
+
   late final _$SidebarStoreBaseActionController =
       ActionController(name: 'SidebarStoreBase', context: context);
 
@@ -40,9 +56,21 @@ mixin _$SidebarStore on SidebarStoreBase, Store {
   }
 
   @override
+  void selectItem(SidebarItem item) {
+    final _$actionInfo = _$SidebarStoreBaseActionController.startAction(
+        name: 'SidebarStoreBase.selectItem');
+    try {
+      return super.selectItem(item);
+    } finally {
+      _$SidebarStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-isCollapsed: ${isCollapsed}
+isCollapsed: ${isCollapsed},
+selectedItem: ${selectedItem}
     ''';
   }
 }

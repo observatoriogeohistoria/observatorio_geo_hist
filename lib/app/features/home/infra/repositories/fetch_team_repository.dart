@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:observatorio_geo_hist/app/core/errors/failures/failures.dart';
+import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/datasources/fetch_team_datasource.dart';
-import 'package:observatorio_geo_hist/app/features/home/infra/errors/exceptions.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/errors/failures.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 
@@ -19,8 +18,8 @@ class FetchTeamRepositoryImpl implements FetchTeamRepository {
     try {
       final team = await _datasource.fetchTeam();
       return Right(team);
-    } on FetchTeamException catch (error) {
-      return Left(FetchTeamFailure(error.message));
+    } catch (error) {
+      return Left(FetchTeamFailure());
     }
   }
 }
