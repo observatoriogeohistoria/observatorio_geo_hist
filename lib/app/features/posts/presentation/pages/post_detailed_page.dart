@@ -5,6 +5,8 @@ import 'package:observatorio_geo_hist/app/core/components/general_content/error_
 import 'package:observatorio_geo_hist/app/core/components/general_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/markdown/markdown_text.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
@@ -95,13 +97,15 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              post.title.toUpperCase(),
-              style: AppTheme.typography.headline.small.copyWith(color: AppTheme.colors.orange),
+            AppHeadline.small(
+              text: post.title.toUpperCase(),
+              textAlign: TextAlign.start,
+              color: AppTheme.colors.orange,
             ),
-            Text(
-              post.subtitle.toUpperCase(),
-              style: AppTheme.typography.title.medium.copyWith(color: AppTheme.colors.gray),
+            SizedBox(height: AppTheme.dimensions.space.small),
+            AppTitle.small(
+              text: post.subtitle.toUpperCase(),
+              color: AppTheme.colors.gray,
             ),
             SizedBox(height: AppTheme.dimensions.space.large),
             MarkdownText(text: post.markdownContent),

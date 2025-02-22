@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
@@ -39,7 +40,7 @@ class _SigninPageState extends State<SigninPage> {
     _reactions = [
       reaction((_) => authStore.state, (AuthState state) {
         if (state.user != null) {
-          GoRouter.of(context).go('/admin/panel');
+          GoRouter.of(context).go('/admin/painel');
         }
 
         if (state.loginState is LoginStateError) {
@@ -53,7 +54,7 @@ class _SigninPageState extends State<SigninPage> {
   @override
   void dispose() {
     for (var reaction in _reactions) {
-      reaction();
+      reaction.reaction.dispose();
     }
     super.dispose();
   }
@@ -92,11 +93,9 @@ class _SigninPageState extends State<SigninPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'LOGIN',
-                      style: AppTheme.typography.title.large.copyWith(
-                        color: AppTheme.colors.darkGray,
-                      ),
+                    AppTitle.big(
+                      text: 'LOGIN',
+                      color: AppTheme.colors.darkGray,
                     ),
                     SizedBox(height: AppTheme.dimensions.space.large),
                     AppTextField(
@@ -127,7 +126,7 @@ class _SigninPageState extends State<SigninPage> {
                     SizedBox(height: AppTheme.dimensions.space.xlarge),
                     loginState is LoginStateLoading
                         ? const Loading()
-                        : PrimaryButton(
+                        : PrimaryButton.medium(
                             text: "ENTRAR",
                             onPressed: () {
                               if (formKey.currentState!.validate()) {

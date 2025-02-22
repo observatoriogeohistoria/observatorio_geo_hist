@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -39,11 +41,9 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
           padding: EdgeInsets.symmetric(horizontal: padding),
           child: Column(
             children: [
-              Text(
-                firstText,
-                style: AppTheme.typography.body.medium.copyWith(
-                  color: AppTheme.colors.darkGray,
-                ),
+              AppBody(
+                text: firstText,
+                color: AppTheme.colors.darkGray,
               ),
               space,
               Column(
@@ -52,20 +52,16 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
                     'assets/images/our-history.jpg',
                   ),
                   SizedBox(height: AppTheme.dimensions.space.small),
-                  Text(
-                    'Foto: Antônio César Ortega',
-                    style: AppTheme.typography.body.small.copyWith(
-                      color: AppTheme.colors.darkGray,
-                    ),
+                  AppLabel(
+                    text: 'Foto: Antônio César Ortega',
+                    color: AppTheme.colors.darkGray,
                   ),
                 ],
               ),
               space,
-              Text(
-                secondText,
-                style: AppTheme.typography.body.medium.copyWith(
-                  color: AppTheme.colors.darkGray,
-                ),
+              AppBody(
+                text: secondText,
+                color: AppTheme.colors.darkGray,
               ),
             ],
           ),

@@ -3,19 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/panel_page.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/contact_us_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/team_member_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/collaborate_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/post_detailed_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/posts_page.dart';
+import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
     initialLocation: '/',
+    errorBuilder: (_, __) => const PageNotFound(),
     redirect: (BuildContext context, GoRouterState state) async {
       bool isLogged = FirebaseAuth.instance.currentUser != null;
-      bool isPanel = state.fullPath == '/admin/panel';
+      bool isPanel = state.fullPath == '/admin/painel';
 
       if (isPanel && !isLogged) return '/admin';
 
@@ -33,9 +36,8 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           final id = state.pathParameters['id'];
 
-          if (id == null) {
-            throw Exception('Invalid route');
-          }
+          final invalidRoute = id == null;
+          if (invalidRoute) return const PageNotFound();
 
           return TeamMemberPage(memberId: id);
         },
@@ -46,9 +48,8 @@ class AppRouter {
           final area = state.pathParameters['area'];
           final categoryKey = state.pathParameters['category'];
 
-          if (area == null || categoryKey == null) {
-            throw Exception('Invalid route');
-          }
+          final invalidRoute = area == null || categoryKey == null;
+          if (invalidRoute) return const PageNotFound();
 
           return PostsPage(
             area: area,
@@ -75,9 +76,8 @@ class AppRouter {
           final categoryKey = state.pathParameters['category'];
           final id = state.pathParameters['id'];
 
-          if (id == null || area == null || categoryKey == null) {
-            throw Exception('Invalid route');
-          }
+          final invalidRoute = id == null || area == null || categoryKey == null;
+          if (invalidRoute) return const PageNotFound();
 
           return PostDetailedPage(
             area: area,
@@ -93,9 +93,18 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/admin/panel',
+        path: '/admin/painel',
+        redirect: (context, state) => '/admin/painel/usuarios',
+      ),
+      GoRoute(
+        path: '/admin/painel/:tab',
         builder: (BuildContext context, GoRouterState state) {
-          return const PanelPage();
+          final tab = SidebarItem.fromString(state.pathParameters['tab']);
+
+          final invalidRoute = tab == null;
+          if (invalidRoute) return const PageNotFound();
+
+          return PanelPage(tab: tab);
         },
       ),
     ],

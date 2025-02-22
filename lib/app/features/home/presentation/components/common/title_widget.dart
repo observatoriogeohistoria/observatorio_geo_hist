@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class TitleWidget extends StatelessWidget {
@@ -17,11 +18,9 @@ class TitleWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(
         horizontal: AppTheme.dimensions.space.large,
       ),
-      child: Text(
-        title,
-        style: AppTheme.typography.headline.large.copyWith(
-          color: color ?? AppTheme.colors.white,
-        ),
+      child: AppHeadline.big(
+        text: title,
+        color: color ?? AppTheme.colors.white,
       ),
     );
   }

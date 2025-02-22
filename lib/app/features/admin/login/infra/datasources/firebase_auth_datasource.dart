@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 
 abstract class FirebaseAuthDatasource {
+  Future<User?> signUp(String email, String password);
   Future<User?> signIn(String email, String password);
   Future<void> signOut();
   Future<User?> currentUser();
@@ -15,12 +16,28 @@ class FirebaseAuthDatasourceImpl implements FirebaseAuthDatasource {
   FirebaseAuthDatasourceImpl(this._firebaseAuth, this._loggerService);
 
   @override
+  Future<User?> signUp(String email, String password) async {
+    try {
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      return userCredential.user;
+    } catch (exception, stackTrace) {
+      _loggerService.error('Error signing up: $exception', stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
   Future<User?> signIn(String email, String password) async {
     try {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+
       return userCredential.user;
     } catch (exception, stackTrace) {
       _loggerService.error('Error signing in: $exception', stackTrace: stackTrace);

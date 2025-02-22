@@ -98,7 +98,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                             if (member.lattesUrl.isNotEmpty)
                               Container(
                                 margin: EdgeInsets.only(top: AppTheme.dimensions.space.large),
-                                child: PrimaryButton(
+                                child: PrimaryButton.medium(
                                   text: 'Currículo Lattes',
                                   onPressed: () async {
                                     final url = member.lattesUrl;

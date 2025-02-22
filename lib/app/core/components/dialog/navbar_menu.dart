@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/navbutton.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class NavbarMenu extends StatelessWidget {
@@ -47,12 +48,10 @@ class NavbarMenu extends StatelessWidget {
                   children: [
                     Align(
                       alignment: Alignment.center,
-                      child: Text(
-                        title,
+                      child: AppTitle.big(
+                        text: title,
                         textAlign: TextAlign.center,
-                        style: AppTheme.typography.title.large.copyWith(
-                          color: AppTheme.colors.lightGray,
-                        ),
+                        color: AppTheme.colors.lightGray,
                       ),
                     ),
                     Align(

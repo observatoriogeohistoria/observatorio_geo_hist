@@ -62,7 +62,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                           ),
                         ),
                         SizedBox(height: AppTheme.dimensions.space.xlarge),
-                        PrimaryButton(
+                        PrimaryButton.medium(
                           text: AppStrings.email,
                           onPressed: () {},
                         ),

@@ -124,7 +124,7 @@ class _PostsPageState extends State<PostsPage> {
                 ),
                 SizedBox(height: AppTheme.dimensions.space.xlarge),
                 if (category.collaborateOption)
-                  PrimaryButton(
+                  PrimaryButton.medium(
                     text: 'COLABORE',
                     onPressed: () => GoRouter.of(context).go('/collaborate'),
                   ),

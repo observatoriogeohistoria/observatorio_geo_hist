@@ -19,7 +19,7 @@ class FetchTeamRepositoryImpl implements FetchTeamRepository {
       final team = await _datasource.fetchTeam();
       return Right(team);
     } catch (error) {
-      return Left(FetchTeamFailure());
+      return const Left(FetchTeamFailure());
     }
   }
 }

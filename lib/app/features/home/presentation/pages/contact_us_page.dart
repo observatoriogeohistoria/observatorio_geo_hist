@@ -3,6 +3,9 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
@@ -48,11 +51,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Text(
-                      'CONTATO',
-                      style: AppTheme.typography.headline.large.copyWith(
-                        color: AppTheme.colors.orange,
-                      ),
+                    child: AppHeadline.medium(
+                      text: 'CONTATO',
+                      color: AppTheme.colors.orange,
                     ),
                   ),
                   SizedBox(height: AppTheme.dimensions.space.xlarge),
@@ -74,7 +75,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             ),
                             SizedBox(
                               width: double.infinity,
-                              child: PrimaryButton(
+                              child: PrimaryButton.medium(
                                 text: 'ENVIAR',
                                 onPressed: () {},
                               ),
@@ -115,18 +116,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTheme.typography.title.medium.copyWith(
-            color: AppTheme.colors.orange,
-          ),
+        AppTitle.small(
+          text: label,
+          color: AppTheme.colors.orange,
         ),
         SizedBox(height: AppTheme.dimensions.space.medium),
-        Text(
-          value,
-          style: AppTheme.typography.body.large.copyWith(
-            color: AppTheme.colors.gray,
-          ),
+        AppBody(
+          text: value,
+          color: AppTheme.colors.gray,
         ),
         SizedBox(height: AppTheme.dimensions.space.xlarge),
       ],
@@ -142,11 +139,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTheme.typography.title.medium.copyWith(
-            color: AppTheme.colors.orange,
-          ),
+        AppTitle.small(
+          text: label,
+          color: AppTheme.colors.orange,
         ),
         SizedBox(height: AppTheme.dimensions.space.medium),
         AppTextField(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/image_from_url/image_from_url.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/infra/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -45,10 +46,10 @@ class PostCard extends StatelessWidget {
               SizedBox(height: AppTheme.dimensions.space.medium),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                child: Text(
-                  post.title,
+                child: AppTitle.small(
+                  text: post.title,
                   textAlign: TextAlign.center,
-                  style: AppTheme.typography.title.medium,
+                  color: AppTheme.colors.darkGray,
                 ),
               ),
               SizedBox(height: AppTheme.dimensions.space.small),

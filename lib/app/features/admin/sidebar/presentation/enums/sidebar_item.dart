@@ -26,4 +26,17 @@ enum SidebarItem {
         return Icons.post_add_outlined;
     }
   }
+
+  static SidebarItem? fromString(String? value) {
+    switch (value) {
+      case 'usuarios':
+        return SidebarItem.users;
+      case 'media':
+        return SidebarItem.media;
+      case 'posts':
+        return SidebarItem.posts;
+      default:
+        return null;
+    }
+  }
 }
