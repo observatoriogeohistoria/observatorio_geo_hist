@@ -33,9 +33,9 @@ class _UsersSectionState extends State<UsersSection> {
         children: [
           Text(
             'Usuários',
-            style: AppTheme.typography.headline.small.copyWith(
-              color: AppTheme.colors.orange,
-            ),
+            style: AppTheme(context).typography.headline.small.copyWith(
+                  color: AppTheme.colors.orange,
+                ),
           ),
           SizedBox(height: AppTheme.dimensions.space.xlarge),
           Observer(

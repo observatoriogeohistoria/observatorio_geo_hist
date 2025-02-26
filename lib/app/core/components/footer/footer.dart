@@ -13,7 +13,7 @@ class Footer extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AppBody(
+          AppBody.medium(
             text:
                 'Faculdade de Educação - Sala 1G156 - UFU - Av. João Naves de Ávila, 2121 - B. Santa Mônica - Uberlândia/MG\n34 3239-4163 | 34 3239-4212 | contato@observatoriogeo.historia.net.br',
             textAlign: TextAlign.center,
@@ -22,7 +22,7 @@ class Footer extends StatelessWidget {
           const SizedBox(height: 20),
           Divider(color: AppTheme.colors.white, thickness: 1),
           const SizedBox(height: 20),
-          AppBody(
+          AppBody.medium(
             text:
                 'Observatório do Ensino de História e Geografia | 2024 | Conteúdo sob licença Creative Commons 4.0 Internacional',
             textAlign: TextAlign.center,

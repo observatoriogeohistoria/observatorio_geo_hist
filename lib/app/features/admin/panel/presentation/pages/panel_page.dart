@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
@@ -75,11 +76,9 @@ class _PanelPageState extends State<PanelPage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: AppTheme.colors.white),
         backgroundColor: AppTheme.colors.orange,
-        title: Text(
-          'PAINEL ADMINISTRATIVO',
-          style: AppTheme.typography.headline.small.copyWith(
-            color: AppTheme.colors.white,
-          ),
+        title: AppHeadline.small(
+          text: 'PAINEL ADMINISTRATIVO',
+          color: AppTheme.colors.white,
         ),
         actions: [
           Padding(

@@ -1,45 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppBody extends StatelessWidget {
-  const AppBody({
+  const AppBody.small({
     required this.text,
     required this.color,
     this.textAlign = TextAlign.start,
     super.key,
-  });
+  }) : size = TypographySize.small;
+
+  const AppBody.medium({
+    required this.text,
+    required this.color,
+    this.textAlign = TextAlign.start,
+    super.key,
+  }) : size = TypographySize.medium;
+
+  const AppBody.big({
+    required this.text,
+    required this.color,
+    this.textAlign = TextAlign.start,
+    super.key,
+  }) : size = TypographySize.big;
 
   final String text;
   final Color color;
   final TextAlign textAlign;
+  final TypographySize size;
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
-    bool isTablet = DeviceUtils.isTablet(context);
+    TextStyle textStyle;
 
-    double fontSize;
-    if (isMobile) {
-      fontSize = 14;
-    } else if (isTablet) {
-      fontSize = 16;
-    } else {
-      fontSize = 18;
+    switch (size) {
+      case TypographySize.small:
+        textStyle = AppTheme(context).typography.body.small;
+        break;
+      case TypographySize.medium:
+        textStyle = AppTheme(context).typography.body.medium;
+        break;
+      case TypographySize.big:
+        textStyle = AppTheme(context).typography.body.big;
+        break;
     }
-
-    double letterSpacing = 0.5;
-    double height = 1.5;
-    FontWeight fontWeight = FontWeight.normal;
 
     return Text(
       text,
       textAlign: textAlign,
-      style: GoogleFonts.dosis(
-        fontSize: fontSize,
-        letterSpacing: letterSpacing,
-        height: height,
-        fontWeight: fontWeight,
+      style: textStyle.copyWith(
         color: color,
       ),
     );

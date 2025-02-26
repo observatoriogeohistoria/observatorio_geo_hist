@@ -77,7 +77,7 @@ class _NavButtonState extends State<NavButton> {
                 : widget.textColor ?? AppTheme.colors.darkGray,
           ),
           textStyle: WidgetStateProperty.resolveWith(
-            (states) => (widget.textStyle ?? AppTheme.typography.title.medium).copyWith(
+            (states) => (widget.textStyle ?? AppTheme(context).typography.title.medium).copyWith(
               color: states.contains(WidgetState.hovered)
                   ? widget.textColorOnHover ?? AppTheme.colors.orange
                   : widget.textColor ?? AppTheme.colors.darkGray,

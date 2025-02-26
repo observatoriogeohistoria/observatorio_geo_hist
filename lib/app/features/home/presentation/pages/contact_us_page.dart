@@ -121,7 +121,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
           color: AppTheme.colors.orange,
         ),
         SizedBox(height: AppTheme.dimensions.space.medium),
-        AppBody(
+        AppBody.big(
           text: value,
           color: AppTheme.colors.gray,
         ),

@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/carousel_options/carousel_options.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
@@ -68,12 +69,9 @@ class _TeamState extends State<Team> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              member.name.toUpperCase(),
-                              style: AppTheme.typography.body.large.copyWith(
-                                color: AppTheme.colors.orange,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            AppBody.big(
+                              text: member.name.toUpperCase(),
+                              color: AppTheme.colors.orange,
                             ),
                             AppTitle.medium(
                               text: member.role,

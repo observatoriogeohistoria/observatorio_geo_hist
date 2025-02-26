@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -47,11 +48,9 @@ class SidebarMenuItem extends StatelessWidget {
                     children: [
                       icon,
                       SizedBox(width: AppTheme.dimensions.space.medium),
-                      Text(
-                        item.title,
-                        style: AppTheme.typography.title.medium.copyWith(
-                          color: AppTheme.colors.darkGray,
-                        ),
+                      AppTitle.medium(
+                        text: item.title,
+                        color: AppTheme.colors.darkGray,
                       ),
                     ],
                   ),

@@ -5,6 +5,8 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
@@ -71,29 +73,23 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                           children: [
                             Align(
                               alignment: Alignment.topLeft,
-                              child: Text(
-                                member.name.toUpperCase(),
-                                style: AppTheme.typography.headline.small.copyWith(
-                                  color: AppTheme.colors.orange,
-                                ),
+                              child: AppHeadline.small(
+                                text: member.name.toUpperCase(),
+                                color: AppTheme.colors.orange,
                               ),
                             ),
                             Align(
                               alignment: Alignment.topLeft,
-                              child: Text(
-                                member.role.toUpperCase(),
-                                style: AppTheme.typography.headline.medium.copyWith(
-                                  color: AppTheme.colors.gray,
-                                ),
+                              child: AppHeadline.medium(
+                                text: member.role.toUpperCase(),
+                                color: AppTheme.colors.gray,
                               ),
                             ),
                             SizedBox(height: AppTheme.dimensions.space.large),
-                            Text(
-                              member.description,
+                            AppBody.big(
+                              text: member.description,
                               textAlign: TextAlign.justify,
-                              style: AppTheme.typography.body.large.copyWith(
-                                color: AppTheme.colors.darkGray,
-                              ),
+                              color: AppTheme.colors.darkGray,
                             ),
                             if (member.lattesUrl.isNotEmpty)
                               Container(

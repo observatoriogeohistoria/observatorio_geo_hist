@@ -77,7 +77,7 @@ class NavbarMenu extends StatelessWidget {
                         text: item.text.toUpperCase(),
                         onPressed: item.onPressed,
                         menuChildren: item.menuChildren,
-                        textStyle: AppTheme.typography.headline.large,
+                        textStyle: AppTheme(context).typography.headline.big,
                         textColor: AppTheme.colors.white,
                         textColorOnHover: AppTheme.colors.darkGray,
                       ),

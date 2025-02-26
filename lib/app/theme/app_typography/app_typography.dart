@@ -1,104 +1,79 @@
 part of '../app_theme.dart';
 
 class AppTypography {
-  AppTypography._();
-  static AppTypography get instance => AppTypography._();
+  AppTypography(BuildContext context) {
+    isMobile = DeviceUtils.isMobile(context);
+    isTablet = DeviceUtils.isTablet(context);
+  }
 
-  static const fontFamily = 'Dosis';
+  late final bool isMobile;
+  late final bool isTablet;
 
-  TypographyStyle headline = TypographyStyle._(
-    small: GoogleFonts.dosis(
-      fontSize: 24,
-      fontWeight: FontWeight.w800,
-      letterSpacing: -0.25,
-      height: 30 / 24,
-    ),
-    medium: GoogleFonts.dosis(
-      fontSize: 32,
-      fontWeight: FontWeight.w800,
-      letterSpacing: 0,
-      height: 31 / 32,
-    ),
-    large: GoogleFonts.dosis(
-      fontSize: 36,
-      fontWeight: FontWeight.w800,
-      letterSpacing: 0,
-      height: 42 / 36,
-    ),
-  );
+  double _getFontSize(TypographySize size, Map<TypographySize, double> baseSizes) {
+    double baseFontSize = baseSizes[size] ?? 14;
 
-  TypographyStyle title = TypographyStyle._(
-    small: GoogleFonts.dosis(
-      fontSize: 18,
-      fontWeight: FontWeight.w600,
-      letterSpacing: -0.25,
-      height: 20 / 18,
-    ),
-    medium: GoogleFonts.dosis(
-      fontSize: 22,
-      fontWeight: FontWeight.w600,
-      letterSpacing: -0.25,
-      height: 22 / 22,
-    ),
-    large: GoogleFonts.dosis(
-      fontSize: 24,
-      fontWeight: FontWeight.w700,
-      letterSpacing: -0.25,
-      height: 28 / 24,
-    ),
-  );
+    if (isMobile) {
+      return baseFontSize - 2;
+    } else if (isTablet) {
+      return baseFontSize;
+    } else {
+      return baseFontSize + 2;
+    }
+  }
 
-  TypographyStyle body = TypographyStyle._(
-    small: GoogleFonts.dosis(
-      fontSize: 16,
-      fontWeight: FontWeight.w700,
-      letterSpacing: 0.35,
-      height: 20 / 16,
-    ),
-    medium: GoogleFonts.dosis(
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
+  TypographyStyle get headline => _createTypographyStyle(
+        {TypographySize.small: 30, TypographySize.medium: 36, TypographySize.big: 40},
+        FontWeight.w800,
+      );
+
+  TypographyStyle get title => _createTypographyStyle(
+        {TypographySize.small: 18, TypographySize.medium: 22, TypographySize.big: 26},
+        FontWeight.w600,
+      );
+
+  TypographyStyle get body => _createTypographyStyle(
+        {TypographySize.small: 16, TypographySize.medium: 18, TypographySize.big: 22},
+        FontWeight.w500,
+      );
+
+  TypographyStyle get label => _createTypographyStyle(
+        {TypographySize.small: 12, TypographySize.medium: 14, TypographySize.big: 18},
+        FontWeight.w400,
+      );
+
+  TypographyStyle _createTypographyStyle(Map<TypographySize, double> baseSizes, FontWeight weight) {
+    return TypographyStyle._(
+      small: _textStyle(TypographySize.small, baseSizes, weight),
+      medium: _textStyle(TypographySize.medium, baseSizes, weight),
+      big: _textStyle(TypographySize.big, baseSizes, weight),
+    );
+  }
+
+  TextStyle _textStyle(
+    TypographySize size,
+    Map<TypographySize, double> baseSizes,
+    FontWeight weight,
+  ) {
+    double fontSize = _getFontSize(size, baseSizes);
+    return GoogleFonts.dosis(
+      fontSize: fontSize,
+      fontWeight: weight,
       letterSpacing: 0.2,
-      height: 22 / 18,
-    ),
-    large: GoogleFonts.dosis(
-      fontSize: 22,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.2,
-      height: 24 / 22,
-    ),
-  );
-
-  TypographyStyle label = TypographyStyle._(
-    small: GoogleFonts.dosis(
-      fontSize: 12,
-      fontWeight: FontWeight.w600,
-      letterSpacing: 0.35,
-      height: 16 / 12,
-    ),
-    medium: GoogleFonts.dosis(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      letterSpacing: 0.2,
-      height: 18 / 14,
-    ),
-    large: GoogleFonts.dosis(
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.2,
-      height: 20 / 18,
-    ),
-  );
+      height: (fontSize + 6) / fontSize,
+    );
+  }
 }
 
 class TypographyStyle {
   const TypographyStyle._({
     required this.small,
     required this.medium,
-    required this.large,
+    required this.big,
   });
 
   final TextStyle small;
   final TextStyle medium;
-  final TextStyle large;
+  final TextStyle big;
 }
+
+enum TypographySize { small, medium, big }

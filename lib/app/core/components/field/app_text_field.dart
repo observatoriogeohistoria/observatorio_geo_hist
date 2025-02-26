@@ -64,9 +64,9 @@ class _AppTextFieldState extends State<AppTextField> {
           minWidth: 32,
         ),
         hintText: widget.hintText,
-        hintStyle: AppTheme.typography.body.medium.copyWith(
-          color: AppTheme.colors.gray,
-        ),
+        hintStyle: AppTheme(context).typography.body.medium.copyWith(
+              color: AppTheme.colors.gray,
+            ),
         filled: true,
         fillColor: AppTheme.colors.white,
         contentPadding: EdgeInsets.symmetric(

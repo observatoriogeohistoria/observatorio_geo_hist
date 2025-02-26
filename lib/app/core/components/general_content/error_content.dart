@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ErrorContent extends StatelessWidget {
@@ -12,9 +13,9 @@ class ErrorContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = Center(
-      child: Text(
-        'Erro ao carregar a página',
-        style: AppTheme.typography.body.large.copyWith(color: AppTheme.colors.gray),
+      child: AppBody.big(
+        text: 'Erro ao carregar a página',
+        color: AppTheme.colors.gray,
       ),
     );
 

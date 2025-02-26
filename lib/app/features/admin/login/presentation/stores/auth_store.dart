@@ -44,7 +44,11 @@ abstract class AuthStoreBase with Store {
 
     result.fold(
       (failure) => state = state.copyWith(loginState: LoginState.error(failure)),
-      (user) => state = state.copyWith(user: user, loginState: const LoginState.success()),
+      (user) => state = state.copyWith(
+        user: user,
+        loginState: const LoginState.success(),
+        logoutState: const LogoutState.initial(),
+      ),
     );
   }
 
@@ -56,7 +60,11 @@ abstract class AuthStoreBase with Store {
 
     result.fold(
       (failure) => state = state.copyWith(logoutState: LogoutState.error(failure)),
-      (_) => state = state.copyWith(user: null, logoutState: const LogoutState.success()),
+      (_) => state = state.copyWith(
+        user: null,
+        loginState: const LoginState.initial(),
+        logoutState: const LogoutState.success(),
+      ),
     );
   }
 }

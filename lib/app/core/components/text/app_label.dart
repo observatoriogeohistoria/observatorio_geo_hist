@@ -1,45 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppLabel extends StatelessWidget {
-  const AppLabel({
+  const AppLabel.small({
     required this.text,
     required this.color,
-    this.textAlign = TextAlign.center,
+    this.textAlign = TextAlign.start,
     super.key,
-  });
+  }) : size = TypographySize.small;
+
+  const AppLabel.medium({
+    required this.text,
+    required this.color,
+    this.textAlign = TextAlign.start,
+    super.key,
+  }) : size = TypographySize.medium;
+
+  const AppLabel.big({
+    required this.text,
+    required this.color,
+    this.textAlign = TextAlign.start,
+    super.key,
+  }) : size = TypographySize.big;
 
   final String text;
   final Color color;
   final TextAlign textAlign;
+  final TypographySize size;
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
-    bool isTablet = DeviceUtils.isTablet(context);
+    TextStyle textStyle;
 
-    double fontSize;
-    if (isMobile) {
-      fontSize = 12;
-    } else if (isTablet) {
-      fontSize = 14;
-    } else {
-      fontSize = 16;
+    switch (size) {
+      case TypographySize.small:
+        textStyle = AppTheme(context).typography.label.small;
+        break;
+      case TypographySize.medium:
+        textStyle = AppTheme(context).typography.label.medium;
+        break;
+      case TypographySize.big:
+        textStyle = AppTheme(context).typography.label.big;
+        break;
     }
-
-    double letterSpacing = 0.5;
-    double height = 1.2;
-    FontWeight fontWeight = FontWeight.w500;
 
     return Text(
       text,
       textAlign: textAlign,
-      style: GoogleFonts.dosis(
-        fontSize: fontSize,
-        letterSpacing: letterSpacing,
-        height: height,
-        fontWeight: fontWeight,
+      style: textStyle.copyWith(
         color: color,
       ),
     );

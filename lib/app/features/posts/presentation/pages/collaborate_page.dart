@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
@@ -54,12 +55,10 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                       children: [
                         const TitleWidget(title: 'COLABORE'),
                         SizedBox(height: AppTheme.dimensions.space.xlarge),
-                        Text(
-                          firstText,
+                        AppBody.big(
+                          text: firstText,
                           textAlign: TextAlign.center,
-                          style: AppTheme.typography.body.large.copyWith(
-                            color: AppTheme.colors.white,
-                          ),
+                          color: AppTheme.colors.white,
                         ),
                         SizedBox(height: AppTheme.dimensions.space.xlarge),
                         PrimaryButton.medium(
@@ -73,15 +72,15 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                             children: [
                               TextSpan(
                                 text: secondText,
-                                style: AppTheme.typography.body.large.copyWith(
-                                  color: AppTheme.colors.white,
-                                ),
+                                style: AppTheme(context).typography.body.big.copyWith(
+                                      color: AppTheme.colors.white,
+                                    ),
                               ),
                               TextSpan(
                                 text: ' clique aqui',
-                                style: AppTheme.typography.body.large.copyWith(
-                                  color: AppTheme.colors.orange,
-                                ),
+                                style: AppTheme(context).typography.body.big.copyWith(
+                                      color: AppTheme.colors.orange,
+                                    ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     const url = AppStrings.creativeCommonsUrl;
@@ -90,9 +89,9 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                               ),
                               TextSpan(
                                 text: '.',
-                                style: AppTheme.typography.body.large.copyWith(
-                                  color: AppTheme.colors.white,
-                                ),
+                                style: AppTheme(context).typography.body.big.copyWith(
+                                      color: AppTheme.colors.white,
+                                    ),
                               ),
                             ],
                           ),

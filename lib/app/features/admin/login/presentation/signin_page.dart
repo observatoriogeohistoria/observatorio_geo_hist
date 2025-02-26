@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
@@ -117,11 +118,10 @@ class _SigninPageState extends State<SigninPage> {
                       ),
                     ),
                     SizedBox(height: AppTheme.dimensions.space.small),
-                    Text(
-                      'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
-                      style: AppTheme.typography.label.small.copyWith(
-                        color: AppTheme.colors.gray,
-                      ),
+                    AppLabel.small(
+                      text:
+                          'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
+                      color: AppTheme.colors.gray,
                     ),
                     SizedBox(height: AppTheme.dimensions.space.xlarge),
                     loginState is LoginStateLoading

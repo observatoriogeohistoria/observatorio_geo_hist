@@ -18,7 +18,7 @@ class ContactUs extends StatelessWidget {
         ),
         child: Column(
           children: [
-            AppBody(
+            AppBody.big(
               text:
                   'O Observatório do Ensino de História e Geografia é criado por e para professores, pesquisadores e estudantes. Envie suas contribuições, opiniões e sugestões e nos ajude a construir este espaço.',
               textAlign: TextAlign.center,

@@ -34,29 +34,29 @@ class MarkdownText extends StatelessWidget {
       shrinkWrap: true,
       data: formattedText,
       styleSheet: MarkdownStyleSheet(
-        code: AppTheme.typography.body.medium.copyWith(
-          color: AppTheme.colors.orange,
-        ),
-        strong: AppTheme.typography.body.medium.copyWith(
-          color: AppTheme.colors.orange,
-        ),
-        p: AppTheme.typography.body.medium.copyWith(
-          color: AppTheme.colors.darkGray,
-        ),
-        h1: AppTheme.typography.title.large.copyWith(
-          color: AppTheme.colors.orange,
-        ),
-        h2: AppTheme.typography.title.medium.copyWith(
-          color: AppTheme.colors.gray,
-        ),
-        h3: AppTheme.typography.title.small.copyWith(
-          color: AppTheme.colors.gray,
-        ),
-        h6: AppTheme.typography.body.medium.copyWith(
-          color: Colors.transparent,
-          height: 0.5,
-          fontSize: 0.5,
-        ),
+        code: AppTheme(context).typography.body.medium.copyWith(
+              color: AppTheme.colors.orange,
+            ),
+        strong: AppTheme(context).typography.body.medium.copyWith(
+              color: AppTheme.colors.orange,
+            ),
+        p: AppTheme(context).typography.body.medium.copyWith(
+              color: AppTheme.colors.darkGray,
+            ),
+        h1: AppTheme(context).typography.title.big.copyWith(
+              color: AppTheme.colors.orange,
+            ),
+        h2: AppTheme(context).typography.title.medium.copyWith(
+              color: AppTheme.colors.gray,
+            ),
+        h3: AppTheme(context).typography.title.small.copyWith(
+              color: AppTheme.colors.gray,
+            ),
+        h6: AppTheme(context).typography.body.medium.copyWith(
+              color: Colors.transparent,
+              height: 0.5,
+              fontSize: 0.5,
+            ),
       ),
       onTapLink: (text, url, title) {
         if (url == null) return;

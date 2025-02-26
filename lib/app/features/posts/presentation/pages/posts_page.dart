@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/general_content/error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/general_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
@@ -115,12 +116,10 @@ class _PostsPageState extends State<PostsPage> {
               children: [
                 TitleWidget(title: category.title.toUpperCase()),
                 SizedBox(height: AppTheme.dimensions.space.xlarge),
-                Text(
-                  category.description,
+                AppBody.big(
+                  text: category.description,
                   textAlign: TextAlign.center,
-                  style: AppTheme.typography.body.large.copyWith(
-                    color: AppTheme.colors.white,
-                  ),
+                  color: AppTheme.colors.white,
                 ),
                 SizedBox(height: AppTheme.dimensions.space.xlarge),
                 if (category.collaborateOption)
