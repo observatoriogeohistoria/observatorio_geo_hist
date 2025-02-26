@@ -19,21 +19,21 @@ class OurHistory extends StatelessWidget {
 Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a missão deste espaço – que é, sobretudo, uma ferramenta para divulgação científica –, ultrapassa qualquer fronteira geográfica. Concebemos um Observatório capaz de interconectar diversas dimensões e realidades que permeiam a educação brasileira e o ensino de História e Geografia, congregando saberes, projetos, opiniões, experiências educativas e protagonistas de diferentes lugares. Para tanto, valorizamos e incentivamos a participação de todos e contamos com o poder multiplicador de cada pessoa, seja ela pesquisador, professor ou estudante.''';
 
     final padding = MediaQuery.of(context).size.height * 0.2;
-    final space = SizedBox(height: AppTheme.dimensions.space.large);
+    final space = SizedBox(height: AppTheme(context).dimensions.space.large);
 
     return Column(
       children: [
         Container(
           padding: EdgeInsets.symmetric(
             horizontal: padding,
-            vertical: AppTheme.dimensions.space.medium,
+            vertical: AppTheme(context).dimensions.space.medium,
           ),
           width: double.infinity,
-          color: AppTheme.colors.gray,
+          color: AppTheme(context).colors.gray,
           child: Center(
             child: TitleWidget(
               title: 'NOSSA HISTÓRIA',
-              color: AppTheme.colors.white,
+              color: AppTheme(context).colors.white,
             ),
           ),
         ),
@@ -44,7 +44,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
             children: [
               AppBody.medium(
                 text: firstText,
-                color: AppTheme.colors.darkGray,
+                color: AppTheme(context).colors.darkGray,
               ),
               space,
               Column(
@@ -52,17 +52,17 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
                   Image.asset(
                     '${AppAssets.images}/our-history.jpg',
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.small),
+                  SizedBox(height: AppTheme(context).dimensions.space.small),
                   AppLabel.small(
                     text: 'Foto: Antônio César Ortega',
-                    color: AppTheme.colors.darkGray,
+                    color: AppTheme(context).colors.darkGray,
                   ),
                 ],
               ),
               space,
               AppBody.medium(
                 text: secondText,
-                color: AppTheme.colors.darkGray,
+                color: AppTheme(context).colors.darkGray,
               ),
             ],
           ),

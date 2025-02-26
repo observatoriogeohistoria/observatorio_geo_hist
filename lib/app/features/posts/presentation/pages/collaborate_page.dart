@@ -48,24 +48,24 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width * 0.15,
-                      vertical: AppTheme.dimensions.space.medium,
+                      vertical: AppTheme(context).dimensions.space.medium,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const TitleWidget(title: 'COLABORE'),
-                        SizedBox(height: AppTheme.dimensions.space.xlarge),
+                        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
                         AppBody.big(
                           text: firstText,
                           textAlign: TextAlign.center,
-                          color: AppTheme.colors.white,
+                          color: AppTheme(context).colors.white,
                         ),
-                        SizedBox(height: AppTheme.dimensions.space.xlarge),
+                        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
                         PrimaryButton.medium(
                           text: AppStrings.email,
                           onPressed: () {},
                         ),
-                        SizedBox(height: AppTheme.dimensions.space.xlarge),
+                        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
@@ -73,13 +73,13 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                               TextSpan(
                                 text: secondText,
                                 style: AppTheme(context).typography.body.big.copyWith(
-                                      color: AppTheme.colors.white,
+                                      color: AppTheme(context).colors.white,
                                     ),
                               ),
                               TextSpan(
                                 text: ' clique aqui',
                                 style: AppTheme(context).typography.body.big.copyWith(
-                                      color: AppTheme.colors.orange,
+                                      color: AppTheme(context).colors.orange,
                                     ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -90,7 +90,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                               TextSpan(
                                 text: '.',
                                 style: AppTheme(context).typography.body.big.copyWith(
-                                      color: AppTheme.colors.white,
+                                      color: AppTheme(context).colors.white,
                                     ),
                               ),
                             ],

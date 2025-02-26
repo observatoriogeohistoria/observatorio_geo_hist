@@ -642,8 +642,6 @@ abstract class _$$LoginStateErrorImplCopyWith<$Res> {
       __$$LoginStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({AuthFailure failure});
-
-  $AuthFailureCopyWith<$Res> get failure;
 }
 
 /// @nodoc
@@ -667,16 +665,6 @@ class __$$LoginStateErrorImplCopyWithImpl<$Res>
           : failure // ignore: cast_nullable_to_non_nullable
               as AuthFailure,
     ));
-  }
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AuthFailureCopyWith<$Res> get failure {
-    return $AuthFailureCopyWith<$Res>(_value.failure, (value) {
-      return _then(_value.copyWith(failure: value));
-    });
   }
 }
 
@@ -1234,8 +1222,6 @@ abstract class _$$LogoutStateErrorImplCopyWith<$Res> {
       __$$LogoutStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({AuthFailure failure});
-
-  $AuthFailureCopyWith<$Res> get failure;
 }
 
 /// @nodoc
@@ -1259,16 +1245,6 @@ class __$$LogoutStateErrorImplCopyWithImpl<$Res>
           : failure // ignore: cast_nullable_to_non_nullable
               as AuthFailure,
     ));
-  }
-
-  /// Create a copy of LogoutState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AuthFailureCopyWith<$Res> get failure {
-    return $AuthFailureCopyWith<$Res>(_value.failure, (value) {
-      return _then(_value.copyWith(failure: value));
-    });
   }
 }
 

@@ -12,8 +12,9 @@ class SidebarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double padding =
-        isCollapsed ? AppTheme.dimensions.space.small : AppTheme.dimensions.space.medium;
+    double padding = isCollapsed
+        ? AppTheme(context).dimensions.space.small
+        : AppTheme(context).dimensions.space.medium;
 
     return Padding(
       padding: EdgeInsets.all(padding),

@@ -5,6 +5,17 @@ enum SidebarItem {
   media,
   posts;
 
+  String get value {
+    switch (this) {
+      case SidebarItem.users:
+        return 'usuarios';
+      case SidebarItem.media:
+        return 'mídias';
+      case SidebarItem.posts:
+        return 'posts';
+    }
+  }
+
   String get title {
     switch (this) {
       case SidebarItem.users:
@@ -31,7 +42,7 @@ enum SidebarItem {
     switch (value) {
       case 'usuarios':
         return SidebarItem.users;
-      case 'media':
+      case 'mídias':
         return SidebarItem.media;
       case 'posts':
         return SidebarItem.posts;

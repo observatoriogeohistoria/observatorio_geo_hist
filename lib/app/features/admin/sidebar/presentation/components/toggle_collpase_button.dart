@@ -23,10 +23,10 @@ class ToggleCollpaseButton extends StatelessWidget {
           alignment: isCollapsed ? Alignment.center : Alignment.centerRight,
           child: Container(
             padding: EdgeInsets.symmetric(
-              vertical: AppTheme.dimensions.space.medium,
-              horizontal: AppTheme.dimensions.space.small,
+              vertical: AppTheme(context).dimensions.space.medium,
+              horizontal: AppTheme(context).dimensions.space.small,
             ),
-            child: Icon(icon, color: AppTheme.colors.darkGray, size: 32),
+            child: Icon(icon, color: AppTheme(context).colors.darkGray, size: 32),
           ),
         ),
       ),

@@ -40,7 +40,7 @@ class UsersDatasourceImpl implements UsersDatasource {
   @override
   Future<void> createUser(UserModel user, String password) async {
     try {
-      final userCredential = await _firebaseAuthDatasource.signUp(user.email, password);
+      final userCredential = await _firebaseAuthDatasource.createUser(user.email, password);
       if (userCredential == null) throw Exception('Error creating user');
 
       final newUser = user.copyWith(id: userCredential.uid);

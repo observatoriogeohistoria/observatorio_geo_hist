@@ -10,7 +10,6 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -46,7 +45,7 @@ class _SigninPageState extends State<SigninPage> {
 
         if (state.loginState is LoginStateError) {
           final loginState = state.loginState as LoginStateError;
-          Messenger.showError(context, AuthFailure.toMessage(loginState.failure));
+          Messenger.showError(context, loginState.failure.message);
         }
       }),
     ];
@@ -63,10 +62,10 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final border = BorderSide(color: AppTheme.colors.gray);
+    final border = BorderSide(color: AppTheme(context).colors.gray);
 
     return Scaffold(
-      backgroundColor: AppTheme.colors.lightGray,
+      backgroundColor: AppTheme(context).colors.lightGray,
       body: SizedBox(
         width: size.width,
         height: size.height,
@@ -77,15 +76,15 @@ class _SigninPageState extends State<SigninPage> {
             child: Container(
               width: size.width * 0.3,
               height: size.height * 0.7,
-              padding: EdgeInsets.all(AppTheme.dimensions.space.large),
+              padding: EdgeInsets.all(AppTheme(context).dimensions.space.large),
               decoration: BoxDecoration(
-                color: AppTheme.colors.white,
-                borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
+                color: AppTheme(context).colors.white,
+                borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.large),
                 border: Border(
                   top: border,
                   left: border,
                   right: border,
-                  bottom: border.copyWith(width: AppTheme.dimensions.stroke.xlarge),
+                  bottom: border.copyWith(width: AppTheme(context).dimensions.stroke.xlarge),
                 ),
               ),
               child: Form(
@@ -96,15 +95,15 @@ class _SigninPageState extends State<SigninPage> {
                   children: [
                     AppTitle.big(
                       text: 'LOGIN',
-                      color: AppTheme.colors.darkGray,
+                      color: AppTheme(context).colors.darkGray,
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.large),
+                    SizedBox(height: AppTheme(context).dimensions.space.large),
                     AppTextField(
                       controller: emailController,
                       hintText: 'E-MAIL',
                       validator: (email) => Validators.isValidEmail(email),
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.large),
+                    SizedBox(height: AppTheme(context).dimensions.space.large),
                     AppTextField(
                       controller: passwordController,
                       hintText: 'SENHA',
@@ -117,13 +116,13 @@ class _SigninPageState extends State<SigninPage> {
                             : const Icon(Icons.visibility),
                       ),
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.small),
+                    SizedBox(height: AppTheme(context).dimensions.space.small),
                     AppLabel.small(
                       text:
                           'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
-                      color: AppTheme.colors.gray,
+                      color: AppTheme(context).colors.gray,
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.xlarge),
+                    SizedBox(height: AppTheme(context).dimensions.space.xlarge),
                     loginState is LoginStateLoading
                         ? const Loading()
                         : PrimaryButton.medium(

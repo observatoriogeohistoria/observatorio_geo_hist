@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
+import 'package:observatorio_geo_hist/firebase_options.dart';
 
 abstract class FirebaseAuthDatasource {
-  Future<User?> signUp(String email, String password);
   Future<User?> signIn(String email, String password);
   Future<void> signOut();
+  Future<User?> createUser(String email, String password);
   Future<User?> currentUser();
   Stream<User?> authStateChanges();
 }
@@ -16,16 +18,20 @@ class FirebaseAuthDatasourceImpl implements FirebaseAuthDatasource {
   FirebaseAuthDatasourceImpl(this._firebaseAuth, this._loggerService);
 
   @override
-  Future<User?> signUp(String email, String password) async {
+  Future<User?> createUser(String email, String password) async {
     try {
-      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+      final app = await Firebase.initializeApp(
+        name: 'TemporaryApp',
+        options: DefaultFirebaseOptions.currentPlatform,
       );
+
+      final userCredential = await FirebaseAuth.instanceFor(app: app)
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await app.delete();
 
       return userCredential.user;
     } catch (exception, stackTrace) {
-      _loggerService.error('Error signing up: $exception', stackTrace: stackTrace);
+      _loggerService.error('Error creating user: $exception', stackTrace: stackTrace);
       rethrow;
     }
   }

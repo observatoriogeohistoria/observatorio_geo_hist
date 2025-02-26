@@ -9,18 +9,11 @@ part 'app_dimensions/app_dimensions.dart';
 part 'app_typography/app_typography.dart';
 
 class AppTheme {
-  static AppTheme? _instance;
-
-  factory AppTheme(BuildContext context) {
-    return _instance ??= AppTheme._(context);
-  }
-
-  AppTheme._(this.context);
+  AppTheme(this.context);
 
   late final BuildContext context;
 
-  static AppColors colors = AppColors.instance;
-  static AppDimensions dimensions = AppDimensions.instance;
-
+  AppColors get colors => AppColors.instance;
+  AppDimensions get dimensions => AppDimensions.instance;
   AppTypography get typography => AppTypography(context);
 }

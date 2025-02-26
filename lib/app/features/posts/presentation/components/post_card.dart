@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/image_from_url/image_from_url.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
@@ -19,40 +20,27 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final border = BorderSide(color: AppTheme.colors.lightGray);
-
     return AppMouseRegion(
       child: GestureDetector(
         onTap: () => GoRouter.of(context).go('/posts/${category.area}/${category.key}/${post.id}'),
-        child: Container(
+        child: AppCard(
           width: MediaQuery.of(context).size.width * 0.2,
-          padding: EdgeInsets.all(AppTheme.dimensions.space.small),
-          decoration: BoxDecoration(
-            color: AppTheme.colors.white,
-            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-            border: Border(
-              top: border,
-              left: border,
-              right: border,
-              bottom: border.copyWith(width: 4),
-            ),
-          ),
           child: Column(
             children: [
               ImageFromUrl(
                 imageUrl: post.imgUrl,
-                radius: AppTheme.dimensions.radius.large,
+                radius: AppTheme(context).dimensions.radius.large,
               ),
-              SizedBox(height: AppTheme.dimensions.space.medium),
+              SizedBox(height: AppTheme(context).dimensions.space.medium),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+                padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.small),
                 child: AppTitle.small(
                   text: post.title,
                   textAlign: TextAlign.center,
-                  color: AppTheme.colors.darkGray,
+                  color: AppTheme(context).colors.darkGray,
                 ),
               ),
-              SizedBox(height: AppTheme.dimensions.space.small),
+              SizedBox(height: AppTheme(context).dimensions.space.small),
             ],
           ),
         ),

@@ -6,11 +6,10 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/users_section.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/users_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_navigation.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
@@ -53,7 +52,7 @@ class _PanelPageState extends State<PanelPage> {
 
         if (state.logoutState is LogoutStateError) {
           final loginState = state.loginState as LoginStateError;
-          Messenger.showError(context, AuthFailure.toMessage(loginState.failure));
+          Messenger.showError(context, loginState.failure.message);
         }
       }),
     ];
@@ -62,7 +61,7 @@ class _PanelPageState extends State<PanelPage> {
   @override
   void dispose() {
     for (var reaction in _reactions) {
-      reaction();
+      reaction.reaction.dispose();
     }
     super.dispose();
   }
@@ -74,15 +73,15 @@ class _PanelPageState extends State<PanelPage> {
     return Scaffold(
       drawer: isDesktop ? null : const Sidebar(),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: AppTheme.colors.white),
-        backgroundColor: AppTheme.colors.orange,
+        iconTheme: IconThemeData(color: AppTheme(context).colors.white),
+        backgroundColor: AppTheme(context).colors.orange,
         title: AppHeadline.small(
           text: 'PAINEL ADMINISTRATIVO',
-          color: AppTheme.colors.white,
+          color: AppTheme(context).colors.white,
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+            padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.small),
             child: IconButton(
               icon: const Icon(Icons.exit_to_app),
               onPressed: authStore.logout,
@@ -91,19 +90,26 @@ class _PanelPageState extends State<PanelPage> {
         ],
         centerTitle: true,
       ),
-      body: Observer(
-        builder: (context) {
-          final body = _buildBody(sidebarStore.selectedItem);
+      body: Expanded(
+        child: Observer(
+          builder: (context) {
+            final body = _buildBody(sidebarStore.selectedItem);
 
-          if (!isDesktop) return body;
+            if (!isDesktop) return body;
 
-          return Row(
-            children: [
-              const Flexible(child: Sidebar()),
-              Expanded(child: body),
-            ],
-          );
-        },
+            return Row(
+              children: [
+                const Expanded(
+                  child: Sidebar(),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: body,
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -113,9 +119,9 @@ class _PanelPageState extends State<PanelPage> {
       case SidebarItem.users:
         return const UsersSection();
       case SidebarItem.media:
-        return Container();
+        return const UsersSection();
       case SidebarItem.posts:
-        return Container();
+        return const UsersSection();
     }
   }
 }

@@ -16,11 +16,11 @@ class TitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: AppTheme.dimensions.space.large,
+        horizontal: AppTheme(context).dimensions.space.large,
       ),
       child: AppHeadline.big(
         text: title,
-        color: color ?? AppTheme.colors.white,
+        color: color ?? AppTheme(context).colors.white,
       ),
     );
   }

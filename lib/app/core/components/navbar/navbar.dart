@@ -67,7 +67,7 @@ class _NavbarState extends State<Navbar> {
     final double width = MediaQuery.of(context).size.width * 0.8;
 
     return Container(
-      color: AppTheme.colors.white,
+      color: AppTheme(context).colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

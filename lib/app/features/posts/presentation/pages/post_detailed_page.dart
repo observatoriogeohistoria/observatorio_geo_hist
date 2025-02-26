@@ -68,7 +68,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.colors.white,
+      backgroundColor: AppTheme(context).colors.white,
       body: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(child: Navbar()),
@@ -91,7 +91,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: MediaQuery.of(context).size.width * 0.2,
-          vertical: 2 * AppTheme.dimensions.space.large,
+          vertical: 2 * AppTheme(context).dimensions.space.large,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -100,14 +100,14 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
             AppHeadline.small(
               text: post.title.toUpperCase(),
               textAlign: TextAlign.start,
-              color: AppTheme.colors.orange,
+              color: AppTheme(context).colors.orange,
             ),
-            SizedBox(height: AppTheme.dimensions.space.small),
+            SizedBox(height: AppTheme(context).dimensions.space.small),
             AppTitle.small(
               text: post.subtitle.toUpperCase(),
-              color: AppTheme.colors.gray,
+              color: AppTheme(context).colors.gray,
             ),
-            SizedBox(height: AppTheme.dimensions.space.large),
+            SizedBox(height: AppTheme(context).dimensions.space.large),
             MarkdownText(text: post.markdownContent),
           ],
         ),

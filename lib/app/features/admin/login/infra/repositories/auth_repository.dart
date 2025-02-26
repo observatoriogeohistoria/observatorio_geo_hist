@@ -21,26 +21,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
       if (user != null) return Right(user);
 
-      return const Left(AuthFailure.userNotFound());
+      return const Left(UserNotFound());
     } on FirebaseAuthException catch (error) {
-      switch (error.code.toLowerCase()) {
-        case 'invalid-credential':
-          return left(const AuthFailure.invalidCredentials());
-        case 'invalid-email':
-          return left(const AuthFailure.invalidEmail());
-        case 'user-disabled':
-          return left(const AuthFailure.userDisabled());
-        case 'user-not-found':
-          return left(const AuthFailure.userNotFound());
-        case 'wrong-password':
-          return left(const AuthFailure.wrongPassword());
-        case 'too-many-requests':
-          return left(const AuthFailure.tooManyRequests());
-        default:
-          return left(const AuthFailure.serverError());
-      }
+      return Left(AuthFailure.fromException(error));
     } catch (_) {
-      return const Left(AuthFailure.serverError());
+      return const Left(ServerError());
     }
   }
 
@@ -49,8 +34,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await _datasource.signOut();
       return const Right(unit);
+    } on FirebaseAuthException catch (error) {
+      return Left(AuthFailure.fromException(error));
     } catch (_) {
-      throw const Left(AuthFailure.serverError());
+      throw const Left(ServerError());
     }
   }
 
@@ -60,9 +47,11 @@ class AuthRepositoryImpl implements AuthRepository {
       final user = await _datasource.currentUser();
 
       if (user != null) return Right(user);
-      return const Left(AuthFailure.userNotFound());
+      return const Left(UserNotFound());
+    } on FirebaseAuthException catch (error) {
+      return Left(AuthFailure.fromException(error));
     } catch (_) {
-      throw const Left(AuthFailure.userNotFound());
+      throw const Left(UserNotFound());
     }
   }
 }

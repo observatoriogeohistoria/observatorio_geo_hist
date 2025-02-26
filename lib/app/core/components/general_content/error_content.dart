@@ -15,7 +15,7 @@ class ErrorContent extends StatelessWidget {
     final content = Center(
       child: AppBody.big(
         text: 'Erro ao carregar a página',
-        color: AppTheme.colors.gray,
+        color: AppTheme(context).colors.gray,
       ),
     );
 

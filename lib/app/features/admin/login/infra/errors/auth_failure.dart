@@ -1,30 +1,72 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
 
-part 'auth_failure.freezed.dart';
+class AuthFailure extends Failure {
+  const AuthFailure([
+    super.message = "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+  ]);
 
-@freezed
-class AuthFailure with _$AuthFailure {
-  const factory AuthFailure.invalidCredentials() = InvalidCredentials;
-  const factory AuthFailure.invalidEmail() = InvalidEmailAddress;
-  const factory AuthFailure.userDisabled() = UserDisabled;
-  const factory AuthFailure.userNotFound() = UserNotFound;
-  const factory AuthFailure.wrongPassword() = WrongPassword;
-  const factory AuthFailure.tooManyRequests() = TooManyRequests;
-  const factory AuthFailure.emailAlreadyInUse() = EmailAlreadyInUse;
-  const factory AuthFailure.serverError() = ServerError;
+  @override
+  List<Object> get props => [message];
 
-  static String toMessage(
-    AuthFailure failure,
+  static AuthFailure fromException(
+    FirebaseAuthException exception,
   ) {
-    return failure.map(
-      invalidCredentials: (_) => "Credenciais inválidas",
-      invalidEmail: (_) => "E-mail inválido",
-      userDisabled: (_) => "Usuário desabilitado",
-      userNotFound: (_) => "Usuário não encontrado",
-      wrongPassword: (_) => "Senha incorreta",
-      tooManyRequests: (_) => "Muitas tentativas, tente novamente mais tarde",
-      emailAlreadyInUse: (_) => "E-mail já está em uso",
-      serverError: (_) => "Erro no servidor",
-    );
+    switch (exception.code.toLowerCase()) {
+      case 'invalid-credential':
+        return const InvalidCredentials();
+      case 'invalid-email':
+        return const InvalidEmailAddress();
+      case 'user-disabled':
+        return const UserDisabled();
+      case 'user-not-found':
+        return const UserNotFound();
+      case 'wrong-password':
+        return const WrongPassword();
+      case 'too-many-requests':
+        return const TooManyRequests();
+      case 'email-already-in-use':
+        return const EmailAlreadyInUse();
+      case 'permission-denied':
+        return const Forbidden();
+      default:
+        return const ServerError();
+    }
   }
+}
+
+class InvalidCredentials extends AuthFailure {
+  const InvalidCredentials() : super("Credenciais inválidas");
+}
+
+class InvalidEmailAddress extends AuthFailure {
+  const InvalidEmailAddress() : super("E-mail inválido");
+}
+
+class UserDisabled extends AuthFailure {
+  const UserDisabled() : super("Usuário desabilitado");
+}
+
+class UserNotFound extends AuthFailure {
+  const UserNotFound() : super("Usuário não encontrado");
+}
+
+class WrongPassword extends AuthFailure {
+  const WrongPassword() : super("Senha incorreta");
+}
+
+class TooManyRequests extends AuthFailure {
+  const TooManyRequests() : super("Muitas tentativas, tente novamente mais tarde");
+}
+
+class EmailAlreadyInUse extends AuthFailure {
+  const EmailAlreadyInUse() : super("E-mail já está em uso");
+}
+
+class Forbidden extends AuthFailure {
+  const Forbidden() : super("Acesso negado");
+}
+
+class ServerError extends AuthFailure {
+  const ServerError() : super("Erro no servidor");
 }

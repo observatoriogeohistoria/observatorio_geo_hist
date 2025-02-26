@@ -19,14 +19,14 @@ class PageNotFound extends StatelessWidget {
           children: [
             AppHeadline.big(
               text: '404',
-              color: AppTheme.colors.darkGray,
+              color: AppTheme(context).colors.darkGray,
             ),
-            SizedBox(height: AppTheme.dimensions.space.medium),
+            SizedBox(height: AppTheme(context).dimensions.space.medium),
             AppTitle.big(
               text: 'Página não encontrada',
-              color: AppTheme.colors.gray,
+              color: AppTheme(context).colors.gray,
             ),
-            SizedBox(height: AppTheme.dimensions.space.medium),
+            SizedBox(height: AppTheme(context).dimensions.space.medium),
             PrimaryButton.big(
               text: 'HOME',
               onPressed: () => GoRouter.of(context).go('/'),

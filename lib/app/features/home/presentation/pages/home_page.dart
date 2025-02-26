@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.colors.white,
+      backgroundColor: AppTheme(context).colors.white,
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -53,7 +53,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
         if (member == null) fetchTeamStore.fetchTeam();
 
         return Scaffold(
-          backgroundColor: AppTheme.colors.white,
+          backgroundColor: AppTheme(context).colors.white,
           body: CustomScrollView(
             slivers: [
               const SliverToBoxAdapter(child: Navbar()),
@@ -61,12 +61,12 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                 hasScrollBody: false,
                 child: member == null
                     ? CircularProgressIndicator(
-                        color: AppTheme.colors.orange,
+                        color: AppTheme(context).colors.orange,
                       )
                     : Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: MediaQuery.of(context).size.width * 0.2,
-                          vertical: 2 * AppTheme.dimensions.space.large,
+                          vertical: 2 * AppTheme(context).dimensions.space.large,
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -75,25 +75,26 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                               alignment: Alignment.topLeft,
                               child: AppHeadline.small(
                                 text: member.name.toUpperCase(),
-                                color: AppTheme.colors.orange,
+                                color: AppTheme(context).colors.orange,
                               ),
                             ),
                             Align(
                               alignment: Alignment.topLeft,
                               child: AppHeadline.medium(
                                 text: member.role.toUpperCase(),
-                                color: AppTheme.colors.gray,
+                                color: AppTheme(context).colors.gray,
                               ),
                             ),
-                            SizedBox(height: AppTheme.dimensions.space.large),
+                            SizedBox(height: AppTheme(context).dimensions.space.large),
                             AppBody.big(
                               text: member.description,
                               textAlign: TextAlign.justify,
-                              color: AppTheme.colors.darkGray,
+                              color: AppTheme(context).colors.darkGray,
                             ),
                             if (member.lattesUrl.isNotEmpty)
                               Container(
-                                margin: EdgeInsets.only(top: AppTheme.dimensions.space.large),
+                                margin:
+                                    EdgeInsets.only(top: AppTheme(context).dimensions.space.large),
                                 child: PrimaryButton.medium(
                                   text: 'Currículo Lattes',
                                   onPressed: () async {

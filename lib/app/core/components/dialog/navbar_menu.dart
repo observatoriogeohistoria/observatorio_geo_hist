@@ -16,7 +16,7 @@ class NavbarMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.colors.darkGray.withValues(alpha: 0.5),
+      backgroundColor: AppTheme(context).colors.darkGray.withValues(alpha: 0.5),
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -42,7 +42,7 @@ class NavbarMenu extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(AppTheme.dimensions.space.large),
+                padding: EdgeInsets.all(AppTheme(context).dimensions.space.large),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -51,7 +51,7 @@ class NavbarMenu extends StatelessWidget {
                       child: AppTitle.big(
                         text: title,
                         textAlign: TextAlign.center,
-                        color: AppTheme.colors.lightGray,
+                        color: AppTheme(context).colors.lightGray,
                       ),
                     ),
                     Align(
@@ -60,7 +60,7 @@ class NavbarMenu extends StatelessWidget {
                         onPressed: () => Navigator.of(context).pop(),
                         icon: Icon(
                           Icons.close,
-                          color: AppTheme.colors.white,
+                          color: AppTheme(context).colors.white,
                           size: 40,
                         ),
                       ),
@@ -78,8 +78,8 @@ class NavbarMenu extends StatelessWidget {
                         onPressed: item.onPressed,
                         menuChildren: item.menuChildren,
                         textStyle: AppTheme(context).typography.headline.big,
-                        textColor: AppTheme.colors.white,
-                        textColorOnHover: AppTheme.colors.darkGray,
+                        textColor: AppTheme(context).colors.white,
+                        textColorOnHover: AppTheme(context).colors.darkGray,
                       ),
                   ],
                 ),

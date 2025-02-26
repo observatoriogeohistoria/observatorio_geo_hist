@@ -24,12 +24,28 @@ mixin _$UsersStore on UsersStoreBase, Store {
     });
   }
 
+  late final _$stateAtom = Atom(name: 'UsersStoreBase.state', context: context);
+
+  @override
+  ManageUsersState get state {
+    _$stateAtom.reportRead();
+    return super.state;
+  }
+
+  @override
+  set state(ManageUsersState value) {
+    _$stateAtom.reportWrite(value, super.state, () {
+      super.state = value;
+    });
+  }
+
   late final _$getUsersAsyncAction =
       AsyncAction('UsersStoreBase.getUsers', context: context);
 
   @override
-  Future<void> getUsers() {
-    return _$getUsersAsyncAction.run(() => super.getUsers());
+  Future<void> getUsers({bool emitLoading = true}) {
+    return _$getUsersAsyncAction
+        .run(() => super.getUsers(emitLoading: emitLoading));
   }
 
   late final _$createUserAsyncAction =
@@ -40,10 +56,19 @@ mixin _$UsersStore on UsersStoreBase, Store {
     return _$createUserAsyncAction.run(() => super.createUser(user, password));
   }
 
+  late final _$deleteUserAsyncAction =
+      AsyncAction('UsersStoreBase.deleteUser', context: context);
+
+  @override
+  Future<void> deleteUser(UserModel user) {
+    return _$deleteUserAsyncAction.run(() => super.deleteUser(user));
+  }
+
   @override
   String toString() {
     return '''
-users: ${users}
+users: ${users},
+state: ${state}
     ''';
   }
 }

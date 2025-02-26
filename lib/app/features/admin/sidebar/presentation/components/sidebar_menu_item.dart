@@ -21,9 +21,9 @@ class SidebarMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const iconSize = 24.0;
-    final widthWhenCollapsed = 24 + 2 * AppTheme.dimensions.space.medium;
+    final widthWhenCollapsed = 24 + 2 * AppTheme(context).dimensions.space.medium;
 
-    final icon = Icon(item.icon, color: AppTheme.colors.orange, size: iconSize);
+    final icon = Icon(item.icon, color: AppTheme(context).colors.orange, size: iconSize);
 
     return Tooltip(
       message: isCollapsed ? item.title : '',
@@ -34,23 +34,23 @@ class SidebarMenuItem extends StatelessWidget {
         child: InkWell(
           onTap: onClicked,
           mouseCursor: SystemMouseCursors.click,
-          hoverColor: isCollapsed ? Colors.transparent : AppTheme.colors.lightGray,
-          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+          hoverColor: isCollapsed ? Colors.transparent : AppTheme(context).colors.lightGray,
+          borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
           child: isCollapsed
               ? icon
               : Container(
-                  padding: EdgeInsets.all(AppTheme.dimensions.space.medium),
+                  padding: EdgeInsets.all(AppTheme(context).dimensions.space.medium),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppTheme.colors.lightGray : Colors.transparent,
-                    borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+                    color: isSelected ? AppTheme(context).colors.lightGray : Colors.transparent,
+                    borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
                   ),
                   child: Row(
                     children: [
                       icon,
-                      SizedBox(width: AppTheme.dimensions.space.medium),
+                      SizedBox(width: AppTheme(context).dimensions.space.medium),
                       AppTitle.medium(
                         text: item.title,
-                        color: AppTheme.colors.darkGray,
+                        color: AppTheme(context).colors.darkGray,
                       ),
                     ],
                   ),

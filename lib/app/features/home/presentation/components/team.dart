@@ -28,18 +28,18 @@ class _TeamState extends State<Team> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        top: AppTheme.dimensions.space.large,
-        bottom: AppTheme.dimensions.space.xlarge,
-        left: AppTheme.dimensions.space.large,
-        right: AppTheme.dimensions.space.large,
+        top: AppTheme(context).dimensions.space.large,
+        bottom: AppTheme(context).dimensions.space.xlarge,
+        left: AppTheme(context).dimensions.space.large,
+        right: AppTheme(context).dimensions.space.large,
       ),
       child: Column(
         children: [
           TitleWidget(
             title: 'EQUIPE',
-            color: AppTheme.colors.orange,
+            color: AppTheme(context).colors.orange,
           ),
-          SizedBox(height: AppTheme.dimensions.space.large),
+          SizedBox(height: AppTheme(context).dimensions.space.large),
           Row(
             children: [
               _buildArrow(
@@ -71,11 +71,11 @@ class _TeamState extends State<Team> {
                           children: [
                             AppBody.big(
                               text: member.name.toUpperCase(),
-                              color: AppTheme.colors.orange,
+                              color: AppTheme(context).colors.orange,
                             ),
                             AppTitle.medium(
                               text: member.role,
-                              color: AppTheme.colors.gray,
+                              color: AppTheme(context).colors.gray,
                             ),
                           ],
                         ),
@@ -103,15 +103,15 @@ class _TeamState extends State<Team> {
       onTap: () => isBack ? controller.previousPage() : controller.nextPage(),
       child: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(AppTheme.dimensions.space.small),
+        padding: EdgeInsets.all(AppTheme(context).dimensions.space.small),
         decoration: BoxDecoration(
-          color: AppTheme.colors.orange.withValues(alpha: 0.35),
-          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
+          color: AppTheme(context).colors.orange.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.small),
         ),
         child: Center(
           child: Icon(
             isBack ? Icons.arrow_back_ios_outlined : Icons.arrow_forward_ios_outlined,
-            color: AppTheme.colors.white,
+            color: AppTheme(context).colors.white,
           ),
         ),
       ),

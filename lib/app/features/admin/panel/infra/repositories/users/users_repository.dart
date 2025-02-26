@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/users/users_datasources.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/users_failures.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
@@ -21,6 +23,8 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       final users = await _usersDatasource.getUsers();
       return Right(users);
+    } on FirebaseAuthException catch (error) {
+      return Left(AuthFailure.fromException(error));
     } catch (error) {
       return const Left(GetUsersFailure());
     }
@@ -31,6 +35,8 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       await _usersDatasource.createUser(user, password);
       return const Right(unit);
+    } on FirebaseAuthException catch (error) {
+      return Left(AuthFailure.fromException(error));
     } catch (error) {
       return const Left(CreateUserFailure());
     }
@@ -41,6 +47,8 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       await _usersDatasource.updateUser(user);
       return const Right(unit);
+    } on FirebaseAuthException catch (error) {
+      return Left(AuthFailure.fromException(error));
     } catch (error) {
       return const Left(UpdateUserFailure());
     }
@@ -51,8 +59,8 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       await _usersDatasource.deleteUser(user);
       return const Right(unit);
-    } on Failure catch (failure) {
-      return Left(failure);
+    } on FirebaseAuthException catch (error) {
+      return Left(AuthFailure.fromException(error));
     } catch (error) {
       return const Left(DeleteUserFailure());
     }

@@ -59,28 +59,28 @@ class _NavButtonState extends State<NavButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppTheme.dimensions.space.small),
+      padding: EdgeInsets.all(AppTheme(context).dimensions.space.small),
       child: TextButton(
         statesController: controller,
         style: ButtonStyle(
           overlayColor: WidgetStateProperty.all(
-            !hasMenu ? Colors.transparent : AppTheme.colors.gray.withValues(alpha: 0.1),
+            !hasMenu ? Colors.transparent : AppTheme(context).colors.gray.withValues(alpha: 0.1),
           ),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
+              borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.small),
             ),
           ),
           foregroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.hovered)
-                ? widget.textColorOnHover ?? AppTheme.colors.orange
-                : widget.textColor ?? AppTheme.colors.darkGray,
+                ? widget.textColorOnHover ?? AppTheme(context).colors.orange
+                : widget.textColor ?? AppTheme(context).colors.darkGray,
           ),
           textStyle: WidgetStateProperty.resolveWith(
             (states) => (widget.textStyle ?? AppTheme(context).typography.title.medium).copyWith(
               color: states.contains(WidgetState.hovered)
-                  ? widget.textColorOnHover ?? AppTheme.colors.orange
-                  : widget.textColor ?? AppTheme.colors.darkGray,
+                  ? widget.textColorOnHover ?? AppTheme(context).colors.orange
+                  : widget.textColor ?? AppTheme(context).colors.darkGray,
             ),
           ),
         ),

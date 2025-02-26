@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class PrimaryButton extends StatelessWidget {
-  const PrimaryButton.small({
+class SecondaryButton extends StatelessWidget {
+  const SecondaryButton.small({
     required this.text,
     required this.onPressed,
     super.key,
   }) : size = ButtonSize.small;
 
-  const PrimaryButton.medium({
+  const SecondaryButton.medium({
     required this.text,
     required this.onPressed,
     super.key,
   }) : size = ButtonSize.medium;
 
-  const PrimaryButton.big({
+  const SecondaryButton.big({
     required this.text,
     required this.onPressed,
     super.key,
@@ -54,12 +54,13 @@ class PrimaryButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.hovered)) {
-            return AppTheme(context).colors.orange.withValues(alpha: 0.8);
+            return AppTheme(context).colors.lightGray.withValues(alpha: 0.2);
           }
-          return AppTheme(context).colors.orange;
+          return AppTheme(context).colors.white;
         }),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
+            side: BorderSide(color: AppTheme(context).colors.orange),
             borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.small),
           ),
         ),
@@ -68,7 +69,7 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       child: AppTitle.big(
         text: text,
-        color: AppTheme(context).colors.white,
+        color: AppTheme(context).colors.orange,
       ),
     );
   }

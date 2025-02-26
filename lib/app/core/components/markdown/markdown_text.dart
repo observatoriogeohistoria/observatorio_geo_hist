@@ -35,22 +35,22 @@ class MarkdownText extends StatelessWidget {
       data: formattedText,
       styleSheet: MarkdownStyleSheet(
         code: AppTheme(context).typography.body.medium.copyWith(
-              color: AppTheme.colors.orange,
+              color: AppTheme(context).colors.orange,
             ),
         strong: AppTheme(context).typography.body.medium.copyWith(
-              color: AppTheme.colors.orange,
+              color: AppTheme(context).colors.orange,
             ),
         p: AppTheme(context).typography.body.medium.copyWith(
-              color: AppTheme.colors.darkGray,
+              color: AppTheme(context).colors.darkGray,
             ),
         h1: AppTheme(context).typography.title.big.copyWith(
-              color: AppTheme.colors.orange,
+              color: AppTheme(context).colors.orange,
             ),
         h2: AppTheme(context).typography.title.medium.copyWith(
-              color: AppTheme.colors.gray,
+              color: AppTheme(context).colors.gray,
             ),
         h3: AppTheme(context).typography.title.small.copyWith(
-              color: AppTheme.colors.gray,
+              color: AppTheme(context).colors.gray,
             ),
         h6: AppTheme(context).typography.body.medium.copyWith(
               color: Colors.transparent,
