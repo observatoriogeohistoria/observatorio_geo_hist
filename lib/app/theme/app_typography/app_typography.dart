@@ -9,6 +9,42 @@ class AppTypography {
   late final bool isMobile;
   late final bool isTablet;
 
+  TypographyStyle get headline => _createTypographyStyle(
+        {TypographySize.small: 30, TypographySize.medium: 36, TypographySize.big: 40},
+        {TypographySize.small: -0.25, TypographySize.medium: 0, TypographySize.big: 0},
+        FontWeight.w800,
+      );
+
+  TypographyStyle get title => _createTypographyStyle(
+        {TypographySize.small: 18, TypographySize.medium: 22, TypographySize.big: 26},
+        {TypographySize.small: -0.25, TypographySize.medium: -0.25, TypographySize.big: -0.25},
+        FontWeight.w600,
+      );
+
+  TypographyStyle get body => _createTypographyStyle(
+        {TypographySize.small: 16, TypographySize.medium: 18, TypographySize.big: 22},
+        {TypographySize.small: 0.35, TypographySize.medium: 0.35, TypographySize.big: 0.2},
+        FontWeight.w500,
+      );
+
+  TypographyStyle get label => _createTypographyStyle(
+        {TypographySize.small: 12, TypographySize.medium: 14, TypographySize.big: 18},
+        {TypographySize.small: 0.35, TypographySize.medium: 0.2, TypographySize.big: 0.2},
+        FontWeight.w400,
+      );
+
+  TypographyStyle _createTypographyStyle(
+    Map<TypographySize, double> baseSizes,
+    Map<TypographySize, double> spacing,
+    FontWeight weight,
+  ) {
+    return TypographyStyle._(
+      small: _textStyle(TypographySize.small, baseSizes, spacing, weight),
+      medium: _textStyle(TypographySize.medium, baseSizes, spacing, weight),
+      big: _textStyle(TypographySize.big, baseSizes, spacing, weight),
+    );
+  }
+
   double _getFontSize(TypographySize size, Map<TypographySize, double> baseSizes) {
     double baseFontSize = baseSizes[size] ?? 14;
 
@@ -21,44 +57,19 @@ class AppTypography {
     }
   }
 
-  TypographyStyle get headline => _createTypographyStyle(
-        {TypographySize.small: 30, TypographySize.medium: 36, TypographySize.big: 40},
-        FontWeight.w800,
-      );
-
-  TypographyStyle get title => _createTypographyStyle(
-        {TypographySize.small: 18, TypographySize.medium: 22, TypographySize.big: 26},
-        FontWeight.w600,
-      );
-
-  TypographyStyle get body => _createTypographyStyle(
-        {TypographySize.small: 16, TypographySize.medium: 18, TypographySize.big: 22},
-        FontWeight.w500,
-      );
-
-  TypographyStyle get label => _createTypographyStyle(
-        {TypographySize.small: 12, TypographySize.medium: 14, TypographySize.big: 18},
-        FontWeight.w400,
-      );
-
-  TypographyStyle _createTypographyStyle(Map<TypographySize, double> baseSizes, FontWeight weight) {
-    return TypographyStyle._(
-      small: _textStyle(TypographySize.small, baseSizes, weight),
-      medium: _textStyle(TypographySize.medium, baseSizes, weight),
-      big: _textStyle(TypographySize.big, baseSizes, weight),
-    );
-  }
-
   TextStyle _textStyle(
     TypographySize size,
     Map<TypographySize, double> baseSizes,
+    Map<TypographySize, double> spacing,
     FontWeight weight,
   ) {
     double fontSize = _getFontSize(size, baseSizes);
+    double letterSpacing = spacing[size] ?? 0.2;
+
     return GoogleFonts.dosis(
       fontSize: fontSize,
       fontWeight: weight,
-      letterSpacing: 0.2,
+      letterSpacing: letterSpacing,
       height: (fontSize + 6) / fontSize,
     );
   }
