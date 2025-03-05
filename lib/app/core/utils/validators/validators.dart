@@ -13,4 +13,9 @@ class Validators {
         RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$').hasMatch(password);
     return hasMatch ? null : 'Senha inválida';
   }
+
+  static String? isValidRole(String? role) {
+    if (role == null || role.isEmpty) return 'Por favor, selecione um papel';
+    return null;
+  }
 }

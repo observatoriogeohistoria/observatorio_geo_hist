@@ -55,10 +55,12 @@ class _AppTextFieldState extends State<AppTextField> {
       obscureText: widget.obscureText,
       validator: widget.validator,
       decoration: InputDecoration(
-        suffixIcon: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.small),
-          child: widget.suffixIcon,
-        ),
+        suffixIcon: widget.suffixIcon == null
+            ? null
+            : Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.small),
+                child: widget.suffixIcon,
+              ),
         suffixIconConstraints: const BoxConstraints(
           minHeight: 32,
           minWidth: 32,

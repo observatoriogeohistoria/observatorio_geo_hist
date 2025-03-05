@@ -101,14 +101,14 @@ class _SigninPageState extends State<SigninPage> {
                     AppTextField(
                       controller: emailController,
                       hintText: 'E-MAIL',
-                      validator: (email) => Validators.isValidEmail(email),
+                      validator: Validators.isValidEmail,
                     ),
                     SizedBox(height: AppTheme(context).dimensions.space.large),
                     AppTextField(
                       controller: passwordController,
                       hintText: 'SENHA',
                       obscureText: !authStore.passwordVisible,
-                      validator: (password) => Validators.isValidPassword(password),
+                      validator: Validators.isValidPassword,
                       suffixIcon: GestureDetector(
                         onTap: authStore.togglePasswordVisibility,
                         child: authStore.passwordVisible

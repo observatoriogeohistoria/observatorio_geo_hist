@@ -6,7 +6,6 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/user_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_user_dialog.dart';
@@ -75,12 +74,7 @@ class _UsersSectionState extends State<UsersSection> {
               onPressed: () {
                 showCreateUserDialog(
                   context,
-                  onCreate: (name, email, password) {
-                    usersStore.createUser(
-                      UserModel(name: name, email: email, role: UserRole.editor),
-                      password,
-                    );
-                  },
+                  onCreate: (user, password) => usersStore.createUser(user, password),
                 );
               },
             ),

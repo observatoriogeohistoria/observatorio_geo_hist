@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateUserDialog(
   BuildContext context, {
-  required void Function(String name, String email, String password) onCreate,
+  required void Function(UserModel user, String password) onCreate,
 }) {
   showDialog(
     context: context,
@@ -25,7 +27,7 @@ class CreateUserDialog extends StatefulWidget {
     super.key,
   });
 
-  final void Function(String name, String email, String password) onCreate;
+  final void Function(UserModel user, String password) onCreate;
 
   @override
   State<CreateUserDialog> createState() => _CreateUserDialogState();
@@ -37,6 +39,8 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  UserRole? selectedRole;
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +65,25 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
             AppTextField(
               controller: _emailController,
               hintText: 'E-mail',
-              validator: (email) => Validators.isValidEmail(email),
+              validator: Validators.isValidEmail,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.medium),
             AppTextField(
               controller: _passwordController,
               hintText: 'Senha',
-              validator: (password) => Validators.isValidPassword(password),
+              validator: Validators.isValidPassword,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.medium),
+            AppDropdownField<UserRole>(
+              hintText: 'Selecione um papel',
+              items: UserRole.values,
+              itemToString: (role) => role.toString(),
+              value: selectedRole,
+              onChanged: (role) {
+                if (role == null) return;
+                setState(() => selectedRole = UserRole.fromString(role));
+              },
+            ),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -85,8 +99,11 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
                     if (!_formKey.currentState!.validate()) return;
 
                     widget.onCreate(
-                      _nameController.text,
-                      _emailController.text,
+                      UserModel(
+                        name: _nameController.text,
+                        email: _nameController.text,
+                        role: selectedRole!,
+                      ),
                       _passwordController.text,
                     );
 

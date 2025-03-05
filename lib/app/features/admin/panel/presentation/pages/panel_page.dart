@@ -9,6 +9,7 @@ import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/posts_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/users_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_navigation.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
@@ -90,26 +91,22 @@ class _PanelPageState extends State<PanelPage> {
         ],
         centerTitle: true,
       ),
-      body: Expanded(
-        child: Observer(
-          builder: (context) {
-            final body = _buildBody(sidebarStore.selectedItem);
+      body: Observer(
+        builder: (context) {
+          Widget body = _buildBody(sidebarStore.selectedItem);
 
-            if (!isDesktop) return body;
+          if (!isDesktop) return body;
 
-            return Row(
-              children: [
-                const Expanded(
-                  child: Sidebar(),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: body,
-                ),
-              ],
-            );
-          },
-        ),
+          return Row(
+            children: [
+              const Sidebar(),
+              Expanded(
+                flex: 3,
+                child: body,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -121,7 +118,7 @@ class _PanelPageState extends State<PanelPage> {
       case SidebarItem.media:
         return const UsersSection();
       case SidebarItem.posts:
-        return const UsersSection();
+        return const PostsSection();
     }
   }
 }

@@ -20,7 +20,7 @@ class UsersDatasourceImpl implements UsersDatasource {
   @override
   Future<List<UserModel>> getUsers() async {
     try {
-      QuerySnapshot querySnapshot = await _firestore.collection('users').get();
+      QuerySnapshot querySnapshot = await _firestore.collection('users').orderBy('name').get();
 
       final docs = querySnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
