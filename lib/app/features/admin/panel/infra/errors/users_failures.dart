@@ -9,19 +9,10 @@ class GetUsersFailure extends Failure {
   List<Object> get props => [message];
 }
 
-class CreateUserFailure extends Failure {
-  const CreateUserFailure({
+class CreateOrUpdateUserFailure extends Failure {
+  const CreateOrUpdateUserFailure({
     String? message,
-  }) : super("Erro ao criar usuário${message != null ? ": $message" : ""}");
-
-  @override
-  List<Object> get props => [message];
-}
-
-class UpdateUserFailure extends Failure {
-  const UpdateUserFailure({
-    String? message,
-  }) : super("Erro ao atualizar usuário${message != null ? ": $message" : ""}");
+  }) : super("Erro ao criar ou atualizar usuário${message != null ? ": $message" : ""}");
 
   @override
   List<Object> get props => [message];

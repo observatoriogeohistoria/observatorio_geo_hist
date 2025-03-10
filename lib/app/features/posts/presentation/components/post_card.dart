@@ -5,7 +5,7 @@ import 'package:observatorio_geo_hist/app/core/components/image_from_url/image_f
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
-import 'package:observatorio_geo_hist/app/features/posts/infra/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostCard extends StatelessWidget {

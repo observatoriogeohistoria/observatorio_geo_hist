@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 abstract class FetchCategoriesDatasource {
   Future<List<CategoryModel>> fetchHistoryCategories();
@@ -17,7 +18,7 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
   Future<List<CategoryModel>> fetchHistoryCategories() async {
     try {
       DocumentSnapshot categoriesSnapshot =
-          await _firestore.collection('posts').doc('historia').get();
+          await _firestore.collection('posts').doc(PostsAreas.history.key).get();
 
       if (categoriesSnapshot.data() == null) return [];
 

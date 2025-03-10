@@ -21,7 +21,9 @@ abstract class UsersStoreBase with Store {
   @action
   Future<void> getUsers({
     bool emitLoading = true,
+    bool force = false,
   }) async {
+    if (!force && users.isNotEmpty) return;
     if (emitLoading) state = ManageUsersLoadingState();
 
     final result = await _usersRepository.getUsers();
@@ -36,15 +38,15 @@ abstract class UsersStoreBase with Store {
   }
 
   @action
-  Future<void> createUser(UserModel user, String password) async {
+  Future<void> createOrUpdateUser(UserModel user, String password) async {
     state = ManageUsersLoadingState();
 
-    final result = await _usersRepository.createUser(user, password);
+    final result = await _usersRepository.createOrUpdateUser(user, password);
 
     result.fold(
       (failure) => state = ManageUsersErrorState(failure),
       (_) {
-        getUsers(emitLoading: false);
+        getUsers(emitLoading: false, force: true);
         state = ManageUsersSuccessState();
       },
     );
@@ -59,7 +61,7 @@ abstract class UsersStoreBase with Store {
     result.fold(
       (failure) => state = ManageUsersErrorState(failure),
       (_) {
-        getUsers(emitLoading: false);
+        getUsers(emitLoading: false, force: true);
         state = ManageUsersSuccessState();
       },
     );

@@ -3,7 +3,7 @@ import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostCard extends StatelessWidget {
@@ -37,7 +37,7 @@ class PostCard extends StatelessWidget {
               ),
               SizedBox(height: AppTheme(context).dimensions.space.small),
               AppBody.big(
-                text: post.area,
+                text: post.area.name,
                 color: AppTheme(context).colors.gray,
               ),
               SizedBox(height: AppTheme(context).dimensions.space.medium),

@@ -30,7 +30,7 @@ class AppTypography {
   TypographyStyle get label => _createTypographyStyle(
         {TypographySize.small: 12, TypographySize.medium: 14, TypographySize.big: 18},
         {TypographySize.small: 0.35, TypographySize.medium: 0.2, TypographySize.big: 0.2},
-        FontWeight.w400,
+        FontWeight.w600,
       );
 
   TypographyStyle _createTypographyStyle(

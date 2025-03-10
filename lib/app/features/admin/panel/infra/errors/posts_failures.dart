@@ -9,19 +9,10 @@ class GetPostsFailure extends Failure {
   List<Object> get props => [message];
 }
 
-class CreatePostFailure extends Failure {
-  const CreatePostFailure({
+class CreateOrUpdatePostFailure extends Failure {
+  const CreateOrUpdatePostFailure({
     String? message,
-  }) : super("Erro ao criar post${message != null ? ": $message" : ""}");
-
-  @override
-  List<Object> get props => [message];
-}
-
-class UpdatePostFailure extends Failure {
-  const UpdatePostFailure({
-    String? message,
-  }) : super("Erro ao atualizar post${message != null ? ": $message" : ""}");
+  }) : super("Erro ao criar ou atualizar post${message != null ? ": $message" : ""}");
 
   @override
   List<Object> get props => [message];

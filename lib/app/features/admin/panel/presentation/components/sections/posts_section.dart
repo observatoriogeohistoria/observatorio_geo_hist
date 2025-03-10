@@ -8,7 +8,8 @@ import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/post_card.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_user_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_post_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/posts_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -22,6 +23,7 @@ class PostsSection extends StatefulWidget {
 
 class _PostsSectionState extends State<PostsSection> {
   late final PostsStore postsStore = PanelSetup.getIt<PostsStore>();
+  late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
@@ -29,6 +31,8 @@ class _PostsSectionState extends State<PostsSection> {
   @override
   void initState() {
     super.initState();
+
+    categoriesStore.getCategories(emitLoading: false, force: false);
     postsStore.getPosts();
 
     _reactions = [
@@ -72,9 +76,10 @@ class _PostsSectionState extends State<PostsSection> {
             child: SecondaryButton.small(
               text: 'Criar post',
               onPressed: () {
-                showCreateUserDialog(
+                showCreatePostDialog(
                   context,
-                  onCreate: (user, password) {},
+                  categories: categoriesStore.categories,
+                  onCreate: (post) {},
                 );
               },
             ),

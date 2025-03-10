@@ -8,9 +8,10 @@ import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
-import 'package:observatorio_geo_hist/app/features/posts/infra/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -22,7 +23,7 @@ class PostDetailedPage extends StatefulWidget {
     super.key,
   });
 
-  final String area;
+  final PostsAreas area;
   final String categoryKey;
   final String postId;
 

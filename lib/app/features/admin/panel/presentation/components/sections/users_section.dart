@@ -74,7 +74,7 @@ class _UsersSectionState extends State<UsersSection> {
               onPressed: () {
                 showCreateUserDialog(
                   context,
-                  onCreate: (user, password) => usersStore.createUser(user, password),
+                  onCreate: (user, password) => usersStore.createOrUpdateUser(user, password),
                 );
               },
             ),

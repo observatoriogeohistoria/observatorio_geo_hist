@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
-import 'package:observatorio_geo_hist/app/features/posts/infra/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/infra/repositories/fetch_posts_repository.dart';
 
 part 'fetch_posts_store.g.dart';

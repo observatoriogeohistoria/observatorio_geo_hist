@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/posts/posts_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/posts_states.dart';
 
@@ -21,7 +21,9 @@ abstract class PostsStoreBase with Store {
   @action
   Future<void> getPosts({
     bool emitLoading = true,
+    bool force = false,
   }) async {
+    if (!force && posts.isNotEmpty) return;
     if (emitLoading) state = ManagePostsLoadingState();
 
     final result = await _postsRepository.getPosts();
@@ -36,15 +38,30 @@ abstract class PostsStoreBase with Store {
   }
 
   @action
-  Future<void> createPost(PostModel post) async {
+  Future<void> createOrUpdatePost(PostModel post) async {
     state = ManagePostsLoadingState();
 
-    final result = await _postsRepository.createPost(post);
+    final result = await _postsRepository.createOrUpdatePost(post);
 
     result.fold(
       (failure) => state = ManagePostsErrorState(failure),
       (_) {
-        getPosts(emitLoading: false);
+        getPosts(emitLoading: false, force: true);
+        state = ManagePostsSuccessState();
+      },
+    );
+  }
+
+  @action
+  Future<void> deletePost(PostModel post) async {
+    state = ManagePostsLoadingState();
+
+    final result = await _postsRepository.deletePost(post);
+
+    result.fold(
+      (failure) => state = ManagePostsErrorState(failure),
+      (_) {
+        getPosts(emitLoading: false, force: true);
         state = ManagePostsSuccessState();
       },
     );

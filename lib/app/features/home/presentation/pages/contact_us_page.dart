@@ -146,7 +146,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
         SizedBox(height: AppTheme(context).dimensions.space.medium),
         AppTextField(
           controller: controller,
-          hintText: '',
+          labelText: '',
           minLines: minLines,
           maxLines: maxLines,
           keyboardType: TextInputType.multiline,

@@ -40,7 +40,7 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  UserRole? selectedRole;
+  UserRole? _selectedRole;
 
   @override
   Widget build(BuildContext context) {
@@ -59,18 +59,19 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
             SizedBox(height: AppTheme(context).dimensions.space.xlarge),
             AppTextField(
               controller: _nameController,
-              hintText: 'Nome',
+              labelText: 'Nome',
+              validator: Validators.isNotEmpty,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.medium),
             AppTextField(
               controller: _emailController,
-              hintText: 'E-mail',
+              labelText: 'E-mail',
               validator: Validators.isValidEmail,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.medium),
             AppTextField(
               controller: _passwordController,
-              hintText: 'Senha',
+              labelText: 'Senha',
               validator: Validators.isValidPassword,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.medium),
@@ -78,11 +79,12 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
               hintText: 'Selecione um papel',
               items: UserRole.values,
               itemToString: (role) => role.toString(),
-              value: selectedRole,
+              value: _selectedRole,
               onChanged: (role) {
                 if (role == null) return;
-                setState(() => selectedRole = UserRole.fromString(role));
+                setState(() => _selectedRole = UserRole.fromString(role));
               },
+              validator: Validators.isNotEmpty,
             ),
             const Spacer(),
             Row(
@@ -102,7 +104,7 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
                       UserModel(
                         name: _nameController.text,
                         email: _nameController.text,
-                        role: selectedRole!,
+                        role: _selectedRole!,
                       ),
                       _passwordController.text,
                     );

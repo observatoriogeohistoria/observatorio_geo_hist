@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 class PostModel extends Equatable {
   const PostModel({
-    required this.id,
+    this.id,
     required this.title,
     required this.subtitle,
     required this.area,
@@ -14,10 +15,10 @@ class PostModel extends Equatable {
     this.published = false,
   });
 
-  final String id;
+  final String? id;
   final String title;
   final String subtitle;
-  final String area;
+  final PostsAreas area;
   final String category;
   final String markdownContent;
   final String date;
@@ -44,7 +45,7 @@ class PostModel extends Equatable {
       id: json['id'] as String,
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
-      area: json['area'] as String,
+      area: PostsAreas.fromKey(json['area'] as String),
       category: json['category'] as String,
       markdownContent: json['markdownContent'] as String,
       date: json['date'] as String,
@@ -59,7 +60,7 @@ class PostModel extends Equatable {
       'id': id,
       'title': title,
       'subtitle': subtitle,
-      'area': area,
+      'area': area.key,
       'category': category,
       'markdownContent': markdownContent,
       'date': date,
@@ -73,7 +74,7 @@ class PostModel extends Equatable {
     String? id,
     String? title,
     String? subtitle,
-    String? area,
+    PostsAreas? area,
     String? category,
     String? markdownContent,
     String? date,

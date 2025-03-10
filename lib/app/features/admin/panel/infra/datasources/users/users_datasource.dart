@@ -5,8 +5,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user
 
 abstract class UsersDatasource {
   Future<List<UserModel>> getUsers();
-  Future<void> createUser(UserModel user, String password);
-  Future<void> updateUser(UserModel user);
+  Future<void> createOrUpdateUser(UserModel user, String password);
   Future<void> deleteUser(UserModel user);
 }
 
@@ -38,25 +37,18 @@ class UsersDatasourceImpl implements UsersDatasource {
   }
 
   @override
-  Future<void> createUser(UserModel user, String password) async {
+  Future<void> createOrUpdateUser(UserModel user, String password) async {
     try {
       final userCredential = await _firebaseAuthDatasource.createUser(user.email, password);
       if (userCredential == null) throw Exception('Error creating user');
 
       final newUser = user.copyWith(id: userCredential.uid);
-      await _firestore.collection('users').doc(newUser.id).set(newUser.toJson());
+      await _firestore
+          .collection('users')
+          .doc(newUser.id)
+          .set(newUser.toJson(), SetOptions(merge: true));
     } catch (exception, stackTrace) {
       _loggerService.error('Error creating user: $exception', stackTrace: stackTrace);
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> updateUser(UserModel user) async {
-    try {
-      await _firestore.collection('users').doc(user.id).update(user.toJson());
-    } catch (exception, stackTrace) {
-      _loggerService.error('Error updating user: $exception', stackTrace: stackTrace);
       rethrow;
     }
   }

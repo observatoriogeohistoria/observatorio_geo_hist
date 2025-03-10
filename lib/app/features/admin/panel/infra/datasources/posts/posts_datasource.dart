@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 abstract class PostsDatasource {
   Future<List<PostModel>> getPosts();
-  Future<void> createPost(PostModel post);
-  Future<void> updatePost(PostModel post);
+  Future<void> createOrUpdatePost(PostModel post);
   Future<void> deletePost(PostModel post);
 }
 
@@ -69,27 +68,14 @@ class PostsDatasourceImpl implements PostsDatasource {
   }
 
   @override
-  Future<void> createPost(PostModel post) async {
+  Future<void> createOrUpdatePost(PostModel post) async {
     try {
       DocumentReference postRef =
-          _firestore.collection('posts').doc(post.area).collection(post.category).doc(post.id);
-
-      await postRef.set(post.toJson());
-    } catch (exception, stackTrace) {
-      _loggerService.error('Error creating post: $exception', stackTrace: stackTrace);
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> updatePost(PostModel post) async {
-    try {
-      DocumentReference postRef =
-          _firestore.collection('posts').doc(post.area).collection(post.category).doc(post.id);
+          _firestore.collection('posts').doc(post.area.key).collection(post.category).doc(post.id);
 
       await postRef.set(post.toJson(), SetOptions(merge: true));
     } catch (exception, stackTrace) {
-      _loggerService.error('Error updating post: $exception', stackTrace: stackTrace);
+      _loggerService.error('Error creating post: $exception', stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -98,7 +84,7 @@ class PostsDatasourceImpl implements PostsDatasource {
   Future<void> deletePost(PostModel post) async {
     try {
       DocumentReference postRef =
-          _firestore.collection('posts').doc(post.area).collection(post.category).doc(post.id);
+          _firestore.collection('posts').doc(post.area.key).collection(post.category).doc(post.id);
 
       await postRef.delete();
     } catch (exception, stackTrace) {

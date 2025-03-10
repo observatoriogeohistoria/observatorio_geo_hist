@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppDropdownField<T> extends StatefulWidget {
@@ -11,6 +9,7 @@ class AppDropdownField<T> extends StatefulWidget {
     required this.hintText,
     this.value,
     this.onChanged,
+    this.validator,
     super.key,
   });
 
@@ -20,6 +19,7 @@ class AppDropdownField<T> extends StatefulWidget {
   final void Function(String?)? onChanged;
 
   final String hintText;
+  final String? Function(String?)? validator;
 
   @override
   State<AppDropdownField<T>> createState() => _AppDropdownFieldState<T>();
@@ -44,39 +44,43 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      hint: AppBody.medium(
-        text: widget.hintText,
-        color: AppTheme(context).colors.gray,
-      ),
-      items: widget.items
-          .map((item) => DropdownMenuItem<String>(
+    return SizedBox(
+      child: DropdownButtonFormField<String>(
+        hint: AppLabel.medium(
+          text: widget.hintText,
+          color: AppTheme(context).colors.gray,
+        ),
+        items: widget.items
+            .map(
+              (item) => DropdownMenuItem<String>(
                 value: widget.itemToString(item),
-                child: AppTitle.small(
+                child: AppLabel.medium(
                   text: widget.itemToString(item),
                   color: AppTheme(context).colors.darkGray,
                 ),
-              ))
-          .toList(),
-      value: selectedValue,
-      onChanged: (value) {
-        setState(() => selectedValue = value);
-        widget.onChanged?.call(value);
-      },
-      validator: Validators.isValidRole,
-      borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: AppTheme(context).colors.white,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: AppTheme(context).dimensions.space.small,
-          vertical: AppTheme(context).dimensions.space.medium,
+              ),
+            )
+            .toList(),
+        value: selectedValue,
+        onChanged: (value) {
+          setState(() => selectedValue = value);
+          widget.onChanged?.call(value);
+        },
+        validator: widget.validator,
+        borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: AppTheme(context).colors.white,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: AppTheme(context).dimensions.space.small,
+            vertical: AppTheme(context).dimensions.space.medium,
+          ),
+          enabledBorder: _buildBorder(AppTheme(context).colors.gray),
+          focusedBorder: _buildBorder(AppTheme(context).colors.orange),
+          focusedErrorBorder: _buildBorder(AppTheme(context).colors.red),
+          disabledBorder: _buildBorder(AppTheme(context).colors.gray),
+          errorBorder: _buildBorder(AppTheme(context).colors.red),
         ),
-        enabledBorder: _buildBorder(AppTheme(context).colors.gray),
-        focusedBorder: _buildBorder(AppTheme(context).colors.orange),
-        focusedErrorBorder: _buildBorder(AppTheme(context).colors.red),
-        disabledBorder: _buildBorder(AppTheme(context).colors.gray),
-        errorBorder: _buildBorder(AppTheme(context).colors.red),
       ),
     );
   }

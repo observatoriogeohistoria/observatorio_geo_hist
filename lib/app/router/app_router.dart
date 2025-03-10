@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/panel_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
@@ -52,7 +53,7 @@ class AppRouter {
           if (invalidRoute) return const PageNotFound();
 
           return PostsPage(
-            area: area,
+            area: PostsAreas.fromKey(area),
             categoryKey: categoryKey,
           );
         },
@@ -80,7 +81,7 @@ class AppRouter {
           if (invalidRoute) return const PageNotFound();
 
           return PostDetailedPage(
-            area: area,
+            area: PostsAreas.fromKey(area),
             categoryKey: categoryKey,
             postId: id,
           );

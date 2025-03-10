@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/infra/errors/exceptions.dart';
-import 'package:observatorio_geo_hist/app/features/posts/infra/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 abstract class FetchPostsDatasource {
   Future<List<PostModel>> fetchPosts(CategoryModel category);

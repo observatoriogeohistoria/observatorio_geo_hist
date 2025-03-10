@@ -1,4 +1,9 @@
 class Validators {
+  static String? isNotEmpty(String? value) {
+    if (value == null || value.isEmpty) return 'Por favor, o campo não pode ser vazio';
+    return null;
+  }
+
   static String? isValidEmail(String? email) {
     if (email == null || email.isEmpty) return 'Por favor, insira um e-mail';
 
@@ -14,8 +19,19 @@ class Validators {
     return hasMatch ? null : 'Senha inválida';
   }
 
-  static String? isValidRole(String? role) {
-    if (role == null || role.isEmpty) return 'Por favor, selecione um papel';
+  static String? isValidMonthAndYear(String? value) {
+    if (value == null || value.isEmpty) return 'Por favor, insira um mês e um ano';
+
+    final hasMatch = RegExp(r'^\d{2}/\d{4}$').hasMatch(value);
+    if (!hasMatch) return 'Formato inválido (MM/yyyy)';
+
+    final parts = value.split('/');
+    final month = int.tryParse(parts[0]);
+    final year = int.tryParse(parts[1]);
+
+    if (month == null || month < 1 || month > 12) return 'Mês inválido';
+    if (year == null) return 'Ano inválido';
+
     return null;
   }
 }

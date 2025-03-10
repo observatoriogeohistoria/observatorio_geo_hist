@@ -5,7 +5,8 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class AppTextField extends StatefulWidget {
   const AppTextField({
     required this.controller,
-    required this.hintText,
+    required this.labelText,
+    this.hintText,
     this.focusNode,
     this.scrollPadding = EdgeInsets.zero,
     this.isDisabled = false,
@@ -20,7 +21,8 @@ class AppTextField extends StatefulWidget {
   });
 
   final TextEditingController controller;
-  final String hintText;
+  final String labelText;
+  final String? hintText;
   final FocusNode? focusNode;
   final bool isDisabled;
   final EdgeInsets scrollPadding;
@@ -65,6 +67,10 @@ class _AppTextFieldState extends State<AppTextField> {
           minHeight: 32,
           minWidth: 32,
         ),
+        labelText: widget.labelText,
+        labelStyle: AppTheme(context).typography.label.small.copyWith(
+              color: AppTheme(context).colors.gray,
+            ),
         hintText: widget.hintText,
         hintStyle: AppTheme(context).typography.body.medium.copyWith(
               color: AppTheme(context).colors.gray,

@@ -43,17 +43,26 @@ mixin _$PostsStore on PostsStoreBase, Store {
       AsyncAction('PostsStoreBase.getPosts', context: context);
 
   @override
-  Future<void> getPosts({bool emitLoading = true}) {
+  Future<void> getPosts({bool emitLoading = true, bool force = false}) {
     return _$getPostsAsyncAction
-        .run(() => super.getPosts(emitLoading: emitLoading));
+        .run(() => super.getPosts(emitLoading: emitLoading, force: force));
   }
 
-  late final _$createPostAsyncAction =
-      AsyncAction('PostsStoreBase.createPost', context: context);
+  late final _$createOrUpdatePostAsyncAction =
+      AsyncAction('PostsStoreBase.createOrUpdatePost', context: context);
 
   @override
-  Future<void> createPost(PostModel post) {
-    return _$createPostAsyncAction.run(() => super.createPost(post));
+  Future<void> createOrUpdatePost(PostModel post) {
+    return _$createOrUpdatePostAsyncAction
+        .run(() => super.createOrUpdatePost(post));
+  }
+
+  late final _$deletePostAsyncAction =
+      AsyncAction('PostsStoreBase.deletePost', context: context);
+
+  @override
+  Future<void> deletePost(PostModel post) {
+    return _$deletePostAsyncAction.run(() => super.deletePost(post));
   }
 
   @override

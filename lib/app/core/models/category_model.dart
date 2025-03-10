@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 class CategoryModel extends Equatable {
   const CategoryModel({
@@ -13,12 +14,19 @@ class CategoryModel extends Equatable {
   final String key;
   final String title;
   final String description;
-  final String area;
+  final PostsAreas area;
   final String backgroundImgUrl;
   final bool collaborateOption;
 
   @override
-  List<Object?> get props => [key, title, description, backgroundImgUrl, collaborateOption];
+  List<Object?> get props => [
+        key,
+        title,
+        description,
+        area,
+        backgroundImgUrl,
+        collaborateOption,
+      ];
 
   factory CategoryModel.fromJson(
     Map<String, dynamic> json,
@@ -28,9 +36,38 @@ class CategoryModel extends Equatable {
       key: json['key'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      area: area,
+      area: PostsAreas.fromKey(area),
       backgroundImgUrl: json['backgroundImgUrl'] as String,
       collaborateOption: json['collaborateOption'] as bool,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'key': key,
+      'title': title,
+      'description': description,
+      'area': area.key,
+      'backgroundImgUrl': backgroundImgUrl,
+      'collaborateOption': collaborateOption,
+    };
+  }
+
+  CategoryModel copyWith({
+    String? key,
+    String? title,
+    String? description,
+    PostsAreas? area,
+    String? backgroundImgUrl,
+    bool? collaborateOption,
+  }) {
+    return CategoryModel(
+      key: key ?? this.key,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      backgroundImgUrl: backgroundImgUrl ?? this.backgroundImgUrl,
+      area: area ?? this.area,
+      collaborateOption: collaborateOption ?? this.collaborateOption,
     );
   }
 }
