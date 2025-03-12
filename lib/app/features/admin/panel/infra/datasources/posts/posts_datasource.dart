@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
+import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 abstract class PostsDatasource {
@@ -19,7 +20,7 @@ class PostsDatasourceImpl implements PostsDatasource {
     try {
       List<PostModel> posts = [];
       List<String> areas = [];
-      Set<String> categories = {};
+      Set<CategoryModel> categories = {};
 
       // Get all areas and categories inside 'posts' collection
       QuerySnapshot areasSnapshot = await _firestore.collection('posts').get();
@@ -30,13 +31,14 @@ class PostsDatasourceImpl implements PostsDatasource {
 
         var data = areaDoc.data() as Map<String, dynamic>?;
         if (data != null && data.containsKey('categories')) {
-          categories
-              .addAll((data['categories'] as List).map((category) => category['key'] as String));
+          categories.addAll((data['categories'] as List)
+              .map((category) => CategoryModel.fromJson(category, area)));
         }
       }
 
       // Get all posts from each category in each area in parallel
-      List<Future<QuerySnapshot>> postQueries = categories.map((category) {
+      final categoriesKeys = categories.map((category) => category.key).toSet();
+      List<Future<QuerySnapshot>> postQueries = categoriesKeys.map((category) {
         return _firestore.collectionGroup(category).get();
       }).toList();
 
@@ -50,8 +52,11 @@ class PostsDatasourceImpl implements PostsDatasource {
           PostModel post = PostModel.fromJson({
             ...data,
             'id': postDoc.id,
-            'area': postDoc.reference.path.split('/')[1],
-            'category': postDoc.reference.parent.id,
+            'category': categories
+                .firstWhere((category) =>
+                    category.key == postDoc.reference.parent.id &&
+                    category.area.key == postDoc.reference.path.split('/')[1])
+                .toJson(),
           });
 
           posts.add(post);
@@ -70,8 +75,11 @@ class PostsDatasourceImpl implements PostsDatasource {
   @override
   Future<void> createOrUpdatePost(PostModel post) async {
     try {
-      DocumentReference postRef =
-          _firestore.collection('posts').doc(post.area.key).collection(post.category).doc(post.id);
+      DocumentReference postRef = _firestore
+          .collection('posts')
+          .doc(post.area.key)
+          .collection(post.category.key)
+          .doc(post.id);
 
       await postRef.set(post.toJson(), SetOptions(merge: true));
     } catch (exception, stackTrace) {
@@ -83,8 +91,11 @@ class PostsDatasourceImpl implements PostsDatasource {
   @override
   Future<void> deletePost(PostModel post) async {
     try {
-      DocumentReference postRef =
-          _firestore.collection('posts').doc(post.area.key).collection(post.category).doc(post.id);
+      DocumentReference postRef = _firestore
+          .collection('posts')
+          .doc(post.area.key)
+          .collection(post.category.key)
+          .doc(post.id);
 
       await postRef.delete();
     } catch (exception, stackTrace) {

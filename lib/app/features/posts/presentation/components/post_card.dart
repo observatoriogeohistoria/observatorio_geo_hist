@@ -22,7 +22,8 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppMouseRegion(
       child: GestureDetector(
-        onTap: () => GoRouter.of(context).go('/posts/${category.area}/${category.key}/${post.id}'),
+        onTap: () =>
+            GoRouter.of(context).go('/posts/${category.area.key}/${category.key}/${post.id}'),
         child: AppCard(
           width: MediaQuery.of(context).size.width * 0.2,
           child: Column(

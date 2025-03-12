@@ -8,7 +8,7 @@ import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/post_card.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_post_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_post_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/posts_states.dart';
@@ -76,14 +76,15 @@ class _PostsSectionState extends State<PostsSection> {
             child: SecondaryButton.small(
               text: 'Criar post',
               onPressed: () {
-                showCreatePostDialog(
+                showCreateOrUpdatePostDialog(
                   context,
                   categories: categoriesStore.categories,
-                  onCreate: (post) {},
+                  onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
                 );
               },
             ),
           ),
+          SizedBox(height: AppTheme(context).dimensions.space.large),
           Expanded(
             child: Observer(
               builder: (context) {
@@ -91,8 +92,8 @@ class _PostsSectionState extends State<PostsSection> {
 
                 return ListView.builder(
                   physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppTheme(context).dimensions.space.large,
+                  padding: EdgeInsets.only(
+                    bottom: AppTheme(context).dimensions.space.large,
                   ),
                   itemCount: posts.length,
                   itemBuilder: (context, index) {
@@ -103,7 +104,15 @@ class _PostsSectionState extends State<PostsSection> {
                       children: [
                         PostCard(
                           post: post,
-                          onDelete: () {},
+                          onEdit: () {
+                            showCreateOrUpdatePostDialog(
+                              context,
+                              post: post,
+                              categories: categoriesStore.categories,
+                              onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+                            );
+                          },
+                          onDelete: () => postsStore.deletePost(post),
                         ),
                         if (!isLast) SizedBox(height: AppTheme(context).dimensions.space.medium),
                       ],

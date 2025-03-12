@@ -117,6 +117,8 @@ class _PanelPageState extends State<PanelPage> {
         return const UsersSection();
       case SidebarItem.media:
         return const UsersSection();
+      case SidebarItem.categories:
+        return const UsersSection();
       case SidebarItem.posts:
         return const PostsSection();
     }

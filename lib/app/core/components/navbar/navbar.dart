@@ -101,7 +101,7 @@ class _NavbarState extends State<Navbar> {
                                         text: suboption.title,
                                         onPressed: () {
                                           GoRouter.of(context).go(
-                                            '/posts/${suboption.category!.area}/${suboption.category!.key}',
+                                            '/posts/${suboption.category!.area.key}/${suboption.category!.key}',
                                             extra: suboption.category,
                                           );
                                         },

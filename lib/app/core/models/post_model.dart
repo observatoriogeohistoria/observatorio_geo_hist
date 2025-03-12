@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 class PostModel extends Equatable {
@@ -19,7 +20,7 @@ class PostModel extends Equatable {
   final String title;
   final String subtitle;
   final PostsAreas area;
-  final String category;
+  final CategoryModel category;
   final String markdownContent;
   final String date;
   final String imgUrl;
@@ -41,12 +42,14 @@ class PostModel extends Equatable {
       ];
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
+    final area = PostsAreas.fromKey(json['category']['area'] as String);
+
     return PostModel(
       id: json['id'] as String,
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
-      area: PostsAreas.fromKey(json['area'] as String),
-      category: json['category'] as String,
+      area: area,
+      category: CategoryModel.fromJson(json['category'], area.key),
       markdownContent: json['markdownContent'] as String,
       date: json['date'] as String,
       imgUrl: json['imgUrl'] as String,
@@ -57,11 +60,8 @@ class PostModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'title': title,
       'subtitle': subtitle,
-      'area': area.key,
-      'category': category,
       'markdownContent': markdownContent,
       'date': date,
       'imgUrl': imgUrl,
@@ -75,7 +75,7 @@ class PostModel extends Equatable {
     String? title,
     String? subtitle,
     PostsAreas? area,
-    String? category,
+    CategoryModel? category,
     String? markdownContent,
     String? date,
     String? imgUrl,

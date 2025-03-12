@@ -9,7 +9,8 @@ class AppDimensions {
     small: 8.0,
     medium: 16.0,
     large: 24.0,
-    xlarge: 48.0,
+    xlarge: 32.0,
+    xxlarge: 48.0,
   );
 
   DimensionStyle radius = const DimensionStyle._(
@@ -18,6 +19,7 @@ class AppDimensions {
     medium: 8.0,
     large: 12.0,
     xlarge: 24.0,
+    xxlarge: 48.0,
   );
 
   DimensionStyle stroke = const DimensionStyle._(
@@ -26,6 +28,7 @@ class AppDimensions {
     medium: 2.0,
     large: 3.0,
     xlarge: 4.0,
+    xxlarge: 5.0,
   );
 }
 
@@ -36,6 +39,7 @@ class DimensionStyle {
     required this.medium,
     required this.large,
     required this.xlarge,
+    required this.xxlarge,
   });
 
   final double xsmall;
@@ -43,4 +47,5 @@ class DimensionStyle {
   final double medium;
   final double large;
   final double xlarge;
+  final double xxlarge;
 }

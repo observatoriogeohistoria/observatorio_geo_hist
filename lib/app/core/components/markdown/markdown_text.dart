@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:observatorio_geo_hist/app/core/utils/file/file.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class MarkdownText extends StatelessWidget {
@@ -22,7 +22,7 @@ class MarkdownText extends StatelessWidget {
 
       return text.replaceAllMapped(regExp, (match) {
         int count = int.parse(match.group(1)!);
-        return '\n' * count;
+        return ' \n' * count;
       });
     }
 
@@ -33,6 +33,13 @@ class MarkdownText extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       data: formattedText,
+      paddingBuilders: <String, MarkdownPaddingBuilder>{
+        'p': PPaddingBuilder(),
+        'h1': HPaddingBuilder(),
+        'h2': HPaddingBuilder(),
+        'h3': HPaddingBuilder(),
+        'h6': HPaddingBuilder(),
+      },
       styleSheet: MarkdownStyleSheet(
         code: AppTheme(context).typography.body.medium.copyWith(
               color: AppTheme(context).colors.orange,
@@ -81,12 +88,12 @@ class MarkdownText extends StatelessWidget {
   }
 }
 
-bool isSvg(String base64Data) {
-  if (base64Data.startsWith("data:image/svg+xml")) return true;
-  return false;
+class PPaddingBuilder extends MarkdownPaddingBuilder {
+  @override
+  EdgeInsets getPadding() => const EdgeInsets.only(top: 16);
 }
 
-Uint8List decodeBase64Image(String dataUri) {
-  final base64Data = dataUri.split(",")[1];
-  return base64Decode(base64Data);
+class HPaddingBuilder extends MarkdownPaddingBuilder {
+  @override
+  EdgeInsets getPadding() => const EdgeInsets.only(top: 16);
 }

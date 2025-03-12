@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 enum SidebarItem {
   users,
   media,
+  categories,
   posts;
 
   String get value {
@@ -11,6 +12,8 @@ enum SidebarItem {
         return 'usuarios';
       case SidebarItem.media:
         return 'mídias';
+      case SidebarItem.categories:
+        return 'categorias';
       case SidebarItem.posts:
         return 'posts';
     }
@@ -22,6 +25,8 @@ enum SidebarItem {
         return 'Usuários';
       case SidebarItem.media:
         return 'Mídias';
+      case SidebarItem.categories:
+        return 'Categorias';
       case SidebarItem.posts:
         return 'Posts';
     }
@@ -33,6 +38,8 @@ enum SidebarItem {
         return Icons.people;
       case SidebarItem.media:
         return Icons.perm_media;
+      case SidebarItem.categories:
+        return Icons.category;
       case SidebarItem.posts:
         return Icons.post_add_outlined;
     }
@@ -44,6 +51,8 @@ enum SidebarItem {
         return SidebarItem.users;
       case 'mídias':
         return SidebarItem.media;
+      case 'categorias':
+        return SidebarItem.categories;
       case 'posts':
         return SidebarItem.posts;
       default:
