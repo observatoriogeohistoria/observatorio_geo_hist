@@ -6,28 +6,35 @@ class SecondaryButton extends StatelessWidget {
   const SecondaryButton.small({
     required this.text,
     required this.onPressed,
+    this.isDisabled = false,
     super.key,
   }) : size = ButtonSize.small;
 
   const SecondaryButton.medium({
     required this.text,
     required this.onPressed,
+    this.isDisabled = false,
     super.key,
   }) : size = ButtonSize.medium;
 
   const SecondaryButton.big({
     required this.text,
     required this.onPressed,
+    this.isDisabled = false,
     super.key,
   }) : size = ButtonSize.big;
 
   final String text;
   final void Function() onPressed;
   final ButtonSize size;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) {
     EdgeInsetsGeometry padding;
+    AppTitle buttonText;
+    Color buttonTextColor =
+        isDisabled ? AppTheme(context).colors.gray : AppTheme(context).colors.orange;
 
     switch (size) {
       case ButtonSize.small:
@@ -35,42 +42,59 @@ class SecondaryButton extends StatelessWidget {
           horizontal: AppTheme(context).dimensions.space.small,
           vertical: AppTheme(context).dimensions.space.medium,
         );
+
+        buttonText = AppTitle.small(
+          text: text,
+          color: buttonTextColor,
+        );
+
         break;
       case ButtonSize.medium:
         padding = EdgeInsets.symmetric(
           horizontal: AppTheme(context).dimensions.space.medium,
           vertical: AppTheme(context).dimensions.space.medium,
         );
+
+        buttonText = AppTitle.medium(
+          text: text,
+          color: buttonTextColor,
+        );
+
         break;
       case ButtonSize.big:
         padding = EdgeInsets.symmetric(
           horizontal: AppTheme(context).dimensions.space.medium,
           vertical: AppTheme(context).dimensions.space.medium,
         );
+
+        buttonText = AppTitle.big(
+          text: text,
+          color: buttonTextColor,
+        );
+
         break;
     }
 
     return TextButton(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.hovered)) {
+          if (isDisabled || states.contains(WidgetState.hovered)) {
             return AppTheme(context).colors.lightGray.withValues(alpha: 0.2);
           }
           return AppTheme(context).colors.white;
         }),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
-            side: BorderSide(color: AppTheme(context).colors.orange),
+            side: BorderSide(
+              color: isDisabled ? AppTheme(context).colors.gray : AppTheme(context).colors.orange,
+            ),
             borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.small),
           ),
         ),
         padding: WidgetStateProperty.all(padding),
       ),
-      onPressed: onPressed,
-      child: AppTitle.big(
-        text: text,
-        color: AppTheme(context).colors.orange,
-      ),
+      onPressed: isDisabled ? null : onPressed,
+      child: buttonText,
     );
   }
 }

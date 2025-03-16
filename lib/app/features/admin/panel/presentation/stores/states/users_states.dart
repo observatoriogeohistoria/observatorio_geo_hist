@@ -10,7 +10,10 @@ final class ManageUsersInitialState extends ManageUsersState {}
 
 final class ManageUsersLoadingState extends ManageUsersState {}
 
-final class ManageUsersSuccessState extends ManageUsersState {}
+final class ManageUsersSuccessState extends ManageUsersState {
+  final String message;
+  ManageUsersSuccessState({this.message = ''});
+}
 
 final class ManageUsersErrorState extends ManageUsersState {
   final Failure failure;

@@ -5,7 +5,7 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 abstract class PostsDatasource {
   Future<List<PostModel>> getPosts();
-  Future<void> createOrUpdatePost(PostModel post);
+  Future<PostModel> createOrUpdatePost(PostModel post);
   Future<void> deletePost(PostModel post);
 }
 
@@ -19,21 +19,18 @@ class PostsDatasourceImpl implements PostsDatasource {
   Future<List<PostModel>> getPosts() async {
     try {
       List<PostModel> posts = [];
-      List<String> areas = [];
       Set<CategoryModel> categories = {};
 
       // Get all areas and categories inside 'posts' collection
       QuerySnapshot areasSnapshot = await _firestore.collection('posts').get();
 
-      for (var areaDoc in areasSnapshot.docs) {
-        String area = areaDoc.id;
-        areas.add(area);
+      for (var doc in areasSnapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+        final categoriesData = data['categories'] as List<dynamic>;
 
-        var data = areaDoc.data() as Map<String, dynamic>?;
-        if (data != null && data.containsKey('categories')) {
-          categories.addAll((data['categories'] as List)
-              .map((category) => CategoryModel.fromJson(category, area)));
-        }
+        categories.addAll(categoriesData.map((category) {
+          return CategoryModel.fromJson(category, doc.id);
+        }).toList());
       }
 
       // Get all posts from each category in each area in parallel
@@ -73,15 +70,20 @@ class PostsDatasourceImpl implements PostsDatasource {
   }
 
   @override
-  Future<void> createOrUpdatePost(PostModel post) async {
+  Future<PostModel> createOrUpdatePost(PostModel post) async {
     try {
-      DocumentReference postRef = _firestore
-          .collection('posts')
-          .doc(post.area.key)
-          .collection(post.category.key)
-          .doc(post.id);
+      final newPost =
+          post.copyWith(id: post.id ?? DateTime.now().millisecondsSinceEpoch.toString());
 
-      await postRef.set(post.toJson(), SetOptions(merge: true));
+      DocumentReference ref = _firestore
+          .collection('posts')
+          .doc(newPost.area.key)
+          .collection(newPost.category.key)
+          .doc(newPost.id);
+
+      await ref.set(post.toJson(), SetOptions(merge: true));
+
+      return newPost;
     } catch (exception, stackTrace) {
       _loggerService.error('Error creating post: $exception', stackTrace: stackTrace);
       rethrow;
@@ -91,13 +93,15 @@ class PostsDatasourceImpl implements PostsDatasource {
   @override
   Future<void> deletePost(PostModel post) async {
     try {
-      DocumentReference postRef = _firestore
+      if (post.id == null) throw Exception('Post ID is required');
+
+      DocumentReference ref = _firestore
           .collection('posts')
           .doc(post.area.key)
           .collection(post.category.key)
           .doc(post.id);
 
-      await postRef.delete();
+      await ref.delete();
     } catch (exception, stackTrace) {
       _loggerService.error('Error deleting post: $exception', stackTrace: stackTrace);
       rethrow;

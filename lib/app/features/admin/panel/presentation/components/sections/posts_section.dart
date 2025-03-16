@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
@@ -32,7 +33,7 @@ class _PostsSectionState extends State<PostsSection> {
   void initState() {
     super.initState();
 
-    categoriesStore.getCategories(emitLoading: false, force: false);
+    categoriesStore.getCategories();
     postsStore.getPosts();
 
     _reactions = [
@@ -73,7 +74,7 @@ class _PostsSectionState extends State<PostsSection> {
           SizedBox(height: AppTheme(context).dimensions.space.xlarge),
           Align(
             alignment: Alignment.centerRight,
-            child: SecondaryButton.small(
+            child: SecondaryButton.medium(
               text: 'Criar post',
               onPressed: () {
                 showCreateOrUpdatePostDialog(
@@ -88,34 +89,39 @@ class _PostsSectionState extends State<PostsSection> {
           Expanded(
             child: Observer(
               builder: (context) {
+                if (postsStore.state is ManagePostsLoadingState) {
+                  return const Center(child: Loading());
+                }
+
                 final posts = postsStore.posts;
 
-                return ListView.builder(
+                return ListView.separated(
                   physics: const ClampingScrollPhysics(),
                   padding: EdgeInsets.only(
                     bottom: AppTheme(context).dimensions.space.large,
                   ),
+                  separatorBuilder: (context, index) {
+                    final isLast = index == posts.length - 1;
+
+                    return isLast
+                        ? const SizedBox()
+                        : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                  },
                   itemCount: posts.length,
                   itemBuilder: (context, index) {
                     final post = posts[index];
-                    final isLast = index == posts.length - 1;
 
-                    return Column(
-                      children: [
-                        PostCard(
+                    return PostCard(
+                      post: post,
+                      onEdit: () {
+                        showCreateOrUpdatePostDialog(
+                          context,
                           post: post,
-                          onEdit: () {
-                            showCreateOrUpdatePostDialog(
-                              context,
-                              post: post,
-                              categories: categoriesStore.categories,
-                              onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
-                            );
-                          },
-                          onDelete: () => postsStore.deletePost(post),
-                        ),
-                        if (!isLast) SizedBox(height: AppTheme(context).dimensions.space.medium),
-                      ],
+                          categories: categoriesStore.categories,
+                          onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+                        );
+                      },
+                      onDelete: () => postsStore.deletePost(post),
                     );
                   },
                 );

@@ -3,18 +3,18 @@ import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class UserCard extends StatelessWidget {
-  const UserCard({
-    required this.user,
+class CategoryCard extends StatelessWidget {
+  const CategoryCard({
+    required this.category,
     required this.onDelete,
     required this.onEdit,
     super.key,
   });
 
-  final UserModel user;
+  final CategoryModel category;
   final void Function() onDelete;
   final void Function() onEdit;
 
@@ -35,20 +35,18 @@ class UserCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppTitle.big(
-                  text: user.name,
+                  text: category.title,
                   color: AppTheme(context).colors.darkGray,
                 ),
                 SizedBox(height: AppTheme(context).dimensions.space.small),
                 AppBody.big(
-                  text: user.email,
+                  text: category.area.name,
                   color: AppTheme(context).colors.gray,
                 ),
                 SizedBox(height: AppTheme(context).dimensions.space.medium),
                 AppLabel.small(
-                  text: user.isDeleted ? 'Usuário inativo' : 'Usuário ativo',
-                  color: user.isDeleted
-                      ? AppTheme(context).colors.red
-                      : AppTheme(context).colors.green,
+                  text: '${category.numberOfPosts} Posts',
+                  color: AppTheme(context).colors.orange,
                 ),
               ],
             ),
@@ -59,10 +57,11 @@ class UserCard extends StatelessWidget {
                   icon: Icon(Icons.edit, color: AppTheme(context).colors.orange),
                   onPressed: onEdit,
                 ),
-                IconButton(
-                  icon: Icon(Icons.delete, color: AppTheme(context).colors.red),
-                  onPressed: onDelete,
-                ),
+                if (category.numberOfPosts == 0)
+                  IconButton(
+                    icon: Icon(Icons.delete, color: AppTheme(context).colors.red),
+                    onPressed: onDelete,
+                  ),
               ],
             ),
           ],

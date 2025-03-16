@@ -9,38 +9,48 @@ import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart'
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-void showCreateUserDialog(
+void showCreateOrUpdateUserDialog(
   BuildContext context, {
   required void Function(UserModel user, String password) onCreate,
+  required void Function(UserModel user) onUpdate,
+  UserModel? user,
 }) {
   showDialog(
     context: context,
-    builder: (_) => CreateUserDialog(
+    builder: (_) => CreateOrUpdateUserDialog(
       onCreate: onCreate,
+      onUpdate: onUpdate,
+      user: user,
     ),
   );
 }
 
-class CreateUserDialog extends StatefulWidget {
-  const CreateUserDialog({
+class CreateOrUpdateUserDialog extends StatefulWidget {
+  const CreateOrUpdateUserDialog({
     required this.onCreate,
+    required this.onUpdate,
+    this.user,
     super.key,
   });
 
   final void Function(UserModel user, String password) onCreate;
+  final void Function(UserModel user) onUpdate;
+  final UserModel? user;
 
   @override
-  State<CreateUserDialog> createState() => _CreateUserDialogState();
+  State<CreateOrUpdateUserDialog> createState() => _CreateOrUpdateUserDialogState();
 }
 
-class _CreateUserDialogState extends State<CreateUserDialog> {
+class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
   final _formKey = GlobalKey<FormState>();
 
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
+  late final _nameController = TextEditingController(text: widget.user?.name);
+  late final _emailController = TextEditingController(text: widget.user?.email);
   final _passwordController = TextEditingController();
 
-  UserRole? _selectedRole;
+  late UserRole? _selectedRole = widget.user?.role;
+
+  bool get _isUpdate => widget.user != null;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +63,7 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppTitle.medium(
-              text: 'Criar usuário',
+              text: _isUpdate ? 'Atualizar usuário' : 'Criar usuário',
               color: AppTheme(context).colors.orange,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.xlarge),
@@ -61,20 +71,24 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
               controller: _nameController,
               labelText: 'Nome',
               validator: Validators.isNotEmpty,
+              isDisabled: _isUpdate,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.medium),
             AppTextField(
               controller: _emailController,
               labelText: 'E-mail',
               validator: Validators.isValidEmail,
+              isDisabled: _isUpdate,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.medium),
-            AppTextField(
-              controller: _passwordController,
-              labelText: 'Senha',
-              validator: Validators.isValidPassword,
-            ),
-            SizedBox(height: AppTheme(context).dimensions.space.medium),
+            if (!_isUpdate) ...[
+              AppTextField(
+                controller: _passwordController,
+                labelText: 'Senha',
+                validator: Validators.isValidPassword,
+              ),
+              SizedBox(height: AppTheme(context).dimensions.space.medium),
+            ],
             AppDropdownField<UserRole>(
               hintText: 'Selecione um papel',
               items: UserRole.values,
@@ -96,21 +110,8 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
                 ),
                 SizedBox(width: AppTheme(context).dimensions.space.medium),
                 PrimaryButton.medium(
-                  text: 'Criar',
-                  onPressed: () {
-                    if (!_formKey.currentState!.validate()) return;
-
-                    widget.onCreate(
-                      UserModel(
-                        name: _nameController.text,
-                        email: _nameController.text,
-                        role: _selectedRole!,
-                      ),
-                      _passwordController.text,
-                    );
-
-                    Navigator.of(context).pop();
-                  },
+                  text: _isUpdate ? 'Atualizar' : 'Criar',
+                  onPressed: _onCreateOrUpdate,
                 ),
               ],
             ),
@@ -118,5 +119,30 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
         ),
       ),
     );
+  }
+
+  void _onCreateOrUpdate() {
+    if (!_formKey.currentState!.validate()) return;
+
+    if (_isUpdate) {
+      widget.onUpdate(
+        widget.user!.copyWith(
+          name: _nameController.text,
+          email: _emailController.text,
+          role: _selectedRole,
+        ),
+      );
+    } else {
+      widget.onCreate(
+        UserModel(
+          name: _nameController.text,
+          email: _nameController.text,
+          role: _selectedRole!,
+        ),
+        _passwordController.text,
+      );
+    }
+
+    Navigator.of(context).pop();
   }
 }

@@ -6,28 +6,35 @@ class PrimaryButton extends StatelessWidget {
   const PrimaryButton.small({
     required this.text,
     required this.onPressed,
+    this.isDisabled = false,
     super.key,
   }) : size = ButtonSize.small;
 
   const PrimaryButton.medium({
     required this.text,
     required this.onPressed,
+    this.isDisabled = false,
     super.key,
   }) : size = ButtonSize.medium;
 
   const PrimaryButton.big({
     required this.text,
     required this.onPressed,
+    this.isDisabled = false,
     super.key,
   }) : size = ButtonSize.big;
 
   final String text;
   final void Function() onPressed;
   final ButtonSize size;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) {
     EdgeInsetsGeometry padding;
+    AppTitle buttonText;
+    Color buttonTextColor =
+        isDisabled ? AppTheme(context).colors.gray : AppTheme(context).colors.white;
 
     switch (size) {
       case ButtonSize.small:
@@ -35,24 +42,45 @@ class PrimaryButton extends StatelessWidget {
           horizontal: AppTheme(context).dimensions.space.small,
           vertical: AppTheme(context).dimensions.space.medium,
         );
+
+        buttonText = AppTitle.small(
+          text: text,
+          color: buttonTextColor,
+        );
+
         break;
       case ButtonSize.medium:
         padding = EdgeInsets.symmetric(
           horizontal: AppTheme(context).dimensions.space.medium,
           vertical: AppTheme(context).dimensions.space.medium,
         );
+
+        buttonText = AppTitle.medium(
+          text: text,
+          color: buttonTextColor,
+        );
+
         break;
       case ButtonSize.big:
         padding = EdgeInsets.symmetric(
           horizontal: AppTheme(context).dimensions.space.medium,
           vertical: AppTheme(context).dimensions.space.medium,
         );
+
+        buttonText = AppTitle.big(
+          text: text,
+          color: buttonTextColor,
+        );
+
         break;
     }
 
     return TextButton(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (isDisabled) {
+            return AppTheme(context).colors.lightGray;
+          }
           if (states.contains(WidgetState.hovered)) {
             return AppTheme(context).colors.orange.withValues(alpha: 0.8);
           }
@@ -65,11 +93,8 @@ class PrimaryButton extends StatelessWidget {
         ),
         padding: WidgetStateProperty.all(padding),
       ),
-      onPressed: onPressed,
-      child: AppTitle.big(
-        text: text,
-        color: AppTheme(context).colors.white,
-      ),
+      onPressed: isDisabled ? null : onPressed,
+      child: buttonText,
     );
   }
 }

@@ -8,7 +8,8 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user
 
 abstract class UsersRepository {
   Future<Either<Failure, List<UserModel>>> getUsers();
-  Future<Either<Failure, Unit>> createOrUpdateUser(UserModel user, String password);
+  Future<Either<Failure, UserModel>> createUser(UserModel user, String password);
+  Future<Either<Failure, UserModel>> updateUser(UserModel user);
   Future<Either<Failure, Unit>> deleteUser(UserModel user);
 }
 
@@ -30,10 +31,22 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> createOrUpdateUser(UserModel user, String password) async {
+  Future<Either<Failure, UserModel>> createUser(UserModel user, String password) async {
     try {
-      await _usersDatasource.createOrUpdateUser(user, password);
-      return const Right(unit);
+      final result = await _usersDatasource.createUser(user, password);
+      return Right(result);
+    } on FirebaseAuthException catch (error) {
+      return Left(AuthFailure.fromException(error));
+    } catch (error) {
+      return const Left(CreateOrUpdateUserFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserModel>> updateUser(UserModel user) async {
+    try {
+      final result = await _usersDatasource.updateUser(user);
+      return Right(result);
     } on FirebaseAuthException catch (error) {
       return Left(AuthFailure.fromException(error));
     } catch (error) {

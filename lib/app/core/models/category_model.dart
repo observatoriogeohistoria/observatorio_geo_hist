@@ -8,7 +8,8 @@ class CategoryModel extends Equatable {
     required this.description,
     required this.backgroundImgUrl,
     required this.area,
-    this.collaborateOption = false,
+    this.hasCollaborateOption = false,
+    this.numberOfPosts = 0,
   });
 
   final String key;
@@ -16,7 +17,8 @@ class CategoryModel extends Equatable {
   final String description;
   final PostsAreas area;
   final String backgroundImgUrl;
-  final bool collaborateOption;
+  final bool hasCollaborateOption;
+  final int numberOfPosts;
 
   @override
   List<Object?> get props => [
@@ -25,7 +27,8 @@ class CategoryModel extends Equatable {
         description,
         area,
         backgroundImgUrl,
-        collaborateOption,
+        hasCollaborateOption,
+        numberOfPosts,
       ];
 
   factory CategoryModel.fromJson(
@@ -38,7 +41,7 @@ class CategoryModel extends Equatable {
       description: json['description'] as String,
       area: PostsAreas.fromKey(area),
       backgroundImgUrl: json['backgroundImgUrl'] as String,
-      collaborateOption: json['collaborateOption'] as bool,
+      hasCollaborateOption: json['hasCollaborateOption'] as bool,
     );
   }
 
@@ -49,7 +52,7 @@ class CategoryModel extends Equatable {
       'description': description,
       'area': area.key,
       'backgroundImgUrl': backgroundImgUrl,
-      'collaborateOption': collaborateOption,
+      'hasCollaborateOption': hasCollaborateOption,
     };
   }
 
@@ -59,7 +62,8 @@ class CategoryModel extends Equatable {
     String? description,
     PostsAreas? area,
     String? backgroundImgUrl,
-    bool? collaborateOption,
+    bool? hasCollaborateOption,
+    int? numberOfPosts,
   }) {
     return CategoryModel(
       key: key ?? this.key,
@@ -67,7 +71,8 @@ class CategoryModel extends Equatable {
       description: description ?? this.description,
       backgroundImgUrl: backgroundImgUrl ?? this.backgroundImgUrl,
       area: area ?? this.area,
-      collaborateOption: collaborateOption ?? this.collaborateOption,
+      hasCollaborateOption: hasCollaborateOption ?? this.hasCollaborateOption,
+      numberOfPosts: numberOfPosts ?? this.numberOfPosts,
     );
   }
 }

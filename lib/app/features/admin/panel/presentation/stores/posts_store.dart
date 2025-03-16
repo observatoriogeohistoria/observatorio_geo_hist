@@ -19,12 +19,11 @@ abstract class PostsStoreBase with Store {
   ManagePostsState state = ManagePostsInitialState();
 
   @action
-  Future<void> getPosts({
-    bool emitLoading = true,
-    bool force = false,
-  }) async {
-    if (!force && posts.isNotEmpty) return;
-    if (emitLoading) state = ManagePostsLoadingState();
+  Future<void> getPosts() async {
+    if (state is ManagePostsLoadingState) return;
+    if (posts.isNotEmpty) return;
+
+    state = ManagePostsLoadingState();
 
     final result = await _postsRepository.getPosts();
 
@@ -39,30 +38,32 @@ abstract class PostsStoreBase with Store {
 
   @action
   Future<void> createOrUpdatePost(PostModel post) async {
-    state = ManagePostsLoadingState();
-
     final result = await _postsRepository.createOrUpdatePost(post);
 
     result.fold(
       (failure) => state = ManagePostsErrorState(failure),
-      (_) {
-        getPosts(emitLoading: false, force: true);
-        state = ManagePostsSuccessState();
+      (data) {
+        final index = posts.indexWhere((p) => p.id == data.id);
+
+        bool isUpdate = index >= 0;
+        index >= 0 ? posts.replaceRange(index, index + 1, [data]) : posts.add(data);
+
+        state = ManagePostsSuccessState(
+          message: isUpdate ? 'Post atualizado com sucesso' : 'Post criado com sucesso',
+        );
       },
     );
   }
 
   @action
   Future<void> deletePost(PostModel post) async {
-    state = ManagePostsLoadingState();
-
     final result = await _postsRepository.deletePost(post);
 
     result.fold(
       (failure) => state = ManagePostsErrorState(failure),
       (_) {
-        getPosts(emitLoading: false, force: true);
-        state = ManagePostsSuccessState();
+        posts.removeWhere((p) => p.id == post.id);
+        state = ManagePostsSuccessState(message: 'Post deletado com sucesso');
       },
     );
   }

@@ -5,7 +5,8 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user
 
 abstract class UsersDatasource {
   Future<List<UserModel>> getUsers();
-  Future<void> createOrUpdateUser(UserModel user, String password);
+  Future<UserModel> createUser(UserModel user, String password);
+  Future<UserModel> updateUser(UserModel user);
   Future<void> deleteUser(UserModel user);
 }
 
@@ -37,16 +38,17 @@ class UsersDatasourceImpl implements UsersDatasource {
   }
 
   @override
-  Future<void> createOrUpdateUser(UserModel user, String password) async {
+  Future<UserModel> createUser(UserModel user, String password) async {
     try {
       final userCredential = await _firebaseAuthDatasource.createUser(user.email, password);
       if (userCredential == null) throw Exception('Error creating user');
 
       final newUser = user.copyWith(id: userCredential.uid);
-      await _firestore
-          .collection('users')
-          .doc(newUser.id)
-          .set(newUser.toJson(), SetOptions(merge: true));
+
+      DocumentReference ref = _firestore.collection('users').doc(newUser.id);
+      await ref.set(newUser.toJson(), SetOptions(merge: true));
+
+      return newUser;
     } catch (exception, stackTrace) {
       _loggerService.error('Error creating user: $exception', stackTrace: stackTrace);
       rethrow;
@@ -54,9 +56,27 @@ class UsersDatasourceImpl implements UsersDatasource {
   }
 
   @override
+  Future<UserModel> updateUser(UserModel user) async {
+    try {
+      if (user.id == null) throw Exception('User ID is required');
+
+      DocumentReference ref = _firestore.collection('users').doc(user.id);
+      await ref.set(user.toJson(), SetOptions(merge: true));
+
+      return user;
+    } catch (exception, stackTrace) {
+      _loggerService.error('Error updating user: $exception', stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
   Future<void> deleteUser(UserModel user) async {
     try {
-      await _firestore.collection('users').doc(user.id).update({'isDeleted': true});
+      if (user.id == null) throw Exception('User ID is required');
+
+      DocumentReference ref = _firestore.collection('users').doc(user.id);
+      await ref.delete();
     } catch (exception, stackTrace) {
       _loggerService.error('Error deleting user: $exception', stackTrace: stackTrace);
       rethrow;

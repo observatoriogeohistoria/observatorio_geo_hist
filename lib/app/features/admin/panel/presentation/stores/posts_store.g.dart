@@ -43,9 +43,8 @@ mixin _$PostsStore on PostsStoreBase, Store {
       AsyncAction('PostsStoreBase.getPosts', context: context);
 
   @override
-  Future<void> getPosts({bool emitLoading = true, bool force = false}) {
-    return _$getPostsAsyncAction
-        .run(() => super.getPosts(emitLoading: emitLoading, force: force));
+  Future<void> getPosts() {
+    return _$getPostsAsyncAction.run(() => super.getPosts());
   }
 
   late final _$createOrUpdatePostAsyncAction =

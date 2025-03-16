@@ -43,18 +43,24 @@ mixin _$UsersStore on UsersStoreBase, Store {
       AsyncAction('UsersStoreBase.getUsers', context: context);
 
   @override
-  Future<void> getUsers({bool emitLoading = true, bool force = false}) {
-    return _$getUsersAsyncAction
-        .run(() => super.getUsers(emitLoading: emitLoading, force: force));
+  Future<void> getUsers() {
+    return _$getUsersAsyncAction.run(() => super.getUsers());
   }
 
-  late final _$createOrUpdateUserAsyncAction =
-      AsyncAction('UsersStoreBase.createOrUpdateUser', context: context);
+  late final _$createUserAsyncAction =
+      AsyncAction('UsersStoreBase.createUser', context: context);
 
   @override
-  Future<void> createOrUpdateUser(UserModel user, String password) {
-    return _$createOrUpdateUserAsyncAction
-        .run(() => super.createOrUpdateUser(user, password));
+  Future<void> createUser(UserModel user, String password) {
+    return _$createUserAsyncAction.run(() => super.createUser(user, password));
+  }
+
+  late final _$updateUserAsyncAction =
+      AsyncAction('UsersStoreBase.updateUser', context: context);
+
+  @override
+  Future<void> updateUser(UserModel user) {
+    return _$updateUserAsyncAction.run(() => super.updateUser(user));
   }
 
   late final _$deleteUserAsyncAction =

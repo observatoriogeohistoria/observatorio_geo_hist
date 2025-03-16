@@ -8,7 +8,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/post
 
 abstract class PostsRepository {
   Future<Either<Failure, List<PostModel>>> getPosts();
-  Future<Either<Failure, Unit>> createOrUpdatePost(PostModel post);
+  Future<Either<Failure, PostModel>> createOrUpdatePost(PostModel post);
   Future<Either<Failure, Unit>> deletePost(PostModel post);
 }
 
@@ -30,10 +30,10 @@ class PostsRepositoryImpl implements PostsRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> createOrUpdatePost(PostModel post) async {
+  Future<Either<Failure, PostModel>> createOrUpdatePost(PostModel post) async {
     try {
-      await _postsDatasource.createOrUpdatePost(post);
-      return const Right(unit);
+      final result = await _postsDatasource.createOrUpdatePost(post);
+      return Right(result);
     } on FirebaseAuthException catch (error) {
       return Left(AuthFailure.fromException(error));
     } catch (error) {

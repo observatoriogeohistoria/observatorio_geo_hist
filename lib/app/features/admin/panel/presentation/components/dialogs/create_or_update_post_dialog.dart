@@ -26,7 +26,7 @@ void showCreateOrUpdatePostDialog(
     context: context,
     builder: (_) => CreateOrUpdatePostDialog(
       categories: categories,
-      onCreate: onCreateOrUpdate,
+      onCreateOrUpdate: onCreateOrUpdate,
       post: post,
     ),
   );
@@ -35,13 +35,13 @@ void showCreateOrUpdatePostDialog(
 class CreateOrUpdatePostDialog extends StatefulWidget {
   const CreateOrUpdatePostDialog({
     required this.categories,
-    required this.onCreate,
+    required this.onCreateOrUpdate,
     this.post,
     super.key,
   });
 
   final List<CategoryModel> categories;
-  final void Function(PostModel post) onCreate;
+  final void Function(PostModel post) onCreateOrUpdate;
   final PostModel? post;
 
   @override
@@ -67,6 +67,8 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
       widget.post?.authors.map((author) => TextEditingController(text: author)).toList() ??
           [TextEditingController()];
 
+  bool get _isUpdate => widget.post != null;
+
   @override
   Widget build(BuildContext context) {
     return RightAlignedDialog(
@@ -80,7 +82,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppTitle.medium(
-                text: 'Criar post',
+                text: _isUpdate ? 'Atualizar post' : 'Criar post',
                 color: AppTheme(context).colors.orange,
               ),
               SizedBox(height: AppTheme(context).dimensions.space.xlarge),
@@ -268,8 +270,8 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                   ),
                   SizedBox(width: AppTheme(context).dimensions.space.medium),
                   PrimaryButton.medium(
-                    text: widget.post != null ? 'Salvar' : 'Criar',
-                    onPressed: _onCreate,
+                    text: _isUpdate ? 'Atualizar' : 'Criar',
+                    onPressed: _onCreateOrUpdate,
                   ),
                 ],
               ),
@@ -292,10 +294,11 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
     );
   }
 
-  void _onCreate() {
+  void _onCreateOrUpdate() {
     if (!_formKey.currentState!.validate()) return;
+    
 
-    widget.onCreate(
+    widget.onCreateOrUpdate(
       PostModel(
         id: widget.post?.id,
         title: _titleController.text,

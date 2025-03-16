@@ -8,7 +8,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/cate
 
 abstract class CategoriesRepository {
   Future<Either<Failure, List<CategoryModel>>> getCategories();
-  Future<Either<Failure, Unit>> createOrUpdateCategory(CategoryModel category);
+  Future<Either<Failure, CategoryModel>> createOrUpdateCategory(CategoryModel category);
   Future<Either<Failure, Unit>> deleteCategory(CategoryModel category);
 }
 
@@ -30,10 +30,10 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> createOrUpdateCategory(CategoryModel category) async {
+  Future<Either<Failure, CategoryModel>> createOrUpdateCategory(CategoryModel category) async {
     try {
-      await _categoriesDatasource.createOrUpdateCategory(category);
-      return const Right(unit);
+      final result = await _categoriesDatasource.createOrUpdateCategory(category);
+      return Right(result);
     } on FirebaseAuthException catch (error) {
       return Left(AuthFailure.fromException(error));
     } catch (error) {

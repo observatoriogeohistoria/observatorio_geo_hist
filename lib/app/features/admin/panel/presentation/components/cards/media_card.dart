@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
-import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/view_image_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class PostCard extends StatelessWidget {
-  const PostCard({
-    required this.post,
-    required this.onEdit,
+class MediaCard extends StatelessWidget {
+  const MediaCard({
+    required this.media,
     required this.onDelete,
     super.key,
   });
 
-  final PostModel post;
-  final void Function() onEdit;
+  final MediaModel media;
   final void Function() onDelete;
 
   @override
@@ -36,40 +35,38 @@ class PostCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppTitle.big(
-                    text: post.title,
+                  AppTitle.medium(
+                    text: media.name,
                     color: AppTheme(context).colors.darkGray,
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.small),
-                  AppBody.medium(
-                    text: post.subtitle,
-                    color: AppTheme(context).colors.gray,
+                  AppBody.small(
+                    text: '.${media.extension}',
+                    color: AppTheme(context).colors.darkGray,
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.small),
-                  const AppDivider(indent: null),
-                  SizedBox(height: AppTheme(context).dimensions.space.small),
-                  AppBody.big(
-                    text: '${post.area.name} | ${post.category.title}',
-                    color: AppTheme(context).colors.gray,
-                  ),
-                  SizedBox(height: AppTheme(context).dimensions.space.medium),
-                  AppLabel.small(
-                    text: post.published ? 'Publicado' : 'Não Publicado',
-                    color: post.published
-                        ? AppTheme(context).colors.green
-                        : AppTheme(context).colors.red,
-                  ),
+                  if (media.url?.isNotEmpty ?? false) ...[
+                    SizedBox(height: AppTheme(context).dimensions.space.medium),
+                    AppLabel.big(
+                      text: media.url!,
+                      color: AppTheme(context).colors.gray,
+                    ),
+                  ]
                 ],
               ),
             ),
-            SizedBox(width: AppTheme(context).dimensions.space.medium),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit, color: AppTheme(context).colors.orange),
-                  onPressed: onEdit,
+                  icon: Icon(Icons.visibility, color: AppTheme(context).colors.orange),
+                  onPressed: () => showViewImageDialog(context, media),
                 ),
+                if (media.url?.isNotEmpty ?? false)
+                  IconButton(
+                    icon: Icon(Icons.copy, color: AppTheme(context).colors.gray),
+                    onPressed: () async {
+                      await Clipboard.setData(ClipboardData(text: media.url!));
+                    },
+                  ),
                 IconButton(
                   icon: Icon(Icons.delete, color: AppTheme(context).colors.red),
                   onPressed: onDelete,

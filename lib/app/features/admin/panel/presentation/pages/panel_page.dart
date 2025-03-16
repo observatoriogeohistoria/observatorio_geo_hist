@@ -9,6 +9,8 @@ import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/categories_section.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/media_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/posts_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/users_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_navigation.dart';
@@ -116,9 +118,9 @@ class _PanelPageState extends State<PanelPage> {
       case SidebarItem.users:
         return const UsersSection();
       case SidebarItem.media:
-        return const UsersSection();
+        return const MediaSection();
       case SidebarItem.categories:
-        return const UsersSection();
+        return const CategoriesSection();
       case SidebarItem.posts:
         return const PostsSection();
     }

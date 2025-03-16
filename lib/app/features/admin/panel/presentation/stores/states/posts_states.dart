@@ -10,7 +10,10 @@ final class ManagePostsInitialState extends ManagePostsState {}
 
 final class ManagePostsLoadingState extends ManagePostsState {}
 
-final class ManagePostsSuccessState extends ManagePostsState {}
+final class ManagePostsSuccessState extends ManagePostsState {
+  final String message;
+  ManagePostsSuccessState({this.message = ''});
+}
 
 final class ManagePostsErrorState extends ManagePostsState {
   final Failure failure;

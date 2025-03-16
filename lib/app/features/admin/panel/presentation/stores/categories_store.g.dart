@@ -45,18 +45,18 @@ mixin _$CategoriesStore on CategoriesStoreBase, Store {
       AsyncAction('CategoriesStoreBase.getCategories', context: context);
 
   @override
-  Future<void> getCategories({bool emitLoading = true, bool force = false}) {
-    return _$getCategoriesAsyncAction
-        .run(() => super.getCategories(emitLoading: emitLoading, force: force));
+  Future<void> getCategories() {
+    return _$getCategoriesAsyncAction.run(() => super.getCategories());
   }
 
-  late final _$createCategoryAsyncAction =
-      AsyncAction('CategoriesStoreBase.createCategory', context: context);
+  late final _$createOrUpdateCategoryAsyncAction = AsyncAction(
+      'CategoriesStoreBase.createOrUpdateCategory',
+      context: context);
 
   @override
-  Future<void> createCategory(CategoryModel category) {
-    return _$createCategoryAsyncAction
-        .run(() => super.createCategory(category));
+  Future<void> createOrUpdateCategory(CategoryModel category) {
+    return _$createOrUpdateCategoryAsyncAction
+        .run(() => super.createOrUpdateCategory(category));
   }
 
   late final _$deleteCategoryAsyncAction =

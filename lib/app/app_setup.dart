@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:observatorio_geo_hist/app/core/infra/datasources/fetch_categories_datasource.dart';
 import 'package:observatorio_geo_hist/app/core/infra/repositories/fetch_categories_repository.dart';
@@ -19,6 +20,7 @@ class AppSetup {
     // Firebase
     getIt.registerFactory<FirebaseFirestore>(() => FirebaseFirestore.instance);
     getIt.registerFactory<FirebaseAuth>(() => FirebaseAuth.instance);
+    getIt.registerFactory<FirebaseStorage>(() => FirebaseStorage.instance);
 
     // Fetch Categories
     getIt.registerFactory<FetchCategoriesDatasource>(

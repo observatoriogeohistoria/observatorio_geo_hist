@@ -10,6 +10,7 @@ class AppDropdownField<T> extends StatefulWidget {
     this.value,
     this.onChanged,
     this.validator,
+    this.isDisabled = false,
     super.key,
   });
 
@@ -20,6 +21,8 @@ class AppDropdownField<T> extends StatefulWidget {
 
   final String hintText;
   final String? Function(String?)? validator;
+
+  final bool isDisabled;
 
   @override
   State<AppDropdownField<T>> createState() => _AppDropdownFieldState<T>();
@@ -62,10 +65,12 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
             )
             .toList(),
         value: selectedValue,
-        onChanged: (value) {
-          setState(() => selectedValue = value);
-          widget.onChanged?.call(value);
-        },
+        onChanged: widget.isDisabled
+            ? null
+            : (value) {
+                setState(() => selectedValue = value);
+                widget.onChanged?.call(value);
+              },
         validator: widget.validator,
         borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
         decoration: InputDecoration(

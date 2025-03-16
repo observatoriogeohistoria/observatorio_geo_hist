@@ -30,12 +30,6 @@ enum UserRole {
 }
 
 class UserModel {
-  final String? id;
-  final String name;
-  final String email;
-  final UserRole role;
-  final bool isDeleted;
-
   UserModel({
     this.id,
     required this.name,
@@ -43,6 +37,12 @@ class UserModel {
     required this.role,
     this.isDeleted = false,
   });
+
+  final String? id;
+  final String name;
+  final String email;
+  final UserRole role;
+  final bool isDeleted;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

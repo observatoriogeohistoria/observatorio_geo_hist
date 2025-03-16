@@ -8,21 +8,21 @@ import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/media_card.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_media_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/media_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/media_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/category_card.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_category_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/categories_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class MediaSection extends StatefulWidget {
-  const MediaSection({super.key});
+class CategoriesSection extends StatefulWidget {
+  const CategoriesSection({super.key});
 
   @override
-  State<MediaSection> createState() => _MediaSectionState();
+  State<CategoriesSection> createState() => _CategoriesSectionState();
 }
 
-class _MediaSectionState extends State<MediaSection> {
-  late final MediaStore mediaStore = PanelSetup.getIt<MediaStore>();
+class _CategoriesSectionState extends State<CategoriesSection> {
+  late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
@@ -31,11 +31,11 @@ class _MediaSectionState extends State<MediaSection> {
   void initState() {
     super.initState();
 
-    mediaStore.getMedias();
+    categoriesStore.getCategories();
 
     _reactions = [
-      reaction((_) => mediaStore.state, (state) {
-        if (state is ManageMediaErrorState) {
+      reaction((_) => categoriesStore.state, (state) {
+        if (state is ManageCategoriesErrorState) {
           final error = state.failure;
           Messenger.showError(context, error.message);
 
@@ -65,18 +65,18 @@ class _MediaSectionState extends State<MediaSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppHeadline.big(
-            text: 'Mídias',
+            text: 'Categorias',
             color: AppTheme(context).colors.orange,
           ),
           SizedBox(height: AppTheme(context).dimensions.space.xlarge),
           Align(
             alignment: Alignment.centerRight,
             child: SecondaryButton.medium(
-              text: 'Criar mídia',
+              text: 'Criar categoria',
               onPressed: () {
-                showCreateMediaDialog(
+                showCreateOrUpdateCategoryDialog(
                   context,
-                  onCreate: (media) => mediaStore.createMedia(media),
+                  onCreateOrUpdate: (category) => categoriesStore.createOrUpdateCategory(category),
                 );
               },
             ),
@@ -85,11 +85,11 @@ class _MediaSectionState extends State<MediaSection> {
           Expanded(
             child: Observer(
               builder: (context) {
-                if (mediaStore.state is ManageMediaLoadingState) {
+                if (categoriesStore.state is ManageCategoriesLoadingState) {
                   return const Center(child: Loading());
                 }
 
-                final medias = mediaStore.medias;
+                final categories = categoriesStore.categories;
 
                 return ListView.separated(
                   physics: const ClampingScrollPhysics(),
@@ -97,19 +97,27 @@ class _MediaSectionState extends State<MediaSection> {
                     bottom: AppTheme(context).dimensions.space.large,
                   ),
                   separatorBuilder: (context, index) {
-                    final isLast = index == medias.length - 1;
+                    final isLast = index == categories.length - 1;
 
                     return isLast
                         ? const SizedBox()
                         : SizedBox(height: AppTheme(context).dimensions.space.medium);
                   },
-                  itemCount: medias.length,
+                  itemCount: categories.length,
                   itemBuilder: (context, index) {
-                    final media = medias[index];
+                    final category = categories[index];
 
-                    return MediaCard(
-                      media: media,
-                      onDelete: () => mediaStore.deleteMedia(media),
+                    return CategoryCard(
+                      category: category,
+                      onDelete: () => categoriesStore.deleteCategory(category),
+                      onEdit: () {
+                        showCreateOrUpdateCategoryDialog(
+                          context,
+                          category: category,
+                          onCreateOrUpdate: (category) =>
+                              categoriesStore.createOrUpdateCategory(category),
+                        );
+                      },
                     );
                   },
                 );

@@ -6,11 +6,14 @@ class RightAlignedDialog extends StatelessWidget {
   const RightAlignedDialog({
     required this.child,
     this.width,
+    this.widthFollowsContent = false,
     super.key,
   });
 
   final Widget child;
+
   final double? width;
+  final bool widthFollowsContent;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class RightAlignedDialog extends StatelessWidget {
           bottomLeft: Radius.circular(AppTheme(context).dimensions.radius.large),
         ),
         child: Container(
-          width: width ?? getWidth(),
+          width: widthFollowsContent ? null : (width ?? getWidth()),
           height: MediaQuery.of(context).size.height,
           padding: EdgeInsets.all(AppTheme(context).dimensions.space.large),
           child: child,
