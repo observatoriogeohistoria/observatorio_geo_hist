@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/categories/categories_repository.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/categories_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/categories_states.dart';
 
 part 'categories_store.g.dart';
@@ -49,7 +49,9 @@ abstract class CategoriesStoreBase with Store {
             ? categories.replaceRange(index, index + 1, [category])
             : categories.add(category);
 
-        state = ManageCategoriesSuccessState();
+        state = ManageCategoriesSuccessState(
+          message: index >= 0 ? 'Categoria atualizada com sucesso' : 'Categoria criada com sucesso',
+        );
       },
     );
   }
@@ -62,7 +64,7 @@ abstract class CategoriesStoreBase with Store {
       (failure) => state = ManageCategoriesErrorState(failure),
       (_) {
         categories.removeWhere((c) => c.key == category.key && c.area == category.area);
-        state = ManageCategoriesSuccessState();
+        state = ManageCategoriesSuccessState(message: 'Categoria deletada com sucesso');
       },
     );
   }

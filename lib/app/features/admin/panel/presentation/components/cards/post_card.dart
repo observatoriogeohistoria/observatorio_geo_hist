@@ -10,12 +10,16 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class PostCard extends StatelessWidget {
   const PostCard({
     required this.post,
+    required this.index,
+    required this.onPublish,
     required this.onEdit,
     required this.onDelete,
     super.key,
   });
 
   final PostModel post;
+  final int index;
+  final void Function() onPublish;
   final void Function() onEdit;
   final void Function() onDelete;
 
@@ -36,6 +40,11 @@ class PostCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  AppLabel.small(
+                    text: '$index',
+                    color: AppTheme(context).colors.gray,
+                  ),
+                  SizedBox(height: AppTheme(context).dimensions.space.xsmall),
                   AppTitle.big(
                     text: post.title,
                     color: AppTheme(context).colors.darkGray,
@@ -66,8 +75,18 @@ class PostCard extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Tooltip(
+                  message: post.published ? 'Despublicar post' : 'Publicar post',
+                  child: IconButton(
+                    icon: Icon(
+                      post.published ? Icons.public_off : Icons.public,
+                      color: AppTheme(context).colors.orange,
+                    ),
+                    onPressed: onPublish,
+                  ),
+                ),
                 IconButton(
-                  icon: Icon(Icons.edit, color: AppTheme(context).colors.orange),
+                  icon: Icon(Icons.edit, color: AppTheme(context).colors.gray),
                   onPressed: onEdit,
                 ),
                 IconButton(

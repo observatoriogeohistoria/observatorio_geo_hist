@@ -41,6 +41,12 @@ class _MediaSectionState extends State<MediaSection> {
 
           if (error is Forbidden) authStore.logout();
         }
+
+        if (state is ManageMediaSuccessState) {
+          if (state.message.isNotEmpty) {
+            Messenger.showSuccess(context, state.message);
+          }
+        }
       }),
     ];
   }
@@ -109,6 +115,7 @@ class _MediaSectionState extends State<MediaSection> {
 
                     return MediaCard(
                       media: media,
+                      index: index + 1,
                       onDelete: () => mediaStore.deleteMedia(media),
                     );
                   },

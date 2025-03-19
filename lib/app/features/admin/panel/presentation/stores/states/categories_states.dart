@@ -10,7 +10,10 @@ final class ManageCategoriesInitialState extends ManageCategoriesState {}
 
 final class ManageCategoriesLoadingState extends ManageCategoriesState {}
 
-final class ManageCategoriesSuccessState extends ManageCategoriesState {}
+final class ManageCategoriesSuccessState extends ManageCategoriesState {
+  final String message;
+  ManageCategoriesSuccessState({this.message = ''});
+}
 
 final class ManageCategoriesErrorState extends ManageCategoriesState {
   final Failure failure;

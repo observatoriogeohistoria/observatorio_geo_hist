@@ -44,6 +44,12 @@ class _PostsSectionState extends State<PostsSection> {
 
           if (error is Forbidden) authStore.logout();
         }
+
+        if (state is ManagePostsSuccessState) {
+          if (state.message.isNotEmpty) {
+            Messenger.showSuccess(context, state.message);
+          }
+        }
       }),
     ];
   }
@@ -113,6 +119,9 @@ class _PostsSectionState extends State<PostsSection> {
 
                     return PostCard(
                       post: post,
+                      index: index + 1,
+                      onPublish: () =>
+                          postsStore.createOrUpdatePost(post.copyWith(published: !post.published)),
                       onEdit: () {
                         showCreateOrUpdatePostDialog(
                           context,

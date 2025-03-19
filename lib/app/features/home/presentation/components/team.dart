@@ -61,6 +61,8 @@ class _TeamState extends State<Team> {
                     return AppMouseRegion(
                       child: GestureDetector(
                         onTap: () {
+                          if (member.description?.isEmpty ?? true) return;
+
                           GoRouter.of(context).go(
                             '/team-member/${member.id}',
                             extra: member,

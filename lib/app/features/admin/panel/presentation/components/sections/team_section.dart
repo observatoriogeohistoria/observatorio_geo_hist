@@ -8,21 +8,22 @@ import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/category_card.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_category_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/categories_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/team_member_card.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_team_member_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/team_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/users_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/team_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class CategoriesSection extends StatefulWidget {
-  const CategoriesSection({super.key});
+class TeamSection extends StatefulWidget {
+  const TeamSection({super.key});
 
   @override
-  State<CategoriesSection> createState() => _CategoriesSectionState();
+  State<TeamSection> createState() => _TeamSectionState();
 }
 
-class _CategoriesSectionState extends State<CategoriesSection> {
-  late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
+class _TeamSectionState extends State<TeamSection> {
+  late final TeamStore teamStore = PanelSetup.getIt<TeamStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
@@ -31,18 +32,18 @@ class _CategoriesSectionState extends State<CategoriesSection> {
   void initState() {
     super.initState();
 
-    categoriesStore.getCategories();
+    teamStore.getTeamMembers();
 
     _reactions = [
-      reaction((_) => categoriesStore.state, (state) {
-        if (state is ManageCategoriesErrorState) {
+      reaction((_) => teamStore.state, (state) {
+        if (state is ManageTeamErrorState) {
           final error = state.failure;
           Messenger.showError(context, error.message);
 
           if (error is Forbidden) authStore.logout();
         }
 
-        if (state is ManageCategoriesSuccessState) {
+        if (state is ManageTeamSuccessState) {
           if (state.message.isNotEmpty) {
             Messenger.showSuccess(context, state.message);
           }
@@ -71,58 +72,56 @@ class _CategoriesSectionState extends State<CategoriesSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppHeadline.big(
-            text: 'Categorias',
+            text: 'Equipe',
             color: AppTheme(context).colors.orange,
           ),
           SizedBox(height: AppTheme(context).dimensions.space.xlarge),
           Align(
             alignment: Alignment.centerRight,
             child: SecondaryButton.medium(
-              text: 'Criar categoria',
+              text: 'Criar membro',
               onPressed: () {
-                showCreateOrUpdateCategoryDialog(
+                showCreateOrUpdateTeamMemberDialog(
                   context,
-                  onCreateOrUpdate: (category) => categoriesStore.createOrUpdateCategory(category),
+                  onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
                 );
               },
             ),
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.large),
           Expanded(
             child: Observer(
               builder: (context) {
-                if (categoriesStore.state is ManageCategoriesLoadingState) {
+                if (teamStore.state is ManageUsersLoadingState) {
                   return const Center(child: Loading());
                 }
 
-                final categories = categoriesStore.categories;
+                final members = teamStore.teamMembers;
 
                 return ListView.separated(
                   physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    bottom: AppTheme(context).dimensions.space.large,
+                  padding: EdgeInsets.symmetric(
+                    vertical: AppTheme(context).dimensions.space.large,
                   ),
                   separatorBuilder: (context, index) {
-                    final isLast = index == categories.length - 1;
+                    final isLast = index == members.length - 1;
 
                     return isLast
                         ? const SizedBox()
                         : SizedBox(height: AppTheme(context).dimensions.space.medium);
                   },
-                  itemCount: categories.length,
+                  itemCount: members.length,
                   itemBuilder: (context, index) {
-                    final category = categories[index];
+                    final member = members[index];
 
-                    return CategoryCard(
-                      category: category,
+                    return TeamMemberCard(
+                      member: member,
                       index: index + 1,
-                      onDelete: () => categoriesStore.deleteCategory(category),
+                      onDelete: () => teamStore.deleteTeamMember(member),
                       onEdit: () {
-                        showCreateOrUpdateCategoryDialog(
+                        showCreateOrUpdateTeamMemberDialog(
                           context,
-                          category: category,
-                          onCreateOrUpdate: (category) =>
-                              categoriesStore.createOrUpdateCategory(category),
+                          onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
+                          member: member,
                         );
                       },
                     );

@@ -85,13 +85,15 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                                 color: AppTheme(context).colors.gray,
                               ),
                             ),
-                            SizedBox(height: AppTheme(context).dimensions.space.large),
-                            AppBody.big(
-                              text: member.description,
-                              textAlign: TextAlign.justify,
-                              color: AppTheme(context).colors.darkGray,
-                            ),
-                            if (member.lattesUrl.isNotEmpty)
+                            if (member.description?.isNotEmpty ?? false) ...[
+                              SizedBox(height: AppTheme(context).dimensions.space.large),
+                              AppBody.big(
+                                text: member.description!,
+                                textAlign: TextAlign.justify,
+                                color: AppTheme(context).colors.darkGray,
+                              ),
+                            ],
+                            if (member.lattesUrl?.isNotEmpty ?? false)
                               Container(
                                 margin:
                                     EdgeInsets.only(top: AppTheme(context).dimensions.space.large),
@@ -99,7 +101,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                                   text: 'Currículo Lattes',
                                   onPressed: () async {
                                     final url = member.lattesUrl;
-                                    html.window.open(url, 'new tab');
+                                    html.window.open(url!, 'new tab');
                                   },
                                 ),
                               ),

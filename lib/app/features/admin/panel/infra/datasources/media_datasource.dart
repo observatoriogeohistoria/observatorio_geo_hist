@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
+import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 
 abstract class MediaDatasource {
@@ -43,7 +44,7 @@ class MediaDatasourceImpl implements MediaDatasource {
   @override
   Future<MediaModel> createMedia(MediaModel media) async {
     try {
-      String id = DateTime.now().millisecondsSinceEpoch.toString();
+      String id = IdGenerator.generate();
       String fileName = '${media.name}_$id';
 
       final ref = _storage.refFromURL(_bucket).child('media/$fileName.${media.extension}');

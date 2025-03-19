@@ -3,17 +3,20 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/datasources/firebase_auth_datasource.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/categories/categories_datasource.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/media/media_datasource.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/posts/posts_datasource.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/users/users_datasource.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/categories/categories_repository.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/media/media_repository.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/posts/posts_repository.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/users/users_repository.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/categories_datasource.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/media_datasource.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/posts_datasource.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/team_datasource.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/users_datasource.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/categories_repository.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/media_repository.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/posts_repository.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/team_repository.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/users_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/media_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/team_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/users_store.dart';
 
 class PanelSetup {
@@ -63,6 +66,17 @@ class PanelSetup {
     );
     getIt.registerLazySingleton<MediaStore>(
       () => MediaStore(getIt<MediaRepository>()),
+    );
+
+    /// Team
+    getIt.registerFactory<TeamDatasource>(
+      () => TeamDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
+    );
+    getIt.registerFactory<TeamRepository>(
+      () => TeamRepositoryImpl(getIt<TeamDatasource>()),
+    );
+    getIt.registerLazySingleton<TeamStore>(
+      () => TeamStore(getIt<TeamRepository>()),
     );
   }
 }

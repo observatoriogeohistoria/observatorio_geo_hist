@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/media/media_datasource.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/media_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/media_failures.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 

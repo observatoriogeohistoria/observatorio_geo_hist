@@ -12,6 +12,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart'
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/categories_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/media_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/posts_section.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/team_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/users_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_navigation.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
@@ -123,6 +124,8 @@ class _PanelPageState extends State<PanelPage> {
         return const CategoriesSection();
       case SidebarItem.posts:
         return const PostsSection();
+      case SidebarItem.team:
+        return const TeamSection();
     }
   }
 }

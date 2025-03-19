@@ -11,11 +11,13 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class MediaCard extends StatelessWidget {
   const MediaCard({
     required this.media,
+    required this.index,
     required this.onDelete,
     super.key,
   });
 
   final MediaModel media;
+  final int index;
   final void Function() onDelete;
 
   @override
@@ -35,6 +37,11 @@ class MediaCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  AppLabel.small(
+                    text: '$index',
+                    color: AppTheme(context).colors.gray,
+                  ),
+                  SizedBox(height: AppTheme(context).dimensions.space.xsmall),
                   AppTitle.medium(
                     text: media.name,
                     color: AppTheme(context).colors.darkGray,
@@ -53,6 +60,7 @@ class MediaCard extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(width: AppTheme(context).dimensions.space.medium),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

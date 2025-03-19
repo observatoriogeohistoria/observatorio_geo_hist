@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/users/users_repository.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/users_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/users_states.dart';
 
 part 'users_store.g.dart';

@@ -19,6 +19,20 @@ class Validators {
     return hasMatch ? null : 'Senha inválida';
   }
 
+  static String? isValidUrl(String? url) {
+    if (url == null || url.isEmpty) return 'Por favor, insira uma URL';
+
+    final hasMatch = RegExp(r'^https?://').hasMatch(url);
+    return hasMatch ? null : 'URL inválida';
+  }
+
+  static String? isValidUrlOrEmpty(String? url) {
+    if (url == null || url.isEmpty) return null;
+
+    final hasMatch = RegExp(r'^https?://').hasMatch(url);
+    return hasMatch ? null : 'URL inválida';
+  }
+
   static String? isValidMonthAndYear(String? value) {
     if (value == null || value.isEmpty) return 'Por favor, insira um mês e um ano';
 

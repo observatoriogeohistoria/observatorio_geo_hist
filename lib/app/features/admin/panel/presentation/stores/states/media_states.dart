@@ -10,7 +10,10 @@ final class ManageMediaInitialState extends ManageMediaState {}
 
 final class ManageMediaLoadingState extends ManageMediaState {}
 
-final class ManageMediaSuccessState extends ManageMediaState {}
+final class ManageMediaSuccessState extends ManageMediaState {
+  final String message;
+  ManageMediaSuccessState({this.message = ''});
+}
 
 final class ManageMediaErrorState extends ManageMediaState {
   final Failure failure;

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 
 abstract class PostsDatasource {
   Future<List<PostModel>> getPosts();
@@ -72,20 +73,18 @@ class PostsDatasourceImpl implements PostsDatasource {
   @override
   Future<PostModel> createOrUpdatePost(PostModel post) async {
     try {
-      final newPost =
-          post.copyWith(id: post.id ?? DateTime.now().millisecondsSinceEpoch.toString());
+      final newPost = post.copyWith(id: post.id ?? IdGenerator.generate());
 
       DocumentReference ref = _firestore
           .collection('posts')
           .doc(newPost.area.key)
           .collection(newPost.category.key)
           .doc(newPost.id);
-
-      await ref.set(post.toJson(), SetOptions(merge: true));
+      await ref.set(newPost.toJson(), SetOptions(merge: true));
 
       return newPost;
     } catch (exception, stackTrace) {
-      _loggerService.error('Error creating post: $exception', stackTrace: stackTrace);
+      _loggerService.error('Error creating or updating post: $exception', stackTrace: stackTrace);
       rethrow;
     }
   }

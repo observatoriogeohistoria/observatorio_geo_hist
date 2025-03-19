@@ -3,7 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/posts/posts_datasource.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/posts_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/posts_failures.dart';
 
 abstract class PostsRepository {

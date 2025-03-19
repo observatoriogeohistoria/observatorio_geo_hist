@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.d
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -41,7 +42,8 @@ class CreateOrUpdateCategoryDialog extends StatefulWidget {
 class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDialog> {
   final _formKey = GlobalKey<FormState>();
 
-  late final _keyController = TextEditingController(text: widget.category?.key);
+  late final _keyController =
+      TextEditingController(text: widget.category?.key ?? IdGenerator.generate());
   late final _titleController = TextEditingController(text: widget.category?.title);
   late final _descriptionController = TextEditingController(text: widget.category?.description);
   late final _backgroundImgUrlController =
@@ -70,7 +72,7 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
               controller: _keyController,
               labelText: 'Chave',
               validator: Validators.isNotEmpty,
-              isDisabled: _isUpdate,
+              isDisabled: true,
             ),
             SizedBox(height: AppTheme(context).dimensions.space.medium),
             AppTextField(

@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/media/media_repository.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/media_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/media_states.dart';
 
 part 'media_store.g.dart';
@@ -44,7 +44,7 @@ abstract class MediaStoreBase with Store {
       (failure) => state = ManageMediaErrorState(failure),
       (_) {
         medias.add(media);
-        state = ManageMediaSuccessState();
+        state = ManageMediaSuccessState(message: 'Mídia criada com sucesso');
       },
     );
   }
@@ -57,7 +57,7 @@ abstract class MediaStoreBase with Store {
       (failure) => state = ManageMediaErrorState(failure),
       (_) {
         medias.remove(media);
-        state = ManageMediaSuccessState();
+        state = ManageMediaSuccessState(message: 'Mídia deletada com sucesso');
       },
     );
   }
