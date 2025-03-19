@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_header.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_menu_item.dart';
@@ -21,14 +22,19 @@ class _SidebarState extends State<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    final widthWhenCollapsed = 24 + 2 * AppTheme(context).dimensions.space.medium;
+    double widthWhenCollapsed = 24 + 2 * AppTheme(context).dimensions.space.medium;
+    bool isMobile = DeviceUtils.isMobile(context);
 
     return Observer(
       builder: (context) {
         final isCollapsed = sidebarStore.isCollapsed;
 
         return Drawer(
-          width: isCollapsed ? widthWhenCollapsed : null,
+          width: isMobile
+              ? MediaQuery.of(context).size.width
+              : isCollapsed
+                  ? widthWhenCollapsed
+                  : null,
           child: Container(
             color: AppTheme(context).colors.white,
             child: Column(
@@ -39,10 +45,18 @@ class _SidebarState extends State<Sidebar> {
                   items: SidebarItem.values,
                   selectedItem: sidebarStore.selectedItem,
                   isCollapsed: isCollapsed,
+                  isMobile: isMobile,
                 ),
                 const Spacer(),
                 ToggleCollpaseButton(
-                  onTap: sidebarStore.toggleCollapse,
+                  onTap: () {
+                    if (isMobile) {
+                      Navigator.of(context).pop();
+                      return;
+                    }
+
+                    sidebarStore.toggleCollapse();
+                  },
                   isCollapsed: isCollapsed,
                 ),
               ],
@@ -57,6 +71,7 @@ class _SidebarState extends State<Sidebar> {
     required List<SidebarItem> items,
     required SidebarItem? selectedItem,
     bool isCollapsed = false,
+    bool isMobile = false,
   }) {
     return ListView.separated(
       padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.medium),
@@ -76,6 +91,8 @@ class _SidebarState extends State<Sidebar> {
           onClicked: () {
             sidebarStore.selectItem(items[index]);
             GoRouter.of(context).go('/admin/painel/${items[index].value}');
+
+            if (isMobile) Navigator.of(context).pop();
           },
           isSelected: items[index] == sidebarStore.selectedItem,
           isCollapsed: isCollapsed,

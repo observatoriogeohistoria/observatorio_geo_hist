@@ -61,70 +61,63 @@ class _MediaSectionState extends State<MediaSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: AppTheme(context).dimensions.space.xlarge,
-        right: AppTheme(context).dimensions.space.xlarge,
-        left: AppTheme(context).dimensions.space.xlarge,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppHeadline.big(
-            text: 'Mídias',
-            color: AppTheme(context).colors.orange,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppHeadline.big(
+          text: 'Mídias',
+          color: AppTheme(context).colors.orange,
+        ),
+        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        Align(
+          alignment: Alignment.centerRight,
+          child: SecondaryButton.medium(
+            text: 'Criar mídia',
+            onPressed: () {
+              showCreateMediaDialog(
+                context,
+                onCreate: (media) => mediaStore.createMedia(media),
+              );
+            },
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.xlarge),
-          Align(
-            alignment: Alignment.centerRight,
-            child: SecondaryButton.medium(
-              text: 'Criar mídia',
-              onPressed: () {
-                showCreateMediaDialog(
-                  context,
-                  onCreate: (media) => mediaStore.createMedia(media),
-                );
-              },
-            ),
+        ),
+        SizedBox(height: AppTheme(context).dimensions.space.large),
+        Expanded(
+          child: Observer(
+            builder: (context) {
+              if (mediaStore.state is ManageMediaLoadingState) {
+                return const Center(child: Loading());
+              }
+    
+              final medias = mediaStore.medias;
+    
+              return ListView.separated(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.only(
+                  bottom: AppTheme(context).dimensions.space.large,
+                ),
+                separatorBuilder: (context, index) {
+                  final isLast = index == medias.length - 1;
+    
+                  return isLast
+                      ? const SizedBox()
+                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                },
+                itemCount: medias.length,
+                itemBuilder: (context, index) {
+                  final media = medias[index];
+    
+                  return MediaCard(
+                    media: media,
+                    index: index + 1,
+                    onDelete: () => mediaStore.deleteMedia(media),
+                  );
+                },
+              );
+            },
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.large),
-          Expanded(
-            child: Observer(
-              builder: (context) {
-                if (mediaStore.state is ManageMediaLoadingState) {
-                  return const Center(child: Loading());
-                }
-
-                final medias = mediaStore.medias;
-
-                return ListView.separated(
-                  physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    bottom: AppTheme(context).dimensions.space.large,
-                  ),
-                  separatorBuilder: (context, index) {
-                    final isLast = index == medias.length - 1;
-
-                    return isLast
-                        ? const SizedBox()
-                        : SizedBox(height: AppTheme(context).dimensions.space.medium);
-                  },
-                  itemCount: medias.length,
-                  itemBuilder: (context, index) {
-                    final media = medias[index];
-
-                    return MediaCard(
-                      media: media,
-                      index: index + 1,
-                      onDelete: () => mediaStore.deleteMedia(media),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

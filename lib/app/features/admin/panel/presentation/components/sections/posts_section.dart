@@ -64,81 +64,74 @@ class _PostsSectionState extends State<PostsSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: AppTheme(context).dimensions.space.xlarge,
-        right: AppTheme(context).dimensions.space.xlarge,
-        left: AppTheme(context).dimensions.space.xlarge,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppHeadline.big(
-            text: 'Posts',
-            color: AppTheme(context).colors.orange,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppHeadline.big(
+          text: 'Posts',
+          color: AppTheme(context).colors.orange,
+        ),
+        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        Align(
+          alignment: Alignment.centerRight,
+          child: SecondaryButton.medium(
+            text: 'Criar post',
+            onPressed: () {
+              showCreateOrUpdatePostDialog(
+                context,
+                categories: categoriesStore.categories,
+                onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+              );
+            },
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.xlarge),
-          Align(
-            alignment: Alignment.centerRight,
-            child: SecondaryButton.medium(
-              text: 'Criar post',
-              onPressed: () {
-                showCreateOrUpdatePostDialog(
-                  context,
-                  categories: categoriesStore.categories,
-                  onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
-                );
-              },
-            ),
+        ),
+        SizedBox(height: AppTheme(context).dimensions.space.large),
+        Expanded(
+          child: Observer(
+            builder: (context) {
+              if (postsStore.state is ManagePostsLoadingState) {
+                return const Center(child: Loading());
+              }
+
+              final posts = postsStore.posts;
+
+              return ListView.separated(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.only(
+                  bottom: AppTheme(context).dimensions.space.large,
+                ),
+                separatorBuilder: (context, index) {
+                  final isLast = index == posts.length - 1;
+
+                  return isLast
+                      ? const SizedBox()
+                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                },
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  final post = posts[index];
+
+                  return PostCard(
+                    post: post,
+                    index: index + 1,
+                    onPublish: () =>
+                        postsStore.createOrUpdatePost(post.copyWith(published: !post.published)),
+                    onEdit: () {
+                      showCreateOrUpdatePostDialog(
+                        context,
+                        post: post,
+                        categories: categoriesStore.categories,
+                        onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+                      );
+                    },
+                    onDelete: () => postsStore.deletePost(post),
+                  );
+                },
+              );
+            },
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.large),
-          Expanded(
-            child: Observer(
-              builder: (context) {
-                if (postsStore.state is ManagePostsLoadingState) {
-                  return const Center(child: Loading());
-                }
-
-                final posts = postsStore.posts;
-
-                return ListView.separated(
-                  physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    bottom: AppTheme(context).dimensions.space.large,
-                  ),
-                  separatorBuilder: (context, index) {
-                    final isLast = index == posts.length - 1;
-
-                    return isLast
-                        ? const SizedBox()
-                        : SizedBox(height: AppTheme(context).dimensions.space.medium);
-                  },
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) {
-                    final post = posts[index];
-
-                    return PostCard(
-                      post: post,
-                      index: index + 1,
-                      onPublish: () =>
-                          postsStore.createOrUpdatePost(post.copyWith(published: !post.published)),
-                      onEdit: () {
-                        showCreateOrUpdatePostDialog(
-                          context,
-                          post: post,
-                          categories: categoriesStore.categories,
-                          onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
-                        );
-                      },
-                      onDelete: () => postsStore.deletePost(post),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

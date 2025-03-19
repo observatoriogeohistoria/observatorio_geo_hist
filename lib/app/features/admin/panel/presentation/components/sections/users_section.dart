@@ -60,77 +60,70 @@ class _UsersSectionState extends State<UsersSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: AppTheme(context).dimensions.space.xlarge,
-        right: AppTheme(context).dimensions.space.xlarge,
-        left: AppTheme(context).dimensions.space.xlarge,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppHeadline.big(
-            text: 'Usuários',
-            color: AppTheme(context).colors.orange,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppHeadline.big(
+          text: 'Usuários',
+          color: AppTheme(context).colors.orange,
+        ),
+        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        Align(
+          alignment: Alignment.centerRight,
+          child: SecondaryButton.medium(
+            text: 'Criar usuário',
+            onPressed: () {
+              showCreateOrUpdateUserDialog(
+                context,
+                onCreate: (user, password) => usersStore.createUser(user, password),
+                onUpdate: (user) => usersStore.updateUser(user),
+              );
+            },
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.xlarge),
-          Align(
-            alignment: Alignment.centerRight,
-            child: SecondaryButton.medium(
-              text: 'Criar usuário',
-              onPressed: () {
-                showCreateOrUpdateUserDialog(
-                  context,
-                  onCreate: (user, password) => usersStore.createUser(user, password),
-                  onUpdate: (user) => usersStore.updateUser(user),
-                );
-              },
-            ),
+        ),
+        Expanded(
+          child: Observer(
+            builder: (context) {
+              if (usersStore.state is ManageUsersLoadingState) {
+                return const Center(child: Loading());
+              }
+
+              final users = usersStore.users;
+
+              return ListView.separated(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.symmetric(
+                  vertical: AppTheme(context).dimensions.space.large,
+                ),
+                separatorBuilder: (context, index) {
+                  final isLast = index == users.length - 1;
+
+                  return isLast
+                      ? const SizedBox()
+                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                },
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  final user = users[index];
+
+                  return UserCard(
+                    user: user,
+                    onDelete: () => usersStore.deleteUser(user),
+                    onEdit: () {
+                      showCreateOrUpdateUserDialog(
+                        context,
+                        onCreate: (user, password) => usersStore.createUser(user, password),
+                        onUpdate: (user) => usersStore.updateUser(user),
+                        user: user,
+                      );
+                    },
+                  );
+                },
+              );
+            },
           ),
-          Expanded(
-            child: Observer(
-              builder: (context) {
-                if (usersStore.state is ManageUsersLoadingState) {
-                  return const Center(child: Loading());
-                }
-
-                final users = usersStore.users;
-
-                return ListView.separated(
-                  physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppTheme(context).dimensions.space.large,
-                  ),
-                  separatorBuilder: (context, index) {
-                    final isLast = index == users.length - 1;
-
-                    return isLast
-                        ? const SizedBox()
-                        : SizedBox(height: AppTheme(context).dimensions.space.medium);
-                  },
-                  itemCount: users.length,
-                  itemBuilder: (context, index) {
-                    final user = users[index];
-
-                    return UserCard(
-                      user: user,
-                      onDelete: () => usersStore.deleteUser(user),
-                      onEdit: () {
-                        showCreateOrUpdateUserDialog(
-                          context,
-                          onCreate: (user, password) => usersStore.createUser(user, password),
-                          onUpdate: (user) => usersStore.updateUser(user),
-                          user: user,
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

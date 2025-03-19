@@ -62,76 +62,69 @@ class _TeamSectionState extends State<TeamSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: AppTheme(context).dimensions.space.xlarge,
-        right: AppTheme(context).dimensions.space.xlarge,
-        left: AppTheme(context).dimensions.space.xlarge,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppHeadline.big(
-            text: 'Equipe',
-            color: AppTheme(context).colors.orange,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppHeadline.big(
+          text: 'Equipe',
+          color: AppTheme(context).colors.orange,
+        ),
+        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        Align(
+          alignment: Alignment.centerRight,
+          child: SecondaryButton.medium(
+            text: 'Criar membro',
+            onPressed: () {
+              showCreateOrUpdateTeamMemberDialog(
+                context,
+                onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
+              );
+            },
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.xlarge),
-          Align(
-            alignment: Alignment.centerRight,
-            child: SecondaryButton.medium(
-              text: 'Criar membro',
-              onPressed: () {
-                showCreateOrUpdateTeamMemberDialog(
-                  context,
-                  onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
-                );
-              },
-            ),
+        ),
+        Expanded(
+          child: Observer(
+            builder: (context) {
+              if (teamStore.state is ManageUsersLoadingState) {
+                return const Center(child: Loading());
+              }
+
+              final members = teamStore.teamMembers;
+
+              return ListView.separated(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.symmetric(
+                  vertical: AppTheme(context).dimensions.space.large,
+                ),
+                separatorBuilder: (context, index) {
+                  final isLast = index == members.length - 1;
+
+                  return isLast
+                      ? const SizedBox()
+                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                },
+                itemCount: members.length,
+                itemBuilder: (context, index) {
+                  final member = members[index];
+
+                  return TeamMemberCard(
+                    member: member,
+                    index: index + 1,
+                    onDelete: () => teamStore.deleteTeamMember(member),
+                    onEdit: () {
+                      showCreateOrUpdateTeamMemberDialog(
+                        context,
+                        onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
+                        member: member,
+                      );
+                    },
+                  );
+                },
+              );
+            },
           ),
-          Expanded(
-            child: Observer(
-              builder: (context) {
-                if (teamStore.state is ManageUsersLoadingState) {
-                  return const Center(child: Loading());
-                }
-
-                final members = teamStore.teamMembers;
-
-                return ListView.separated(
-                  physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppTheme(context).dimensions.space.large,
-                  ),
-                  separatorBuilder: (context, index) {
-                    final isLast = index == members.length - 1;
-
-                    return isLast
-                        ? const SizedBox()
-                        : SizedBox(height: AppTheme(context).dimensions.space.medium);
-                  },
-                  itemCount: members.length,
-                  itemBuilder: (context, index) {
-                    final member = members[index];
-
-                    return TeamMemberCard(
-                      member: member,
-                      index: index + 1,
-                      onDelete: () => teamStore.deleteTeamMember(member),
-                      onEdit: () {
-                        showCreateOrUpdateTeamMemberDialog(
-                          context,
-                          onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
-                          member: member,
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

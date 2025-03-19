@@ -1,33 +1,5 @@
-enum UserRole {
-  admin,
-  editor,
-  viewer;
-
-  @override
-  String toString() {
-    switch (this) {
-      case UserRole.admin:
-        return 'ADMIN';
-      case UserRole.editor:
-        return 'EDITOR';
-      case UserRole.viewer:
-        return 'VIEWER';
-    }
-  }
-
-  static UserRole fromString(String role) {
-    switch (role) {
-      case 'ADMIN':
-        return UserRole.admin;
-      case 'EDITOR':
-        return UserRole.editor;
-      case 'VIEWER':
-        return UserRole.viewer;
-      default:
-        throw Exception('Invalid role');
-    }
-  }
-}
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_permissions.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_role.dart';
 
 class UserModel {
   UserModel({
@@ -36,13 +8,32 @@ class UserModel {
     required this.email,
     required this.role,
     this.isDeleted = false,
-  });
+  }) {
+    permissions = UserPermissions(
+      canViewUsersSection: isAdmin,
+      canEditUsersSection: isAdmin,
+      canViewMediaSection: true,
+      canEditMediaSection: isAdmin || isEditor,
+      canViewCategoriesSection: true,
+      canEditCategoriesSection: isAdmin || isEditor,
+      canViewPostsSection: true,
+      canEditPostsSection: isAdmin || isEditor,
+      canViewTeamSection: true,
+      canEditTeamSection: isAdmin || isEditor,
+    );
+  }
 
   final String? id;
   final String name;
   final String email;
   final UserRole role;
   final bool isDeleted;
+
+  late final UserPermissions permissions;
+
+  bool get isAdmin => role == UserRole.admin;
+  bool get isEditor => role == UserRole.editor;
+  bool get isViewer => role == UserRole.viewer;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

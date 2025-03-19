@@ -61,78 +61,71 @@ class _CategoriesSectionState extends State<CategoriesSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: AppTheme(context).dimensions.space.xlarge,
-        right: AppTheme(context).dimensions.space.xlarge,
-        left: AppTheme(context).dimensions.space.xlarge,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppHeadline.big(
-            text: 'Categorias',
-            color: AppTheme(context).colors.orange,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppHeadline.big(
+          text: 'Categorias',
+          color: AppTheme(context).colors.orange,
+        ),
+        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        Align(
+          alignment: Alignment.centerRight,
+          child: SecondaryButton.medium(
+            text: 'Criar categoria',
+            onPressed: () {
+              showCreateOrUpdateCategoryDialog(
+                context,
+                onCreateOrUpdate: (category) => categoriesStore.createOrUpdateCategory(category),
+              );
+            },
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.xlarge),
-          Align(
-            alignment: Alignment.centerRight,
-            child: SecondaryButton.medium(
-              text: 'Criar categoria',
-              onPressed: () {
-                showCreateOrUpdateCategoryDialog(
-                  context,
-                  onCreateOrUpdate: (category) => categoriesStore.createOrUpdateCategory(category),
-                );
-              },
-            ),
+        ),
+        SizedBox(height: AppTheme(context).dimensions.space.large),
+        Expanded(
+          child: Observer(
+            builder: (context) {
+              if (categoriesStore.state is ManageCategoriesLoadingState) {
+                return const Center(child: Loading());
+              }
+
+              final categories = categoriesStore.categories;
+
+              return ListView.separated(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.only(
+                  bottom: AppTheme(context).dimensions.space.large,
+                ),
+                separatorBuilder: (context, index) {
+                  final isLast = index == categories.length - 1;
+
+                  return isLast
+                      ? const SizedBox()
+                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                },
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+
+                  return CategoryCard(
+                    category: category,
+                    index: index + 1,
+                    onDelete: () => categoriesStore.deleteCategory(category),
+                    onEdit: () {
+                      showCreateOrUpdateCategoryDialog(
+                        context,
+                        category: category,
+                        onCreateOrUpdate: (category) =>
+                            categoriesStore.createOrUpdateCategory(category),
+                      );
+                    },
+                  );
+                },
+              );
+            },
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.large),
-          Expanded(
-            child: Observer(
-              builder: (context) {
-                if (categoriesStore.state is ManageCategoriesLoadingState) {
-                  return const Center(child: Loading());
-                }
-
-                final categories = categoriesStore.categories;
-
-                return ListView.separated(
-                  physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    bottom: AppTheme(context).dimensions.space.large,
-                  ),
-                  separatorBuilder: (context, index) {
-                    final isLast = index == categories.length - 1;
-
-                    return isLast
-                        ? const SizedBox()
-                        : SizedBox(height: AppTheme(context).dimensions.space.medium);
-                  },
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-
-                    return CategoryCard(
-                      category: category,
-                      index: index + 1,
-                      onDelete: () => categoriesStore.deleteCategory(category),
-                      onEdit: () {
-                        showCreateOrUpdateCategoryDialog(
-                          context,
-                          category: category,
-                          onCreateOrUpdate: (category) =>
-                              categoriesStore.createOrUpdateCategory(category),
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

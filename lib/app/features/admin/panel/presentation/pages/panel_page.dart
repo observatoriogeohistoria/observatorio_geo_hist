@@ -74,6 +74,10 @@ class _PanelPageState extends State<PanelPage> {
   Widget build(BuildContext context) {
     bool isDesktop = DeviceUtils.isDesktop(context);
 
+    double padding = DeviceUtils.isMobile(context)
+        ? AppTheme(context).dimensions.space.medium
+        : AppTheme(context).dimensions.space.xlarge;
+
     return Scaffold(
       drawer: isDesktop ? null : const Sidebar(),
       appBar: AppBar(
@@ -96,7 +100,14 @@ class _PanelPageState extends State<PanelPage> {
       ),
       body: Observer(
         builder: (context) {
-          Widget body = _buildBody(sidebarStore.selectedItem);
+          Widget body = Padding(
+            padding: EdgeInsets.only(
+              top: padding,
+              right: padding,
+              left: padding,
+            ),
+            child: _buildBody(sidebarStore.selectedItem),
+          );
 
           if (!isDesktop) return body;
 
