@@ -23,7 +23,7 @@ class _SidebarState extends State<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    double widthWhenCollapsed = 32.0.scale + 2 * AppTheme.dimensions.space.medium;
+    double widthWhenCollapsed = 32.0.scale + 2 * AppTheme.dimensions.space.medium.scale;
     bool isMobile = DeviceUtils.isMobile(context);
 
     return Observer(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -38,8 +39,8 @@ class PrimaryButton extends StatelessWidget {
     switch (size) {
       case ButtonSize.small:
         padding = EdgeInsets.symmetric(
-          horizontal: AppTheme.dimensions.space.small,
-          vertical: AppTheme.dimensions.space.medium,
+          horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
+          vertical: AppTheme.dimensions.space.medium.verticalSpacing,
         );
 
         buttonText = AppTitle.small(
@@ -49,10 +50,7 @@ class PrimaryButton extends StatelessWidget {
 
         break;
       case ButtonSize.medium:
-        padding = EdgeInsets.symmetric(
-          horizontal: AppTheme.dimensions.space.medium,
-          vertical: AppTheme.dimensions.space.medium,
-        );
+        padding = EdgeInsets.all(AppTheme.dimensions.space.medium.scale);
 
         buttonText = AppTitle.medium(
           text: text,
@@ -61,10 +59,7 @@ class PrimaryButton extends StatelessWidget {
 
         break;
       case ButtonSize.big:
-        padding = EdgeInsets.symmetric(
-          horizontal: AppTheme.dimensions.space.medium,
-          vertical: AppTheme.dimensions.space.medium,
-        );
+        padding = EdgeInsets.all(AppTheme.dimensions.space.medium.scale);
 
         buttonText = AppTitle.big(
           text: text,

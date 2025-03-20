@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_butt
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -58,14 +59,14 @@ class _CreateMediaDialogState extends State<CreateMediaDialog> {
               text: 'Criar mídia',
               color: AppTheme.colors.orange,
             ),
-            SizedBox(height: AppTheme.dimensions.space.xlarge),
+            SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
             AppTextField(
               controller: _nameController,
               labelText: 'Arquivo',
               validator: Validators.isNotEmpty,
               isDisabled: true,
             ),
-            SizedBox(height: AppTheme.dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
             SecondaryButton.small(
               text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
               onPressed: () async {
@@ -98,7 +99,7 @@ class _CreateMediaDialogState extends State<CreateMediaDialog> {
                   text: 'Cancelar',
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                SizedBox(width: AppTheme.dimensions.space.medium),
+                SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
                 PrimaryButton.medium(
                   text: 'Criar',
                   onPressed: _onCreate,

@@ -21,10 +21,10 @@ class SidebarMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double iconSize = 32.0.scale;
-    final widthWhenCollapsed = iconSize + 2 * AppTheme.dimensions.space.medium.scale;
+    double iconSize = 32.scale;
+    double widthWhenCollapsed = iconSize + 2 * AppTheme.dimensions.space.medium.scale;
 
-    final icon = Icon(item.icon, color: AppTheme.colors.orange, size: iconSize);
+    Widget icon = Icon(item.icon, color: AppTheme.colors.orange, size: iconSize);
 
     return Tooltip(
       message: isCollapsed ? item.title : '',
@@ -40,7 +40,7 @@ class SidebarMenuItem extends StatelessWidget {
           child: isCollapsed
               ? icon
               : Container(
-                  padding: EdgeInsets.all(AppTheme.dimensions.space.medium),
+                  padding: EdgeInsets.all(AppTheme.dimensions.space.medium.scale),
                   decoration: BoxDecoration(
                     color: isSelected ? AppTheme.colors.lightGray : Colors.transparent,
                     borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
@@ -48,7 +48,7 @@ class SidebarMenuItem extends StatelessWidget {
                   child: Row(
                     children: [
                       icon,
-                      SizedBox(width: AppTheme.dimensions.space.medium),
+                      SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
                       AppTitle.medium(
                         text: item.title,
                         color: AppTheme.colors.darkGray,

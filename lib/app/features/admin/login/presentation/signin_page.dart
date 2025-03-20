@@ -7,6 +7,8 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.d
 import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
@@ -64,19 +66,25 @@ class _SigninPageState extends State<SigninPage> {
     final size = MediaQuery.of(context).size;
     final border = BorderSide(color: AppTheme.colors.gray);
 
+    bool isMobile = DeviceUtils.isMobile(context);
+    bool isTablet = DeviceUtils.isTablet(context);
+
     return Scaffold(
       backgroundColor: AppTheme.colors.lightGray,
       body: SizedBox(
         width: size.width,
-        height: size.height,
         child: Observer(builder: (context) {
           final loginState = authStore.state.loginState;
 
           return Center(
             child: Container(
-              width: size.width * 0.3,
-              height: size.height * 0.7,
-              padding: EdgeInsets.all(AppTheme.dimensions.space.large),
+              width: size.width * (isMobile ? 1 : (isTablet ? 0.5 : 0.3)),
+              padding: EdgeInsets.all(AppTheme.dimensions.space.large.scale),
+              margin: isMobile
+                  ? EdgeInsets.symmetric(
+                      horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
+                    )
+                  : EdgeInsets.zero,
               decoration: BoxDecoration(
                 color: AppTheme.colors.white,
                 borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
@@ -92,19 +100,20 @@ class _SigninPageState extends State<SigninPage> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     AppTitle.big(
                       text: 'LOGIN',
                       color: AppTheme.colors.darkGray,
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.large),
+                    SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
                     AppTextField(
                       controller: emailController,
                       labelText: 'E-MAIL',
                       hintText: 'exemplo@dominio.com',
                       validator: Validators.isValidEmail,
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.large),
+                    SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
                     AppTextField(
                       controller: passwordController,
                       labelText: 'SENHA',
@@ -117,13 +126,13 @@ class _SigninPageState extends State<SigninPage> {
                             : const Icon(Icons.visibility),
                       ),
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.small),
+                    SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                     AppLabel.small(
                       text:
                           'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
                       color: AppTheme.colors.gray,
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.xlarge),
+                    SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
                     loginState is LoginStateLoading
                         ? const Loading()
                         : PrimaryButton.medium(

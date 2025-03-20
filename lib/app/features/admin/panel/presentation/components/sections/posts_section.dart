@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
@@ -71,7 +72,7 @@ class _PostsSectionState extends State<PostsSection> {
           text: 'Posts',
           color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(
@@ -85,7 +86,7 @@ class _PostsSectionState extends State<PostsSection> {
             },
           ),
         ),
-        SizedBox(height: AppTheme.dimensions.space.large),
+        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
         Expanded(
           child: Observer(
             builder: (context) {
@@ -98,14 +99,14 @@ class _PostsSectionState extends State<PostsSection> {
               return ListView.separated(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.only(
-                  bottom: AppTheme.dimensions.space.large,
+                  bottom: AppTheme.dimensions.space.large.verticalSpacing,
                 ),
                 separatorBuilder: (context, index) {
                   final isLast = index == posts.length - 1;
 
                   return isLast
                       ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium);
+                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
                 },
                 itemCount: posts.length,
                 itemBuilder: (context, index) {

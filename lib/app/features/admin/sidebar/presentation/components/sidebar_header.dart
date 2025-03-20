@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class SidebarHeader extends StatelessWidget {
@@ -16,7 +17,7 @@ class SidebarHeader extends StatelessWidget {
         isCollapsed ? AppTheme.dimensions.space.small : AppTheme.dimensions.space.medium;
 
     return Padding(
-      padding: EdgeInsets.all(padding),
+      padding: EdgeInsets.all(padding.scale),
       child: Image.asset(
         '${AppAssets.images}/${isCollapsed ? 'lupa.png' : 'logo.png'}',
         width: double.infinity,

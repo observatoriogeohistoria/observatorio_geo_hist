@@ -12,6 +12,7 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/formatters/mont_year_input_formatter.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -61,7 +62,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
   late CategoryModel? _selectedCategory = widget.post?.category;
 
   late List<CategoryModel> _categoryOptions =
-      widget.categories.where((category) => category.area.key == _selectedArea!.key).toList();
+      widget.categories.where((category) => category.area.key == _selectedArea?.key).toList();
 
   late final List<TextEditingController> _authorsControllers =
       widget.post?.authors.map((author) => TextEditingController(text: author)).toList() ??
@@ -85,7 +86,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                 text: _isUpdate ? 'Atualizar post' : 'Criar post',
                 color: AppTheme.colors.orange,
               ),
-              SizedBox(height: AppTheme.dimensions.space.xlarge),
+              SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
               Expanded(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,20 +103,20 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                               labelText: 'Título',
                               validator: Validators.isNotEmpty,
                             ),
-                            SizedBox(height: AppTheme.dimensions.space.medium),
+                            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                             AppTextField(
                               controller: _subtitleController,
                               labelText: 'Subtítulo',
                               validator: Validators.isNotEmpty,
                             ),
-                            SizedBox(height: AppTheme.dimensions.space.medium),
+                            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                             AppTextField(
                               controller: _imageUrlController,
                               labelText: 'URL da imagem',
                               hintText: 'https://',
                               validator: Validators.isNotEmpty,
                             ),
-                            SizedBox(height: AppTheme.dimensions.space.medium),
+                            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                             AppTextField(
                               controller: _dateController,
                               labelText: 'Data',
@@ -128,7 +129,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                               ],
                               validator: Validators.isValidMonthAndYear,
                             ),
-                            SizedBox(height: AppTheme.dimensions.space.medium),
+                            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                             _buildLabel('Área'),
                             AppDropdownField<PostsAreas>(
                               hintText: 'Selecione',
@@ -149,7 +150,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                               },
                               validator: Validators.isNotEmpty,
                             ),
-                            SizedBox(height: AppTheme.dimensions.space.medium),
+                            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                             _buildLabel('Categoria'),
                             AppDropdownField<CategoryModel>(
                               hintText: 'Selecione',
@@ -168,7 +169,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                               },
                               validator: Validators.isNotEmpty,
                             ),
-                            SizedBox(height: AppTheme.dimensions.space.medium),
+                            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                             _buildLabel('Autores'),
                             for (var i = 0; i < _authorsControllers.length; i++)
                               Column(
@@ -177,7 +178,9 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                                     controller: _authorsControllers[i],
                                     validator: Validators.isNotEmpty,
                                   ),
-                                  SizedBox(height: AppTheme.dimensions.space.xsmall),
+                                  SizedBox(
+                                    height: AppTheme.dimensions.space.xsmall.verticalSpacing,
+                                  ),
                                 ],
                               ),
                             Row(
@@ -201,7 +204,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                         ),
                       ),
                     ),
-                    SizedBox(width: AppTheme.dimensions.space.medium),
+                    SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
                     Expanded(
                       flex: 2,
                       child: SingleChildScrollView(
@@ -226,7 +229,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                                 ],
                               ),
                             ),
-                            SizedBox(width: AppTheme.dimensions.space.medium),
+                            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
                             Flexible(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,7 +237,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                                   _buildLabel('Preview do Conteúdo'),
                                   Container(
                                     height: MediaQuery.of(context).size.height * 0.7,
-                                    padding: EdgeInsets.all(AppTheme.dimensions.space.small),
+                                    padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: AppTheme.colors.orange,
@@ -259,7 +262,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                   ],
                 ),
               ),
-              SizedBox(height: AppTheme.dimensions.space.medium),
+              SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -267,7 +270,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                     text: 'Cancelar',
                     onPressed: () => Navigator.of(context).pop(),
                   ),
-                  SizedBox(width: AppTheme.dimensions.space.medium),
+                  SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
                   PrimaryButton.medium(
                     text: _isUpdate ? 'Atualizar' : 'Criar',
                     onPressed: _onCreateOrUpdate,
@@ -288,7 +291,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
           text: text,
           color: AppTheme.colors.darkGray,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xsmall),
+        SizedBox(height: AppTheme.dimensions.space.xsmall.verticalSpacing),
       ],
     );
   }

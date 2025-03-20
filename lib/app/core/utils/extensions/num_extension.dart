@@ -28,15 +28,20 @@ extension NumExtension on num {
     return _ScalingFactors(widthFactor, heightFactor, scaleFactor);
   }
 
-  /// Calculates the font size based on the screen size, clamped between min and max values
-  double get fontSize {
+  double fontSize({double min = 18.0, double max = 40.0}) {
     final scaleFactor = _getScalingFactors().scaleFactor;
-
-    const min = 12.0;
-    const max = 40.0;
-
     return (this * scaleFactor).clamp(min, max);
   }
+
+  /// Calculates the font size based on the screen size, clamped between min and max values
+  // double get fontSize {
+  //   final scaleFactor = _getScalingFactors().scaleFactor;
+
+  //   const min = 18.0;
+  //   const max = 40.0;
+
+  //   return (this * scaleFactor).clamp(min, max);
+  // }
 
   /// Calculates a horizontal spacing based on the screen size (for padding/margin)
   double get horizontalSpacing {

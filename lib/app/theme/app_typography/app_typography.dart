@@ -8,19 +8,19 @@ class AppTypography {
 
   TypographyStyle get headline => TypographyStyle._(
         small: GoogleFonts.dosis(
-          fontSize: 26.fontSize,
+          fontSize: 26.fontSize(min: 26),
           fontWeight: FontWeight.w800,
           letterSpacing: 0,
           height: 1.3,
         ),
         medium: GoogleFonts.dosis(
-          fontSize: 30.fontSize,
+          fontSize: 30.fontSize(min: 26),
           fontWeight: FontWeight.w800,
           letterSpacing: 0.15,
           height: 1.3,
         ),
         big: GoogleFonts.dosis(
-          fontSize: 34.fontSize,
+          fontSize: 34.fontSize(min: 26),
           fontWeight: FontWeight.w800,
           letterSpacing: 0.2,
           height: 1.3,
@@ -29,19 +29,19 @@ class AppTypography {
 
   TypographyStyle get title => TypographyStyle._(
         small: GoogleFonts.dosis(
-          fontSize: 18.fontSize,
+          fontSize: 18.fontSize(min: 18),
           fontWeight: FontWeight.w600,
           letterSpacing: 0.1,
           height: 1.4,
         ),
         medium: GoogleFonts.dosis(
-          fontSize: 22.fontSize,
+          fontSize: 22.fontSize(min: 18),
           fontWeight: FontWeight.w600,
           letterSpacing: 0.15,
           height: 1.4,
         ),
         big: GoogleFonts.dosis(
-          fontSize: 26.fontSize,
+          fontSize: 26.fontSize(min: 18),
           fontWeight: FontWeight.w600,
           letterSpacing: 0.2,
           height: 1.4,
@@ -50,19 +50,19 @@ class AppTypography {
 
   TypographyStyle get body => TypographyStyle._(
         small: GoogleFonts.dosis(
-          fontSize: 16.fontSize,
+          fontSize: 16.fontSize(min: 16),
           fontWeight: FontWeight.w500,
           letterSpacing: 0.2,
           height: 1.5,
         ),
         medium: GoogleFonts.dosis(
-          fontSize: 18.fontSize,
+          fontSize: 18.fontSize(min: 16),
           fontWeight: FontWeight.w500,
           letterSpacing: 0.25,
           height: 1.5,
         ),
         big: GoogleFonts.dosis(
-          fontSize: 22.fontSize,
+          fontSize: 22.fontSize(min: 16),
           fontWeight: FontWeight.w500,
           letterSpacing: 0.25,
           height: 1.5,
@@ -71,19 +71,19 @@ class AppTypography {
 
   TypographyStyle get label => TypographyStyle._(
         small: GoogleFonts.dosis(
-          fontSize: 12.fontSize,
+          fontSize: 12.fontSize(min: 12),
           fontWeight: FontWeight.w600,
           letterSpacing: 0.2,
           height: 1.4,
         ),
         medium: GoogleFonts.dosis(
-          fontSize: 14.fontSize,
+          fontSize: 14.fontSize(min: 12),
           fontWeight: FontWeight.w600,
           letterSpacing: 0.25,
           height: 1.4,
         ),
         big: GoogleFonts.dosis(
-          fontSize: 18.fontSize,
+          fontSize: 18.fontSize(min: 12),
           fontWeight: FontWeight.w600,
           letterSpacing: 0.3,
           height: 1.4,

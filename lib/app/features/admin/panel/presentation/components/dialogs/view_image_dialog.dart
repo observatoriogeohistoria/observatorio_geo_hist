@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -34,7 +35,6 @@ class ViewImageDialog extends StatelessWidget {
           SingleChildScrollView(
             child: Image.memory(
               media.bytes,
-              height: 1000,
               fit: BoxFit.contain,
             ),
           ),
@@ -42,7 +42,7 @@ class ViewImageDialog extends StatelessWidget {
             top: 0,
             right: 0,
             child: Padding(
-              padding: EdgeInsets.all(AppTheme.dimensions.space.small),
+              padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
               child: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.of(context).pop(),

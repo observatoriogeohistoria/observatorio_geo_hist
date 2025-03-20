@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
@@ -67,7 +68,7 @@ class _UsersSectionState extends State<UsersSection> {
           text: 'Usuários',
           color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(
@@ -93,14 +94,14 @@ class _UsersSectionState extends State<UsersSection> {
               return ListView.separated(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.symmetric(
-                  vertical: AppTheme.dimensions.space.large,
+                  vertical: AppTheme.dimensions.space.large.verticalSpacing,
                 ),
                 separatorBuilder: (context, index) {
                   final isLast = index == users.length - 1;
 
                   return isLast
                       ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium);
+                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
                 },
                 itemCount: users.length,
                 itemBuilder: (context, index) {

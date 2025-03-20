@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.d
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -67,21 +68,21 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
               text: _isUpdate ? 'Atualizar categoria' : 'Criar categoria',
               color: AppTheme.colors.orange,
             ),
-            SizedBox(height: AppTheme.dimensions.space.xlarge),
+            SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
             AppTextField(
               controller: _keyController,
               labelText: 'Chave',
               validator: Validators.isNotEmpty,
               isDisabled: true,
             ),
-            SizedBox(height: AppTheme.dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
             AppTextField(
               controller: _titleController,
               labelText: 'Título',
               validator: Validators.isNotEmpty,
               isDisabled: _isUpdate,
             ),
-            SizedBox(height: AppTheme.dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
             AppTextField(
               controller: _descriptionController,
               labelText: 'Descrição',
@@ -90,13 +91,13 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
               minLines: 5,
               maxLines: 5,
             ),
-            SizedBox(height: AppTheme.dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
             AppTextField(
               controller: _backgroundImgUrlController,
               labelText: 'URL da imagem de fundo',
               validator: Validators.isNotEmpty,
             ),
-            SizedBox(height: AppTheme.dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
             AppDropdownField<PostsAreas>(
               hintText: 'Selecione uma área',
               items: PostsAreas.values,
@@ -117,7 +118,7 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
                   text: 'Cancelar',
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                SizedBox(width: AppTheme.dimensions.space.medium),
+                SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
                 PrimaryButton.medium(
                   text: _isUpdate ? 'Atualizar' : 'Criar',
                   onPressed: _onCreateOrUpdate,
