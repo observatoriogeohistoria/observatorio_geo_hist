@@ -65,14 +65,14 @@ class _AppTextFieldState extends State<AppTextField> {
       onTapOutside: (_) => _focusNode.unfocus(),
       obscureText: widget.obscureText,
       validator: widget.validator,
-      cursorColor: AppTheme(context).colors.darkGray,
+      cursorColor: AppTheme.colors.darkGray,
       textAlignVertical: TextAlignVertical.top,
       decoration: InputDecoration(
         alignLabelWithHint: true,
         suffixIcon: widget.suffixIcon == null
             ? null
             : Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.small),
+                padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
                 child: widget.suffixIcon,
               ),
         suffixIconConstraints: const BoxConstraints(
@@ -80,32 +80,32 @@ class _AppTextFieldState extends State<AppTextField> {
           minWidth: 32,
         ),
         labelText: widget.labelText,
-        labelStyle: AppTheme(context).typography.label.small.copyWith(
-              color: AppTheme(context).colors.gray,
-            ),
-        hintText: widget.hintText,
-        hintStyle: AppTheme(context).typography.body.medium.copyWith(
-              color: AppTheme(context).colors.gray,
-            ),
-        filled: true,
-        fillColor: AppTheme(context).colors.white,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: AppTheme(context).dimensions.space.small,
-          vertical: AppTheme(context).dimensions.space.medium,
+        labelStyle: AppTheme.typography.label.small.copyWith(
+          color: AppTheme.colors.gray,
         ),
-        enabledBorder: _buildBorder(AppTheme(context).colors.gray),
-        focusedBorder: _buildBorder(AppTheme(context).colors.orange),
-        focusedErrorBorder: _buildBorder(AppTheme(context).colors.red),
-        disabledBorder: _buildBorder(AppTheme(context).colors.gray),
-        errorBorder: _buildBorder(AppTheme(context).colors.red),
+        hintText: widget.hintText,
+        hintStyle: AppTheme.typography.body.medium.copyWith(
+          color: AppTheme.colors.gray,
+        ),
+        filled: true,
+        fillColor: AppTheme.colors.white,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: AppTheme.dimensions.space.small,
+          vertical: AppTheme.dimensions.space.medium,
+        ),
+        enabledBorder: _buildBorder(AppTheme.colors.gray),
+        focusedBorder: _buildBorder(AppTheme.colors.orange),
+        focusedErrorBorder: _buildBorder(AppTheme.colors.red),
+        disabledBorder: _buildBorder(AppTheme.colors.gray),
+        errorBorder: _buildBorder(AppTheme.colors.red),
       ),
     );
   }
 
   OutlineInputBorder _buildBorder(Color color) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
+        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
         borderSide: BorderSide(
-          width: AppTheme(context).dimensions.stroke.small,
+          width: AppTheme.dimensions.stroke.small,
           color: color,
         ),
       );

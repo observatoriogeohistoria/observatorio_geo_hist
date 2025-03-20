@@ -66,9 +66,9 @@ class _MediaSectionState extends State<MediaSection> {
       children: [
         AppHeadline.big(
           text: 'Mídias',
-          color: AppTheme(context).colors.orange,
+          color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(
@@ -81,32 +81,32 @@ class _MediaSectionState extends State<MediaSection> {
             },
           ),
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.large),
+        SizedBox(height: AppTheme.dimensions.space.large),
         Expanded(
           child: Observer(
             builder: (context) {
               if (mediaStore.state is ManageMediaLoadingState) {
                 return const Center(child: Loading());
               }
-    
+
               final medias = mediaStore.medias;
-    
+
               return ListView.separated(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.only(
-                  bottom: AppTheme(context).dimensions.space.large,
+                  bottom: AppTheme.dimensions.space.large,
                 ),
                 separatorBuilder: (context, index) {
                   final isLast = index == medias.length - 1;
-    
+
                   return isLast
                       ? const SizedBox()
-                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                      : SizedBox(height: AppTheme.dimensions.space.medium);
                 },
                 itemCount: medias.length,
                 itemBuilder: (context, index) {
                   final media = medias[index];
-    
+
                   return MediaCard(
                     media: media,
                     index: index + 1,

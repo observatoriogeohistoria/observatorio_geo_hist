@@ -13,7 +13,7 @@ class LoadingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final content = Center(
       child: Center(
-        child: CircularProgressIndicator(color: AppTheme(context).colors.orange),
+        child: CircularProgressIndicator(color: AppTheme.colors.orange),
       ),
     );
 

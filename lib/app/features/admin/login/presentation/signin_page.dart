@@ -62,10 +62,10 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final border = BorderSide(color: AppTheme(context).colors.gray);
+    final border = BorderSide(color: AppTheme.colors.gray);
 
     return Scaffold(
-      backgroundColor: AppTheme(context).colors.lightGray,
+      backgroundColor: AppTheme.colors.lightGray,
       body: SizedBox(
         width: size.width,
         height: size.height,
@@ -76,15 +76,15 @@ class _SigninPageState extends State<SigninPage> {
             child: Container(
               width: size.width * 0.3,
               height: size.height * 0.7,
-              padding: EdgeInsets.all(AppTheme(context).dimensions.space.large),
+              padding: EdgeInsets.all(AppTheme.dimensions.space.large),
               decoration: BoxDecoration(
-                color: AppTheme(context).colors.white,
-                borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.large),
+                color: AppTheme.colors.white,
+                borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
                 border: Border(
                   top: border,
                   left: border,
                   right: border,
-                  bottom: border.copyWith(width: AppTheme(context).dimensions.stroke.xlarge),
+                  bottom: border.copyWith(width: AppTheme.dimensions.stroke.xlarge),
                 ),
               ),
               child: Form(
@@ -95,16 +95,16 @@ class _SigninPageState extends State<SigninPage> {
                   children: [
                     AppTitle.big(
                       text: 'LOGIN',
-                      color: AppTheme(context).colors.darkGray,
+                      color: AppTheme.colors.darkGray,
                     ),
-                    SizedBox(height: AppTheme(context).dimensions.space.large),
+                    SizedBox(height: AppTheme.dimensions.space.large),
                     AppTextField(
                       controller: emailController,
                       labelText: 'E-MAIL',
                       hintText: 'exemplo@dominio.com',
                       validator: Validators.isValidEmail,
                     ),
-                    SizedBox(height: AppTheme(context).dimensions.space.large),
+                    SizedBox(height: AppTheme.dimensions.space.large),
                     AppTextField(
                       controller: passwordController,
                       labelText: 'SENHA',
@@ -117,13 +117,13 @@ class _SigninPageState extends State<SigninPage> {
                             : const Icon(Icons.visibility),
                       ),
                     ),
-                    SizedBox(height: AppTheme(context).dimensions.space.small),
+                    SizedBox(height: AppTheme.dimensions.space.small),
                     AppLabel.small(
                       text:
                           'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
-                      color: AppTheme(context).colors.gray,
+                      color: AppTheme.colors.gray,
                     ),
-                    SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+                    SizedBox(height: AppTheme.dimensions.space.xlarge),
                     loginState is LoginStateLoading
                         ? const Loading()
                         : PrimaryButton.medium(

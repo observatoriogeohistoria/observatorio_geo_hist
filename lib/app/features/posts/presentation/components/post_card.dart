@@ -30,18 +30,18 @@ class PostCard extends StatelessWidget {
             children: [
               ImageFromUrl(
                 imageUrl: post.imgUrl,
-                radius: AppTheme(context).dimensions.radius.large,
+                radius: AppTheme.dimensions.radius.large,
               ),
-              SizedBox(height: AppTheme(context).dimensions.space.medium),
+              SizedBox(height: AppTheme.dimensions.space.medium),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.small),
+                padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
                 child: AppTitle.small(
                   text: post.title,
                   textAlign: TextAlign.center,
-                  color: AppTheme(context).colors.darkGray,
+                  color: AppTheme.colors.darkGray,
                 ),
               ),
-              SizedBox(height: AppTheme(context).dimensions.space.small),
+              SizedBox(height: AppTheme.dimensions.space.small),
             ],
           ),
         ),

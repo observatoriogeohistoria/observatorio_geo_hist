@@ -34,13 +34,13 @@ class AppBody extends StatelessWidget {
 
     switch (size) {
       case TypographySize.small:
-        textStyle = AppTheme(context).typography.body.small;
+        textStyle = AppTheme.typography.body.small;
         break;
       case TypographySize.medium:
-        textStyle = AppTheme(context).typography.body.medium;
+        textStyle = AppTheme.typography.body.medium;
         break;
       case TypographySize.big:
-        textStyle = AppTheme(context).typography.body.big;
+        textStyle = AppTheme.typography.body.big;
         break;
     }
 

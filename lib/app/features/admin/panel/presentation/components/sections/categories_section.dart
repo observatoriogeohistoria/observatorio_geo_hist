@@ -66,9 +66,9 @@ class _CategoriesSectionState extends State<CategoriesSection> {
       children: [
         AppHeadline.big(
           text: 'Categorias',
-          color: AppTheme(context).colors.orange,
+          color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(
@@ -81,7 +81,7 @@ class _CategoriesSectionState extends State<CategoriesSection> {
             },
           ),
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.large),
+        SizedBox(height: AppTheme.dimensions.space.large),
         Expanded(
           child: Observer(
             builder: (context) {
@@ -94,14 +94,14 @@ class _CategoriesSectionState extends State<CategoriesSection> {
               return ListView.separated(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.only(
-                  bottom: AppTheme(context).dimensions.space.large,
+                  bottom: AppTheme.dimensions.space.large,
                 ),
                 separatorBuilder: (context, index) {
                   final isLast = index == categories.length - 1;
 
                   return isLast
                       ? const SizedBox()
-                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                      : SizedBox(height: AppTheme.dimensions.space.medium);
                 },
                 itemCount: categories.length,
                 itemBuilder: (context, index) {

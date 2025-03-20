@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -20,10 +21,10 @@ class SidebarMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const iconSize = 24.0;
-    final widthWhenCollapsed = 24 + 2 * AppTheme(context).dimensions.space.medium;
+    double iconSize = 32.0.scale;
+    final widthWhenCollapsed = iconSize + 2 * AppTheme.dimensions.space.medium.scale;
 
-    final icon = Icon(item.icon, color: AppTheme(context).colors.orange, size: iconSize);
+    final icon = Icon(item.icon, color: AppTheme.colors.orange, size: iconSize);
 
     return Tooltip(
       message: isCollapsed ? item.title : '',
@@ -34,23 +35,23 @@ class SidebarMenuItem extends StatelessWidget {
         child: InkWell(
           onTap: onClicked,
           mouseCursor: SystemMouseCursors.click,
-          hoverColor: isCollapsed ? Colors.transparent : AppTheme(context).colors.lightGray,
-          borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
+          hoverColor: isCollapsed ? Colors.transparent : AppTheme.colors.lightGray,
+          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
           child: isCollapsed
               ? icon
               : Container(
-                  padding: EdgeInsets.all(AppTheme(context).dimensions.space.medium),
+                  padding: EdgeInsets.all(AppTheme.dimensions.space.medium),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppTheme(context).colors.lightGray : Colors.transparent,
-                    borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
+                    color: isSelected ? AppTheme.colors.lightGray : Colors.transparent,
+                    borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
                   ),
                   child: Row(
                     children: [
                       icon,
-                      SizedBox(width: AppTheme(context).dimensions.space.medium),
+                      SizedBox(width: AppTheme.dimensions.space.medium),
                       AppTitle.medium(
                         text: item.title,
-                        color: AppTheme(context).colors.darkGray,
+                        color: AppTheme.colors.darkGray,
                       ),
                     ],
                   ),

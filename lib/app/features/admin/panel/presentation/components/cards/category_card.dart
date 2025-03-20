@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -24,10 +26,6 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: AppTheme(context).dimensions.space.medium,
-        vertical: AppTheme(context).dimensions.space.small,
-      ),
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,39 +37,44 @@ class CategoryCard extends StatelessWidget {
                 children: [
                   AppLabel.small(
                     text: '$index',
-                    color: AppTheme(context).colors.gray,
+                    color: AppTheme.colors.gray,
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.xsmall),
+                  SizedBox(height: AppTheme.dimensions.space.xsmall.verticalSpacing),
                   AppTitle.big(
                     text: category.title,
-                    color: AppTheme(context).colors.darkGray,
+                    color: AppTheme.colors.darkGray,
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.small),
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppBody.big(
                     text: category.area.name,
-                    color: AppTheme(context).colors.gray,
+                    color: AppTheme.colors.gray,
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.medium),
-                  AppLabel.small(
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppLabel.medium(
                     text: '${category.numberOfPosts} Posts',
-                    color: AppTheme(context).colors.orange,
+                    color: AppTheme.colors.orange,
                   ),
                 ],
               ),
             ),
-            SizedBox(width: AppTheme(context).dimensions.space.medium),
+            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                IconButton(
-                  icon: Icon(Icons.edit, color: AppTheme(context).colors.orange),
+                AppIconButton(
+                  icon: Icons.edit,
+                  color: AppTheme.colors.orange,
                   onPressed: onEdit,
                 ),
-                if (category.numberOfPosts == 0)
-                  IconButton(
-                    icon: Icon(Icons.delete, color: AppTheme(context).colors.red),
+                if (category.numberOfPosts == 0) ...[
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppIconButton(
+                    icon: Icons.delete,
+                    color: AppTheme.colors.red,
                     onPressed: onDelete,
                   ),
+                ]
               ],
             ),
           ],

@@ -66,7 +66,7 @@ class _PostsPageState extends State<PostsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme(context).colors.white,
+      backgroundColor: AppTheme.colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -110,19 +110,19 @@ class _PostsPageState extends State<PostsPage> {
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width * 0.15,
-              vertical: AppTheme(context).dimensions.space.medium,
+              vertical: AppTheme.dimensions.space.medium,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TitleWidget(title: category.title.toUpperCase()),
-                SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+                SizedBox(height: AppTheme.dimensions.space.xlarge),
                 AppBody.big(
                   text: category.description,
                   textAlign: TextAlign.center,
-                  color: AppTheme(context).colors.white,
+                  color: AppTheme.colors.white,
                 ),
-                SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+                SizedBox(height: AppTheme.dimensions.space.xlarge),
                 if (category.hasCollaborateOption)
                   PrimaryButton.medium(
                     text: 'COLABORE',
@@ -142,14 +142,14 @@ class _PostsPageState extends State<PostsPage> {
         return Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.symmetric(
-            horizontal: AppTheme(context).dimensions.space.xlarge,
-            vertical: AppTheme(context).dimensions.space.xlarge,
+            horizontal: AppTheme.dimensions.space.xlarge,
+            vertical: AppTheme.dimensions.space.xlarge,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TitleWidget(title: 'POSTS', color: AppTheme(context).colors.orange),
-              SizedBox(height: AppTheme(context).dimensions.space.medium),
+              TitleWidget(title: 'POSTS', color: AppTheme.colors.orange),
+              SizedBox(height: AppTheme.dimensions.space.medium),
               if (fetchPostsStore.posts.isNotEmpty)
                 ...fetchPostsStore.posts.map(
                   (post) => PostCard(

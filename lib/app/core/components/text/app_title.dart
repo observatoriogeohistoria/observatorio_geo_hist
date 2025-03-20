@@ -34,13 +34,13 @@ class AppTitle extends StatelessWidget {
 
     switch (size) {
       case TypographySize.small:
-        textStyle = AppTheme(context).typography.title.small;
+        textStyle = AppTheme.typography.title.small;
         break;
       case TypographySize.medium:
-        textStyle = AppTheme(context).typography.title.medium;
+        textStyle = AppTheme.typography.title.medium;
         break;
       case TypographySize.big:
-        textStyle = AppTheme(context).typography.title.big;
+        textStyle = AppTheme.typography.title.big;
         break;
     }
 

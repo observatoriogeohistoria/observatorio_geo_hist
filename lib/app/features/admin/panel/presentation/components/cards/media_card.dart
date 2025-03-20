@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/view_image_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -24,10 +26,6 @@ class MediaCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: AppTheme(context).dimensions.space.medium,
-        vertical: AppTheme(context).dimensions.space.small,
-      ),
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,44 +37,51 @@ class MediaCard extends StatelessWidget {
                 children: [
                   AppLabel.small(
                     text: '$index',
-                    color: AppTheme(context).colors.gray,
+                    color: AppTheme.colors.gray,
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.xsmall),
-                  AppTitle.medium(
+                  SizedBox(height: AppTheme.dimensions.space.xsmall.verticalSpacing),
+                  AppTitle.big(
                     text: media.name,
-                    color: AppTheme(context).colors.darkGray,
+                    color: AppTheme.colors.darkGray,
                   ),
-                  AppBody.small(
+                  AppBody.medium(
                     text: '.${media.extension}',
-                    color: AppTheme(context).colors.darkGray,
+                    color: AppTheme.colors.darkGray,
                   ),
                   if (media.url?.isNotEmpty ?? false) ...[
-                    SizedBox(height: AppTheme(context).dimensions.space.medium),
+                    SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                     AppLabel.big(
                       text: media.url!,
-                      color: AppTheme(context).colors.gray,
+                      color: AppTheme.colors.gray,
                     ),
                   ]
                 ],
               ),
             ),
-            SizedBox(width: AppTheme(context).dimensions.space.medium),
+            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                IconButton(
-                  icon: Icon(Icons.visibility, color: AppTheme(context).colors.orange),
+                AppIconButton(
+                  icon: Icons.visibility,
+                  color: AppTheme.colors.orange,
                   onPressed: () => showViewImageDialog(context, media),
                 ),
-                if (media.url?.isNotEmpty ?? false)
-                  IconButton(
-                    icon: Icon(Icons.copy, color: AppTheme(context).colors.gray),
+                if (media.url?.isNotEmpty ?? false) ...[
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppIconButton(
+                    icon: Icons.copy,
+                    color: AppTheme.colors.gray,
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: media.url!));
                     },
                   ),
-                IconButton(
-                  icon: Icon(Icons.delete, color: AppTheme(context).colors.red),
+                ],
+                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                AppIconButton(
+                  icon: Icons.delete,
+                  color: AppTheme.colors.red,
                   onPressed: onDelete,
                 ),
               ],

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
@@ -74,24 +76,24 @@ class _PanelPageState extends State<PanelPage> {
   Widget build(BuildContext context) {
     bool isDesktop = DeviceUtils.isDesktop(context);
 
-    double padding = DeviceUtils.isMobile(context)
-        ? AppTheme(context).dimensions.space.medium
-        : AppTheme(context).dimensions.space.xlarge;
-
     return Scaffold(
       drawer: isDesktop ? null : const Sidebar(),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: AppTheme(context).colors.white),
-        backgroundColor: AppTheme(context).colors.orange,
+        iconTheme: IconThemeData(color: AppTheme.colors.white),
+        backgroundColor: AppTheme.colors.orange,
         title: AppHeadline.small(
           text: 'PAINEL ADMINISTRATIVO',
-          color: AppTheme(context).colors.white,
+          color: AppTheme.colors.white,
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.small),
-            child: IconButton(
-              icon: const Icon(Icons.exit_to_app),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
+            ),
+            child: AppIconButton(
+              icon: Icons.exit_to_app,
+              color: AppTheme.colors.white,
+              size: 32,
               onPressed: authStore.logout,
             ),
           ),
@@ -102,9 +104,9 @@ class _PanelPageState extends State<PanelPage> {
         builder: (context) {
           Widget body = Padding(
             padding: EdgeInsets.only(
-              top: padding,
-              right: padding,
-              left: padding,
+              top: AppTheme.dimensions.space.large.verticalSpacing,
+              right: AppTheme.dimensions.space.large.horizontalSpacing,
+              left: AppTheme.dimensions.space.large.horizontalSpacing,
             ),
             child: _buildBody(sidebarStore.selectedItem),
           );

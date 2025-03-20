@@ -10,11 +10,11 @@ class ContactUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme(context).colors.gray,
+      color: AppTheme.colors.gray,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: MediaQuery.of(context).size.width * 0.2,
-          vertical: AppTheme(context).dimensions.space.xlarge,
+          vertical: AppTheme.dimensions.space.xlarge,
         ),
         child: Column(
           children: [
@@ -22,9 +22,9 @@ class ContactUs extends StatelessWidget {
               text:
                   'O Observatório do Ensino de História e Geografia é criado por e para professores, pesquisadores e estudantes. Envie suas contribuições, opiniões e sugestões e nos ajude a construir este espaço.',
               textAlign: TextAlign.center,
-              color: AppTheme(context).colors.white,
+              color: AppTheme.colors.white,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+            SizedBox(height: AppTheme.dimensions.space.xlarge),
             PrimaryButton.medium(
               text: 'FALE COM A GENTE',
               onPressed: () => GoRouter.of(context).go('/contact-us'),

@@ -34,13 +34,13 @@ class AppHeadline extends StatelessWidget {
 
     switch (size) {
       case TypographySize.small:
-        textStyle = AppTheme(context).typography.headline.small;
+        textStyle = AppTheme.typography.headline.small;
         break;
       case TypographySize.medium:
-        textStyle = AppTheme(context).typography.headline.medium;
+        textStyle = AppTheme.typography.headline.medium;
         break;
       case TypographySize.big:
-        textStyle = AppTheme(context).typography.headline.big;
+        textStyle = AppTheme.typography.headline.big;
         break;
     }
 

@@ -48,39 +48,39 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width * 0.15,
-                      vertical: AppTheme(context).dimensions.space.medium,
+                      vertical: AppTheme.dimensions.space.medium,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const TitleWidget(title: 'COLABORE'),
-                        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+                        SizedBox(height: AppTheme.dimensions.space.xlarge),
                         AppBody.big(
                           text: firstText,
                           textAlign: TextAlign.center,
-                          color: AppTheme(context).colors.white,
+                          color: AppTheme.colors.white,
                         ),
-                        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+                        SizedBox(height: AppTheme.dimensions.space.xlarge),
                         PrimaryButton.medium(
                           text: AppStrings.email,
                           onPressed: () {},
                         ),
-                        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+                        SizedBox(height: AppTheme.dimensions.space.xlarge),
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
                             children: [
                               TextSpan(
                                 text: secondText,
-                                style: AppTheme(context).typography.body.big.copyWith(
-                                      color: AppTheme(context).colors.white,
-                                    ),
+                                style: AppTheme.typography.body.big.copyWith(
+                                  color: AppTheme.colors.white,
+                                ),
                               ),
                               TextSpan(
                                 text: ' clique aqui',
-                                style: AppTheme(context).typography.body.big.copyWith(
-                                      color: AppTheme(context).colors.orange,
-                                    ),
+                                style: AppTheme.typography.body.big.copyWith(
+                                  color: AppTheme.colors.orange,
+                                ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     const url = AppStrings.creativeCommonsUrl;
@@ -89,9 +89,9 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                               ),
                               TextSpan(
                                 text: '.',
-                                style: AppTheme(context).typography.body.big.copyWith(
-                                      color: AppTheme(context).colors.white,
-                                    ),
+                                style: AppTheme.typography.body.big.copyWith(
+                                  color: AppTheme.colors.white,
+                                ),
                               ),
                             ],
                           ),

@@ -65,23 +65,23 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
           children: [
             AppTitle.medium(
               text: _isUpdate ? 'Atualizar categoria' : 'Criar categoria',
-              color: AppTheme(context).colors.orange,
+              color: AppTheme.colors.orange,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+            SizedBox(height: AppTheme.dimensions.space.xlarge),
             AppTextField(
               controller: _keyController,
               labelText: 'Chave',
               validator: Validators.isNotEmpty,
               isDisabled: true,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium),
             AppTextField(
               controller: _titleController,
               labelText: 'Título',
               validator: Validators.isNotEmpty,
               isDisabled: _isUpdate,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium),
             AppTextField(
               controller: _descriptionController,
               labelText: 'Descrição',
@@ -90,13 +90,13 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
               minLines: 5,
               maxLines: 5,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium),
             AppTextField(
               controller: _backgroundImgUrlController,
               labelText: 'URL da imagem de fundo',
               validator: Validators.isNotEmpty,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium),
             AppDropdownField<PostsAreas>(
               hintText: 'Selecione uma área',
               items: PostsAreas.values,
@@ -117,7 +117,7 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
                   text: 'Cancelar',
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                SizedBox(width: AppTheme(context).dimensions.space.medium),
+                SizedBox(width: AppTheme.dimensions.space.medium),
                 PrimaryButton.medium(
                   text: _isUpdate ? 'Atualizar' : 'Criar',
                   onPressed: _onCreateOrUpdate,

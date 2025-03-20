@@ -12,7 +12,7 @@ class AppDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-      color: AppTheme(context).colors.gray.withValues(alpha: 0.5),
+      color: AppTheme.colors.gray.withValues(alpha: 0.5),
       thickness: 1,
       indent: indent,
       endIndent: indent,

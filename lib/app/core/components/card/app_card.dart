@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppCard extends StatelessWidget {
@@ -16,14 +17,18 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final border = BorderSide(color: AppTheme(context).colors.lightGray);
+    final border = BorderSide(color: AppTheme.colors.lightGray);
 
     return Container(
       width: width,
-      padding: padding ?? EdgeInsets.all(AppTheme(context).dimensions.space.small),
+      padding: padding ??
+          EdgeInsets.symmetric(
+            horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
+            vertical: AppTheme.dimensions.space.small.verticalSpacing,
+          ),
       decoration: BoxDecoration(
-        color: AppTheme(context).colors.white,
-        borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.large),
+        color: AppTheme.colors.white,
+        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
         border: Border(
           top: border,
           left: border,

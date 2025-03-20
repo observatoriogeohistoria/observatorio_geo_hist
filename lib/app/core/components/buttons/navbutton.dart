@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/navbar_menu.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class NavButton extends StatefulWidget {
@@ -59,28 +60,28 @@ class _NavButtonState extends State<NavButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppTheme(context).dimensions.space.small),
+      padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
       child: TextButton(
         statesController: controller,
         style: ButtonStyle(
           overlayColor: WidgetStateProperty.all(
-            !hasMenu ? Colors.transparent : AppTheme(context).colors.gray.withValues(alpha: 0.1),
+            !hasMenu ? Colors.transparent : AppTheme.colors.gray.withValues(alpha: 0.1),
           ),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.small),
+              borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
             ),
           ),
           foregroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.hovered)
-                ? widget.textColorOnHover ?? AppTheme(context).colors.orange
-                : widget.textColor ?? AppTheme(context).colors.darkGray,
+                ? widget.textColorOnHover ?? AppTheme.colors.orange
+                : widget.textColor ?? AppTheme.colors.darkGray,
           ),
           textStyle: WidgetStateProperty.resolveWith(
-            (states) => (widget.textStyle ?? AppTheme(context).typography.title.medium).copyWith(
+            (states) => (widget.textStyle ?? AppTheme.typography.title.medium).copyWith(
               color: states.contains(WidgetState.hovered)
-                  ? widget.textColorOnHover ?? AppTheme(context).colors.orange
-                  : widget.textColor ?? AppTheme(context).colors.darkGray,
+                  ? widget.textColorOnHover ?? AppTheme.colors.orange
+                  : widget.textColor ?? AppTheme.colors.darkGray,
             ),
           ),
         ),

@@ -33,15 +33,15 @@ class RightAlignedDialog extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: Material(
-        color: AppTheme(context).colors.lightGray,
+        color: AppTheme.colors.lightGray,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(AppTheme(context).dimensions.radius.large),
-          bottomLeft: Radius.circular(AppTheme(context).dimensions.radius.large),
+          topLeft: Radius.circular(AppTheme.dimensions.radius.large),
+          bottomLeft: Radius.circular(AppTheme.dimensions.radius.large),
         ),
         child: Container(
           width: widthFollowsContent ? null : (width ?? getWidth()),
           height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(AppTheme(context).dimensions.space.large),
+          padding: EdgeInsets.all(AppTheme.dimensions.space.large),
           child: child,
         ),
       ),

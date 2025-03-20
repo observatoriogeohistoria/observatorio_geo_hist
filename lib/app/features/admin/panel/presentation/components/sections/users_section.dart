@@ -65,9 +65,9 @@ class _UsersSectionState extends State<UsersSection> {
       children: [
         AppHeadline.big(
           text: 'Usuários',
-          color: AppTheme(context).colors.orange,
+          color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(
@@ -93,14 +93,14 @@ class _UsersSectionState extends State<UsersSection> {
               return ListView.separated(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.symmetric(
-                  vertical: AppTheme(context).dimensions.space.large,
+                  vertical: AppTheme.dimensions.space.large,
                 ),
                 separatorBuilder: (context, index) {
                   final isLast = index == users.length - 1;
 
                   return isLast
                       ? const SizedBox()
-                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                      : SizedBox(height: AppTheme.dimensions.space.medium);
                 },
                 itemCount: users.length,
                 itemBuilder: (context, index) {
@@ -108,6 +108,7 @@ class _UsersSectionState extends State<UsersSection> {
 
                   return UserCard(
                     user: user,
+                    index: index + 1,
                     onDelete: () => usersStore.deleteUser(user),
                     onEdit: () {
                       showCreateOrUpdateUserDialog(

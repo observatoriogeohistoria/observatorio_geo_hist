@@ -56,16 +56,16 @@ class _CreateMediaDialogState extends State<CreateMediaDialog> {
           children: [
             AppTitle.medium(
               text: 'Criar mídia',
-              color: AppTheme(context).colors.orange,
+              color: AppTheme.colors.orange,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+            SizedBox(height: AppTheme.dimensions.space.xlarge),
             AppTextField(
               controller: _nameController,
               labelText: 'Arquivo',
               validator: Validators.isNotEmpty,
               isDisabled: true,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium),
             SecondaryButton.small(
               text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
               onPressed: () async {
@@ -98,7 +98,7 @@ class _CreateMediaDialogState extends State<CreateMediaDialog> {
                   text: 'Cancelar',
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                SizedBox(width: AppTheme(context).dimensions.space.medium),
+                SizedBox(width: AppTheme.dimensions.space.medium),
                 PrimaryButton.medium(
                   text: 'Criar',
                   onPressed: _onCreate,

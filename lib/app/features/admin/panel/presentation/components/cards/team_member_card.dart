@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -24,10 +26,6 @@ class TeamMemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: AppTheme(context).dimensions.space.medium,
-        vertical: AppTheme(context).dimensions.space.small,
-      ),
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,38 +37,40 @@ class TeamMemberCard extends StatelessWidget {
                 children: [
                   AppLabel.small(
                     text: '$index',
-                    color: AppTheme(context).colors.gray,
+                    color: AppTheme.colors.gray,
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.xsmall),
+                  SizedBox(height: AppTheme.dimensions.space.xsmall.verticalSpacing),
                   AppTitle.big(
                     text: member.name,
-                    color: AppTheme(context).colors.darkGray,
+                    color: AppTheme.colors.darkGray,
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.small),
                   AppBody.big(
                     text: member.role,
-                    color: AppTheme(context).colors.gray,
+                    color: AppTheme.colors.gray,
                   ),
                   if (member.lattesUrl?.isNotEmpty ?? false) ...[
-                    SizedBox(height: AppTheme(context).dimensions.space.small),
-                    AppBody.small(
+                    SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                    AppBody.medium(
                       text: member.lattesUrl!,
-                      color: AppTheme(context).colors.gray,
+                      color: AppTheme.colors.lightOrange,
                     ),
                   ]
                 ],
               ),
             ),
-            SizedBox(width: AppTheme(context).dimensions.space.medium),
+            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  icon: Icon(Icons.edit, color: AppTheme(context).colors.orange),
+                AppIconButton(
+                  icon: Icons.edit,
+                  color: AppTheme.colors.orange,
                   onPressed: onEdit,
                 ),
-                IconButton(
-                  icon: Icon(Icons.delete, color: AppTheme(context).colors.red),
+                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                AppIconButton(
+                  icon: Icons.delete,
+                  color: AppTheme.colors.red,
                   onPressed: onDelete,
                 ),
               ],

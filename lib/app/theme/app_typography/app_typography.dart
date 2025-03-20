@@ -1,78 +1,94 @@
 part of '../app_theme.dart';
 
 class AppTypography {
-  AppTypography(BuildContext context) {
-    isMobile = DeviceUtils.isMobile(context);
-    isTablet = DeviceUtils.isTablet(context);
-  }
+  const AppTypography._();
 
-  late final bool isMobile;
-  late final bool isTablet;
+  /// The singleton instance of the [AppTypography] class.
+  static const AppTypography instance = AppTypography._();
 
-  TypographyStyle get headline => _createTypographyStyle(
-        {TypographySize.small: 30, TypographySize.medium: 36, TypographySize.big: 40},
-        {TypographySize.small: -0.25, TypographySize.medium: 0, TypographySize.big: 0},
-        FontWeight.w800,
+  TypographyStyle get headline => TypographyStyle._(
+        small: GoogleFonts.dosis(
+          fontSize: 26.fontSize,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0,
+          height: 1.3,
+        ),
+        medium: GoogleFonts.dosis(
+          fontSize: 30.fontSize,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.15,
+          height: 1.3,
+        ),
+        big: GoogleFonts.dosis(
+          fontSize: 34.fontSize,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.2,
+          height: 1.3,
+        ),
       );
 
-  TypographyStyle get title => _createTypographyStyle(
-        {TypographySize.small: 18, TypographySize.medium: 22, TypographySize.big: 26},
-        {TypographySize.small: -0.25, TypographySize.medium: -0.25, TypographySize.big: -0.25},
-        FontWeight.w600,
+  TypographyStyle get title => TypographyStyle._(
+        small: GoogleFonts.dosis(
+          fontSize: 18.fontSize,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.1,
+          height: 1.4,
+        ),
+        medium: GoogleFonts.dosis(
+          fontSize: 22.fontSize,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.15,
+          height: 1.4,
+        ),
+        big: GoogleFonts.dosis(
+          fontSize: 26.fontSize,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2,
+          height: 1.4,
+        ),
       );
 
-  TypographyStyle get body => _createTypographyStyle(
-        {TypographySize.small: 16, TypographySize.medium: 18, TypographySize.big: 22},
-        {TypographySize.small: 0.35, TypographySize.medium: 0.35, TypographySize.big: 0.2},
-        FontWeight.w500,
+  TypographyStyle get body => TypographyStyle._(
+        small: GoogleFonts.dosis(
+          fontSize: 16.fontSize,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.2,
+          height: 1.5,
+        ),
+        medium: GoogleFonts.dosis(
+          fontSize: 18.fontSize,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.25,
+          height: 1.5,
+        ),
+        big: GoogleFonts.dosis(
+          fontSize: 22.fontSize,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.25,
+          height: 1.5,
+        ),
       );
 
-  TypographyStyle get label => _createTypographyStyle(
-        {TypographySize.small: 12, TypographySize.medium: 14, TypographySize.big: 18},
-        {TypographySize.small: 0.35, TypographySize.medium: 0.2, TypographySize.big: 0.2},
-        FontWeight.w600,
+  TypographyStyle get label => TypographyStyle._(
+        small: GoogleFonts.dosis(
+          fontSize: 12.fontSize,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2,
+          height: 1.4,
+        ),
+        medium: GoogleFonts.dosis(
+          fontSize: 14.fontSize,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.25,
+          height: 1.4,
+        ),
+        big: GoogleFonts.dosis(
+          fontSize: 18.fontSize,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.3,
+          height: 1.4,
+        ),
       );
-
-  TypographyStyle _createTypographyStyle(
-    Map<TypographySize, double> baseSizes,
-    Map<TypographySize, double> spacing,
-    FontWeight weight,
-  ) {
-    return TypographyStyle._(
-      small: _textStyle(TypographySize.small, baseSizes, spacing, weight),
-      medium: _textStyle(TypographySize.medium, baseSizes, spacing, weight),
-      big: _textStyle(TypographySize.big, baseSizes, spacing, weight),
-    );
-  }
-
-  double _getFontSize(TypographySize size, Map<TypographySize, double> baseSizes) {
-    double baseFontSize = baseSizes[size] ?? 14;
-
-    if (isMobile) {
-      return baseFontSize - 2;
-    } else if (isTablet) {
-      return baseFontSize;
-    } else {
-      return baseFontSize + 2;
-    }
-  }
-
-  TextStyle _textStyle(
-    TypographySize size,
-    Map<TypographySize, double> baseSizes,
-    Map<TypographySize, double> spacing,
-    FontWeight weight,
-  ) {
-    double fontSize = _getFontSize(size, baseSizes);
-    double letterSpacing = spacing[size] ?? 0.2;
-
-    return GoogleFonts.dosis(
-      fontSize: fontSize,
-      fontWeight: weight,
-      letterSpacing: letterSpacing,
-      height: (fontSize + 6) / fontSize,
-    );
-  }
 }
 
 class TypographyStyle {

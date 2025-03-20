@@ -65,30 +65,30 @@ class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
           children: [
             AppTitle.medium(
               text: _isUpdate ? 'Atualizar usuário' : 'Criar usuário',
-              color: AppTheme(context).colors.orange,
+              color: AppTheme.colors.orange,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+            SizedBox(height: AppTheme.dimensions.space.xlarge),
             AppTextField(
               controller: _nameController,
               labelText: 'Nome',
               validator: Validators.isNotEmpty,
               isDisabled: _isUpdate,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium),
             AppTextField(
               controller: _emailController,
               labelText: 'E-mail',
               validator: Validators.isValidEmail,
               isDisabled: _isUpdate,
             ),
-            SizedBox(height: AppTheme(context).dimensions.space.medium),
+            SizedBox(height: AppTheme.dimensions.space.medium),
             if (!_isUpdate) ...[
               AppTextField(
                 controller: _passwordController,
                 labelText: 'Senha',
                 validator: Validators.isValidPassword,
               ),
-              SizedBox(height: AppTheme(context).dimensions.space.medium),
+              SizedBox(height: AppTheme.dimensions.space.medium),
             ],
             AppDropdownField<UserRole>(
               hintText: 'Selecione um papel',
@@ -109,7 +109,7 @@ class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
                   text: 'Cancelar',
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                SizedBox(width: AppTheme(context).dimensions.space.medium),
+                SizedBox(width: AppTheme.dimensions.space.medium),
                 PrimaryButton.medium(
                   text: _isUpdate ? 'Atualizar' : 'Criar',
                   onPressed: _onCreateOrUpdate,

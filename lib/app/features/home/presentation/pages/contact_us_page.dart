@@ -36,7 +36,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
     final messageController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: AppTheme(context).colors.white,
+      backgroundColor: AppTheme.colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -45,7 +45,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
               width: double.infinity,
               padding: EdgeInsets.symmetric(
                 horizontal: MediaQuery.of(context).size.width * 0.2,
-                vertical: 2 * AppTheme(context).dimensions.space.large,
+                vertical: 2 * AppTheme.dimensions.space.large,
               ),
               child: Column(
                 children: [
@@ -53,10 +53,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
                     alignment: Alignment.topLeft,
                     child: AppHeadline.medium(
                       text: 'CONTATO',
-                      color: AppTheme(context).colors.orange,
+                      color: AppTheme.colors.orange,
                     ),
                   ),
-                  SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+                  SizedBox(height: AppTheme.dimensions.space.xlarge),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +83,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                           ],
                         ),
                       ),
-                      SizedBox(width: AppTheme(context).dimensions.space.xlarge),
+                      SizedBox(width: AppTheme.dimensions.space.xlarge),
                       Flexible(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,14 +118,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
       children: [
         AppTitle.small(
           text: label,
-          color: AppTheme(context).colors.orange,
+          color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.medium),
+        SizedBox(height: AppTheme.dimensions.space.medium),
         AppBody.big(
           text: value,
-          color: AppTheme(context).colors.gray,
+          color: AppTheme.colors.gray,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge),
       ],
     );
   }
@@ -141,16 +141,16 @@ class _ContactUsPageState extends State<ContactUsPage> {
       children: [
         AppTitle.small(
           text: label,
-          color: AppTheme(context).colors.orange,
+          color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.medium),
+        SizedBox(height: AppTheme.dimensions.space.medium),
         AppTextField(
           controller: controller,
           minLines: minLines,
           maxLines: maxLines,
           keyboardType: TextInputType.multiline,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge),
       ],
     );
   }

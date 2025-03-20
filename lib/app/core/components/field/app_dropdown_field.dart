@@ -51,7 +51,7 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
       child: DropdownButtonFormField<String>(
         hint: AppLabel.medium(
           text: widget.hintText,
-          color: AppTheme(context).colors.gray,
+          color: AppTheme.colors.gray,
         ),
         items: widget.items
             .map(
@@ -59,7 +59,7 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
                 value: widget.itemToString(item),
                 child: AppLabel.medium(
                   text: widget.itemToString(item),
-                  color: AppTheme(context).colors.darkGray,
+                  color: AppTheme.colors.darkGray,
                 ),
               ),
             )
@@ -72,28 +72,28 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
                 widget.onChanged?.call(value);
               },
         validator: widget.validator,
-        borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
+        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
         decoration: InputDecoration(
           filled: true,
-          fillColor: AppTheme(context).colors.white,
+          fillColor: AppTheme.colors.white,
           contentPadding: EdgeInsets.symmetric(
-            horizontal: AppTheme(context).dimensions.space.small,
-            vertical: AppTheme(context).dimensions.space.medium,
+            horizontal: AppTheme.dimensions.space.small,
+            vertical: AppTheme.dimensions.space.medium,
           ),
-          enabledBorder: _buildBorder(AppTheme(context).colors.gray),
-          focusedBorder: _buildBorder(AppTheme(context).colors.orange),
-          focusedErrorBorder: _buildBorder(AppTheme(context).colors.red),
-          disabledBorder: _buildBorder(AppTheme(context).colors.gray),
-          errorBorder: _buildBorder(AppTheme(context).colors.red),
+          enabledBorder: _buildBorder(AppTheme.colors.gray),
+          focusedBorder: _buildBorder(AppTheme.colors.orange),
+          focusedErrorBorder: _buildBorder(AppTheme.colors.red),
+          disabledBorder: _buildBorder(AppTheme.colors.gray),
+          errorBorder: _buildBorder(AppTheme.colors.red),
         ),
       ),
     );
   }
 
   OutlineInputBorder _buildBorder(Color color) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.medium),
+        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
         borderSide: BorderSide(
-          width: AppTheme(context).dimensions.stroke.small,
+          width: AppTheme.dimensions.stroke.small,
           color: color,
         ),
       );

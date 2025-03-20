@@ -42,7 +42,7 @@ class ViewImageDialog extends StatelessWidget {
             top: 0,
             right: 0,
             child: Padding(
-              padding: EdgeInsets.all(AppTheme(context).dimensions.space.small),
+              padding: EdgeInsets.all(AppTheme.dimensions.space.small),
               child: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.of(context).pop(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ToggleCollpaseButton extends StatelessWidget {
@@ -23,10 +24,14 @@ class ToggleCollpaseButton extends StatelessWidget {
           alignment: isCollapsed ? Alignment.center : Alignment.centerRight,
           child: Container(
             padding: EdgeInsets.symmetric(
-              vertical: AppTheme(context).dimensions.space.medium,
-              horizontal: AppTheme(context).dimensions.space.small,
+              vertical: AppTheme.dimensions.space.medium.verticalSpacing,
+              horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
             ),
-            child: Icon(icon, color: AppTheme(context).colors.darkGray, size: 32),
+            child: Icon(
+              icon,
+              color: AppTheme.colors.darkGray,
+              size: 32.scale,
+            ),
           ),
         ),
       ),

@@ -8,32 +8,32 @@ class Partners extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final border = BorderSide(color: AppTheme(context).colors.lightGray);
+    final border = BorderSide(color: AppTheme.colors.lightGray);
     const images = PartnersImages.values;
 
     return Padding(
       padding: EdgeInsets.only(
-        top: AppTheme(context).dimensions.space.large,
-        bottom: AppTheme(context).dimensions.space.xlarge,
+        top: AppTheme.dimensions.space.large,
+        bottom: AppTheme.dimensions.space.xlarge,
       ),
       child: Column(
         children: [
           TitleWidget(
             title: 'PARCEIROS',
-            color: AppTheme(context).colors.orange,
+            color: AppTheme.colors.orange,
           ),
-          SizedBox(height: AppTheme(context).dimensions.space.large),
+          SizedBox(height: AppTheme.dimensions.space.large),
           Wrap(
             alignment: WrapAlignment.center,
-            spacing: AppTheme(context).dimensions.space.medium,
-            runSpacing: AppTheme(context).dimensions.space.medium,
+            spacing: AppTheme.dimensions.space.medium,
+            runSpacing: AppTheme.dimensions.space.medium,
             children: [
               for (final partner in images)
                 Container(
-                  padding: EdgeInsets.all(AppTheme(context).dimensions.space.small),
+                  padding: EdgeInsets.all(AppTheme.dimensions.space.small),
                   decoration: BoxDecoration(
-                    color: AppTheme(context).colors.white,
-                    borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.large),
+                    color: AppTheme.colors.white,
+                    borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
                     border: Border(
                       top: border,
                       left: border,

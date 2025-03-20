@@ -48,7 +48,7 @@ enum SidebarItem {
       case SidebarItem.posts:
         return Icons.post_add_outlined;
       case SidebarItem.team:
-        return Icons.diversity_3;
+        return Icons.workspaces;
     }
   }
 

@@ -33,14 +33,13 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     EdgeInsetsGeometry padding;
     AppTitle buttonText;
-    Color buttonTextColor =
-        isDisabled ? AppTheme(context).colors.gray : AppTheme(context).colors.white;
+    Color buttonTextColor = isDisabled ? AppTheme.colors.gray : AppTheme.colors.white;
 
     switch (size) {
       case ButtonSize.small:
         padding = EdgeInsets.symmetric(
-          horizontal: AppTheme(context).dimensions.space.small,
-          vertical: AppTheme(context).dimensions.space.medium,
+          horizontal: AppTheme.dimensions.space.small,
+          vertical: AppTheme.dimensions.space.medium,
         );
 
         buttonText = AppTitle.small(
@@ -51,8 +50,8 @@ class PrimaryButton extends StatelessWidget {
         break;
       case ButtonSize.medium:
         padding = EdgeInsets.symmetric(
-          horizontal: AppTheme(context).dimensions.space.medium,
-          vertical: AppTheme(context).dimensions.space.medium,
+          horizontal: AppTheme.dimensions.space.medium,
+          vertical: AppTheme.dimensions.space.medium,
         );
 
         buttonText = AppTitle.medium(
@@ -63,8 +62,8 @@ class PrimaryButton extends StatelessWidget {
         break;
       case ButtonSize.big:
         padding = EdgeInsets.symmetric(
-          horizontal: AppTheme(context).dimensions.space.medium,
-          vertical: AppTheme(context).dimensions.space.medium,
+          horizontal: AppTheme.dimensions.space.medium,
+          vertical: AppTheme.dimensions.space.medium,
         );
 
         buttonText = AppTitle.big(
@@ -79,16 +78,16 @@ class PrimaryButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (isDisabled) {
-            return AppTheme(context).colors.lightGray;
+            return AppTheme.colors.lightGray;
           }
           if (states.contains(WidgetState.hovered)) {
-            return AppTheme(context).colors.orange.withValues(alpha: 0.8);
+            return AppTheme.colors.orange.withValues(alpha: 0.8);
           }
-          return AppTheme(context).colors.orange;
+          return AppTheme.colors.orange;
         }),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppTheme(context).dimensions.radius.small),
+            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
           ),
         ),
         padding: WidgetStateProperty.all(padding),

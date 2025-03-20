@@ -34,13 +34,13 @@ class AppLabel extends StatelessWidget {
 
     switch (size) {
       case TypographySize.small:
-        textStyle = AppTheme(context).typography.label.small;
+        textStyle = AppTheme.typography.label.small;
         break;
       case TypographySize.medium:
-        textStyle = AppTheme(context).typography.label.medium;
+        textStyle = AppTheme.typography.label.medium;
         break;
       case TypographySize.big:
-        textStyle = AppTheme(context).typography.label.big;
+        textStyle = AppTheme.typography.label.big;
         break;
     }
 

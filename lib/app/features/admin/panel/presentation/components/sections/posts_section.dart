@@ -69,9 +69,9 @@ class _PostsSectionState extends State<PostsSection> {
       children: [
         AppHeadline.big(
           text: 'Posts',
-          color: AppTheme(context).colors.orange,
+          color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(
@@ -85,7 +85,7 @@ class _PostsSectionState extends State<PostsSection> {
             },
           ),
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.large),
+        SizedBox(height: AppTheme.dimensions.space.large),
         Expanded(
           child: Observer(
             builder: (context) {
@@ -98,14 +98,14 @@ class _PostsSectionState extends State<PostsSection> {
               return ListView.separated(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.only(
-                  bottom: AppTheme(context).dimensions.space.large,
+                  bottom: AppTheme.dimensions.space.large,
                 ),
                 separatorBuilder: (context, index) {
                   final isLast = index == posts.length - 1;
 
                   return isLast
                       ? const SizedBox()
-                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                      : SizedBox(height: AppTheme.dimensions.space.medium);
                 },
                 itemCount: posts.length,
                 itemBuilder: (context, index) {

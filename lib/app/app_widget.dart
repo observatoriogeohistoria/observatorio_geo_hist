@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:observatorio_geo_hist/app/router/app_router.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
+import 'package:observatorio_geo_hist/app/router/app_router.dart';
 
 class AppWidget extends StatefulWidget {
   const AppWidget({super.key});

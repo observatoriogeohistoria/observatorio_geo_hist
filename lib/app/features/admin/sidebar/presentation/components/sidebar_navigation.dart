@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_header.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_menu_item.dart';
@@ -22,7 +23,7 @@ class _SidebarState extends State<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    double widthWhenCollapsed = 24 + 2 * AppTheme(context).dimensions.space.medium;
+    double widthWhenCollapsed = 32.0.scale + 2 * AppTheme.dimensions.space.medium;
     bool isMobile = DeviceUtils.isMobile(context);
 
     return Observer(
@@ -36,11 +37,11 @@ class _SidebarState extends State<Sidebar> {
                   ? widthWhenCollapsed
                   : null,
           child: Container(
-            color: AppTheme(context).colors.white,
+            color: AppTheme.colors.white,
             child: Column(
               children: [
                 SidebarHeader(isCollapsed: isCollapsed),
-                SizedBox(height: AppTheme(context).dimensions.space.large),
+                SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
                 _buildItems(
                   items: SidebarItem.values,
                   selectedItem: sidebarStore.selectedItem,
@@ -74,16 +75,18 @@ class _SidebarState extends State<Sidebar> {
     bool isMobile = false,
   }) {
     return ListView.separated(
-      padding: EdgeInsets.symmetric(horizontal: AppTheme(context).dimensions.space.medium),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
+      ),
       shrinkWrap: true,
       itemCount: items.length,
       separatorBuilder: (context, index) => Padding(
         padding: EdgeInsets.symmetric(
-          vertical: isCollapsed
-              ? AppTheme(context).dimensions.space.medium
-              : AppTheme(context).dimensions.space.xsmall,
+          vertical:
+              (isCollapsed ? AppTheme.dimensions.space.medium : AppTheme.dimensions.space.xsmall)
+                  .verticalSpacing,
         ),
-        child: Divider(color: AppTheme(context).colors.gray),
+        child: Divider(color: AppTheme.colors.gray),
       ),
       itemBuilder: (context, index) {
         return SidebarMenuItem(

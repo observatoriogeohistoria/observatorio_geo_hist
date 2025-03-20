@@ -9,7 +9,7 @@ class Messenger {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppTheme(context).colors.red,
+        backgroundColor: AppTheme.colors.red,
       ),
     );
   }
@@ -21,7 +21,7 @@ class Messenger {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppTheme(context).colors.green,
+        backgroundColor: AppTheme.colors.green,
       ),
     );
   }
@@ -33,7 +33,7 @@ class Messenger {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppTheme(context).colors.blue,
+        backgroundColor: AppTheme.colors.blue,
       ),
     );
   }

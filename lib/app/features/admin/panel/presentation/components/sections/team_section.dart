@@ -67,9 +67,9 @@ class _TeamSectionState extends State<TeamSection> {
       children: [
         AppHeadline.big(
           text: 'Equipe',
-          color: AppTheme(context).colors.orange,
+          color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme(context).dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.xlarge),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(
@@ -94,14 +94,14 @@ class _TeamSectionState extends State<TeamSection> {
               return ListView.separated(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.symmetric(
-                  vertical: AppTheme(context).dimensions.space.large,
+                  vertical: AppTheme.dimensions.space.large,
                 ),
                 separatorBuilder: (context, index) {
                   final isLast = index == members.length - 1;
 
                   return isLast
                       ? const SizedBox()
-                      : SizedBox(height: AppTheme(context).dimensions.space.medium);
+                      : SizedBox(height: AppTheme.dimensions.space.medium);
                 },
                 itemCount: members.length,
                 itemBuilder: (context, index) {
