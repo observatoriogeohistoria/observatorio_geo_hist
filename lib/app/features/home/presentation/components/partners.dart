@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/partners_images.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -13,8 +14,8 @@ class Partners extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-        top: AppTheme.dimensions.space.large,
-        bottom: AppTheme.dimensions.space.xlarge,
+        top: AppTheme.dimensions.space.large.verticalSpacing,
+        bottom: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       child: Column(
         children: [
@@ -22,15 +23,15 @@ class Partners extends StatelessWidget {
             title: 'PARCEIROS',
             color: AppTheme.colors.orange,
           ),
-          SizedBox(height: AppTheme.dimensions.space.large),
+          SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
           Wrap(
             alignment: WrapAlignment.center,
-            spacing: AppTheme.dimensions.space.medium,
-            runSpacing: AppTheme.dimensions.space.medium,
+            spacing: AppTheme.dimensions.space.medium.horizontalSpacing,
+            runSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
             children: [
               for (final partner in images)
                 Container(
-                  padding: EdgeInsets.all(AppTheme.dimensions.space.small),
+                  padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
                   decoration: BoxDecoration(
                     color: AppTheme.colors.white,
                     borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),

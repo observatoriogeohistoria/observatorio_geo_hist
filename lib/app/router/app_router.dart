@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/page
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/contact_us_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_page.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/pages/manifest_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/team_member_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/collaborate_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/post_detailed_page.dart';
@@ -59,18 +60,6 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/contact-us',
-        builder: (BuildContext context, GoRouterState state) {
-          return const ContactUsPage();
-        },
-      ),
-      GoRoute(
-        path: '/collaborate',
-        builder: (BuildContext context, GoRouterState state) {
-          return const CollaboratePage();
-        },
-      ),
-      GoRoute(
         path: '/posts/:area/:category/:id',
         builder: (BuildContext context, GoRouterState state) {
           final area = state.pathParameters['area'];
@@ -85,6 +74,24 @@ class AppRouter {
             categoryKey: categoryKey,
             postId: id,
           );
+        },
+      ),
+      GoRoute(
+        path: '/contact-us',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ContactUsPage();
+        },
+      ),
+      GoRoute(
+        path: '/collaborate',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CollaboratePage();
+        },
+      ),
+      GoRoute(
+        path: '/manifest',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ManifestPage();
         },
       ),
       GoRoute(

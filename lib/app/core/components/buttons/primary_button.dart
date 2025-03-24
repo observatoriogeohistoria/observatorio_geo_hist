@@ -45,6 +45,7 @@ class PrimaryButton extends StatelessWidget {
 
         buttonText = AppTitle.small(
           text: text,
+          textAlign: TextAlign.center,
           color: buttonTextColor,
         );
 
@@ -54,6 +55,7 @@ class PrimaryButton extends StatelessWidget {
 
         buttonText = AppTitle.medium(
           text: text,
+          textAlign: TextAlign.center,
           color: buttonTextColor,
         );
 
@@ -63,6 +65,7 @@ class PrimaryButton extends StatelessWidget {
 
         buttonText = AppTitle.big(
           text: text,
+          textAlign: TextAlign.center,
           color: buttonTextColor,
         );
 

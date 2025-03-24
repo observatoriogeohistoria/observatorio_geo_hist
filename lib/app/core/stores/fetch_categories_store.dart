@@ -19,6 +19,9 @@ abstract class FetchCategoriesStoreBase with Store {
   @observable
   ObservableList<CategoryModel> geographyCategories = ObservableList<CategoryModel>();
 
+  @observable
+  CategoryModel? selectedCategory;
+
   @action
   Future<void> fetchHistoryCategories() async {
     final result = await _repository.fetchHistoryCategories();
@@ -41,6 +44,11 @@ abstract class FetchCategoriesStoreBase with Store {
         geographyCategories = categories.asObservable();
       },
     );
+  }
+
+  @action
+  void setSelectedCategory(CategoryModel? category) {
+    selectedCategory = category;
   }
 
   CategoryModel? getCategoryByAreaAndKey(PostsAreas area, String key) {

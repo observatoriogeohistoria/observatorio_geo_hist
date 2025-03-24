@@ -42,7 +42,7 @@ class PostCard extends StatelessWidget {
                     text: '$index',
                     color: AppTheme.colors.gray,
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.xsmall.verticalSpacing),
+                  SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
                   AppTitle.big(
                     text: post.title,
                     color: AppTheme.colors.darkGray,
@@ -52,7 +52,7 @@ class PostCard extends StatelessWidget {
                     text: post.subtitle,
                     color: AppTheme.colors.gray,
                   ),
-                  const AppDivider(indent: null),
+                  const AppDivider(),
                   AppBody.big(
                     text: '${post.area.name} | ${post.category.title}',
                     color: AppTheme.colors.gray,

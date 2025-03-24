@@ -52,7 +52,7 @@ class _SidebarState extends State<Sidebar> {
                 ToggleCollpaseButton(
                   onTap: () {
                     if (isMobile) {
-                      Navigator.of(context).pop();
+                      GoRouter.of(context).pop();
                       return;
                     }
 
@@ -83,7 +83,7 @@ class _SidebarState extends State<Sidebar> {
       separatorBuilder: (context, index) => Padding(
         padding: EdgeInsets.symmetric(
           vertical:
-              (isCollapsed ? AppTheme.dimensions.space.medium : AppTheme.dimensions.space.xsmall)
+              (isCollapsed ? AppTheme.dimensions.space.medium : AppTheme.dimensions.space.mini)
                   .verticalSpacing,
         ),
         child: Divider(color: AppTheme.colors.gray),
@@ -95,7 +95,7 @@ class _SidebarState extends State<Sidebar> {
             sidebarStore.selectItem(items[index]);
             GoRouter.of(context).go('/admin/painel/${items[index].value}');
 
-            if (isMobile) Navigator.of(context).pop();
+            if (isMobile) GoRouter.of(context).pop();
           },
           isSelected: items[index] == sidebarStore.selectedItem,
           isCollapsed: isCollapsed,

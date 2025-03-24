@@ -19,9 +19,12 @@ abstract class FetchPostsStoreBase with Store {
   @action
   Future<void> fetchPosts(CategoryModel category) async {
     final result = await _repository.fetchPosts(category);
+
     result.fold(
       (failure) {},
-      (posts) => this.posts = posts.asObservable(),
+      (posts) {
+        this.posts = posts.asObservable();
+      },
     );
   }
 

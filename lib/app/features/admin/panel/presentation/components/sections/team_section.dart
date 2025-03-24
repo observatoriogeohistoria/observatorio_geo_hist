@@ -70,7 +70,7 @@ class _TeamSectionState extends State<TeamSection> {
           text: 'Equipe',
           color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
+        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(

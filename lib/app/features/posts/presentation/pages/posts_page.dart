@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
@@ -10,7 +12,9 @@ import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_card.dart';
@@ -34,6 +38,10 @@ class PostsPage extends StatefulWidget {
 class _PostsPageState extends State<PostsPage> {
   late final FetchCategoriesStore fetchCategoriesStore = PostsSetup.getIt<FetchCategoriesStore>();
   late final FetchPostsStore fetchPostsStore = PostsSetup.getIt<FetchPostsStore>();
+
+  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get isTablet => DeviceUtils.isTablet(context);
+  bool get isDesktop => DeviceUtils.isDesktop(context);
 
   List<ReactionDisposer> reactions = [];
   ValueNotifier<CategoryModel?> categoryNotifier = ValueNotifier(null);
@@ -67,27 +75,27 @@ class _PostsPageState extends State<PostsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Navbar(),
-            ValueListenableBuilder<CategoryModel?>(
-              valueListenable: categoryNotifier,
-              builder: (context, category, child) {
-                if (error) return const ErrorContent(isSliver: false);
-                if (category == null) return const LoadingContent(isSliver: false);
+      body: CustomScrollView(
+        slivers: [
+          const SliverToBoxAdapter(child: Navbar()),
+          ValueListenableBuilder<CategoryModel?>(
+            valueListenable: categoryNotifier,
+            builder: (context, category, child) {
+              if (error) return const ErrorContent(isSliver: true);
+              if (category == null) return const LoadingContent(isSliver: true);
 
-                return Column(
+              return SliverToBoxAdapter(
+                child: Column(
                   children: [
                     _buildCategoryHeader(context, category),
                     _buildPostsSection(category),
                   ],
-                );
-              },
-            ),
-            const Footer(),
-          ],
-        ),
+                ),
+              );
+            },
+          ),
+          const SliverToBoxAdapter(child: Footer()),
+        ],
       ),
     );
   }
@@ -95,42 +103,40 @@ class _PostsPageState extends State<PostsPage> {
   Widget _buildCategoryHeader(BuildContext context, CategoryModel category) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.5,
+      height: isMobile ? null : MediaQuery.of(context).size.height * 0.5,
+      padding: EdgeInsets.symmetric(
+        horizontal: (isDesktop
+                ? AppTheme.dimensions.space.gigantic
+                : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
+            .horizontalSpacing,
+        vertical: AppTheme.dimensions.space.huge.verticalSpacing,
+      ),
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(category.backgroundImgUrl),
+          image: CachedNetworkImageProvider(category.backgroundImgUrl),
+          colorFilter: ColorFilter.mode(
+            Colors.black.withValues(alpha: 0.5),
+            BlendMode.darken,
+          ),
           fit: BoxFit.cover,
         ),
       ),
-      child: Stack(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            color: Colors.black.withValues(alpha: .35),
+          TitleWidget(title: category.title.toUpperCase()),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppBody.big(
+            text: category.description,
+            textAlign: TextAlign.center,
+            color: AppTheme.colors.white,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.15,
-              vertical: AppTheme.dimensions.space.medium,
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          if (category.hasCollaborateOption)
+            PrimaryButton.medium(
+              text: 'COLABORE',
+              onPressed: () => GoRouter.of(context).go('/collaborate'),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TitleWidget(title: category.title.toUpperCase()),
-                SizedBox(height: AppTheme.dimensions.space.xlarge),
-                AppBody.big(
-                  text: category.description,
-                  textAlign: TextAlign.center,
-                  color: AppTheme.colors.white,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.xlarge),
-                if (category.hasCollaborateOption)
-                  PrimaryButton.medium(
-                    text: 'COLABORE',
-                    onPressed: () => GoRouter.of(context).go('/collaborate'),
-                  ),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -142,20 +148,33 @@ class _PostsPageState extends State<PostsPage> {
         return Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.symmetric(
-            horizontal: AppTheme.dimensions.space.xlarge,
-            vertical: AppTheme.dimensions.space.xlarge,
+            horizontal: (isDesktop
+                    ? AppTheme.dimensions.space.gigantic
+                    : (isTablet
+                        ? AppTheme.dimensions.space.massive
+                        : AppTheme.dimensions.space.large))
+                .horizontalSpacing,
+            vertical: AppTheme.dimensions.space.huge.verticalSpacing,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleWidget(title: 'POSTS', color: AppTheme.colors.orange),
-              SizedBox(height: AppTheme.dimensions.space.medium),
+              SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
               if (fetchPostsStore.posts.isNotEmpty)
-                ...fetchPostsStore.posts.map(
-                  (post) => PostCard(
-                    category: category,
-                    post: post,
-                  ),
+                AlignedGridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: isMobile ? 1 : (isTablet ? 2 : 3),
+                  crossAxisSpacing: AppTheme.dimensions.space.medium.horizontalSpacing,
+                  mainAxisSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
+                  itemCount: fetchPostsStore.posts.length,
+                  itemBuilder: (context, index) {
+                    return PostCard(
+                      category: category,
+                      post: fetchPostsStore.posts[index],
+                    );
+                  },
                 ),
             ],
           ),
@@ -185,6 +204,9 @@ class _PostsPageState extends State<PostsPage> {
 
     setState(() => error = category == null);
 
-    if (category != null) fetchPostsStore.fetchPosts(category);
+    if (category != null) {
+      fetchPostsStore.fetchPosts(category);
+      fetchCategoriesStore.setSelectedCategory(category);
+    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
@@ -61,7 +62,7 @@ class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMembe
               text: _isUpdate ? 'Atualizar membro' : 'Criar membro',
               color: AppTheme.colors.orange,
             ),
-            SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
+            SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
             AppTextField(
               controller: _nameController,
               labelText: 'Nome',
@@ -92,7 +93,7 @@ class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMembe
               children: [
                 SecondaryButton.medium(
                   text: 'Cancelar',
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => GoRouter.of(context).pop(),
                 ),
                 SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
                 PrimaryButton.medium(
@@ -120,6 +121,6 @@ class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMembe
       ),
     );
 
-    Navigator.of(context).pop();
+    GoRouter.of(context).pop();
   }
 }

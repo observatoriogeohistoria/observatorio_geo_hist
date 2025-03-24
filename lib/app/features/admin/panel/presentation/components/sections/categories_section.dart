@@ -69,7 +69,7 @@ class _CategoriesSectionState extends State<CategoriesSection> {
           text: 'Categorias',
           color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
+        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(

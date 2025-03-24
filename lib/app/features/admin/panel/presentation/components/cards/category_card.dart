@@ -39,7 +39,7 @@ class CategoryCard extends StatelessWidget {
                     text: '$index',
                     color: AppTheme.colors.gray,
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.xsmall.verticalSpacing),
+                  SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
                   AppTitle.big(
                     text: category.title,
                     color: AppTheme.colors.darkGray,

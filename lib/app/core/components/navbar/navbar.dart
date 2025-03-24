@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/navbutton.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/dialog/navbar_mobile_menu.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_menu.dart';
 import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class Navbar extends StatefulWidget {
@@ -17,17 +22,21 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  late final FetchCategoriesStore store = AppSetup.getIt.get<FetchCategoriesStore>();
+  late final FetchCategoriesStore fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
+
+  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get isTablet => DeviceUtils.isTablet(context);
+  bool get isDesktop => DeviceUtils.isDesktop(context);
 
   @override
   void initState() {
     super.initState();
 
-    store.fetchHistoryCategories();
-    store.fetchGeographyCategories();
+    fetchCategoriesStore.fetchHistoryCategories();
+    fetchCategoriesStore.fetchGeographyCategories();
   }
 
-  List<NavButtonItem> getNavButtonItens() {
+  List<NavButtonItem> get navButtonItens {
     return [
       const NavButtonItem(
         title: 'SOBRE',
@@ -38,8 +47,8 @@ class _NavbarState extends State<Navbar> {
         route: AppRoutes.root,
       ),
       NavButtonItem(
-        title: 'HISTÓRIA',
-        options: store.historyCategories
+        title: PostsAreas.history.name.toUpperCase(),
+        options: fetchCategoriesStore.historyCategories
             .map(
               (category) => NavButtonItem(
                 title: category.title,
@@ -47,10 +56,11 @@ class _NavbarState extends State<Navbar> {
               ),
             )
             .toList(),
+        area: PostsAreas.history,
       ),
       NavButtonItem(
-        title: 'GEOGRAFIA',
-        options: store.geographyCategories
+        title: PostsAreas.geography.name.toUpperCase(),
+        options: fetchCategoriesStore.geographyCategories
             .map(
               (category) => NavButtonItem(
                 title: category.title,
@@ -58,68 +68,71 @@ class _NavbarState extends State<Navbar> {
               ),
             )
             .toList(),
+        area: PostsAreas.geography,
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width * 0.8;
+    double width = MediaQuery.of(context).size.width * 0.8;
 
     return Container(
       color: AppTheme.colors.white,
+      padding: EdgeInsets.symmetric(
+        horizontal: (isDesktop
+                ? AppTheme.dimensions.space.gigantic
+                : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
+            .horizontalSpacing,
+      ),
+      height: isMobile ? MediaQuery.of(context).size.height * 0.075 : null,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  '${AppAssets.images}/logo.png',
-                  width: width * 0.3,
-                ),
-                Observer(
-                  builder: (context) {
-                    return Row(
-                      children: getNavButtonItens().map(
-                        (option) {
-                          final noOptions = (option.options?.isEmpty ?? true);
+          Image.asset(
+            '${AppAssets.images}/logo.png',
+            width: isMobile ? null : width * 0.3,
+            height: isMobile ? double.infinity : null,
+          ),
+          Observer(
+            builder: (context) {
+              if (isMobile) {
+                return AppIconButton(
+                  icon: Icons.menu,
+                  color: AppTheme.colors.orange,
+                  size: 32,
+                  onPressed: () => _showMobileMenu(context),
+                );
+              }
 
-                          return NavButton(
-                            text: option.title,
-                            onPressed: () {
-                              if (!noOptions) return;
-                              GoRouter.of(context).replace(option.route!);
-                            },
-                            menuChildren: noOptions
-                                ? null
-                                : option.options!.map(
-                                    (suboption) {
-                                      return NavButton(
-                                        text: suboption.title,
-                                        onPressed: () {
-                                          GoRouter.of(context).go(
-                                            '/posts/${suboption.category!.area.key}/${suboption.category!.key}',
-                                            extra: suboption.category,
-                                          );
-                                        },
-                                        menuChildren: const [],
-                                      );
-                                    },
-                                  ).toList(),
-                          );
-                        },
-                      ).toList(),
-                    );
-                  },
+              return Row(
+                children: buildNavbarMenu(
+                  context,
+                  navButtonItens,
+                  fetchCategoriesStore.selectedCategory,
+                  fetchCategoriesStore.setSelectedCategory,
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),
+    );
+  }
+
+  void _showMobileMenu(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Mobile Menu',
+      transitionDuration: const Duration(milliseconds: 300),
+      transitionBuilder: TransitionsBuilder.slide,
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return NavbarMobileMenu(
+          navButtonItens: navButtonItens,
+          onCategorySelected: fetchCategoriesStore.setSelectedCategory,
+        );
+      },
     );
   }
 }

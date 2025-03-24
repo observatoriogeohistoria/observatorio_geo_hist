@@ -39,7 +39,7 @@ class UserCard extends StatelessWidget {
                     text: '$index',
                     color: AppTheme.colors.gray,
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.xsmall.verticalSpacing),
+                  SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
                   AppTitle.big(
                     text: user.name,
                     color: AppTheme.colors.darkGray,

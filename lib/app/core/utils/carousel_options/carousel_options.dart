@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 
 CarouselOptions carouselOptions = CarouselOptions(
   scrollPhysics: const NeverScrollableScrollPhysics(),
-  viewportFraction: 0.3,
+  viewportFraction: 1,
   enableInfiniteScroll: true,
   autoPlay: true,
   autoPlayInterval: const Duration(milliseconds: 3000),
   autoPlayAnimationDuration: const Duration(milliseconds: 1000),
   enlargeCenterPage: true,
-  enlargeFactor: 0.5,
 );

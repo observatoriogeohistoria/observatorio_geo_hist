@@ -41,6 +41,22 @@ mixin _$FetchCategoriesStore on FetchCategoriesStoreBase, Store {
     });
   }
 
+  late final _$selectedCategoryAtom =
+      Atom(name: 'FetchCategoriesStoreBase.selectedCategory', context: context);
+
+  @override
+  CategoryModel? get selectedCategory {
+    _$selectedCategoryAtom.reportRead();
+    return super.selectedCategory;
+  }
+
+  @override
+  set selectedCategory(CategoryModel? value) {
+    _$selectedCategoryAtom.reportWrite(value, super.selectedCategory, () {
+      super.selectedCategory = value;
+    });
+  }
+
   late final _$fetchHistoryCategoriesAsyncAction = AsyncAction(
       'FetchCategoriesStoreBase.fetchHistoryCategories',
       context: context);
@@ -61,11 +77,26 @@ mixin _$FetchCategoriesStore on FetchCategoriesStoreBase, Store {
         .run(() => super.fetchGeographyCategories());
   }
 
+  late final _$FetchCategoriesStoreBaseActionController =
+      ActionController(name: 'FetchCategoriesStoreBase', context: context);
+
+  @override
+  void setSelectedCategory(CategoryModel? category) {
+    final _$actionInfo = _$FetchCategoriesStoreBaseActionController.startAction(
+        name: 'FetchCategoriesStoreBase.setSelectedCategory');
+    try {
+      return super.setSelectedCategory(category);
+    } finally {
+      _$FetchCategoriesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 historyCategories: ${historyCategories},
-geographyCategories: ${geographyCategories}
+geographyCategories: ${geographyCategories},
+selectedCategory: ${selectedCategory}
     ''';
   }
 }

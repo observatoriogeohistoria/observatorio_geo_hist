@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
@@ -45,7 +46,7 @@ class ViewImageDialog extends StatelessWidget {
               padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
               child: IconButton(
                 icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => GoRouter.of(context).pop(),
               ),
             ),
           ),

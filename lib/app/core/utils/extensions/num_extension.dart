@@ -48,7 +48,7 @@ extension NumExtension on num {
     final scaleFactor = _getScalingFactors().widthFactor;
 
     const minScale = 0.85; // Maintains good visibility on smaller screens
-    const maxScale = 1.2; // Avoids excessive growth
+    const maxScale = 2.0; // Avoids excessive growth
 
     return (this * scaleFactor).clamp(this * minScale, this * maxScale);
   }
@@ -58,7 +58,7 @@ extension NumExtension on num {
     final scaleFactor = _getScalingFactors().heightFactor;
 
     const minScale = 0.9; // Maintains good visibility on smaller screens
-    const maxScale = 1.3; // Avoids excessive growth
+    const maxScale = 2.0; // Avoids excessive growth
 
     return (this * scaleFactor).clamp(this * minScale, this * maxScale);
   }

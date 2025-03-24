@@ -43,22 +43,8 @@ class _HomePageState extends State<HomePage> {
             const AppDivider(),
             Observer(
               builder: (context) {
-                if (fetchTeamStore.team.isEmpty) {
-                  return const SizedBox.shrink();
-                }
-
-                // TODO: Remove this code
-                List<T> multiplyListItems<T>(List<T> originalList, int times) {
-                  List<T> newList = [];
-                  for (var item in originalList) {
-                    for (int i = 0; i < times; i++) {
-                      newList.add(item);
-                    }
-                  }
-                  return newList;
-                }
-
-                return Team(team: multiplyListItems(fetchTeamStore.team, 10));
+                final team = fetchTeamStore.team;
+                return team.isEmpty ? const SizedBox.shrink() : Team(team: fetchTeamStore.team);
               },
             ),
             const AppDivider(),

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
@@ -86,7 +87,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                 text: _isUpdate ? 'Atualizar post' : 'Criar post',
                 color: AppTheme.colors.orange,
               ),
-              SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
+              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
               Expanded(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,7 +180,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                                     validator: Validators.isNotEmpty,
                                   ),
                                   SizedBox(
-                                    height: AppTheme.dimensions.space.xsmall.verticalSpacing,
+                                    height: AppTheme.dimensions.space.mini.verticalSpacing,
                                   ),
                                 ],
                               ),
@@ -268,7 +269,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                 children: [
                   SecondaryButton.medium(
                     text: 'Cancelar',
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => GoRouter.of(context).pop(),
                   ),
                   SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
                   PrimaryButton.medium(
@@ -291,7 +292,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
           text: text,
           color: AppTheme.colors.darkGray,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xsmall.verticalSpacing),
+        SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
       ],
     );
   }
@@ -313,6 +314,6 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
       ),
     );
 
-    Navigator.of(context).pop();
+    GoRouter.of(context).pop();
   }
 }

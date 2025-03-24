@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppDropdownField<T> extends StatefulWidget {
@@ -77,8 +78,8 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
           filled: true,
           fillColor: AppTheme.colors.white,
           contentPadding: EdgeInsets.symmetric(
-            horizontal: AppTheme.dimensions.space.small,
-            vertical: AppTheme.dimensions.space.medium,
+            horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
+            vertical: AppTheme.dimensions.space.medium.verticalSpacing,
           ),
           enabledBorder: _buildBorder(AppTheme.colors.gray),
           focusedBorder: _buildBorder(AppTheme.colors.orange),

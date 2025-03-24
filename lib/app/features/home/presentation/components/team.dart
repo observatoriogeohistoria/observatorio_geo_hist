@@ -5,6 +5,8 @@ import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/carousel_options/carousel_options.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -24,14 +26,19 @@ class Team extends StatefulWidget {
 class _TeamState extends State<Team> {
   final carouselController = CarouselSliderController();
 
+  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get isTablet => DeviceUtils.isTablet(context);
+  bool get isDesktop => DeviceUtils.isDesktop(context);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        top: AppTheme.dimensions.space.large,
-        bottom: AppTheme.dimensions.space.xlarge,
-        left: AppTheme.dimensions.space.large,
-        right: AppTheme.dimensions.space.large,
+      padding: EdgeInsets.symmetric(
+        horizontal: (isDesktop
+                ? AppTheme.dimensions.space.gigantic
+                : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
+            .horizontalSpacing,
+        vertical: AppTheme.dimensions.space.large.verticalSpacing,
       ),
       child: Column(
         children: [
@@ -39,7 +46,7 @@ class _TeamState extends State<Team> {
             title: 'EQUIPE',
             color: AppTheme.colors.orange,
           ),
-          SizedBox(height: AppTheme.dimensions.space.large),
+          SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
           Row(
             children: [
               _buildArrow(
@@ -49,9 +56,7 @@ class _TeamState extends State<Team> {
               Expanded(
                 child: CarouselSlider.builder(
                   options: carouselOptions.copyWith(
-                    height: 80,
-                    enlargeCenterPage: true,
-                    enlargeFactor: 0.5,
+                    height: isMobile ? null : 100.verticalSpacing,
                   ),
                   carouselController: carouselController,
                   itemCount: widget.team.length,
@@ -73,10 +78,12 @@ class _TeamState extends State<Team> {
                           children: [
                             AppBody.big(
                               text: member.name.toUpperCase(),
+                              textAlign: TextAlign.center,
                               color: AppTheme.colors.orange,
                             ),
                             AppTitle.medium(
                               text: member.role,
+                              textAlign: TextAlign.center,
                               color: AppTheme.colors.gray,
                             ),
                           ],
@@ -105,7 +112,7 @@ class _TeamState extends State<Team> {
       onTap: () => isBack ? controller.previousPage() : controller.nextPage(),
       child: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(AppTheme.dimensions.space.small),
+        padding: isMobile ? EdgeInsets.zero : EdgeInsets.all(AppTheme.dimensions.space.small.scale),
         decoration: BoxDecoration(
           color: AppTheme.colors.orange.withValues(alpha: 0.35),
           borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),

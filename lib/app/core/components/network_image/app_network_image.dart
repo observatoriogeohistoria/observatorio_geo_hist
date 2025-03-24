@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/cached_image/cached_image.dart';
 
-class ImageFromUrl extends StatelessWidget {
-  const ImageFromUrl({
+class AppNetworkImage extends StatelessWidget {
+  const AppNetworkImage({
     required this.imageUrl,
     this.width = double.infinity,
     this.height = 253,

@@ -92,7 +92,7 @@ class _SigninPageState extends State<SigninPage> {
                   top: border,
                   left: border,
                   right: border,
-                  bottom: border.copyWith(width: AppTheme.dimensions.stroke.xlarge),
+                  bottom: border.copyWith(width: AppTheme.dimensions.stroke.huge),
                 ),
               ),
               child: Form(
@@ -132,7 +132,7 @@ class _SigninPageState extends State<SigninPage> {
                           'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
                       color: AppTheme.colors.gray,
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
+                    SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
                     loginState is LoginStateLoading
                         ? const Loading()
                         : PrimaryButton.medium(

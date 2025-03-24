@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
@@ -7,8 +8,8 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ContactUsPage extends StatefulWidget {
@@ -19,33 +20,36 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
-  late final FetchTeamStore fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
+  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get isTablet => DeviceUtils.isTablet(context);
+  bool get isDesktop => DeviceUtils.isDesktop(context);
 
-  @override
-  void initState() {
-    super.initState();
-
-    fetchTeamStore.fetchTeam();
-  }
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _subjectController = TextEditingController();
+  final _messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final subjectController = TextEditingController();
-    final messageController = TextEditingController();
+    double horizontalPadding = (isDesktop
+            ? AppTheme.dimensions.space.gigantic
+            : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
+        .horizontalSpacing;
+
+    double width = MediaQuery.of(context).size.width -
+        2 * horizontalPadding -
+        AppTheme.dimensions.space.massive.horizontalSpacing;
 
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Navbar(),
-            Container(
-              width: double.infinity,
+      body: CustomScrollView(
+        slivers: [
+          const SliverToBoxAdapter(child: Navbar()),
+          SliverToBoxAdapter(
+            child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.2,
-                vertical: 2 * AppTheme.dimensions.space.large,
+                horizontal: horizontalPadding,
+                vertical: AppTheme.dimensions.space.huge.verticalSpacing,
               ),
               child: Column(
                 children: [
@@ -56,56 +60,76 @@ class _ContactUsPageState extends State<ContactUsPage> {
                       color: AppTheme.colors.orange,
                     ),
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.xlarge),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        child: Column(
+                  const AppDivider(),
+                  SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+                  isMobile
+                      ? Column(
                           children: [
-                            _buildContactField('NOME', nameController),
-                            _buildContactField('E-MAIL', emailController),
-                            _buildContactField('ASSUNTO', subjectController),
-                            _buildContactField(
-                              'MENSAGEM',
-                              messageController,
-                              minLines: 5,
-                              maxLines: 10,
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: PrimaryButton.medium(
-                                text: 'ENVIAR',
-                                onPressed: () {},
-                              ),
-                            ),
+                            _buildFields(),
+                            SizedBox(height: AppTheme.dimensions.space.massive.verticalSpacing),
+                            _buildInfos(),
                           ],
-                        ),
-                      ),
-                      SizedBox(width: AppTheme.dimensions.space.xlarge),
-                      Flexible(
-                        child: Column(
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildContactInfo('ENDEREÇO', AppStrings.address),
-                            _buildContactInfo('TELEFONES', AppStrings.phones),
-                            _buildContactInfo('E-MAIL', AppStrings.email),
-                            _buildContactInfo('INSTAGRAM', AppStrings.instagram),
-                            _buildContactInfo('FACEBOOK', AppStrings.facebook),
-                            _buildContactInfo('YOUTUBE', AppStrings.youtube),
+                            SizedBox(
+                              width: width / 2,
+                              child: _buildFields(),
+                            ),
+                            SizedBox(width: AppTheme.dimensions.space.massive.horizontalSpacing),
+                            SizedBox(
+                              width: width / 2,
+                              child: _buildInfos(),
+                            ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
-            const Footer(),
-          ],
-        ),
+          ),
+          const SliverFillRemaining(hasScrollBody: false, child: SizedBox.shrink()),
+          const SliverToBoxAdapter(child: Footer()),
+        ],
       ),
+    );
+  }
+
+  Widget _buildFields() {
+    return Column(
+      children: [
+        _buildContactField('NOME', _nameController),
+        _buildContactField('E-MAIL', _emailController),
+        _buildContactField('ASSUNTO', _subjectController),
+        _buildContactField(
+          'MENSAGEM',
+          _messageController,
+          minLines: 5,
+          maxLines: 10,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: PrimaryButton.medium(
+            text: 'ENVIAR',
+            onPressed: () {},
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfos() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildContactInfo('ENDEREÇO', AppStrings.address),
+        _buildContactInfo('TELEFONES', AppStrings.phones),
+        _buildContactInfo('E-MAIL', AppStrings.email),
+        _buildContactInfo('INSTAGRAM', AppStrings.instagram),
+        _buildContactInfo('FACEBOOK', AppStrings.facebook),
+        _buildContactInfo('YOUTUBE', AppStrings.youtube),
+      ],
     );
   }
 
@@ -125,7 +149,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
           text: value,
           color: AppTheme.colors.gray,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.huge),
       ],
     );
   }
@@ -146,11 +170,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
         SizedBox(height: AppTheme.dimensions.space.medium),
         AppTextField(
           controller: controller,
-          minLines: minLines,
-          maxLines: maxLines,
+          // minLines: minLines,
+          // maxLines: maxLines,
           keyboardType: TextInputType.multiline,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xlarge),
+        SizedBox(height: AppTheme.dimensions.space.huge),
       ],
     );
   }

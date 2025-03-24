@@ -72,7 +72,7 @@ class _PostsSectionState extends State<PostsSection> {
           text: 'Posts',
           color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
+        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(

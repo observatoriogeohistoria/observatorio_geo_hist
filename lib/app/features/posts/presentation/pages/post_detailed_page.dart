@@ -10,7 +10,9 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -34,6 +36,10 @@ class PostDetailedPage extends StatefulWidget {
 class _PostDetailedPageState extends State<PostDetailedPage> {
   late final FetchCategoriesStore fetchCategoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
   late final FetchPostsStore fetchPostsStore = HomeSetup.getIt<FetchPostsStore>();
+
+  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get isTablet => DeviceUtils.isTablet(context);
+  bool get isDesktop => DeviceUtils.isDesktop(context);
 
   List<ReactionDisposer> reactions = [];
 
@@ -78,6 +84,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
             builder: (context, post, child) {
               if (error) return const ErrorContent(isSliver: true);
               if (post == null) return const LoadingContent(isSliver: true);
+
               return _buildPostContent(context, post);
             },
           ),
@@ -91,8 +98,13 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.2,
-          vertical: 2 * AppTheme.dimensions.space.large,
+          horizontal: (isDesktop
+                  ? AppTheme.dimensions.space.gigantic
+                  : (isTablet
+                      ? AppTheme.dimensions.space.massive
+                      : AppTheme.dimensions.space.large))
+              .horizontalSpacing,
+          vertical: AppTheme.dimensions.space.huge.verticalSpacing,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -103,12 +115,12 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
               textAlign: TextAlign.start,
               color: AppTheme.colors.orange,
             ),
-            SizedBox(height: AppTheme.dimensions.space.small),
+            SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
             AppTitle.small(
               text: post.subtitle.toUpperCase(),
               color: AppTheme.colors.gray,
             ),
-            SizedBox(height: AppTheme.dimensions.space.large),
+            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
             MarkdownText(text: post.markdownContent),
           ],
         ),

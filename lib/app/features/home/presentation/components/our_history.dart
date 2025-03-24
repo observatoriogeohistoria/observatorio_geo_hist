@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -10,6 +12,9 @@ class OurHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isTablet = DeviceUtils.isTablet(context);
+    bool isDesktop = DeviceUtils.isDesktop(context);
+
     const firstText =
         'O Observatório do Ensino de História e Geografia nasce da confluência entre o espírito acadêmico e o desejo de construir pontes entre pesquisadores, professores, estudantes e a sociedade brasileira, dentro e fora dos muros escolares e universitários. O Observatório foi idealizado e criado pelo Grupo de Estudos e Pesquisas em Ensino de Geografia – GEPEGH/UFU, vinculado à Linha de Pesquisa “Saberes e Práticas Educativas” do Programa de Pós-Graduação em Educação da Universidade Federal de Uberlândia, Minas Gerais, Brasil. O Observatório é um espaço formativo e colaborativo, fruto do Projeto de Pesquisa Coletivo, financiado pela FAPEMIG (2016-2018), intitulado “Observatório do Ensino de História e Geografia em Minas Gerais: políticas educacionais, formação docente e produção de conhecimentos”. O projeto foi desenvolvido por pesquisadores de diferentes níveis (IC, Mestrado e Doutorado), apoiado por diversas instituições.';
 
@@ -18,15 +23,14 @@ class OurHistory extends StatelessWidget {
 
 Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a missão deste espaço – que é, sobretudo, uma ferramenta para divulgação científica –, ultrapassa qualquer fronteira geográfica. Concebemos um Observatório capaz de interconectar diversas dimensões e realidades que permeiam a educação brasileira e o ensino de História e Geografia, congregando saberes, projetos, opiniões, experiências educativas e protagonistas de diferentes lugares. Para tanto, valorizamos e incentivamos a participação de todos e contamos com o poder multiplicador de cada pessoa, seja ela pesquisador, professor ou estudante.''';
 
-    final padding = MediaQuery.of(context).size.height * 0.2;
-    final space = SizedBox(height: AppTheme.dimensions.space.large);
+    final space = SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing);
 
     return Column(
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: padding,
-            vertical: AppTheme.dimensions.space.medium,
+            horizontal: AppTheme.dimensions.space.massive.horizontalSpacing,
+            vertical: AppTheme.dimensions.space.medium.verticalSpacing,
           ),
           width: double.infinity,
           color: AppTheme.colors.gray,
@@ -39,7 +43,14 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
         ),
         space,
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: padding),
+          padding: EdgeInsets.symmetric(
+            horizontal: (isDesktop
+                    ? AppTheme.dimensions.space.gigantic
+                    : (isTablet
+                        ? AppTheme.dimensions.space.massive
+                        : AppTheme.dimensions.space.large))
+                .horizontalSpacing,
+          ),
           child: Column(
             children: [
               AppBody.medium(
@@ -52,7 +63,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
                   Image.asset(
                     '${AppAssets.images}/our-history.jpg',
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.small),
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppLabel.small(
                     text: 'Foto: Antônio César Ortega',
                     color: AppTheme.colors.darkGray,

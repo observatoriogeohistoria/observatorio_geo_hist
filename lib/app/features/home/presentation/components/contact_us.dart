@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ContactUs extends StatelessWidget {
@@ -9,12 +11,20 @@ class ContactUs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isTablet = DeviceUtils.isTablet(context);
+    bool isDesktop = DeviceUtils.isDesktop(context);
+
     return Container(
       color: AppTheme.colors.gray,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.2,
-          vertical: AppTheme.dimensions.space.xlarge,
+          horizontal: (isDesktop
+                  ? AppTheme.dimensions.space.gigantic
+                  : (isTablet
+                      ? AppTheme.dimensions.space.massive
+                      : AppTheme.dimensions.space.large))
+              .horizontalSpacing,
+          vertical: AppTheme.dimensions.space.huge.verticalSpacing,
         ),
         child: Column(
           children: [
@@ -24,7 +34,7 @@ class ContactUs extends StatelessWidget {
               textAlign: TextAlign.center,
               color: AppTheme.colors.white,
             ),
-            SizedBox(height: AppTheme.dimensions.space.xlarge),
+            SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
             PrimaryButton.medium(
               text: 'FALE COM A GENTE',
               onPressed: () => GoRouter.of(context).go('/contact-us'),

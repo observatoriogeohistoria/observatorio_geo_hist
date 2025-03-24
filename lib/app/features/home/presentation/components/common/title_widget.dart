@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class TitleWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class TitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: AppTheme.dimensions.space.large,
+        horizontal: AppTheme.dimensions.space.large.horizontalSpacing,
       ),
       child: AppHeadline.big(
         text: title,

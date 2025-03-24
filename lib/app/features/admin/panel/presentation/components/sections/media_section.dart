@@ -69,7 +69,7 @@ class _MediaSectionState extends State<MediaSection> {
           text: 'Mídias',
           color: AppTheme.colors.orange,
         ),
-        SizedBox(height: AppTheme.dimensions.space.xlarge.verticalSpacing),
+        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
         Align(
           alignment: Alignment.centerRight,
           child: SecondaryButton.medium(

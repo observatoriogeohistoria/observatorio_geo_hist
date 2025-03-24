@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/navbar_menu.dart';
+import 'package:observatorio_geo_hist/app/core/components/dialog/navbar_sub_menu.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class NavButton extends StatefulWidget {
@@ -8,6 +9,7 @@ class NavButton extends StatefulWidget {
     required this.text,
     required this.onPressed,
     required this.menuChildren,
+    this.backgroundColor,
     this.textStyle,
     this.textColor,
     this.textColorOnHover,
@@ -17,6 +19,8 @@ class NavButton extends StatefulWidget {
   final String text;
   final Function()? onPressed;
   final List<NavButton>? menuChildren;
+
+  final Color? backgroundColor;
 
   final TextStyle? textStyle;
   final Color? textColor;
@@ -31,25 +35,15 @@ class _NavButtonState extends State<NavButton> {
 
   bool get hasMenu => (widget.menuChildren?.isNotEmpty ?? false);
 
-  void showMenus(BuildContext context) async {
-    await showGeneralDialog(
+  void showSubMenu(BuildContext context) {
+    showGeneralDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel: 'Menu',
+      barrierLabel: 'Sub Menu',
       transitionDuration: const Duration(milliseconds: 300),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        final offsetAnimation = Tween<Offset>(
-          begin: const Offset(0, -1),
-          end: Offset.zero,
-        ).animate(animation);
-
-        return SlideTransition(
-          position: offsetAnimation,
-          child: child,
-        );
-      },
+      transitionBuilder: TransitionsBuilder.slide,
       pageBuilder: (context, animation, secondaryAnimation) {
-        return NavbarMenu(
+        return NavbarSubMenu(
           title: widget.text,
           menuChildren: widget.menuChildren!,
         );
@@ -59,37 +53,43 @@ class _NavButtonState extends State<NavButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
-      child: TextButton(
-        statesController: controller,
-        style: ButtonStyle(
-          overlayColor: WidgetStateProperty.all(
-            !hasMenu ? Colors.transparent : AppTheme.colors.gray.withValues(alpha: 0.1),
+    return TextButton(
+      statesController: controller,
+      style: ButtonStyle(
+        padding: WidgetStateProperty.all(
+          EdgeInsets.all(AppTheme.dimensions.space.medium.scale),
+        ),
+        overlayColor: WidgetStateProperty.all(
+          !hasMenu ? Colors.transparent : AppTheme.colors.gray.withValues(alpha: 0.1),
+        ),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
           ),
-          shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
-            ),
-          ),
-          foregroundColor: WidgetStateProperty.resolveWith(
-            (states) => states.contains(WidgetState.hovered)
+        ),
+        backgroundColor: WidgetStateProperty.resolveWith(
+          (states) => widget.backgroundColor,
+        ),
+        foregroundColor: WidgetStateProperty.resolveWith(
+          (states) {
+            return states.contains(WidgetState.hovered)
+                ? widget.textColorOnHover ?? AppTheme.colors.orange
+                : widget.textColor ?? AppTheme.colors.darkGray;
+          },
+        ),
+        textStyle: WidgetStateProperty.resolveWith(
+          (states) => (widget.textStyle ?? AppTheme.typography.title.medium).copyWith(
+            color: states.contains(WidgetState.hovered)
                 ? widget.textColorOnHover ?? AppTheme.colors.orange
                 : widget.textColor ?? AppTheme.colors.darkGray,
           ),
-          textStyle: WidgetStateProperty.resolveWith(
-            (states) => (widget.textStyle ?? AppTheme.typography.title.medium).copyWith(
-              color: states.contains(WidgetState.hovered)
-                  ? widget.textColorOnHover ?? AppTheme.colors.orange
-                  : widget.textColor ?? AppTheme.colors.darkGray,
-            ),
-          ),
         ),
-        onPressed: () {
-          hasMenu ? showMenus(context) : widget.onPressed?.call();
-        },
-        child: Text(widget.text),
       ),
+      onPressed: () {
+        widget.onPressed?.call();
+        if (hasMenu) showSubMenu(context);
+      },
+      child: Text(widget.text),
     );
   }
 }
