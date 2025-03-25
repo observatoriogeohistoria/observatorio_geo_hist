@@ -23,13 +23,14 @@ jobs:
       with:
         flutter-version: '3.24.3'
 
+    - name: Clean Flutter cache
+      run: flutter clean
+
     - name: Install dependencies
-      run: |
-        flutter pub get
+      run: flutter pub get
 
     - name: Build Flutter Web app
-      run: |
-        flutter build web --release
+      run: flutter build web --release
 
     - name: Deploy to HostGator
       run: |
