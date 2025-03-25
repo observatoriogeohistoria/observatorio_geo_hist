@@ -115,7 +115,7 @@ class _PostsPageState extends State<PostsPage> {
         image: DecorationImage(
           image: CachedNetworkImageProvider(category.backgroundImgUrl),
           colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.5),
+            Colors.black.withOpacity(0.5),
             BlendMode.darken,
           ),
           fit: BoxFit.cover,

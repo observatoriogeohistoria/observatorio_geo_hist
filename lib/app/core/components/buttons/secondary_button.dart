@@ -76,7 +76,7 @@ class SecondaryButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (isDisabled || states.contains(WidgetState.hovered)) {
-            return AppTheme.colors.lightGray.withValues(alpha: 0.2);
+            return AppTheme.colors.lightGray.withOpacity(0.2);
           }
           return AppTheme.colors.white;
         }),

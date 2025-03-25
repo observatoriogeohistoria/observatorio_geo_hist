@@ -79,7 +79,7 @@ class PrimaryButton extends StatelessWidget {
             return AppTheme.colors.lightGray;
           }
           if (states.contains(WidgetState.hovered)) {
-            return AppTheme.colors.orange.withValues(alpha: 0.8);
+            return AppTheme.colors.orange.withOpacity( 0.8);
           }
           return AppTheme.colors.orange;
         }),

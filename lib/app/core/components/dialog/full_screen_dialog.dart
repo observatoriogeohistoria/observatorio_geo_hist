@@ -18,7 +18,7 @@ class FullScreenDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.colors.darkGray.withValues(alpha: 0.5),
+      backgroundColor: AppTheme.colors.darkGray.withOpacity(0.5),
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,

@@ -42,7 +42,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                   image: const AssetImage('${AppAssets.images}/collaborate.jpg'),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Colors.black.withValues(alpha: 0.35),
+                    Colors.black.withOpacity(0.35),
                     BlendMode.darken,
                   ),
                 ),

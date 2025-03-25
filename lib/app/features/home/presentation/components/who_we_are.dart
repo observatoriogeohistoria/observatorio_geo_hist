@@ -23,7 +23,7 @@ class WhoWeAre extends StatelessWidget {
         image: DecorationImage(
           image: const AssetImage('${AppAssets.images}/who-we-are.jpg'),
           colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.35),
+            Colors.black.withOpacity(0.35),
             BlendMode.darken,
           ),
           fit: BoxFit.cover,

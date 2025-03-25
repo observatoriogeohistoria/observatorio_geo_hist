@@ -114,7 +114,7 @@ class _TeamState extends State<Team> {
         alignment: Alignment.center,
         padding: isMobile ? EdgeInsets.zero : EdgeInsets.all(AppTheme.dimensions.space.small.scale),
         decoration: BoxDecoration(
-          color: AppTheme.colors.orange.withValues(alpha: 0.35),
+          color: AppTheme.colors.orange.withOpacity(0.35),
           borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
         ),
         child: Center(

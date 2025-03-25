@@ -60,7 +60,7 @@ class _NavButtonState extends State<NavButton> {
           EdgeInsets.all(AppTheme.dimensions.space.medium.scale),
         ),
         overlayColor: WidgetStateProperty.all(
-          !hasMenu ? Colors.transparent : AppTheme.colors.gray.withValues(alpha: 0.1),
+          !hasMenu ? Colors.transparent : AppTheme.colors.gray.withOpacity(0.1),
         ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
