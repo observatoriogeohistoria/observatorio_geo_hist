@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -82,12 +83,25 @@ class _CategoriesSectionState extends State<CategoriesSection> {
             },
           ),
         ),
+        Observer(
+          builder: (context) {
+            final state = categoriesStore.state;
+
+            if (state is ManageCategoriesLoadingState && state.isRefreshing) {
+              return const LinearLoading();
+            }
+
+            return const SizedBox.shrink();
+          },
+        ),
         SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
         Expanded(
           child: Observer(
             builder: (context) {
-              if (categoriesStore.state is ManageCategoriesLoadingState) {
-                return const Center(child: Loading());
+              final state = categoriesStore.state;
+
+              if (state is ManageCategoriesLoadingState && !state.isRefreshing) {
+                return const Center(child: CircularLoading());
               }
 
               final categories = categoriesStore.categories;

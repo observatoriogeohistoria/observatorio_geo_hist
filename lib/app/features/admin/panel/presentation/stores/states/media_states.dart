@@ -8,7 +8,10 @@ sealed class ManageMediaState extends Equatable {
 
 final class ManageMediaInitialState extends ManageMediaState {}
 
-final class ManageMediaLoadingState extends ManageMediaState {}
+final class ManageMediaLoadingState extends ManageMediaState {
+  final bool isRefreshing;
+  ManageMediaLoadingState({this.isRefreshing = false});
+}
 
 final class ManageMediaSuccessState extends ManageMediaState {
   final String message;

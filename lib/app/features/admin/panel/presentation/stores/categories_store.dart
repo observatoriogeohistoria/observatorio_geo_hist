@@ -38,6 +38,8 @@ abstract class CategoriesStoreBase with Store {
 
   @action
   Future<void> createOrUpdateCategory(CategoryModel category) async {
+    state = ManageCategoriesLoadingState(isRefreshing: true);
+
     final result = await _categoriesRepository.createOrUpdateCategory(category);
 
     result.fold(
@@ -58,6 +60,8 @@ abstract class CategoriesStoreBase with Store {
 
   @action
   Future<void> deleteCategory(CategoryModel category) async {
+    state = ManageCategoriesLoadingState(isRefreshing: true);
+
     final result = await _categoriesRepository.deleteCategory(category);
 
     result.fold(

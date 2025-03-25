@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class Loading extends StatelessWidget {
-  const Loading({super.key});
+class CircularLoading extends StatelessWidget {
+  const CircularLoading({super.key});
 
   @override
   Widget build(BuildContext context) {

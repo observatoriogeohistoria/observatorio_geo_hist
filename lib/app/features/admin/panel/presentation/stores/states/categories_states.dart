@@ -8,7 +8,10 @@ sealed class ManageCategoriesState extends Equatable {
 
 final class ManageCategoriesInitialState extends ManageCategoriesState {}
 
-final class ManageCategoriesLoadingState extends ManageCategoriesState {}
+final class ManageCategoriesLoadingState extends ManageCategoriesState {
+  final bool isRefreshing;
+  ManageCategoriesLoadingState({this.isRefreshing = false});
+}
 
 final class ManageCategoriesSuccessState extends ManageCategoriesState {
   final String message;

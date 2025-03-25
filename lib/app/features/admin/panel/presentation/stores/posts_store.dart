@@ -38,6 +38,8 @@ abstract class PostsStoreBase with Store {
 
   @action
   Future<void> createOrUpdatePost(PostModel post) async {
+    state = ManagePostsLoadingState(isRefreshing: true);
+
     final result = await _postsRepository.createOrUpdatePost(post);
 
     result.fold(
@@ -57,6 +59,8 @@ abstract class PostsStoreBase with Store {
 
   @action
   Future<void> deletePost(PostModel post) async {
+    state = ManagePostsLoadingState(isRefreshing: true);
+
     final result = await _postsRepository.deletePost(post);
 
     result.fold(
