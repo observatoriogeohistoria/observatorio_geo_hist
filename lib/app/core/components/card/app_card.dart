@@ -7,6 +7,8 @@ class AppCard extends StatelessWidget {
     required this.child,
     this.width = double.infinity,
     this.padding,
+    this.margin = EdgeInsets.zero,
+    this.borderColor,
     super.key,
   });
 
@@ -14,10 +16,13 @@ class AppCard extends StatelessWidget {
   final double width;
 
   final EdgeInsets? padding;
+  final EdgeInsets margin;
+
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
-    final border = BorderSide(color: AppTheme.colors.lightGray);
+    final border = BorderSide(color: borderColor ?? AppTheme.colors.lightGray);
 
     return Container(
       width: width,
@@ -26,6 +31,7 @@ class AppCard extends StatelessWidget {
             horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
             vertical: AppTheme.dimensions.space.small.verticalSpacing,
           ),
+      margin: margin,
       decoration: BoxDecoration(
         color: AppTheme.colors.white,
         borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
@@ -33,7 +39,7 @@ class AppCard extends StatelessWidget {
           top: border,
           left: border,
           right: border,
-          bottom: border.copyWith(width: 4),
+          bottom: border.copyWith(width: AppTheme.dimensions.stroke.huge),
         ),
       ),
       child: child,

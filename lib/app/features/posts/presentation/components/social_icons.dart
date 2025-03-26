@@ -1,5 +1,3 @@
-import 'dart:js' as js;
-
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
@@ -42,11 +40,10 @@ class _SocialIconsState extends State<SocialIcons> {
     return InkWell(
       onTap: () {
         String currentUrl = getEncodedCurrentUrl();
-
         String linkTo =
             link.replaceAll('[TEXT]', widget.post.title).replaceAll('[URL]', currentUrl);
 
-        js.context.callMethod('open', [linkTo]);
+        openUrl(linkTo);
       },
       mouseCursor: SystemMouseCursors.click,
       child: Image.asset(

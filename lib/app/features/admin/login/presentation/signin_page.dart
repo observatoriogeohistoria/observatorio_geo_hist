@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
@@ -64,7 +65,6 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final border = BorderSide(color: AppTheme.colors.gray);
 
     bool isMobile = DeviceUtils.isMobile(context);
     bool isTablet = DeviceUtils.isTablet(context);
@@ -77,7 +77,7 @@ class _SigninPageState extends State<SigninPage> {
           final loginState = authStore.state.loginState;
 
           return Center(
-            child: Container(
+            child: AppCard(
               width: size.width * (isMobile ? 1 : (isTablet ? 0.5 : 0.3)),
               padding: EdgeInsets.all(AppTheme.dimensions.space.large.scale),
               margin: isMobile
@@ -85,16 +85,7 @@ class _SigninPageState extends State<SigninPage> {
                       horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
                     )
                   : EdgeInsets.zero,
-              decoration: BoxDecoration(
-                color: AppTheme.colors.white,
-                borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-                border: Border(
-                  top: border,
-                  left: border,
-                  right: border,
-                  bottom: border.copyWith(width: AppTheme.dimensions.stroke.huge),
-                ),
-              ),
+              borderColor: AppTheme.colors.gray,
               child: Form(
                 key: formKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,

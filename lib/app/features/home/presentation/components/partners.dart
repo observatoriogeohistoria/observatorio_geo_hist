@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/partners_images.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
@@ -14,7 +15,6 @@ class Partners extends StatelessWidget {
     bool isMobile = DeviceUtils.isMobile(context);
     bool isTablet = DeviceUtils.isTablet(context);
 
-    final border = BorderSide(color: AppTheme.colors.lightGray);
     const images = PartnersImages.values;
 
     return Padding(
@@ -42,18 +42,8 @@ class Partners extends StatelessWidget {
                 mainAxisSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
                 itemCount: images.length,
                 itemBuilder: (context, index) {
-                  return Container(
+                  return AppCard(
                     padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
-                    decoration: BoxDecoration(
-                      color: AppTheme.colors.white,
-                      borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-                      border: Border(
-                        top: border,
-                        left: border,
-                        right: border,
-                        bottom: border.copyWith(width: 4),
-                      ),
-                    ),
                     child: Image.asset(images[index].path),
                   );
                 },
