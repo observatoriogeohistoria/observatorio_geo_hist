@@ -3,6 +3,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart';
+import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart';
@@ -33,26 +37,34 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Navbar(),
-            const WhoWeAre(),
-            const OurHistory(),
-            const AppDivider(),
-            Observer(
+      body: CustomScrollView(
+        slivers: [
+          const SliverToBoxAdapter(child: Navbar()),
+          const SliverToBoxAdapter(child: WhoWeAre()),
+          SliverToBoxAdapter(
+            child: AppVideoPlayer(
+              padding: EdgeInsets.symmetric(
+                horizontal: DeviceUtils.getPageHorizontalPadding(context),
+                vertical: AppTheme.dimensions.space.massive.verticalSpacing,
+              ),
+              url: AppStrings.presentationVideoUrl,
+            ),
+          ),
+          const SliverToBoxAdapter(child: OurHistory()),
+          const SliverToBoxAdapter(child: AppDivider()),
+          SliverToBoxAdapter(
+            child: Observer(
               builder: (context) {
                 final team = fetchTeamStore.team;
                 return team.isEmpty ? const SizedBox.shrink() : Team(team: fetchTeamStore.team);
               },
             ),
-            const AppDivider(),
-            const Partners(),
-            const ContactUs(),
-            const Footer(),
-          ],
-        ),
+          ),
+          const SliverToBoxAdapter(child: AppDivider()),
+          const SliverToBoxAdapter(child: Partners()),
+          const SliverToBoxAdapter(child: ContactUs()),
+          const SliverToBoxAdapter(child: Footer()),
+        ],
       ),
     );
   }

@@ -1,15 +1,14 @@
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
-import 'package:observatorio_geo_hist/app/core/components/general_content/loading_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
@@ -79,13 +78,8 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                 hasScrollBody: false,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: (isDesktop
-                            ? AppTheme.dimensions.space.gigantic
-                            : (isTablet
-                                ? AppTheme.dimensions.space.massive
-                                : AppTheme.dimensions.space.large))
-                        .horizontalSpacing,
-                    vertical: AppTheme.dimensions.space.huge.verticalSpacing,
+                    horizontal: DeviceUtils.getPageHorizontalPadding(context),
+                    vertical: AppTheme.dimensions.space.massive.verticalSpacing,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -119,9 +113,9 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                           ),
                           child: PrimaryButton.medium(
                             text: 'Currículo Lattes',
-                            onPressed: () async {
-                              final url = member.lattesUrl;
-                              html.window.open(url!, 'new tab');
+                            onPressed: () {
+                              if (member.lattesUrl == null) return;
+                              openUrl(member.lattesUrl!);
                             },
                           ),
                         ),

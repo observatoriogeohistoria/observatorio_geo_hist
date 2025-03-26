@@ -38,13 +38,14 @@ abstract class CategoriesStoreBase with Store {
 
   @action
   Future<void> createOrUpdateCategory(CategoryModel category) async {
+    state = ManageCategoriesLoadingState(isRefreshing: true);
+
     final result = await _categoriesRepository.createOrUpdateCategory(category);
 
     result.fold(
       (failure) => state = ManageCategoriesErrorState(failure),
       (_) {
-        final index =
-            categories.indexWhere((c) => c.key == category.key && c.area == category.area);
+        final index = categories.indexWhere((c) => c.key == category.key);
         index >= 0
             ? categories.replaceRange(index, index + 1, [category])
             : categories.add(category);
@@ -58,12 +59,14 @@ abstract class CategoriesStoreBase with Store {
 
   @action
   Future<void> deleteCategory(CategoryModel category) async {
+    state = ManageCategoriesLoadingState(isRefreshing: true);
+
     final result = await _categoriesRepository.deleteCategory(category);
 
     result.fold(
       (failure) => state = ManageCategoriesErrorState(failure),
       (_) {
-        categories.removeWhere((c) => c.key == category.key && c.area == category.area);
+        categories.removeWhere((c) => c.key == category.key);
         state = ManageCategoriesSuccessState(message: 'Categoria deletada com sucesso');
       },
     );

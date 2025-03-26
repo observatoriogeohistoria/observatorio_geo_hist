@@ -38,11 +38,13 @@ abstract class MediaStoreBase with Store {
 
   @action
   Future<void> createMedia(MediaModel media) async {
+    state = ManageMediaLoadingState(isRefreshing: true);
+
     final result = await _mediaRepository.createMedia(media);
 
     result.fold(
       (failure) => state = ManageMediaErrorState(failure),
-      (_) {
+      (media) {
         medias.add(media);
         state = ManageMediaSuccessState(message: 'Mídia criada com sucesso');
       },
@@ -51,6 +53,8 @@ abstract class MediaStoreBase with Store {
 
   @action
   Future<void> deleteMedia(MediaModel media) async {
+    state = ManageMediaLoadingState(isRefreshing: true);
+
     final result = await _mediaRepository.deleteMedia(media);
 
     result.fold(

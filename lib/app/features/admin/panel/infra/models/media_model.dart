@@ -5,14 +5,14 @@ class MediaModel {
     this.id,
     required this.name,
     required this.extension,
-    required this.bytes,
+    this.bytes,
     this.url,
   });
 
   final String? id;
   final String name;
   final String extension;
-  final Uint8List bytes;
+  final Uint8List? bytes;
   final String? url;
 
   MediaModel copyWith({

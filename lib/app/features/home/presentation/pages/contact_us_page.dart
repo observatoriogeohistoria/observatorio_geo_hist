@@ -10,6 +10,8 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
+import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ContactUsPage extends StatefulWidget {
@@ -20,6 +22,8 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
+  final formKey = GlobalKey<FormState>();
+
   bool get isMobile => DeviceUtils.isMobile(context);
   bool get isTablet => DeviceUtils.isTablet(context);
   bool get isDesktop => DeviceUtils.isDesktop(context);
@@ -31,10 +35,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 
   @override
   Widget build(BuildContext context) {
-    double horizontalPadding = (isDesktop
-            ? AppTheme.dimensions.space.gigantic
-            : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
-        .horizontalSpacing;
+    double horizontalPadding = DeviceUtils.getPageHorizontalPadding(context);
 
     double width = MediaQuery.of(context).size.width -
         2 * horizontalPadding -
@@ -49,7 +50,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: horizontalPadding,
-                vertical: AppTheme.dimensions.space.huge.verticalSpacing,
+                vertical: AppTheme.dimensions.space.massive.verticalSpacing,
               ),
               child: Column(
                 children: [
@@ -96,26 +97,45 @@ class _ContactUsPageState extends State<ContactUsPage> {
     );
   }
 
+  void _sendEmail() async {
+    if (!formKey.currentState!.validate()) return;
+
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String subject = _subjectController.text;
+    String message = _messageController.text;
+
+    String encodedSubject = encodeUrlComponent(subject);
+    String encodedMessage = encodeUrlComponent('De: $name\nE-mail: $email\n\nMensagem:\n$message');
+
+    final url = 'mailto:${AppStrings.email}?subject=$encodedSubject&body=$encodedMessage';
+
+    openUrl(url);
+  }
+
   Widget _buildFields() {
-    return Column(
-      children: [
-        _buildContactField('NOME', _nameController),
-        _buildContactField('E-MAIL', _emailController),
-        _buildContactField('ASSUNTO', _subjectController),
-        _buildContactField(
-          'MENSAGEM',
-          _messageController,
-          minLines: 5,
-          maxLines: 10,
-        ),
-        SizedBox(
-          width: double.infinity,
-          child: PrimaryButton.medium(
-            text: 'ENVIAR',
-            onPressed: () {},
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          _buildContactField('NOME', _nameController),
+          _buildContactField('E-MAIL', _emailController),
+          _buildContactField('ASSUNTO', _subjectController),
+          _buildContactField(
+            'MENSAGEM',
+            _messageController,
+            minLines: 5,
+            maxLines: 10,
           ),
-        ),
-      ],
+          SizedBox(
+            width: double.infinity,
+            child: PrimaryButton.medium(
+              text: 'ENVIAR',
+              onPressed: _sendEmail,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -170,9 +190,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
         SizedBox(height: AppTheme.dimensions.space.medium),
         AppTextField(
           controller: controller,
-          // minLines: minLines,
-          // maxLines: maxLines,
+          minLines: minLines ?? 1,
+          maxLines: maxLines ?? 3,
           keyboardType: TextInputType.multiline,
+          validator: Validators.isNotEmpty,
         ),
         SizedBox(height: AppTheme.dimensions.space.huge),
       ],

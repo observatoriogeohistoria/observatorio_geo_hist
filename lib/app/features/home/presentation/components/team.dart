@@ -34,10 +34,7 @@ class _TeamState extends State<Team> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: (isDesktop
-                ? AppTheme.dimensions.space.gigantic
-                : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
-            .horizontalSpacing,
+        horizontal: DeviceUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.large.verticalSpacing,
       ),
       child: Column(
@@ -114,7 +111,7 @@ class _TeamState extends State<Team> {
         alignment: Alignment.center,
         padding: isMobile ? EdgeInsets.zero : EdgeInsets.all(AppTheme.dimensions.space.small.scale),
         decoration: BoxDecoration(
-          color: AppTheme.colors.orange.withOpacity(0.35),
+          color: AppTheme.colors.orange.withValues(alpha: 0.35),
           borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
         ),
         child: Center(

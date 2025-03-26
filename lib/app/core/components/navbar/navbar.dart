@@ -10,7 +10,6 @@ import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dar
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -80,10 +79,7 @@ class _NavbarState extends State<Navbar> {
     return Container(
       color: AppTheme.colors.white,
       padding: EdgeInsets.symmetric(
-        horizontal: (isDesktop
-                ? AppTheme.dimensions.space.gigantic
-                : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
-            .horizontalSpacing,
+        horizontal: DeviceUtils.getPageHorizontalPadding(context),
       ),
       height: isMobile ? MediaQuery.of(context).size.height * 0.075 : null,
       child: Row(

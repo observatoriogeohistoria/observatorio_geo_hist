@@ -8,7 +8,10 @@ sealed class ManageUsersState extends Equatable {
 
 final class ManageUsersInitialState extends ManageUsersState {}
 
-final class ManageUsersLoadingState extends ManageUsersState {}
+final class ManageUsersLoadingState extends ManageUsersState {
+  final bool isRefreshing;
+  ManageUsersLoadingState({this.isRefreshing = false});
+}
 
 final class ManageUsersSuccessState extends ManageUsersState {
   final String message;

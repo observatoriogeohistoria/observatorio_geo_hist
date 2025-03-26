@@ -8,7 +8,10 @@ sealed class ManageTeamState extends Equatable {
 
 final class ManageTeamInitialState extends ManageTeamState {}
 
-final class ManageTeamLoadingState extends ManageTeamState {}
+final class ManageTeamLoadingState extends ManageTeamState {
+  final bool isRefreshing;
+  ManageTeamLoadingState({this.isRefreshing = false});
+}
 
 final class ManageTeamSuccessState extends ManageTeamState {
   final String message;

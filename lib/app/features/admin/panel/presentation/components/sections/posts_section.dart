@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -47,6 +49,8 @@ class _PostsSectionState extends State<PostsSection> {
         }
 
         if (state is ManagePostsSuccessState) {
+          GoRouter.of(context).pop();
+
           if (state.message.isNotEmpty) {
             Messenger.showSuccess(context, state.message);
           }
@@ -86,12 +90,25 @@ class _PostsSectionState extends State<PostsSection> {
             },
           ),
         ),
+        Observer(
+          builder: (context) {
+            final state = postsStore.state;
+
+            if (state is ManagePostsLoadingState && state.isRefreshing) {
+              return const LinearLoading();
+            }
+
+            return const SizedBox.shrink();
+          },
+        ),
         SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
         Expanded(
           child: Observer(
             builder: (context) {
-              if (postsStore.state is ManagePostsLoadingState) {
-                return const Center(child: Loading());
+              final state = postsStore.state;
+
+              if (state is ManagePostsLoadingState && !state.isRefreshing) {
+                return const Center(child: CircularLoading());
               }
 
               final posts = postsStore.posts;
@@ -115,8 +132,8 @@ class _PostsSectionState extends State<PostsSection> {
                   return PostCard(
                     post: post,
                     index: index + 1,
-                    onPublish: () =>
-                        postsStore.createOrUpdatePost(post.copyWith(published: !post.published)),
+                    onPublish: () => postsStore
+                        .createOrUpdatePost(post.copyWith(isPublished: !post.isPublished)),
                     onEdit: () {
                       showCreateOrUpdatePostDialog(
                         context,

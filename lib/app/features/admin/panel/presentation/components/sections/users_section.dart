@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -43,6 +45,8 @@ class _UsersSectionState extends State<UsersSection> {
         }
 
         if (state is ManageUsersSuccessState) {
+          GoRouter.of(context).pop();
+
           if (state.message.isNotEmpty) {
             Messenger.showSuccess(context, state.message);
           }
@@ -82,11 +86,25 @@ class _UsersSectionState extends State<UsersSection> {
             },
           ),
         ),
+        Observer(
+          builder: (context) {
+            final state = usersStore.state;
+
+            if (state is ManageUsersLoadingState && state.isRefreshing) {
+              return const LinearLoading();
+            }
+
+            return const SizedBox.shrink();
+          },
+        ),
+        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
         Expanded(
           child: Observer(
             builder: (context) {
-              if (usersStore.state is ManageUsersLoadingState) {
-                return const Center(child: Loading());
+              final state = usersStore.state;
+
+              if (state is ManageUsersLoadingState && !state.isRefreshing) {
+                return const Center(child: CircularLoading());
               }
 
               final users = usersStore.users;

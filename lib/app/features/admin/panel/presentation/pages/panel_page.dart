@@ -74,6 +74,7 @@ class _PanelPageState extends State<PanelPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = DeviceUtils.isMobile(context);
     bool isDesktop = DeviceUtils.isDesktop(context);
 
     return Scaffold(
@@ -81,10 +82,19 @@ class _PanelPageState extends State<PanelPage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: AppTheme.colors.white),
         backgroundColor: AppTheme.colors.orange,
-        title: AppHeadline.small(
-          text: 'PAINEL ADMINISTRATIVO',
-          color: AppTheme.colors.white,
-        ),
+        title: isMobile
+            ? Text(
+                'PAINEL ADMINISTRATIVO',
+                style: AppTheme.typography.body.big.copyWith(
+                  color: AppTheme.colors.white,
+                  fontWeight: FontWeight.w900,
+                ),
+              )
+            : AppHeadline.small(
+                text: 'PAINEL ADMINISTRATIVO',
+                color: AppTheme.colors.white,
+                notSelectable: true,
+              ),
         actions: [
           Padding(
             padding: EdgeInsets.symmetric(

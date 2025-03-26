@@ -19,6 +19,7 @@ void showCreateMediaDialog(
 }) {
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (_) => CreateMediaDialog(
       onCreate: onCreate,
     ),
@@ -128,7 +129,5 @@ class _CreateMediaDialogState extends State<CreateMediaDialog> {
         bytes: _selectedFile!,
       ),
     );
-
-    GoRouter.of(context).pop();
   }
 }

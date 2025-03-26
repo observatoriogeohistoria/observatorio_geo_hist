@@ -8,7 +8,10 @@ sealed class ManagePostsState extends Equatable {
 
 final class ManagePostsInitialState extends ManagePostsState {}
 
-final class ManagePostsLoadingState extends ManagePostsState {}
+final class ManagePostsLoadingState extends ManagePostsState {
+  final bool isRefreshing;
+  ManagePostsLoadingState({this.isRefreshing = false});
+}
 
 final class ManagePostsSuccessState extends ManagePostsState {
   final String message;

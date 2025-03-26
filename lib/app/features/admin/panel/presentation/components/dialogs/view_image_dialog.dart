@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
+import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -19,7 +20,7 @@ void showViewImageDialog(
   );
 }
 
-class ViewImageDialog extends StatelessWidget {
+class ViewImageDialog extends StatefulWidget {
   const ViewImageDialog({
     required this.media,
     super.key,
@@ -28,17 +29,22 @@ class ViewImageDialog extends StatelessWidget {
   final MediaModel media;
 
   @override
+  State<ViewImageDialog> createState() => _ViewImageDialogState();
+}
+
+class _ViewImageDialogState extends State<ViewImageDialog> {
+  @override
   Widget build(BuildContext context) {
+    bool isVideo = widget.media.extension == 'mp4';
+
     return RightAlignedDialog(
       widthFollowsContent: true,
       child: Stack(
         children: [
-          SingleChildScrollView(
-            child: Image.memory(
-              media.bytes,
-              fit: BoxFit.contain,
-            ),
-          ),
+          _buildMediaContent(isVideo),
+          // SingleChildScrollView(
+          //   child: _buildMediaContent(isVideo),
+          // ),
           Positioned(
             top: 0,
             right: 0,
@@ -53,5 +59,27 @@ class ViewImageDialog extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildMediaContent(bool isVideo) {
+    if (widget.media.bytes != null && !isVideo) {
+      return Image.memory(
+        widget.media.bytes!,
+        fit: BoxFit.contain,
+      );
+    }
+
+    if (widget.media.url != null) {
+      if (isVideo) {
+        return AppVideoPlayer(url: widget.media.url!);
+      }
+
+      return Image.network(
+        widget.media.url!,
+        fit: BoxFit.contain,
+      );
+    }
+
+    return const SizedBox();
   }
 }

@@ -46,7 +46,7 @@ class CategoryCard extends StatelessWidget {
                   ),
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppBody.big(
-                    text: category.area.name,
+                    text: category.areas.map((area) => area.name).join(' | '),
                     color: AppTheme.colors.gray,
                   ),
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),

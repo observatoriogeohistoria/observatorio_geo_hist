@@ -38,6 +38,8 @@ abstract class UsersStoreBase with Store {
 
   @action
   Future<void> createUser(UserModel user, String password) async {
+    state = ManageUsersLoadingState(isRefreshing: true);
+
     final result = await _usersRepository.createUser(user, password);
 
     result.fold(
@@ -53,6 +55,8 @@ abstract class UsersStoreBase with Store {
 
   @action
   Future<void> updateUser(UserModel user) async {
+    state = ManageUsersLoadingState(isRefreshing: true);
+
     final result = await _usersRepository.updateUser(user);
 
     result.fold(

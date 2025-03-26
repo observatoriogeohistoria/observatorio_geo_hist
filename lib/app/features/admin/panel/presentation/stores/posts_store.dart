@@ -38,6 +38,8 @@ abstract class PostsStoreBase with Store {
 
   @action
   Future<void> createOrUpdatePost(PostModel post) async {
+    state = ManagePostsLoadingState(isRefreshing: true);
+
     final result = await _postsRepository.createOrUpdatePost(post);
 
     result.fold(
@@ -57,13 +59,17 @@ abstract class PostsStoreBase with Store {
 
   @action
   Future<void> deletePost(PostModel post) async {
+    state = ManagePostsLoadingState(isRefreshing: true);
+
     final result = await _postsRepository.deletePost(post);
 
     result.fold(
       (failure) => state = ManagePostsErrorState(failure),
       (_) {
         posts.removeWhere((p) => p.id == post.id);
-        state = ManagePostsSuccessState(message: 'Post deletado com sucesso');
+        state = ManagePostsSuccessState(
+          message: 'Post deletado com sucesso',
+        );
       },
     );
   }

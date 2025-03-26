@@ -38,6 +38,8 @@ abstract class TeamStoreBase with Store {
 
   @action
   Future<void> createOrUpdateTeamMember(TeamMemberModel teamMember) async {
+    state = ManageTeamLoadingState(isRefreshing: true);
+
     final result = await _teamRepository.createOrUpdateTeamMember(teamMember);
 
     result.fold(
@@ -55,6 +57,8 @@ abstract class TeamStoreBase with Store {
 
   @action
   Future<void> deleteTeamMember(TeamMemberModel teamMember) async {
+    state = ManageTeamLoadingState(isRefreshing: true);
+
     final result = await _teamRepository.deleteTeamMember(teamMember);
 
     result.fold(

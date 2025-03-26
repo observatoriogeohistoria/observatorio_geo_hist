@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
@@ -134,7 +134,7 @@ class _SigninPageState extends State<SigninPage> {
                     ),
                     SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
                     loginState is LoginStateLoading
-                        ? const Loading()
+                        ? const CircularLoading()
                         : PrimaryButton.medium(
                             text: "ENTRAR",
                             onPressed: () {

@@ -17,18 +17,21 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
   @override
   Future<List<CategoryModel>> fetchHistoryCategories() async {
     try {
-      DocumentSnapshot categoriesSnapshot =
-          await _firestore.collection('posts').doc(PostsAreas.history.key).get();
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('posts')
+          .where(
+            'areas',
+            arrayContains: 'historia',
+          )
+          .get();
 
-      if (categoriesSnapshot.data() == null) return [];
+      if (querySnapshot.docs.isEmpty) return [];
 
-      Map<String, dynamic> categoriesData = categoriesSnapshot.data() as Map<String, dynamic>;
-      List<CategoryModel> categories = (categoriesData['categories'] as List)
+      List<CategoryModel> categories = querySnapshot.docs
           .map(
             (category) => CategoryModel.fromJson(
-              category as Map<String, dynamic>,
-              'historia',
-            ),
+              category.data() as Map<String, dynamic>,
+            ).copyWith(areas: [PostsAreas.history]),
           )
           .toList();
 
@@ -42,18 +45,21 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
   @override
   Future<List<CategoryModel>> fetchGeographyCategories() async {
     try {
-      DocumentSnapshot categoriesSnapshot =
-          await _firestore.collection('posts').doc('geografia').get();
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('posts')
+          .where(
+            'areas',
+            arrayContains: 'geografia',
+          )
+          .get();
 
-      if (categoriesSnapshot.data() == null) return [];
+      if (querySnapshot.docs.isEmpty) return [];
 
-      Map<String, dynamic> categoriesData = categoriesSnapshot.data() as Map<String, dynamic>;
-      List<CategoryModel> categories = (categoriesData['categories'] as List)
+      List<CategoryModel> categories = querySnapshot.docs
           .map(
             (category) => CategoryModel.fromJson(
-              category as Map<String, dynamic>,
-              'geografia',
-            ),
+              category.data() as Map<String, dynamic>,
+            ).copyWith(areas: [PostsAreas.geography]),
           )
           .toList();
 

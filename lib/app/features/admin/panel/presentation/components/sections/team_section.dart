@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -12,7 +14,6 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart'
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/team_member_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_team_member_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/team_states.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/users_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/team_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -45,6 +46,8 @@ class _TeamSectionState extends State<TeamSection> {
         }
 
         if (state is ManageTeamSuccessState) {
+          GoRouter.of(context).pop();
+
           if (state.message.isNotEmpty) {
             Messenger.showSuccess(context, state.message);
           }
@@ -83,12 +86,25 @@ class _TeamSectionState extends State<TeamSection> {
             },
           ),
         ),
+        Observer(
+          builder: (context) {
+            final state = teamStore.state;
+
+            if (state is ManageTeamLoadingState && state.isRefreshing) {
+              return const LinearLoading();
+            }
+
+            return const SizedBox.shrink();
+          },
+        ),
         SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
         Expanded(
           child: Observer(
             builder: (context) {
-              if (teamStore.state is ManageUsersLoadingState) {
-                return const Center(child: Loading());
+              final state = teamStore.state;
+
+              if (state is ManageTeamLoadingState && !state.isRefreshing) {
+                return const Center(child: CircularLoading());
               }
 
               final members = teamStore.teamMembers;

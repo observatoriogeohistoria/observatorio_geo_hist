@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
-import 'package:observatorio_geo_hist/app/core/components/network_image/app_network_image.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
+import 'package:observatorio_geo_hist/app/core/components/network_image/app_network_image.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -27,8 +27,9 @@ class PostCard extends StatelessWidget {
 
     return AppMouseRegion(
       child: GestureDetector(
-        onTap: () =>
-            GoRouter.of(context).go('/posts/${category.area.key}/${category.key}/${post.id}'),
+        onTap: () {
+          GoRouter.of(context).go('/posts/${category.areas.first.key}/${category.key}/${post.id}');
+        },
         child: AppCard(
           width: MediaQuery.of(context).size.width * (isMobile ? 1 : (isTablet ? 0.4 : 0.2)),
           child: Column(

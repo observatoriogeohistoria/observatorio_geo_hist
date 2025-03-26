@@ -39,7 +39,7 @@ List<Widget> buildNavbarMenu(
 
                       GoRouter.of(context).pop();
                       GoRouter.of(context).go(
-                        '/posts/${suboption.category!.area.key}/${suboption.category!.key}',
+                        '/posts/${suboption.category!.areas.first.key}/${suboption.category!.key}',
                         extra: suboption.category,
                       );
                     },
@@ -47,7 +47,8 @@ List<Widget> buildNavbarMenu(
                   );
                 },
               ).toList(),
-        backgroundColor: categorySelected?.area != null && categorySelected!.area == option.area
+        backgroundColor: (categorySelected?.areas.isNotEmpty ?? false) &&
+                categorySelected!.areas.first == option.area
             ? AppTheme.colors.lightGray
             : null,
         textStyle: isMobile ? AppTheme.typography.headline.big : null,

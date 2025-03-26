@@ -12,9 +12,6 @@ class OurHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isTablet = DeviceUtils.isTablet(context);
-    bool isDesktop = DeviceUtils.isDesktop(context);
-
     const firstText =
         'O Observatório do Ensino de História e Geografia nasce da confluência entre o espírito acadêmico e o desejo de construir pontes entre pesquisadores, professores, estudantes e a sociedade brasileira, dentro e fora dos muros escolares e universitários. O Observatório foi idealizado e criado pelo Grupo de Estudos e Pesquisas em Ensino de Geografia – GEPEGH/UFU, vinculado à Linha de Pesquisa “Saberes e Práticas Educativas” do Programa de Pós-Graduação em Educação da Universidade Federal de Uberlândia, Minas Gerais, Brasil. O Observatório é um espaço formativo e colaborativo, fruto do Projeto de Pesquisa Coletivo, financiado pela FAPEMIG (2016-2018), intitulado “Observatório do Ensino de História e Geografia em Minas Gerais: políticas educacionais, formação docente e produção de conhecimentos”. O projeto foi desenvolvido por pesquisadores de diferentes níveis (IC, Mestrado e Doutorado), apoiado por diversas instituições.';
 
@@ -44,12 +41,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
         space,
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: (isDesktop
-                    ? AppTheme.dimensions.space.gigantic
-                    : (isTablet
-                        ? AppTheme.dimensions.space.massive
-                        : AppTheme.dimensions.space.large))
-                .horizontalSpacing,
+            horizontal: DeviceUtils.getPageHorizontalPadding(context),
           ),
           child: Column(
             children: [

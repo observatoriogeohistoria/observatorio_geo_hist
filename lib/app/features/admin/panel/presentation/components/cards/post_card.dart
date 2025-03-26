@@ -54,13 +54,14 @@ class PostCard extends StatelessWidget {
                   ),
                   const AppDivider(),
                   AppBody.big(
-                    text: '${post.area.name} | ${post.category.title}',
+                    text:
+                        '${post.areas.map((area) => area.name).join(' - ')} | ${post.category?.title}',
                     color: AppTheme.colors.gray,
                   ),
                   SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                   AppLabel.medium(
-                    text: post.published ? 'Publicado' : 'Não Publicado',
-                    color: post.published ? AppTheme.colors.green : AppTheme.colors.red,
+                    text: post.isPublished ? 'Publicado' : 'Não Publicado',
+                    color: post.isPublished ? AppTheme.colors.green : AppTheme.colors.red,
                   ),
                 ],
               ),
@@ -71,9 +72,9 @@ class PostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Tooltip(
-                  message: post.published ? 'Despublicar post' : 'Publicar post',
+                  message: post.isPublished ? 'Despublicar post' : 'Publicar post',
                   child: AppIconButton(
-                    icon: post.published ? Icons.public_off : Icons.public,
+                    icon: post.isPublished ? Icons.public_off : Icons.public,
                     color: AppTheme.colors.orange,
                     onPressed: onPublish,
                   ),

@@ -24,14 +24,22 @@ class MediaDatasourceImpl implements MediaDatasource {
 
       final ListResult result = await _storage.refFromURL(_bucket).child('media').listAll();
       for (final ref in result.items) {
-        final bytes = await ref.getData();
-        if (bytes == null) continue;
+        final metadata = await ref.getMetadata();
+        final fileSize = metadata.size;
 
-        String name = ref.name.split('_').first;
+        int lastUnderscoreIndex = ref.name.lastIndexOf('_');
+
+        String name = ref.name.substring(0, lastUnderscoreIndex);
+        String id = ref.name.substring(lastUnderscoreIndex + 1).split('.').first;
         String extension = ref.name.split('.').last;
         String url = await ref.getDownloadURL();
 
-        medias.add(MediaModel(name: name, extension: extension, bytes: bytes, url: url));
+        if (fileSize == null || fileSize > 10 * 1024 * 1024) {
+          medias.add(MediaModel(id: id, name: name, extension: extension, bytes: null, url: url));
+        } else {
+          final bytes = await ref.getData();
+          medias.add(MediaModel(id: id, name: name, extension: extension, bytes: bytes, url: url));
+        }
       }
 
       return medias;
@@ -44,11 +52,13 @@ class MediaDatasourceImpl implements MediaDatasource {
   @override
   Future<MediaModel> createMedia(MediaModel media) async {
     try {
+      if (media.bytes == null) throw Exception('Media bytes is required');
+
       String id = IdGenerator.generate();
       String fileName = '${media.name}_$id';
 
       final ref = _storage.refFromURL(_bucket).child('media/$fileName.${media.extension}');
-      await ref.putData(media.bytes);
+      await ref.putData(media.bytes!);
 
       String url = await ref.getDownloadURL();
 
@@ -64,7 +74,8 @@ class MediaDatasourceImpl implements MediaDatasource {
     try {
       if (media.id == null) throw Exception('Media ID is required');
 
-      final ref = _storage.refFromURL(_bucket).child('media/${media.name}_${media.id}.jpg');
+      final ref =
+          _storage.refFromURL(_bucket).child('media/${media.name}_${media.id}.${media.extension}');
       await ref.delete();
     } catch (exception, stackTrace) {
       _loggerService.error('Error deleting media: $exception', stackTrace: stackTrace);
