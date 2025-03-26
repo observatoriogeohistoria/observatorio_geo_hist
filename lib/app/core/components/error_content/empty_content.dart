@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class PageErrorContent extends StatelessWidget {
-  const PageErrorContent({
+class EmptyContent extends StatelessWidget {
+  const EmptyContent({
     required this.isSliver,
     super.key,
   });
@@ -22,12 +22,12 @@ class PageErrorContent extends StatelessWidget {
         children: [
           Icon(
             Icons.error,
-            size: 100.scale,
+            size: 48.scale,
             color: AppTheme.colors.lightGray,
           ),
           SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-          AppHeadline.big(
-            text: 'Erro ao carregar a página',
+          AppTitle.big(
+            text: 'Hmmm, parece que não há nada por aqui',
             color: AppTheme.colors.gray,
           ),
         ],

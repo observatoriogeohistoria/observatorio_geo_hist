@@ -13,7 +13,7 @@ class ImageErrorContent extends StatelessWidget {
       children: [
         Icon(
           Icons.error,
-          size: 24.horizontalSpacing,
+          size: 24.scale,
           color: AppTheme.colors.gray,
         ),
         SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),

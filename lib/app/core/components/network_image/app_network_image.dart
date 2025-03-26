@@ -47,12 +47,23 @@ class AppNetworkImage extends StatelessWidget {
       width: width,
       height: height,
       fit: BoxFit.cover,
-      loadingBuilder: (_, child, loadingProgress) {
-        if (loadingProgress == null) return child;
+      frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) return child;
 
-        return Skeleton(
-          width: width,
-          height: height,
+        return AnimatedSwitcher(
+          duration: const Duration(seconds: 1),
+          transitionBuilder: (child, animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          child: frame != null
+              ? child
+              : Skeleton(
+                  width: width,
+                  height: height,
+                ),
         );
       },
       errorBuilder: (_, __, ___) {
