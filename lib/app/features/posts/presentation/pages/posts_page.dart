@@ -107,10 +107,7 @@ class _PostsPageState extends State<PostsPage> {
       width: MediaQuery.of(context).size.width,
       height: isMobile ? null : MediaQuery.of(context).size.height * 0.5,
       padding: EdgeInsets.symmetric(
-        horizontal: (isDesktop
-                ? (2 * AppTheme.dimensions.space.gigantic)
-                : (isTablet ? AppTheme.dimensions.space.gigantic : AppTheme.dimensions.space.large))
-            .horizontalSpacing,
+        horizontal: DeviceUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       decoration: BoxDecoration(
@@ -150,12 +147,7 @@ class _PostsPageState extends State<PostsPage> {
         return Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.symmetric(
-            horizontal: (isDesktop
-                    ? (2 * AppTheme.dimensions.space.gigantic)
-                    : (isTablet
-                        ? AppTheme.dimensions.space.gigantic
-                        : AppTheme.dimensions.space.large))
-                .horizontalSpacing,
+            horizontal: DeviceUtils.getPageHorizontalPadding(context),
             vertical: AppTheme.dimensions.space.huge.verticalSpacing,
           ),
           child: Column(

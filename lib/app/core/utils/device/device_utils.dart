@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class DeviceUtils {
   static bool isMobile(BuildContext context) {
@@ -12,5 +14,14 @@ class DeviceUtils {
 
   static bool isDesktop(BuildContext context) {
     return MediaQuery.of(context).size.width >= 1024;
+  }
+
+  static double getPageHorizontalPadding(BuildContext context) {
+    return (isDesktop(context)
+            ? (2 * AppTheme.dimensions.space.gigantic)
+            : (isTablet(context)
+                ? AppTheme.dimensions.space.gigantic
+                : AppTheme.dimensions.space.large))
+        .horizontalSpacing;
   }
 }

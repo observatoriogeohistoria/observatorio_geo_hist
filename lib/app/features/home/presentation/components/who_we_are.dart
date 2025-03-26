@@ -13,9 +13,6 @@ class WhoWeAre extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isTablet = DeviceUtils.isTablet(context);
-    bool isDesktop = DeviceUtils.isDesktop(context);
-
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -31,12 +28,7 @@ class WhoWeAre extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: (isDesktop
-                  ? (2 * AppTheme.dimensions.space.gigantic)
-                  : (isTablet
-                      ? AppTheme.dimensions.space.gigantic
-                      : AppTheme.dimensions.space.large))
-              .horizontalSpacing,
+          horizontal: DeviceUtils.getPageHorizontalPadding(context),
           vertical: AppTheme.dimensions.space.medium.verticalSpacing,
         ),
         child: Column(

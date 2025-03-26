@@ -35,10 +35,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 
   @override
   Widget build(BuildContext context) {
-    double horizontalPadding = (isDesktop
-            ? (2 * AppTheme.dimensions.space.gigantic)
-            : (isTablet ? AppTheme.dimensions.space.gigantic : AppTheme.dimensions.space.large))
-        .horizontalSpacing;
+    double horizontalPadding = DeviceUtils.getPageHorizontalPadding(context);
 
     double width = MediaQuery.of(context).size.width -
         2 * horizontalPadding -

@@ -112,7 +112,6 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                   color: AppTheme.colors.orange,
                 ),
                 SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                const SizedBox(height: 28),
                 AppTextField(
                   controller: _titleController,
                   labelText: 'Título',

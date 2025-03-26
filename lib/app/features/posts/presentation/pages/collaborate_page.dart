@@ -18,9 +18,6 @@ class CollaboratePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isTablet = DeviceUtils.isTablet(context);
-    bool isDesktop = DeviceUtils.isDesktop(context);
-
     const firstText =
         'O Observatório do Ensino de História e Geografia é uma plataforma digital colaborativa. Valorizamos e incentivamos a participação de professores, pesquisadores e estudantes na construção deste espaço coletivo. Gostaria de publicar artigos de opinião, compartilhar relatos de experiência, divulgar produções acadêmicas ou sugerir a inclusão de materiais? Envie um e-mail para:';
 
@@ -48,12 +45,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: (isDesktop
-                          ? (2 * AppTheme.dimensions.space.gigantic)
-                          : (isTablet
-                              ? AppTheme.dimensions.space.gigantic
-                              : AppTheme.dimensions.space.large))
-                      .horizontalSpacing,
+                  horizontal: DeviceUtils.getPageHorizontalPadding(context),
                   vertical: AppTheme.dimensions.space.large.verticalSpacing,
                 ),
                 child: Column(

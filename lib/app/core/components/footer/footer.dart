@@ -10,16 +10,10 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isTablet = DeviceUtils.isTablet(context);
-    bool isDesktop = DeviceUtils.isDesktop(context);
-
     return Container(
       color: AppTheme.colors.orange,
       padding: EdgeInsets.symmetric(
-        horizontal: (isDesktop
-                ? (2 * AppTheme.dimensions.space.gigantic)
-                : (isTablet ? AppTheme.dimensions.space.gigantic : AppTheme.dimensions.space.large))
-            .horizontalSpacing,
+        horizontal: DeviceUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       child: Column(

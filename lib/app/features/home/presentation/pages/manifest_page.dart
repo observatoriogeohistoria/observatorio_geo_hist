@@ -32,12 +32,7 @@ class _ManifestPageState extends State<ManifestPage> {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: (isDesktop
-                        ? (2 * AppTheme.dimensions.space.gigantic)
-                        : (isTablet
-                            ? AppTheme.dimensions.space.gigantic
-                            : AppTheme.dimensions.space.large))
-                    .horizontalSpacing,
+                horizontal: DeviceUtils.getPageHorizontalPadding(context),
                 vertical: AppTheme.dimensions.space.massive.verticalSpacing,
               ),
               child: Column(

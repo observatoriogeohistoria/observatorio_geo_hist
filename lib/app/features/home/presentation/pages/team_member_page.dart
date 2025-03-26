@@ -78,12 +78,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                 hasScrollBody: false,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: (isDesktop
-                            ? (2 * AppTheme.dimensions.space.gigantic)
-                            : (isTablet
-                                ? AppTheme.dimensions.space.gigantic
-                                : AppTheme.dimensions.space.large))
-                        .horizontalSpacing,
+                    horizontal: DeviceUtils.getPageHorizontalPadding(context),
                     vertical: AppTheme.dimensions.space.massive.verticalSpacing,
                   ),
                   child: Column(

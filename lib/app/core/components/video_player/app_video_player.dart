@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 import 'package:video_player/video_player.dart';
 
 class AppVideoPlayer extends StatefulWidget {
@@ -17,18 +19,23 @@ class AppVideoPlayer extends StatefulWidget {
 
 class _AppVideoPlayerState extends State<AppVideoPlayer> {
   late VideoPlayerController _controller;
-  bool _isLoading = true; // Para controlar o carregamento
-  bool _isPlaying = false; // Para controlar se o vídeo está em reprodução
-  late Future<void> _initializeVideoPlayerFuture; // Aguardar a inicialização
+  late Future<void> _initializeVideoPlayerFuture;
+
+  bool _isLoading = true;
+  bool _isPlaying = false;
+  bool _isMuted = false;
+
+  bool _error = false;
 
   @override
   void initState() {
     super.initState();
+
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
-      setState(() {
-        _isLoading = false; // Carregamento concluído
-      });
+      setState(() => _isLoading = false);
+    }).catchError((error) {
+      setState(() => _error = true);
     });
   }
 
@@ -38,7 +45,6 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     super.dispose();
   }
 
-  // Função para alternar play/pause
   void _togglePlayPause() {
     setState(() {
       if (_isPlaying) {
@@ -50,45 +56,59 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     });
   }
 
+  void _toggleMute() {
+    setState(() {
+      _controller.setVolume(_isMuted ? 1 : 0);
+      _isMuted = !_isMuted;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: FutureBuilder<void>(
-              future: _initializeVideoPlayerFuture,
-              builder: (context, snapshot) {
-                if (_isLoading) return const CircularLoading();
+    if (_error) return const SizedBox();
 
-                return VideoPlayer(_controller);
-              },
-            ),
-          ),
-          Row(
+    return FutureBuilder<void>(
+      future: _initializeVideoPlayerFuture,
+      builder: (context, snapshot) {
+        if (_isLoading) return const LoadingContent(isSliver: false);
+
+        return AspectRatio(
+          aspectRatio: _controller.value.aspectRatio,
+          child: Stack(
             children: [
-              AppIconButton(
-                icon: _isPlaying ? Icons.pause : Icons.play_arrow,
-                color: Colors.white,
-                size: 40,
-                onPressed: _togglePlayPause,
-              ),
-              Expanded(
-                child: VideoProgressIndicator(
-                  _controller,
-                  allowScrubbing: true,
-                  padding: EdgeInsets.zero,
+              VideoPlayer(_controller),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  children: [
+                    AppIconButton(
+                      icon: _isPlaying ? Icons.pause : Icons.play_arrow,
+                      color: Colors.white,
+                      size: 32,
+                      onPressed: _togglePlayPause,
+                    ),
+                    AppIconButton(
+                      icon: _isMuted ? Icons.volume_off : Icons.volume_up,
+                      color: Colors.white,
+                      size: 32,
+                      onPressed: _toggleMute,
+                    ),
+                    SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+                    Expanded(
+                      child: VideoProgressIndicator(
+                        _controller,
+                        allowScrubbing: true,
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                    SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+                  ],
                 ),
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
