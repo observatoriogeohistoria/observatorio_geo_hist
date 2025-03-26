@@ -38,19 +38,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
-        // mainAxisSize: MainAxisSize.min,
         slivers: [
           const SliverToBoxAdapter(child: Navbar()),
           const SliverToBoxAdapter(child: WhoWeAre()),
           SliverToBoxAdapter(
-            child: Padding(
+            child: AppVideoPlayer(
               padding: EdgeInsets.symmetric(
                 horizontal: DeviceUtils.getPageHorizontalPadding(context),
                 vertical: AppTheme.dimensions.space.massive.verticalSpacing,
               ),
-              child: const AppVideoPlayer(
-                url: AppStrings.presentationVideoUrl,
-              ),
+              url: AppStrings.presentationVideoUrl,
             ),
           ),
           const SliverToBoxAdapter(child: OurHistory()),

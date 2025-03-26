@@ -8,10 +8,12 @@ import 'package:video_player/video_player.dart';
 class AppVideoPlayer extends StatefulWidget {
   const AppVideoPlayer({
     required this.url,
+    this.padding = EdgeInsets.zero,
     super.key,
   });
 
   final String url;
+  final EdgeInsets padding;
 
   @override
   State<AppVideoPlayer> createState() => _AppVideoPlayerState();
@@ -67,48 +69,51 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   Widget build(BuildContext context) {
     if (_error) return const SizedBox();
 
-    return FutureBuilder<void>(
-      future: _initializeVideoPlayerFuture,
-      builder: (context, snapshot) {
-        if (_isLoading) return const LoadingContent(isSliver: false);
+    return Padding(
+      padding: widget.padding,
+      child: FutureBuilder<void>(
+        future: _initializeVideoPlayerFuture,
+        builder: (context, snapshot) {
+          if (_isLoading) return const LoadingContent(isSliver: false);
 
-        return AspectRatio(
-          aspectRatio: _controller.value.aspectRatio,
-          child: Stack(
-            children: [
-              VideoPlayer(_controller),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  children: [
-                    AppIconButton(
-                      icon: _isPlaying ? Icons.pause : Icons.play_arrow,
-                      color: Colors.white,
-                      size: 32,
-                      onPressed: _togglePlayPause,
-                    ),
-                    AppIconButton(
-                      icon: _isMuted ? Icons.volume_off : Icons.volume_up,
-                      color: Colors.white,
-                      size: 32,
-                      onPressed: _toggleMute,
-                    ),
-                    SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-                    Expanded(
-                      child: VideoProgressIndicator(
-                        _controller,
-                        allowScrubbing: true,
-                        padding: EdgeInsets.zero,
+          return AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            child: Stack(
+              children: [
+                VideoPlayer(_controller),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    children: [
+                      AppIconButton(
+                        icon: _isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: Colors.white,
+                        size: 32,
+                        onPressed: _togglePlayPause,
                       ),
-                    ),
-                    SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-                  ],
+                      AppIconButton(
+                        icon: _isMuted ? Icons.volume_off : Icons.volume_up,
+                        color: Colors.white,
+                        size: 32,
+                        onPressed: _toggleMute,
+                      ),
+                      SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+                      Expanded(
+                        child: VideoProgressIndicator(
+                          _controller,
+                          allowScrubbing: true,
+                          padding: EdgeInsets.zero,
+                        ),
+                      ),
+                      SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
