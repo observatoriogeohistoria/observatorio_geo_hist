@@ -17,6 +17,7 @@ void showCreateOrUpdateTeamMemberDialog(
 }) {
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (_) => CreateOrUpdateTeamMemberDialog(
       onCreateOrUpdate: onCreateOrUpdate,
       member: member,
@@ -120,7 +121,5 @@ class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMembe
         description: _descriptionController.text,
       ),
     );
-
-    GoRouter.of(context).pop();
   }
 }

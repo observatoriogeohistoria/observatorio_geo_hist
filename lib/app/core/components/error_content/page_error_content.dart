@@ -3,8 +3,8 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class ErrorContent extends StatelessWidget {
-  const ErrorContent({
+class PageErrorContent extends StatelessWidget {
+  const PageErrorContent({
     required this.isSliver,
     super.key,
   });

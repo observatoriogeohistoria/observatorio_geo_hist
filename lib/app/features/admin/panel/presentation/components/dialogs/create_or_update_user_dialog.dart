@@ -20,6 +20,7 @@ void showCreateOrUpdateUserDialog(
 }) {
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (_) => CreateOrUpdateUserDialog(
       onCreate: onCreate,
       onUpdate: onUpdate,
@@ -145,7 +146,5 @@ class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
         _passwordController.text,
       );
     }
-
-    GoRouter.of(context).pop();
   }
 }

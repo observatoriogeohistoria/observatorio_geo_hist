@@ -81,8 +81,8 @@ class _NavbarState extends State<Navbar> {
       color: AppTheme.colors.white,
       padding: EdgeInsets.symmetric(
         horizontal: (isDesktop
-                ? AppTheme.dimensions.space.gigantic
-                : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
+                ? (2 * AppTheme.dimensions.space.gigantic)
+                : (isTablet ? AppTheme.dimensions.space.gigantic : AppTheme.dimensions.space.large))
             .horizontalSpacing,
       ),
       height: isMobile ? MediaQuery.of(context).size.height * 0.075 : null,

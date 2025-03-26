@@ -55,6 +55,7 @@ dependencies:
   file_picker: ^9.1.0
   flutter_staggered_grid_view: ^0.7.0
   video_player: ^2.9.3
+  flutter_quill: ^11.1.2
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/icons/
     - assets/images/
     - assets/images/partners/
 

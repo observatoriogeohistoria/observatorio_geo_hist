@@ -45,9 +45,9 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: (isDesktop
-                    ? AppTheme.dimensions.space.gigantic
+                    ? (2 * AppTheme.dimensions.space.gigantic)
                     : (isTablet
-                        ? AppTheme.dimensions.space.massive
+                        ? AppTheme.dimensions.space.gigantic
                         : AppTheme.dimensions.space.large))
                 .horizontalSpacing,
           ),

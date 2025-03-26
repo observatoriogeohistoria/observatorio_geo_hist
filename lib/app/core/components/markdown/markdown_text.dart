@@ -1,10 +1,12 @@
-import 'dart:html' as html;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:observatorio_geo_hist/app/core/utils/file/file.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/image_error_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/network_image/app_network_image.dart';
+import 'package:observatorio_geo_hist/app/core/utils/image/image.dart';
+import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class MarkdownText extends StatelessWidget {
@@ -67,22 +69,30 @@ class MarkdownText extends StatelessWidget {
       ),
       onTapLink: (text, url, title) {
         if (url == null) return;
-        html.window.open(url, 'new tab');
+        openUrl(url);
       },
       imageBuilder: (uri, title, alt) {
-        final str = uri.toString();
-        final isSvgImage = isSvg(str);
+        final uriString = uri.toString();
 
-        if (str.startsWith("data:image")) {
+        if (ImageUtils.isBase64(uriString)) {
           try {
-            Uint8List bytes = decodeBase64Image(str);
-            return isSvgImage ? SvgPicture.memory(bytes) : Image.memory(bytes);
+            Uint8List bytes = ImageUtils.decodeBase64(uriString);
+
+            return ImageUtils.isSvg(uriString) ? SvgPicture.memory(bytes) : Image.memory(bytes);
           } catch (e) {
-            return const SizedBox();
+            return const ImageErrorContent();
           }
-        } else {
-          return isSvgImage ? SvgPicture.network(uri.toString()) : Image.network(uri.toString());
         }
+
+        if (ImageUtils.isHttp(uriString)) {
+          if (ImageUtils.isAsset(uriString) || ImageUtils.isSvg(uriString)) {
+            return AppNetworkImage(imageUrl: uriString);
+          }
+
+          return const ImageErrorContent();
+        }
+
+        return const ImageErrorContent();
       },
     );
   }

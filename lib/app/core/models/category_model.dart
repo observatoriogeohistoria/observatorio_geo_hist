@@ -7,7 +7,7 @@ class CategoryModel extends Equatable {
     required this.title,
     required this.description,
     required this.backgroundImgUrl,
-    required this.area,
+    required this.areas,
     this.hasCollaborateOption = false,
     this.numberOfPosts = 0,
   });
@@ -15,7 +15,7 @@ class CategoryModel extends Equatable {
   final String key;
   final String title;
   final String description;
-  final PostsAreas area;
+  final List<PostsAreas> areas;
   final String backgroundImgUrl;
   final bool hasCollaborateOption;
   final int numberOfPosts;
@@ -25,21 +25,18 @@ class CategoryModel extends Equatable {
         key,
         title,
         description,
-        area,
+        areas,
         backgroundImgUrl,
         hasCollaborateOption,
         numberOfPosts,
       ];
 
-  factory CategoryModel.fromJson(
-    Map<String, dynamic> json,
-    String area,
-  ) {
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
       key: json['key'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      area: PostsAreas.fromKey(area),
+      areas: (json['areas'] as List).map((area) => PostsAreas.fromKey(area as String)).toList(),
       backgroundImgUrl: json['backgroundImgUrl'] as String,
       hasCollaborateOption: json['hasCollaborateOption'] as bool,
     );
@@ -50,7 +47,7 @@ class CategoryModel extends Equatable {
       'key': key,
       'title': title,
       'description': description,
-      'area': area.key,
+      'areas': areas.map((area) => area.key).toList(),
       'backgroundImgUrl': backgroundImgUrl,
       'hasCollaborateOption': hasCollaborateOption,
     };
@@ -60,7 +57,7 @@ class CategoryModel extends Equatable {
     String? key,
     String? title,
     String? description,
-    PostsAreas? area,
+    List<PostsAreas>? areas,
     String? backgroundImgUrl,
     bool? hasCollaborateOption,
     int? numberOfPosts,
@@ -70,7 +67,7 @@ class CategoryModel extends Equatable {
       title: title ?? this.title,
       description: description ?? this.description,
       backgroundImgUrl: backgroundImgUrl ?? this.backgroundImgUrl,
-      area: area ?? this.area,
+      areas: areas ?? this.areas,
       hasCollaborateOption: hasCollaborateOption ?? this.hasCollaborateOption,
       numberOfPosts: numberOfPosts ?? this.numberOfPosts,
     );

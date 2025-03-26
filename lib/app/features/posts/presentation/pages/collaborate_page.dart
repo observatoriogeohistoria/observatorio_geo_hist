@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
@@ -10,6 +8,7 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -42,7 +41,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                   image: const AssetImage('${AppAssets.images}/collaborate.jpg'),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.35),
+                    Colors.black.withValues(alpha: 0.35),
                     BlendMode.darken,
                   ),
                 ),
@@ -50,9 +49,9 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: (isDesktop
-                          ? AppTheme.dimensions.space.gigantic
+                          ? (2 * AppTheme.dimensions.space.gigantic)
                           : (isTablet
-                              ? AppTheme.dimensions.space.massive
+                              ? AppTheme.dimensions.space.gigantic
                               : AppTheme.dimensions.space.large))
                       .horizontalSpacing,
                   vertical: AppTheme.dimensions.space.large.verticalSpacing,
@@ -70,14 +69,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                     SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
                     PrimaryButton.medium(
                       text: AppStrings.email,
-                      onPressed: () {
-                        final Uri emailUri = Uri(
-                          scheme: 'mailto',
-                          path: AppStrings.email,
-                        );
-
-                        html.window.open(emailUri.toString(), 'new tab');
-                      },
+                      onPressed: () => openUrl('mailto:${AppStrings.email}'),
                     ),
                     SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
                     RichText(
@@ -96,10 +88,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                               color: AppTheme.colors.orange,
                             ),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                const url = AppStrings.creativeCommonsUrl;
-                                html.window.open(url, 'new tab');
-                              },
+                              ..onTap = () => openUrl(AppStrings.creativeCommonsUrl),
                           ),
                           TextSpan(
                             text: '.',

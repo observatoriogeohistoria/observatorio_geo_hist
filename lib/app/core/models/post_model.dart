@@ -4,57 +4,81 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 class PostModel extends Equatable {
   const PostModel({
-    this.id,
     required this.title,
     required this.subtitle,
-    required this.area,
-    required this.category,
+    required this.areas,
+    required this.categoryKey,
     required this.markdownContent,
     required this.date,
     required this.imgUrl,
     required this.authors,
-    this.published = false,
+    this.id,
+    this.category,
+    this.imgCaption,
+    this.observation,
+    this.createdAt,
+    this.updatedAt,
+    this.isPublished = false,
+    this.isHighlighted = false,
   });
 
-  final String? id;
   final String title;
   final String subtitle;
-  final PostsAreas area;
-  final CategoryModel category;
+  final List<PostsAreas> areas;
+  final String categoryKey;
   final String markdownContent;
   final String date;
   final String imgUrl;
   final List<String> authors;
-  final bool published;
+
+  final String? id;
+  final CategoryModel? category;
+  final String? imgCaption;
+  final String? observation;
+
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  final bool isPublished;
+  final bool isHighlighted;
 
   @override
   List<Object?> get props => [
-        id,
         title,
         subtitle,
-        area,
-        category,
+        areas,
+        categoryKey,
         markdownContent,
         date,
         imgUrl,
         authors,
-        published,
+        id,
+        category,
+        imgCaption,
+        observation,
+        createdAt,
+        updatedAt,
+        isPublished,
+        isHighlighted,
       ];
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
-    final area = PostsAreas.fromKey(json['category']['area'] as String);
-
     return PostModel(
-      id: json['id'] as String,
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
-      area: area,
-      category: CategoryModel.fromJson(json['category'], area.key),
+      areas: (json['areas'] as List).map((area) => PostsAreas.fromKey(area as String)).toList(),
+      categoryKey: json['category'],
       markdownContent: json['markdownContent'] as String,
       date: json['date'] as String,
       imgUrl: json['imgUrl'] as String,
       authors: (json['authors'] as List).map((author) => author as String).toList(),
-      published: json['published'] as bool,
+      id: json['id'] as String,
+      imgCaption: json['imgCaption'] as String?,
+      observation: json['observation'] as String?,
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt'] as String) : null,
+      isPublished: json['isPublished'] as bool,
+      isHighlighted: json['isHighlighted'] as bool,
     );
   }
 
@@ -62,37 +86,57 @@ class PostModel extends Equatable {
     return {
       'title': title,
       'subtitle': subtitle,
+      'areas': areas.map((area) => area.key).toList(),
+      'category': categoryKey,
       'markdownContent': markdownContent,
       'date': date,
       'imgUrl': imgUrl,
       'authors': authors,
-      'published': published,
+      'id': id,
+      'imgCaption': imgCaption,
+      'observation': observation,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      'isPublished': isPublished,
+      'isHighlighted': isHighlighted,
     };
   }
 
   PostModel copyWith({
-    String? id,
     String? title,
     String? subtitle,
-    PostsAreas? area,
-    CategoryModel? category,
+    List<PostsAreas>? areas,
+    String? categoryKey,
     String? markdownContent,
     String? date,
     String? imgUrl,
     List<String>? authors,
-    bool? published,
+    String? id,
+    CategoryModel? category,
+    String? imgCaption,
+    String? observation,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? isPublished,
+    bool? isHighlighted,
   }) {
     return PostModel(
-      id: id ?? this.id,
       title: title ?? this.title,
       subtitle: subtitle ?? this.subtitle,
-      area: area ?? this.area,
-      category: category ?? this.category,
+      areas: areas ?? this.areas,
+      categoryKey: categoryKey ?? this.categoryKey,
       markdownContent: markdownContent ?? this.markdownContent,
       date: date ?? this.date,
       imgUrl: imgUrl ?? this.imgUrl,
       authors: authors ?? this.authors,
-      published: published ?? this.published,
+      id: id ?? this.id,
+      category: category ?? this.category,
+      imgCaption: imgCaption ?? this.imgCaption,
+      observation: observation ?? this.observation,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isPublished: isPublished ?? this.isPublished,
+      isHighlighted: isHighlighted ?? this.isHighlighted,
     );
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/cached_image/cached_image.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/image_error_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart';
+import 'package:observatorio_geo_hist/app/core/utils/image/image.dart';
 
 class AppNetworkImage extends StatelessWidget {
   const AppNetworkImage({
@@ -12,22 +15,49 @@ class AppNetworkImage extends StatelessWidget {
 
   final String imageUrl;
   final double width;
-  final double height;
+  final double? height;
   final double? radius;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius ?? 0),
+      child: _buildImage(),
+    );
+  }
+
+  Widget _buildImage() {
+    if (ImageUtils.isSvg(imageUrl)) {
+      return SvgPicture.network(
+        imageUrl,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+        placeholderBuilder: (_) {
+          return Skeleton(
+            width: width,
+            height: height,
+          );
+        },
+      );
+    }
+
+    return Image.network(
+      imageUrl,
       width: width,
       height: height,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius ?? 0),
-        child: CachedImage(
-          imageUrl: imageUrl,
+      fit: BoxFit.cover,
+      loadingBuilder: (_, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+
+        return Skeleton(
           width: width,
           height: height,
-        ),
-      ),
+        );
+      },
+      errorBuilder: (_, __, ___) {
+        return const ImageErrorContent();
+      },
     );
   }
 }

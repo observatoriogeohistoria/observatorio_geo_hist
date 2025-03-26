@@ -45,8 +45,7 @@ abstract class CategoriesStoreBase with Store {
     result.fold(
       (failure) => state = ManageCategoriesErrorState(failure),
       (_) {
-        final index =
-            categories.indexWhere((c) => c.key == category.key && c.area == category.area);
+        final index = categories.indexWhere((c) => c.key == category.key);
         index >= 0
             ? categories.replaceRange(index, index + 1, [category])
             : categories.add(category);
@@ -67,7 +66,7 @@ abstract class CategoriesStoreBase with Store {
     result.fold(
       (failure) => state = ManageCategoriesErrorState(failure),
       (_) {
-        categories.removeWhere((c) => c.key == category.key && c.area == category.area);
+        categories.removeWhere((c) => c.key == category.key);
         state = ManageCategoriesSuccessState(message: 'Categoria deletada com sucesso');
       },
     );

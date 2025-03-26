@@ -57,6 +57,22 @@ mixin _$FetchCategoriesStore on FetchCategoriesStoreBase, Store {
     });
   }
 
+  late final _$stateAtom =
+      Atom(name: 'FetchCategoriesStoreBase.state', context: context);
+
+  @override
+  FetchCategoriesState get state {
+    _$stateAtom.reportRead();
+    return super.state;
+  }
+
+  @override
+  set state(FetchCategoriesState value) {
+    _$stateAtom.reportWrite(value, super.state, () {
+      super.state = value;
+    });
+  }
+
   late final _$fetchHistoryCategoriesAsyncAction = AsyncAction(
       'FetchCategoriesStoreBase.fetchHistoryCategories',
       context: context);
@@ -96,7 +112,8 @@ mixin _$FetchCategoriesStore on FetchCategoriesStoreBase, Store {
     return '''
 historyCategories: ${historyCategories},
 geographyCategories: ${geographyCategories},
-selectedCategory: ${selectedCategory}
+selectedCategory: ${selectedCategory},
+state: ${state}
     ''';
   }
 }

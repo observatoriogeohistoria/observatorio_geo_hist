@@ -19,28 +19,23 @@ class CategoriesDatasourceImpl implements CategoriesDatasource {
     try {
       QuerySnapshot querySnapshot = await _firestore.collection('posts').get();
 
-      Set<CategoryModel> categoriesSet = {};
-      List<CategoryModel> categoriesList = [];
+      List<CategoryModel> categories = querySnapshot.docs
+          .map((category) => CategoryModel.fromJson(category.data() as Map<String, dynamic>))
+          .toList();
 
-      for (var doc in querySnapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
-        final categoriesData = data['categories'] as List<dynamic>;
+      List<CategoryModel> updatedCategories = [];
 
-        categoriesSet.addAll(categoriesData.map((category) {
-          return CategoryModel.fromJson(category, doc.id);
-        }).toList());
-      }
-
-      for (var category in categoriesSet) {
-        QuerySnapshot querySnapshot = await _firestore
+      for (var category in categories) {
+        QuerySnapshot postsQuerySnapshot = await _firestore
             .collection('posts')
-            .doc(category.area.key)
-            .collection(category.key)
+            .doc(category.key)
+            .collection('category_posts')
             .get();
-        categoriesList.add(category.copyWith(numberOfPosts: querySnapshot.docs.length));
+
+        updatedCategories.add(category.copyWith(numberOfPosts: postsQuerySnapshot.docs.length));
       }
 
-      return categoriesList;
+      return updatedCategories;
     } catch (exception, stackTrace) {
       _loggerService.error('Error fetching categories: $exception', stackTrace: stackTrace);
       rethrow;
@@ -50,11 +45,8 @@ class CategoriesDatasourceImpl implements CategoriesDatasource {
   @override
   Future<CategoryModel> createOrUpdateCategory(CategoryModel category) async {
     try {
-      DocumentReference ref = _firestore.collection('posts').doc(category.area.key);
-
-      await ref.set({
-        'categories': FieldValue.arrayUnion([category.toJson()])
-      }, SetOptions(merge: true));
+      DocumentReference ref = _firestore.collection('posts').doc(category.key);
+      await ref.set(category.toJson(), SetOptions(merge: true));
 
       return category;
     } catch (exception, stackTrace) {
@@ -67,23 +59,24 @@ class CategoriesDatasourceImpl implements CategoriesDatasource {
   @override
   Future<void> deleteCategory(CategoryModel category) async {
     try {
-      DocumentReference ref = _firestore.collection('posts').doc(category.area.key);
+      DocumentReference ref = _firestore.collection('posts').doc(category.key);
+      await ref.delete();
 
-      DocumentSnapshot docSnapshot = await ref.get();
-      QuerySnapshot querySnapshot = await ref.collection(category.key).get();
+      // DocumentSnapshot docSnapshot = await ref.get();
+      // QuerySnapshot querySnapshot = await ref.collection(category.key).get();
 
-      Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+      // Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
 
-      if (data.containsKey('categories')) {
-        List categories = List.from(data['categories']);
-        categories.removeWhere((item) => item['key'] == category.key);
+      // if (data.containsKey('categories')) {
+      //   List categories = List.from(data['categories']);
+      //   categories.removeWhere((item) => item['key'] == category.key);
 
-        await ref.set({'categories': categories}, SetOptions(merge: true));
-      }
+      //   await ref.set({'categories': categories}, SetOptions(merge: true));
+      // }
 
-      List<Future<void>> deletePosts =
-          querySnapshot.docs.map((doc) => doc.reference.delete()).toList();
-      await Future.wait(deletePosts);
+      // List<Future<void>> deletePosts =
+      //     querySnapshot.docs.map((doc) => doc.reference.delete()).toList();
+      // await Future.wait(deletePosts);
     } catch (exception, stackTrace) {
       _loggerService.error('Error deleting category: $exception', stackTrace: stackTrace);
       rethrow;

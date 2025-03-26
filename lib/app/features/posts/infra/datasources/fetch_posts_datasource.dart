@@ -17,24 +17,25 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
   @override
   Future<List<PostModel>> fetchPosts(CategoryModel category) async {
     try {
-      QuerySnapshot querySnapshot = await _firestore
-          .collection('posts/${category.area.key}/${category.key}')
-          .where('published', isEqualTo: true)
+      QuerySnapshot postsQuerySnapshot = await _firestore
+          .collectionGroup('category_posts')
+          .where('isPublished', isEqualTo: true)
           .get();
 
-      final docs = querySnapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        data['id'] = doc.id;
-        data['category'] = category.toJson();
+      List<PostModel> posts = [];
 
-        return data;
-      }).toList();
+      for (final post in postsQuerySnapshot.docs) {
+        final data = post.data() as Map<String, dynamic>;
+        final fromJson = PostModel.fromJson(data);
 
-      List<PostModel> posts = docs.map((post) => PostModel.fromJson(post)).toList();
+        if (fromJson.categoryKey == category.key && fromJson.areas.contains(category.areas.first)) {
+          posts.add(fromJson.copyWith(category: category));
+        }
+      }
 
       return posts;
     } catch (exception) {
-      _loggerService.error('Error fetching geography categories: $exception');
+      _loggerService.error('Error fetching posts: $exception');
       throw const FetchPostsException();
     }
   }

@@ -67,7 +67,9 @@ abstract class PostsStoreBase with Store {
       (failure) => state = ManagePostsErrorState(failure),
       (_) {
         posts.removeWhere((p) => p.id == post.id);
-        state = ManagePostsSuccessState(message: 'Post deletado com sucesso');
+        state = ManagePostsSuccessState(
+          message: 'Post deletado com sucesso',
+        );
       },
     );
   }

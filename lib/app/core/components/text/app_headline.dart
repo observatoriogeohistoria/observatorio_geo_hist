@@ -6,6 +6,7 @@ class AppHeadline extends StatelessWidget {
     required this.text,
     required this.color,
     this.textAlign = TextAlign.center,
+    this.notSelectable = false,
     super.key,
   }) : size = TypographySize.small;
 
@@ -13,6 +14,7 @@ class AppHeadline extends StatelessWidget {
     required this.text,
     required this.color,
     this.textAlign = TextAlign.center,
+    this.notSelectable = false,
     super.key,
   }) : size = TypographySize.medium;
 
@@ -20,6 +22,7 @@ class AppHeadline extends StatelessWidget {
     required this.text,
     required this.color,
     this.textAlign = TextAlign.center,
+    this.notSelectable = false,
     super.key,
   }) : size = TypographySize.big;
 
@@ -27,6 +30,7 @@ class AppHeadline extends StatelessWidget {
   final Color color;
   final TextAlign textAlign;
   final TypographySize size;
+  final bool notSelectable;
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +48,20 @@ class AppHeadline extends StatelessWidget {
         break;
     }
 
-    return Text(
-      text,
-      textAlign: textAlign,
-      style: textStyle.copyWith(
-        color: color,
-      ),
-    );
+    return notSelectable
+        ? Text(
+            text,
+            textAlign: textAlign,
+            style: textStyle.copyWith(
+              color: color,
+            ),
+          )
+        : SelectableText(
+            text,
+            textAlign: textAlign,
+            style: textStyle.copyWith(
+              color: color,
+            ),
+          );
   }
 }

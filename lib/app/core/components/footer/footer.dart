@@ -17,8 +17,8 @@ class Footer extends StatelessWidget {
       color: AppTheme.colors.orange,
       padding: EdgeInsets.symmetric(
         horizontal: (isDesktop
-                ? AppTheme.dimensions.space.gigantic
-                : (isTablet ? AppTheme.dimensions.space.massive : AppTheme.dimensions.space.large))
+                ? (2 * AppTheme.dimensions.space.gigantic)
+                : (isTablet ? AppTheme.dimensions.space.gigantic : AppTheme.dimensions.space.large))
             .horizontalSpacing,
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),

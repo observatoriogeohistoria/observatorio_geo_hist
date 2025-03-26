@@ -23,7 +23,7 @@ class WhoWeAre extends StatelessWidget {
         image: DecorationImage(
           image: const AssetImage('${AppAssets.images}/who-we-are.jpg'),
           colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.35),
+            Colors.black.withValues(alpha: 0.35),
             BlendMode.darken,
           ),
           fit: BoxFit.cover,
@@ -32,9 +32,9 @@ class WhoWeAre extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: (isDesktop
-                  ? AppTheme.dimensions.space.gigantic
+                  ? (2 * AppTheme.dimensions.space.gigantic)
                   : (isTablet
-                      ? AppTheme.dimensions.space.massive
+                      ? AppTheme.dimensions.space.gigantic
                       : AppTheme.dimensions.space.large))
               .horizontalSpacing,
           vertical: AppTheme.dimensions.space.medium.verticalSpacing,

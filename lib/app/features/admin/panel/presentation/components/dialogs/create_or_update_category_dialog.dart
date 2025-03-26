@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/switch_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -20,6 +20,7 @@ void showCreateOrUpdateCategoryDialog(
 }) {
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (_) => CreateOrUpdateCategoryDialog(
       onCreateOrUpdate: onCreateOrUpdate,
       category: category,
@@ -51,7 +52,8 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
   late final _backgroundImgUrlController =
       TextEditingController(text: widget.category?.backgroundImgUrl);
 
-  late PostsAreas? _area = widget.category?.area;
+  late bool isHistory = widget.category?.areas.contains(PostsAreas.history) ?? false;
+  late bool isGeography = widget.category?.areas.contains(PostsAreas.geography) ?? false;
 
   bool get _isUpdate => widget.category != null;
 
@@ -99,17 +101,16 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
               validator: Validators.isNotEmpty,
             ),
             SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-            AppDropdownField<PostsAreas>(
-              hintText: 'Selecione uma área',
-              items: PostsAreas.values,
-              itemToString: (area) => area.name,
-              value: _area,
-              onChanged: (area) {
-                if (area == null) return;
-                setState(() => _area = PostsAreas.fromName(area));
-              },
-              validator: Validators.isNotEmpty,
-              isDisabled: _isUpdate,
+            SwitchButton(
+              title: 'História',
+              onChanged: (value) => setState(() => isHistory = value),
+              initialValue: isHistory,
+            ),
+            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+            SwitchButton(
+              title: 'Geografia',
+              onChanged: (value) => setState(() => isGeography = value),
+              initialValue: isGeography,
             ),
             const Spacer(),
             Row(
@@ -140,11 +141,12 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
       title: _titleController.text,
       description: _descriptionController.text,
       backgroundImgUrl: _backgroundImgUrlController.text,
-      area: _area!,
+      areas: [
+        if (isHistory) PostsAreas.history,
+        if (isGeography) PostsAreas.geography,
+      ],
     );
 
     widget.onCreateOrUpdate(category);
-
-    GoRouter.of(context).pop();
   }
 }

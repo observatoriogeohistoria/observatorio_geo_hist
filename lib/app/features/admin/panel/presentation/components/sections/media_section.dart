@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
@@ -45,6 +46,8 @@ class _MediaSectionState extends State<MediaSection> {
         }
 
         if (state is ManageMediaSuccessState) {
+          GoRouter.of(context).pop();
+
           if (state.message.isNotEmpty) {
             Messenger.showSuccess(context, state.message);
           }

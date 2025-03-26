@@ -25,6 +25,22 @@ mixin _$FetchPostsStore on FetchPostsStoreBase, Store {
     });
   }
 
+  late final _$stateAtom =
+      Atom(name: 'FetchPostsStoreBase.state', context: context);
+
+  @override
+  FetchPostsState get state {
+    _$stateAtom.reportRead();
+    return super.state;
+  }
+
+  @override
+  set state(FetchPostsState value) {
+    _$stateAtom.reportWrite(value, super.state, () {
+      super.state = value;
+    });
+  }
+
   late final _$fetchPostsAsyncAction =
       AsyncAction('FetchPostsStoreBase.fetchPosts', context: context);
 
@@ -36,7 +52,8 @@ mixin _$FetchPostsStore on FetchPostsStoreBase, Store {
   @override
   String toString() {
     return '''
-posts: ${posts}
+posts: ${posts},
+state: ${state}
     ''';
   }
 }
