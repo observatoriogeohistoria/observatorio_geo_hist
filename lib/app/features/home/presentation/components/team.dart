@@ -66,7 +66,7 @@ class _TeamState extends State<Team> {
                           if (member.description?.isEmpty ?? true) return;
 
                           GoRouter.of(context).go(
-                            '/team-member/${member.id}',
+                            '/membro/${member.id}',
                             extra: member,
                           );
                         },

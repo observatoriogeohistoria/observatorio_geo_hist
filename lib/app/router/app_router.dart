@@ -34,7 +34,7 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/team-member/:id',
+        path: '/membro/:id',
         builder: (BuildContext context, GoRouterState state) {
           final id = state.pathParameters['id'];
 
@@ -77,13 +77,13 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/contact-us',
+        path: '/contato',
         builder: (BuildContext context, GoRouterState state) {
           return const ContactUsPage();
         },
       ),
       GoRoute(
-        path: '/collaborate',
+        path: '/colaborar',
         builder: (BuildContext context, GoRouterState state) {
           return const CollaboratePage();
         },

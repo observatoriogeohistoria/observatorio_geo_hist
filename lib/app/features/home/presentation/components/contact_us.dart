@@ -29,7 +29,7 @@ class ContactUs extends StatelessWidget {
             SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
             PrimaryButton.medium(
               text: 'FALE COM A GENTE',
-              onPressed: () => GoRouter.of(context).go('/contact-us'),
+              onPressed: () => GoRouter.of(context).go('/contato'),
             ),
           ],
         ),

@@ -134,7 +134,7 @@ class _PostsPageState extends State<PostsPage> {
           if (category.hasCollaborateOption)
             PrimaryButton.medium(
               text: 'COLABORE',
-              onPressed: () => GoRouter.of(context).go('/collaborate'),
+              onPressed: () => GoRouter.of(context).go('/colaborar'),
             ),
         ],
       ),
