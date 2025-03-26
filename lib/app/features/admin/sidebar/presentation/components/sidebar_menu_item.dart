@@ -52,6 +52,7 @@ class SidebarMenuItem extends StatelessWidget {
                       AppTitle.medium(
                         text: item.title,
                         color: AppTheme.colors.darkGray,
+                        notSelectable: true,
                       ),
                     ],
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -50,7 +51,7 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: DropdownButtonFormField<String>(
-        hint: AppLabel.medium(
+        hint: AppBody.medium(
           text: widget.hintText,
           color: AppTheme.colors.gray,
         ),

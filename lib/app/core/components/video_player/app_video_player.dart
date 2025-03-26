@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 import 'package:video_player/video_player.dart';
@@ -9,11 +10,16 @@ class AppVideoPlayer extends StatefulWidget {
   const AppVideoPlayer({
     required this.url,
     this.padding = EdgeInsets.zero,
+    this.startPlaying = false,
+    this.startMuted = false,
     super.key,
   });
 
   final String url;
   final EdgeInsets padding;
+
+  final bool startPlaying;
+  final bool startMuted;
 
   @override
   State<AppVideoPlayer> createState() => _AppVideoPlayerState();
@@ -36,6 +42,9 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
       setState(() => _isLoading = false);
+
+      if (widget.startPlaying) _togglePlayPause();
+      if (widget.startMuted) _toggleMute();
     }).catchError((error) {
       setState(() => _error = true);
     });
@@ -99,10 +108,12 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
                       ),
                       SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
                       Expanded(
-                        child: VideoProgressIndicator(
-                          _controller,
-                          allowScrubbing: true,
-                          padding: EdgeInsets.zero,
+                        child: AppMouseRegion(
+                          child: VideoProgressIndicator(
+                            _controller,
+                            allowScrubbing: true,
+                            padding: EdgeInsets.zero,
+                          ),
                         ),
                       ),
                       SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),

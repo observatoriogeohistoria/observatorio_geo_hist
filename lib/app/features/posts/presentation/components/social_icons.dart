@@ -22,13 +22,10 @@ class _SocialIconsState extends State<SocialIcons> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _buildIcon('facebook', AppStrings.shareOnFacebook),
-        SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-        _buildIcon('twitter', AppStrings.shareOnTwitter),
-        SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-        _buildIcon('whatsapp', AppStrings.shareOnWhatsapp),
-        SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-        _buildIcon('email', AppStrings.shareOnEmail),
+        _buildIcon('facebook', AppStrings.shareOnFacebook, Colors.blue),
+        _buildIcon('twitter', AppStrings.shareOnTwitter, Colors.blueGrey),
+        _buildIcon('whatsapp', AppStrings.shareOnWhatsapp, Colors.green),
+        _buildIcon('email', AppStrings.shareOnEmail, Colors.orange),
       ],
     );
   }
@@ -36,8 +33,11 @@ class _SocialIconsState extends State<SocialIcons> {
   Widget _buildIcon(
     String name,
     String link,
+    Color color,
   ) {
     return InkWell(
+      customBorder: const CircleBorder(),
+      hoverColor: color,
       onTap: () {
         String currentUrl = getEncodedCurrentUrl();
         String linkTo =
@@ -46,10 +46,13 @@ class _SocialIconsState extends State<SocialIcons> {
         openUrl(linkTo);
       },
       mouseCursor: SystemMouseCursors.click,
-      child: Image.asset(
-        'assets/icons/$name.png',
-        width: 40.scale,
-        height: 40.scale,
+      child: Padding(
+        padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
+        child: Image.asset(
+          'assets/icons/$name.png',
+          width: 40.scale,
+          height: 40.scale,
+        ),
       ),
     );
   }

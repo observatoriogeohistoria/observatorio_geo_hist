@@ -78,11 +78,13 @@ class _NavButtonState extends State<NavButton> {
           },
         ),
         textStyle: WidgetStateProperty.resolveWith(
-          (states) => (widget.textStyle ?? AppTheme.typography.title.medium).copyWith(
-            color: states.contains(WidgetState.hovered)
-                ? widget.textColorOnHover ?? AppTheme.colors.orange
-                : widget.textColor ?? AppTheme.colors.darkGray,
-          ),
+          (states) {
+            return (widget.textStyle ?? AppTheme.typography.title.medium).copyWith(
+              color: states.contains(WidgetState.hovered)
+                  ? widget.textColorOnHover ?? AppTheme.colors.orange
+                  : widget.textColor ?? AppTheme.colors.darkGray,
+            );
+          },
         ),
       ),
       onPressed: () {

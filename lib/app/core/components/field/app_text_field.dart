@@ -80,7 +80,7 @@ class _AppTextFieldState extends State<AppTextField> {
           minWidth: 32,
         ),
         labelText: widget.labelText,
-        labelStyle: AppTheme.typography.label.small.copyWith(
+        labelStyle: AppTheme.typography.body.medium.copyWith(
           color: AppTheme.colors.gray,
         ),
         hintText: widget.hintText,

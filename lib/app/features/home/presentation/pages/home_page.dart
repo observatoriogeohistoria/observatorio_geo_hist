@@ -48,6 +48,8 @@ class _HomePageState extends State<HomePage> {
                 vertical: AppTheme.dimensions.space.massive.verticalSpacing,
               ),
               url: AppStrings.presentationVideoUrl,
+              startPlaying: true,
+              startMuted: true,
             ),
           ),
           const SliverToBoxAdapter(child: OurHistory()),

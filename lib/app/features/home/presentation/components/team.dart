@@ -105,19 +105,22 @@ class _TeamState extends State<Team> {
     required CarouselSliderController controller,
     required bool isBack,
   }) {
-    return GestureDetector(
-      onTap: () => isBack ? controller.previousPage() : controller.nextPage(),
-      child: Container(
-        alignment: Alignment.center,
-        padding: isMobile ? EdgeInsets.zero : EdgeInsets.all(AppTheme.dimensions.space.small.scale),
-        decoration: BoxDecoration(
-          color: AppTheme.colors.orange.withValues(alpha: 0.35),
-          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
-        ),
-        child: Center(
-          child: Icon(
-            isBack ? Icons.arrow_back_ios_outlined : Icons.arrow_forward_ios_outlined,
-            color: AppTheme.colors.white,
+    return AppMouseRegion(
+      child: GestureDetector(
+        onTap: () => isBack ? controller.previousPage() : controller.nextPage(),
+        child: Container(
+          alignment: Alignment.center,
+          padding:
+              isMobile ? EdgeInsets.zero : EdgeInsets.all(AppTheme.dimensions.space.small.scale),
+          decoration: BoxDecoration(
+            color: AppTheme.colors.orange.withValues(alpha: 0.35),
+            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
+          ),
+          child: Center(
+            child: Icon(
+              isBack ? Icons.arrow_back_ios_outlined : Icons.arrow_forward_ios_outlined,
+              color: AppTheme.colors.white,
+            ),
           ),
         ),
       ),
