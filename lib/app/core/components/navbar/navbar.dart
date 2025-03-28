@@ -42,6 +42,10 @@ class _NavbarState extends State<Navbar> {
         route: AppRoutes.root,
       ),
       const NavButtonItem(
+        title: 'GEOENSINE',
+        route: AppRoutes.geoensine,
+      ),
+      const NavButtonItem(
         title: 'EXPOGEO',
         route: AppRoutes.root,
       ),

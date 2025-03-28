@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
 
 enum PartnersImages {
@@ -12,6 +13,6 @@ enum PartnersImages {
 
   /// The path of the image.
   String get path {
-    return 'assets/images/partners/${convertToSnakeCase(name)}.png';
+    return '${AppAssets.images}/partners/${convertToSnakeCase(name)}.png';
   }
 }

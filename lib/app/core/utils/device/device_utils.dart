@@ -12,16 +12,20 @@ class DeviceUtils {
     return width >= 600 && width < 1024;
   }
 
+  static bool isSmallDesktop(BuildContext context) {
+    return MediaQuery.of(context).size.width >= 600 && MediaQuery.of(context).size.width < 1200;
+  }
+
   static bool isDesktop(BuildContext context) {
     return MediaQuery.of(context).size.width >= 1024;
   }
 
   static double getPageHorizontalPadding(BuildContext context) {
-    return (isDesktop(context)
-            ? (2 * AppTheme.dimensions.space.gigantic)
-            : (isTablet(context)
-                ? AppTheme.dimensions.space.gigantic
-                : AppTheme.dimensions.space.large))
+    return ((isSmallDesktop(context) || isTablet(context))
+            ? AppTheme.dimensions.space.gigantic
+            : isDesktop(context)
+                ? (2 * AppTheme.dimensions.space.gigantic)
+                : AppTheme.dimensions.space.large)
         .horizontalSpacing;
   }
 }
