@@ -58,11 +58,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
 
   void _togglePlayPause() {
     setState(() {
-      if (_isPlaying) {
-        _controller.pause();
-      } else {
-        _controller.play();
-      }
+      _isPlaying ? _controller.pause() : _controller.play();
       _isPlaying = !_isPlaying;
     });
   }

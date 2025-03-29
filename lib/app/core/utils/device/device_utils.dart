@@ -7,6 +7,10 @@ class DeviceUtils {
     return MediaQuery.of(context).size.width < 600;
   }
 
+  static bool isSmallMobile(BuildContext context) {
+    return MediaQuery.of(context).size.width < 400;
+  }
+
   static bool isTablet(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return width >= 600 && width < 1024;

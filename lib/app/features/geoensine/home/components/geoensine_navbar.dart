@@ -5,6 +5,7 @@ import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class GeoensineNavbar extends StatefulWidget {
   const GeoensineNavbar({super.key});
@@ -39,15 +40,18 @@ class _GeoensineNavbarState extends State<GeoensineNavbar> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = DeviceUtils.isMobile(context);
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: DeviceUtils.getPageHorizontalPadding(context),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            '${AppAssets.images}/logo_geoensine.png',
-            width: 400.horizontalSpacing,
+            '${AppAssets.geoensine}/logo_geoensine.png',
+            width: 200.horizontalSpacing,
           ),
           Row(
             children: [
@@ -56,6 +60,13 @@ class _GeoensineNavbarState extends State<GeoensineNavbar> {
                   text: item.title,
                   onPressed: () {},
                   menuChildren: const [],
+                  backgroundColor:
+                      (item.route != null && AppRoutes.isCurrentRoute(context, item.route!))
+                          ? AppTheme.colors.lightGray
+                          : null,
+                  textStyle: isMobile ? AppTheme.typography.headline.big : null,
+                  textColor: isMobile ? AppTheme.colors.white : null,
+                  textColorOnHover: isMobile ? AppTheme.colors.darkGray : null,
                 ),
             ],
           ),

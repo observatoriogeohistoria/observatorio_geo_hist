@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/custom_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
@@ -46,9 +47,9 @@ class _TeamState extends State<Team> {
           SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
           Row(
             children: [
-              _buildArrow(
-                controller: carouselController,
-                isBack: true,
+              CustomIconButton(
+                icon: Icons.arrow_back_ios_outlined,
+                onTap: () => carouselController.previousPage(),
               ),
               Expanded(
                 child: CarouselSlider.builder(
@@ -77,11 +78,13 @@ class _TeamState extends State<Team> {
                               text: member.name.toUpperCase(),
                               textAlign: TextAlign.center,
                               color: AppTheme.colors.orange,
+                              notSelectable: true,
                             ),
                             AppTitle.medium(
                               text: member.role,
                               textAlign: TextAlign.center,
                               color: AppTheme.colors.gray,
+                              notSelectable: true,
                             ),
                           ],
                         ),
@@ -90,39 +93,13 @@ class _TeamState extends State<Team> {
                   },
                 ),
               ),
-              _buildArrow(
-                controller: carouselController,
-                isBack: false,
-              ),
+              CustomIconButton(
+                icon: Icons.arrow_forward_ios_outlined,
+                onTap: () => carouselController.nextPage(),
+              )
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildArrow({
-    required CarouselSliderController controller,
-    required bool isBack,
-  }) {
-    return AppMouseRegion(
-      child: GestureDetector(
-        onTap: () => isBack ? controller.previousPage() : controller.nextPage(),
-        child: Container(
-          alignment: Alignment.center,
-          padding:
-              isMobile ? EdgeInsets.zero : EdgeInsets.all(AppTheme.dimensions.space.small.scale),
-          decoration: BoxDecoration(
-            color: AppTheme.colors.orange.withValues(alpha: 0.35),
-            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
-          ),
-          child: Center(
-            child: Icon(
-              isBack ? Icons.arrow_back_ios_outlined : Icons.arrow_forward_ios_outlined,
-              color: AppTheme.colors.white,
-            ),
-          ),
-        ),
       ),
     );
   }

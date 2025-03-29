@@ -1,5 +1,5 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/3.24.3",
+  "dart.flutterSdkPath": ".fvm/versions/3.27.4",
   "search.exclude": {
     "**/.fvm": true
   },
@@ -8,7 +8,9 @@
   },
   "dart.lineLength": 100,
   "[dart]": {
-    "editor.rulers": [100],
+    "editor.rulers": [
+      100
+    ],
     "editor.formatOnSave": true
   },
   "editor.codeActionsOnSave": {

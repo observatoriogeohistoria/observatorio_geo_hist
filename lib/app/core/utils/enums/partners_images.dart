@@ -13,6 +13,6 @@ enum PartnersImages {
 
   /// The path of the image.
   String get path {
-    return '${AppAssets.images}/partners/${convertToSnakeCase(name)}.png';
+    return '${AppAssets.partners}/${convertToSnakeCase(name)}.png';
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
+import 'package:observatorio_geo_hist/app/features/geoensine/home/components/geoensine_introduction.dart';
 import 'package:observatorio_geo_hist/app/features/geoensine/home/components/geoensine_navbar.dart';
+import 'package:observatorio_geo_hist/app/features/geoensine/home/components/geoensine_polifonia.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class GeoensineHomePage extends StatefulWidget {
@@ -15,13 +17,17 @@ class _GeoensineHomePageState extends State<GeoensineHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
-      body: Column(
-        children: [
-          Image.asset(
-            '${AppAssets.images}/home_geoensine.png',
-            width: double.infinity,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Image.asset(
+              '${AppAssets.geoensine}/home_geoensine.png',
+              width: double.infinity,
+            ),
           ),
-          const GeoensineNavbar(),
+          const SliverToBoxAdapter(child: GeoensineNavbar()),
+          const SliverToBoxAdapter(child: GeoensineIntroduction()),
+          const SliverToBoxAdapter(child: GeoensinePolifonia()),
         ],
       ),
     );

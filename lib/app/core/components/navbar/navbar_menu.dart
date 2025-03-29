@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/navbutton.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -47,8 +48,9 @@ List<Widget> buildNavbarMenu(
                   );
                 },
               ).toList(),
-        backgroundColor: (categorySelected?.areas.isNotEmpty ?? false) &&
-                categorySelected!.areas.first == option.area
+        backgroundColor: ((categorySelected?.areas.isNotEmpty ?? false) &&
+                    categorySelected!.areas.first == option.area) ||
+                (option.route != null && AppRoutes.isCurrentRoute(context, option.route!))
             ? AppTheme.colors.lightGray
             : null,
         textStyle: isMobile ? AppTheme.typography.headline.big : null,
