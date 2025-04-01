@@ -5,7 +5,7 @@ import 'package:observatorio_geo_hist/app/core/components/error_content/page_err
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/network_image/app_network_image.dart';
+import 'package:observatorio_geo_hist/app/core/components/image/app_network_image.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/view_quill.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';

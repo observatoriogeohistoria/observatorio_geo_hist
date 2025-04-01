@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
@@ -49,7 +50,7 @@ class _SocialIconsState extends State<SocialIcons> {
       child: Padding(
         padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
         child: Image.asset(
-          'assets/icons/$name.png',
+          '${AppAssets.icons}/$name.png',
           width: 40.scale,
           height: 40.scale,
         ),
