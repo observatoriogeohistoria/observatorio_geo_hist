@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/navbar_sub_menu.dart';
+import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -79,10 +80,15 @@ class _NavButtonState extends State<NavButton> {
         ),
         textStyle: WidgetStateProperty.resolveWith(
           (states) {
-            return (widget.textStyle ?? AppTheme.typography.title.medium).copyWith(
+            return (widget.textStyle ??
+                    (DeviceUtils.isSmallDesktop(context)
+                        ? AppTheme.typography.label.big
+                        : AppTheme.typography.title.medium))
+                .copyWith(
               color: states.contains(WidgetState.hovered)
                   ? widget.textColorOnHover ?? AppTheme.colors.orange
                   : widget.textColor ?? AppTheme.colors.darkGray,
+              fontWeight: FontWeight.w700,
             );
           },
         ),

@@ -17,6 +17,9 @@ scripts:
   builder:
     $script: dart run build_runner watch --delete-conflicting-outputs
 
+  build:
+    $script: fvm flutter build web
+
   run:
     $script: fvm flutter run -d chrome --web-renderer html
 
@@ -72,6 +75,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/images/partners/
+    - assets/images/geoensine/
 
   fonts:
     - family: Dosis

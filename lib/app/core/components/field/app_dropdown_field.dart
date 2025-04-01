@@ -59,7 +59,7 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
             .map(
               (item) => DropdownMenuItem<String>(
                 value: widget.itemToString(item),
-                child: AppLabel.medium(
+                child: AppLabel.big(
                   text: widget.itemToString(item),
                   color: AppTheme.colors.darkGray,
                 ),

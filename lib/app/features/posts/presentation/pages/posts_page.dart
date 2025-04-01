@@ -68,6 +68,8 @@ class _PostsPageState extends State<PostsPage> {
     for (final disposer in reactions) {
       disposer();
     }
+
+    fetchCategoriesStore.setSelectedCategory(null);
     categoryNotifier.dispose();
     super.dispose();
   }

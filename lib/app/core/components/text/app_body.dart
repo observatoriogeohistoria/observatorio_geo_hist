@@ -52,6 +52,7 @@ class AppBody extends StatelessWidget {
         ? Text(
             text,
             textAlign: textAlign,
+            softWrap: true,
             style: textStyle.copyWith(
               color: color,
             ),

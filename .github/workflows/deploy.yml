@@ -27,9 +27,20 @@ jobs:
     - name: Build Flutter Web app
       run: flutter build web --release
 
-    - name: Sync files to HostGator
+    - name: Sync all files to HostGator (excluding build/web)
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: ${{ secrets.FTP_HOST }}
         username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./
+        exclude: |
+          build/web/**  # Exclui a pasta build/web para não enviá-la aqui
+
+    - name: Sync build/web to HostGator
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: build/web/

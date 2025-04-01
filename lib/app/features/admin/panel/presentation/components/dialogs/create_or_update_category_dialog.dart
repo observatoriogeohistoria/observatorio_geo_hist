@@ -83,7 +83,6 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
               controller: _titleController,
               labelText: 'Título',
               validator: Validators.isNotEmpty,
-              isDisabled: _isUpdate,
             ),
             SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
             AppTextField(
