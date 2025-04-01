@@ -34,11 +34,9 @@ jobs:
     - name: Build Flutter Web app
       run: flutter build web --release
 
-    - name: Deploy to HostGator
-      run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-          cd /home/seu_usuario/public_html/curadoria &&
-          git pull origin main &&
-          rm -rf ./web/* &&
-          cp -r /github/workspace/build/web/* ./web/
-        "
+    - name: Sync files to HostGator
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASSWORD }}
