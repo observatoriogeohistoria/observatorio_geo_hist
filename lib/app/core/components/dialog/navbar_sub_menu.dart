@@ -17,19 +17,25 @@ class NavbarSubMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return FullScreenDialog(
       title: title,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (var item in menuChildren)
-            NavButton(
-              text: item.text.toUpperCase(),
-              onPressed: item.onPressed,
-              menuChildren: item.menuChildren,
-              textStyle: AppTheme.typography.headline.big,
-              textColor: AppTheme.colors.white,
-              textColorOnHover: AppTheme.colors.darkGray,
-            ),
-        ],
+      child: Scrollbar(
+        thumbVisibility: false,
+        trackVisibility: false,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var item in menuChildren)
+                NavButton(
+                  text: item.text.toUpperCase(),
+                  onPressed: item.onPressed,
+                  menuChildren: item.menuChildren,
+                  textStyle: AppTheme.typography.headline.big,
+                  textColor: AppTheme.colors.white,
+                  textColorOnHover: AppTheme.colors.darkGray,
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
