@@ -35,6 +35,8 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
           )
           .toList();
 
+      categories.sort((a, b) => a.title.compareTo(b.title));
+
       return categories;
     } catch (exception, stackTrace) {
       _loggerService.error('Error fetching history categories: $exception', stackTrace: stackTrace);

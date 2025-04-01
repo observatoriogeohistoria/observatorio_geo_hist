@@ -23,7 +23,11 @@ class FullScreenDialog extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(AppTheme.dimensions.space.large.scale),
+          padding: EdgeInsets.only(
+            left: AppTheme.dimensions.space.large.horizontalSpacing,
+            right: AppTheme.dimensions.space.large.horizontalSpacing,
+            top: AppTheme.dimensions.space.large.verticalSpacing,
+          ),
           decoration: const BoxDecoration(
             gradient: RadialGradient(
               radius: 1.5,
@@ -36,12 +40,13 @@ class FullScreenDialog extends StatelessWidget {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  if (title != null)
+                  if (title != null) ...[
                     AppTitle.big(
                       text: title!,
                       textAlign: TextAlign.center,
                       color: AppTheme.colors.lightGray,
                     ),
+                  ],
                   Align(
                     alignment: Alignment.centerRight,
                     child: AppIconButton(
@@ -53,6 +58,7 @@ class FullScreenDialog extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
               Expanded(
                 child: child,
               ),

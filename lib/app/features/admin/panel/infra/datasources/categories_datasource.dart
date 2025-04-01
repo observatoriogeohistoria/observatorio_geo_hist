@@ -35,6 +35,8 @@ class CategoriesDatasourceImpl implements CategoriesDatasource {
         updatedCategories.add(category.copyWith(numberOfPosts: postsQuerySnapshot.docs.length));
       }
 
+      updatedCategories.sort((a, b) => a.title.compareTo(b.title));
+
       return updatedCategories;
     } catch (exception, stackTrace) {
       _loggerService.error('Error fetching categories: $exception', stackTrace: stackTrace);
