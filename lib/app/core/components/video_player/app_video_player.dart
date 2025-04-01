@@ -40,11 +40,12 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     super.initState();
 
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));
+
+    if (widget.startPlaying) _togglePlayPause();
+    if (widget.startMuted) _toggleMute();
+
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
       setState(() => _isLoading = false);
-
-      if (widget.startPlaying) _togglePlayPause();
-      if (widget.startMuted) _toggleMute();
     }).catchError((error) {
       setState(() => _error = true);
     });
