@@ -50,7 +50,7 @@ class _NavbarState extends State<Navbar> {
         route: AppRoutes.root,
       ),
       NavButtonItem(
-        title: PostsAreas.history.name.toUpperCase(),
+        title: PostsAreas.history.portuguese.toUpperCase(),
         options: fetchCategoriesStore.historyCategories
             .map(
               (category) => NavButtonItem(
@@ -62,7 +62,7 @@ class _NavbarState extends State<Navbar> {
         area: PostsAreas.history,
       ),
       NavButtonItem(
-        title: PostsAreas.geography.name.toUpperCase(),
+        title: PostsAreas.geography.portuguese.toUpperCase(),
         options: fetchCategoriesStore.geographyCategories
             .map(
               (category) => NavButtonItem(

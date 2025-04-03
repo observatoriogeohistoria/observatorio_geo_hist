@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -29,6 +30,8 @@ class _MediaSectionState extends State<MediaSection> {
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
+
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -109,28 +112,32 @@ class _MediaSectionState extends State<MediaSection> {
 
               final medias = mediaStore.medias;
 
-              return ListView.separated(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.only(
-                  bottom: AppTheme.dimensions.space.large.verticalSpacing,
+              return AppScrollbar(
+                controller: _scrollController,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                  ),
+                  separatorBuilder: (context, index) {
+                    final isLast = index == medias.length - 1;
+
+                    return isLast
+                        ? const SizedBox()
+                        : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                  },
+                  itemCount: medias.length,
+                  itemBuilder: (context, index) {
+                    final media = medias[index];
+
+                    return MediaCard(
+                      media: media,
+                      index: index + 1,
+                      onDelete: () => mediaStore.deleteMedia(media),
+                    );
+                  },
                 ),
-                separatorBuilder: (context, index) {
-                  final isLast = index == medias.length - 1;
-
-                  return isLast
-                      ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                },
-                itemCount: medias.length,
-                itemBuilder: (context, index) {
-                  final media = medias[index];
-
-                  return MediaCard(
-                    media: media,
-                    index: index + 1,
-                    onDelete: () => mediaStore.deleteMedia(media),
-                  );
-                },
               );
             },
           ),

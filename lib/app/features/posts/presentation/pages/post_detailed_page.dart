@@ -3,10 +3,9 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
+import 'package:observatorio_geo_hist/app/core/components/image/app_network_image.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/image/app_network_image.dart';
-import 'package:observatorio_geo_hist/app/core/components/quill/view_quill.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -110,25 +109,27 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppHeadline.big(
-              text: post.title.toUpperCase(),
-              textAlign: TextAlign.start,
-              color: AppTheme.colors.orange,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+            if (post.body?.title.isNotEmpty ?? false) ...[
+              AppHeadline.big(
+                text: post.body!.title.toUpperCase(),
+                textAlign: TextAlign.start,
+                color: AppTheme.colors.orange,
+              ),
+              SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+            ],
             AppTitle.big(
-              text: post.subtitle.toUpperCase(),
+              text: 'post.subtitle'.toUpperCase(),
               color: AppTheme.colors.gray,
             ),
             SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-            for (var author in post.authors)
-              AppTitle.small(
-                text: author,
-                color: AppTheme.colors.orange,
-              ),
+            // for (var author in post.authors)
+            //   AppTitle.small(
+            //     text: author,
+            //     color: AppTheme.colors.orange,
+            //   ),
             SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
             AppTitle.medium(
-              text: post.date,
+              text: 'post.date',
               color: AppTheme.colors.darkGray,
             ),
             SizedBox(height: AppTheme.dimensions.space.massive.verticalSpacing),
@@ -136,43 +137,43 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
             SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
             const AppDivider(),
             SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-            AppNetworkImage(
-              imageUrl: post.imgUrl,
+            const AppNetworkImage(
+              imageUrl: 'post.imgUrl',
               height: null,
             ),
-            if (post.imgCaption != null)
-              Align(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                    AppTitle.small(
-                      text: post.imgCaption!,
-                      textAlign: TextAlign.start,
-                      color: AppTheme.colors.gray,
-                    ),
-                  ],
-                ),
-              ),
+            // if (post.imgCaption != null)
+            //   Align(
+            //     alignment: Alignment.center,
+            //     child: Column(
+            //       children: [
+            //         SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+            //         AppTitle.small(
+            //           text: post.imgCaption!,
+            //           textAlign: TextAlign.start,
+            //           color: AppTheme.colors.gray,
+            //         ),
+            //       ],
+            //     ),
+            //   ),
             SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-            ViewQuill(initialContent: post.markdownContent),
-            if (post.observation != null)
-              Column(
-                children: [
-                  SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppTheme.dimensions.space.large.horizontalSpacing,
-                      vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTheme.colors.lightGray,
-                      borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-                    ),
-                    child: ViewQuill(initialContent: post.observation),
-                  ),
-                ],
-              ),
+            // ViewQuill(initialContent: post.markdownContent),
+            // if (post.observation != null)
+            //   Column(
+            //     children: [
+            //       SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+            //       Container(
+            //         padding: EdgeInsets.symmetric(
+            //           horizontal: AppTheme.dimensions.space.large.horizontalSpacing,
+            //           vertical: AppTheme.dimensions.space.medium.verticalSpacing,
+            //         ),
+            //         decoration: BoxDecoration(
+            //           color: AppTheme.colors.lightGray,
+            //           borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+            //         ),
+            //         child: ViewQuill(initialContent: post.observation),
+            //       ),
+            //     ],
+            //   ),
             SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/empty_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
@@ -157,6 +158,7 @@ class _PostsPageState extends State<PostsPage> {
             children: [
               TitleWidget(title: 'POSTS', color: AppTheme.colors.orange),
               SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+              if (fetchPostsStore.posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
               if (fetchPostsStore.posts.isNotEmpty)
                 AlignedGridView.count(
                   physics: const NeverScrollableScrollPhysics(),

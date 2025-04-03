@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -31,6 +32,8 @@ class _PostsSectionState extends State<PostsSection> {
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
+
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -113,38 +116,42 @@ class _PostsSectionState extends State<PostsSection> {
 
               final posts = postsStore.posts;
 
-              return ListView.separated(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.only(
-                  bottom: AppTheme.dimensions.space.large.verticalSpacing,
+              return AppScrollbar(
+                controller: _scrollController,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                  ),
+                  separatorBuilder: (context, index) {
+                    final isLast = index == posts.length - 1;
+
+                    return isLast
+                        ? const SizedBox()
+                        : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                  },
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    final post = posts[index];
+
+                    return PostCard(
+                      post: post,
+                      index: index + 1,
+                      onPublish: () => postsStore
+                          .createOrUpdatePost(post.copyWith(isPublished: !post.isPublished)),
+                      onEdit: () {
+                        showCreateOrUpdatePostDialog(
+                          context,
+                          post: post,
+                          categories: categoriesStore.categories,
+                          onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+                        );
+                      },
+                      onDelete: () => postsStore.deletePost(post),
+                    );
+                  },
                 ),
-                separatorBuilder: (context, index) {
-                  final isLast = index == posts.length - 1;
-
-                  return isLast
-                      ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                },
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  final post = posts[index];
-
-                  return PostCard(
-                    post: post,
-                    index: index + 1,
-                    onPublish: () => postsStore
-                        .createOrUpdatePost(post.copyWith(isPublished: !post.isPublished)),
-                    onEdit: () {
-                      showCreateOrUpdatePostDialog(
-                        context,
-                        post: post,
-                        categories: categoriesStore.categories,
-                        onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
-                      );
-                    },
-                    onDelete: () => postsStore.deletePost(post),
-                  );
-                },
               );
             },
           ),

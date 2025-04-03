@@ -35,7 +35,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./
         exclude: |
-          build/web/**  # Exclui a pasta build/web para não enviá-la aqui
+          build/web/**
 
     - name: Sync build/web to HostGator
       uses: SamKirkland/FTP-Deploy-Action@4.3.0

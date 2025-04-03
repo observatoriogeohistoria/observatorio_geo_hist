@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -29,6 +30,8 @@ class _TeamSectionState extends State<TeamSection> {
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
+
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -109,35 +112,39 @@ class _TeamSectionState extends State<TeamSection> {
 
               final members = teamStore.teamMembers;
 
-              return ListView.separated(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.only(
-                  bottom: AppTheme.dimensions.space.large.verticalSpacing,
+              return AppScrollbar(
+                controller: _scrollController,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                  ),
+                  separatorBuilder: (context, index) {
+                    final isLast = index == members.length - 1;
+
+                    return isLast
+                        ? const SizedBox()
+                        : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                  },
+                  itemCount: members.length,
+                  itemBuilder: (context, index) {
+                    final member = members[index];
+
+                    return TeamMemberCard(
+                      member: member,
+                      index: index + 1,
+                      onDelete: () => teamStore.deleteTeamMember(member),
+                      onEdit: () {
+                        showCreateOrUpdateTeamMemberDialog(
+                          context,
+                          onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
+                          member: member,
+                        );
+                      },
+                    );
+                  },
                 ),
-                separatorBuilder: (context, index) {
-                  final isLast = index == members.length - 1;
-
-                  return isLast
-                      ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                },
-                itemCount: members.length,
-                itemBuilder: (context, index) {
-                  final member = members[index];
-
-                  return TeamMemberCard(
-                    member: member,
-                    index: index + 1,
-                    onDelete: () => teamStore.deleteTeamMember(member),
-                    onEdit: () {
-                      showCreateOrUpdateTeamMemberDialog(
-                        context,
-                        onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
-                        member: member,
-                      );
-                    },
-                  );
-                },
               );
             },
           ),

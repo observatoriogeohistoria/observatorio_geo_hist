@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
-import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/image/app_network_image.dart';
+import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -35,23 +35,26 @@ class PostCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppNetworkImage(
-                imageUrl: post.imgUrl,
-                radius: AppTheme.dimensions.radius.large,
-              ),
-              SizedBox(height: AppTheme.dimensions.space.medium),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                child: AppTitle.big(
-                  text: post.title,
-                  textAlign: TextAlign.center,
-                  color: AppTheme.colors.darkGray,
+              if (post.body?.image.isNotEmpty ?? false) ...[
+                AppNetworkImage(
+                  imageUrl: post.body!.image,
+                  radius: AppTheme.dimensions.radius.large,
                 ),
-              ),
+                SizedBox(height: AppTheme.dimensions.space.medium),
+              ],
+              if (post.body?.title.isEmpty ?? false)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+                  child: AppTitle.big(
+                    text: post.body!.title,
+                    textAlign: TextAlign.center,
+                    color: AppTheme.colors.darkGray,
+                  ),
+                ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
                 child: AppBody.medium(
-                  text: post.subtitle,
+                  text: 'post.subtitle',
                   textAlign: TextAlign.center,
                   color: AppTheme.colors.gray,
                 ),

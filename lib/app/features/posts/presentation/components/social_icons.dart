@@ -41,8 +41,9 @@ class _SocialIconsState extends State<SocialIcons> {
       hoverColor: color,
       onTap: () {
         String currentUrl = getEncodedCurrentUrl();
-        String linkTo =
-            link.replaceAll('[TEXT]', widget.post.title).replaceAll('[URL]', currentUrl);
+        String linkTo = link
+            .replaceAll('[TEXT]', widget.post.body?.title ?? '')
+            .replaceAll('[URL]', currentUrl);
 
         openUrl(linkTo);
       },

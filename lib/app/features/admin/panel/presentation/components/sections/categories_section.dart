@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -29,6 +30,8 @@ class _CategoriesSectionState extends State<CategoriesSection> {
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
+
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -109,36 +112,40 @@ class _CategoriesSectionState extends State<CategoriesSection> {
 
               final categories = categoriesStore.categories;
 
-              return ListView.separated(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.only(
-                  bottom: AppTheme.dimensions.space.large.verticalSpacing,
+              return AppScrollbar(
+                controller: _scrollController,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                  ),
+                  separatorBuilder: (context, index) {
+                    final isLast = index == categories.length - 1;
+
+                    return isLast
+                        ? const SizedBox()
+                        : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                  },
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+
+                    return CategoryCard(
+                      category: category,
+                      index: index + 1,
+                      onDelete: () => categoriesStore.deleteCategory(category),
+                      onEdit: () {
+                        showCreateOrUpdateCategoryDialog(
+                          context,
+                          category: category,
+                          onCreateOrUpdate: (category) =>
+                              categoriesStore.createOrUpdateCategory(category),
+                        );
+                      },
+                    );
+                  },
                 ),
-                separatorBuilder: (context, index) {
-                  final isLast = index == categories.length - 1;
-
-                  return isLast
-                      ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                },
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  final category = categories[index];
-
-                  return CategoryCard(
-                    category: category,
-                    index: index + 1,
-                    onDelete: () => categoriesStore.deleteCategory(category),
-                    onEdit: () {
-                      showCreateOrUpdateCategoryDialog(
-                        context,
-                        category: category,
-                        onCreateOrUpdate: (category) =>
-                            categoriesStore.createOrUpdateCategory(category),
-                      );
-                    },
-                  );
-                },
               );
             },
           ),

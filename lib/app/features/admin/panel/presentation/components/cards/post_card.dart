@@ -4,9 +4,10 @@ import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/posts_cards/article_card.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostCard extends StatelessWidget {
@@ -38,24 +39,11 @@ class PostCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppLabel.small(
-                    text: '$index',
-                    color: AppTheme.colors.gray,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-                  AppTitle.big(
-                    text: post.title,
-                    color: AppTheme.colors.darkGray,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                  AppBody.medium(
-                    text: post.subtitle,
-                    color: AppTheme.colors.gray,
-                  ),
+                  _buildBody(post),
                   const AppDivider(),
                   AppBody.big(
                     text:
-                        '${post.areas.map((area) => area.name).join(' - ')} | ${post.category?.title}',
+                        '${post.areas.map((area) => area.portuguese).join(' - ')} | ${post.category?.title}',
                     color: AppTheme.colors.gray,
                   ),
                   SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
@@ -97,5 +85,15 @@ class PostCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildBody(PostModel post) {
+    if (post.body == null) return const SizedBox.shrink();
+
+    if (post.type == PostType.article) {
+      return ArticleCard(body: (post.body! as ArticleModel), index: index);
+    }
+
+    return const SizedBox.shrink();
   }
 }
