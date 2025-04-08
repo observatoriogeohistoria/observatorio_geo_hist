@@ -14,6 +14,7 @@ class TeamMemberCard extends StatelessWidget {
     required this.index,
     required this.onDelete,
     required this.onEdit,
+    required this.canEdit,
     super.key,
   });
 
@@ -21,6 +22,7 @@ class TeamMemberCard extends StatelessWidget {
   final int index;
   final void Function() onDelete;
   final void Function() onEdit;
+  final bool canEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -58,23 +60,25 @@ class TeamMemberCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                AppIconButton(
-                  icon: Icons.edit,
-                  color: AppTheme.colors.orange,
-                  onPressed: onEdit,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                AppIconButton(
-                  icon: Icons.delete,
-                  color: AppTheme.colors.red,
-                  onPressed: onDelete,
-                ),
-              ],
-            ),
+            if (canEdit) ...[
+              SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  AppIconButton(
+                    icon: Icons.edit,
+                    color: AppTheme.colors.orange,
+                    onPressed: onEdit,
+                  ),
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppIconButton(
+                    icon: Icons.delete,
+                    color: AppTheme.colors.red,
+                    onPressed: onDelete,
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),

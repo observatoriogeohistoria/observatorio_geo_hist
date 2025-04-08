@@ -204,6 +204,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
         context,
         onCreateOrUpdate: widget.onCreateOrUpdate,
         post: PostModel(
+          id: widget.post?.id,
           categoryId: _selectedCategory!.key,
           category: _selectedCategory!,
           areas: [
@@ -211,6 +212,11 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
             if (isGeography) PostsAreas.geography,
           ],
           type: _selectedType!,
+          body: widget.post?.body,
+          createdAt: widget.post?.createdAt,
+          updatedAt: widget.post?.updatedAt,
+          isPublished: widget.post?.isPublished ?? false,
+          isHighlighted: widget.post?.isHighlighted ?? false,
         ),
       );
     }

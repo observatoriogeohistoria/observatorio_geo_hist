@@ -69,87 +69,102 @@ class _TeamSectionState extends State<TeamSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppHeadline.big(
-          text: 'Equipe',
-          color: AppTheme.colors.orange,
-        ),
-        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-        Align(
-          alignment: Alignment.centerRight,
-          child: SecondaryButton.medium(
-            text: 'Criar membro',
-            onPressed: () {
-              showCreateOrUpdateTeamMemberDialog(
-                context,
-                onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
-              );
-            },
-          ),
-        ),
-        Observer(
-          builder: (context) {
-            final state = teamStore.state;
+    return Observer(
+      builder: (context) {
+        bool canEdit = authStore.user?.permissions.canEditTeamSection ?? false;
 
-            if (state is ManageTeamLoadingState && state.isRefreshing) {
-              return const LinearLoading();
-            }
-
-            return const SizedBox.shrink();
-          },
-        ),
-        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-        Expanded(
-          child: Observer(
-            builder: (context) {
-              final state = teamStore.state;
-
-              if (state is ManageTeamLoadingState && !state.isRefreshing) {
-                return const Center(child: CircularLoading());
-              }
-
-              final members = teamStore.teamMembers;
-
-              return AppScrollbar(
-                controller: _scrollController,
-                child: ListView.separated(
-                  controller: _scrollController,
-                  physics: const ClampingScrollPhysics(),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppHeadline.big(
+              text: 'Equipe',
+              color: AppTheme.colors.orange,
+            ),
+            if (canEdit) ...[
+              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
                   padding: EdgeInsets.only(
-                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                    right: AppTheme.dimensions.space.medium.horizontalSpacing,
                   ),
-                  separatorBuilder: (context, index) {
-                    final isLast = index == members.length - 1;
+                  child: SecondaryButton.medium(
+                    text: 'Criar membro',
+                    onPressed: () {
+                      showCreateOrUpdateTeamMemberDialog(
+                        context,
+                        onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+            Observer(
+              builder: (context) {
+                final state = teamStore.state;
 
-                    return isLast
-                        ? const SizedBox()
-                        : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                  },
-                  itemCount: members.length,
-                  itemBuilder: (context, index) {
-                    final member = members[index];
+                if (state is ManageTeamLoadingState && state.isRefreshing) {
+                  return const LinearLoading();
+                }
 
-                    return TeamMemberCard(
-                      member: member,
-                      index: index + 1,
-                      onDelete: () => teamStore.deleteTeamMember(member),
-                      onEdit: () {
-                        showCreateOrUpdateTeamMemberDialog(
-                          context,
-                          onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
+                return const SizedBox.shrink();
+              },
+            ),
+            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+            Expanded(
+              child: Observer(
+                builder: (context) {
+                  final state = teamStore.state;
+
+                  if (state is ManageTeamLoadingState && !state.isRefreshing) {
+                    return const Center(child: CircularLoading());
+                  }
+
+                  final members = teamStore.teamMembers;
+
+                  return AppScrollbar(
+                    controller: _scrollController,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      padding: EdgeInsets.only(
+                        bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                      ),
+                      separatorBuilder: (context, index) {
+                        final isLast = index == members.length - 1;
+
+                        return isLast
+                            ? const SizedBox()
+                            : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                      },
+                      itemCount: members.length,
+                      itemBuilder: (context, index) {
+                        final member = members[index];
+
+                        return TeamMemberCard(
                           member: member,
+                          index: index + 1,
+                          onDelete: () => teamStore.deleteTeamMember(member),
+                          onEdit: () {
+                            showCreateOrUpdateTeamMemberDialog(
+                              context,
+                              onCreateOrUpdate: (member) =>
+                                  teamStore.createOrUpdateTeamMember(member),
+                              member: member,
+                            );
+                          },
+                          canEdit: canEdit,
                         );
                       },
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

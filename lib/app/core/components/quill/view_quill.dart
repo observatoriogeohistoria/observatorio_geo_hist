@@ -14,6 +14,28 @@ class ViewQuill extends StatefulWidget {
 
   @override
   State<ViewQuill> createState() => _ViewQuillState();
+
+  static bool isQuillContentEmpty(String? content) {
+    if (content == null || content.trim().isEmpty) return true;
+
+    try {
+      final List<dynamic> deltaOps = jsonDecode(content);
+      for (final op in deltaOps) {
+        if (op is Map && op.containsKey('insert')) {
+          final value = op['insert'];
+          if (value is String && value.trim().isNotEmpty && value.trim() != '\n') {
+            return false;
+          }
+          if (value is! String) {
+            return false;
+          }
+        }
+      }
+      return true;
+    } catch (_) {
+      return true;
+    }
+  }
 }
 
 class _ViewQuillState extends State<ViewQuill> {
@@ -24,7 +46,7 @@ class _ViewQuillState extends State<ViewQuill> {
     super.initState();
 
     _controller = QuillController(
-      document: widget.initialContent != null
+      document: (widget.initialContent?.isNotEmpty ?? false)
           ? Document.fromDelta(Delta.fromJson(jsonDecode(widget.initialContent!)))
           : Document(),
       selection: const TextSelection.collapsed(offset: 0),

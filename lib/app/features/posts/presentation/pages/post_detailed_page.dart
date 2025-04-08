@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
-import 'package:observatorio_geo_hist/app/core/components/image/app_network_image.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/social_icons.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/article_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/fetch_posts_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -99,86 +95,16 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
   }
 
   Widget _buildPostContent(BuildContext context, PostModel post) {
-    return SliverToBoxAdapter(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: DeviceUtils.getPageHorizontalPadding(context),
-          vertical: AppTheme.dimensions.space.massive.verticalSpacing,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (post.body?.title.isNotEmpty ?? false) ...[
-              AppHeadline.big(
-                text: post.body!.title.toUpperCase(),
-                textAlign: TextAlign.start,
-                color: AppTheme.colors.orange,
-              ),
-              SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-            ],
-            AppTitle.big(
-              text: 'post.subtitle'.toUpperCase(),
-              color: AppTheme.colors.gray,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-            // for (var author in post.authors)
-            //   AppTitle.small(
-            //     text: author,
-            //     color: AppTheme.colors.orange,
-            //   ),
-            SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-            AppTitle.medium(
-              text: 'post.date',
-              color: AppTheme.colors.darkGray,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.massive.verticalSpacing),
-            SocialIcons(post: post),
-            SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-            const AppDivider(),
-            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-            const AppNetworkImage(
-              imageUrl: 'post.imgUrl',
-              height: null,
-            ),
-            // if (post.imgCaption != null)
-            //   Align(
-            //     alignment: Alignment.center,
-            //     child: Column(
-            //       children: [
-            //         SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-            //         AppTitle.small(
-            //           text: post.imgCaption!,
-            //           textAlign: TextAlign.start,
-            //           color: AppTheme.colors.gray,
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-            // ViewQuill(initialContent: post.markdownContent),
-            // if (post.observation != null)
-            //   Column(
-            //     children: [
-            //       SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-            //       Container(
-            //         padding: EdgeInsets.symmetric(
-            //           horizontal: AppTheme.dimensions.space.large.horizontalSpacing,
-            //           vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-            //         ),
-            //         decoration: BoxDecoration(
-            //           color: AppTheme.colors.lightGray,
-            //           borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-            //         ),
-            //         child: ViewQuill(initialContent: post.observation),
-            //       ),
-            //     ],
-            //   ),
-            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-          ],
-        ),
-      ),
-    );
+    Widget content = const SizedBox.shrink();
+
+    if (post.type == PostType.article) {
+      content = ArticleContent(
+        post: post,
+        article: post.body! as ArticleModel,
+      );
+    }
+
+    return SliverToBoxAdapter(child: content);
   }
 
   void setupReactions() {

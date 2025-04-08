@@ -2,11 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/datasources/firebase_auth_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 
 abstract class AuthRepository {
-  Future<Either<AuthFailure, User>> login(String email, String password);
+  Future<Either<AuthFailure, UserModel>> login(String email, String password);
   Future<Either<AuthFailure, Unit>> logout();
-  Future<Either<AuthFailure, User>> currentUser();
+  Future<Either<AuthFailure, UserModel>> currentUser();
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -15,7 +16,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._datasource);
 
   @override
-  Future<Either<AuthFailure, User>> login(String email, String password) async {
+  Future<Either<AuthFailure, UserModel>> login(String email, String password) async {
     try {
       final user = await _datasource.signIn(email, password);
 
@@ -42,7 +43,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, User>> currentUser() async {
+  Future<Either<AuthFailure, UserModel>> currentUser() async {
     try {
       final user = await _datasource.currentUser();
 

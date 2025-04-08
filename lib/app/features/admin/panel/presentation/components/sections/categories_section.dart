@@ -26,8 +26,8 @@ class CategoriesSection extends StatefulWidget {
 }
 
 class _CategoriesSectionState extends State<CategoriesSection> {
-  late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
+  late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
 
   List<ReactionDisposer> _reactions = [];
 
@@ -69,88 +69,103 @@ class _CategoriesSectionState extends State<CategoriesSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppHeadline.big(
-          text: 'Categorias',
-          color: AppTheme.colors.orange,
-        ),
-        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-        Align(
-          alignment: Alignment.centerRight,
-          child: SecondaryButton.medium(
-            text: 'Criar categoria',
-            onPressed: () {
-              showCreateOrUpdateCategoryDialog(
-                context,
-                onCreateOrUpdate: (category) => categoriesStore.createOrUpdateCategory(category),
-              );
-            },
-          ),
-        ),
-        Observer(
-          builder: (context) {
-            final state = categoriesStore.state;
+    return Observer(
+      builder: (context) {
+        bool canEdit = authStore.user?.permissions.canEditCategoriesSection ?? false;
 
-            if (state is ManageCategoriesLoadingState && state.isRefreshing) {
-              return const LinearLoading();
-            }
-
-            return const SizedBox.shrink();
-          },
-        ),
-        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-        Expanded(
-          child: Observer(
-            builder: (context) {
-              final state = categoriesStore.state;
-
-              if (state is ManageCategoriesLoadingState && !state.isRefreshing) {
-                return const Center(child: CircularLoading());
-              }
-
-              final categories = categoriesStore.categories;
-
-              return AppScrollbar(
-                controller: _scrollController,
-                child: ListView.separated(
-                  controller: _scrollController,
-                  physics: const ClampingScrollPhysics(),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppHeadline.big(
+              text: 'Categorias',
+              color: AppTheme.colors.orange,
+            ),
+            if (canEdit) ...[
+              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
                   padding: EdgeInsets.only(
-                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                    right: AppTheme.dimensions.space.medium.horizontalSpacing,
                   ),
-                  separatorBuilder: (context, index) {
-                    final isLast = index == categories.length - 1;
+                  child: SecondaryButton.medium(
+                    text: 'Criar categoria',
+                    onPressed: () {
+                      showCreateOrUpdateCategoryDialog(
+                        context,
+                        onCreateOrUpdate: (category) =>
+                            categoriesStore.createOrUpdateCategory(category),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+            Observer(
+              builder: (context) {
+                final state = categoriesStore.state;
 
-                    return isLast
-                        ? const SizedBox()
-                        : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                  },
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
+                if (state is ManageCategoriesLoadingState && state.isRefreshing) {
+                  return const LinearLoading();
+                }
 
-                    return CategoryCard(
-                      category: category,
-                      index: index + 1,
-                      onDelete: () => categoriesStore.deleteCategory(category),
-                      onEdit: () {
-                        showCreateOrUpdateCategoryDialog(
-                          context,
+                return const SizedBox.shrink();
+              },
+            ),
+            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+            Expanded(
+              child: Observer(
+                builder: (context) {
+                  final state = categoriesStore.state;
+
+                  if (state is ManageCategoriesLoadingState && !state.isRefreshing) {
+                    return const Center(child: CircularLoading());
+                  }
+
+                  final categories = categoriesStore.categories;
+
+                  return AppScrollbar(
+                    controller: _scrollController,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      padding: EdgeInsets.only(
+                        bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                      ),
+                      separatorBuilder: (context, index) {
+                        final isLast = index == categories.length - 1;
+
+                        return isLast
+                            ? const SizedBox()
+                            : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                      },
+                      itemCount: categories.length,
+                      itemBuilder: (context, index) {
+                        final category = categories[index];
+
+                        return CategoryCard(
                           category: category,
-                          onCreateOrUpdate: (category) =>
-                              categoriesStore.createOrUpdateCategory(category),
+                          index: index + 1,
+                          onDelete: () => categoriesStore.deleteCategory(category),
+                          onEdit: () {
+                            showCreateOrUpdateCategoryDialog(
+                              context,
+                              category: category,
+                              onCreateOrUpdate: (category) =>
+                                  categoriesStore.createOrUpdateCategory(category),
+                            );
+                          },
+                          canEdit: canEdit,
                         );
                       },
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

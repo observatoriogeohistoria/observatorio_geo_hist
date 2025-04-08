@@ -17,6 +17,7 @@ class PostCard extends StatelessWidget {
     required this.onPublish,
     required this.onEdit,
     required this.onDelete,
+    required this.canEdit,
     super.key,
   });
 
@@ -25,6 +26,7 @@ class PostCard extends StatelessWidget {
   final void Function() onPublish;
   final void Function() onEdit;
   final void Function() onDelete;
+  final bool canEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -54,33 +56,35 @@ class PostCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Tooltip(
-                  message: post.isPublished ? 'Despublicar post' : 'Publicar post',
-                  child: AppIconButton(
-                    icon: post.isPublished ? Icons.public_off : Icons.public,
-                    color: AppTheme.colors.orange,
-                    onPressed: onPublish,
+            if (canEdit) ...[
+              SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Tooltip(
+                    message: post.isPublished ? 'Despublicar post' : 'Publicar post',
+                    child: AppIconButton(
+                      icon: post.isPublished ? Icons.public_off : Icons.public,
+                      color: AppTheme.colors.orange,
+                      onPressed: onPublish,
+                    ),
                   ),
-                ),
-                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                AppIconButton(
-                  icon: Icons.edit,
-                  color: AppTheme.colors.gray,
-                  onPressed: onEdit,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                AppIconButton(
-                  icon: Icons.delete,
-                  color: AppTheme.colors.red,
-                  onPressed: onDelete,
-                ),
-              ],
-            ),
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppIconButton(
+                    icon: Icons.edit,
+                    color: AppTheme.colors.gray,
+                    onPressed: onEdit,
+                  ),
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppIconButton(
+                    icon: Icons.delete,
+                    color: AppTheme.colors.red,
+                    onPressed: onDelete,
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),

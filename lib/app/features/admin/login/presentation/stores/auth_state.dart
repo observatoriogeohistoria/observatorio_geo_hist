@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 
@@ -9,7 +8,6 @@ class AuthState with _$AuthState {
   const AuthState._();
 
   const factory AuthState({
-    required User? user,
     required LoginState loginState,
     required LogoutState logoutState,
   }) = _AuthState;

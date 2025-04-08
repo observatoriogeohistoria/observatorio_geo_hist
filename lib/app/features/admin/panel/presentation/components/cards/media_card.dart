@@ -15,12 +15,14 @@ class MediaCard extends StatelessWidget {
     required this.media,
     required this.index,
     required this.onDelete,
+    required this.canEdit,
     super.key,
   });
 
   final MediaModel media;
   final int index;
   final void Function() onDelete;
+  final bool canEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +80,14 @@ class MediaCard extends StatelessWidget {
                     },
                   ),
                 ],
-                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                AppIconButton(
-                  icon: Icons.delete,
-                  color: AppTheme.colors.red,
-                  onPressed: onDelete,
-                ),
+                if (canEdit) ...[
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppIconButton(
+                    icon: Icons.delete,
+                    color: AppTheme.colors.red,
+                    onPressed: onDelete,
+                  ),
+                ],
               ],
             ),
           ],

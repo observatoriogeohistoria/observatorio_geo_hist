@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/repositories/auth_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 
 part 'auth_store.g.dart';
 
@@ -15,8 +16,10 @@ abstract class AuthStoreBase with Store {
   bool passwordVisible = false;
 
   @observable
+  UserModel? user;
+
+  @observable
   AuthState state = const AuthState(
-    user: null,
     loginState: LoginState.initial(),
     logoutState: LogoutState.initial(),
   );
@@ -31,8 +34,8 @@ abstract class AuthStoreBase with Store {
     final result = await _authRepository.currentUser();
 
     result.fold(
-      (failure) => state = state.copyWith(user: null),
-      (user) => state = state.copyWith(user: user),
+      (failure) => user = null,
+      (user) => this.user = user,
     );
   }
 
@@ -44,11 +47,14 @@ abstract class AuthStoreBase with Store {
 
     result.fold(
       (failure) => state = state.copyWith(loginState: LoginState.error(failure)),
-      (user) => state = state.copyWith(
-        user: user,
-        loginState: const LoginState.success(),
-        logoutState: const LogoutState.initial(),
-      ),
+      (user) {
+        this.user = user;
+
+        state = state.copyWith(
+          loginState: const LoginState.success(),
+          logoutState: const LogoutState.initial(),
+        );
+      },
     );
   }
 
@@ -60,11 +66,13 @@ abstract class AuthStoreBase with Store {
 
     result.fold(
       (failure) => state = state.copyWith(logoutState: LogoutState.error(failure)),
-      (_) => state = state.copyWith(
-        user: null,
-        loginState: const LoginState.initial(),
-        logoutState: const LogoutState.success(),
-      ),
+      (_) {
+        user = null;
+        state = state.copyWith(
+          loginState: const LoginState.initial(),
+          logoutState: const LogoutState.success(),
+        );
+      },
     );
   }
 }

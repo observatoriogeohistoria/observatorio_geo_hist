@@ -26,8 +26,8 @@ class MediaSection extends StatefulWidget {
 }
 
 class _MediaSectionState extends State<MediaSection> {
-  late final MediaStore mediaStore = PanelSetup.getIt<MediaStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
+  late final MediaStore mediaStore = PanelSetup.getIt<MediaStore>();
 
   List<ReactionDisposer> _reactions = [];
 
@@ -69,80 +69,94 @@ class _MediaSectionState extends State<MediaSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppHeadline.big(
-          text: 'Mídias',
-          color: AppTheme.colors.orange,
-        ),
-        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-        Align(
-          alignment: Alignment.centerRight,
-          child: SecondaryButton.medium(
-            text: 'Criar mídia',
-            onPressed: () {
-              showCreateMediaDialog(
-                context,
-                onCreate: (media) => mediaStore.createMedia(media),
-              );
-            },
-          ),
-        ),
-        Observer(
-          builder: (context) {
-            final state = mediaStore.state;
+    return Observer(
+      builder: (context) {
+        bool canEdit = authStore.user?.permissions.canEditMediaSection ?? false;
 
-            if (state is ManageMediaLoadingState && state.isRefreshing) {
-              return const LinearLoading();
-            }
-
-            return const SizedBox.shrink();
-          },
-        ),
-        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-        Expanded(
-          child: Observer(
-            builder: (context) {
-              final state = mediaStore.state;
-
-              if (state is ManageMediaLoadingState && !state.isRefreshing) {
-                return const CircularLoading();
-              }
-
-              final medias = mediaStore.medias;
-
-              return AppScrollbar(
-                controller: _scrollController,
-                child: ListView.separated(
-                  controller: _scrollController,
-                  physics: const ClampingScrollPhysics(),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppHeadline.big(
+              text: 'Mídias',
+              color: AppTheme.colors.orange,
+            ),
+            if (canEdit) ...[
+              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
                   padding: EdgeInsets.only(
-                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                    right: AppTheme.dimensions.space.medium.horizontalSpacing,
                   ),
-                  separatorBuilder: (context, index) {
-                    final isLast = index == medias.length - 1;
-
-                    return isLast
-                        ? const SizedBox()
-                        : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                  },
-                  itemCount: medias.length,
-                  itemBuilder: (context, index) {
-                    final media = medias[index];
-
-                    return MediaCard(
-                      media: media,
-                      index: index + 1,
-                      onDelete: () => mediaStore.deleteMedia(media),
-                    );
-                  },
+                  child: SecondaryButton.medium(
+                    text: 'Criar mídia',
+                    onPressed: () {
+                      showCreateMediaDialog(
+                        context,
+                        onCreate: (media) => mediaStore.createMedia(media),
+                      );
+                    },
+                  ),
                 ),
-              );
-            },
-          ),
-        ),
-      ],
+              ),
+            ],
+            Observer(
+              builder: (context) {
+                final state = mediaStore.state;
+
+                if (state is ManageMediaLoadingState && state.isRefreshing) {
+                  return const LinearLoading();
+                }
+
+                return const SizedBox.shrink();
+              },
+            ),
+            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+            Expanded(
+              child: Observer(
+                builder: (context) {
+                  final state = mediaStore.state;
+
+                  if (state is ManageMediaLoadingState && !state.isRefreshing) {
+                    return const CircularLoading();
+                  }
+
+                  final medias = mediaStore.medias;
+
+                  return AppScrollbar(
+                    controller: _scrollController,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      padding: EdgeInsets.only(
+                        bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                      ),
+                      separatorBuilder: (context, index) {
+                        final isLast = index == medias.length - 1;
+
+                        return isLast
+                            ? const SizedBox()
+                            : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                      },
+                      itemCount: medias.length,
+                      itemBuilder: (context, index) {
+                        final media = medias[index];
+
+                        return MediaCard(
+                          media: media,
+                          index: index + 1,
+                          onDelete: () => mediaStore.deleteMedia(media),
+                          canEdit: canEdit,
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

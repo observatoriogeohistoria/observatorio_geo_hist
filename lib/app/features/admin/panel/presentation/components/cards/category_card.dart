@@ -14,6 +14,7 @@ class CategoryCard extends StatelessWidget {
     required this.index,
     required this.onDelete,
     required this.onEdit,
+    required this.canEdit,
     super.key,
   });
 
@@ -21,6 +22,7 @@ class CategoryCard extends StatelessWidget {
   final int index;
   final void Function() onDelete;
   final void Function() onEdit;
+  final bool canEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -57,26 +59,28 @@ class CategoryCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AppIconButton(
-                  icon: Icons.edit,
-                  color: AppTheme.colors.orange,
-                  onPressed: onEdit,
-                ),
-                if (category.numberOfPosts == 0) ...[
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+            if (canEdit) ...[
+              SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
                   AppIconButton(
-                    icon: Icons.delete,
-                    color: AppTheme.colors.red,
-                    onPressed: onDelete,
+                    icon: Icons.edit,
+                    color: AppTheme.colors.orange,
+                    onPressed: onEdit,
                   ),
-                ]
-              ],
-            ),
+                  if (category.numberOfPosts == 0) ...[
+                    SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                    AppIconButton(
+                      icon: Icons.delete,
+                      color: AppTheme.colors.red,
+                      onPressed: onDelete,
+                    ),
+                  ]
+                ],
+              ),
+            ],
           ],
         ),
       ),

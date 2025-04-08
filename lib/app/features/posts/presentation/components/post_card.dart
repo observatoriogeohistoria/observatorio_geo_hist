@@ -5,6 +5,7 @@ import 'package:observatorio_geo_hist/app/core/components/image/app_network_imag
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
@@ -42,7 +43,7 @@ class PostCard extends StatelessWidget {
                 ),
                 SizedBox(height: AppTheme.dimensions.space.medium),
               ],
-              if (post.body?.title.isEmpty ?? false)
+              if (post.body?.title.isNotEmpty ?? false)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
                   child: AppTitle.big(
@@ -51,19 +52,26 @@ class PostCard extends StatelessWidget {
                     color: AppTheme.colors.darkGray,
                   ),
                 ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                child: AppBody.medium(
-                  text: 'post.subtitle',
-                  textAlign: TextAlign.center,
-                  color: AppTheme.colors.gray,
+              if (_subtitle.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+                  child: AppBody.medium(
+                    text: _subtitle,
+                    textAlign: TextAlign.center,
+                    color: AppTheme.colors.gray,
+                  ),
                 ),
-              ),
               SizedBox(height: AppTheme.dimensions.space.small),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String get _subtitle {
+    if (post.type == PostType.article) return (post.body as ArticleModel).subtitle;
+
+    return '';
   }
 }

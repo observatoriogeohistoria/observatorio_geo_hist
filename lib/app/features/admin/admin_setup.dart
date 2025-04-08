@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
@@ -13,7 +14,11 @@ class AdminSetup {
   static void setup() {
     // Auth
     getIt.registerFactory<FirebaseAuthDatasource>(
-      () => FirebaseAuthDatasourceImpl(getIt<FirebaseAuth>(), getIt<LoggerService>()),
+      () => FirebaseAuthDatasourceImpl(
+        getIt<FirebaseAuth>(),
+        getIt<FirebaseFirestore>(),
+        getIt<LoggerService>(),
+      ),
     );
     getIt.registerFactory<AuthRepository>(
       () => AuthRepositoryImpl(getIt<FirebaseAuthDatasource>()),

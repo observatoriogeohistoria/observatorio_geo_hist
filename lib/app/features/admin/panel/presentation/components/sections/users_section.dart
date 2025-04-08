@@ -78,15 +78,20 @@ class _UsersSectionState extends State<UsersSection> {
         SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
         Align(
           alignment: Alignment.centerRight,
-          child: SecondaryButton.medium(
-            text: 'Criar usuário',
-            onPressed: () {
-              showCreateOrUpdateUserDialog(
-                context,
-                onCreate: (user, password) => usersStore.createUser(user, password),
-                onUpdate: (user) => usersStore.updateUser(user),
-              );
-            },
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: AppTheme.dimensions.space.medium.horizontalSpacing,
+            ),
+            child: SecondaryButton.medium(
+              text: 'Criar usuário',
+              onPressed: () {
+                showCreateOrUpdateUserDialog(
+                  context,
+                  onCreate: (user, password) => usersStore.createUser(user, password),
+                  onUpdate: (user) => usersStore.updateUser(user),
+                );
+              },
+            ),
           ),
         ),
         Observer(
@@ -117,8 +122,8 @@ class _UsersSectionState extends State<UsersSection> {
                 child: ListView.separated(
                   controller: _scrollController,
                   physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppTheme.dimensions.space.large.verticalSpacing,
+                  padding: EdgeInsets.only(
+                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
                   ),
                   separatorBuilder: (context, index) {
                     final isLast = index == users.length - 1;
