@@ -28,7 +28,7 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
         final data = post.data() as Map<String, dynamic>;
         final fromJson = PostModel.fromJson(data);
 
-        if (fromJson.categoryKey == category.key && fromJson.areas.contains(category.areas.first)) {
+        if (fromJson.categoryId == category.key && fromJson.areas.contains(category.areas.first)) {
           posts.add(fromJson.copyWith(category: category));
         }
       }

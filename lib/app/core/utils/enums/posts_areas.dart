@@ -33,7 +33,7 @@ enum PostsAreas {
     }
   }
 
-  String get name {
+  String get portuguese {
     switch (this) {
       case PostsAreas.history:
         return 'História';

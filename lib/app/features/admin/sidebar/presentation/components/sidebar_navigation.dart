@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_header.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_menu_item.dart';
@@ -19,7 +22,38 @@ class Sidebar extends StatefulWidget {
 }
 
 class _SidebarState extends State<Sidebar> {
+  late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
   late final SidebarStore sidebarStore = PanelSetup.getIt<SidebarStore>();
+
+  List<SidebarItem> sidebarItems = [];
+  List<ReactionDisposer> _reactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _reactions = [
+      reaction((_) => authStore.user, (UserModel? user) {
+        setState(() {
+          sidebarItems = [
+            if (user?.permissions.canAccessUsersSection ?? false) SidebarItem.users,
+            SidebarItem.media,
+            SidebarItem.categories,
+            SidebarItem.posts,
+            SidebarItem.team,
+          ];
+        });
+      }),
+    ];
+  }
+
+  @override
+  void dispose() {
+    for (var reaction in _reactions) {
+      reaction.reaction.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +77,7 @@ class _SidebarState extends State<Sidebar> {
                 SidebarHeader(isCollapsed: isCollapsed),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
                 _buildItems(
-                  items: SidebarItem.values,
+                  items: sidebarItems,
                   selectedItem: sidebarStore.selectedItem,
                   isCollapsed: isCollapsed,
                   isMobile: isMobile,

@@ -10,6 +10,7 @@ import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/categories_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/media_section.dart';
@@ -47,11 +48,12 @@ class _PanelPageState extends State<PanelPage> {
     authStore.currentUser();
 
     _reactions = [
-      reaction((_) => authStore.state, (AuthState state) {
-        if (state.user == null) {
+      reaction((_) => authStore.user, (UserModel? user) {
+        if (user == null) {
           GoRouter.of(context).go('/admin');
         }
-
+      }),
+      reaction((_) => authStore.state, (AuthState state) {
         if (state.logoutState is LogoutStateSuccess) {
           GoRouter.of(context).go('/admin');
         }
@@ -115,7 +117,7 @@ class _PanelPageState extends State<PanelPage> {
           Widget body = Padding(
             padding: EdgeInsets.only(
               top: AppTheme.dimensions.space.large.verticalSpacing,
-              right: AppTheme.dimensions.space.large.horizontalSpacing,
+              right: AppTheme.dimensions.space.small.horizontalSpacing,
               left: AppTheme.dimensions.space.large.horizontalSpacing,
             ),
             child: _buildBody(sidebarStore.selectedItem),

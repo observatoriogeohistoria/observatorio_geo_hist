@@ -16,7 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AuthState {
-  User? get user => throw _privateConstructorUsedError;
   LoginState get loginState => throw _privateConstructorUsedError;
   LogoutState get logoutState => throw _privateConstructorUsedError;
 
@@ -32,7 +31,7 @@ abstract class $AuthStateCopyWith<$Res> {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) then) =
       _$AuthStateCopyWithImpl<$Res, AuthState>;
   @useResult
-  $Res call({User? user, LoginState loginState, LogoutState logoutState});
+  $Res call({LoginState loginState, LogoutState logoutState});
 
   $LoginStateCopyWith<$Res> get loginState;
   $LogoutStateCopyWith<$Res> get logoutState;
@@ -53,15 +52,10 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? user = freezed,
     Object? loginState = null,
     Object? logoutState = null,
   }) {
     return _then(_value.copyWith(
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as User?,
       loginState: null == loginState
           ? _value.loginState
           : loginState // ignore: cast_nullable_to_non_nullable
@@ -102,7 +96,7 @@ abstract class _$$AuthStateImplCopyWith<$Res>
       __$$AuthStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({User? user, LoginState loginState, LogoutState logoutState});
+  $Res call({LoginState loginState, LogoutState logoutState});
 
   @override
   $LoginStateCopyWith<$Res> get loginState;
@@ -123,15 +117,10 @@ class __$$AuthStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? user = freezed,
     Object? loginState = null,
     Object? logoutState = null,
   }) {
     return _then(_$AuthStateImpl(
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as User?,
       loginState: null == loginState
           ? _value.loginState
           : loginState // ignore: cast_nullable_to_non_nullable
@@ -147,12 +136,9 @@ class __$$AuthStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AuthStateImpl extends _AuthState {
-  const _$AuthStateImpl(
-      {required this.user, required this.loginState, required this.logoutState})
+  const _$AuthStateImpl({required this.loginState, required this.logoutState})
       : super._();
 
-  @override
-  final User? user;
   @override
   final LoginState loginState;
   @override
@@ -160,7 +146,7 @@ class _$AuthStateImpl extends _AuthState {
 
   @override
   String toString() {
-    return 'AuthState(user: $user, loginState: $loginState, logoutState: $logoutState)';
+    return 'AuthState(loginState: $loginState, logoutState: $logoutState)';
   }
 
   @override
@@ -168,7 +154,6 @@ class _$AuthStateImpl extends _AuthState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AuthStateImpl &&
-            (identical(other.user, user) || other.user == user) &&
             (identical(other.loginState, loginState) ||
                 other.loginState == loginState) &&
             (identical(other.logoutState, logoutState) ||
@@ -176,7 +161,7 @@ class _$AuthStateImpl extends _AuthState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, user, loginState, logoutState);
+  int get hashCode => Object.hash(runtimeType, loginState, logoutState);
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -189,13 +174,10 @@ class _$AuthStateImpl extends _AuthState {
 
 abstract class _AuthState extends AuthState {
   const factory _AuthState(
-      {required final User? user,
-      required final LoginState loginState,
+      {required final LoginState loginState,
       required final LogoutState logoutState}) = _$AuthStateImpl;
   const _AuthState._() : super._();
 
-  @override
-  User? get user;
   @override
   LoginState get loginState;
   @override

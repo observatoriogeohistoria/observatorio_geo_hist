@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -15,6 +16,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_post_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/categories_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/posts_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -26,11 +28,13 @@ class PostsSection extends StatefulWidget {
 }
 
 class _PostsSectionState extends State<PostsSection> {
+  late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
   late final PostsStore postsStore = PanelSetup.getIt<PostsStore>();
   late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
-  late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
+
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -69,87 +73,111 @@ class _PostsSectionState extends State<PostsSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppHeadline.big(
-          text: 'Posts',
-          color: AppTheme.colors.orange,
-        ),
-        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-        Align(
-          alignment: Alignment.centerRight,
-          child: SecondaryButton.medium(
-            text: 'Criar post',
-            onPressed: () {
-              showCreateOrUpdatePostDialog(
-                context,
-                categories: categoriesStore.categories,
-                onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
-              );
-            },
-          ),
-        ),
-        Observer(
-          builder: (context) {
-            final state = postsStore.state;
+    return Observer(
+      builder: (context) {
+        bool canEdit = authStore.user?.permissions.canEditPostsSection ?? false;
 
-            if (state is ManagePostsLoadingState && state.isRefreshing) {
-              return const LinearLoading();
-            }
-
-            return const SizedBox.shrink();
-          },
-        ),
-        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-        Expanded(
-          child: Observer(
-            builder: (context) {
-              final state = postsStore.state;
-
-              if (state is ManagePostsLoadingState && !state.isRefreshing) {
-                return const Center(child: CircularLoading());
-              }
-
-              final posts = postsStore.posts;
-
-              return ListView.separated(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.only(
-                  bottom: AppTheme.dimensions.space.large.verticalSpacing,
-                ),
-                separatorBuilder: (context, index) {
-                  final isLast = index == posts.length - 1;
-
-                  return isLast
-                      ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                },
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  final post = posts[index];
-
-                  return PostCard(
-                    post: post,
-                    index: index + 1,
-                    onPublish: () => postsStore
-                        .createOrUpdatePost(post.copyWith(isPublished: !post.isPublished)),
-                    onEdit: () {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppHeadline.big(
+              text: 'Posts',
+              color: AppTheme.colors.orange,
+            ),
+            if (canEdit) ...[
+              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: AppTheme.dimensions.space.medium.horizontalSpacing,
+                  ),
+                  child: SecondaryButton.medium(
+                    text: 'Criar post',
+                    onPressed: () {
                       showCreateOrUpdatePostDialog(
                         context,
-                        post: post,
                         categories: categoriesStore.categories,
                         onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
                       );
                     },
-                    onDelete: () => postsStore.deletePost(post),
+                    isDisabled: categoriesStore.state is ManageCategoriesLoadingState,
+                  ),
+                ),
+              ),
+            ],
+            Observer(
+              builder: (context) {
+                final state = postsStore.state;
+
+                if (state is ManagePostsLoadingState && state.isRefreshing) {
+                  return const LinearLoading();
+                }
+
+                return const SizedBox.shrink();
+              },
+            ),
+            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+            Expanded(
+              child: Observer(
+                builder: (context) {
+                  final postsState = postsStore.state;
+                  final categoriesState = categoriesStore.state;
+
+                  if (postsState is ManagePostsLoadingState && !postsState.isRefreshing) {
+                    return const Center(child: CircularLoading());
+                  }
+
+                  if (categoriesState is ManageCategoriesLoadingState) {
+                    return const Center(child: CircularLoading());
+                  }
+
+                  final posts = postsStore.posts;
+
+                  return AppScrollbar(
+                    controller: _scrollController,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      padding: EdgeInsets.only(
+                        bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                      ),
+                      separatorBuilder: (context, index) {
+                        final isLast = index == posts.length - 1;
+
+                        return isLast
+                            ? const SizedBox()
+                            : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                      },
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        final post = posts[index];
+
+                        return PostCard(
+                          post: post,
+                          index: index + 1,
+                          onPublish: () => postsStore
+                              .createOrUpdatePost(post.copyWith(isPublished: !post.isPublished)),
+                          onEdit: () {
+                            showCreateOrUpdatePostDialog(
+                              context,
+                              post: post,
+                              categories: categoriesStore.categories,
+                              onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+                            );
+                          },
+                          onDelete: () => postsStore.deletePost(post),
+                          canEdit: canEdit,
+                        );
+                      },
+                    ),
                   );
                 },
-              );
-            },
-          ),
-        ),
-      ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

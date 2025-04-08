@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_permissions.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_role.dart';
 
@@ -10,15 +11,10 @@ class UserModel {
     this.isDeleted = false,
   }) {
     permissions = UserPermissions(
-      canViewUsersSection: isAdmin,
-      canEditUsersSection: isAdmin,
-      canViewMediaSection: true,
+      canAccessUsersSection: isAdmin,
       canEditMediaSection: isAdmin || isEditor,
-      canViewCategoriesSection: true,
       canEditCategoriesSection: isAdmin || isEditor,
-      canViewPostsSection: true,
       canEditPostsSection: isAdmin || isEditor,
-      canViewTeamSection: true,
       canEditTeamSection: isAdmin || isEditor,
     );
   }
@@ -34,6 +30,16 @@ class UserModel {
   bool get isAdmin => role == UserRole.admin;
   bool get isEditor => role == UserRole.editor;
   bool get isViewer => role == UserRole.viewer;
+
+  factory UserModel.fromFirebaseUser(User user) {
+    return UserModel(
+      id: user.uid,
+      name: user.displayName ?? '',
+      email: user.email ?? '',
+      role: UserRole.viewer,
+      isDeleted: false,
+    );
+  }
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

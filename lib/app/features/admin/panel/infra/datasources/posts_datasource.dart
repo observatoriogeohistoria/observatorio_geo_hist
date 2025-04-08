@@ -33,7 +33,9 @@ class PostsDatasourceImpl implements PostsDatasource {
         final fromJson = PostModel.fromJson(data);
 
         return fromJson.copyWith(
-          category: categories.firstWhereOrNull((category) => category.key == fromJson.categoryKey),
+          category: categories.firstWhereOrNull(
+            (category) => category.key == fromJson.categoryId,
+          ),
         );
       }).toList();
 
@@ -51,7 +53,7 @@ class PostsDatasourceImpl implements PostsDatasource {
 
       DocumentReference ref = _firestore
           .collection('posts')
-          .doc(newPost.categoryKey)
+          .doc(newPost.categoryId)
           .collection('category_posts')
           .doc(newPost.id);
 
@@ -71,7 +73,7 @@ class PostsDatasourceImpl implements PostsDatasource {
 
       DocumentReference ref = _firestore
           .collection('posts')
-          .doc(post.categoryKey)
+          .doc(post.categoryId)
           .collection('category_posts')
           .doc(post.id);
 

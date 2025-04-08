@@ -140,7 +140,7 @@ class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
       widget.onCreate(
         UserModel(
           name: _nameController.text,
-          email: _nameController.text,
+          email: _emailController.text,
           role: _selectedRole!,
         ),
         _passwordController.text,

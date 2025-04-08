@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -25,10 +26,12 @@ class MediaSection extends StatefulWidget {
 }
 
 class _MediaSectionState extends State<MediaSection> {
-  late final MediaStore mediaStore = PanelSetup.getIt<MediaStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
+  late final MediaStore mediaStore = PanelSetup.getIt<MediaStore>();
 
   List<ReactionDisposer> _reactions = [];
+
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -66,76 +69,94 @@ class _MediaSectionState extends State<MediaSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppHeadline.big(
-          text: 'Mídias',
-          color: AppTheme.colors.orange,
-        ),
-        SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-        Align(
-          alignment: Alignment.centerRight,
-          child: SecondaryButton.medium(
-            text: 'Criar mídia',
-            onPressed: () {
-              showCreateMediaDialog(
-                context,
-                onCreate: (media) => mediaStore.createMedia(media),
-              );
-            },
-          ),
-        ),
-        Observer(
-          builder: (context) {
-            final state = mediaStore.state;
+    return Observer(
+      builder: (context) {
+        bool canEdit = authStore.user?.permissions.canEditMediaSection ?? false;
 
-            if (state is ManageMediaLoadingState && state.isRefreshing) {
-              return const LinearLoading();
-            }
-
-            return const SizedBox.shrink();
-          },
-        ),
-        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-        Expanded(
-          child: Observer(
-            builder: (context) {
-              final state = mediaStore.state;
-
-              if (state is ManageMediaLoadingState && !state.isRefreshing) {
-                return const CircularLoading();
-              }
-
-              final medias = mediaStore.medias;
-
-              return ListView.separated(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.only(
-                  bottom: AppTheme.dimensions.space.large.verticalSpacing,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppHeadline.big(
+              text: 'Mídias',
+              color: AppTheme.colors.orange,
+            ),
+            if (canEdit) ...[
+              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: AppTheme.dimensions.space.medium.horizontalSpacing,
+                  ),
+                  child: SecondaryButton.medium(
+                    text: 'Criar mídia',
+                    onPressed: () {
+                      showCreateMediaDialog(
+                        context,
+                        onCreate: (media) => mediaStore.createMedia(media),
+                      );
+                    },
+                  ),
                 ),
-                separatorBuilder: (context, index) {
-                  final isLast = index == medias.length - 1;
+              ),
+            ],
+            Observer(
+              builder: (context) {
+                final state = mediaStore.state;
 
-                  return isLast
-                      ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                },
-                itemCount: medias.length,
-                itemBuilder: (context, index) {
-                  final media = medias[index];
+                if (state is ManageMediaLoadingState && state.isRefreshing) {
+                  return const LinearLoading();
+                }
 
-                  return MediaCard(
-                    media: media,
-                    index: index + 1,
-                    onDelete: () => mediaStore.deleteMedia(media),
+                return const SizedBox.shrink();
+              },
+            ),
+            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+            Expanded(
+              child: Observer(
+                builder: (context) {
+                  final state = mediaStore.state;
+
+                  if (state is ManageMediaLoadingState && !state.isRefreshing) {
+                    return const CircularLoading();
+                  }
+
+                  final medias = mediaStore.medias;
+
+                  return AppScrollbar(
+                    controller: _scrollController,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      padding: EdgeInsets.only(
+                        bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                      ),
+                      separatorBuilder: (context, index) {
+                        final isLast = index == medias.length - 1;
+
+                        return isLast
+                            ? const SizedBox()
+                            : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                      },
+                      itemCount: medias.length,
+                      itemBuilder: (context, index) {
+                        final media = medias[index];
+
+                        return MediaCard(
+                          media: media,
+                          index: index + 1,
+                          onDelete: () => mediaStore.deleteMedia(media),
+                          canEdit: canEdit,
+                        );
+                      },
+                    ),
                   );
                 },
-              );
-            },
-          ),
-        ),
-      ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

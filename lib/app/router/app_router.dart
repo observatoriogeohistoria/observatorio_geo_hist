@@ -103,7 +103,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/admin/painel',
-        redirect: (context, state) => '/admin/painel/usuarios',
+        redirect: (context, state) => '/admin/painel/posts',
       ),
       GoRoute(
         path: '/admin/painel/:tab',

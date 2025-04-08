@@ -25,6 +25,21 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
+  late final _$userAtom = Atom(name: 'AuthStoreBase.user', context: context);
+
+  @override
+  UserModel? get user {
+    _$userAtom.reportRead();
+    return super.user;
+  }
+
+  @override
+  set user(UserModel? value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
+    });
+  }
+
   late final _$stateAtom = Atom(name: 'AuthStoreBase.state', context: context);
 
   @override
@@ -82,6 +97,7 @@ mixin _$AuthStore on AuthStoreBase, Store {
   String toString() {
     return '''
 passwordVisible: ${passwordVisible},
+user: ${user},
 state: ${state}
     ''';
   }

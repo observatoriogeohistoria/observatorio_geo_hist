@@ -15,6 +15,7 @@ import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart'
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class SigninPage extends StatefulWidget {
@@ -41,11 +42,12 @@ class _SigninPageState extends State<SigninPage> {
     authStore.currentUser();
 
     _reactions = [
-      reaction((_) => authStore.state, (AuthState state) {
-        if (state.user != null) {
+      reaction((_) => authStore.user, (UserModel? user) {
+        if (user != null) {
           GoRouter.of(context).go('/admin/painel');
         }
-
+      }),
+      reaction((_) => authStore.state, (AuthState state) {
         if (state.loginState is LoginStateError) {
           final loginState = state.loginState as LoginStateError;
           Messenger.showError(context, loginState.failure.message);

@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
+import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -29,6 +30,8 @@ class _UsersSectionState extends State<UsersSection> {
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
+
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -75,15 +78,20 @@ class _UsersSectionState extends State<UsersSection> {
         SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
         Align(
           alignment: Alignment.centerRight,
-          child: SecondaryButton.medium(
-            text: 'Criar usuário',
-            onPressed: () {
-              showCreateOrUpdateUserDialog(
-                context,
-                onCreate: (user, password) => usersStore.createUser(user, password),
-                onUpdate: (user) => usersStore.updateUser(user),
-              );
-            },
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: AppTheme.dimensions.space.medium.horizontalSpacing,
+            ),
+            child: SecondaryButton.medium(
+              text: 'Criar usuário',
+              onPressed: () {
+                showCreateOrUpdateUserDialog(
+                  context,
+                  onCreate: (user, password) => usersStore.createUser(user, password),
+                  onUpdate: (user) => usersStore.updateUser(user),
+                );
+              },
+            ),
           ),
         ),
         Observer(
@@ -109,36 +117,40 @@ class _UsersSectionState extends State<UsersSection> {
 
               final users = usersStore.users;
 
-              return ListView.separated(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.symmetric(
-                  vertical: AppTheme.dimensions.space.large.verticalSpacing,
+              return AppScrollbar(
+                controller: _scrollController,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                  ),
+                  separatorBuilder: (context, index) {
+                    final isLast = index == users.length - 1;
+
+                    return isLast
+                        ? const SizedBox()
+                        : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                  },
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    final user = users[index];
+
+                    return UserCard(
+                      user: user,
+                      index: index + 1,
+                      onDelete: () => usersStore.deleteUser(user),
+                      onEdit: () {
+                        showCreateOrUpdateUserDialog(
+                          context,
+                          onCreate: (user, password) => usersStore.createUser(user, password),
+                          onUpdate: (user) => usersStore.updateUser(user),
+                          user: user,
+                        );
+                      },
+                    );
+                  },
                 ),
-                separatorBuilder: (context, index) {
-                  final isLast = index == users.length - 1;
-
-                  return isLast
-                      ? const SizedBox()
-                      : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                },
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  final user = users[index];
-
-                  return UserCard(
-                    user: user,
-                    index: index + 1,
-                    onDelete: () => usersStore.deleteUser(user),
-                    onEdit: () {
-                      showCreateOrUpdateUserDialog(
-                        context,
-                        onCreate: (user, password) => usersStore.createUser(user, password),
-                        onUpdate: (user) => usersStore.updateUser(user),
-                        user: user,
-                      );
-                    },
-                  );
-                },
               );
             },
           ),
