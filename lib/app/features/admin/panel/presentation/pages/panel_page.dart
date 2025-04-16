@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -25,10 +26,12 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class PanelPage extends StatefulWidget {
   const PanelPage({
     required this.tab,
+    this.postType,
     super.key,
   });
 
   final SidebarItem tab;
+  final PostType? postType;
 
   @override
   State<PanelPage> createState() => _PanelPageState();
@@ -45,6 +48,8 @@ class _PanelPageState extends State<PanelPage> {
     super.initState();
 
     sidebarStore.selectItem(widget.tab);
+    if (widget.postType != null) sidebarStore.selectPostType(widget.postType!);
+
     authStore.currentUser();
 
     _reactions = [
