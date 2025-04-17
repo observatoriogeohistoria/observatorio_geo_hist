@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/loading/circular_loadi
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
@@ -18,6 +19,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stor
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/categories_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/posts_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostsSection extends StatefulWidget {
@@ -31,35 +33,49 @@ class _PostsSectionState extends State<PostsSection> {
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
   late final PostsStore postsStore = PanelSetup.getIt<PostsStore>();
   late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
-
-  List<ReactionDisposer> _reactions = [];
+  late final SidebarStore sidebarStore = PanelSetup.getIt<SidebarStore>();
 
   final _scrollController = ScrollController();
+
+  PostType selectedPostType = PostType.article;
+  List<ReactionDisposer> _reactions = [];
 
   @override
   void initState() {
     super.initState();
 
     categoriesStore.getCategories();
-    postsStore.getPosts();
+
+    selectedPostType = sidebarStore.selectedPostType ?? PostType.article;
+    postsStore.getPosts(sidebarStore.selectedPostType ?? PostType.article);
 
     _reactions = [
-      reaction((_) => postsStore.state, (state) {
-        if (state is ManagePostsErrorState) {
-          final error = state.failure;
-          Messenger.showError(context, error.message);
+      reaction(
+        (_) => sidebarStore.selectedPostType,
+        (PostType? postType) {
+          setState(() => selectedPostType = postType ?? PostType.article);
+          postsStore.getPosts(postType ?? PostType.article);
+        },
+      ),
+      reaction(
+        (_) => postsStore.state,
+        (state) {
+          if (state is ManagePostsErrorState) {
+            final error = state.failure;
+            Messenger.showError(context, error.message);
 
-          if (error is Forbidden) authStore.logout();
-        }
-
-        if (state is ManagePostsSuccessState) {
-          GoRouter.of(context).pop();
-
-          if (state.message.isNotEmpty) {
-            Messenger.showSuccess(context, state.message);
+            if (error is Forbidden) authStore.logout();
           }
-        }
-      }),
+
+          if (state is ManagePostsSuccessState) {
+            GoRouter.of(context).pop();
+
+            if (state.message.isNotEmpty) {
+              Messenger.showSuccess(context, state.message);
+            }
+          }
+        },
+      ),
     ];
   }
 
@@ -81,7 +97,7 @@ class _PostsSectionState extends State<PostsSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppHeadline.big(
-              text: 'Posts',
+              text: selectedPostType.portuguesePlural,
               color: AppTheme.colors.orange,
             ),
             if (canEdit) ...[
@@ -93,12 +109,13 @@ class _PostsSectionState extends State<PostsSection> {
                     right: AppTheme.dimensions.space.medium.horizontalSpacing,
                   ),
                   child: SecondaryButton.medium(
-                    text: 'Criar post',
+                    text: 'Criar ${selectedPostType.portuguese}',
                     onPressed: () {
                       showCreateOrUpdatePostDialog(
                         context,
                         categories: categoriesStore.categories,
                         onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+                        postType: selectedPostType,
                       );
                     },
                     isDisabled: categoriesStore.state is ManageCategoriesLoadingState,
@@ -132,7 +149,7 @@ class _PostsSectionState extends State<PostsSection> {
                     return const Center(child: CircularLoading());
                   }
 
-                  final posts = postsStore.posts;
+                  final posts = postsStore.posts[selectedPostType] ?? [];
 
                   return AppScrollbar(
                     controller: _scrollController,
@@ -161,9 +178,10 @@ class _PostsSectionState extends State<PostsSection> {
                           onEdit: () {
                             showCreateOrUpdatePostDialog(
                               context,
-                              post: post,
                               categories: categoriesStore.categories,
                               onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+                              post: post,
+                              postType: post.type,
                             );
                           },
                           onDelete: () => postsStore.deletePost(post),

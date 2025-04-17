@@ -110,18 +110,7 @@ class AppRouter {
         path: '/admin/painel/:tab',
         builder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
-
-          final invalidRoute = tab == null;
-          if (invalidRoute) return const PageNotFound();
-
-          return PanelPage(tab: tab);
-        },
-      ),
-      GoRoute(
-        path: '/admin/painel/:tab/:postType',
-        builder: (BuildContext context, GoRouterState state) {
-          final tab = SidebarItem.fromString(state.pathParameters['tab']);
-          final postType = PostType.fromString(state.pathParameters['postType']);
+          final postType = PostType.fromString(state.uri.queryParameters['postType']);
 
           final invalidRoute = tab == null;
           if (invalidRoute) return const PageNotFound();

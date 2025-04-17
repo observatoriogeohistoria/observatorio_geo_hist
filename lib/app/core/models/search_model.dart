@@ -44,7 +44,7 @@ class SearchModel extends PostBody {
     return SearchModel(
       title: json['title'],
       image: json['image'],
-      state: json['state'],
+      state: SearchState.values.byName(json['state']),
       imageCaption: json['imageCaption'],
       description: json['description'],
       coordinator: json['coordinator'],
@@ -85,5 +85,15 @@ enum SearchState {
       case SearchState.completed:
         return 'Concluída';
     }
+  }
+
+  static SearchState? fromPortuguese(String portuguese) {
+    switch (portuguese) {
+      case 'Em andamento':
+        return SearchState.inProgress;
+      case 'Concluída':
+        return SearchState.completed;
+    }
+    return null;
   }
 }

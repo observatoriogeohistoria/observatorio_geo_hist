@@ -7,7 +7,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/posts_failures.dart';
 
 abstract class PostsRepository {
-  Future<Either<Failure, List<PostModel>>> getPosts();
+  Future<Either<Failure, List<PostModel>>> getPosts(PostType type);
   Future<Either<Failure, PostModel>> createOrUpdatePost(PostModel post);
   Future<Either<Failure, Unit>> deletePost(PostModel post);
 }
@@ -18,9 +18,9 @@ class PostsRepositoryImpl implements PostsRepository {
   PostsRepositoryImpl(this._postsDatasource);
 
   @override
-  Future<Either<Failure, List<PostModel>>> getPosts() async {
+  Future<Either<Failure, List<PostModel>>> getPosts(PostType type) async {
     try {
-      final posts = await _postsDatasource.getPosts();
+      final posts = await _postsDatasource.getPosts(type);
       return Right(posts);
     } on FirebaseAuthException catch (error) {
       return Left(AuthFailure.fromException(error));

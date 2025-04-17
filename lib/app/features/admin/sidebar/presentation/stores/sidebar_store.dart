@@ -22,6 +22,7 @@ abstract class SidebarStoreBase with Store {
   @action
   void toggleCollapse() {
     isCollapsed = !isCollapsed;
+    if (isCollapsed) showPostsSubItems = false;
   }
 
   @action

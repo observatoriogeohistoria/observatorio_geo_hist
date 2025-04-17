@@ -6,7 +6,7 @@ class BookModel extends PostBody {
     required super.image,
     required this.category,
     required this.author,
-    required this.publicationYear,
+    required this.year,
     required this.publisher,
     required this.synopsis,
     required this.link,
@@ -14,7 +14,7 @@ class BookModel extends PostBody {
 
   final BookCategory category;
   final String author;
-  final String publicationYear;
+  final int year;
   final String publisher;
   final String synopsis;
   final String link;
@@ -25,7 +25,7 @@ class BookModel extends PostBody {
         image,
         category,
         author,
-        publicationYear,
+        year,
         publisher,
         synopsis,
         link,
@@ -35,9 +35,9 @@ class BookModel extends PostBody {
     return BookModel(
       title: json['title'],
       image: json['image'],
-      category: BookCategory.values.firstWhere((cat) => cat.portuguese == json['category']),
+      category: BookCategory.values.byName(json['category']),
       author: json['author'],
-      publicationYear: json['publicationYear'],
+      year: json['year'],
       publisher: json['publisher'],
       synopsis: json['synopsis'],
       link: json['link'],
@@ -49,9 +49,9 @@ class BookModel extends PostBody {
     return {
       'title': title,
       'image': image,
-      'category': category.portuguese,
+      'category': category.name,
       'author': author,
-      'publicationYear': publicationYear,
+      'year': year,
       'publisher': publisher,
       'synopsis': synopsis,
       'link': link,
@@ -69,6 +69,17 @@ enum BookCategory {
         return 'Livro';
       case BookCategory.ebook:
         return 'Ebook';
+    }
+  }
+
+  static BookCategory? fromPortuguese(String portuguese) {
+    switch (portuguese) {
+      case 'Livro':
+        return BookCategory.book;
+      case 'Ebook':
+        return BookCategory.ebook;
+      default:
+        return null;
     }
   }
 }

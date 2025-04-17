@@ -209,7 +209,7 @@ enum PostType {
   String get portuguesePlural {
     switch (this) {
       case PostType.academicProduction:
-        return 'Produções Academicas';
+        return 'Produções Acadêmicas';
       case PostType.article:
         return 'Artigos';
       case PostType.artist:

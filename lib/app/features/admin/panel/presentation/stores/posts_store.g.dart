@@ -12,13 +12,13 @@ mixin _$PostsStore on PostsStoreBase, Store {
   late final _$postsAtom = Atom(name: 'PostsStoreBase.posts', context: context);
 
   @override
-  ObservableList<PostModel> get posts {
+  ObservableMap<PostType, List<PostModel>> get posts {
     _$postsAtom.reportRead();
     return super.posts;
   }
 
   @override
-  set posts(ObservableList<PostModel> value) {
+  set posts(ObservableMap<PostType, List<PostModel>> value) {
     _$postsAtom.reportWrite(value, super.posts, () {
       super.posts = value;
     });
@@ -43,8 +43,8 @@ mixin _$PostsStore on PostsStoreBase, Store {
       AsyncAction('PostsStoreBase.getPosts', context: context);
 
   @override
-  Future<void> getPosts() {
-    return _$getPostsAsyncAction.run(() => super.getPosts());
+  Future<void> getPosts(PostType type) {
+    return _$getPostsAsyncAction.run(() => super.getPosts(type));
   }
 
   late final _$createOrUpdatePostAsyncAction =

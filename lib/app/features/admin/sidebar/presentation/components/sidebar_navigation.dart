@@ -73,33 +73,46 @@ class _SidebarState extends State<Sidebar> {
                   : null,
           child: Container(
             color: AppTheme.colors.white,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SidebarHeader(isCollapsed: isCollapsed),
-                  SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                  _buildItems(
-                    items: sidebarItems,
-                    selectedItem: sidebarStore.selectedItem,
-                    selectedPostType: sidebarStore.selectedPostType,
-                    showPostsSubItems: sidebarStore.showPostsSubItems,
-                    isCollapsed: isCollapsed,
-                    isMobile: isMobile,
+            height: MediaQuery.of(context).size.height,
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SidebarHeader(isCollapsed: isCollapsed),
+                      SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+                      _buildItems(
+                        items: sidebarItems,
+                        selectedItem: sidebarStore.selectedItem,
+                        selectedPostType: sidebarStore.selectedPostType,
+                        showPostsSubItems: sidebarStore.showPostsSubItems,
+                        isCollapsed: isCollapsed,
+                        isMobile: isMobile,
+                      ),
+                      SizedBox(height: 64.verticalSpacing),
+                    ],
                   ),
-                  // const Spacer(),
-                  ToggleCollpaseButton(
-                    onTap: () {
-                      if (isMobile) {
-                        GoRouter.of(context).pop();
-                        return;
-                      }
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ToggleCollpaseButton(
+                        onTap: () {
+                          if (isMobile) {
+                            GoRouter.of(context).pop();
+                            return;
+                          }
 
-                      sidebarStore.toggleCollapse();
-                    },
-                    isCollapsed: isCollapsed,
+                          sidebarStore.toggleCollapse();
+                        },
+                        isCollapsed: isCollapsed,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
@@ -145,7 +158,7 @@ class _SidebarState extends State<Sidebar> {
               sidebarStore.selectItem(item);
 
               final postType = (sidebarStore.selectedPostType ?? PostType.article).value;
-              GoRouter.of(context).go('/admin/painel/posts/$postType');
+              GoRouter.of(context).go('/admin/painel/posts?postType=$postType');
 
               return;
             }
@@ -158,7 +171,7 @@ class _SidebarState extends State<Sidebar> {
             if (!isPosts) return;
 
             sidebarStore.selectPostType(item);
-            GoRouter.of(context).go('/admin/painel/posts/${item.value}');
+            GoRouter.of(context).go('/admin/painel/posts?postType=${item.value}');
 
             if (isMobile) GoRouter.of(context).pop();
           },

@@ -26,7 +26,7 @@ class DocumentModel extends PostBody {
     return DocumentModel(
       title: json['title'],
       image: json['image'],
-      category: DocumentCategory.values.firstWhere((cat) => cat.portuguese == json['category']),
+      category: DocumentCategory.values.byName(json['category']),
       description: json['description'],
       link: json['link'],
     );
@@ -37,7 +37,7 @@ class DocumentModel extends PostBody {
     return {
       'title': title,
       'image': image,
-      'category': category.portuguese,
+      'category': category.name,
       'description': description,
       'link': link,
     };
@@ -87,6 +87,39 @@ enum DocumentCategory {
         return 'Guia';
       case DocumentCategory.website:
         return 'Site';
+    }
+  }
+
+  static DocumentCategory fromPortuguese(String portuguese) {
+    switch (portuguese) {
+      case 'Decreto':
+        return DocumentCategory.decree;
+      case 'Deliberação':
+        return DocumentCategory.deliberation;
+      case 'Documento Normativo':
+        return DocumentCategory.normativeDocument;
+      case 'Lei':
+        return DocumentCategory.law;
+      case 'Medida Provisória':
+        return DocumentCategory.provisionalMeasure;
+      case 'Parecer':
+        return DocumentCategory.opinion;
+      case 'Portaria':
+        return DocumentCategory.ordinance;
+      case 'Regimento':
+        return DocumentCategory.regiment;
+      case 'Regulamento':
+        return DocumentCategory.regulation;
+      case 'Resolução':
+        return DocumentCategory.resolution;
+      case 'Súmula':
+        return DocumentCategory.summary;
+      case 'Guia':
+        return DocumentCategory.guide;
+      case 'Site':
+        return DocumentCategory.website;
+      default:
+        return DocumentCategory.decree;
     }
   }
 }

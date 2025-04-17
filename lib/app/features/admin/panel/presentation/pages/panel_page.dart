@@ -53,21 +53,27 @@ class _PanelPageState extends State<PanelPage> {
     authStore.currentUser();
 
     _reactions = [
-      reaction((_) => authStore.user, (UserModel? user) {
-        if (user == null) {
-          GoRouter.of(context).go('/admin');
-        }
-      }),
-      reaction((_) => authStore.state, (AuthState state) {
-        if (state.logoutState is LogoutStateSuccess) {
-          GoRouter.of(context).go('/admin');
-        }
+      reaction(
+        (_) => authStore.user,
+        (UserModel? user) {
+          if (user == null) {
+            GoRouter.of(context).go('/admin');
+          }
+        },
+      ),
+      reaction(
+        (_) => authStore.state,
+        (AuthState state) {
+          if (state.logoutState is LogoutStateSuccess) {
+            GoRouter.of(context).go('/admin');
+          }
 
-        if (state.logoutState is LogoutStateError) {
-          final loginState = state.loginState as LoginStateError;
-          Messenger.showError(context, loginState.failure.message);
-        }
-      }),
+          if (state.logoutState is LogoutStateError) {
+            final loginState = state.loginState as LoginStateError;
+            Messenger.showError(context, loginState.failure.message);
+          }
+        },
+      ),
     ];
   }
 

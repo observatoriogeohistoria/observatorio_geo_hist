@@ -6,7 +6,7 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 
 abstract class PostsDatasource {
-  Future<List<PostModel>> getPosts();
+  Future<List<PostModel>> getPosts(PostType type);
   Future<PostModel> createOrUpdatePost(PostModel post);
   Future<void> deletePost(PostModel post);
 }
@@ -18,7 +18,7 @@ class PostsDatasourceImpl implements PostsDatasource {
   PostsDatasourceImpl(this._firestore, this._loggerService);
 
   @override
-  Future<List<PostModel>> getPosts() async {
+  Future<List<PostModel>> getPosts(PostType type) async {
     try {
       QuerySnapshot categoriesQuerySnapshot = await _firestore.collection('posts').get();
 
@@ -26,7 +26,10 @@ class PostsDatasourceImpl implements PostsDatasource {
           .map((category) => CategoryModel.fromJson(category.data() as Map<String, dynamic>))
           .toList();
 
-      QuerySnapshot postsQuerySnapshot = await _firestore.collectionGroup('category_posts').get();
+      QuerySnapshot postsQuerySnapshot = await _firestore
+          .collectionGroup('category_posts')
+          .where('type', isEqualTo: type.name)
+          .get();
 
       List<PostModel> posts = postsQuerySnapshot.docs.map((post) {
         final data = post.data() as Map<String, dynamic>;

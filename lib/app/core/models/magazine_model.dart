@@ -5,14 +5,12 @@ class MagazineModel extends PostBody {
     required super.title,
     required super.image,
     required this.category,
-    required this.coverImage,
-    this.teaser,
     required this.description,
     required this.link,
+    this.teaser,
   });
 
   final MagazineCategory category;
-  final String coverImage;
   final String? teaser;
   final String description;
   final String link;
@@ -22,7 +20,6 @@ class MagazineModel extends PostBody {
         title,
         image,
         category,
-        coverImage,
         teaser,
         description,
         link,
@@ -32,8 +29,7 @@ class MagazineModel extends PostBody {
     return MagazineModel(
       title: json['title'],
       image: json['image'],
-      category: MagazineCategory.values.firstWhere((cat) => cat.portuguese == json['category']),
-      coverImage: json['coverImage'],
+      category: MagazineCategory.values.byName(json['category']),
       teaser: json['teaser'],
       description: json['description'],
       link: json['link'],
@@ -44,8 +40,7 @@ class MagazineModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'category': category.portuguese,
-      'coverImage': coverImage,
+      'category': category.name,
       'teaser': teaser,
       'description': description,
       'link': link,
@@ -63,6 +58,17 @@ enum MagazineCategory {
         return 'Revista';
       case MagazineCategory.dossier:
         return 'Dossiê';
+    }
+  }
+
+  static MagazineCategory? fromPortuguese(String portuguese) {
+    switch (portuguese) {
+      case 'Revista':
+        return MagazineCategory.magazine;
+      case 'Dossiê':
+        return MagazineCategory.dossier;
+      default:
+        return null;
     }
   }
 }

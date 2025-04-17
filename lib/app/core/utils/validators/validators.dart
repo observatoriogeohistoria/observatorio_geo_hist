@@ -48,4 +48,11 @@ class Validators {
 
     return null;
   }
+
+  static String? isValidYear(String? value) {
+    if (value == null || value.isEmpty) return 'Por favor, insira um ano';
+
+    final hasMatch = RegExp(r'^\d{4}$').hasMatch(value);
+    return hasMatch ? null : 'Ano inválido';
+  }
 }
