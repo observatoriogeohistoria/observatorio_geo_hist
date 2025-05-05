@@ -6,16 +6,18 @@ class EventModel extends PostBody {
     required super.image,
     required this.scope,
     required this.link,
-    required this.local,
+    required this.location,
     required this.city,
+    required this.date,
     this.time,
     this.details,
   });
 
   final EventScope scope;
   final String link;
-  final String local;
+  final String location;
   final String city;
+  final String date;
   final String? time;
   final String? details;
 
@@ -25,8 +27,9 @@ class EventModel extends PostBody {
         image,
         scope,
         link,
-        local,
+        location,
         city,
+        date,
         time,
         details,
       ];
@@ -35,10 +38,11 @@ class EventModel extends PostBody {
     return EventModel(
       title: json['title'],
       image: json['image'],
-      scope: json['scope'],
+      scope: EventScope.values.byName(json['scope']),
       link: json['link'],
-      local: json['local'],
+      location: json['location'],
       city: json['city'],
+      date: json['date'],
       time: json['time'],
       details: json['details'],
     );
@@ -49,10 +53,11 @@ class EventModel extends PostBody {
     return {
       'title': title,
       'image': image,
-      'scope': scope,
+      'scope': scope.name,
       'link': link,
-      'local': local,
+      'location': location,
       'city': city,
+      'date': date,
       'time': time,
       'details': details,
     };
@@ -69,6 +74,17 @@ enum EventScope {
         return 'Nacional';
       case EventScope.international:
         return 'Internacional';
+    }
+  }
+
+  static EventScope? fromPortuguese(String portuguese) {
+    switch (portuguese) {
+      case 'Nacional':
+        return EventScope.national;
+      case 'Internacional':
+        return EventScope.international;
+      default:
+        return null;
     }
   }
 }

@@ -152,6 +152,33 @@ enum PostType {
   podcast,
   search;
 
+  String get value {
+    switch (this) {
+      case PostType.academicProduction:
+        return 'producoes-academicas';
+      case PostType.article:
+        return 'artigos';
+      case PostType.artist:
+        return 'artistas';
+      case PostType.book:
+        return 'livros';
+      case PostType.document:
+        return 'documentos';
+      case PostType.event:
+        return 'eventos';
+      case PostType.film:
+        return 'filmes';
+      case PostType.magazine:
+        return 'revistas';
+      case PostType.music:
+        return 'musicas';
+      case PostType.podcast:
+        return 'podcasts';
+      case PostType.search:
+        return 'pesquisas';
+    }
+  }
+
   String get portuguese {
     switch (this) {
       case PostType.academicProduction:
@@ -179,6 +206,33 @@ enum PostType {
     }
   }
 
+  String get portuguesePlural {
+    switch (this) {
+      case PostType.academicProduction:
+        return 'Produções Acadêmicas';
+      case PostType.article:
+        return 'Artigos';
+      case PostType.artist:
+        return 'Artistas';
+      case PostType.book:
+        return 'Livros';
+      case PostType.document:
+        return 'Documentos';
+      case PostType.event:
+        return 'Eventos';
+      case PostType.film:
+        return 'Filmes';
+      case PostType.magazine:
+        return 'Revistas';
+      case PostType.music:
+        return 'Músicas';
+      case PostType.podcast:
+        return 'Podcasts';
+      case PostType.search:
+        return 'Pesquisas';
+    }
+  }
+
   PostBody getBody(Map<String, dynamic> json) {
     switch (this) {
       case PostType.academicProduction:
@@ -203,6 +257,35 @@ enum PostType {
         return PodcastModel.fromJson(json);
       case PostType.search:
         return SearchModel.fromJson(json);
+    }
+  }
+
+  static PostType? fromString(String? value) {
+    switch (value) {
+      case 'producoes-academicas':
+        return PostType.academicProduction;
+      case 'artigos':
+        return PostType.article;
+      case 'artistas':
+        return PostType.artist;
+      case 'livros':
+        return PostType.book;
+      case 'documentos':
+        return PostType.document;
+      case 'eventos':
+        return PostType.event;
+      case 'filmes':
+        return PostType.film;
+      case 'revistas':
+        return PostType.magazine;
+      case 'musicas':
+        return PostType.music;
+      case 'podcasts':
+        return PostType.podcast;
+      case 'pesquisas':
+        return PostType.search;
+      default:
+        return null;
     }
   }
 }

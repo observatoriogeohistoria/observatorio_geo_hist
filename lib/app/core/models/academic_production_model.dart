@@ -44,8 +44,7 @@ class AcademicProductionModel extends PostBody {
     return AcademicProductionModel(
       title: json['title'],
       image: json['image'],
-      category: AcademicProductionCategory.values
-          .firstWhere((category) => category.portuguese == json['category']),
+      category: AcademicProductionCategory.values.byName(json['category']),
       author: json['author'],
       advisor: json['advisor'],
       imageCaption: json['imageCaption'],
@@ -61,7 +60,7 @@ class AcademicProductionModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'category': category.portuguese,
+      'category': category.name,
       'author': author,
       'advisor': advisor,
       'image': image,
@@ -91,6 +90,21 @@ enum AcademicProductionCategory {
         return 'Monografia';
       case AcademicProductionCategory.thesis:
         return 'Tese';
+    }
+  }
+
+  static AcademicProductionCategory? fromPortuguese(String portuguese) {
+    switch (portuguese) {
+      case 'Artigo':
+        return AcademicProductionCategory.article;
+      case 'Dissertação':
+        return AcademicProductionCategory.dissertation;
+      case 'Monografia':
+        return AcademicProductionCategory.monography;
+      case 'Tese':
+        return AcademicProductionCategory.thesis;
+      default:
+        return null;
     }
   }
 }

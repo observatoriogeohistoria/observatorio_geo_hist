@@ -25,6 +25,22 @@ mixin _$SidebarStore on SidebarStoreBase, Store {
     });
   }
 
+  late final _$showPostsSubItemsAtom =
+      Atom(name: 'SidebarStoreBase.showPostsSubItems', context: context);
+
+  @override
+  bool get showPostsSubItems {
+    _$showPostsSubItemsAtom.reportRead();
+    return super.showPostsSubItems;
+  }
+
+  @override
+  set showPostsSubItems(bool value) {
+    _$showPostsSubItemsAtom.reportWrite(value, super.showPostsSubItems, () {
+      super.showPostsSubItems = value;
+    });
+  }
+
   late final _$selectedItemAtom =
       Atom(name: 'SidebarStoreBase.selectedItem', context: context);
 
@@ -38,6 +54,22 @@ mixin _$SidebarStore on SidebarStoreBase, Store {
   set selectedItem(SidebarItem value) {
     _$selectedItemAtom.reportWrite(value, super.selectedItem, () {
       super.selectedItem = value;
+    });
+  }
+
+  late final _$selectedPostTypeAtom =
+      Atom(name: 'SidebarStoreBase.selectedPostType', context: context);
+
+  @override
+  PostType? get selectedPostType {
+    _$selectedPostTypeAtom.reportRead();
+    return super.selectedPostType;
+  }
+
+  @override
+  set selectedPostType(PostType? value) {
+    _$selectedPostTypeAtom.reportWrite(value, super.selectedPostType, () {
+      super.selectedPostType = value;
     });
   }
 
@@ -56,6 +88,17 @@ mixin _$SidebarStore on SidebarStoreBase, Store {
   }
 
   @override
+  void toggleShowPostsSubItems() {
+    final _$actionInfo = _$SidebarStoreBaseActionController.startAction(
+        name: 'SidebarStoreBase.toggleShowPostsSubItems');
+    try {
+      return super.toggleShowPostsSubItems();
+    } finally {
+      _$SidebarStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void selectItem(SidebarItem item) {
     final _$actionInfo = _$SidebarStoreBaseActionController.startAction(
         name: 'SidebarStoreBase.selectItem');
@@ -67,10 +110,23 @@ mixin _$SidebarStore on SidebarStoreBase, Store {
   }
 
   @override
+  void selectPostType(PostType item) {
+    final _$actionInfo = _$SidebarStoreBaseActionController.startAction(
+        name: 'SidebarStoreBase.selectPostType');
+    try {
+      return super.selectPostType(item);
+    } finally {
+      _$SidebarStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isCollapsed: ${isCollapsed},
-selectedItem: ${selectedItem}
+showPostsSubItems: ${showPostsSubItems},
+selectedItem: ${selectedItem},
+selectedPostType: ${selectedPostType}
     ''';
   }
 }

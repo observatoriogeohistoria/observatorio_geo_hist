@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/panel_page.dart';
@@ -103,17 +104,18 @@ class AppRouter {
       ),
       GoRoute(
         path: '/admin/painel',
-        redirect: (context, state) => '/admin/painel/posts',
+        redirect: (context, state) => '/admin/painel/categorias',
       ),
       GoRoute(
         path: '/admin/painel/:tab',
         builder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
+          final postType = PostType.fromString(state.uri.queryParameters['postType']);
 
           final invalidRoute = tab == null;
           if (invalidRoute) return const PageNotFound();
 
-          return PanelPage(tab: tab);
+          return PanelPage(tab: tab, postType: postType);
         },
       ),
       GoRoute(

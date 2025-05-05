@@ -49,6 +49,7 @@ class CreateOrUpdateArticleDialog extends StatefulWidget {
 
 class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialog> {
   final _scrollController = ScrollController();
+
   final _formKey = GlobalKey<FormState>();
 
   final StreamController<Completer<String>> _contentController = StreamController();
@@ -70,6 +71,27 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
           [TextEditingController()];
 
   bool get _isUpdate => widget.post.id != null;
+
+  Future<String> _getContent() async {
+    final complete = Completer<String>();
+    _contentController.add(complete);
+
+    return await complete.future;
+  }
+
+  Future<String> _getObservation() {
+    final complete = Completer<String>();
+    _observationController.add(complete);
+
+    return complete.future;
+  }
+
+  @override
+  void dispose() {
+    _contentController.close();
+    _observationController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,20 +231,6 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
         SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
       ],
     );
-  }
-
-  Future<String> _getContent() async {
-    final complete = Completer<String>();
-    _contentController.add(complete);
-
-    return await complete.future;
-  }
-
-  Future<String> _getObservation() {
-    final complete = Completer<String>();
-    _observationController.add(complete);
-
-    return complete.future;
   }
 
   Future<void> _onCreateOrUpdate() async {

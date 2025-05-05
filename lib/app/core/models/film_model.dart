@@ -5,7 +5,6 @@ class FilmModel extends PostBody {
     required super.title,
     required super.image,
     required this.category,
-    required this.posterImage,
     required this.releaseYear,
     required this.duration,
     required this.director,
@@ -15,8 +14,7 @@ class FilmModel extends PostBody {
   });
 
   final FilmCategory category;
-  final String posterImage;
-  final String releaseYear;
+  final int releaseYear;
   final String duration;
   final String director;
   final String country;
@@ -28,7 +26,6 @@ class FilmModel extends PostBody {
         title,
         image,
         category,
-        posterImage,
         releaseYear,
         duration,
         director,
@@ -41,8 +38,7 @@ class FilmModel extends PostBody {
     return FilmModel(
       title: json['title'],
       image: json['image'],
-      category: FilmCategory.values.firstWhere((cat) => cat.portuguese == json['category']),
-      posterImage: json['posterImage'],
+      category: FilmCategory.values.byName(json['category']),
       releaseYear: json['releaseYear'],
       duration: json['duration'],
       director: json['director'],
@@ -57,8 +53,7 @@ class FilmModel extends PostBody {
     return {
       'title': title,
       'image': image,
-      'category': category.portuguese,
-      'posterImage': posterImage,
+      'category': category.name,
       'releaseYear': releaseYear,
       'duration': duration,
       'director': director,
@@ -85,6 +80,21 @@ enum FilmCategory {
         return 'Curta Metragem';
       case FilmCategory.series:
         return 'Série';
+    }
+  }
+
+  static FilmCategory? fromPortuguese(String portuguese) {
+    switch (portuguese) {
+      case 'Filme':
+        return FilmCategory.movie;
+      case 'Documentário':
+        return FilmCategory.documentary;
+      case 'Curta Metragem':
+        return FilmCategory.shortFilm;
+      case 'Série':
+        return FilmCategory.series;
+      default:
+        return null;
     }
   }
 }

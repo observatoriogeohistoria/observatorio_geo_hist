@@ -1,13 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/switch_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
@@ -15,13 +13,24 @@ import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_academic_production_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_article_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_artist_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_book_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_document_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_event_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_film_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_magazine_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_music_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_podcast_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_search_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdatePostDialog(
   BuildContext context, {
   required List<CategoryModel> categories,
   required void Function(PostModel post) onCreateOrUpdate,
+  required PostType postType,
   PostModel? post,
 }) {
   showDialog(
@@ -29,6 +38,7 @@ void showCreateOrUpdatePostDialog(
     builder: (_) => CreateOrUpdatePostDialog(
       categories: categories,
       onCreateOrUpdate: onCreateOrUpdate,
+      postType: postType,
       post: post,
     ),
   );
@@ -38,12 +48,14 @@ class CreateOrUpdatePostDialog extends StatefulWidget {
   const CreateOrUpdatePostDialog({
     required this.categories,
     required this.onCreateOrUpdate,
+    required this.postType,
     this.post,
     super.key,
   });
 
   final List<CategoryModel> categories;
   final void Function(PostModel post) onCreateOrUpdate;
+  final PostType postType;
   final PostModel? post;
 
   @override
@@ -51,8 +63,6 @@ class CreateOrUpdatePostDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
-  final _scrollController = ScrollController();
-
   bool get isMobile => DeviceUtils.isMobile(context);
 
   List<PostType> types = PostType.values.toList();
@@ -61,7 +71,6 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
   late bool isGeography = widget.post?.areas.contains(PostsAreas.geography) ?? false;
 
   late CategoryModel? _selectedCategory = widget.post?.category;
-  late PostType? _selectedType = widget.post?.type;
 
   List<CategoryModel> get _categoryOptions {
     List<CategoryModel> categories = [];
@@ -77,8 +86,6 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
     return categories;
   }
 
-  bool get _isUpdate => widget.post != null;
-
   @override
   void initState() {
     super.initState();
@@ -90,88 +97,49 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
     return RightAlignedDialog(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          double padding = AppTheme.dimensions.space.medium.horizontalSpacing;
-          double width = isMobile ? constraints.maxWidth : (constraints.maxWidth / 2) - padding;
-
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(width: padding),
-              SizedBox(
-                width: width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppTitle.big(
-                      text: 'Área',
-                      color: AppTheme.colors.orange,
-                    ),
-                    SwitchButton(
-                      title: 'História',
-                      onChanged: (value) => setState(() => isHistory = value),
-                      initialValue: isHistory,
-                    ),
-                    SwitchButton(
-                      title: 'Geografia',
-                      onChanged: (value) => setState(() => isGeography = value),
-                      initialValue: isGeography,
-                    ),
-                    SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                    AppTitle.big(
-                      text: 'Categoria',
-                      color: AppTheme.colors.orange,
-                    ),
-                    SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                    AppDropdownField<CategoryModel>(
-                      hintText: 'Selecione',
-                      items: _categoryOptions,
-                      itemToString: (category) => category.title,
-                      value: _selectedCategory,
-                      onChanged: (category) {
-                        if (category == null) return;
-
-                        CategoryModel? selectedCategory =
-                            widget.categories.firstWhereOrNull((value) => value.title == category);
-
-                        setState(() => _selectedCategory = selectedCategory);
-                      },
-                      validator: Validators.isNotEmpty,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-              Expanded(
-                child: AppScrollbar(
-                  controller: _scrollController,
-                  child: AlignedGridView.count(
-                    controller: _scrollController,
-                    crossAxisCount: isMobile ? 1 : 2,
-                    mainAxisSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
-                    crossAxisSpacing: AppTheme.dimensions.space.medium.horizontalSpacing,
-                    itemCount: types.length,
-                    itemBuilder: (context, index) {
-                      final type = types[index];
-                      final isSelected = type == _selectedType;
-
-                      return SizedBox(
-                        width: width,
-                        child: isSelected
-                            ? PrimaryButton.big(
-                                text: type.portuguese,
-                                onPressed: () => setState(() => _selectedType = type),
-                                isDisabled: _isUpdate,
-                              )
-                            : SecondaryButton.big(
-                                text: type.portuguese,
-                                onPressed: () => setState(() => _selectedType = type),
-                                isDisabled: _isUpdate,
-                              ),
-                      );
-                    },
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppTitle.big(
+                    text: 'Área',
+                    color: AppTheme.colors.orange,
                   ),
-                ),
+                  SwitchButton(
+                    title: 'História',
+                    onChanged: (value) => setState(() => isHistory = value),
+                    initialValue: isHistory,
+                  ),
+                  SwitchButton(
+                    title: 'Geografia',
+                    onChanged: (value) => setState(() => isGeography = value),
+                    initialValue: isGeography,
+                  ),
+                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+                  AppTitle.big(
+                    text: 'Categoria',
+                    color: AppTheme.colors.orange,
+                  ),
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppDropdownField<CategoryModel>(
+                    hintText: 'Selecione',
+                    items: _categoryOptions,
+                    itemToString: (category) => category.title,
+                    value: _selectedCategory,
+                    onChanged: (category) {
+                      if (category == null) return;
+
+                      CategoryModel? selectedCategory =
+                          widget.categories.firstWhereOrNull((value) => value.title == category);
+
+                      setState(() => _selectedCategory = selectedCategory);
+                    },
+                    validator: Validators.isNotEmpty,
+                  ),
+                ],
               ),
               SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
               Row(
@@ -185,7 +153,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
                   PrimaryButton.medium(
                     text: 'Avançar',
                     onPressed: _onTap,
-                    isDisabled: _selectedCategory == null || _selectedType == null,
+                    isDisabled: _selectedCategory == null,
                   ),
                 ],
               ),
@@ -199,26 +167,77 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
   void _onTap() {
     GoRouter.of(context).pop();
 
-    if (_selectedType == PostType.article) {
-      showCreateOrUpdateArticleDialog(
-        context,
-        onCreateOrUpdate: widget.onCreateOrUpdate,
-        post: PostModel(
-          id: widget.post?.id,
-          categoryId: _selectedCategory!.key,
-          category: _selectedCategory!,
-          areas: [
-            if (isHistory) PostsAreas.history,
-            if (isGeography) PostsAreas.geography,
-          ],
-          type: _selectedType!,
-          body: widget.post?.body,
-          createdAt: widget.post?.createdAt,
-          updatedAt: widget.post?.updatedAt,
-          isPublished: widget.post?.isPublished ?? false,
-          isHighlighted: widget.post?.isHighlighted ?? false,
-        ),
-      );
+    PostModel post = PostModel(
+      id: widget.post?.id,
+      categoryId: _selectedCategory!.key,
+      category: _selectedCategory!,
+      areas: [
+        if (isHistory) PostsAreas.history,
+        if (isGeography) PostsAreas.geography,
+      ],
+      type: widget.postType,
+      body: widget.post?.body,
+      createdAt: widget.post?.createdAt,
+      updatedAt: widget.post?.updatedAt,
+      isPublished: widget.post?.isPublished ?? false,
+      isHighlighted: widget.post?.isHighlighted ?? false,
+    );
+
+    switch (widget.postType) {
+      case PostType.article:
+        showCreateOrUpdateArticleDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.event:
+        showCreateOrUpdateEventDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.academicProduction:
+        showCreateOrUpdateAcademicProductionDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.search:
+        showCreateOrUpdateSearchDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.document:
+        showCreateOrUpdateDocumentDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.book:
+        showCreateOrUpdateBookDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.magazine:
+        showCreateOrUpdateMagazineDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.film:
+        showCreateOrUpdateFilmDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.podcast:
+        showCreateOrUpdatePodcastDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.music:
+        showCreateOrUpdateMusicDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
+
+      case PostType.artist:
+        showCreateOrUpdateArtistDialog(context,
+            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        break;
     }
   }
 }
