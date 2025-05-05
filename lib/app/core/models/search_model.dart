@@ -61,7 +61,7 @@ class SearchModel extends PostBody {
     return {
       'title': title,
       'image': image,
-      'state': state,
+      'state': state.name,
       'imageCaption': imageCaption,
       'description': description,
       'coordinator': coordinator,

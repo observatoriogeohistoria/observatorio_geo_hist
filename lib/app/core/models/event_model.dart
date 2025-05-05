@@ -53,7 +53,7 @@ class EventModel extends PostBody {
     return {
       'title': title,
       'image': image,
-      'scope': scope,
+      'scope': scope.name,
       'link': link,
       'location': location,
       'city': city,

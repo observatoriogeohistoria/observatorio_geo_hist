@@ -33,19 +33,27 @@ class _SidebarState extends State<Sidebar> {
   void initState() {
     super.initState();
 
+    if (authStore.user != null) {
+      _setSidebarItems(authStore.user);
+    }
+
     _reactions = [
       reaction((_) => authStore.user, (UserModel? user) {
-        setState(() {
-          sidebarItems = [
-            if (user?.permissions.canAccessUsersSection ?? false) SidebarItem.users,
-            SidebarItem.media,
-            SidebarItem.categories,
-            SidebarItem.posts,
-            SidebarItem.team,
-          ];
-        });
+        _setSidebarItems(user);
       }),
     ];
+  }
+
+  void _setSidebarItems(UserModel? user) {
+    setState(() {
+      sidebarItems = [
+        if (user?.permissions.canAccessUsersSection ?? false) SidebarItem.users,
+        SidebarItem.media,
+        SidebarItem.categories,
+        SidebarItem.posts,
+        SidebarItem.team,
+      ];
+    });
   }
 
   @override
