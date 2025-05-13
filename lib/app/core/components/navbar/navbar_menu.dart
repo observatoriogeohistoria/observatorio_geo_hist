@@ -48,11 +48,13 @@ List<Widget> buildNavbarMenu(
                   );
                 },
               ).toList(),
-        backgroundColor: ((categorySelected?.areas.isNotEmpty ?? false) &&
-                    categorySelected!.areas.first == option.area) ||
-                (option.route != null && AppRoutes.isCurrentRoute(context, option.route!))
-            ? AppTheme.colors.lightGray
-            : null,
+        backgroundColor: isMobile
+            ? null
+            : ((categorySelected?.areas.isNotEmpty ?? false) &&
+                        categorySelected!.areas.first == option.area) ||
+                    (option.route != null && AppRoutes.isCurrentRoute(context, option.route!))
+                ? AppTheme.colors.lightGray
+                : null,
         textStyle: isMobile ? AppTheme.typography.headline.big : null,
         textColor: isMobile ? AppTheme.colors.white : null,
         textColorOnHover: isMobile ? AppTheme.colors.darkGray : null,

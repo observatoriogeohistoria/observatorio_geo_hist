@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/empty_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
@@ -160,17 +160,25 @@ class _PostsPageState extends State<PostsPage> {
               SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
               if (fetchPostsStore.posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
               if (fetchPostsStore.posts.isNotEmpty)
-                AlignedGridView.count(
+                ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  crossAxisCount: isMobile ? 1 : (isTablet ? 2 : 3),
-                  crossAxisSpacing: AppTheme.dimensions.space.medium.horizontalSpacing,
-                  mainAxisSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
+                  separatorBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(
+                        vertical: AppTheme.dimensions.space.massive.verticalSpacing,
+                      ),
+                      child: AppDivider(
+                        color: AppTheme.colors.gray.withValues(alpha: 0.2),
+                      ),
+                    );
+                  },
                   itemCount: fetchPostsStore.posts.length,
                   itemBuilder: (context, index) {
                     return PostCard(
                       category: category,
                       post: fetchPostsStore.posts[index],
+                      index: index,
                     );
                   },
                 ),

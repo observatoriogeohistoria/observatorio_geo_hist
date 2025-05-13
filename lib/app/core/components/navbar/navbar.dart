@@ -101,7 +101,7 @@ class _NavbarState extends State<Navbar> {
                   icon: Icons.menu,
                   color: AppTheme.colors.orange,
                   size: 32,
-                  onPressed: () => _showMobileMenu(context),
+                  onPressed: _showMobileMenu,
                 );
               }
 
@@ -120,7 +120,7 @@ class _NavbarState extends State<Navbar> {
     );
   }
 
-  void _showMobileMenu(BuildContext context) {
+  void _showMobileMenu() {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,

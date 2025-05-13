@@ -45,35 +45,37 @@ class _AppCardState extends State<AppCard> {
     return _card;
   }
 
-  Widget get _card => Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            width: widget.width,
-            padding: widget.padding ??
-                EdgeInsets.symmetric(
-                  horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
-                  vertical: AppTheme.dimensions.space.small.verticalSpacing,
-                ),
-            margin: widget.margin,
-            decoration: BoxDecoration(
-              color: AppTheme.colors.white,
-              borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-              border: Border(
-                top: border,
-                left: border,
-                right: border,
-                bottom: border.copyWith(width: AppTheme.dimensions.stroke.huge),
+  Widget get _card {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: widget.width,
+          padding: widget.padding ??
+              EdgeInsets.symmetric(
+                horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
+                vertical: AppTheme.dimensions.space.small.verticalSpacing,
               ),
+          margin: widget.margin,
+          decoration: BoxDecoration(
+            color: AppTheme.colors.white,
+            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
+            border: Border(
+              top: border,
+              left: border,
+              right: border,
+              bottom: border.copyWith(width: AppTheme.dimensions.stroke.huge),
             ),
-            child: widget.child,
           ),
-          if (isHovered)
-            Icon(
-              Icons.touch_app,
-              color: AppTheme.colors.orange,
-              size: 56.scale,
-            ),
-        ],
-      );
+          child: widget.child,
+        ),
+        if (isHovered)
+          Icon(
+            Icons.touch_app,
+            color: AppTheme.colors.orange,
+            size: 56.scale,
+          ),
+      ],
+    );
+  }
 }
