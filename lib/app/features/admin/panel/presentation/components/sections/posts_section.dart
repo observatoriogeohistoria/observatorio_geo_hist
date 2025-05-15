@@ -17,8 +17,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_post_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/categories_states.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/posts_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -44,7 +43,7 @@ class _PostsSectionState extends State<PostsSection> {
   void initState() {
     super.initState();
 
-    categoriesStore.getCategories();
+    categoriesStore.getItems();
 
     selectedPostType = sidebarStore.selectedPostType ?? PostType.article;
     postsStore.getPosts(sidebarStore.selectedPostType ?? PostType.article);
@@ -60,17 +59,16 @@ class _PostsSectionState extends State<PostsSection> {
       reaction(
         (_) => postsStore.state,
         (state) {
-          if (state is ManagePostsErrorState) {
+          if (state is CrudErrorState) {
             final error = state.failure;
             Messenger.showError(context, error.message);
 
             if (error is Forbidden) authStore.logout();
           }
 
-          if (state is ManagePostsSuccessState) {
-            GoRouter.of(context).pop();
-
+          if (state is CrudSuccessState) {
             if (state.message.isNotEmpty) {
+              GoRouter.of(context).pop();
               Messenger.showSuccess(context, state.message);
             }
           }
@@ -109,16 +107,16 @@ class _PostsSectionState extends State<PostsSection> {
                     right: AppTheme.dimensions.space.medium.horizontalSpacing,
                   ),
                   child: SecondaryButton.medium(
-                    text: 'Criar ${selectedPostType.portuguese}',
+                    text: 'Criar',
                     onPressed: () {
                       showCreateOrUpdatePostDialog(
                         context,
-                        categories: categoriesStore.categories,
+                        categories: categoriesStore.items,
                         onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
                         postType: selectedPostType,
                       );
                     },
-                    isDisabled: categoriesStore.state is ManageCategoriesLoadingState,
+                    isDisabled: categoriesStore.state is CrudLoadingState,
                   ),
                 ),
               ),
@@ -127,7 +125,7 @@ class _PostsSectionState extends State<PostsSection> {
               builder: (context) {
                 final state = postsStore.state;
 
-                if (state is ManagePostsLoadingState && state.isRefreshing) {
+                if (state is CrudLoadingState && state.isRefreshing) {
                   return const LinearLoading();
                 }
 
@@ -141,11 +139,11 @@ class _PostsSectionState extends State<PostsSection> {
                   final postsState = postsStore.state;
                   final categoriesState = categoriesStore.state;
 
-                  if (postsState is ManagePostsLoadingState && !postsState.isRefreshing) {
+                  if (postsState is CrudLoadingState && !postsState.isRefreshing) {
                     return const Center(child: CircularLoading());
                   }
 
-                  if (categoriesState is ManageCategoriesLoadingState) {
+                  if (categoriesState is CrudLoadingState) {
                     return const Center(child: CircularLoading());
                   }
 
@@ -178,7 +176,7 @@ class _PostsSectionState extends State<PostsSection> {
                           onEdit: () {
                             showCreateOrUpdatePostDialog(
                               context,
-                              categories: categoriesStore.categories,
+                              categories: categoriesStore.items,
                               onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
                               post: post,
                               postType: post.type,

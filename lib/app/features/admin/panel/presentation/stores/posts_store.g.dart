@@ -27,13 +27,13 @@ mixin _$PostsStore on PostsStoreBase, Store {
   late final _$stateAtom = Atom(name: 'PostsStoreBase.state', context: context);
 
   @override
-  ManagePostsState get state {
+  CrudState get state {
     _$stateAtom.reportRead();
     return super.state;
   }
 
   @override
-  set state(ManagePostsState value) {
+  set state(CrudState value) {
     _$stateAtom.reportWrite(value, super.state, () {
       super.state = value;
     });

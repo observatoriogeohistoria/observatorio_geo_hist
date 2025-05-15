@@ -1,67 +1,73 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/media_repository.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/media_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
 
 part 'media_store.g.dart';
 
 class MediaStore = MediaStoreBase with _$MediaStore;
 
-abstract class MediaStoreBase with Store {
+abstract class MediaStoreBase extends CrudStore<MediaModel> with Store {
   final MediaRepository _mediaRepository;
 
   MediaStoreBase(this._mediaRepository);
 
+  @override
   @observable
-  ObservableList<MediaModel> medias = ObservableList<MediaModel>();
+  ObservableList<MediaModel> items = ObservableList<MediaModel>();
 
+  @override
   @observable
-  ManageMediaState state = ManageMediaInitialState();
+  CrudState state = CrudInitialState();
 
+  @override
   @action
-  Future<void> getMedias() async {
-    if (state is ManageMediaLoadingState) return;
-    if (medias.isNotEmpty) return;
+  Future<void> getItems() async {
+    if (state is CrudLoadingState) return;
+    if (items.isNotEmpty) return;
 
-    state = ManageMediaLoadingState();
+    state = CrudLoadingState();
 
     final result = await _mediaRepository.getMedias();
 
     result.fold(
-      (failure) => state = ManageMediaErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (medias) {
-        this.medias = medias.asObservable();
-        state = ManageMediaSuccessState();
+        items = medias.asObservable();
+        state = CrudSuccessState();
       },
     );
   }
 
+  @override
   @action
-  Future<void> createMedia(MediaModel media) async {
-    state = ManageMediaLoadingState(isRefreshing: true);
+  Future<void> createOrUpdateItem(MediaModel item, {dynamic extra}) async {
+    state = CrudLoadingState(isRefreshing: true);
 
-    final result = await _mediaRepository.createMedia(media);
+    final result = await _mediaRepository.createMedia(item);
 
     result.fold(
-      (failure) => state = ManageMediaErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (media) {
-        medias.add(media);
-        state = ManageMediaSuccessState(message: 'Mídia criada com sucesso');
+        items.add(media);
+        state = CrudSuccessState(message: 'Mídia criada com sucesso');
       },
     );
   }
 
+  @override
   @action
-  Future<void> deleteMedia(MediaModel media) async {
-    state = ManageMediaLoadingState(isRefreshing: true);
+  Future<void> deleteItem(MediaModel item) async {
+    state = CrudLoadingState(isRefreshing: true);
 
-    final result = await _mediaRepository.deleteMedia(media);
+    final result = await _mediaRepository.deleteMedia(item);
 
     result.fold(
-      (failure) => state = ManageMediaErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (_) {
-        medias.remove(media);
-        state = ManageMediaSuccessState(message: 'Mídia deletada com sucesso');
+        items.remove(item);
+        state = CrudSuccessState(message: 'Mídia deletada com sucesso');
       },
     );
   }
