@@ -1,18 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/editor_quill.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateMusicDialog(
@@ -45,8 +41,6 @@ class CreateOrUpdateMusicDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
-  final _scrollController = ScrollController();
-  final _formKey = GlobalKey<FormState>();
   final StreamController<Completer<String>> _lyricsController = StreamController();
 
   late final MusicModel? _initialBody = widget.post.body as MusicModel?;
@@ -75,87 +69,61 @@ class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      width: MediaQuery.of(context).size.width,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: AppScrollbar(
-          controller: _scrollController,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppTitle.medium(
-                  text: _isUpdate ? 'Atualizar música' : 'Criar música',
-                  color: AppTheme.colors.orange,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                AppTextField(
-                  controller: _titleController,
-                  labelText: 'Nome da música',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _artistController,
-                  labelText: 'Nome do artista',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _imageController,
-                  labelText: 'URL da imagem',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _descriptionController,
-                  labelText: 'Descrição',
-                  validator: Validators.isNotEmpty,
-                  maxLines: 3,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                EditorQuill(
-                  saveController: _lyricsController,
-                  initialContent: _initialLyrics,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _linkController,
-                  labelText: 'Link',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SecondaryButton.medium(
-                      text: 'Cancelar',
-                      onPressed: () => GoRouter.of(context).pop(),
-                    ),
-                    SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                    PrimaryButton.medium(
-                      text: _isUpdate ? 'Atualizar' : 'Criar',
-                      onPressed: _onCreateOrUpdate,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+    return FormDialog(
+      onSubmit: _onCreateOrUpdate,
+      isUpdate: _isUpdate,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.medium(
+            text: _isUpdate ? 'Atualizar música' : 'Criar música',
+            color: AppTheme.colors.orange,
           ),
-        ),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppTextField(
+            controller: _titleController,
+            labelText: 'Nome da música',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _artistController,
+            labelText: 'Nome do artista',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _imageController,
+            labelText: 'URL da imagem',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _descriptionController,
+            labelText: 'Descrição',
+            validator: Validators.isNotEmpty,
+            maxLines: 3,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          EditorQuill(
+            saveController: _lyricsController,
+            initialContent: _initialLyrics,
+            height: MediaQuery.of(context).size.height * 0.3,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _linkController,
+            labelText: 'Link',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+        ],
       ),
     );
   }
 
   Future<void> _onCreateOrUpdate() async {
-    if (!_formKey.currentState!.validate()) return;
-
     String lyrics = await _getLyrics();
 
     widget.onCreateOrUpdate(

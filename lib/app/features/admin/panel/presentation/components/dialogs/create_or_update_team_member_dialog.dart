@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -40,8 +37,6 @@ class CreateOrUpdateTeamMemberDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMemberDialog> {
-  final _formKey = GlobalKey<FormState>();
-
   late final _nameController = TextEditingController(text: widget.member?.name);
   late final _roleController = TextEditingController(text: widget.member?.role.toString());
   late final _lattesUrlController = TextEditingController(text: widget.member?.lattesUrl);
@@ -51,67 +46,49 @@ class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMembe
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppTitle.medium(
-              text: _isUpdate ? 'Atualizar membro' : 'Criar membro',
-              color: AppTheme.colors.orange,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-            AppTextField(
-              controller: _nameController,
-              labelText: 'Nome',
-              validator: Validators.isNotEmpty,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-            AppTextField(
-              controller: _roleController,
-              labelText: 'Papel',
-              validator: Validators.isNotEmpty,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-            AppTextField(
-              controller: _lattesUrlController,
-              labelText: 'URL do Lattes',
-              validator: Validators.isValidUrlOrEmpty,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-            AppTextField(
-              controller: _descriptionController,
-              labelText: 'Descrição',
-              minLines: 10,
-              maxLines: 10,
-            ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SecondaryButton.medium(
-                  text: 'Cancelar',
-                  onPressed: () => GoRouter.of(context).pop(),
-                ),
-                SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                PrimaryButton.medium(
-                  text: _isUpdate ? 'Atualizar' : 'Criar',
-                  onPressed: _onCreateOrUpdate,
-                ),
-              ],
-            ),
-          ],
-        ),
+    return FormDialog(
+      onSubmit: _onCreateOrUpdate,
+      isUpdate: _isUpdate,
+      isFullScreen: false,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.medium(
+            text: _isUpdate ? 'Atualizar membro' : 'Criar membro',
+            color: AppTheme.colors.orange,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppTextField(
+            controller: _nameController,
+            labelText: 'Nome',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _roleController,
+            labelText: 'Papel',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _lattesUrlController,
+            labelText: 'URL do Lattes',
+            validator: Validators.isValidUrlOrEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _descriptionController,
+            labelText: 'Descrição',
+            minLines: 10,
+            maxLines: 10,
+          ),
+        ],
       ),
     );
   }
 
   void _onCreateOrUpdate() {
-    if (!_formKey.currentState!.validate()) return;
-
     widget.onCreateOrUpdate(
       TeamMemberModel(
         id: widget.member?.id,

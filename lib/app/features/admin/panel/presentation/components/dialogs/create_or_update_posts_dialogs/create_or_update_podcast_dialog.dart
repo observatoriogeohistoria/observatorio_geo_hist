@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdatePodcastDialog(
@@ -42,9 +38,6 @@ class CreateOrUpdatePodcastDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdatePodcastDialogState extends State<CreateOrUpdatePodcastDialog> {
-  final _scrollController = ScrollController();
-  final _formKey = GlobalKey<FormState>();
-
   late final PodcastModel? _initialBody = widget.post.body as PodcastModel?;
 
   late final _titleController = TextEditingController(text: _initialBody?.title);
@@ -56,75 +49,49 @@ class _CreateOrUpdatePodcastDialogState extends State<CreateOrUpdatePodcastDialo
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      width: MediaQuery.of(context).size.width,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: AppScrollbar(
-          controller: _scrollController,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppTitle.medium(
-                  text: _isUpdate ? 'Atualizar podcast' : 'Criar podcast',
-                  color: AppTheme.colors.orange,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                AppTextField(
-                  controller: _titleController,
-                  labelText: 'Título',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _imageController,
-                  labelText: 'URL da imagem',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _descriptionController,
-                  labelText: 'Descrição',
-                  validator: Validators.isNotEmpty,
-                  maxLines: 5,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _linkController,
-                  labelText: 'Link',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SecondaryButton.medium(
-                      text: 'Cancelar',
-                      onPressed: () => GoRouter.of(context).pop(),
-                    ),
-                    SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                    PrimaryButton.medium(
-                      text: _isUpdate ? 'Atualizar' : 'Criar',
-                      onPressed: _onCreateOrUpdate,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+    return FormDialog(
+      onSubmit: _onCreateOrUpdate,
+      isUpdate: _isUpdate,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.medium(
+            text: _isUpdate ? 'Atualizar podcast' : 'Criar podcast',
+            color: AppTheme.colors.orange,
           ),
-        ),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppTextField(
+            controller: _titleController,
+            labelText: 'Título',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _imageController,
+            labelText: 'URL da imagem',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _descriptionController,
+            labelText: 'Descrição',
+            validator: Validators.isNotEmpty,
+            maxLines: 5,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _linkController,
+            labelText: 'Link',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+        ],
       ),
     );
   }
 
   Future<void> _onCreateOrUpdate() async {
-    if (!_formKey.currentState!.validate()) return;
-
     widget.onCreateOrUpdate(
       widget.post.copyWith(
         id: widget.post.id,

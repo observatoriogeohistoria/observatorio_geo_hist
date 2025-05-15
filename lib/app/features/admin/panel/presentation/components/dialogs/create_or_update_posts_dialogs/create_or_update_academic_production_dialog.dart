@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateAcademicProductionDialog(
@@ -45,9 +41,6 @@ class CreateOrUpdateAcademicProductionDialog extends StatefulWidget {
 
 class _CreateOrUpdateAcademicProductionDialogState
     extends State<CreateOrUpdateAcademicProductionDialog> {
-  final _scrollController = ScrollController();
-  final _formKey = GlobalKey<FormState>();
-
   late final AcademicProductionModel? _initialBody = widget.post.body as AcademicProductionModel?;
 
   late final _titleController = TextEditingController(text: _initialBody?.title);
@@ -67,129 +60,103 @@ class _CreateOrUpdateAcademicProductionDialogState
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      width: MediaQuery.of(context).size.width,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: AppScrollbar(
-          controller: _scrollController,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppTitle.medium(
-                  text: _isUpdate ? 'Atualizar produção acadêmica' : 'Criar produção acadêmica',
-                  color: AppTheme.colors.orange,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                AppTextField(
-                  controller: _titleController,
-                  labelText: 'Título',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppDropdownField<AcademicProductionCategory>(
-                  hintText: 'Categoria',
-                  items: AcademicProductionCategory.values,
-                  itemToString: (value) => value.portuguese,
-                  value: _selectedCategory,
-                  onChanged: (value) {
-                    if (value == null) return;
-
-                    AcademicProductionCategory? selected =
-                        AcademicProductionCategory.fromPortuguese(value);
-                    setState(() => _selectedCategory = selected);
-                  },
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _authorController,
-                  labelText: 'Autor',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _advisorController,
-                  labelText: 'Orientador',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _imageController,
-                  labelText: 'URL da imagem',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _imageCaptionController,
-                  labelText: 'Legenda da imagem',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _institutionController,
-                  labelText: 'Instituição',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _yearAndCityController,
-                  labelText: 'Cidade e ano de publicação',
-                  hintText: 'Ex: São Paulo, 2021',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _summaryController,
-                  labelText: 'Resumo',
-                  validator: Validators.isNotEmpty,
-                  minLines: 6,
-                  maxLines: 6,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _keywordsController,
-                  labelText: 'Palavras-chave',
-                  hintText: 'Separe com vírgulas',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _linkController,
-                  labelText: 'Link da pesquisa',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SecondaryButton.medium(
-                      text: 'Cancelar',
-                      onPressed: () => GoRouter.of(context).pop(),
-                    ),
-                    SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                    PrimaryButton.medium(
-                      text: _isUpdate ? 'Atualizar' : 'Criar',
-                      onPressed: _onCreateOrUpdate,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+    return FormDialog(
+      onSubmit: _onCreateOrUpdate,
+      isUpdate: _isUpdate,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.medium(
+            text: _isUpdate ? 'Atualizar produção acadêmica' : 'Criar produção acadêmica',
+            color: AppTheme.colors.orange,
           ),
-        ),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppTextField(
+            controller: _titleController,
+            labelText: 'Título',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppDropdownField<AcademicProductionCategory>(
+            hintText: 'Categoria',
+            items: AcademicProductionCategory.values,
+            itemToString: (value) => value.portuguese,
+            value: _selectedCategory,
+            onChanged: (value) {
+              if (value == null) return;
+
+              AcademicProductionCategory? selected =
+                  AcademicProductionCategory.fromPortuguese(value);
+              setState(() => _selectedCategory = selected);
+            },
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _authorController,
+            labelText: 'Autor',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _advisorController,
+            labelText: 'Orientador',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _imageController,
+            labelText: 'URL da imagem',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _imageCaptionController,
+            labelText: 'Legenda da imagem',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _institutionController,
+            labelText: 'Instituição',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _yearAndCityController,
+            labelText: 'Cidade e ano de publicação',
+            hintText: 'Ex: São Paulo, 2021',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _summaryController,
+            labelText: 'Resumo',
+            validator: Validators.isNotEmpty,
+            minLines: 6,
+            maxLines: 6,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _keywordsController,
+            labelText: 'Palavras-chave',
+            hintText: 'Separe com vírgulas',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _linkController,
+            labelText: 'Link da pesquisa',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+        ],
       ),
     );
   }
 
   void _onCreateOrUpdate() {
-    if (!_formKey.currentState!.validate()) return;
-
     widget.onCreateOrUpdate(
       widget.post.copyWith(
         id: widget.post.id,

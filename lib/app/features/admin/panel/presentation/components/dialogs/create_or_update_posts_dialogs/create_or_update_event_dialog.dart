@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/event_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateEventDialog(
@@ -43,10 +39,6 @@ class CreateOrUpdateEventDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateEventDialogState extends State<CreateOrUpdateEventDialog> {
-  final _scrollController = ScrollController();
-
-  final _formKey = GlobalKey<FormState>();
-
   late final EventModel? _initialBody = widget.post.body as EventModel?;
 
   late final _titleController = TextEditingController(text: _initialBody?.title);
@@ -64,114 +56,88 @@ class _CreateOrUpdateEventDialogState extends State<CreateOrUpdateEventDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      width: MediaQuery.of(context).size.width,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: AppScrollbar(
-          controller: _scrollController,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppTitle.medium(
-                  text: _isUpdate ? 'Atualizar evento' : 'Criar evento',
-                  color: AppTheme.colors.orange,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                AppTextField(
-                  controller: _titleController,
-                  labelText: 'Título/Nome do evento',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppDropdownField<EventScope>(
-                  hintText: 'Abrangência',
-                  items: EventScope.values,
-                  itemToString: (value) => value.portuguese,
-                  value: _selectedScope,
-                  onChanged: (value) {
-                    if (value == null) return;
-
-                    EventScope? selected = EventScope.fromPortuguese(value);
-                    setState(() => _selectedScope = selected);
-                  },
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _imageController,
-                  labelText: 'URL da imagem',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _linkController,
-                  labelText: 'Link do evento',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _locationController,
-                  labelText: 'Local',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _cityController,
-                  labelText:
-                      'Cidade (Cidade/UF (para evento no Brasil) ou Cidade – País (para evento fora do Brasil))',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _dateController,
-                  labelText: 'Data (Ex.: 1º de janeiro de 2020 a 10 de janeiro de 2020)',
-                  hintText: 'DD/MM/AAAA',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _timeController,
-                  labelText: 'Horário',
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _detailsController,
-                  labelText: 'Detalhes',
-                  minLines: 8,
-                  maxLines: 8,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SecondaryButton.medium(
-                      text: 'Cancelar',
-                      onPressed: () => GoRouter.of(context).pop(),
-                    ),
-                    SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                    PrimaryButton.medium(
-                      text: _isUpdate ? 'Atualizar' : 'Criar',
-                      onPressed: _onCreateOrUpdate,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+    return FormDialog(
+      onSubmit: _onCreateOrUpdate,
+      isUpdate: _isUpdate,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.medium(
+            text: _isUpdate ? 'Atualizar evento' : 'Criar evento',
+            color: AppTheme.colors.orange,
           ),
-        ),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppTextField(
+            controller: _titleController,
+            labelText: 'Título/Nome do evento',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppDropdownField<EventScope>(
+            hintText: 'Abrangência',
+            items: EventScope.values,
+            itemToString: (value) => value.portuguese,
+            value: _selectedScope,
+            onChanged: (value) {
+              if (value == null) return;
+
+              EventScope? selected = EventScope.fromPortuguese(value);
+              setState(() => _selectedScope = selected);
+            },
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _imageController,
+            labelText: 'URL da imagem',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _linkController,
+            labelText: 'Link do evento',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _locationController,
+            labelText: 'Local',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _cityController,
+            labelText:
+                'Cidade (Cidade/UF (para evento no Brasil) ou Cidade – País (para evento fora do Brasil))',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _dateController,
+            labelText: 'Data (Ex.: 1º de janeiro de 2020 a 10 de janeiro de 2020)',
+            hintText: 'DD/MM/AAAA',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _timeController,
+            labelText: 'Horário',
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _detailsController,
+            labelText: 'Detalhes',
+            minLines: 8,
+            maxLines: 8,
+          ),
+        ],
       ),
     );
   }
 
   void _onCreateOrUpdate() {
-    if (!_formKey.currentState!.validate()) return;
-
     widget.onCreateOrUpdate(
       widget.post.copyWith(
         id: widget.post.id,

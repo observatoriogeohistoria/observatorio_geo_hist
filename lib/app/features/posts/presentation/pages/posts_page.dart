@@ -90,6 +90,7 @@ class _PostsPageState extends State<PostsPage> {
 
               return SliverToBoxAdapter(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildCategoryHeader(context, category),
                     _buildPostsSection(category),
@@ -147,6 +148,17 @@ class _PostsPageState extends State<PostsPage> {
   Widget _buildPostsSection(CategoryModel category) {
     return Observer(
       builder: (context) {
+        if (fetchPostsStore.state is FetchPostsLoadingState) {
+          return Column(
+            children: [
+              SizedBox(height: AppTheme.dimensions.space.gigantic.verticalSpacing),
+              const LoadingContent(isSliver: false),
+            ],
+          );
+        }
+
+        final posts = fetchPostsStore.posts;
+
         return Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.symmetric(
@@ -158,8 +170,8 @@ class _PostsPageState extends State<PostsPage> {
             children: [
               TitleWidget(title: 'POSTS', color: AppTheme.colors.orange),
               SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-              if (fetchPostsStore.posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
-              if (fetchPostsStore.posts.isNotEmpty)
+              if (posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
+              if (posts.isNotEmpty)
                 ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -173,11 +185,11 @@ class _PostsPageState extends State<PostsPage> {
                       ),
                     );
                   },
-                  itemCount: fetchPostsStore.posts.length,
+                  itemCount: posts.length,
                   itemBuilder: (context, index) {
                     return PostCard(
                       category: category,
-                      post: fetchPostsStore.posts[index],
+                      post: posts[index],
                       index: index,
                     );
                   },

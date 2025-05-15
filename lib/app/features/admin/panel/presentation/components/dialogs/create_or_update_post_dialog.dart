@@ -1,10 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/switch_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -24,6 +21,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_music_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_podcast_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_search_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdatePostDialog(
@@ -86,6 +84,8 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
     return categories;
   }
 
+  bool get _isUpdate => widget.post != null;
+
   @override
   void initState() {
     super.initState();
@@ -94,77 +94,54 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppTitle.big(
-                    text: 'Área',
-                    color: AppTheme.colors.orange,
-                  ),
-                  SwitchButton(
-                    title: 'História',
-                    onChanged: (value) => setState(() => isHistory = value),
-                    initialValue: isHistory,
-                  ),
-                  SwitchButton(
-                    title: 'Geografia',
-                    onChanged: (value) => setState(() => isGeography = value),
-                    initialValue: isGeography,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  AppTitle.big(
-                    text: 'Categoria',
-                    color: AppTheme.colors.orange,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                  AppDropdownField<CategoryModel>(
-                    hintText: 'Selecione',
-                    items: _categoryOptions,
-                    itemToString: (category) => category.title,
-                    value: _selectedCategory,
-                    onChanged: (category) {
-                      if (category == null) return;
+    return FormDialog(
+      onSubmit: _onSubmit,
+      isUpdate: _isUpdate,
+      isFullScreen: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.big(
+            text: 'Área',
+            color: AppTheme.colors.orange,
+          ),
+          SwitchButton(
+            title: 'História',
+            onChanged: (value) => setState(() => isHistory = value),
+            initialValue: isHistory,
+          ),
+          SwitchButton(
+            title: 'Geografia',
+            onChanged: (value) => setState(() => isGeography = value),
+            initialValue: isGeography,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTitle.big(
+            text: 'Categoria',
+            color: AppTheme.colors.orange,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+          AppDropdownField<CategoryModel>(
+            hintText: 'Selecione',
+            items: _categoryOptions,
+            itemToString: (category) => category.title,
+            value: _selectedCategory,
+            onChanged: (category) {
+              if (category == null) return;
 
-                      CategoryModel? selectedCategory =
-                          widget.categories.firstWhereOrNull((value) => value.title == category);
+              CategoryModel? selectedCategory =
+                  widget.categories.firstWhereOrNull((value) => value.title == category);
 
-                      setState(() => _selectedCategory = selectedCategory);
-                    },
-                    validator: Validators.isNotEmpty,
-                  ),
-                ],
-              ),
-              SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SecondaryButton.medium(
-                    text: 'Cancelar',
-                    onPressed: () => GoRouter.of(context).pop(),
-                  ),
-                  SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                  PrimaryButton.medium(
-                    text: 'Avançar',
-                    onPressed: _onTap,
-                    isDisabled: _selectedCategory == null,
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
+              setState(() => _selectedCategory = selectedCategory);
+            },
+            validator: Validators.isNotEmpty,
+          ),
+        ],
       ),
     );
   }
 
-  void _onTap() {
+  void _onSubmit() {
     GoRouter.of(context).pop();
 
     PostModel post = PostModel(
