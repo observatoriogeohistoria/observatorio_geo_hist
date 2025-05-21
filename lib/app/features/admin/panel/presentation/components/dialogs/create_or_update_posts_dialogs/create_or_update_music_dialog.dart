@@ -11,6 +11,7 @@ import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.da
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateMusicDialog(
@@ -118,6 +119,7 @@ class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
             maxLines: 3,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          const FormLabel(text: 'Letra'),
           EditorQuill(
             saveController: _lyricsController,
             initialContent: _initialLyrics,

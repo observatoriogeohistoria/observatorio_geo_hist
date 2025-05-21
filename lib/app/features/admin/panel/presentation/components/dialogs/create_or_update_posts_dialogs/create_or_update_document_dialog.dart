@@ -13,6 +13,7 @@ import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.da
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateDocumentDialog(
@@ -119,6 +120,7 @@ class _CreateOrUpdateDocumentDialogState extends State<CreateOrUpdateDocumentDia
             imageController: _imageController,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          const FormLabel(text: 'Descrição'),
           EditorQuill(
             saveController: _descriptionController,
             initialContent: _initialDescription,
