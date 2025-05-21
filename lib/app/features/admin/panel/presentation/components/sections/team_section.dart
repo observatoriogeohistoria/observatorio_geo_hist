@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
-import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/team_member_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_team_member_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/team_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/crud_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/team_store.dart';
-import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 
 class TeamSection extends StatefulWidget {
   const TeamSection({super.key});
@@ -29,140 +19,37 @@ class _TeamSectionState extends State<TeamSection> {
   late final TeamStore teamStore = PanelSetup.getIt<TeamStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
 
-  List<ReactionDisposer> _reactions = [];
-
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    teamStore.getTeamMembers();
-
-    _reactions = [
-      reaction((_) => teamStore.state, (state) {
-        if (state is ManageTeamErrorState) {
-          final error = state.failure;
-          Messenger.showError(context, error.message);
-
-          if (error is Forbidden) authStore.logout();
-        }
-
-        if (state is ManageTeamSuccessState) {
-          GoRouter.of(context).pop();
-
-          if (state.message.isNotEmpty) {
-            Messenger.showSuccess(context, state.message);
-          }
-        }
-      }),
-    ];
-  }
-
-  @override
-  void dispose() {
-    for (var reaction in _reactions) {
-      reaction.reaction.dispose();
-    }
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
         bool canEdit = authStore.user?.permissions.canEditTeamSection ?? false;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppHeadline.big(
-              text: 'Equipe',
-              color: AppTheme.colors.orange,
-            ),
-            if (canEdit) ...[
-              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: AppTheme.dimensions.space.medium.horizontalSpacing,
-                  ),
-                  child: SecondaryButton.medium(
-                    text: 'Criar membro',
-                    onPressed: () {
-                      showCreateOrUpdateTeamMemberDialog(
-                        context,
-                        onCreateOrUpdate: (member) => teamStore.createOrUpdateTeamMember(member),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-            Observer(
-              builder: (context) {
-                final state = teamStore.state;
-
-                if (state is ManageTeamLoadingState && state.isRefreshing) {
-                  return const LinearLoading();
-                }
-
-                return const SizedBox.shrink();
+        return CrudSection<TeamMemberModel>(
+          title: 'Equipe',
+          canEdit: canEdit,
+          store: teamStore,
+          itemBuilder: (item, index) {
+            return TeamMemberCard(
+              member: item,
+              index: index + 1,
+              onDelete: () => teamStore.deleteItem(item),
+              onEdit: () {
+                showCreateOrUpdateTeamMemberDialog(
+                  context,
+                  onCreateOrUpdate: (item) => teamStore.createOrUpdateItem(item),
+                  member: item,
+                );
               },
-            ),
-            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-            Expanded(
-              child: Observer(
-                builder: (context) {
-                  final state = teamStore.state;
-
-                  if (state is ManageTeamLoadingState && !state.isRefreshing) {
-                    return const Center(child: CircularLoading());
-                  }
-
-                  final members = teamStore.teamMembers;
-
-                  return AppScrollbar(
-                    controller: _scrollController,
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      physics: const ClampingScrollPhysics(),
-                      padding: EdgeInsets.only(
-                        bottom: AppTheme.dimensions.space.large.verticalSpacing,
-                      ),
-                      separatorBuilder: (context, index) {
-                        final isLast = index == members.length - 1;
-
-                        return isLast
-                            ? const SizedBox()
-                            : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
-                      },
-                      itemCount: members.length,
-                      itemBuilder: (context, index) {
-                        final member = members[index];
-
-                        return TeamMemberCard(
-                          member: member,
-                          index: index + 1,
-                          onDelete: () => teamStore.deleteTeamMember(member),
-                          onEdit: () {
-                            showCreateOrUpdateTeamMemberDialog(
-                              context,
-                              onCreateOrUpdate: (member) =>
-                                  teamStore.createOrUpdateTeamMember(member),
-                              member: member,
-                            );
-                          },
-                          canEdit: canEdit,
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+              canEdit: canEdit,
+            );
+          },
+          onCreatePressed: () {
+            showCreateOrUpdateTeamMemberDialog(
+              context,
+              onCreateOrUpdate: (item) => teamStore.createOrUpdateItem(item),
+            );
+          },
         );
       },
     );

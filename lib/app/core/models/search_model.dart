@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class SearchModel extends PostBody {
@@ -43,7 +44,7 @@ class SearchModel extends PostBody {
   factory SearchModel.fromJson(Map<String, dynamic> json) {
     return SearchModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       state: SearchState.values.byName(json['state']),
       imageCaption: json['imageCaption'],
       description: json['description'],
@@ -60,7 +61,7 @@ class SearchModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'image': image,
+      'image': image.url,
       'state': state.name,
       'imageCaption': imageCaption,
       'description': description,
@@ -71,6 +72,35 @@ class SearchModel extends PostBody {
       'members': members,
       'financier': financier,
     };
+  }
+
+  @override
+  SearchModel copyWith({
+    String? title,
+    ImageModel? image,
+    SearchState? state,
+    String? imageCaption,
+    String? description,
+    String? coordinator,
+    String? researcher,
+    String? advisor,
+    String? coAdvisor,
+    String? members,
+    String? financier,
+  }) {
+    return SearchModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      state: state ?? this.state,
+      imageCaption: imageCaption ?? this.imageCaption,
+      description: description ?? this.description,
+      coordinator: coordinator ?? this.coordinator,
+      researcher: researcher ?? this.researcher,
+      advisor: advisor ?? this.advisor,
+      coAdvisor: coAdvisor ?? this.coAdvisor,
+      members: members ?? this.members,
+      financier: financier ?? this.financier,
+    );
   }
 }
 

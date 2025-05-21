@@ -1,71 +1,77 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/team_repository.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/team_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 
 part 'team_store.g.dart';
 
 class TeamStore = TeamStoreBase with _$TeamStore;
 
-abstract class TeamStoreBase with Store {
+abstract class TeamStoreBase extends CrudStore<TeamMemberModel> with Store {
   final TeamRepository _teamRepository;
 
   TeamStoreBase(this._teamRepository);
 
+  @override
   @observable
-  ObservableList<TeamMemberModel> teamMembers = ObservableList<TeamMemberModel>();
+  ObservableList<TeamMemberModel> items = ObservableList<TeamMemberModel>();
 
+  @override
   @observable
-  ManageTeamState state = ManageTeamInitialState();
+  CrudState state = CrudInitialState();
 
+  @override
   @action
-  Future<void> getTeamMembers() async {
-    if (state is ManageTeamLoadingState) return;
-    if (teamMembers.isNotEmpty) return;
+  Future<void> getItems() async {
+    if (state is CrudLoadingState) return;
+    if (items.isNotEmpty) return;
 
-    state = ManageTeamLoadingState();
+    state = CrudLoadingState();
 
     final result = await _teamRepository.getTeamMembers();
 
     result.fold(
-      (failure) => state = ManageTeamErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (teamMembers) {
-        this.teamMembers = teamMembers.asObservable();
-        state = ManageTeamSuccessState();
+        items = teamMembers.asObservable();
+        state = CrudSuccessState();
       },
     );
   }
 
+  @override
   @action
-  Future<void> createOrUpdateTeamMember(TeamMemberModel teamMember) async {
-    state = ManageTeamLoadingState(isRefreshing: true);
+  Future<void> createOrUpdateItem(TeamMemberModel item, {dynamic extra}) async {
+    state = CrudLoadingState(isRefreshing: true);
 
-    final result = await _teamRepository.createOrUpdateTeamMember(teamMember);
+    final result = await _teamRepository.createOrUpdateTeamMember(item);
 
     result.fold(
-      (failure) => state = ManageTeamErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (data) {
-        final index = teamMembers.indexWhere((c) => c.id == data.id);
-        index >= 0 ? teamMembers.replaceRange(index, index + 1, [data]) : teamMembers.add(data);
+        final index = items.indexWhere((c) => c.id == data.id);
+        index >= 0 ? items.replaceRange(index, index + 1, [data]) : items.add(data);
 
-        state = ManageTeamSuccessState(
+        state = CrudSuccessState(
           message: index >= 0 ? 'Membro atualizado com sucesso' : 'Membro criado com sucesso',
         );
       },
     );
   }
 
+  @override
   @action
-  Future<void> deleteTeamMember(TeamMemberModel teamMember) async {
-    state = ManageTeamLoadingState(isRefreshing: true);
+  Future<void> deleteItem(TeamMemberModel item) async {
+    state = CrudLoadingState(isRefreshing: true);
 
-    final result = await _teamRepository.deleteTeamMember(teamMember);
+    final result = await _teamRepository.deleteTeamMember(item);
 
     result.fold(
-      (failure) => state = ManageTeamErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (_) {
-        teamMembers.removeWhere((c) => c.id == teamMember.id);
-        state = ManageTeamSuccessState(message: 'Membro deletado com sucesso');
+        items.removeWhere((c) => c.id == item.id);
+        state = CrudSuccessState(message: 'Membro deletado com sucesso');
       },
     );
   }

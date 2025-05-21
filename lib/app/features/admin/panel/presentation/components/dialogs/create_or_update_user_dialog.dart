@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
@@ -10,6 +6,7 @@ import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.da
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_role.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateUserDialog(
@@ -46,8 +43,6 @@ class CreateOrUpdateUserDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
-  final _formKey = GlobalKey<FormState>();
-
   late final _nameController = TextEditingController(text: widget.user?.name);
   late final _emailController = TextEditingController(text: widget.user?.email);
   final _passwordController = TextEditingController();
@@ -58,76 +53,58 @@ class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppTitle.medium(
-              text: _isUpdate ? 'Atualizar usuário' : 'Criar usuário',
-              color: AppTheme.colors.orange,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+    return FormDialog(
+      onSubmit: _onCreateOrUpdate,
+      isUpdate: _isUpdate,
+      isFullScreen: false,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.medium(
+            text: _isUpdate ? 'Atualizar usuário' : 'Criar usuário',
+            color: AppTheme.colors.orange,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppTextField(
+            controller: _nameController,
+            labelText: 'Nome',
+            validator: Validators.isNotEmpty,
+            isDisabled: _isUpdate,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _emailController,
+            labelText: 'E-mail',
+            validator: Validators.isValidEmail,
+            isDisabled: _isUpdate,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          if (!_isUpdate) ...[
             AppTextField(
-              controller: _nameController,
-              labelText: 'Nome',
-              validator: Validators.isNotEmpty,
-              isDisabled: _isUpdate,
+              controller: _passwordController,
+              labelText: 'Senha',
+              validator: Validators.isValidPassword,
             ),
             SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-            AppTextField(
-              controller: _emailController,
-              labelText: 'E-mail',
-              validator: Validators.isValidEmail,
-              isDisabled: _isUpdate,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-            if (!_isUpdate) ...[
-              AppTextField(
-                controller: _passwordController,
-                labelText: 'Senha',
-                validator: Validators.isValidPassword,
-              ),
-              SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-            ],
-            AppDropdownField<UserRole>(
-              hintText: 'Selecione um papel',
-              items: UserRole.values,
-              itemToString: (role) => role.toString(),
-              value: _selectedRole,
-              onChanged: (role) {
-                if (role == null) return;
-                setState(() => _selectedRole = UserRole.fromString(role));
-              },
-              validator: Validators.isNotEmpty,
-            ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SecondaryButton.medium(
-                  text: 'Cancelar',
-                  onPressed: () => GoRouter.of(context).pop(),
-                ),
-                SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                PrimaryButton.medium(
-                  text: _isUpdate ? 'Atualizar' : 'Criar',
-                  onPressed: _onCreateOrUpdate,
-                ),
-              ],
-            ),
           ],
-        ),
+          AppDropdownField<UserRole>(
+            hintText: 'Selecione um papel',
+            items: UserRole.values,
+            itemToString: (role) => role.toString(),
+            value: _selectedRole,
+            onChanged: (role) {
+              if (role == null) return;
+              setState(() => _selectedRole = UserRole.fromString(role));
+            },
+            validator: Validators.isNotEmpty,
+          ),
+        ],
       ),
     );
   }
 
   void _onCreateOrUpdate() {
-    if (!_formKey.currentState!.validate()) return;
-
     if (_isUpdate) {
       widget.onUpdate(
         widget.user!.copyWith(

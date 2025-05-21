@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class BookModel extends PostBody {
@@ -34,7 +35,7 @@ class BookModel extends PostBody {
   factory BookModel.fromJson(Map<String, dynamic> json) {
     return BookModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       category: BookCategory.values.byName(json['category']),
       author: json['author'],
       year: json['year'],
@@ -48,7 +49,7 @@ class BookModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'image': image,
+      'image': image.url,
       'category': category.name,
       'author': author,
       'year': year,
@@ -56,6 +57,29 @@ class BookModel extends PostBody {
       'synopsis': synopsis,
       'link': link,
     };
+  }
+
+  @override
+  BookModel copyWith({
+    String? title,
+    ImageModel? image,
+    BookCategory? category,
+    String? author,
+    int? year,
+    String? publisher,
+    String? synopsis,
+    String? link,
+  }) {
+    return BookModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      category: category ?? this.category,
+      author: author ?? this.author,
+      year: year ?? this.year,
+      publisher: publisher ?? this.publisher,
+      synopsis: synopsis ?? this.synopsis,
+      link: link ?? this.link,
+    );
   }
 }
 

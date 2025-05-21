@@ -9,72 +9,65 @@ part of 'users_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UsersStore on UsersStoreBase, Store {
-  late final _$usersAtom = Atom(name: 'UsersStoreBase.users', context: context);
+  late final _$itemsAtom = Atom(name: 'UsersStoreBase.items', context: context);
 
   @override
-  ObservableList<UserModel> get users {
-    _$usersAtom.reportRead();
-    return super.users;
+  ObservableList<UserModel> get items {
+    _$itemsAtom.reportRead();
+    return super.items;
   }
 
   @override
-  set users(ObservableList<UserModel> value) {
-    _$usersAtom.reportWrite(value, super.users, () {
-      super.users = value;
+  set items(ObservableList<UserModel> value) {
+    _$itemsAtom.reportWrite(value, super.items, () {
+      super.items = value;
     });
   }
 
   late final _$stateAtom = Atom(name: 'UsersStoreBase.state', context: context);
 
   @override
-  ManageUsersState get state {
+  CrudState get state {
     _$stateAtom.reportRead();
     return super.state;
   }
 
   @override
-  set state(ManageUsersState value) {
+  set state(CrudState value) {
     _$stateAtom.reportWrite(value, super.state, () {
       super.state = value;
     });
   }
 
-  late final _$getUsersAsyncAction =
-      AsyncAction('UsersStoreBase.getUsers', context: context);
+  late final _$getItemsAsyncAction =
+      AsyncAction('UsersStoreBase.getItems', context: context);
 
   @override
-  Future<void> getUsers() {
-    return _$getUsersAsyncAction.run(() => super.getUsers());
+  Future<void> getItems() {
+    return _$getItemsAsyncAction.run(() => super.getItems());
   }
 
-  late final _$createUserAsyncAction =
-      AsyncAction('UsersStoreBase.createUser', context: context);
+  late final _$createOrUpdateItemAsyncAction =
+      AsyncAction('UsersStoreBase.createOrUpdateItem', context: context);
 
   @override
-  Future<void> createUser(UserModel user, String password) {
-    return _$createUserAsyncAction.run(() => super.createUser(user, password));
+  Future<void> createOrUpdateItem(UserModel item, {dynamic extra}) {
+    return _$createOrUpdateItemAsyncAction
+        .run(() => super.createOrUpdateItem(item, extra: extra));
   }
 
-  late final _$updateUserAsyncAction =
-      AsyncAction('UsersStoreBase.updateUser', context: context);
+  late final _$deleteItemAsyncAction =
+      AsyncAction('UsersStoreBase.deleteItem', context: context);
 
   @override
-  Future<void> updateUser(UserModel user) {
-    return _$updateUserAsyncAction.run(() => super.updateUser(user));
-  }
-
-  late final _$deleteUserAsyncAction =
-      AsyncAction('UsersStoreBase.deleteUser', context: context);
-
-  @override
-  Future<void> deleteUser(UserModel user) {
-    return _$deleteUserAsyncAction.run(() => super.deleteUser(user));
+  Future<void> deleteItem(UserModel item) {
+    return _$deleteItemAsyncAction.run(() => super.deleteItem(item));
   }
 
   @override
   String toString() {
     return '''
-users: ${users},
+items: ${items},
 state: ${state}
     ''';
   }

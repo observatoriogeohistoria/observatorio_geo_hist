@@ -1,19 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/editor_quill.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/film_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateFilmDialog(
@@ -46,15 +45,13 @@ class CreateOrUpdateFilmDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
-  final _scrollController = ScrollController();
-  final _formKey = GlobalKey<FormState>();
-
   final StreamController<Completer<String>> _synopsisController = StreamController();
+  final StreamController<Completer<ImageModel?>> _imageController = StreamController();
 
   late final FilmModel? _initialBody = widget.post.body as FilmModel?;
 
   late final _titleController = TextEditingController(text: _initialBody?.title);
-  late final _imageController = TextEditingController(text: _initialBody?.image);
+  late final _imageUrlController = TextEditingController(text: _initialBody?.image.url);
   late final _yearController = TextEditingController(text: _initialBody?.releaseYear.toString());
   late final _durationController = TextEditingController(text: _initialBody?.duration);
   late final _directorController = TextEditingController(text: _initialBody?.director);
@@ -70,125 +67,117 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
   Future<String> _getSynopsis() {
     final complete = Completer<String>();
     _synopsisController.add(complete);
+
     return complete.future;
+  }
+
+  Future<ImageModel?> _getImage() {
+    final completer = Completer<ImageModel?>();
+    _imageController.add(completer);
+
+    return completer.future;
   }
 
   @override
   void dispose() {
     _synopsisController.close();
+    _imageController.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      width: MediaQuery.of(context).size.width,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: AppScrollbar(
-          controller: _scrollController,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppTitle.medium(
-                  text: _isUpdate ? 'Atualizar filme' : 'Criar filme',
-                  color: AppTheme.colors.orange,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                AppDropdownField<FilmCategory>(
-                  hintText: 'Categoria',
-                  items: FilmCategory.values,
-                  itemToString: (value) => value.portuguese,
-                  value: _selectedCategory,
-                  onChanged: (category) {
-                    if (category == null) return;
-
-                    FilmCategory? selected = FilmCategory.fromPortuguese(category);
-                    setState(() => _selectedCategory = selected);
-                  },
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _titleController,
-                  labelText: 'Título',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _imageController,
-                  labelText: 'URL da imagem',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _yearController,
-                  labelText: 'Ano de lançamento',
-                  keyboardType: TextInputType.number,
-                  validator: Validators.isValidYear,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _durationController,
-                  labelText: 'Duração',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _directorController,
-                  labelText: 'Direção',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _countryController,
-                  labelText: 'País',
-                  validator: Validators.isNotEmpty,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                EditorQuill(
-                  saveController: _synopsisController,
-                  initialContent: _initialSynopsis,
-                  height: MediaQuery.of(context).size.height * 0.4,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                AppTextField(
-                  controller: _linkController,
-                  labelText: 'Link',
-                  hintText: 'https://',
-                  validator: Validators.isValidUrl,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SecondaryButton.medium(
-                      text: 'Cancelar',
-                      onPressed: () => GoRouter.of(context).pop(),
-                    ),
-                    SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                    PrimaryButton.medium(
-                      text: _isUpdate ? 'Atualizar' : 'Criar',
-                      onPressed: _onCreateOrUpdate,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+    return FormDialog(
+      onSubmit: _onCreateOrUpdate,
+      isUpdate: _isUpdate,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.medium(
+            text: _isUpdate ? 'Atualizar filme' : 'Criar filme',
+            color: AppTheme.colors.orange,
           ),
-        ),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppDropdownField<FilmCategory>(
+            hintText: 'Categoria',
+            items: FilmCategory.values,
+            itemToString: (value) => value.portuguese,
+            value: _selectedCategory,
+            onChanged: (category) {
+              if (category == null) return;
+
+              FilmCategory? selected = FilmCategory.fromPortuguese(category);
+              setState(() => _selectedCategory = selected);
+            },
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _titleController,
+            labelText: 'Título',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppImageField(
+            imageUrlController: _imageUrlController,
+            imageController: _imageController,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _yearController,
+            labelText: 'Ano de lançamento',
+            keyboardType: TextInputType.number,
+            validator: Validators.isValidYear,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _durationController,
+            labelText: 'Duração',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _directorController,
+            labelText: 'Direção',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _countryController,
+            labelText: 'País',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          EditorQuill(
+            saveController: _synopsisController,
+            initialContent: _initialSynopsis,
+            height: MediaQuery.of(context).size.height * 0.4,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _linkController,
+            labelText: 'Link',
+            hintText: 'https://',
+            validator: Validators.isValidUrl,
+          ),
+        ],
       ),
     );
   }
 
   Future<void> _onCreateOrUpdate() async {
-    if (!_formKey.currentState!.validate()) return;
-
     String synopsis = await _getSynopsis();
+    ImageModel? image = await _getImage();
+
+    if (synopsis.isEmpty) {
+      _showErrorMessage('Preencha a sinopse do post');
+      return;
+    }
+
+    if ((image?.isNull ?? true) && _imageUrlController.text.isEmpty) {
+      _showErrorMessage('Preencha a imagem do post');
+      return;
+    }
 
     widget.onCreateOrUpdate(
       widget.post.copyWith(
@@ -201,7 +190,11 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
         body: FilmModel(
           category: _selectedCategory!,
           title: _titleController.text,
-          image: _imageController.text,
+          image: ImageModel(
+            url: _imageUrlController.text,
+            bytes: image?.bytes,
+            name: image?.name,
+          ),
           releaseYear: int.parse(_yearController.text),
           duration: _durationController.text,
           director: _directorController.text,
@@ -211,5 +204,11 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
         ),
       ),
     );
+  }
+
+  void _showErrorMessage(String message) {
+    if (context.mounted) {
+      Messenger.showError(context, message);
+    }
   }
 }

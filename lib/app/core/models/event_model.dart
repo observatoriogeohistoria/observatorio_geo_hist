@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class EventModel extends PostBody {
@@ -37,7 +38,7 @@ class EventModel extends PostBody {
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       scope: EventScope.values.byName(json['scope']),
       link: json['link'],
       location: json['location'],
@@ -61,6 +62,31 @@ class EventModel extends PostBody {
       'time': time,
       'details': details,
     };
+  }
+
+  @override
+  EventModel copyWith({
+    String? title,
+    ImageModel? image,
+    EventScope? scope,
+    String? link,
+    String? location,
+    String? city,
+    String? date,
+    String? time,
+    String? details,
+  }) {
+    return EventModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      scope: scope ?? this.scope,
+      link: link ?? this.link,
+      location: location ?? this.location,
+      city: city ?? this.city,
+      date: date ?? this.date,
+      time: time ?? this.time,
+      details: details ?? this.details,
+    );
   }
 }
 

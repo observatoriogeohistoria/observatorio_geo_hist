@@ -11,66 +11,102 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   const PostCard({
     required this.category,
     required this.post,
+    required this.index,
     super.key,
   });
 
   final CategoryModel category;
   final PostModel post;
+  final int index;
 
   @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
+  @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
-    bool isTablet = DeviceUtils.isTablet(context);
+    bool isEven = widget.index.isEven;
+    double sectionWidth =
+        (MediaQuery.of(context).size.width - 2 * DeviceUtils.getPageHorizontalPadding(context)) /
+                2 -
+            AppTheme.dimensions.space.large;
 
     return AppMouseRegion(
       child: GestureDetector(
         onTap: () {
-          GoRouter.of(context).go('/posts/${category.areas.first.key}/${category.key}/${post.id}');
+          GoRouter.of(context).go(
+              '/posts/${widget.category.areas.first.key}/${widget.category.key}/${widget.post.id}');
         },
-        child: AppCard(
-          width: MediaQuery.of(context).size.width * (isMobile ? 1 : (isTablet ? 0.4 : 0.2)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (post.body?.image.isNotEmpty ?? false) ...[
-                AppNetworkImage(
-                  imageUrl: post.body!.image,
-                  radius: AppTheme.dimensions.radius.large,
-                ),
-                SizedBox(height: AppTheme.dimensions.space.medium),
-              ],
-              if (post.body?.title.isNotEmpty ?? false)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                  child: AppTitle.big(
-                    text: post.body!.title,
-                    textAlign: TextAlign.center,
-                    color: AppTheme.colors.darkGray,
-                  ),
-                ),
-              if (_subtitle.isNotEmpty)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                  child: AppBody.medium(
-                    text: _subtitle,
-                    textAlign: TextAlign.center,
-                    color: AppTheme.colors.gray,
-                  ),
-                ),
-              SizedBox(height: AppTheme.dimensions.space.small),
+        child: Row(
+          children: [
+            if (isEven) ...[
+              _buildImage(sectionWidth, isEven),
+              SizedBox(width: AppTheme.dimensions.space.large),
             ],
-          ),
+            SizedBox(
+              width: sectionWidth,
+              child: Column(
+                crossAxisAlignment: isEven ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                children: [
+                  if (widget.post.body?.title.isNotEmpty ?? false)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+                      child: AppTitle.big(
+                        text: widget.post.body!.title,
+                        textAlign: isEven ? TextAlign.start : TextAlign.end,
+                        notSelectable: true,
+                        color: AppTheme.colors.darkGray,
+                      ),
+                    ),
+                  SizedBox(height: AppTheme.dimensions.space.small),
+                  if (_subtitle.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+                      child: AppBody.medium(
+                        text: _subtitle,
+                        textAlign: isEven ? TextAlign.start : TextAlign.end,
+                        notSelectable: true,
+                        color: AppTheme.colors.gray,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            if (!isEven) ...[
+              SizedBox(width: AppTheme.dimensions.space.large),
+              _buildImage(sectionWidth, isEven),
+            ],
+          ],
         ),
       ),
     );
   }
 
+  Widget _buildImage(
+    double sectionWidth,
+    bool isEven,
+  ) {
+    if (widget.post.body?.image.url?.isEmpty ?? true) {
+      return const SizedBox.shrink();
+    }
+
+    return AppCard(
+      width: sectionWidth,
+      child: AppNetworkImage(
+        imageUrl: widget.post.body!.image.url!,
+        radius: AppTheme.dimensions.radius.large,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
   String get _subtitle {
-    if (post.type == PostType.article) return (post.body as ArticleModel).subtitle;
+    if (widget.post.type == PostType.article) return (widget.post.body as ArticleModel).subtitle;
 
     return '';
   }

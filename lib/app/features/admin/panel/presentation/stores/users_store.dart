@@ -1,84 +1,78 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/users_repository.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/users_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
 
 part 'users_store.g.dart';
 
 class UsersStore = UsersStoreBase with _$UsersStore;
 
-abstract class UsersStoreBase with Store {
+abstract class UsersStoreBase extends CrudStore<UserModel> with Store {
   final UsersRepository _usersRepository;
 
   UsersStoreBase(this._usersRepository);
 
+  @override
   @observable
-  ObservableList<UserModel> users = ObservableList<UserModel>();
+  ObservableList<UserModel> items = ObservableList<UserModel>();
 
+  @override
   @observable
-  ManageUsersState state = ManageUsersInitialState();
+  CrudState state = CrudInitialState();
 
+  @override
   @action
-  Future<void> getUsers() async {
-    if (state is ManageUsersLoadingState) return;
-    if (users.isNotEmpty) return;
+  Future<void> getItems() async {
+    if (state is CrudLoadingState) return;
+    if (items.isNotEmpty) return;
 
-    state = ManageUsersLoadingState();
+    state = CrudLoadingState();
 
     final result = await _usersRepository.getUsers();
 
     result.fold(
-      (failure) => state = ManageUsersErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (users) {
-        this.users = users.asObservable();
-        state = ManageUsersSuccessState();
+        items = users.asObservable();
+        state = CrudSuccessState();
       },
     );
   }
 
+  @override
   @action
-  Future<void> createUser(UserModel user, String password) async {
-    state = ManageUsersLoadingState(isRefreshing: true);
+  Future<void> createOrUpdateItem(UserModel item, {dynamic extra}) async {
+    state = CrudLoadingState(isRefreshing: true);
 
-    final result = await _usersRepository.createUser(user, password);
+    bool isCreating = extra == null && extra is String;
+
+    final result = isCreating
+        ? await _usersRepository.createUser(item, extra)
+        : await _usersRepository.updateUser(item);
 
     result.fold(
-      (failure) => state = ManageUsersErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (data) {
-        final index = users.indexWhere((u) => u.id == data.id);
-        index >= 0 ? users.replaceRange(index, index + 1, [data]) : users.add(data);
+        final index = items.indexWhere((u) => u.id == data.id);
+        index >= 0 ? items.replaceRange(index, index + 1, [data]) : items.add(data);
 
-        state = ManageUsersSuccessState(message: 'Usuário criado com sucesso');
+        state = CrudSuccessState(
+            message: 'Usuário ${isCreating ? 'criado' : 'atualizado'} com sucesso');
       },
     );
   }
 
+  @override
   @action
-  Future<void> updateUser(UserModel user) async {
-    state = ManageUsersLoadingState(isRefreshing: true);
-
-    final result = await _usersRepository.updateUser(user);
+  Future<void> deleteItem(UserModel item) async {
+    final result = await _usersRepository.deleteUser(item);
 
     result.fold(
-      (failure) => state = ManageUsersErrorState(failure),
-      (data) {
-        final index = users.indexWhere((u) => u.id == data.id);
-        index >= 0 ? users.replaceRange(index, index + 1, [data]) : users.add(data);
-
-        state = ManageUsersSuccessState(message: 'Usuário atualizado com sucesso');
-      },
-    );
-  }
-
-  @action
-  Future<void> deleteUser(UserModel user) async {
-    final result = await _usersRepository.deleteUser(user);
-
-    result.fold(
-      (failure) => state = ManageUsersErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (_) {
-        users.removeWhere((u) => u.id == user.id);
-        state = ManageUsersSuccessState(message: 'Usuário deletado com sucesso');
+        items.removeWhere((u) => u.id == item.id);
+        state = CrudSuccessState(message: 'Usuário deletado com sucesso');
       },
     );
   }

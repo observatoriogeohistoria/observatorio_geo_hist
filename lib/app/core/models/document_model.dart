@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class DocumentModel extends PostBody {
@@ -25,7 +26,7 @@ class DocumentModel extends PostBody {
   factory DocumentModel.fromJson(Map<String, dynamic> json) {
     return DocumentModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       category: DocumentCategory.values.byName(json['category']),
       description: json['description'],
       link: json['link'],
@@ -36,11 +37,28 @@ class DocumentModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'image': image,
+      'image': image.url,
       'category': category.name,
       'description': description,
       'link': link,
     };
+  }
+
+  @override
+  DocumentModel copyWith({
+    String? title,
+    ImageModel? image,
+    DocumentCategory? category,
+    String? description,
+    String? link,
+  }) {
+    return DocumentModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      category: category ?? this.category,
+      description: description ?? this.description,
+      link: link ?? this.link,
+    );
   }
 }
 

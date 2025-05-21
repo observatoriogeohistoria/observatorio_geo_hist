@@ -51,7 +51,7 @@ class PanelSetup {
       () => PostsDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );
     getIt.registerFactory<PostsRepository>(
-      () => PostsRepositoryImpl(getIt<PostsDatasource>()),
+      () => PostsRepositoryImpl(getIt<PostsDatasource>(), getIt<MediaDatasource>()),
     );
     getIt.registerLazySingleton<PostsStore>(
       () => PostsStore(getIt<PostsRepository>()),

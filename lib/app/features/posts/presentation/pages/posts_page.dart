@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/empty_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
@@ -90,6 +90,7 @@ class _PostsPageState extends State<PostsPage> {
 
               return SliverToBoxAdapter(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildCategoryHeader(context, category),
                     _buildPostsSection(category),
@@ -147,6 +148,17 @@ class _PostsPageState extends State<PostsPage> {
   Widget _buildPostsSection(CategoryModel category) {
     return Observer(
       builder: (context) {
+        if (fetchPostsStore.state is FetchPostsLoadingState) {
+          return Column(
+            children: [
+              SizedBox(height: AppTheme.dimensions.space.gigantic.verticalSpacing),
+              const LoadingContent(isSliver: false),
+            ],
+          );
+        }
+
+        final posts = fetchPostsStore.posts;
+
         return Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.symmetric(
@@ -158,19 +170,27 @@ class _PostsPageState extends State<PostsPage> {
             children: [
               TitleWidget(title: 'POSTS', color: AppTheme.colors.orange),
               SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-              if (fetchPostsStore.posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
-              if (fetchPostsStore.posts.isNotEmpty)
-                AlignedGridView.count(
+              if (posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
+              if (posts.isNotEmpty)
+                ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  crossAxisCount: isMobile ? 1 : (isTablet ? 2 : 3),
-                  crossAxisSpacing: AppTheme.dimensions.space.medium.horizontalSpacing,
-                  mainAxisSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
-                  itemCount: fetchPostsStore.posts.length,
+                  separatorBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(
+                        vertical: AppTheme.dimensions.space.massive.verticalSpacing,
+                      ),
+                      child: AppDivider(
+                        color: AppTheme.colors.gray.withValues(alpha: 0.2),
+                      ),
+                    );
+                  },
+                  itemCount: posts.length,
                   itemBuilder: (context, index) {
                     return PostCard(
                       category: category,
-                      post: fetchPostsStore.posts[index],
+                      post: posts[index],
+                      index: index,
                     );
                   },
                 ),

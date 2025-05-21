@@ -10,6 +10,7 @@ class AppNetworkImage extends StatelessWidget {
     this.width = double.infinity,
     this.height = 253,
     this.radius,
+    this.fit = BoxFit.cover,
     super.key,
   });
 
@@ -17,6 +18,7 @@ class AppNetworkImage extends StatelessWidget {
   final double width;
   final double? height;
   final double? radius;
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class AppNetworkImage extends StatelessWidget {
         imageUrl,
         width: width,
         height: height,
-        fit: BoxFit.cover,
+        fit: fit,
         placeholderBuilder: (_) {
           return Skeleton(
             width: width,
@@ -46,7 +48,7 @@ class AppNetworkImage extends StatelessWidget {
       imageUrl,
       width: width,
       height: height,
-      fit: BoxFit.cover,
+      fit: fit,
       frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
         if (wasSynchronouslyLoaded) return child;
 

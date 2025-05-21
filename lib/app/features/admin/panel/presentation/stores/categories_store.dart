@@ -1,73 +1,77 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/categories_repository.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/categories_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
 
 part 'categories_store.g.dart';
 
 class CategoriesStore = CategoriesStoreBase with _$CategoriesStore;
 
-abstract class CategoriesStoreBase with Store {
+abstract class CategoriesStoreBase extends CrudStore<CategoryModel> with Store {
   final CategoriesRepository _categoriesRepository;
 
   CategoriesStoreBase(this._categoriesRepository);
 
+  @override
   @observable
-  ObservableList<CategoryModel> categories = ObservableList<CategoryModel>();
+  ObservableList<CategoryModel> items = ObservableList<CategoryModel>();
 
+  @override
   @observable
-  ManageCategoriesState state = ManageCategoriesInitialState();
+  CrudState state = CrudInitialState();
 
+  @override
   @action
-  Future<void> getCategories() async {
-    if (state is ManageCategoriesLoadingState) return;
-    if (categories.isNotEmpty) return;
+  Future<void> getItems() async {
+    if (state is CrudLoadingState) return;
+    if (items.isNotEmpty) return;
 
-    state = ManageCategoriesLoadingState();
+    state = CrudLoadingState();
 
     final result = await _categoriesRepository.getCategories();
 
     result.fold(
-      (failure) => state = ManageCategoriesErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (categories) {
-        this.categories = categories.asObservable();
-        state = ManageCategoriesSuccessState();
+        items = categories.asObservable();
+        state = CrudSuccessState();
       },
     );
   }
 
+  @override
   @action
-  Future<void> createOrUpdateCategory(CategoryModel category) async {
-    state = ManageCategoriesLoadingState(isRefreshing: true);
+  Future<void> createOrUpdateItem(CategoryModel item, {dynamic extra}) async {
+    state = CrudLoadingState(isRefreshing: true);
 
-    final result = await _categoriesRepository.createOrUpdateCategory(category);
+    final result = await _categoriesRepository.createOrUpdateCategory(item);
 
     result.fold(
-      (failure) => state = ManageCategoriesErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (_) {
-        final index = categories.indexWhere((c) => c.key == category.key);
-        index >= 0
-            ? categories.replaceRange(index, index + 1, [category])
-            : categories.add(category);
+        final index = items.indexWhere((c) => c.key == item.key);
+        index >= 0 ? items.replaceRange(index, index + 1, [item]) : items.add(item);
 
-        state = ManageCategoriesSuccessState(
+        state = CrudSuccessState(
           message: index >= 0 ? 'Categoria atualizada com sucesso' : 'Categoria criada com sucesso',
         );
       },
     );
   }
 
+  @override
   @action
-  Future<void> deleteCategory(CategoryModel category) async {
-    state = ManageCategoriesLoadingState(isRefreshing: true);
+  Future<void> deleteItem(CategoryModel item) async {
+    state = CrudLoadingState(isRefreshing: true);
 
-    final result = await _categoriesRepository.deleteCategory(category);
+    final result = await _categoriesRepository.deleteCategory(item);
 
     result.fold(
-      (failure) => state = ManageCategoriesErrorState(failure),
+      (failure) => state = CrudErrorState(failure),
       (_) {
-        categories.removeWhere((c) => c.key == category.key);
-        state = ManageCategoriesSuccessState(message: 'Categoria deletada com sucesso');
+        items.removeWhere((c) => c.key == item.key);
+        state = CrudSuccessState(message: 'Categoria deletada com sucesso');
       },
     );
   }

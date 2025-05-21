@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class FilmModel extends PostBody {
@@ -37,7 +38,7 @@ class FilmModel extends PostBody {
   factory FilmModel.fromJson(Map<String, dynamic> json) {
     return FilmModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       category: FilmCategory.values.byName(json['category']),
       releaseYear: json['releaseYear'],
       duration: json['duration'],
@@ -52,7 +53,7 @@ class FilmModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'image': image,
+      'image': image.url,
       'category': category.name,
       'releaseYear': releaseYear,
       'duration': duration,
@@ -61,6 +62,31 @@ class FilmModel extends PostBody {
       'synopsis': synopsis,
       'link': link,
     };
+  }
+
+  @override
+  FilmModel copyWith({
+    String? title,
+    ImageModel? image,
+    FilmCategory? category,
+    int? releaseYear,
+    String? duration,
+    String? director,
+    String? country,
+    String? synopsis,
+    String? link,
+  }) {
+    return FilmModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      category: category ?? this.category,
+      releaseYear: releaseYear ?? this.releaseYear,
+      duration: duration ?? this.duration,
+      director: director ?? this.director,
+      country: country ?? this.country,
+      synopsis: synopsis ?? this.synopsis,
+      link: link ?? this.link,
+    );
   }
 }
 

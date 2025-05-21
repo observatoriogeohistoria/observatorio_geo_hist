@@ -2,20 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/editor_quill.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/formatters/mont_year_input_formatter.dart';
+import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateArticleDialog(
@@ -48,12 +47,9 @@ class CreateOrUpdateArticleDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialog> {
-  final _scrollController = ScrollController();
-
-  final _formKey = GlobalKey<FormState>();
-
   final StreamController<Completer<String>> _contentController = StreamController();
   final StreamController<Completer<String>> _observationController = StreamController();
+  final StreamController<Completer<ImageModel?>> _imageController = StreamController();
 
   late final ArticleModel? _initialBody = widget.post.body as ArticleModel?;
 
@@ -62,7 +58,7 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
 
   late final _titleController = TextEditingController(text: _initialBody?.title);
   late final _subtitleController = TextEditingController(text: _initialBody?.subtitle);
-  late final _imageUrlController = TextEditingController(text: _initialBody?.image);
+  late final _imageUrlController = TextEditingController(text: _initialBody?.image.url);
   late final _dateController = TextEditingController(text: _initialBody?.date);
   late final _imageCaptionController = TextEditingController(text: _initialBody?.imageCaption);
 
@@ -86,137 +82,115 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
     return complete.future;
   }
 
+  Future<ImageModel?> _getImage() async {
+    final completer = Completer<ImageModel?>();
+    _imageController.add(completer);
+
+    return completer.future;
+  }
+
   @override
   void dispose() {
     _contentController.close();
     _observationController.close();
+    _imageController.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RightAlignedDialog(
-      width: MediaQuery.of(context).size.width,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: AppScrollbar(
-            controller: _scrollController,
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppTitle.medium(
-                    text: _isUpdate ? 'Atualizar post' : 'Criar post',
-                    color: AppTheme.colors.orange,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                  AppTextField(
-                    controller: _titleController,
-                    labelText: 'Título',
-                    validator: Validators.isNotEmpty,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  AppTextField(
-                    controller: _subtitleController,
-                    labelText: 'Subtítulo',
-                    validator: Validators.isNotEmpty,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  AppTextField(
-                    controller: _imageUrlController,
-                    labelText: 'URL da imagem',
-                    hintText: 'https://',
-                    validator: Validators.isValidUrl,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  AppTextField(
-                    controller: _imageCaptionController,
-                    labelText: 'Legenda da imagem',
-                    validator: Validators.isNotEmpty,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  AppTextField(
-                    controller: _dateController,
-                    labelText: 'Data',
-                    hintText: 'MM/yyyy',
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(6),
-                      MonthYearInputFormatter(),
-                    ],
-                    validator: Validators.isValidMonthAndYear,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  _buildLabel('Autores'),
-                  for (var i = 0; i < _authorsControllers.length; i++)
-                    Column(
-                      children: [
-                        AppTextField(
-                          controller: _authorsControllers[i],
-                          validator: Validators.isNotEmpty,
-                        ),
-                        SizedBox(
-                          height: AppTheme.dimensions.space.mini.verticalSpacing,
-                        ),
-                      ],
-                    ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () =>
-                            setState(() => _authorsControllers.add(TextEditingController())),
-                        icon: Icon(Icons.add, color: AppTheme.colors.orange),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          if (_authorsControllers.length == 1) return;
-                          setState(() => _authorsControllers.removeLast());
-                        },
-                        icon: Icon(Icons.remove, color: AppTheme.colors.orange),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  _buildLabel('Conteúdo'),
-                  EditorQuill(
-                    saveController: _contentController,
-                    initialContent: _initialContent,
-                    height: MediaQuery.of(context).size.height * 0.7,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  _buildLabel('Observação'),
-                  EditorQuill(
-                    saveController: _observationController,
-                    initialContent: _initialObservation,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SecondaryButton.medium(
-                        text: 'Cancelar',
-                        onPressed: () => GoRouter.of(context).pop(),
-                      ),
-                      SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                      PrimaryButton.medium(
-                        text: _isUpdate ? 'Atualizar' : 'Criar',
-                        onPressed: _onCreateOrUpdate,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+    return FormDialog(
+      onSubmit: _onCreateOrUpdate,
+      isUpdate: _isUpdate,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppTitle.medium(
+            text: _isUpdate ? 'Atualizar post' : 'Criar post',
+            color: AppTheme.colors.orange,
           ),
-        ),
+          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          AppTextField(
+            controller: _titleController,
+            labelText: 'Título',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _subtitleController,
+            labelText: 'Subtítulo',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppImageField(
+            imageUrlController: _imageUrlController,
+            imageController: _imageController,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _imageCaptionController,
+            labelText: 'Legenda da imagem',
+            validator: Validators.isNotEmpty,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppTextField(
+            controller: _dateController,
+            labelText: 'Data',
+            hintText: 'MM/yyyy',
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(6),
+              MonthYearInputFormatter(),
+            ],
+            validator: Validators.isValidMonthAndYear,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          _buildLabel('Autores'),
+          for (var i = 0; i < _authorsControllers.length; i++)
+            Column(
+              children: [
+                AppTextField(
+                  controller: _authorsControllers[i],
+                  validator: Validators.isNotEmpty,
+                ),
+                SizedBox(
+                  height: AppTheme.dimensions.space.mini.verticalSpacing,
+                ),
+              ],
+            ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () => setState(() => _authorsControllers.add(TextEditingController())),
+                icon: Icon(Icons.add, color: AppTheme.colors.orange),
+              ),
+              IconButton(
+                onPressed: () {
+                  if (_authorsControllers.length == 1) return;
+                  setState(() => _authorsControllers.removeLast());
+                },
+                icon: Icon(Icons.remove, color: AppTheme.colors.orange),
+              ),
+            ],
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          _buildLabel('Conteúdo'),
+          EditorQuill(
+            saveController: _contentController,
+            initialContent: _initialContent,
+            height: MediaQuery.of(context).size.height * 0.7,
+          ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          _buildLabel('Observação'),
+          EditorQuill(
+            saveController: _observationController,
+            initialContent: _initialObservation,
+            height: MediaQuery.of(context).size.height * 0.4,
+          ),
+        ],
       ),
     );
   }
@@ -234,10 +208,19 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
   }
 
   Future<void> _onCreateOrUpdate() async {
-    if (!_formKey.currentState!.validate()) return;
-
     String content = await _getContent();
     String observation = await _getObservation();
+    ImageModel? image = await _getImage();
+
+    if (content.isEmpty) {
+      _showErrorMessage('Preencha o conteúdo do post');
+      return;
+    }
+
+    if ((image?.isNull ?? true) && _imageUrlController.text.isEmpty) {
+      _showErrorMessage('Preencha a imagem do post');
+      return;
+    }
 
     widget.onCreateOrUpdate(
       widget.post.copyWith(
@@ -249,7 +232,11 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
         isHighlighted: widget.post.isHighlighted,
         body: ArticleModel(
           title: _titleController.text,
-          image: _imageUrlController.text,
+          image: ImageModel(
+            url: _imageUrlController.text,
+            bytes: image?.bytes,
+            name: image?.name,
+          ),
           subtitle: _subtitleController.text,
           authors: _authorsControllers.map((controller) => controller.text).toList(),
           date: _dateController.text,
@@ -259,5 +246,11 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
         ),
       ),
     );
+  }
+
+  void _showErrorMessage(String message) {
+    if (context.mounted) {
+      Messenger.showError(context, message);
+    }
   }
 }
