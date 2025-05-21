@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/editor_quill.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
@@ -15,6 +14,7 @@ import 'package:observatorio_geo_hist/app/core/utils/formatters/mont_year_input_
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateArticleDialog(
@@ -146,7 +146,7 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
             validator: Validators.isValidMonthAndYear,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          _buildLabel('Autores'),
+          const FormLabel(text: 'Autores'),
           for (var i = 0; i < _authorsControllers.length; i++)
             Column(
               children: [
@@ -177,14 +177,14 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
             ],
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          _buildLabel('Conteúdo'),
+          const FormLabel(text: 'Conteúdo'),
           EditorQuill(
             saveController: _contentController,
             initialContent: _initialContent,
             height: MediaQuery.of(context).size.height * 0.7,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          _buildLabel('Observação'),
+          const FormLabel(text: 'Observação'),
           EditorQuill(
             saveController: _observationController,
             initialContent: _initialObservation,
@@ -192,18 +192,6 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildLabel(String text) {
-    return Column(
-      children: [
-        AppLabel.medium(
-          text: text,
-          color: AppTheme.colors.darkGray,
-        ),
-        SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-      ],
     );
   }
 
