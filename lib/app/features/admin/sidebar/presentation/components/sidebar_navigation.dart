@@ -81,25 +81,78 @@ class _SidebarState extends State<Sidebar> {
                   : null,
           child: Container(
             color: AppTheme.colors.white,
-            height: MediaQuery.of(context).size.height,
             child: Stack(
               children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SidebarHeader(isCollapsed: isCollapsed),
-                      SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                      _buildItems(
-                        items: sidebarItems,
-                        selectedItem: sidebarStore.selectedItem,
-                        selectedPostType: sidebarStore.selectedPostType,
-                        showPostsSubItems: sidebarStore.showPostsSubItems,
-                        isCollapsed: isCollapsed,
-                        isMobile: isMobile,
+                CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(child: SidebarHeader(isCollapsed: isCollapsed)),
+                    SliverToBoxAdapter(
+                        child: SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing)),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
                       ),
-                      SizedBox(height: 64.verticalSpacing),
-                    ],
-                  ),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final item = sidebarItems[index];
+                            final isPosts = item == SidebarItem.posts;
+
+                            return Observer(
+                              builder: (context) {
+                                final selectedItem = sidebarStore.selectedItem;
+                                final selectedPostType = sidebarStore.selectedPostType;
+                                final showPostsSubItems = sidebarStore.showPostsSubItems;
+
+                                return SidebarMenuItem(
+                                  item: item,
+                                  subItems: item.subItems,
+                                  onItemClicked: () {
+                                    if (isPosts) {
+                                      if (isCollapsed) sidebarStore.toggleCollapse();
+                                      if (sidebarStore.selectedPostType == null) {
+                                        sidebarStore.selectPostType(PostType.article);
+                                      }
+
+                                      sidebarStore.toggleShowPostsSubItems();
+                                      sidebarStore.selectItem(item);
+
+                                      final postType =
+                                          (sidebarStore.selectedPostType ?? PostType.article).value;
+                                      GoRouter.of(context)
+                                          .go('/admin/painel/posts?postType=$postType');
+
+                                      return;
+                                    }
+
+                                    sidebarStore.selectItem(item);
+                                    GoRouter.of(context).go('/admin/painel/${item.value}');
+
+                                    if (isMobile) GoRouter.of(context).pop();
+                                  },
+                                  onSubItemClicked: (subItem) {
+                                    if (!isPosts) return;
+
+                                    sidebarStore.selectPostType(subItem);
+                                    GoRouter.of(context)
+                                        .go('/admin/painel/posts?postType=${subItem.value}');
+
+                                    if (isMobile) GoRouter.of(context).pop();
+                                  },
+                                  selectedItem: selectedItem,
+                                  selectedSubItem: selectedPostType,
+                                  showPostsSubItems: showPostsSubItems,
+                                  isCollapsed: isCollapsed,
+                                );
+                              },
+                            );
+                          },
+                          childCount: sidebarItems.length,
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(child: SizedBox(height: 64.verticalSpacing)),
+                  ],
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -112,7 +165,6 @@ class _SidebarState extends State<Sidebar> {
                             GoRouter.of(context).pop();
                             return;
                           }
-
                           sidebarStore.toggleCollapse();
                         },
                         isCollapsed: isCollapsed,
@@ -123,70 +175,6 @@ class _SidebarState extends State<Sidebar> {
               ],
             ),
           ),
-        );
-      },
-    );
-  }
-
-  Widget _buildItems({
-    required List<SidebarItem> items,
-    required SidebarItem selectedItem,
-    required PostType? selectedPostType,
-    bool showPostsSubItems = false,
-    bool isCollapsed = false,
-    bool isMobile = false,
-  }) {
-    return ListView.separated(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
-      ),
-      shrinkWrap: true,
-      itemCount: items.length,
-      separatorBuilder: (context, index) => Padding(
-        padding: EdgeInsets.symmetric(
-          vertical:
-              (isCollapsed ? AppTheme.dimensions.space.medium : AppTheme.dimensions.space.mini)
-                  .verticalSpacing,
-        ),
-        child: Divider(color: AppTheme.colors.gray),
-      ),
-      itemBuilder: (context, index) {
-        final item = items[index];
-        bool isPosts = item == SidebarItem.posts;
-
-        return SidebarMenuItem(
-          item: item,
-          subItems: item.subItems,
-          onItemClicked: () {
-            if (isPosts) {
-              if (isCollapsed) sidebarStore.toggleCollapse();
-              if (selectedPostType == null) sidebarStore.selectPostType(PostType.article);
-
-              sidebarStore.toggleShowPostsSubItems();
-              sidebarStore.selectItem(item);
-
-              final postType = (sidebarStore.selectedPostType ?? PostType.article).value;
-              GoRouter.of(context).go('/admin/painel/posts?postType=$postType');
-
-              return;
-            }
-
-            sidebarStore.selectItem(item);
-            GoRouter.of(context).go('/admin/painel/${item.value}');
-            if (isMobile) GoRouter.of(context).pop();
-          },
-          onSubItemClicked: (item) {
-            if (!isPosts) return;
-
-            sidebarStore.selectPostType(item);
-            GoRouter.of(context).go('/admin/painel/posts?postType=${item.value}');
-
-            if (isMobile) GoRouter.of(context).pop();
-          },
-          selectedItem: selectedItem,
-          selectedSubItem: selectedPostType,
-          showPostsSubItems: showPostsSubItems,
-          isCollapsed: isCollapsed,
         );
       },
     );

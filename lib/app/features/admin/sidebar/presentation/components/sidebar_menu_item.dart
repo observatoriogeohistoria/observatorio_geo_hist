@@ -106,7 +106,7 @@ class SidebarMenuItem extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: AppTheme.dimensions.space.small.scale),
                 child: Text(
                   subItem.portuguesePlural,
-                  style: AppTheme.typography.label.big.copyWith(
+                  style: AppTheme.typography.title.small.copyWith(
                     color:
                         subItemIsSelected(subItem) ? AppTheme.colors.orange : AppTheme.colors.gray,
                   ),
