@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class PodcastModel extends PostBody {
@@ -22,7 +23,7 @@ class PodcastModel extends PostBody {
   factory PodcastModel.fromJson(Map<String, dynamic> json) {
     return PodcastModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       description: json['description'],
       link: json['link'],
     );
@@ -32,9 +33,24 @@ class PodcastModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'image': image,
+      'image': image.url,
       'description': description,
       'link': link,
     };
+  }
+
+  @override
+  PodcastModel copyWith({
+    String? title,
+    ImageModel? image,
+    String? description,
+    String? link,
+  }) {
+    return PodcastModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      description: description ?? this.description,
+      link: link ?? this.link,
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class ArticleModel extends PostBody {
@@ -34,7 +35,7 @@ class ArticleModel extends PostBody {
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
     return ArticleModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       subtitle: json['subtitle'],
       authors: List<String>.from(json['authors']),
       date: json['date'],
@@ -51,10 +52,33 @@ class ArticleModel extends PostBody {
       'subtitle': subtitle,
       'authors': authors,
       'date': date,
-      'image': image,
+      'image': image.url,
       'imageCaption': imageCaption,
       'content': content,
       'observation': observation,
     };
+  }
+
+  @override
+  ArticleModel copyWith({
+    String? title,
+    ImageModel? image,
+    String? subtitle,
+    List<String>? authors,
+    String? date,
+    String? imageCaption,
+    String? content,
+    String? observation,
+  }) {
+    return ArticleModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      subtitle: subtitle ?? this.subtitle,
+      authors: authors ?? this.authors,
+      date: date ?? this.date,
+      imageCaption: imageCaption ?? this.imageCaption,
+      content: content ?? this.content,
+      observation: observation ?? this.observation,
+    );
   }
 }

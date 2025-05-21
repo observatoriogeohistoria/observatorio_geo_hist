@@ -91,14 +91,14 @@ class _PostCardState extends State<PostCard> {
     double sectionWidth,
     bool isEven,
   ) {
-    if (widget.post.body?.image.isEmpty ?? true) {
+    if (widget.post.body?.image.url?.isEmpty ?? true) {
       return const SizedBox.shrink();
     }
 
     return AppCard(
       width: sectionWidth,
       child: AppNetworkImage(
-        imageUrl: widget.post.body!.image,
+        imageUrl: widget.post.body!.image.url!,
         radius: AppTheme.dimensions.radius.large,
         fit: BoxFit.contain,
       ),

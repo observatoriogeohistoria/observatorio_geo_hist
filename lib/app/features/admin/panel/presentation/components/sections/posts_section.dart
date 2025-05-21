@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/loading/circular_loadi
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -171,8 +172,14 @@ class _PostsSectionState extends State<PostsSection> {
                         return PostCard(
                           post: post,
                           index: index + 1,
-                          onPublish: () => postsStore
-                              .createOrUpdatePost(post.copyWith(isPublished: !post.isPublished)),
+                          onPublish: () {
+                            postsStore.createOrUpdatePost(post.copyWith(
+                              isPublished: !post.isPublished,
+                              body: post.body?.copyWith(
+                                image: ImageModel(url: post.body?.image.url),
+                              ),
+                            ));
+                          },
                           onEdit: () {
                             showCreateOrUpdatePostDialog(
                               context,

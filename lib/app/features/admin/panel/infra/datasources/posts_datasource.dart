@@ -29,6 +29,7 @@ class PostsDatasourceImpl implements PostsDatasource {
       QuerySnapshot postsQuerySnapshot = await _firestore
           .collectionGroup('category_posts')
           .where('type', isEqualTo: type.name)
+          .orderBy('createdAt', descending: true)
           .get();
 
       List<PostModel> posts = postsQuerySnapshot.docs.map((post) {

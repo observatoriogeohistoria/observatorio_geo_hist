@@ -58,10 +58,11 @@ class ArticleContent extends StatelessWidget {
           SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
           const AppDivider(),
           SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-          AppNetworkImage(
-            imageUrl: article.image,
-            height: null,
-          ),
+          if (article.image.url?.isNotEmpty ?? false)
+            AppNetworkImage(
+              imageUrl: article.image.url!,
+              height: null,
+            ),
           Align(
             alignment: Alignment.center,
             child: Column(

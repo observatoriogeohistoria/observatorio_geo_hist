@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/event_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/film_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/magazine_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
@@ -20,9 +21,14 @@ abstract class PostBody extends Equatable {
   });
 
   final String title;
-  final String image;
+  final ImageModel image;
 
   Map<String, dynamic> toJson();
+
+  PostBody copyWith({
+    String? title,
+    ImageModel? image,
+  });
 }
 
 class PostModel extends Equatable {

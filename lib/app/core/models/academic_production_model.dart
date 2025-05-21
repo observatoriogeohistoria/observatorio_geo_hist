@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class AcademicProductionModel extends PostBody {
@@ -43,7 +44,7 @@ class AcademicProductionModel extends PostBody {
   factory AcademicProductionModel.fromJson(Map<String, dynamic> json) {
     return AcademicProductionModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       category: AcademicProductionCategory.values.byName(json['category']),
       author: json['author'],
       advisor: json['advisor'],
@@ -63,7 +64,7 @@ class AcademicProductionModel extends PostBody {
       'category': category.name,
       'author': author,
       'advisor': advisor,
-      'image': image,
+      'image': image.url,
       'imageCaption': imageCaption,
       'institution': institution,
       'yearAndCity': yearAndCity,
@@ -71,6 +72,35 @@ class AcademicProductionModel extends PostBody {
       'keywords': keywords,
       'link': link,
     };
+  }
+
+  @override
+  AcademicProductionModel copyWith({
+    String? title,
+    ImageModel? image,
+    AcademicProductionCategory? category,
+    String? author,
+    String? advisor,
+    String? imageCaption,
+    String? institution,
+    String? yearAndCity,
+    String? summary,
+    String? keywords,
+    String? link,
+  }) {
+    return AcademicProductionModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      category: category ?? this.category,
+      author: author ?? this.author,
+      advisor: advisor ?? this.advisor,
+      imageCaption: imageCaption ?? this.imageCaption,
+      institution: institution ?? this.institution,
+      yearAndCity: yearAndCity ?? this.yearAndCity,
+      summary: summary ?? this.summary,
+      keywords: keywords ?? this.keywords,
+      link: link ?? this.link,
+    );
   }
 }
 

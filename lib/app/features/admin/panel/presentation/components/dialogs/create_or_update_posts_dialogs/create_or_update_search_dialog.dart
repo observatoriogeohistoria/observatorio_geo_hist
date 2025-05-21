@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -39,10 +44,12 @@ class CreateOrUpdateSearchDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateSearchDialogState extends State<CreateOrUpdateSearchDialog> {
+  final StreamController<Completer<ImageModel?>> _imageController = StreamController();
+
   late final SearchModel? _initialBody = widget.post.body as SearchModel?;
 
   late final _titleController = TextEditingController(text: _initialBody?.title);
-  late final _imageController = TextEditingController(text: _initialBody?.image);
+  late final _imageUrlController = TextEditingController(text: _initialBody?.image.url);
   late final _imageCaptionController = TextEditingController(text: _initialBody?.imageCaption);
   late final _coordinatorController = TextEditingController(text: _initialBody?.coordinator ?? '');
   late final _researcherController = TextEditingController(text: _initialBody?.researcher ?? '');
@@ -55,6 +62,19 @@ class _CreateOrUpdateSearchDialogState extends State<CreateOrUpdateSearchDialog>
   late SearchState? _selectedState = _initialBody?.state;
 
   bool get _isUpdate => widget.post.id != null;
+
+  Future<ImageModel?> _getImage() {
+    final completer = Completer<ImageModel?>();
+    _imageController.add(completer);
+
+    return completer.future;
+  }
+
+  @override
+  void dispose() {
+    _imageController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +109,9 @@ class _CreateOrUpdateSearchDialogState extends State<CreateOrUpdateSearchDialog>
             validator: Validators.isNotEmpty,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTextField(
-            controller: _imageController,
-            labelText: 'URL da imagem',
-            hintText: 'https://',
-            validator: Validators.isValidUrl,
+          AppImageField(
+            imageUrlController: _imageUrlController,
+            imageController: _imageController,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
           AppTextField(
@@ -144,7 +162,14 @@ class _CreateOrUpdateSearchDialogState extends State<CreateOrUpdateSearchDialog>
     );
   }
 
-  void _onCreateOrUpdate() {
+  Future<void> _onCreateOrUpdate() async {
+    ImageModel? image = await _getImage();
+
+    if ((image?.isNull ?? true) && _imageUrlController.text.isEmpty) {
+      _showErrorMessage('Preencha a imagem do post');
+      return;
+    }
+
     widget.onCreateOrUpdate(
       widget.post.copyWith(
         id: widget.post.id,
@@ -156,7 +181,11 @@ class _CreateOrUpdateSearchDialogState extends State<CreateOrUpdateSearchDialog>
         body: SearchModel(
           title: _titleController.text,
           state: _selectedState!,
-          image: _imageController.text,
+          image: ImageModel(
+            url: _imageUrlController.text,
+            bytes: image?.bytes,
+            name: image?.name,
+          ),
           imageCaption: _imageCaptionController.text,
           coordinator: _coordinatorController.text,
           researcher: _researcherController.text,
@@ -168,5 +197,11 @@ class _CreateOrUpdateSearchDialogState extends State<CreateOrUpdateSearchDialog>
         ),
       ),
     );
+  }
+
+  void _showErrorMessage(String message) {
+    if (context.mounted) {
+      Messenger.showError(context, message);
+    }
   }
 }

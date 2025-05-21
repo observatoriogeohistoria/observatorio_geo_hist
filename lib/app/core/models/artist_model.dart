@@ -1,3 +1,4 @@
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 class ArtistModel extends PostBody {
@@ -22,7 +23,7 @@ class ArtistModel extends PostBody {
   factory ArtistModel.fromJson(Map<String, dynamic> json) {
     return ArtistModel(
       title: json['title'],
-      image: json['image'],
+      image: ImageModel(url: json['image']),
       description: json['description'],
       link: json['link'],
     );
@@ -32,9 +33,24 @@ class ArtistModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'image': image,
+      'image': image.url,
       'description': description,
       'link': link,
     };
+  }
+
+  @override
+  ArtistModel copyWith({
+    String? title,
+    ImageModel? image,
+    String? description,
+    String? link,
+  }) {
+    return ArtistModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      description: description ?? this.description,
+      link: link ?? this.link,
+    );
   }
 }

@@ -49,7 +49,9 @@ abstract class PostsStoreBase with Store {
         final index = postsByType.indexWhere((p) => p.id == data.id);
 
         bool isUpdate = index >= 0;
-        index >= 0 ? postsByType.replaceRange(index, index + 1, [data]) : postsByType.add(data);
+        index >= 0
+            ? postsByType.replaceRange(index, index + 1, [data])
+            : postsByType.insert(0, data);
 
         posts[data.type] = postsByType.asObservable();
 
