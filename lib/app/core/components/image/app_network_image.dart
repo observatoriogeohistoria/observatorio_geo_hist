@@ -11,14 +11,19 @@ class AppNetworkImage extends StatelessWidget {
     this.height = 253,
     this.radius,
     this.fit = BoxFit.cover,
+    this.noPlaceholder = false,
     super.key,
   });
 
   final String imageUrl;
+
   final double width;
   final double? height;
   final double? radius;
+
   final BoxFit fit;
+
+  final bool noPlaceholder;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +57,10 @@ class AppNetworkImage extends StatelessWidget {
       frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
         if (wasSynchronouslyLoaded) return child;
 
+        if (noPlaceholder) {
+          return child;
+        }
+
         return AnimatedSwitcher(
           duration: const Duration(seconds: 1),
           transitionBuilder: (child, animation) {
@@ -69,7 +78,11 @@ class AppNetworkImage extends StatelessWidget {
         );
       },
       errorBuilder: (_, __, ___) {
-        return const ImageErrorContent();
+        return SizedBox(
+          width: width,
+          height: height,
+          child: const ImageErrorContent(),
+        );
       },
     );
   }

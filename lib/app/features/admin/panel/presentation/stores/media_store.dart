@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/media_repository.dart';

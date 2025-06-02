@@ -4,8 +4,10 @@ import 'package:observatorio_geo_hist/app/core/components/error_content/page_err
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/support/support.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
@@ -13,6 +15,7 @@ import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/article_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/document_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/fetch_posts_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -88,6 +91,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
               return _buildPostContent(context, post);
             },
           ),
+          const SliverToBoxAdapter(child: Support()),
           const SliverToBoxAdapter(child: Footer()),
         ],
       ),
@@ -101,6 +105,13 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
       content = ArticleContent(
         post: post,
         article: post.body! as ArticleModel,
+      );
+    }
+
+    if (post.type == PostType.document) {
+      content = DocumentContent(
+        post: post,
+        document: post.body! as DocumentModel,
       );
     }
 

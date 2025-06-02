@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html' as html;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+import 'package:web/web.dart' as web;
 
 class AppImageField extends StatefulWidget {
   const AppImageField({
@@ -49,12 +49,13 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
   }
 
   void _pickImageWeb() {
-    final uploadInput = html.FileUploadInputElement()..accept = 'image/*';
-    uploadInput.click();
+    final uploadInput = web.document.createElement('input') as web.HTMLInputElement;
+    uploadInput.type = 'file';
+    uploadInput.accept = 'image/*';
 
     uploadInput.onChange.listen((e) {
-      final file = uploadInput.files?.first;
-      final reader = html.FileReader();
+      final file = uploadInput.files?.item(0);
+      final reader = web.FileReader();
 
       reader.readAsArrayBuffer(file!);
       reader.onLoadEnd.listen((e) {
