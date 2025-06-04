@@ -5,17 +5,35 @@ import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/support/support.dart';
+import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/artist_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/book_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/event_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/film_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/magazine_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/academic_production_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/article_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/artist_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/book_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/document_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/event_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/film_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/magazine_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/music_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/podcast_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/search_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/fetch_posts_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -99,20 +117,75 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
   }
 
   Widget _buildPostContent(BuildContext context, PostModel post) {
-    Widget content = const SizedBox.shrink();
+    Widget content;
 
-    if (post.type == PostType.article) {
-      content = ArticleContent(
-        post: post,
-        article: post.body! as ArticleModel,
-      );
-    }
-
-    if (post.type == PostType.document) {
-      content = DocumentContent(
-        post: post,
-        document: post.body! as DocumentModel,
-      );
+    switch (post.type) {
+      case PostType.article:
+        content = ArticleContent(
+          post: post,
+          article: post.body! as ArticleModel,
+        );
+        break;
+      case PostType.document:
+        content = DocumentContent(
+          post: post,
+          document: post.body! as DocumentModel,
+        );
+        break;
+      case PostType.book:
+        content = BookContent(
+          post: post,
+          book: post.body! as BookModel,
+        );
+        break;
+      case PostType.film:
+        content = FilmContent(
+          post: post,
+          film: post.body! as FilmModel,
+        );
+        break;
+      case PostType.magazine:
+        content = MagazineContent(
+          post: post,
+          magazine: post.body! as MagazineModel,
+        );
+        break;
+      case PostType.podcast:
+        content = PodcastContent(
+          post: post,
+          podcast: post.body! as PodcastModel,
+        );
+        break;
+      case PostType.music:
+        content = MusicContent(
+          post: post,
+          music: post.body! as MusicModel,
+        );
+        break;
+      case PostType.artist:
+        content = ArtistContent(
+          post: post,
+          artis: post.body! as ArtistModel,
+        );
+        break;
+      case PostType.academicProduction:
+        content = AcademicProductionContent(
+          post: post,
+          academicProduction: post.body! as AcademicProductionModel,
+        );
+        break;
+      case PostType.event:
+        content = EventContent(
+          post: post,
+          event: post.body! as EventModel,
+        );
+        break;
+      case PostType.search:
+        content = SearchContent(
+          post: post,
+          search: post.body! as SearchModel,
+        );
+        break;
     }
 
     return SliverToBoxAdapter(child: content);

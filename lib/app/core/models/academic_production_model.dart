@@ -8,7 +8,6 @@ class AcademicProductionModel extends PostBody {
     required this.category,
     required this.author,
     required this.advisor,
-    required this.imageCaption,
     required this.institution,
     required this.yearAndCity,
     required this.summary,
@@ -19,7 +18,6 @@ class AcademicProductionModel extends PostBody {
   final AcademicProductionCategory category;
   final String author;
   final String advisor;
-  final String imageCaption;
   final String institution;
   final String yearAndCity;
   final String summary;
@@ -33,7 +31,6 @@ class AcademicProductionModel extends PostBody {
         category,
         author,
         advisor,
-        imageCaption,
         institution,
         yearAndCity,
         summary,
@@ -48,7 +45,6 @@ class AcademicProductionModel extends PostBody {
       category: AcademicProductionCategory.values.byName(json['category']),
       author: json['author'],
       advisor: json['advisor'],
-      imageCaption: json['imageCaption'],
       institution: json['institution'],
       yearAndCity: json['yearAndCity'],
       summary: json['summary'],
@@ -65,7 +61,6 @@ class AcademicProductionModel extends PostBody {
       'author': author,
       'advisor': advisor,
       'image': image.url,
-      'imageCaption': imageCaption,
       'institution': institution,
       'yearAndCity': yearAndCity,
       'summary': summary,
@@ -81,7 +76,6 @@ class AcademicProductionModel extends PostBody {
     AcademicProductionCategory? category,
     String? author,
     String? advisor,
-    String? imageCaption,
     String? institution,
     String? yearAndCity,
     String? summary,
@@ -94,7 +88,6 @@ class AcademicProductionModel extends PostBody {
       category: category ?? this.category,
       author: author ?? this.author,
       advisor: advisor ?? this.advisor,
-      imageCaption: imageCaption ?? this.imageCaption,
       institution: institution ?? this.institution,
       yearAndCity: yearAndCity ?? this.yearAndCity,
       summary: summary ?? this.summary,

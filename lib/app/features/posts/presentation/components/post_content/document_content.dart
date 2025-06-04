@@ -39,14 +39,14 @@ class DocumentContent extends StatelessWidget {
               children: [
                 if (document.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: 200.verticalSpacing,
+                    height: null,
                     imageUrl: document.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
                 SizedBox(
                   width: double.maxFinite,
                   child: SecondaryButton.medium(
-                    text: "Acesse o documento",
+                    text: "Acesse",
                     onPressed: () => openUrl(document.link),
                   ),
                 ),
@@ -70,7 +70,7 @@ class DocumentContent extends StatelessWidget {
                   text: document.category.portuguese,
                   color: AppTheme.colors.gray,
                 ),
-                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
                 ViewQuill(initialContent: document.description),
               ],
             ),

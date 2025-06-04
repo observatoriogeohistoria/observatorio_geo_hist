@@ -30,6 +30,7 @@ void showCreateOrUpdatePostDialog(
   required void Function(PostModel post) onCreateOrUpdate,
   required PostType postType,
   PostModel? post,
+  required bool isLoading,
 }) {
   showDialog(
     context: context,
@@ -38,6 +39,7 @@ void showCreateOrUpdatePostDialog(
       onCreateOrUpdate: onCreateOrUpdate,
       postType: postType,
       post: post,
+      isLoading: isLoading,
     ),
   );
 }
@@ -48,6 +50,7 @@ class CreateOrUpdatePostDialog extends StatefulWidget {
     required this.onCreateOrUpdate,
     required this.postType,
     this.post,
+    this.isLoading = false,
     super.key,
   });
 
@@ -55,6 +58,7 @@ class CreateOrUpdatePostDialog extends StatefulWidget {
   final void Function(PostModel post) onCreateOrUpdate;
   final PostType postType;
   final PostModel? post;
+  final bool isLoading;
 
   @override
   State<CreateOrUpdatePostDialog> createState() => _CreateOrUpdatePostDialogState();

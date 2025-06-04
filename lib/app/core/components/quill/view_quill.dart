@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ViewQuill extends StatefulWidget {
   const ViewQuill({
@@ -23,12 +24,12 @@ class ViewQuill extends StatefulWidget {
       for (final op in deltaOps) {
         if (op is Map && op.containsKey('insert')) {
           final value = op['insert'];
+
           if (value is String && value.trim().isNotEmpty && value.trim() != '\n') {
             return false;
           }
-          if (value is! String) {
-            return false;
-          }
+
+          if (value is! String) return false;
         }
       }
       return true;
@@ -57,9 +58,65 @@ class _ViewQuillState extends State<ViewQuill> {
 
   @override
   Widget build(BuildContext context) {
+    const horizontalSpacing = HorizontalSpacing.zero;
+    const verticalSpacing = VerticalSpacing.zero;
+    const lineSpacing = VerticalSpacing.zero;
+
     return QuillEditor.basic(
       controller: _controller,
-      config: const QuillEditorConfig(),
+      config: QuillEditorConfig(
+        customStyles: DefaultStyles(
+          h1: DefaultTextBlockStyle(
+            AppTheme.typography.title.big.copyWith(color: AppTheme.colors.darkGray),
+            horizontalSpacing,
+            verticalSpacing,
+            lineSpacing,
+            null,
+          ),
+          h2: DefaultTextBlockStyle(
+            AppTheme.typography.title.medium.copyWith(color: AppTheme.colors.darkGray),
+            horizontalSpacing,
+            verticalSpacing,
+            lineSpacing,
+            null,
+          ),
+          h3: DefaultTextBlockStyle(
+            AppTheme.typography.title.small.copyWith(color: AppTheme.colors.darkGray),
+            horizontalSpacing,
+            verticalSpacing,
+            lineSpacing,
+            null,
+          ),
+          h4: DefaultTextBlockStyle(
+            AppTheme.typography.body.big.copyWith(color: AppTheme.colors.darkGray),
+            horizontalSpacing,
+            verticalSpacing,
+            lineSpacing,
+            null,
+          ),
+          h5: DefaultTextBlockStyle(
+            AppTheme.typography.body.medium.copyWith(color: AppTheme.colors.darkGray),
+            horizontalSpacing,
+            verticalSpacing,
+            lineSpacing,
+            null,
+          ),
+          h6: DefaultTextBlockStyle(
+            AppTheme.typography.body.small.copyWith(color: AppTheme.colors.darkGray),
+            horizontalSpacing,
+            verticalSpacing,
+            lineSpacing,
+            null,
+          ),
+          paragraph: DefaultTextBlockStyle(
+            AppTheme.typography.body.big.copyWith(color: AppTheme.colors.darkGray),
+            horizontalSpacing,
+            verticalSpacing,
+            lineSpacing,
+            null,
+          ),
+        ),
+      ),
     );
   }
 }

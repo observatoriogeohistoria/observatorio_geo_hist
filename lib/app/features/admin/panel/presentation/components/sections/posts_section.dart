@@ -115,6 +115,7 @@ class _PostsSectionState extends State<PostsSection> {
                         categories: categoriesStore.items,
                         onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
                         postType: selectedPostType,
+                        isLoading: postsStore.state is CrudLoadingState,
                       );
                     },
                     isDisabled: categoriesStore.state is CrudLoadingState,
@@ -187,6 +188,7 @@ class _PostsSectionState extends State<PostsSection> {
                               onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
                               post: post,
                               postType: post.type,
+                              isLoading: postsStore.state is CrudLoadingState,
                             );
                           },
                           onDelete: () => postsStore.deletePost(post),
