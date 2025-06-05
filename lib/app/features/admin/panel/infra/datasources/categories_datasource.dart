@@ -63,22 +63,6 @@ class CategoriesDatasourceImpl implements CategoriesDatasource {
     try {
       DocumentReference ref = _firestore.collection('posts').doc(category.key);
       await ref.delete();
-
-      // DocumentSnapshot docSnapshot = await ref.get();
-      // QuerySnapshot querySnapshot = await ref.collection(category.key).get();
-
-      // Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
-
-      // if (data.containsKey('categories')) {
-      //   List categories = List.from(data['categories']);
-      //   categories.removeWhere((item) => item['key'] == category.key);
-
-      //   await ref.set({'categories': categories}, SetOptions(merge: true));
-      // }
-
-      // List<Future<void>> deletePosts =
-      //     querySnapshot.docs.map((doc) => doc.reference.delete()).toList();
-      // await Future.wait(deletePosts);
     } catch (exception, stackTrace) {
       _loggerService.error('Error deleting category: $exception', stackTrace: stackTrace);
       rethrow;

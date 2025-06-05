@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 class CategoryModel extends Equatable {
@@ -6,7 +7,7 @@ class CategoryModel extends Equatable {
     required this.key,
     required this.title,
     required this.description,
-    required this.backgroundImgUrl,
+    required this.backgroundImg,
     required this.areas,
     this.hasCollaborateOption = false,
     this.numberOfPosts = 0,
@@ -16,7 +17,7 @@ class CategoryModel extends Equatable {
   final String title;
   final String description;
   final List<PostsAreas> areas;
-  final String backgroundImgUrl;
+  final ImageModel backgroundImg;
   final bool hasCollaborateOption;
   final int numberOfPosts;
 
@@ -26,7 +27,7 @@ class CategoryModel extends Equatable {
         title,
         description,
         areas,
-        backgroundImgUrl,
+        backgroundImg,
         hasCollaborateOption,
         numberOfPosts,
       ];
@@ -37,7 +38,7 @@ class CategoryModel extends Equatable {
       title: json['title'] as String,
       description: json['description'] as String,
       areas: (json['areas'] as List).map((area) => PostsAreas.fromKey(area as String)).toList(),
-      backgroundImgUrl: json['backgroundImgUrl'] as String,
+      backgroundImg: ImageModel(url: json['backgroundImgUrl'] as String),
       hasCollaborateOption: json['hasCollaborateOption'] as bool,
     );
   }
@@ -48,7 +49,7 @@ class CategoryModel extends Equatable {
       'title': title,
       'description': description,
       'areas': areas.map((area) => area.key).toList(),
-      'backgroundImgUrl': backgroundImgUrl,
+      'backgroundImgUrl': backgroundImg.url,
       'hasCollaborateOption': hasCollaborateOption,
     };
   }
@@ -58,7 +59,7 @@ class CategoryModel extends Equatable {
     String? title,
     String? description,
     List<PostsAreas>? areas,
-    String? backgroundImgUrl,
+    ImageModel? backgroundImgUrl,
     bool? hasCollaborateOption,
     int? numberOfPosts,
   }) {
@@ -66,7 +67,7 @@ class CategoryModel extends Equatable {
       key: key ?? this.key,
       title: title ?? this.title,
       description: description ?? this.description,
-      backgroundImgUrl: backgroundImgUrl ?? this.backgroundImgUrl,
+      backgroundImg: backgroundImgUrl ?? backgroundImg,
       areas: areas ?? this.areas,
       hasCollaborateOption: hasCollaborateOption ?? this.hasCollaborateOption,
       numberOfPosts: numberOfPosts ?? this.numberOfPosts,

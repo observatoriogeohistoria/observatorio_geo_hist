@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/paginated/paginated_posts.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
@@ -11,7 +13,11 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/post
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 
 abstract class PostsRepository {
-  Future<Either<Failure, List<PostModel>>> getPosts(PostType type);
+  Future<Either<Failure, PaginatedPosts>> getPosts(
+    PostType type, {
+    DocumentSnapshot? startAfterDocument,
+    int limit = 10,
+  });
   Future<Either<Failure, PostModel>> createOrUpdatePost(PostModel post);
   Future<Either<Failure, Unit>> deletePost(PostModel post);
 }
@@ -23,9 +29,18 @@ class PostsRepositoryImpl implements PostsRepository {
   PostsRepositoryImpl(this._postsDatasource, this._mediaDatasource);
 
   @override
-  Future<Either<Failure, List<PostModel>>> getPosts(PostType type) async {
+  Future<Either<Failure, PaginatedPosts>> getPosts(
+    PostType type, {
+    DocumentSnapshot? startAfterDocument,
+    int limit = 10,
+  }) async {
     try {
-      final posts = await _postsDatasource.getPosts(type);
+      final posts = await _postsDatasource.getPosts(
+        type,
+        startAfterDocument: startAfterDocument,
+        limit: limit,
+      );
+
       return Right(posts);
     } on FirebaseAuthException catch (error) {
       return Left(AuthFailure.fromException(error));

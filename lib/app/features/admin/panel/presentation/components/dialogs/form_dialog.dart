@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_d
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -32,6 +33,7 @@ class FormDialog extends StatefulWidget {
 
 class _FormDialogState extends State<FormDialog> {
   late final PostsStore postsStore = PanelSetup.getIt<PostsStore>();
+  late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
 
   final _scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
@@ -79,7 +81,8 @@ class _FormDialogState extends State<FormDialog> {
                             if (!_formKey.currentState!.validate()) return;
                             widget.onSubmit();
                           },
-                          isDisabled: postsStore.state is CrudLoadingState,
+                          isDisabled: postsStore.state is CrudLoadingState ||
+                              categoriesStore.state is CrudLoadingState,
                         ),
                       ],
                     ),

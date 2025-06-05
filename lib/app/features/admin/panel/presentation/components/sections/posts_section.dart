@@ -44,6 +44,8 @@ class _PostsSectionState extends State<PostsSection> {
   void initState() {
     super.initState();
 
+    _scrollController.addListener(_onScroll);
+
     categoriesStore.getItems();
 
     selectedPostType = sidebarStore.selectedPostType ?? PostType.article;
@@ -80,9 +82,13 @@ class _PostsSectionState extends State<PostsSection> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+
     for (var reaction in _reactions) {
       reaction.reaction.dispose();
     }
+
     super.dispose();
   }
 
@@ -128,7 +134,12 @@ class _PostsSectionState extends State<PostsSection> {
                 final state = postsStore.state;
 
                 if (state is CrudLoadingState && state.isRefreshing) {
-                  return const LinearLoading();
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: AppTheme.dimensions.space.medium.horizontalSpacing,
+                    ),
+                    child: const LinearLoading(),
+                  );
                 }
 
                 return const SizedBox.shrink();
@@ -204,5 +215,11 @@ class _PostsSectionState extends State<PostsSection> {
         );
       },
     );
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      postsStore.getPosts(sidebarStore.selectedPostType ?? PostType.article);
+    }
   }
 }

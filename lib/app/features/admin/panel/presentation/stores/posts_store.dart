@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/posts_repository.dart';
@@ -18,19 +19,30 @@ abstract class PostsStoreBase with Store {
   @observable
   CrudState state = CrudInitialState();
 
+  DocumentSnapshot? _lastDocument;
+
+  final Map<PostType, bool> _hasMore = {for (PostType type in PostType.values) type: true};
+
   @action
   Future<void> getPosts(PostType type) async {
     if (state is CrudLoadingState) return;
-    if (posts.containsKey(type)) return;
+    if (_hasMore[type] == false) return;
 
-    state = CrudLoadingState();
+    state = CrudLoadingState(isRefreshing: _lastDocument != null);
 
-    final result = await _postsRepository.getPosts(type);
+    final result = await _postsRepository.getPosts(type, startAfterDocument: _lastDocument);
 
     result.fold(
       (failure) => state = CrudErrorState(failure),
-      (posts) {
-        this.posts[type] = posts.asObservable();
+      (paginatedPosts) {
+        final newPosts = posts[type] ?? [];
+        newPosts.addAll(paginatedPosts.posts);
+
+        posts[type] = newPosts.asObservable();
+
+        _lastDocument = paginatedPosts.lastDocument;
+        _hasMore[type] = paginatedPosts.hasMore;
+
         state = CrudSuccessState();
       },
     );

@@ -116,14 +116,16 @@ class _PostsPageState extends State<PostsPage> {
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(category.backgroundImgUrl),
-          colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.5),
-            BlendMode.darken,
-          ),
-          fit: BoxFit.cover,
-        ),
+        image: (category.backgroundImg.url?.isNotEmpty ?? false)
+            ? DecorationImage(
+                image: NetworkImage(category.backgroundImg.url!),
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withValues(alpha: 0.5),
+                  BlendMode.darken,
+                ),
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
