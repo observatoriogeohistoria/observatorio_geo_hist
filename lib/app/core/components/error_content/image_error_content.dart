@@ -17,9 +17,12 @@ class ImageErrorContent extends StatelessWidget {
           color: AppTheme.colors.gray,
         ),
         SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-        AppTitle.medium(
-          text: 'Erro ao carregar a imagem',
-          color: AppTheme.colors.gray,
+        Flexible(
+          child: AppTitle.medium(
+            text: 'Erro ao carregar a imagem',
+            textAlign: TextAlign.center,
+            color: AppTheme.colors.gray,
+          ),
         ),
       ],
     );

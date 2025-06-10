@@ -41,6 +41,7 @@ class MusicModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+      'title_lower': title.toLowerCase(),
       'image': image.url,
       'artistName': artistName,
       'description': description,

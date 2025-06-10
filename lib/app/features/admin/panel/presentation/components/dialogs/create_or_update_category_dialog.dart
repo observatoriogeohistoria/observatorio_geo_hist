@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/switch_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
+import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -40,18 +45,32 @@ class CreateOrUpdateCategoryDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDialog> {
+  final StreamController<Completer<ImageModel?>> _imageController = StreamController();
+
   late final _keyController =
       TextEditingController(text: widget.category?.key ?? IdGenerator.generate());
   late final _titleController = TextEditingController(text: widget.category?.title);
   late final _descriptionController = TextEditingController(text: widget.category?.description);
-  late final _backgroundImgUrlController =
-      TextEditingController(text: widget.category?.backgroundImgUrl);
+  late final _imageUrlController = TextEditingController(text: widget.category?.backgroundImg.url);
 
   late bool isHistory = widget.category?.areas.contains(PostsAreas.history) ?? false;
   late bool isGeography = widget.category?.areas.contains(PostsAreas.geography) ?? false;
   late bool isCollaborate = widget.category?.hasCollaborateOption ?? false;
 
   bool get _isUpdate => widget.category != null;
+
+  Future<ImageModel?> _getImage() {
+    final completer = Completer<ImageModel?>();
+    _imageController.add(completer);
+
+    return completer.future;
+  }
+
+  @override
+  void dispose() {
+    _imageController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +109,9 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
             maxLines: 5,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTextField(
-            controller: _backgroundImgUrlController,
-            labelText: 'URL da imagem de fundo',
-            validator: Validators.isNotEmpty,
+          AppImageField(
+            imageUrlController: _imageUrlController,
+            imageController: _imageController,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
           SwitchButton(
@@ -118,12 +136,23 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
     );
   }
 
-  void _onCreateOrUpdate() {
+  Future<void> _onCreateOrUpdate() async {
+    ImageModel? image = await _getImage();
+
+    if ((image?.isNull ?? true) && _imageUrlController.text.isEmpty) {
+      _showErrorMessage('Preencha a imagem do post');
+      return;
+    }
+
     final category = CategoryModel(
       key: _keyController.text,
       title: _titleController.text,
       description: _descriptionController.text,
-      backgroundImgUrl: _backgroundImgUrlController.text,
+      backgroundImg: ImageModel(
+        url: _imageUrlController.text,
+        bytes: image?.bytes,
+        name: image?.name,
+      ),
       areas: [
         if (isHistory) PostsAreas.history,
         if (isGeography) PostsAreas.geography,
@@ -132,5 +161,11 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
     );
 
     widget.onCreateOrUpdate(category);
+  }
+
+  void _showErrorMessage(String message) {
+    if (context.mounted) {
+      Messenger.showError(context, message);
+    }
   }
 }

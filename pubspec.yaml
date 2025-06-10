@@ -15,7 +15,7 @@ scripts:
     $after: fvm flutter pub get
 
   builder:
-    $script: dart run build_runner watch --delete-conflicting-outputs
+    $script: fvm dart run build_runner watch --delete-conflicting-outputs
 
   build:
     $script: fvm flutter build web
@@ -60,6 +60,7 @@ dependencies:
   flutter_quill: ^11.1.2
   url_launcher: ^6.3.1
   image_picker_for_web: ^3.0.6
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

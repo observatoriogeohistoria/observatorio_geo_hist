@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
@@ -19,6 +21,8 @@ class AppTextField extends StatefulWidget {
     this.focusNode,
     this.scrollPadding = EdgeInsets.zero,
     this.suffixIcon,
+    this.useDebounce = false,
+    this.debounceDuration = const Duration(milliseconds: 500),
     super.key,
   });
 
@@ -42,6 +46,9 @@ class AppTextField extends StatefulWidget {
   final EdgeInsets scrollPadding;
   final Widget? suffixIcon;
 
+  final bool useDebounce;
+  final Duration debounceDuration;
+
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -49,12 +56,30 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   late final _focusNode = widget.focusNode ?? FocusNode();
 
+  Timer? _debounce;
+
+  void _onChangedDebounced(String value) {
+    if (widget.onChanged == null) return;
+
+    _debounce?.cancel();
+    _debounce = Timer(widget.debounceDuration, () {
+      widget.onChanged!(value);
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: AppTheme.dimensions.space.small.verticalSpacing),
       child: TextFormField(
-        onChanged: widget.onChanged,
+        onChanged: widget.useDebounce ? _onChangedDebounced : widget.onChanged,
         controller: widget.controller,
         focusNode: _focusNode,
         enabled: !widget.isDisabled,

@@ -88,6 +88,11 @@ class SidebarMenuItem extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(
+          height: isCollapsed
+              ? AppTheme.dimensions.space.large.verticalSpacing
+              : AppTheme.dimensions.space.small.verticalSpacing,
+        ),
         if (showSubItems) ...[
           SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
           for (var subItem in subItems)
@@ -102,7 +107,7 @@ class SidebarMenuItem extends StatelessWidget {
                   },
                 ),
               ),
-              child: Padding(
+              child: Container(
                 padding: EdgeInsets.symmetric(vertical: AppTheme.dimensions.space.small.scale),
                 child: Text(
                   subItem.portuguesePlural,

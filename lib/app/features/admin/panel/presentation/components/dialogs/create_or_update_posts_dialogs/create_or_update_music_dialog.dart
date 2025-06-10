@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/editor_quill.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
@@ -105,11 +106,9 @@ class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
             validator: Validators.isNotEmpty,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTextField(
-            controller: _imageUrlController,
-            labelText: 'URL da imagem',
-            hintText: 'https://',
-            validator: Validators.isValidUrl,
+          AppImageField(
+            imageUrlController: _imageUrlController,
+            imageController: _imageController,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
           AppTextField(

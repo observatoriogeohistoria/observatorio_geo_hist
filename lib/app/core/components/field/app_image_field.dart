@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:html' as html;
 import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
@@ -30,6 +30,8 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
   Uint8List? _uploadedImageBytes;
   String? _uploadedImageName;
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,24 +50,25 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
     });
   }
 
-  void _pickImageWeb() {
-    final uploadInput = html.FileUploadInputElement()..accept = 'image/*';
-    uploadInput.click();
+  Future<void> _pickImageWeb() async {
+    setState(() => _isLoading = true);
 
-    uploadInput.onChange.listen((e) {
-      final file = uploadInput.files?.first;
-      final reader = html.FileReader();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowMultiple: false,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'webm'],
+    );
 
-      reader.readAsArrayBuffer(file!);
-      reader.onLoadEnd.listen((e) {
-        setState(() {
-          _uploadedImageBytes = reader.result as Uint8List;
-          _uploadedImageName = file.name;
+    if (result != null) {
+      Uint8List? fileBytes = result.files.first.bytes;
 
-          widget.imageUrlController.clear();
-        });
-      });
-    });
+      _uploadedImageBytes = fileBytes;
+      _uploadedImageName = result.files.first.name;
+
+      widget.imageUrlController.clear();
+    }
+
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -103,7 +106,7 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       PrimaryButton.small(
-                        text: 'Escolher imagem',
+                        text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
                         onPressed: _pickImageWeb,
                       ),
                       SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),

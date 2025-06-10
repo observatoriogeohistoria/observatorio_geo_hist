@@ -61,6 +61,7 @@ class SearchModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+      'title_lower': title.toLowerCase(),
       'image': image.url,
       'state': state.name,
       'imageCaption': imageCaption,

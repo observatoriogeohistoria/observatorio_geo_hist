@@ -49,6 +49,7 @@ class ArticleModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+      'title_lower': title.toLowerCase(),
       'subtitle': subtitle,
       'authors': authors,
       'date': date,

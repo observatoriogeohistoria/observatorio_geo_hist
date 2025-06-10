@@ -16,6 +16,10 @@ class DeviceUtils {
     return width >= 600 && width < 1024;
   }
 
+  static bool isLaptop(BuildContext context) {
+    return MediaQuery.of(context).size.width >= 1024 && MediaQuery.of(context).size.width < 1200;
+  }
+
   static bool isSmallDesktop(BuildContext context) {
     return MediaQuery.of(context).size.width >= 600 && MediaQuery.of(context).size.width < 1200;
   }
