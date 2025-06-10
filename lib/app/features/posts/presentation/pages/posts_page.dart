@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
@@ -115,14 +116,16 @@ class _PostsPageState extends State<PostsPage> {
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(category.backgroundImgUrl),
-          colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.5),
-            BlendMode.darken,
-          ),
-          fit: BoxFit.cover,
-        ),
+        image: (category.backgroundImg.url?.isNotEmpty ?? false)
+            ? DecorationImage(
+                image: NetworkImage(category.backgroundImg.url!),
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withValues(alpha: 0.5),
+                  BlendMode.darken,
+                ),
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -169,31 +172,54 @@ class _PostsPageState extends State<PostsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleWidget(title: 'POSTS', color: AppTheme.colors.orange),
-              SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+              SizedBox(
+                height: isMobile
+                    ? AppTheme.dimensions.space.huge.verticalSpacing
+                    : AppTheme.dimensions.space.gigantic.verticalSpacing,
+              ),
               if (posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
               if (posts.isNotEmpty)
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(
-                        vertical: AppTheme.dimensions.space.massive.verticalSpacing,
+                isMobile
+                    ? ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        separatorBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: AppTheme.dimensions.space.large.verticalSpacing,
+                            ),
+                            child: AppDivider(
+                              color: AppTheme.colors.gray.withValues(alpha: 0.2),
+                            ),
+                          );
+                        },
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          return PostCard(
+                            category: category,
+                            post: posts[index],
+                            index: index,
+                          );
+                        },
+                      )
+                    : StaggeredGrid.count(
+                        crossAxisCount: isTablet ? 2 : 3,
+                        mainAxisSpacing: AppTheme.dimensions.space.gigantic.verticalSpacing,
+                        crossAxisSpacing: AppTheme.dimensions.space.massive.horizontalSpacing,
+                        children: [
+                          for (final post in posts)
+                            PostCard(
+                              category: category,
+                              post: post,
+                              index: posts.indexOf(post),
+                            ),
+                        ],
                       ),
-                      child: AppDivider(
-                        color: AppTheme.colors.gray.withValues(alpha: 0.2),
-                      ),
-                    );
-                  },
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) {
-                    return PostCard(
-                      category: category,
-                      post: posts[index],
-                      index: index,
-                    );
-                  },
-                ),
+              SizedBox(
+                height: isMobile
+                    ? AppTheme.dimensions.space.huge.verticalSpacing
+                    : AppTheme.dimensions.space.gigantic.verticalSpacing,
+              ),
             ],
           ),
         );

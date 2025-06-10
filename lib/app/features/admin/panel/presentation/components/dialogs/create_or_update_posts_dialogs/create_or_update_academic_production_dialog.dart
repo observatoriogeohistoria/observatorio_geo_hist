@@ -54,7 +54,6 @@ class _CreateOrUpdateAcademicProductionDialogState
   late final _authorController = TextEditingController(text: _initialBody?.author);
   late final _advisorController = TextEditingController(text: _initialBody?.advisor);
   late final _imageUrlController = TextEditingController(text: _initialBody?.image.url);
-  late final _imageCaptionController = TextEditingController(text: _initialBody?.imageCaption);
   late final _institutionController = TextEditingController(text: _initialBody?.institution);
   late final _yearAndCityController = TextEditingController(text: _initialBody?.yearAndCity);
   late final _summaryController = TextEditingController(text: _initialBody?.summary);
@@ -130,12 +129,6 @@ class _CreateOrUpdateAcademicProductionDialogState
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
           AppTextField(
-            controller: _imageCaptionController,
-            labelText: 'Legenda da imagem',
-            validator: Validators.isNotEmpty,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTextField(
             controller: _institutionController,
             labelText: 'Instituição',
             validator: Validators.isNotEmpty,
@@ -200,7 +193,6 @@ class _CreateOrUpdateAcademicProductionDialogState
             bytes: image?.bytes,
             name: image?.name,
           ),
-          imageCaption: _imageCaptionController.text,
           institution: _institutionController.text,
           yearAndCity: _yearAndCityController.text,
           summary: _summaryController.text,

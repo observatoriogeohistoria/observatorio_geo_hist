@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/image/app_network_image.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
@@ -9,6 +8,7 @@ import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostCard extends StatefulWidget {
@@ -28,79 +28,82 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  bool isHovered = false;
+
+  bool get isMobile => DeviceUtils.isMobile(context);
+
   @override
   Widget build(BuildContext context) {
-    bool isEven = widget.index.isEven;
-    double sectionWidth =
-        (MediaQuery.of(context).size.width - 2 * DeviceUtils.getPageHorizontalPadding(context)) /
-                2 -
-            AppTheme.dimensions.space.large;
+    BorderSide border = BorderSide(color: AppTheme.colors.lightGray);
 
     return AppMouseRegion(
-      child: GestureDetector(
-        onTap: () {
-          GoRouter.of(context).go(
-              '/posts/${widget.category.areas.first.key}/${widget.category.key}/${widget.post.id}');
-        },
-        child: Row(
-          children: [
-            if (isEven) ...[
-              _buildImage(sectionWidth, isEven),
-              SizedBox(width: AppTheme.dimensions.space.large),
-            ],
-            SizedBox(
-              width: sectionWidth,
-              child: Column(
-                crossAxisAlignment: isEven ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-                children: [
-                  if (widget.post.body?.title.isNotEmpty ?? false)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                      child: AppTitle.big(
-                        text: widget.post.body!.title,
-                        textAlign: isEven ? TextAlign.start : TextAlign.end,
-                        notSelectable: true,
-                        color: AppTheme.colors.darkGray,
-                      ),
-                    ),
-                  SizedBox(height: AppTheme.dimensions.space.small),
-                  if (_subtitle.isNotEmpty)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                      child: AppBody.medium(
-                        text: _subtitle,
-                        textAlign: isEven ? TextAlign.start : TextAlign.end,
-                        notSelectable: true,
-                        color: AppTheme.colors.gray,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            if (!isEven) ...[
-              SizedBox(width: AppTheme.dimensions.space.large),
-              _buildImage(sectionWidth, isEven),
-            ],
-          ],
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        transform: isHovered ? (Matrix4.identity()..scale(1.02)) : Matrix4.identity(),
+        padding: EdgeInsets.all(AppTheme.dimensions.space.medium.horizontalSpacing),
+        decoration: BoxDecoration(
+          color: isHovered ? AppTheme.colors.white : null,
+          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
+          border: isHovered
+              ? Border(
+                  top: border,
+                  left: border,
+                  right: border,
+                  bottom: border.copyWith(width: AppTheme.dimensions.stroke.huge),
+                )
+              : null,
         ),
-      ),
-    );
-  }
-
-  Widget _buildImage(
-    double sectionWidth,
-    bool isEven,
-  ) {
-    if (widget.post.body?.image.url?.isEmpty ?? true) {
-      return const SizedBox.shrink();
-    }
-
-    return AppCard(
-      width: sectionWidth,
-      child: AppNetworkImage(
-        imageUrl: widget.post.body!.image.url!,
-        radius: AppTheme.dimensions.radius.large,
-        fit: BoxFit.contain,
+        child: GestureDetector(
+          onTap: () {
+            GoRouter.of(context).go(
+                '/posts/${widget.category.areas.first.key}/${widget.category.key}/${widget.post.id}');
+          },
+          child: Column(
+            children: [
+              if (widget.post.body?.image.url?.isNotEmpty ?? false)
+                AppNetworkImage(
+                  height: null,
+                  imageUrl: widget.post.body!.image.url!,
+                  radius: 0,
+                  fit: BoxFit.contain,
+                  noPlaceholder: true,
+                ),
+              SizedBox(height: AppTheme.dimensions.space.large),
+              SizedBox(
+                width: double.maxFinite,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.post.body?.title.isNotEmpty ?? false)
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+                        child: AppTitle.big(
+                          text: widget.post.body!.title,
+                          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+                          notSelectable: true,
+                          color: isHovered ? AppTheme.colors.orange : AppTheme.colors.darkGray,
+                        ),
+                      ),
+                    SizedBox(height: AppTheme.dimensions.space.small),
+                    if (_subtitle.isNotEmpty)
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+                        child: AppBody.medium(
+                          text: _subtitle,
+                          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+                          notSelectable: true,
+                          color: AppTheme.colors.gray,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

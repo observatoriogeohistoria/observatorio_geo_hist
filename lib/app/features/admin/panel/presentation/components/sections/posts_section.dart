@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
@@ -16,6 +16,8 @@ import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stor
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/post_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_post_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_actions.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
@@ -40,9 +42,15 @@ class _PostsSectionState extends State<PostsSection> {
   PostType selectedPostType = PostType.article;
   List<ReactionDisposer> _reactions = [];
 
+  String? _searchText;
+  PostsAreas? _searchArea;
+  CategoryModel? _searchCategory;
+
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(_onScroll);
 
     categoriesStore.getItems();
 
@@ -80,9 +88,13 @@ class _PostsSectionState extends State<PostsSection> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+
     for (var reaction in _reactions) {
       reaction.reaction.dispose();
     }
+
     super.dispose();
   }
 
@@ -91,43 +103,48 @@ class _PostsSectionState extends State<PostsSection> {
     return Observer(
       builder: (context) {
         bool canEdit = authStore.user?.permissions.canEditPostsSection ?? false;
+        bool categoriesLoading = postsStore.state is CrudLoadingState;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppHeadline.big(
-              text: selectedPostType.portuguesePlural,
-              color: AppTheme.colors.orange,
+            SectionHeaderTitle(
+              title: selectedPostType.portuguesePlural,
+              onCreate: () {
+                showCreateOrUpdatePostDialog(
+                  context,
+                  categories: categoriesStore.items,
+                  onCreateOrUpdate: (post, pastCategory) =>
+                      postsStore.createOrUpdatePost(post, pastCategory),
+                  postType: selectedPostType,
+                  isLoading: postsStore.state is CrudLoadingState,
+                );
+              },
+              canEdit: canEdit,
+              isLoading: categoriesLoading,
             ),
-            if (canEdit) ...[
-              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: AppTheme.dimensions.space.medium.horizontalSpacing,
-                  ),
-                  child: SecondaryButton.medium(
-                    text: 'Criar',
-                    onPressed: () {
-                      showCreateOrUpdatePostDialog(
-                        context,
-                        categories: categoriesStore.items,
-                        onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
-                        postType: selectedPostType,
-                      );
-                    },
-                    isDisabled: categoriesStore.state is CrudLoadingState,
-                  ),
-                ),
-              ),
-            ],
+            SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+            SectionHeaderActions(
+              onTextChange: (text) => _onSearch(text: text),
+              onAreaChange: (area) => _onSearch(area: area),
+              onCategoryChange: (category) => _onSearch(category: category),
+              onClear: _onClear,
+              selectedText: _searchText,
+              selectedArea: _searchArea,
+              selectedCategory: _searchCategory,
+              categories: categoriesStore.items,
+            ),
             Observer(
               builder: (context) {
                 final state = postsStore.state;
 
                 if (state is CrudLoadingState && state.isRefreshing) {
-                  return const LinearLoading();
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: AppTheme.dimensions.space.medium.horizontalSpacing,
+                    ),
+                    child: const LinearLoading(),
+                  );
                 }
 
                 return const SizedBox.shrink();
@@ -173,20 +190,25 @@ class _PostsSectionState extends State<PostsSection> {
                           post: post,
                           index: index + 1,
                           onPublish: () {
-                            postsStore.createOrUpdatePost(post.copyWith(
-                              isPublished: !post.isPublished,
-                              body: post.body?.copyWith(
-                                image: ImageModel(url: post.body?.image.url),
+                            postsStore.createOrUpdatePost(
+                              post.copyWith(
+                                isPublished: !post.isPublished,
+                                body: post.body?.copyWith(
+                                  image: ImageModel(url: post.body?.image.url),
+                                ),
                               ),
-                            ));
+                              null,
+                            );
                           },
                           onEdit: () {
                             showCreateOrUpdatePostDialog(
                               context,
                               categories: categoriesStore.items,
-                              onCreateOrUpdate: (post) => postsStore.createOrUpdatePost(post),
+                              onCreateOrUpdate: (post, pastCategory) =>
+                                  postsStore.createOrUpdatePost(post, pastCategory),
                               post: post,
                               postType: post.type,
+                              isLoading: postsStore.state is CrudLoadingState,
                             );
                           },
                           onDelete: () => postsStore.deletePost(post),
@@ -202,5 +224,45 @@ class _PostsSectionState extends State<PostsSection> {
         );
       },
     );
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      postsStore.getPosts(
+        sidebarStore.selectedPostType ?? PostType.article,
+        searchText: _searchText,
+        searchArea: _searchArea,
+        searchCategory: _searchCategory,
+      );
+    }
+  }
+
+  void _onSearch({
+    String? text,
+    PostsAreas? area,
+    CategoryModel? category,
+  }) {
+    setState(() {
+      if (text != null) _searchText = text;
+      if (area != null) _searchArea = area;
+      if (category != null) _searchCategory = category;
+    });
+
+    postsStore.getPosts(
+      sidebarStore.selectedPostType ?? PostType.article,
+      searchText: _searchText,
+      searchArea: area ?? _searchArea,
+      searchCategory: category ?? _searchCategory,
+    );
+  }
+
+  void _onClear() {
+    setState(() {
+      _searchText = null;
+      _searchArea = null;
+      _searchCategory = null;
+    });
+
+    postsStore.getPosts(sidebarStore.selectedPostType ?? PostType.article);
   }
 }

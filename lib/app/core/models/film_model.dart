@@ -53,6 +53,7 @@ class FilmModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+      'title_lower': title.toLowerCase(),
       'image': image.url,
       'category': category.name,
       'releaseYear': releaseYear,

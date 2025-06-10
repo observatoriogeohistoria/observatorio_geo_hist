@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/team_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';

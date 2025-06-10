@@ -6,12 +6,11 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      // "args": [
-      //   "-d",
-      //   "chrome",
-      //   "--web-renderer",
-      //   "html",
-      // ]
+      "args": [
+        "-d",
+        "chrome",
+        // "--web-experimental-hot-reload",
+      ]
     },
   ]
 }

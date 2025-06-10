@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/image_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart';
+import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/image/image.dart';
 
 class AppNetworkImage extends StatelessWidget {
@@ -11,14 +12,19 @@ class AppNetworkImage extends StatelessWidget {
     this.height = 253,
     this.radius,
     this.fit = BoxFit.cover,
+    this.noPlaceholder = false,
     super.key,
   });
 
   final String imageUrl;
+
   final double width;
   final double? height;
   final double? radius;
+
   final BoxFit fit;
+
+  final bool noPlaceholder;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +57,7 @@ class AppNetworkImage extends StatelessWidget {
       fit: fit,
       frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
         if (wasSynchronouslyLoaded) return child;
+        if (noPlaceholder) return child;
 
         return AnimatedSwitcher(
           duration: const Duration(seconds: 1),
@@ -64,12 +71,16 @@ class AppNetworkImage extends StatelessWidget {
               ? child
               : Skeleton(
                   width: width,
-                  height: height,
+                  height: height ?? 253.verticalSpacing,
                 ),
         );
       },
       errorBuilder: (_, __, ___) {
-        return const ImageErrorContent();
+        return SizedBox(
+          width: width,
+          height: height,
+          child: const ImageErrorContent(),
+        );
       },
     );
   }
