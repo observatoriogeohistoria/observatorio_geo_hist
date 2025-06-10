@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
+import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/posts_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
 
@@ -19,18 +21,53 @@ abstract class PostsStoreBase with Store {
   @observable
   CrudState state = CrudInitialState();
 
-  DocumentSnapshot? _lastDocument;
+  final Map<PostType, String?> _lastSearchText = {
+    for (PostType type in PostType.values) type: null
+  };
+
+  final Map<PostType, PostsAreas?> _lastSearchArea = {
+    for (PostType type in PostType.values) type: null
+  };
+
+  final Map<PostType, CategoryModel?> _lastSearchCategory = {
+    for (PostType type in PostType.values) type: null
+  };
+
+  final Map<PostType, DocumentSnapshot?> _lastDocument = {
+    for (PostType type in PostType.values) type: null
+  };
 
   final Map<PostType, bool> _hasMore = {for (PostType type in PostType.values) type: true};
 
   @action
-  Future<void> getPosts(PostType type) async {
+  Future<void> getPosts(
+    PostType type, {
+    String? searchText,
+    PostsAreas? searchArea,
+    CategoryModel? searchCategory,
+  }) async {
     if (state is CrudLoadingState) return;
+
+    if (searchText != _lastSearchText[type] ||
+        searchArea != _lastSearchArea[type] ||
+        searchCategory?.key != _lastSearchCategory[type]?.key) {
+      posts[type] = [];
+      _hasMore[type] = true;
+      _lastDocument[type] = null;
+    }
+
     if (_hasMore[type] == false) return;
 
-    state = CrudLoadingState(isRefreshing: _lastDocument != null);
+    state = CrudLoadingState(isRefreshing: _lastDocument[type] != null);
 
-    final result = await _postsRepository.getPosts(type, startAfterDocument: _lastDocument);
+    final normalizedSearchText = searchText?.toLowerCase();
+    final result = await _postsRepository.getPosts(
+      type,
+      searchText: normalizedSearchText,
+      searchArea: searchArea,
+      searchCategory: searchCategory,
+      startAfterDocument: _lastDocument[type],
+    );
 
     result.fold(
       (failure) => state = CrudErrorState(failure),
@@ -40,7 +77,10 @@ abstract class PostsStoreBase with Store {
 
         posts[type] = newPosts.asObservable();
 
-        _lastDocument = paginatedPosts.lastDocument;
+        _lastSearchText[type] = normalizedSearchText;
+        _lastSearchArea[type] = searchArea;
+        _lastSearchCategory[type] = searchCategory;
+        _lastDocument[type] = paginatedPosts.lastDocument;
         _hasMore[type] = paginatedPosts.hasMore;
 
         state = CrudSuccessState();
@@ -49,10 +89,13 @@ abstract class PostsStoreBase with Store {
   }
 
   @action
-  Future<void> createOrUpdatePost(PostModel post) async {
+  Future<void> createOrUpdatePost(
+    PostModel post,
+    CategoryModel? pastCategory,
+  ) async {
     state = CrudLoadingState(isRefreshing: true);
 
-    final result = await _postsRepository.createOrUpdatePost(post);
+    final result = await _postsRepository.createOrUpdatePost(post, pastCategory);
 
     result.fold(
       (failure) => state = CrudErrorState(failure),

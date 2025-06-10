@@ -53,6 +53,7 @@ class EventModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+      'title_lower': title.toLowerCase(),
       'image': image.url,
       'scope': scope.name,
       'link': link,

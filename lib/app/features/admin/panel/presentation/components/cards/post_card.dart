@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
@@ -63,11 +62,12 @@ class PostCard extends StatelessWidget {
                 children: [
                   _buildBody(post),
                   const AppDivider(),
-                  AppBody.big(
-                    text:
-                        '${post.areas.map((area) => area.portuguese).join(' - ')} | ${post.category?.title}',
-                    color: AppTheme.colors.gray,
-                  ),
+                  SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                  _buildInfo('Área(s)', post.areas.map((area) => area.portuguese).join(' e ')),
+                  if (post.category != null) ...[
+                    SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                    _buildInfo('Categoria', post.category!.title),
+                  ],
                   SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                   AppLabel.medium(
                     text: post.isPublished ? 'Publicado' : 'Não Publicado',
@@ -107,6 +107,24 @@ class PostCard extends StatelessWidget {
             ],
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfo(
+    String title,
+    String text,
+  ) {
+    return RichText(
+      text: TextSpan(
+        text: '$title: ',
+        style: AppTheme.typography.title.small.copyWith(color: AppTheme.colors.orange),
+        children: [
+          TextSpan(
+            text: text,
+            style: AppTheme.typography.body.medium.copyWith(color: AppTheme.colors.darkGray),
+          ),
+        ],
       ),
     );
   }

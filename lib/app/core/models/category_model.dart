@@ -47,6 +47,7 @@ class CategoryModel extends Equatable {
     return {
       'key': key,
       'title': title,
+      'title_lower': title.toLowerCase(),
       'description': description,
       'areas': areas.map((area) => area.key).toList(),
       'backgroundImgUrl': backgroundImg.url,

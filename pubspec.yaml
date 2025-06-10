@@ -15,7 +15,7 @@ scripts:
     $after: fvm flutter pub get
 
   builder:
-    $script: dart run build_runner watch --delete-conflicting-outputs
+    $script: fvm dart run build_runner watch --delete-conflicting-outputs
 
   build:
     $script: fvm flutter build web

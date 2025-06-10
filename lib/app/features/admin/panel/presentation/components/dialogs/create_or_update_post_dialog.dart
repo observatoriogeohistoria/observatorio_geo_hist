@@ -27,7 +27,7 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 void showCreateOrUpdatePostDialog(
   BuildContext context, {
   required List<CategoryModel> categories,
-  required void Function(PostModel post) onCreateOrUpdate,
+  required void Function(PostModel post, CategoryModel? pastCategory) onCreateOrUpdate,
   required PostType postType,
   PostModel? post,
   required bool isLoading,
@@ -55,7 +55,7 @@ class CreateOrUpdatePostDialog extends StatefulWidget {
   });
 
   final List<CategoryModel> categories;
-  final void Function(PostModel post) onCreateOrUpdate;
+  final void Function(PostModel post, CategoryModel? pastCategory) onCreateOrUpdate;
   final PostType postType;
   final PostModel? post;
   final bool isLoading;
@@ -164,60 +164,57 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
       isHighlighted: widget.post?.isHighlighted ?? false,
     );
 
+    void onCreateOrUpdate(PostModel post) {
+      CategoryModel? pastCategory = _isUpdate
+          ? (widget.post?.category?.key != _selectedCategory?.key ? widget.post?.category : null)
+          : null;
+      widget.onCreateOrUpdate(post, pastCategory);
+    }
+
     switch (widget.postType) {
       case PostType.article:
-        showCreateOrUpdateArticleDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateArticleDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.event:
-        showCreateOrUpdateEventDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateEventDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.academicProduction:
         showCreateOrUpdateAcademicProductionDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+            onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.search:
-        showCreateOrUpdateSearchDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateSearchDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.document:
-        showCreateOrUpdateDocumentDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateDocumentDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.book:
-        showCreateOrUpdateBookDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateBookDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.magazine:
-        showCreateOrUpdateMagazineDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateMagazineDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.film:
-        showCreateOrUpdateFilmDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateFilmDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.podcast:
-        showCreateOrUpdatePodcastDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdatePodcastDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.music:
-        showCreateOrUpdateMusicDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateMusicDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
 
       case PostType.artist:
-        showCreateOrUpdateArtistDialog(context,
-            onCreateOrUpdate: widget.onCreateOrUpdate, post: post);
+        showCreateOrUpdateArtistDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
     }
   }

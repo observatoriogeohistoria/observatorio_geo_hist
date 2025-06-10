@@ -43,17 +43,23 @@ mixin _$PostsStore on PostsStoreBase, Store {
       AsyncAction('PostsStoreBase.getPosts', context: context);
 
   @override
-  Future<void> getPosts(PostType type) {
-    return _$getPostsAsyncAction.run(() => super.getPosts(type));
+  Future<void> getPosts(PostType type,
+      {String? searchText,
+      PostsAreas? searchArea,
+      CategoryModel? searchCategory}) {
+    return _$getPostsAsyncAction.run(() => super.getPosts(type,
+        searchText: searchText,
+        searchArea: searchArea,
+        searchCategory: searchCategory));
   }
 
   late final _$createOrUpdatePostAsyncAction =
       AsyncAction('PostsStoreBase.createOrUpdatePost', context: context);
 
   @override
-  Future<void> createOrUpdatePost(PostModel post) {
+  Future<void> createOrUpdatePost(PostModel post, CategoryModel? pastCategory) {
     return _$createOrUpdatePostAsyncAction
-        .run(() => super.createOrUpdatePost(post));
+        .run(() => super.createOrUpdatePost(post, pastCategory));
   }
 
   late final _$deletePostAsyncAction =

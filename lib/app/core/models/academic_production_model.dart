@@ -57,6 +57,7 @@ class AcademicProductionModel extends PostBody {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+      'title_lower': title.toLowerCase(),
       'category': category.name,
       'author': author,
       'advisor': advisor,

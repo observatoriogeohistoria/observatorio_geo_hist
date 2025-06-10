@@ -49,45 +49,43 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: DropdownButtonFormField<String>(
-        hint: AppBody.medium(
-          text: widget.hintText,
-          color: AppTheme.colors.gray,
-        ),
-        items: widget.items
-            .map(
-              (item) => DropdownMenuItem<String>(
-                value: widget.itemToString(item),
-                child: AppLabel.big(
-                  text: widget.itemToString(item),
-                  color: AppTheme.colors.darkGray,
-                ),
+    return DropdownButtonFormField<String>(
+      hint: AppBody.medium(
+        text: widget.hintText,
+        color: AppTheme.colors.gray,
+      ),
+      items: widget.items
+          .map(
+            (item) => DropdownMenuItem<String>(
+              value: widget.itemToString(item),
+              child: AppLabel.big(
+                text: widget.itemToString(item),
+                color: AppTheme.colors.darkGray,
               ),
-            )
-            .toList(),
-        value: selectedValue,
-        onChanged: widget.isDisabled
-            ? null
-            : (value) {
-                setState(() => selectedValue = value);
-                widget.onChanged?.call(value);
-              },
-        validator: widget.validator,
-        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: AppTheme.colors.white,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
-            vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-          ),
-          enabledBorder: _buildBorder(AppTheme.colors.gray),
-          focusedBorder: _buildBorder(AppTheme.colors.orange),
-          focusedErrorBorder: _buildBorder(AppTheme.colors.red),
-          disabledBorder: _buildBorder(AppTheme.colors.gray),
-          errorBorder: _buildBorder(AppTheme.colors.red),
+            ),
+          )
+          .toList(),
+      value: selectedValue,
+      onChanged: widget.isDisabled
+          ? null
+          : (value) {
+              setState(() => selectedValue = value);
+              widget.onChanged?.call(value);
+            },
+      validator: widget.validator,
+      borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: AppTheme.colors.white,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
+          vertical: AppTheme.dimensions.space.medium.verticalSpacing,
         ),
+        enabledBorder: _buildBorder(AppTheme.colors.gray),
+        focusedBorder: _buildBorder(AppTheme.colors.orange),
+        focusedErrorBorder: _buildBorder(AppTheme.colors.red),
+        disabledBorder: _buildBorder(AppTheme.colors.gray),
+        errorBorder: _buildBorder(AppTheme.colors.red),
       ),
     );
   }
