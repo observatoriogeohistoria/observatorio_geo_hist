@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class WhoWeAre extends StatelessWidget {
@@ -34,7 +34,7 @@ class WhoWeAre extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const TitleWidget(title: 'QUEM SOMOS'),
+            const CommonTitle(title: 'QUEM SOMOS'),
             SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
             AppBody.big(
               text:

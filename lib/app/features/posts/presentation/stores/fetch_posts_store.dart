@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -20,19 +21,45 @@ abstract class FetchPostsStoreBase with Store {
   @observable
   FetchPostsState state = FetchPostsInitialState();
 
-  @action
-  Future<void> fetchPosts(CategoryModel category) async {
-    state = FetchPostsLoadingState();
-    posts.clear();
+  CategoryModel? _lastCategory;
 
-    final result = await _repository.fetchPosts(category);
+  String? _lastSearchText;
+
+  DocumentSnapshot? _lastDocument;
+
+  @action
+  Future<void> fetchPosts(
+    CategoryModel category, {
+    String? searchText,
+  }) async {
+    if (state is FetchPostsLoadingState) return;
+
+    if (category != _lastCategory || searchText != _lastSearchText) {
+      state = FetchPostsLoadingState();
+      posts.clear();
+
+      _lastDocument = null;
+    }
+
+    final result = await _repository.fetchPosts(
+      category,
+      searchText: searchText,
+      startAfterDocument: _lastDocument,
+    );
 
     result.fold(
       (failure) {
         state = FetchPostsErrorState(failure.message);
       },
-      (posts) {
-        this.posts = posts.asObservable();
+      (paginatedPosts) {
+        final newPosts = posts;
+        newPosts.addAll(paginatedPosts.posts);
+        posts = newPosts.asObservable();
+
+        _lastCategory = category;
+        _lastSearchText = searchText;
+        _lastDocument = paginatedPosts.lastDocument;
+
         state = FetchPostsSuccessState();
       },
     );

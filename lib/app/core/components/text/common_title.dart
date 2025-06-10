@@ -3,8 +3,8 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class TitleWidget extends StatelessWidget {
-  const TitleWidget({
+class CommonTitle extends StatelessWidget {
+  const CommonTitle({
     required this.title,
     this.color,
     super.key,

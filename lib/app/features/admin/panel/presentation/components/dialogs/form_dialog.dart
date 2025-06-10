@@ -42,6 +42,9 @@ class _FormDialogState extends State<FormDialog> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
+        bool isLoading =
+            postsStore.state is CrudLoadingState || categoriesStore.state is CrudLoadingState;
+
         return RightAlignedDialog(
           width: widget.isFullScreen ? MediaQuery.of(context).size.width : null,
           child: Form(
@@ -68,21 +71,22 @@ class _FormDialogState extends State<FormDialog> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                        SecondaryButton.medium(
-                          text: 'Cancelar',
-                          onPressed: () => GoRouter.of(context).pop(),
-                          isDisabled: postsStore.state is CrudLoadingState,
-                        ),
-                        SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+                        if (!isLoading) ...[
+                          SecondaryButton.medium(
+                            text: 'Cancelar',
+                            onPressed: () => GoRouter.of(context).pop(),
+                            isDisabled: postsStore.state is CrudLoadingState,
+                          ),
+                          SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+                        ],
                         PrimaryButton.medium(
-                          text: widget.isUpdate ? 'Atualizar' : 'Criar',
+                          text:
+                              isLoading ? 'Aguarde...' : (widget.isUpdate ? 'Atualizar' : 'Criar'),
                           onPressed: () {
                             if (!_formKey.currentState!.validate()) return;
                             widget.onSubmit();
                           },
-                          isDisabled: postsStore.state is CrudLoadingState ||
-                              categoriesStore.state is CrudLoadingState,
+                          isDisabled: isLoading,
                         ),
                       ],
                     ),

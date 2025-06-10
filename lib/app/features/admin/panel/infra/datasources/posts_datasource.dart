@@ -107,14 +107,11 @@ class PostsDatasourceImpl implements PostsDatasource {
         );
       }).toList();
 
-      /// Check if there are more documents to paginate
-      final hasMore = postsQuerySnapshot.docs.length == limit;
-
       /// Return paginated result
       return PaginatedPosts(
         posts: posts,
         lastDocument: lastDocument,
-        hasMore: hasMore,
+        hasMore: postsQuerySnapshot.docs.length == limit,
       );
     } catch (exception, stackTrace) {
       _loggerService.error('Error fetching posts: $exception', stackTrace: stackTrace);
