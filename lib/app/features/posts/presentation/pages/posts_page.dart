@@ -11,13 +11,14 @@ import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/header_actions.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_card.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
@@ -48,6 +49,8 @@ class _PostsPageState extends State<PostsPage> {
 
   List<ReactionDisposer> reactions = [];
   ValueNotifier<CategoryModel?> categoryNotifier = ValueNotifier(null);
+
+  String? searchText;
 
   bool error = false;
 
@@ -130,7 +133,7 @@ class _PostsPageState extends State<PostsPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleWidget(title: category.title.toUpperCase()),
+          CommonTitle(title: category.title.toUpperCase()),
           SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
           AppBody.big(
             text: category.description,
@@ -171,7 +174,14 @@ class _PostsPageState extends State<PostsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TitleWidget(title: 'POSTS', color: AppTheme.colors.orange),
+              HeaderActions(
+                category: category,
+                searchText: searchText,
+                onTextChanged: (text) {
+                  searchText = text;
+                  fetchPostsStore.fetchPosts(category, searchText: text);
+                },
+              ),
               SizedBox(
                 height: isMobile
                     ? AppTheme.dimensions.space.huge.verticalSpacing
@@ -244,7 +254,9 @@ class _PostsPageState extends State<PostsPage> {
     categoryNotifier.value =
         fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
 
-    if (categoryNotifier.value != null) fetchPostsStore.fetchPosts(categoryNotifier.value!);
+    if (categoryNotifier.value != null) {
+      fetchPostsStore.fetchPosts(categoryNotifier.value!, searchText: searchText);
+    }
   }
 
   void updateCategory() {
@@ -252,7 +264,7 @@ class _PostsPageState extends State<PostsPage> {
     categoryNotifier.value = category;
 
     if (category != null) {
-      fetchPostsStore.fetchPosts(category);
+      fetchPostsStore.fetchPosts(category, searchText: searchText);
       fetchCategoriesStore.setSelectedCategory(category);
     }
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class OurHistory extends StatelessWidget {
@@ -32,7 +32,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
           width: double.infinity,
           color: AppTheme.colors.gray,
           child: Center(
-            child: TitleWidget(
+            child: CommonTitle(
               title: 'NOSSA HISTÓRIA',
               color: AppTheme.colors.white,
             ),

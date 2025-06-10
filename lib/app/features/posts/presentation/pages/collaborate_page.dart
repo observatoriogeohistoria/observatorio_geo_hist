@@ -4,12 +4,12 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -51,7 +51,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const TitleWidget(title: 'COLABORE'),
+                    const CommonTitle(title: 'COLABORE'),
                     SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
                     AppBody.big(
                       text: firstText,

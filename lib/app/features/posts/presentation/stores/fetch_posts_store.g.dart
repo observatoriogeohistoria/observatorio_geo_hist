@@ -45,8 +45,9 @@ mixin _$FetchPostsStore on FetchPostsStoreBase, Store {
       AsyncAction('FetchPostsStoreBase.fetchPosts', context: context);
 
   @override
-  Future<void> fetchPosts(CategoryModel category) {
-    return _$fetchPostsAsyncAction.run(() => super.fetchPosts(category));
+  Future<void> fetchPosts(CategoryModel category, {String? searchText}) {
+    return _$fetchPostsAsyncAction
+        .run(() => super.fetchPosts(category, searchText: searchText));
   }
 
   @override

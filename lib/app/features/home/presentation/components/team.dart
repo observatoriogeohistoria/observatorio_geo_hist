@@ -5,11 +5,11 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/custom_icon_bu
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/carousel_options/carousel_options.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/title_widget.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class Team extends StatefulWidget {
@@ -40,7 +40,7 @@ class _TeamState extends State<Team> {
       ),
       child: Column(
         children: [
-          TitleWidget(
+          CommonTitle(
             title: 'EQUIPE',
             color: AppTheme.colors.orange,
           ),
