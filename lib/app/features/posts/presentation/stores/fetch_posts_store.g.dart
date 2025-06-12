@@ -13,13 +13,13 @@ mixin _$FetchPostsStore on FetchPostsStoreBase, Store {
       Atom(name: 'FetchPostsStoreBase.posts', context: context);
 
   @override
-  ObservableList<PostModel> get posts {
+  ObservableMap<PostType, List<PostModel>> get posts {
     _$postsAtom.reportRead();
     return super.posts;
   }
 
   @override
-  set posts(ObservableList<PostModel> value) {
+  set posts(ObservableMap<PostType, List<PostModel>> value) {
     _$postsAtom.reportWrite(value, super.posts, () {
       super.posts = value;
     });
@@ -45,9 +45,10 @@ mixin _$FetchPostsStore on FetchPostsStoreBase, Store {
       AsyncAction('FetchPostsStoreBase.fetchPosts', context: context);
 
   @override
-  Future<void> fetchPosts(CategoryModel category, {String? searchText}) {
-    return _$fetchPostsAsyncAction
-        .run(() => super.fetchPosts(category, searchText: searchText));
+  Future<void> fetchPosts(CategoryModel category, PostType postType,
+      {String? searchText}) {
+    return _$fetchPostsAsyncAction.run(
+        () => super.fetchPosts(category, postType, searchText: searchText));
   }
 
   @override

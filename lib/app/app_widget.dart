@@ -27,8 +27,7 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addObserver(this);
 
-    fetchCategoriesStore.fetchHistoryCategories();
-    fetchCategoriesStore.fetchGeographyCategories();
+    fetchCategoriesStore.fetchCategories();
   }
 
   @override

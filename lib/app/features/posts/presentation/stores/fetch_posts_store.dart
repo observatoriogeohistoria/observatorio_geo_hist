@@ -16,7 +16,7 @@ abstract class FetchPostsStoreBase with Store {
   FetchPostsStoreBase(this._repository);
 
   @observable
-  ObservableList<PostModel> posts = ObservableList<PostModel>();
+  ObservableMap<PostType, List<PostModel>> posts = ObservableMap<PostType, List<PostModel>>();
 
   @observable
   FetchPostsState state = FetchPostsInitialState();
@@ -25,26 +25,34 @@ abstract class FetchPostsStoreBase with Store {
 
   String? _lastSearchText;
 
-  DocumentSnapshot? _lastDocument;
+  Map<PostType, DocumentSnapshot?> _lastDocument = {
+    for (PostType type in PostType.values) type: null
+  };
+
+  Map<PostType, bool> _hasMore = {for (PostType type in PostType.values) type: true};
 
   @action
   Future<void> fetchPosts(
-    CategoryModel category, {
+    CategoryModel category,
+    PostType postType, {
     String? searchText,
   }) async {
-    if (state is FetchPostsLoadingState) return;
-
     if (category != _lastCategory || searchText != _lastSearchText) {
-      state = FetchPostsLoadingState();
       posts.clear();
 
-      _lastDocument = null;
+      _hasMore = {for (PostType type in PostType.values) type: true};
+      _lastDocument = {for (PostType type in PostType.values) type: null};
     }
+
+    if (_hasMore[postType] == false) return;
+
+    state = FetchPostsLoadingState(isRefreshing: state is! FetchPostsInitialState);
 
     final result = await _repository.fetchPosts(
       category,
+      postType: postType,
       searchText: searchText,
-      startAfterDocument: _lastDocument,
+      startAfterDocument: _lastDocument[postType],
     );
 
     result.fold(
@@ -52,13 +60,16 @@ abstract class FetchPostsStoreBase with Store {
         state = FetchPostsErrorState(failure.message);
       },
       (paginatedPosts) {
-        final newPosts = posts;
+        final newPosts = posts[postType] ?? [];
         newPosts.addAll(paginatedPosts.posts);
-        posts = newPosts.asObservable();
+
+        posts[postType] = newPosts.asObservable();
 
         _lastCategory = category;
         _lastSearchText = searchText;
-        _lastDocument = paginatedPosts.lastDocument;
+
+        _lastDocument[postType] = paginatedPosts.lastDocument;
+        _hasMore[postType] = paginatedPosts.hasMore;
 
         state = FetchPostsSuccessState();
       },
@@ -66,6 +77,13 @@ abstract class FetchPostsStoreBase with Store {
   }
 
   PostModel? getPostById(String id) {
-    return posts.firstWhereOrNull((element) => element.id == id);
+    if (posts.isEmpty) return null;
+
+    for (final entries in posts.entries) {
+      final post = entries.value.firstWhereOrNull((element) => element.id == id);
+      if (post != null) return post;
+    }
+
+    return null;
   }
 }

@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/empty_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/common/header_actions.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_card.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/card/post_card.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/header/actions_header.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/header/category_header.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/fetch_posts_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -59,13 +58,13 @@ class _PostsPageState extends State<PostsPage> {
     super.initState();
 
     setupReactions();
-    updateData();
+    updateCategory();
   }
 
   @override
   void didUpdateWidget(covariant PostsPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    updateData();
+    updateCategory();
   }
 
   @override
@@ -76,6 +75,7 @@ class _PostsPageState extends State<PostsPage> {
 
     fetchCategoriesStore.setSelectedCategory(null);
     categoryNotifier.dispose();
+
     super.dispose();
   }
 
@@ -96,7 +96,7 @@ class _PostsPageState extends State<PostsPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildCategoryHeader(context, category),
+                    CategoryHeader(category: category),
                     _buildPostsSection(category),
                   ],
                 ),
@@ -110,51 +110,12 @@ class _PostsPageState extends State<PostsPage> {
     );
   }
 
-  Widget _buildCategoryHeader(BuildContext context, CategoryModel category) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: isMobile ? null : MediaQuery.of(context).size.height * 0.5,
-      padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
-        vertical: AppTheme.dimensions.space.huge.verticalSpacing,
-      ),
-      decoration: BoxDecoration(
-        image: (category.backgroundImg.url?.isNotEmpty ?? false)
-            ? DecorationImage(
-                image: NetworkImage(category.backgroundImg.url!),
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withValues(alpha: 0.5),
-                  BlendMode.darken,
-                ),
-                fit: BoxFit.cover,
-              )
-            : null,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CommonTitle(title: category.title.toUpperCase()),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-          AppBody.big(
-            text: category.description,
-            textAlign: TextAlign.center,
-            color: AppTheme.colors.white,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-          if (category.hasCollaborateOption)
-            PrimaryButton.medium(
-              text: 'COLABORE',
-              onPressed: () => GoRouter.of(context).go('/colaborar'),
-            ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildPostsSection(CategoryModel category) {
     return Observer(
       builder: (context) {
-        if (fetchPostsStore.state is FetchPostsLoadingState) {
+        final state = fetchPostsStore.state;
+
+        if (state is FetchPostsLoadingState && !state.isRefreshing) {
           return Column(
             children: [
               SizedBox(height: AppTheme.dimensions.space.gigantic.verticalSpacing),
@@ -164,22 +125,19 @@ class _PostsPageState extends State<PostsPage> {
         }
 
         final posts = fetchPostsStore.posts;
+        final numberOfPostsTypes = fetchCategoriesStore.selectedCategory?.postsTypes.length ?? 0;
 
-        return Container(
+        return SizedBox(
           width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(
-            horizontal: DeviceUtils.getPageHorizontalPadding(context),
-            vertical: AppTheme.dimensions.space.huge.verticalSpacing,
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              HeaderActions(
+              ActionsHeader(
                 category: category,
                 searchText: searchText,
                 onTextChanged: (text) {
                   searchText = text;
-                  fetchPostsStore.fetchPosts(category, searchText: text);
+                  // fetchPostsStore.fetchPosts(category, searchText: text);
                 },
               ),
               SizedBox(
@@ -189,42 +147,80 @@ class _PostsPageState extends State<PostsPage> {
               ),
               if (posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
               if (posts.isNotEmpty)
-                isMobile
-                    ? ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        separatorBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(
-                              vertical: AppTheme.dimensions.space.large.verticalSpacing,
-                            ),
-                            child: AppDivider(
-                              color: AppTheme.colors.gray.withValues(alpha: 0.2),
-                            ),
-                          );
-                        },
-                        itemCount: posts.length,
-                        itemBuilder: (context, index) {
-                          return PostCard(
-                            category: category,
-                            post: posts[index],
-                            index: index,
-                          );
-                        },
-                      )
-                    : StaggeredGrid.count(
-                        crossAxisCount: isTablet ? 2 : 3,
-                        mainAxisSpacing: AppTheme.dimensions.space.gigantic.verticalSpacing,
-                        crossAxisSpacing: AppTheme.dimensions.space.massive.horizontalSpacing,
+                // isMobile
+                //     ? ListView.separated(
+                //         physics: const NeverScrollableScrollPhysics(),
+                //         shrinkWrap: true,
+                //         separatorBuilder: (context, index) {
+                //           return Container(
+                //             margin: EdgeInsets.symmetric(
+                //               vertical: AppTheme.dimensions.space.large.verticalSpacing,
+                //             ),
+                //             child: AppDivider(
+                //               color: AppTheme.colors.gray.withValues(alpha: 0.2),
+                //             ),
+                //           );
+                //         },
+                //         itemCount: posts.length,
+                //         itemBuilder: (context, index) {
+                //           return PostCard(
+                //             category: category,
+                //             post: posts[index],
+                //             index: index,
+                //           );
+                //         },
+                //       )
+                //     :
+                Column(
+                  children: [
+                    for (final entry in posts.entries)
+                      Column(
                         children: [
-                          for (final post in posts)
-                            PostCard(
-                              category: category,
-                              post: post,
-                              index: posts.indexOf(post),
+                          if (numberOfPostsTypes > 1)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: AppTheme.dimensions.space.massive.horizontalSpacing,
+                                vertical: AppTheme.dimensions.space.medium.verticalSpacing,
+                              ),
+                              width: double.infinity,
+                              color: AppTheme.colors.gray,
+                              child: Center(
+                                child: AppHeadline.big(
+                                  text: entry.key.portuguese,
+                                  color: AppTheme.colors.white,
+                                ),
+                              ),
                             ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: DeviceUtils.getPageHorizontalPadding(context),
+                              vertical: AppTheme.dimensions.space.huge.verticalSpacing,
+                            ),
+                            child: StaggeredGrid.count(
+                              crossAxisCount: isTablet ? 2 : 3,
+                              mainAxisSpacing: AppTheme.dimensions.space.gigantic.verticalSpacing,
+                              crossAxisSpacing: AppTheme.dimensions.space.massive.horizontalSpacing,
+                              children: [
+                                for (final post in entry.value)
+                                  PostCard(
+                                    category: category,
+                                    post: post,
+                                    index: entry.value.indexOf(post),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+                          PrimaryButton.big(
+                            text: 'Ver mais',
+                            onPressed: () => fetchPosts(postType: entry.key),
+                            isDisabled: state is FetchPostsLoadingState && state.isRefreshing,
+                          ),
+                          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
                         ],
                       ),
+                  ],
+                ),
               SizedBox(
                 height: isMobile
                     ? AppTheme.dimensions.space.huge.verticalSpacing
@@ -239,8 +235,12 @@ class _PostsPageState extends State<PostsPage> {
 
   void setupReactions() {
     reactions = [
-      reaction((_) => fetchCategoriesStore.historyCategories, (_) => updateCategory()),
-      reaction((_) => fetchCategoriesStore.geographyCategories, (_) => updateCategory()),
+      reaction((_) => fetchCategoriesStore.selectedCategory, (_) {
+        updateCategory();
+      }),
+      reaction((_) => fetchCategoriesStore.categories, (_) {
+        updateCategory();
+      }),
       reaction((_) => fetchCategoriesStore.state, (_) {
         setState(() => error = fetchCategoriesStore.state is FetchCategoriesErrorState);
       }),
@@ -250,22 +250,28 @@ class _PostsPageState extends State<PostsPage> {
     ];
   }
 
-  void updateData() {
-    categoryNotifier.value =
-        fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
+  void updateCategory() {
+    final category = fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
+    if (category == null) return;
 
-    if (categoryNotifier.value != null) {
-      fetchPostsStore.fetchPosts(categoryNotifier.value!, searchText: searchText);
+    if (categoryNotifier.value?.key != category.key) {
+      categoryNotifier.value = category;
+
+      fetchPosts();
+      fetchCategoriesStore.setSelectedCategory(category);
     }
   }
 
-  void updateCategory() {
-    final category = fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
-    categoryNotifier.value = category;
+  void fetchPosts({PostType? postType}) {
+    if (categoryNotifier.value == null) return;
 
-    if (category != null) {
-      fetchPostsStore.fetchPosts(category, searchText: searchText);
-      fetchCategoriesStore.setSelectedCategory(category);
+    if (postType != null) {
+      fetchPostsStore.fetchPosts(categoryNotifier.value!, postType, searchText: searchText);
+      return;
+    }
+
+    for (final postType in (categoryNotifier.value?.postsTypes ?? [])) {
+      fetchPostsStore.fetchPosts(categoryNotifier.value!, postType, searchText: searchText);
     }
   }
 }

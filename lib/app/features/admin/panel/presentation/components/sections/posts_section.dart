@@ -45,6 +45,8 @@ class _PostsSectionState extends State<PostsSection> {
   String? _searchText;
   PostsAreas? _searchArea;
   CategoryModel? _searchCategory;
+  bool? _isPublished;
+  bool? _isHighlighted;
 
   @override
   void initState() {
@@ -125,13 +127,17 @@ class _PostsSectionState extends State<PostsSection> {
             ),
             SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
             SectionHeaderActions(
-              onTextChange: (text) => _onSearch(text: text),
-              onAreaChange: (area) => _onSearch(area: area),
-              onCategoryChange: (category) => _onSearch(category: category),
+              onTextChange: (text) => _onSearch(1, text: text),
+              onAreaChange: (area) => _onSearch(2, area: area),
+              onCategoryChange: (category) => _onSearch(3, category: category),
+              onPublishedChange: (isPublished) => _onSearch(4, isPublished: isPublished),
+              onHighlightedChange: (isHighlighted) => _onSearch(5, isHighlighted: isHighlighted),
               onClear: _onClear,
               selectedText: _searchText,
               selectedArea: _searchArea,
               selectedCategory: _searchCategory,
+              isPublished: _isPublished,
+              isHighlighted: _isHighlighted,
               categories: categoriesStore.items,
             ),
             Observer(
@@ -200,6 +206,17 @@ class _PostsSectionState extends State<PostsSection> {
                               null,
                             );
                           },
+                          onHighlight: () {
+                            postsStore.createOrUpdatePost(
+                              post.copyWith(
+                                isHighlighted: !post.isHighlighted,
+                                body: post.body?.copyWith(
+                                  image: ImageModel(url: post.body?.image.url),
+                                ),
+                              ),
+                              null,
+                            );
+                          },
                           onEdit: () {
                             showCreateOrUpdatePostDialog(
                               context,
@@ -233,26 +250,35 @@ class _PostsSectionState extends State<PostsSection> {
         searchText: _searchText,
         searchArea: _searchArea,
         searchCategory: _searchCategory,
+        isPublished: _isPublished,
+        isHighlighted: _isHighlighted,
       );
     }
   }
 
-  void _onSearch({
+  void _onSearch(
+    int action, {
     String? text,
     PostsAreas? area,
     CategoryModel? category,
+    bool? isPublished,
+    bool? isHighlighted,
   }) {
     setState(() {
-      if (text != null) _searchText = text;
-      if (area != null) _searchArea = area;
-      if (category != null) _searchCategory = category;
+      if (action == 1) _searchText = text;
+      if (action == 2) _searchArea = area;
+      if (action == 3) _searchCategory = category;
+      if (action == 4) _isPublished = isPublished;
+      if (action == 5) _isHighlighted = isHighlighted;
     });
 
     postsStore.getPosts(
       sidebarStore.selectedPostType ?? PostType.article,
       searchText: _searchText,
-      searchArea: area ?? _searchArea,
-      searchCategory: category ?? _searchCategory,
+      searchArea: _searchArea,
+      searchCategory: _searchCategory,
+      isPublished: _isPublished,
+      isHighlighted: _isHighlighted,
     );
   }
 
@@ -261,6 +287,8 @@ class _PostsSectionState extends State<PostsSection> {
       _searchText = null;
       _searchArea = null;
       _searchCategory = null;
+      _isPublished = null;
+      _isHighlighted = null;
     });
 
     postsStore.getPosts(sidebarStore.selectedPostType ?? PostType.article);

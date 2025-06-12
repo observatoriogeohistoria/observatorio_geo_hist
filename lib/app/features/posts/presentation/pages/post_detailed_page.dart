@@ -193,9 +193,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
 
   void setupReactions() {
     reactions.addAll([
-      reaction((_) => fetchCategoriesStore.historyCategories, (_) => updateCategoryAndFetchPosts()),
-      reaction(
-          (_) => fetchCategoriesStore.geographyCategories, (_) => updateCategoryAndFetchPosts()),
+      reaction((_) => fetchCategoriesStore.categories, (_) => updateCategoryAndFetchPosts()),
       reaction((_) => fetchPostsStore.posts, (_) => updatePost()),
       reaction((_) => fetchCategoriesStore.state, (_) {
         if (fetchCategoriesStore.state is FetchCategoriesErrorState) {
@@ -215,14 +213,14 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
         fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
     postNotifier.value = fetchPostsStore.getPostById(widget.postId);
 
-    if (categoryNotifier.value != null) fetchPostsStore.fetchPosts(categoryNotifier.value!);
+    // if (categoryNotifier.value != null) fetchPostsStore.fetchPosts(categoryNotifier.value!);
   }
 
   void updateCategoryAndFetchPosts() {
     categoryNotifier.value =
         fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
 
-    if (categoryNotifier.value != null) fetchPostsStore.fetchPosts(categoryNotifier.value!);
+    // if (categoryNotifier.value != null) fetchPostsStore.fetchPosts(categoryNotifier.value!);
   }
 
   void updatePost() {

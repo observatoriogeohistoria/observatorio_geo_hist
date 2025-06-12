@@ -13,6 +13,8 @@ abstract class PostsDatasource {
     String? searchText,
     PostsAreas? searchArea,
     CategoryModel? searchCategory,
+    bool? isPublished,
+    bool? isHighlighted,
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
   });
@@ -35,6 +37,8 @@ class PostsDatasourceImpl implements PostsDatasource {
     String? searchText,
     PostsAreas? searchArea,
     CategoryModel? searchCategory,
+    bool? isPublished,
+    bool? isHighlighted,
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
   }) async {
@@ -57,6 +61,14 @@ class PostsDatasourceImpl implements PostsDatasource {
       /// Filter by category if provided (simple equality filter)
       if (searchCategory != null) {
         query = query.where('categoryId', isEqualTo: searchCategory.key);
+      }
+
+      if (isPublished != null) {
+        query = query.where('isPublished', isEqualTo: isPublished);
+      }
+
+      if (isHighlighted != null) {
+        query = query.where('isHighlighted', isEqualTo: isHighlighted);
       }
 
       /// Filter by title if provided (nested equality filter)

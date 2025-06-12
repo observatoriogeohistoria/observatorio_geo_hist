@@ -13,6 +13,7 @@ class AppDropdownField<T> extends StatefulWidget {
     this.onChanged,
     this.validator,
     this.isDisabled = false,
+    this.canUnselect = false,
     super.key,
   });
 
@@ -25,6 +26,7 @@ class AppDropdownField<T> extends StatefulWidget {
   final String? Function(String?)? validator;
 
   final bool isDisabled;
+  final bool canUnselect;
 
   @override
   State<AppDropdownField<T>> createState() => _AppDropdownFieldState<T>();
@@ -32,39 +34,66 @@ class AppDropdownField<T> extends StatefulWidget {
 
 class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
   String? selectedValue;
+  List<T?> items = [];
 
   @override
   void initState() {
     super.initState();
-    selectedValue = widget.value != null ? widget.itemToString(widget.value as T) : null;
+
+    _setSelectedValue();
+    _setItems();
   }
 
   @override
   void didUpdateWidget(covariant AppDropdownField<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.value != oldWidget.value) {
-      selectedValue = widget.value != null ? widget.itemToString(widget.value as T) : null;
-    }
+
+    if (widget.value != oldWidget.value) _setSelectedValue();
+    if (widget.items != oldWidget.items) _setItems();
+  }
+
+  void _setSelectedValue() {
+    selectedValue = widget.value != null ? widget.itemToString(widget.value as T) : null;
+  }
+
+  void _setItems() {
+    items = widget.items.map((item) => item).toList();
+    if (widget.canUnselect) items = [null, ...items];
   }
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
+      isDense: true,
+      isExpanded: true,
       hint: AppBody.medium(
         text: widget.hintText,
         color: AppTheme.colors.gray,
+        notSelectable: true,
       ),
-      items: widget.items
-          .map(
-            (item) => DropdownMenuItem<String>(
-              value: widget.itemToString(item),
-              child: AppLabel.big(
-                text: widget.itemToString(item),
-                color: AppTheme.colors.darkGray,
+      items: items.map(
+        (item) {
+          if (item == null) {
+            return DropdownMenuItem<String>(
+              value: null,
+              child: AppBody.medium(
+                text: widget.hintText,
+                color: AppTheme.colors.gray,
+                notSelectable: true,
               ),
+            );
+          }
+
+          return DropdownMenuItem<String>(
+            value: widget.itemToString(item),
+            child: AppLabel.big(
+              text: widget.itemToString(item),
+              color: AppTheme.colors.darkGray,
+              notSelectable: true,
             ),
-          )
-          .toList(),
+          );
+        },
+      ).toList(),
       value: selectedValue,
       onChanged: widget.isDisabled
           ? null

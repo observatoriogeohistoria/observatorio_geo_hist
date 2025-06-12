@@ -46,11 +46,15 @@ mixin _$PostsStore on PostsStoreBase, Store {
   Future<void> getPosts(PostType type,
       {String? searchText,
       PostsAreas? searchArea,
-      CategoryModel? searchCategory}) {
+      CategoryModel? searchCategory,
+      bool? isPublished,
+      bool? isHighlighted}) {
     return _$getPostsAsyncAction.run(() => super.getPosts(type,
         searchText: searchText,
         searchArea: searchArea,
-        searchCategory: searchCategory));
+        searchCategory: searchCategory,
+        isPublished: isPublished,
+        isHighlighted: isHighlighted));
   }
 
   late final _$createOrUpdatePostAsyncAction =

@@ -30,9 +30,7 @@ class _NavbarState extends State<Navbar> {
   @override
   void initState() {
     super.initState();
-
-    fetchCategoriesStore.fetchHistoryCategories();
-    fetchCategoriesStore.fetchGeographyCategories();
+    fetchCategoriesStore.fetchCategories();
   }
 
   List<NavButtonItem> get navButtonItens {
@@ -51,7 +49,7 @@ class _NavbarState extends State<Navbar> {
       ),
       NavButtonItem(
         title: PostsAreas.history.portuguese.toUpperCase(),
-        options: fetchCategoriesStore.historyCategories
+        options: fetchCategoriesStore.categories.history
             .map(
               (category) => NavButtonItem(
                 title: category.title,
@@ -63,7 +61,7 @@ class _NavbarState extends State<Navbar> {
       ),
       NavButtonItem(
         title: PostsAreas.geography.portuguese.toUpperCase(),
-        options: fetchCategoriesStore.geographyCategories
+        options: fetchCategoriesStore.categories.geography
             .map(
               (category) => NavButtonItem(
                 title: category.title,

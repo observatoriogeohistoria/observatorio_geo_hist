@@ -34,6 +34,7 @@ class PostCard extends StatelessWidget {
     required this.post,
     required this.index,
     required this.onPublish,
+    required this.onHighlight,
     required this.onEdit,
     required this.onDelete,
     required this.canEdit,
@@ -43,6 +44,7 @@ class PostCard extends StatelessWidget {
   final PostModel post;
   final int index;
   final void Function() onPublish;
+  final void Function() onHighlight;
   final void Function() onEdit;
   final void Function() onDelete;
   final bool canEdit;
@@ -88,6 +90,17 @@ class PostCard extends StatelessWidget {
                       icon: post.isPublished ? Icons.public_off : Icons.public,
                       color: AppTheme.colors.orange,
                       onPressed: onPublish,
+                    ),
+                  ),
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  Tooltip(
+                    message: post.isHighlighted ? 'Remover dos destaques' : 'Destacar post',
+                    child: AppIconButton(
+                      icon: post.isHighlighted
+                          ? Icons.bookmark_remove_outlined
+                          : Icons.bookmark_add_outlined,
+                      color: AppTheme.colors.orange,
+                      onPressed: onHighlight,
                     ),
                   ),
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
