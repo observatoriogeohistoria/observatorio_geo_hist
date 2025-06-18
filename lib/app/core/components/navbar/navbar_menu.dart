@@ -59,7 +59,7 @@ List<Widget> buildNavbarMenu(
               : ((categorySelected?.areas.isNotEmpty ?? false) &&
                           categorySelected!.areas.first == option.area) ||
                       (option.route != null && AppRoutes.isCurrentRoute(context, option.route!))
-                  ? AppTheme.colors.lightGray
+                  ? AppTheme.colors.lighterGray
                   : null,
           textStyle: isMobile ? AppTheme.typography.headline.big : null,
           textColor: isMobile ? AppTheme.colors.white : null,

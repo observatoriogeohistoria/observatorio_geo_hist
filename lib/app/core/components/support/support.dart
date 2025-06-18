@@ -27,7 +27,7 @@ class Support extends StatelessWidget {
     ];
 
     return Container(
-      color: AppTheme.colors.lightGray,
+      color: AppTheme.colors.lighterGray,
       padding: EdgeInsets.symmetric(
         horizontal: DeviceUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.massive.verticalSpacing,

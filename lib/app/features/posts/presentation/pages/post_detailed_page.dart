@@ -19,7 +19,6 @@ import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
-import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
@@ -58,10 +57,6 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
   late final FetchCategoriesStore fetchCategoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
   late final FetchPostsStore fetchPostsStore = HomeSetup.getIt<FetchPostsStore>();
 
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
-
   List<ReactionDisposer> reactions = [];
 
   ValueNotifier<CategoryModel?> categoryNotifier = ValueNotifier(null);
@@ -69,18 +64,22 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
 
   bool error = false;
 
+  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get isTablet => DeviceUtils.isTablet(context);
+  bool get isDesktop => DeviceUtils.isDesktop(context);
+
   @override
   void initState() {
     super.initState();
 
     setupReactions();
-    updateData();
+    updateCategory();
   }
 
   @override
   void didUpdateWidget(covariant PostDetailedPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    updateData();
+    updateCategory();
   }
 
   @override
@@ -88,8 +87,10 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
     for (var dispose in reactions) {
       dispose();
     }
+
     categoryNotifier.dispose();
     postNotifier.dispose();
+
     super.dispose();
   }
 
@@ -193,38 +194,45 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
 
   void setupReactions() {
     reactions.addAll([
-      reaction((_) => fetchCategoriesStore.categories, (_) => updateCategoryAndFetchPosts()),
-      reaction((_) => fetchPostsStore.posts, (_) => updatePost()),
-      reaction((_) => fetchCategoriesStore.state, (_) {
-        if (fetchCategoriesStore.state is FetchCategoriesErrorState) {
-          setState(() => error = true);
-        }
+      reaction((_) => fetchCategoriesStore.selectedCategory, (_) {
+        updateCategory();
+      }),
+      reaction((_) => fetchCategoriesStore.categories, (_) {
+        updateCategory();
       }),
       reaction((_) => fetchPostsStore.state, (_) {
-        if (fetchPostsStore.state is FetchPostsErrorState) {
-          setState(() => error = true);
-        }
+        updatePost();
+      }),
+      reaction((_) => fetchCategoriesStore.state, (_) {
+        setState(() => error = fetchPostsStore.state is FetchPostsErrorState);
+      }),
+      reaction((_) => fetchPostsStore.state, (_) {
+        setState(() => error = fetchPostsStore.state is FetchPostsErrorState);
       }),
     ]);
   }
 
-  void updateData() {
-    categoryNotifier.value =
-        fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
-    postNotifier.value = fetchPostsStore.getPostById(widget.postId);
+  void updateCategory() {
+    final category = fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
+    if (category == null) return;
 
-    // if (categoryNotifier.value != null) fetchPostsStore.fetchPosts(categoryNotifier.value!);
-  }
+    if (categoryNotifier.value?.key != category.key) {
+      categoryNotifier.value = category;
 
-  void updateCategoryAndFetchPosts() {
-    categoryNotifier.value =
-        fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
-
-    // if (categoryNotifier.value != null) fetchPostsStore.fetchPosts(categoryNotifier.value!);
+      fetchPosts();
+      fetchCategoriesStore.setSelectedCategory(category);
+    }
   }
 
   void updatePost() {
     postNotifier.value = fetchPostsStore.getPostById(widget.postId);
     if (postNotifier.value != null) setState(() => error = false);
+  }
+
+  void fetchPosts({PostType? postType}) {
+    if (categoryNotifier.value == null) return;
+
+    fetchPostsStore.fetchPosts(categoryNotifier.value!);
+    return;
   }
 }

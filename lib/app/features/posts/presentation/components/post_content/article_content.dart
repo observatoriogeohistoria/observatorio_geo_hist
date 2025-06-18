@@ -88,7 +88,7 @@ class ArticleContent extends StatelessWidget {
                     vertical: AppTheme.dimensions.space.medium.verticalSpacing,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.colors.lightGray,
+                    color: AppTheme.colors.lighterGray,
                     borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
                   ),
                   child: ViewQuill(initialContent: article.observation),

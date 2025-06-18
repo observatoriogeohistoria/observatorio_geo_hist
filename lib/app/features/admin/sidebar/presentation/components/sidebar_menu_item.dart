@@ -53,14 +53,14 @@ class SidebarMenuItem extends StatelessWidget {
             child: InkWell(
               onTap: onItemClicked,
               mouseCursor: SystemMouseCursors.click,
-              hoverColor: isCollapsed ? Colors.transparent : AppTheme.colors.lightGray,
+              hoverColor: isCollapsed ? Colors.transparent : AppTheme.colors.lighterGray,
               borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
               child: isCollapsed
                   ? icon
                   : Container(
                       padding: EdgeInsets.all(AppTheme.dimensions.space.medium.scale),
                       decoration: BoxDecoration(
-                        color: itemIsSelected ? AppTheme.colors.lightGray : Colors.transparent,
+                        color: itemIsSelected ? AppTheme.colors.lighterGray : Colors.transparent,
                         borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
                       ),
                       child: Row(

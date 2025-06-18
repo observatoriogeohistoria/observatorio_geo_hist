@@ -62,7 +62,7 @@ class _GeoensineNavbarState extends State<GeoensineNavbar> {
                   menuChildren: const [],
                   backgroundColor:
                       (item.route != null && AppRoutes.isCurrentRoute(context, item.route!))
-                          ? AppTheme.colors.lightGray
+                          ? AppTheme.colors.lighterGray
                           : null,
                   textStyle: isMobile ? AppTheme.typography.headline.big : null,
                   textColor: isMobile ? AppTheme.colors.white : null,

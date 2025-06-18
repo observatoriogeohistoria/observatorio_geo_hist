@@ -30,7 +30,7 @@ class AppCard extends StatefulWidget {
 class _AppCardState extends State<AppCard> {
   bool isHovered = false;
 
-  BorderSide get border => BorderSide(color: widget.borderColor ?? AppTheme.colors.lightGray);
+  BorderSide get border => BorderSide(color: widget.borderColor ?? AppTheme.colors.lighterGray);
 
   @override
   Widget build(BuildContext context) {

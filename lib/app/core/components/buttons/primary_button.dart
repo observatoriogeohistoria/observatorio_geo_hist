@@ -79,7 +79,7 @@ class PrimaryButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (isDisabled) {
-            return AppTheme.colors.lightGray;
+            return AppTheme.colors.lighterGray;
           }
           if (states.contains(WidgetState.hovered)) {
             return AppTheme.colors.orange.withValues(alpha: 0.8);

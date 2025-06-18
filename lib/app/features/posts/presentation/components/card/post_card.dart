@@ -16,12 +16,17 @@ class PostCard extends StatefulWidget {
     required this.category,
     required this.post,
     required this.index,
+    required this.backgroundColor,
+    required this.borderColor,
     super.key,
   });
 
   final CategoryModel category;
   final PostModel post;
   final int index;
+
+  final Color backgroundColor;
+  final Color borderColor;
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -34,7 +39,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    BorderSide border = BorderSide(color: AppTheme.colors.lightGray);
+    BorderSide border = BorderSide(color: widget.borderColor);
 
     return AppMouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
@@ -45,7 +50,7 @@ class _PostCardState extends State<PostCard> {
         transform: isHovered ? (Matrix4.identity()..scale(1.02)) : Matrix4.identity(),
         padding: EdgeInsets.all(AppTheme.dimensions.space.medium.horizontalSpacing),
         decoration: BoxDecoration(
-          color: isHovered ? AppTheme.colors.white : null,
+          color: isHovered ? widget.backgroundColor : null,
           borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
           border: isHovered
               ? Border(

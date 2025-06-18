@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/empty_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
@@ -17,9 +14,9 @@ import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/card/post_card.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/header/actions_header.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/header/category_header.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/posts_section_list.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/fetch_posts_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -42,16 +39,17 @@ class _PostsPageState extends State<PostsPage> {
   late final FetchCategoriesStore fetchCategoriesStore = PostsSetup.getIt<FetchCategoriesStore>();
   late final FetchPostsStore fetchPostsStore = PostsSetup.getIt<FetchPostsStore>();
 
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
+  final scrollController = ScrollController();
 
   List<ReactionDisposer> reactions = [];
   ValueNotifier<CategoryModel?> categoryNotifier = ValueNotifier(null);
 
   String? searchText;
-
   bool error = false;
+
+  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get isTablet => DeviceUtils.isTablet(context);
+  bool get isDesktop => DeviceUtils.isDesktop(context);
 
   @override
   void initState() {
@@ -84,6 +82,7 @@ class _PostsPageState extends State<PostsPage> {
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
+        controller: scrollController,
         slivers: [
           const SliverToBoxAdapter(child: Navbar()),
           ValueListenableBuilder<CategoryModel?>(
@@ -124,7 +123,7 @@ class _PostsPageState extends State<PostsPage> {
           );
         }
 
-        final posts = fetchPostsStore.posts;
+        final posts = fetchPostsStore.postsByType;
         final numberOfPostsTypes = fetchCategoriesStore.selectedCategory?.postsTypes.length ?? 0;
 
         return SizedBox(
@@ -132,19 +131,16 @@ class _PostsPageState extends State<PostsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
               ActionsHeader(
                 category: category,
                 searchText: searchText,
                 onTextChanged: (text) {
                   searchText = text;
-                  // fetchPostsStore.fetchPosts(category, searchText: text);
+                  fetchPosts();
                 },
               ),
-              SizedBox(
-                height: isMobile
-                    ? AppTheme.dimensions.space.huge.verticalSpacing
-                    : AppTheme.dimensions.space.gigantic.verticalSpacing,
-              ),
+              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
               if (posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
               if (posts.isNotEmpty)
                 // isMobile
@@ -171,61 +167,14 @@ class _PostsPageState extends State<PostsPage> {
                 //         },
                 //       )
                 //     :
-                Column(
-                  children: [
-                    for (final entry in posts.entries)
-                      Column(
-                        children: [
-                          if (numberOfPostsTypes > 1)
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: AppTheme.dimensions.space.massive.horizontalSpacing,
-                                vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-                              ),
-                              width: double.infinity,
-                              color: AppTheme.colors.gray,
-                              child: Center(
-                                child: AppHeadline.big(
-                                  text: entry.key.portuguese,
-                                  color: AppTheme.colors.white,
-                                ),
-                              ),
-                            ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: DeviceUtils.getPageHorizontalPadding(context),
-                              vertical: AppTheme.dimensions.space.huge.verticalSpacing,
-                            ),
-                            child: StaggeredGrid.count(
-                              crossAxisCount: isTablet ? 2 : 3,
-                              mainAxisSpacing: AppTheme.dimensions.space.gigantic.verticalSpacing,
-                              crossAxisSpacing: AppTheme.dimensions.space.massive.horizontalSpacing,
-                              children: [
-                                for (final post in entry.value)
-                                  PostCard(
-                                    category: category,
-                                    post: post,
-                                    index: entry.value.indexOf(post),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                          PrimaryButton.big(
-                            text: 'Ver mais',
-                            onPressed: () => fetchPosts(postType: entry.key),
-                            isDisabled: state is FetchPostsLoadingState && state.isRefreshing,
-                          ),
-                          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                        ],
-                      ),
-                  ],
+                PostsSectionList(
+                  posts: posts,
+                  numberOfPostsTypes: numberOfPostsTypes,
+                  category: category,
+                  hasMorePosts: (type) => fetchPostsStore.hasMore[type] ?? false,
+                  loadMorePosts: (type) => fetchPosts(postType: type),
+                  loadMorePostsIsDisabled: state is FetchPostsLoadingState && state.isRefreshing,
                 ),
-              SizedBox(
-                height: isMobile
-                    ? AppTheme.dimensions.space.huge.verticalSpacing
-                    : AppTheme.dimensions.space.gigantic.verticalSpacing,
-              ),
             ],
           ),
         );
@@ -266,12 +215,12 @@ class _PostsPageState extends State<PostsPage> {
     if (categoryNotifier.value == null) return;
 
     if (postType != null) {
-      fetchPostsStore.fetchPosts(categoryNotifier.value!, postType, searchText: searchText);
+      fetchPostsStore.fetchPostsByType(categoryNotifier.value!, postType, searchText: searchText);
       return;
     }
 
     for (final postType in (categoryNotifier.value?.postsTypes ?? [])) {
-      fetchPostsStore.fetchPosts(categoryNotifier.value!, postType, searchText: searchText);
+      fetchPostsStore.fetchPostsByType(categoryNotifier.value!, postType, searchText: searchText);
     }
   }
 }

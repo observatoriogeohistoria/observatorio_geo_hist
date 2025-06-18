@@ -72,7 +72,7 @@ class _SigninPageState extends State<SigninPage> {
     bool isTablet = DeviceUtils.isTablet(context);
 
     return Scaffold(
-      backgroundColor: AppTheme.colors.lightGray,
+      backgroundColor: AppTheme.colors.lighterGray,
       body: SizedBox(
         width: size.width,
         child: Observer(builder: (context) {

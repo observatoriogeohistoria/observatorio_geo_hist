@@ -23,7 +23,7 @@ class PageErrorContent extends StatelessWidget {
           Icon(
             Icons.error,
             size: 100.scale,
-            color: AppTheme.colors.lightGray,
+            color: AppTheme.colors.lighterGray,
           ),
           SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
           AppHeadline.big(
