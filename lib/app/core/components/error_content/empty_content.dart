@@ -28,6 +28,7 @@ class EmptyContent extends StatelessWidget {
           SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
           AppTitle.big(
             text: 'Hmmm, parece que não há nada por aqui',
+            textAlign: TextAlign.center,
             color: AppTheme.colors.gray,
           ),
         ],

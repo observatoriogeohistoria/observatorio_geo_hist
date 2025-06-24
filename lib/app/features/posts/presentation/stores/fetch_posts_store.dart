@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
@@ -16,24 +15,38 @@ abstract class FetchPostsStoreBase with Store {
   FetchPostsStoreBase(this._repository);
 
   @observable
+  FetchPostsState state = FetchPostsInitialState();
+
+  @observable
   ObservableMap<PostType, List<PostModel>> postsByType = ObservableMap<PostType, List<PostModel>>();
 
   @observable
-  ObservableList<PostModel> posts = ObservableList<PostModel>();
+  Observable<PostModel>? selectedPost;
 
   @observable
   Map<PostType, bool> hasMore = {for (PostType type in PostType.values) type: true};
 
-  @observable
-  FetchPostsState state = FetchPostsInitialState();
+  Map<PostType, DocumentSnapshot?> _lastDocument = {
+    for (PostType type in PostType.values) type: null
+  };
 
   CategoryModel? _lastCategory;
 
   String? _lastSearchText;
 
-  Map<PostType, DocumentSnapshot?> _lastDocument = {
-    for (PostType type in PostType.values) type: null
-  };
+  @action
+  void reset() {
+    postsByType.clear();
+    selectedPost = null;
+
+    state = FetchPostsInitialState();
+
+    _lastDocument = {for (PostType type in PostType.values) type: null};
+    hasMore = {for (PostType type in PostType.values) type: true};
+
+    _lastCategory = null;
+    _lastSearchText = null;
+  }
 
   @action
   Future<void> fetchPostsByType(
@@ -80,24 +93,19 @@ abstract class FetchPostsStoreBase with Store {
   }
 
   @action
-  Future<void> fetchPosts(CategoryModel category) async {
+  Future<void> fetchPostById(String postId) async {
     state = FetchPostsLoadingState(isRefreshing: state is! FetchPostsInitialState);
 
-    final result = await _repository.fetchPosts(category);
+    final result = await _repository.fetchPostById(postId);
 
     result.fold(
       (failure) {
         state = FetchPostsErrorState(failure.message);
       },
-      (paginatedPosts) {
-        posts = paginatedPosts.posts.asObservable();
+      (post) {
+        selectedPost = Observable<PostModel>(post);
         state = FetchPostsSuccessState();
       },
     );
-  }
-
-  PostModel? getPostById(String id) {
-    final post = posts.firstWhereOrNull((element) => element.id == id);
-    return post;
   }
 }

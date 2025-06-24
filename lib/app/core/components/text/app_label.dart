@@ -7,6 +7,7 @@ class AppLabel extends StatelessWidget {
     required this.color,
     this.textAlign = TextAlign.start,
     this.notSelectable = false,
+    this.decoration,
     super.key,
   }) : size = TypographySize.small;
 
@@ -15,6 +16,7 @@ class AppLabel extends StatelessWidget {
     required this.color,
     this.textAlign = TextAlign.start,
     this.notSelectable = false,
+    this.decoration,
     super.key,
   }) : size = TypographySize.medium;
 
@@ -23,6 +25,7 @@ class AppLabel extends StatelessWidget {
     required this.color,
     this.textAlign = TextAlign.start,
     this.notSelectable = false,
+    this.decoration,
     super.key,
   }) : size = TypographySize.big;
 
@@ -31,6 +34,7 @@ class AppLabel extends StatelessWidget {
   final TextAlign textAlign;
   final TypographySize size;
   final bool notSelectable;
+  final TextDecoration? decoration;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +57,7 @@ class AppLabel extends StatelessWidget {
             text,
             textAlign: textAlign,
             style: textStyle.copyWith(
+              decoration: decoration,
               color: color,
             ),
           )
@@ -60,6 +65,7 @@ class AppLabel extends StatelessWidget {
             text,
             textAlign: textAlign,
             style: textStyle.copyWith(
+              decoration: decoration,
               color: color,
             ),
           );

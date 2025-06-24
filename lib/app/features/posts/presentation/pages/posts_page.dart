@@ -141,32 +141,11 @@ class _PostsPageState extends State<PostsPage> {
                 },
               ),
               SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-              if (posts.isEmpty) const Center(child: EmptyContent(isSliver: false)),
+              if (posts.isEmpty) ...[
+                const Center(child: EmptyContent(isSliver: false)),
+                SizedBox(height: AppTheme.dimensions.space.massive.verticalSpacing),
+              ],
               if (posts.isNotEmpty)
-                // isMobile
-                //     ? ListView.separated(
-                //         physics: const NeverScrollableScrollPhysics(),
-                //         shrinkWrap: true,
-                //         separatorBuilder: (context, index) {
-                //           return Container(
-                //             margin: EdgeInsets.symmetric(
-                //               vertical: AppTheme.dimensions.space.large.verticalSpacing,
-                //             ),
-                //             child: AppDivider(
-                //               color: AppTheme.colors.gray.withValues(alpha: 0.2),
-                //             ),
-                //           );
-                //         },
-                //         itemCount: posts.length,
-                //         itemBuilder: (context, index) {
-                //           return PostCard(
-                //             category: category,
-                //             post: posts[index],
-                //             index: index,
-                //           );
-                //         },
-                //       )
-                //     :
                 PostsSectionList(
                   posts: posts,
                   numberOfPostsTypes: numberOfPostsTypes,
@@ -206,6 +185,7 @@ class _PostsPageState extends State<PostsPage> {
     if (categoryNotifier.value?.key != category.key) {
       categoryNotifier.value = category;
 
+      fetchPostsStore.reset();
       fetchPosts();
       fetchCategoriesStore.setSelectedCategory(category);
     }
@@ -219,7 +199,8 @@ class _PostsPageState extends State<PostsPage> {
       return;
     }
 
-    for (final postType in (categoryNotifier.value?.postsTypes ?? [])) {
+    final postTypes = categoryNotifier.value?.postsTypes ?? [];
+    for (final postType in postTypes) {
       fetchPostsStore.fetchPostsByType(categoryNotifier.value!, postType, searchText: searchText);
     }
   }

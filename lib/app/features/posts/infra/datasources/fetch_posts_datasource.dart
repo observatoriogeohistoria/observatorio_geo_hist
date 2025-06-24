@@ -3,7 +3,6 @@ import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/log
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/paginated/paginated_posts.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/features/posts/infra/errors/exceptions.dart';
 
 abstract class FetchPostsDatasource {
   Future<PaginatedPosts> fetchPosts(
@@ -13,6 +12,7 @@ abstract class FetchPostsDatasource {
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
   });
+  Future<PostModel> fetchPostById(String postId);
 }
 
 class FetchPostsDatasourceImpl implements FetchPostsDatasource {
@@ -70,6 +70,7 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
       final posts = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         final fromJson = PostModel.fromJson(data);
+
         return fromJson.copyWith(category: category);
       }).toList();
 
@@ -81,7 +82,24 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
       );
     } catch (exception) {
       _loggerService.error('Error fetching posts: $exception');
-      throw const FetchPostsException();
+      rethrow;
+    }
+  }
+
+  @override
+  Future<PostModel> fetchPostById(String postId) async {
+    try {
+      Query query =
+          _firestore.collectionGroup('category_posts').where('id', isEqualTo: postId).limit(1);
+
+      final snapshot = await query.get();
+      if (snapshot.docs.isEmpty) throw Exception('Post not found');
+
+      final data = snapshot.docs.first.data() as Map<String, dynamic>;
+      return PostModel.fromJson(data);
+    } catch (exception) {
+      _loggerService.error('Error fetching post by id: $exception');
+      rethrow;
     }
   }
 }

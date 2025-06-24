@@ -8,3 +8,12 @@ class FetchTeamFailure extends Failure {
   @override
   List<Object> get props => [message];
 }
+
+class FetchHighlightsFailure extends Failure {
+  const FetchHighlightsFailure({
+    String? message,
+  }) : super("Erro ao buscar destaque${message != null ? ": $message" : ""}");
+
+  @override
+  List<Object> get props => [message];
+}

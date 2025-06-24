@@ -30,10 +30,12 @@ class PostsSectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = DeviceUtils.isMobile(context);
     final isTablet = DeviceUtils.isTablet(context);
 
     return ListView.builder(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: posts.entries.length,
       itemBuilder: (context, index) {
         final entry = posts.entries.elementAt(index);
@@ -66,7 +68,11 @@ class PostsSectionList extends StatelessWidget {
                   vertical: AppTheme.dimensions.space.huge.verticalSpacing,
                 ),
                 child: StaggeredGrid.count(
-                  crossAxisCount: isTablet ? 2 : 3,
+                  crossAxisCount: isMobile
+                      ? 1
+                      : isTablet
+                          ? 2
+                          : 3,
                   mainAxisSpacing: AppTheme.dimensions.space.gigantic.verticalSpacing,
                   crossAxisSpacing: AppTheme.dimensions.space.massive.horizontalSpacing,
                   children: [

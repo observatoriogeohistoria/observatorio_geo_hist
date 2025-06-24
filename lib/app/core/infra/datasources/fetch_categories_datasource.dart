@@ -32,6 +32,7 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
         final data = doc.data();
         final category = CategoryModel.fromJson(data);
         final types = await _fetchPostTypesForCategory(category.key);
+
         return category.copyWith(
           areas: [PostsAreas.history],
           postsTypes: types,
@@ -42,6 +43,7 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
         final data = doc.data();
         final category = CategoryModel.fromJson(data);
         final types = await _fetchPostTypesForCategory(category.key);
+
         return category.copyWith(
           areas: [PostsAreas.geography],
           postsTypes: types,
@@ -67,6 +69,7 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
       final snapshot = await _firestore
           .collectionGroup('category_posts')
           .where('categoryId', isEqualTo: categoryId)
+          .where('isPublished', isEqualTo: true)
           .get();
 
       final types = snapshot.docs

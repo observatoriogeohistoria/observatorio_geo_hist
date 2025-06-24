@@ -225,14 +225,14 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
   }
 
   void updatePost() {
-    postNotifier.value = fetchPostsStore.getPostById(widget.postId);
+    postNotifier.value = fetchPostsStore.selectedPost?.value;
     if (postNotifier.value != null) setState(() => error = false);
   }
 
   void fetchPosts({PostType? postType}) {
     if (categoryNotifier.value == null) return;
 
-    fetchPostsStore.fetchPosts(categoryNotifier.value!);
+    fetchPostsStore.fetchPostById(widget.postId);
     return;
   }
 }

@@ -13,6 +13,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -25,12 +26,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final FetchTeamStore fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
+  late final FetchHighlightsStore fetchHighlightsStore = HomeSetup.getIt<FetchHighlightsStore>();
 
   @override
   void initState() {
     super.initState();
 
     fetchTeamStore.fetchTeam();
+    fetchHighlightsStore.fetchHighlights();
   }
 
   @override

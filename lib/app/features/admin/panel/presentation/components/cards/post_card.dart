@@ -75,6 +75,14 @@ class PostCard extends StatelessWidget {
                     text: post.isPublished ? 'Publicado' : 'Não Publicado',
                     color: post.isPublished ? AppTheme.colors.green : AppTheme.colors.red,
                   ),
+                  if (post.isHighlighted) ...[
+                    SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                    AppLabel.medium(
+                      text: 'DESTAQUE',
+                      color: AppTheme.colors.gray,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ],
                 ],
               ),
             ),
