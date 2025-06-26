@@ -39,7 +39,6 @@ class DocumentContent extends StatelessWidget {
               children: [
                 if (document.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: document.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),

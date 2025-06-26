@@ -10,7 +10,6 @@ import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
@@ -36,26 +35,22 @@ class PostsPage extends StatefulWidget {
 }
 
 class _PostsPageState extends State<PostsPage> {
-  late final FetchCategoriesStore fetchCategoriesStore = PostsSetup.getIt<FetchCategoriesStore>();
-  late final FetchPostsStore fetchPostsStore = PostsSetup.getIt<FetchPostsStore>();
+  late final _fetchCategoriesStore = PostsSetup.getIt<FetchCategoriesStore>();
+  late final _fetchPostsStore = PostsSetup.getIt<FetchPostsStore>();
 
-  final scrollController = ScrollController();
+  List<ReactionDisposer> _reactions = [];
 
-  List<ReactionDisposer> reactions = [];
-  ValueNotifier<CategoryModel?> categoryNotifier = ValueNotifier(null);
+  final _scrollController = ScrollController();
+  final ValueNotifier<CategoryModel?> _categoryNotifier = ValueNotifier(null);
 
-  String? searchText;
-  bool error = false;
-
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
+  String? _searchText;
+  bool _error = false;
 
   @override
   void initState() {
     super.initState();
 
-    setupReactions();
+    _setupReactions();
     updateCategory();
   }
 
@@ -67,12 +62,12 @@ class _PostsPageState extends State<PostsPage> {
 
   @override
   void dispose() {
-    for (final disposer in reactions) {
+    for (final disposer in _reactions) {
       disposer();
     }
 
-    fetchCategoriesStore.setSelectedCategory(null);
-    categoryNotifier.dispose();
+    _fetchCategoriesStore.setSelectedCategory(null);
+    _categoryNotifier.dispose();
 
     super.dispose();
   }
@@ -82,13 +77,13 @@ class _PostsPageState extends State<PostsPage> {
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
-        controller: scrollController,
+        controller: _scrollController,
         slivers: [
           const SliverToBoxAdapter(child: Navbar()),
           ValueListenableBuilder<CategoryModel?>(
-            valueListenable: categoryNotifier,
+            valueListenable: _categoryNotifier,
             builder: (context, category, child) {
-              if (error) return const PageErrorContent(isSliver: true);
+              if (_error) return const PageErrorContent(isSliver: true);
               if (category == null) return const LoadingContent(isSliver: true);
 
               return SliverToBoxAdapter(
@@ -112,7 +107,7 @@ class _PostsPageState extends State<PostsPage> {
   Widget _buildPostsSection(CategoryModel category) {
     return Observer(
       builder: (context) {
-        final state = fetchPostsStore.state;
+        final state = _fetchPostsStore.state;
 
         if (state is FetchPostsLoadingState && !state.isRefreshing) {
           return Column(
@@ -123,8 +118,8 @@ class _PostsPageState extends State<PostsPage> {
           );
         }
 
-        final posts = fetchPostsStore.postsByType;
-        final numberOfPostsTypes = fetchCategoriesStore.selectedCategory?.postsTypes.length ?? 0;
+        final posts = _fetchPostsStore.postsByType;
+        final numberOfPostsTypes = _fetchCategoriesStore.selectedCategory?.postsTypes.length ?? 0;
 
         return SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -134,9 +129,9 @@ class _PostsPageState extends State<PostsPage> {
               SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
               ActionsHeader(
                 category: category,
-                searchText: searchText,
+                searchText: _searchText,
                 onTextChanged: (text) {
-                  searchText = text;
+                  _searchText = text;
                   fetchPosts();
                 },
               ),
@@ -150,7 +145,7 @@ class _PostsPageState extends State<PostsPage> {
                   posts: posts,
                   numberOfPostsTypes: numberOfPostsTypes,
                   category: category,
-                  hasMorePosts: (type) => fetchPostsStore.hasMore[type] ?? false,
+                  hasMorePosts: (type) => _fetchPostsStore.hasMore[type] ?? false,
                   loadMorePosts: (type) => fetchPosts(postType: type),
                   loadMorePostsIsDisabled: state is FetchPostsLoadingState && state.isRefreshing,
                 ),
@@ -161,47 +156,49 @@ class _PostsPageState extends State<PostsPage> {
     );
   }
 
-  void setupReactions() {
-    reactions = [
-      reaction((_) => fetchCategoriesStore.selectedCategory, (_) {
+  void _setupReactions() {
+    _reactions = [
+      reaction((_) => _fetchCategoriesStore.selectedCategory, (_) {
         updateCategory();
       }),
-      reaction((_) => fetchCategoriesStore.categories, (_) {
+      reaction((_) => _fetchCategoriesStore.categories, (_) {
         updateCategory();
       }),
-      reaction((_) => fetchCategoriesStore.state, (_) {
-        setState(() => error = fetchCategoriesStore.state is FetchCategoriesErrorState);
+      reaction((_) => _fetchCategoriesStore.state, (_) {
+        setState(() => _error = _fetchCategoriesStore.state is FetchCategoriesErrorState);
       }),
-      reaction((_) => fetchPostsStore.state, (_) {
-        setState(() => error = fetchPostsStore.state is FetchPostsErrorState);
+      reaction((_) => _fetchPostsStore.state, (_) {
+        setState(() => _error = _fetchPostsStore.state is FetchPostsErrorState);
       }),
     ];
   }
 
   void updateCategory() {
-    final category = fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
+    final category = _fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
     if (category == null) return;
 
-    if (categoryNotifier.value?.key != category.key) {
-      categoryNotifier.value = category;
+    if (_categoryNotifier.value?.key != category.key) {
+      _categoryNotifier.value = category;
 
-      fetchPostsStore.reset();
+      _fetchPostsStore.reset();
       fetchPosts();
-      fetchCategoriesStore.setSelectedCategory(category);
+      _fetchCategoriesStore.setSelectedCategory(category);
     }
   }
 
   void fetchPosts({PostType? postType}) {
-    if (categoryNotifier.value == null) return;
+    if (_categoryNotifier.value == null) return;
 
     if (postType != null) {
-      fetchPostsStore.fetchPostsByType(categoryNotifier.value!, postType, searchText: searchText);
+      _fetchPostsStore.fetchPostsByType(_categoryNotifier.value!, postType,
+          searchText: _searchText);
       return;
     }
 
-    final postTypes = categoryNotifier.value?.postsTypes ?? [];
+    final postTypes = _categoryNotifier.value?.postsTypes ?? [];
     for (final postType in postTypes) {
-      fetchPostsStore.fetchPostsByType(categoryNotifier.value!, postType, searchText: searchText);
+      _fetchPostsStore.fetchPostsByType(_categoryNotifier.value!, postType,
+          searchText: _searchText);
     }
   }
 }

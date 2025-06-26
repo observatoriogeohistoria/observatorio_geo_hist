@@ -19,7 +19,6 @@ import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/academic_production_content.dart';
@@ -54,42 +53,38 @@ class PostDetailedPage extends StatefulWidget {
 }
 
 class _PostDetailedPageState extends State<PostDetailedPage> {
-  late final FetchCategoriesStore fetchCategoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
-  late final FetchPostsStore fetchPostsStore = HomeSetup.getIt<FetchPostsStore>();
+  late final _fetchCategoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
+  late final _fetchPostsStore = HomeSetup.getIt<FetchPostsStore>();
 
-  List<ReactionDisposer> reactions = [];
+  List<ReactionDisposer> _reactions = [];
 
-  ValueNotifier<CategoryModel?> categoryNotifier = ValueNotifier(null);
-  ValueNotifier<PostModel?> postNotifier = ValueNotifier(null);
+  final ValueNotifier<CategoryModel?> _categoryNotifier = ValueNotifier(null);
+  final ValueNotifier<PostModel?> _postNotifier = ValueNotifier(null);
 
-  bool error = false;
-
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
+  bool _error = false;
 
   @override
   void initState() {
     super.initState();
 
-    setupReactions();
-    updateCategory();
+    _setupReactions();
+    _updateCategory();
   }
 
   @override
   void didUpdateWidget(covariant PostDetailedPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    updateCategory();
+    _updateCategory();
   }
 
   @override
   void dispose() {
-    for (var dispose in reactions) {
+    for (var dispose in _reactions) {
       dispose();
     }
 
-    categoryNotifier.dispose();
-    postNotifier.dispose();
+    _categoryNotifier.dispose();
+    _postNotifier.dispose();
 
     super.dispose();
   }
@@ -102,9 +97,9 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
         slivers: [
           const SliverToBoxAdapter(child: Navbar()),
           ValueListenableBuilder<PostModel?>(
-            valueListenable: postNotifier,
+            valueListenable: _postNotifier,
             builder: (context, post, child) {
-              if (error) return const PageErrorContent(isSliver: true);
+              if (_error) return const PageErrorContent(isSliver: true);
               if (post == null) return const LoadingContent(isSliver: true);
 
               return _buildPostContent(context, post);
@@ -192,47 +187,47 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
     return SliverToBoxAdapter(child: content);
   }
 
-  void setupReactions() {
-    reactions.addAll([
-      reaction((_) => fetchCategoriesStore.selectedCategory, (_) {
-        updateCategory();
+  void _setupReactions() {
+    _reactions = [
+      reaction((_) => _fetchCategoriesStore.selectedCategory, (_) {
+        _updateCategory();
       }),
-      reaction((_) => fetchCategoriesStore.categories, (_) {
-        updateCategory();
+      reaction((_) => _fetchCategoriesStore.categories, (_) {
+        _updateCategory();
       }),
-      reaction((_) => fetchPostsStore.state, (_) {
-        updatePost();
+      reaction((_) => _fetchPostsStore.state, (_) {
+        _updatePost();
       }),
-      reaction((_) => fetchCategoriesStore.state, (_) {
-        setState(() => error = fetchPostsStore.state is FetchPostsErrorState);
+      reaction((_) => _fetchCategoriesStore.state, (_) {
+        setState(() => _error = _fetchPostsStore.state is FetchPostsErrorState);
       }),
-      reaction((_) => fetchPostsStore.state, (_) {
-        setState(() => error = fetchPostsStore.state is FetchPostsErrorState);
+      reaction((_) => _fetchPostsStore.state, (_) {
+        setState(() => _error = _fetchPostsStore.state is FetchPostsErrorState);
       }),
-    ]);
+    ];
   }
 
-  void updateCategory() {
-    final category = fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
+  void _updateCategory() {
+    final category = _fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
     if (category == null) return;
 
-    if (categoryNotifier.value?.key != category.key) {
-      categoryNotifier.value = category;
+    if (_categoryNotifier.value?.key != category.key) {
+      _categoryNotifier.value = category;
 
-      fetchPosts();
-      fetchCategoriesStore.setSelectedCategory(category);
+      _fetchPost();
+      _fetchCategoriesStore.setSelectedCategory(category);
     }
   }
 
-  void updatePost() {
-    postNotifier.value = fetchPostsStore.selectedPost?.value;
-    if (postNotifier.value != null) setState(() => error = false);
+  void _updatePost() {
+    _postNotifier.value = _fetchPostsStore.selectedPost?.value;
+    if (_postNotifier.value != null) setState(() => _error = false);
   }
 
-  void fetchPosts({PostType? postType}) {
-    if (categoryNotifier.value == null) return;
+  void _fetchPost() {
+    if (_categoryNotifier.value == null) return;
 
-    fetchPostsStore.fetchPostById(widget.postId);
+    _fetchPostsStore.fetchPostById(widget.postId);
     return;
   }
 }

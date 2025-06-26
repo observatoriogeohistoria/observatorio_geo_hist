@@ -27,35 +27,31 @@ class TeamMemberPage extends StatefulWidget {
 }
 
 class _TeamMemberPageState extends State<TeamMemberPage> {
-  late final FetchTeamStore fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
+  late final _fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
 
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
-
-  List<ReactionDisposer> reactions = [];
-  ValueNotifier<TeamMemberModel?> teamMemberNotifier = ValueNotifier(null);
+  List<ReactionDisposer> _reactions = [];
+  final ValueNotifier<TeamMemberModel?> _teamMemberNotifier = ValueNotifier(null);
 
   @override
   void initState() {
     super.initState();
 
-    setupReactions();
-    updateData();
+    _setupReactions();
+    _updateData();
   }
 
   @override
   void didUpdateWidget(covariant TeamMemberPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    updateData();
+    _updateData();
   }
 
   @override
   void dispose() {
-    for (final disposer in reactions) {
+    for (final disposer in _reactions) {
       disposer();
     }
-    teamMemberNotifier.dispose();
+    _teamMemberNotifier.dispose();
     super.dispose();
   }
 
@@ -67,10 +63,10 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
         slivers: [
           const SliverToBoxAdapter(child: Navbar()),
           ValueListenableBuilder<TeamMemberModel?>(
-            valueListenable: teamMemberNotifier,
+            valueListenable: _teamMemberNotifier,
             builder: (context, member, child) {
               if (member == null) {
-                fetchTeamStore.fetchTeam();
+                _fetchTeamStore.fetchTeam();
                 return const LoadingContent(isSliver: true);
               }
 
@@ -131,14 +127,14 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
     );
   }
 
-  void setupReactions() {
-    reactions = [
-      reaction((_) => fetchTeamStore.team, (_) => updateData()),
+  void _setupReactions() {
+    _reactions = [
+      reaction((_) => _fetchTeamStore.team, (_) => _updateData()),
     ];
   }
 
-  void updateData() {
-    teamMemberNotifier.value = fetchTeamStore.getTeamMemberById(widget.memberId);
-    if (teamMemberNotifier.value == null) fetchTeamStore.fetchTeam();
+  void _updateData() {
+    _teamMemberNotifier.value = _fetchTeamStore.getTeamMemberById(widget.memberId);
+    if (_teamMemberNotifier.value == null) _fetchTeamStore.fetchTeam();
   }
 }

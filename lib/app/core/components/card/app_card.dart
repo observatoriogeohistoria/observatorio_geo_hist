@@ -10,6 +10,7 @@ class AppCard extends StatefulWidget {
     this.padding,
     this.margin = EdgeInsets.zero,
     this.borderColor,
+    this.borderRadius,
     this.isHover = false,
     super.key,
   });
@@ -21,6 +22,8 @@ class AppCard extends StatefulWidget {
   final EdgeInsets margin;
 
   final Color? borderColor;
+  final double? borderRadius;
+
   final bool isHover;
 
   @override
@@ -59,7 +62,8 @@ class _AppCardState extends State<AppCard> {
           margin: widget.margin,
           decoration: BoxDecoration(
             color: AppTheme.colors.white,
-            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
+            borderRadius:
+                BorderRadius.circular(widget.borderRadius ?? AppTheme.dimensions.radius.large),
             border: Border(
               top: border,
               left: border,

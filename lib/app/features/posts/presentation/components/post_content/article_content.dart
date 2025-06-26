@@ -61,7 +61,6 @@ class ArticleContent extends StatelessWidget {
           if (article.image.url?.isNotEmpty ?? false)
             AppNetworkImage(
               imageUrl: article.image.url!,
-              height: null,
             ),
           Align(
             alignment: Alignment.center,

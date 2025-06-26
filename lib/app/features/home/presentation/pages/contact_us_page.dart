@@ -22,11 +22,9 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
+  bool get _isMobile => DeviceUtils.isMobile(context);
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -63,7 +61,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                   ),
                   const AppDivider(),
                   SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                  isMobile
+                  _isMobile
                       ? Column(
                           children: [
                             _buildFields(),
@@ -98,7 +96,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
   }
 
   void _sendEmail() async {
-    if (!formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) return;
 
     String name = _nameController.text;
     String email = _emailController.text;
@@ -115,7 +113,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 
   Widget _buildFields() {
     return Form(
-      key: formKey,
+      key: _formKey,
       child: Column(
         children: [
           _buildContactField('NOME', _nameController),

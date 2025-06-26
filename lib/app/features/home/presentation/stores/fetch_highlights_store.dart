@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/repositories/fetch_highlights_repository.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_highlights_states.dart';
@@ -18,11 +19,17 @@ abstract class FetchHighlightsStoreBase with Store {
   @observable
   FetchHighlightsState state = FetchHighlightsInitialState();
 
+  @observable
+  bool highlightsDialogWasShown = false;
+
+  @observable
+  bool highlightsDialogIsOpen = false;
+
   @action
-  Future<void> fetchHighlights() async {
+  Future<void> fetchHighlights(List<CategoryModel> categories) async {
     state = FetchHighlightsLoadingState();
 
-    final result = await _repository.fetchHighlights();
+    final result = await _repository.fetchHighlights(categories);
 
     result.fold(
       (error) {
@@ -33,5 +40,16 @@ abstract class FetchHighlightsStoreBase with Store {
         state = FetchHighlightsSuccessState();
       },
     );
+  }
+
+  @action
+  void showHighlights() {
+    highlightsDialogWasShown = true;
+    highlightsDialogIsOpen = true;
+  }
+
+  @action
+  void hideHighlights() {
+    highlightsDialogIsOpen = false;
   }
 }

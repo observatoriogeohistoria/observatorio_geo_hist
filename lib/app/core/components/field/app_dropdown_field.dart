@@ -33,8 +33,8 @@ class AppDropdownField<T> extends StatefulWidget {
 }
 
 class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
-  String? selectedValue;
-  List<T?> items = [];
+  String? _selectedValue;
+  List<T?> _items = [];
 
   @override
   void initState() {
@@ -53,12 +53,12 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
   }
 
   void _setSelectedValue() {
-    selectedValue = widget.value != null ? widget.itemToString(widget.value as T) : null;
+    _selectedValue = widget.value != null ? widget.itemToString(widget.value as T) : null;
   }
 
   void _setItems() {
-    items = widget.items.map((item) => item).toList();
-    if (widget.canUnselect) items = [null, ...items];
+    _items = widget.items.map((item) => item).toList();
+    if (widget.canUnselect) _items = [null, ..._items];
   }
 
   @override
@@ -71,7 +71,7 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
         color: AppTheme.colors.gray,
         notSelectable: true,
       ),
-      items: items.map(
+      items: _items.map(
         (item) {
           if (item == null) {
             return DropdownMenuItem<String>(
@@ -94,11 +94,11 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
           );
         },
       ).toList(),
-      value: selectedValue,
+      value: _selectedValue,
       onChanged: widget.isDisabled
           ? null
           : (value) {
-              setState(() => selectedValue = value);
+              setState(() => _selectedValue = value);
               widget.onChanged?.call(value);
             },
       validator: widget.validator,

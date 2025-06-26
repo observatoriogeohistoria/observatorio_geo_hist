@@ -26,12 +26,12 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  late final AuthStore authStore = AdminSetup.getIt<AuthStore>();
+  late final _authStore = AdminSetup.getIt<AuthStore>();
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   List<ReactionDisposer> _reactions = [];
 
@@ -39,15 +39,15 @@ class _SigninPageState extends State<SigninPage> {
   void initState() {
     super.initState();
 
-    authStore.currentUser();
+    _authStore.currentUser();
 
     _reactions = [
-      reaction((_) => authStore.user, (UserModel? user) {
+      reaction((_) => _authStore.user, (UserModel? user) {
         if (user != null) {
           GoRouter.of(context).go('/admin/painel');
         }
       }),
-      reaction((_) => authStore.state, (AuthState state) {
+      reaction((_) => _authStore.state, (AuthState state) {
         if (state.loginState is LoginStateError) {
           final loginState = state.loginState as LoginStateError;
           Messenger.showError(context, loginState.failure.message);
@@ -76,7 +76,7 @@ class _SigninPageState extends State<SigninPage> {
       body: SizedBox(
         width: size.width,
         child: Observer(builder: (context) {
-          final loginState = authStore.state.loginState;
+          final loginState = _authStore.state.loginState;
 
           return Center(
             child: AppCard(
@@ -89,7 +89,7 @@ class _SigninPageState extends State<SigninPage> {
                   : EdgeInsets.zero,
               borderColor: AppTheme.colors.gray,
               child: Form(
-                key: formKey,
+                key: _formKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -101,20 +101,20 @@ class _SigninPageState extends State<SigninPage> {
                     ),
                     SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
                     AppTextField(
-                      controller: emailController,
+                      controller: _emailController,
                       labelText: 'E-MAIL',
                       hintText: 'exemplo@dominio.com',
                       validator: Validators.isValidEmail,
                     ),
                     SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
                     AppTextField(
-                      controller: passwordController,
+                      controller: _passwordController,
                       labelText: 'SENHA',
-                      obscureText: !authStore.passwordVisible,
+                      obscureText: !_authStore.passwordVisible,
                       validator: Validators.isValidPassword,
                       suffixIcon: GestureDetector(
-                        onTap: authStore.togglePasswordVisibility,
-                        child: authStore.passwordVisible
+                        onTap: _authStore.togglePasswordVisibility,
+                        child: _authStore.passwordVisible
                             ? const Icon(Icons.visibility_off)
                             : const Icon(Icons.visibility),
                       ),
@@ -131,8 +131,8 @@ class _SigninPageState extends State<SigninPage> {
                         : PrimaryButton.medium(
                             text: "ENTRAR",
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                authStore.login(emailController.text, passwordController.text);
+                              if (_formKey.currentState!.validate()) {
+                                _authStore.login(_emailController.text, _passwordController.text);
                               }
                             },
                           ),

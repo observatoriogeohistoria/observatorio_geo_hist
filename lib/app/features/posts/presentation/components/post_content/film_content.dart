@@ -39,7 +39,6 @@ class FilmContent extends StatelessWidget {
               children: [
                 if (film.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: film.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),

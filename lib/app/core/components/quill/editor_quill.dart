@@ -43,10 +43,7 @@ class _EditorQuillState extends State<EditorQuill> {
     });
   }
 
-  String _saveContent() {
-    final result = jsonEncode(_controller.document.toDelta().toJson());
-    return result;
-  }
+  String _saveContent() => jsonEncode(_controller.document.toDelta().toJson());
 
   @override
   Widget build(BuildContext context) {

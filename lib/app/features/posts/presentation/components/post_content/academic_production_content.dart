@@ -38,7 +38,6 @@ class AcademicProductionContent extends StatelessWidget {
               children: [
                 if (academicProduction.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: academicProduction.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),

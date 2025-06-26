@@ -16,10 +16,6 @@ class ManifestPage extends StatefulWidget {
 }
 
 class _ManifestPageState extends State<ManifestPage> {
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
-
   @override
   Widget build(BuildContext context) {
     SizedBox space = SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing);

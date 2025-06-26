@@ -52,7 +52,6 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      width: double.infinity,
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

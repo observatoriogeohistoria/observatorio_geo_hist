@@ -38,7 +38,6 @@ class ArtistContent extends StatelessWidget {
               children: [
                 if (artis.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: artis.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
