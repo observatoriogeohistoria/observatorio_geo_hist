@@ -50,25 +50,10 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
     });
   }
 
-  Future<void> _pickImageWeb() async {
-    setState(() => _isLoading = true);
-
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowMultiple: false,
-      allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'webm'],
-    );
-
-    if (result != null) {
-      Uint8List? fileBytes = result.files.first.bytes;
-
-      _uploadedImageBytes = fileBytes;
-      _uploadedImageName = result.files.first.name;
-
-      widget.imageUrlController.clear();
-    }
-
-    setState(() => _isLoading = false);
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -134,9 +119,24 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
     );
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  Future<void> _pickImageWeb() async {
+    setState(() => _isLoading = true);
+
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowMultiple: false,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'webm'],
+    );
+
+    if (result != null) {
+      Uint8List? fileBytes = result.files.first.bytes;
+
+      _uploadedImageBytes = fileBytes;
+      _uploadedImageName = result.files.first.name;
+
+      widget.imageUrlController.clear();
+    }
+
+    setState(() => _isLoading = false);
   }
 }

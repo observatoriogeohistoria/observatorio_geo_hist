@@ -21,18 +21,14 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  late final FetchCategoriesStore fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
+  late final _fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
 
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
+  bool get _isMobile => DeviceUtils.isMobile(context);
 
   @override
   void initState() {
     super.initState();
-
-    fetchCategoriesStore.fetchHistoryCategories();
-    fetchCategoriesStore.fetchGeographyCategories();
+    _fetchCategoriesStore.fetchCategories();
   }
 
   List<NavButtonItem> get navButtonItens {
@@ -51,7 +47,7 @@ class _NavbarState extends State<Navbar> {
       ),
       NavButtonItem(
         title: PostsAreas.history.portuguese.toUpperCase(),
-        options: fetchCategoriesStore.historyCategories
+        options: _fetchCategoriesStore.categories.history
             .map(
               (category) => NavButtonItem(
                 title: category.title,
@@ -63,7 +59,7 @@ class _NavbarState extends State<Navbar> {
       ),
       NavButtonItem(
         title: PostsAreas.geography.portuguese.toUpperCase(),
-        options: fetchCategoriesStore.geographyCategories
+        options: _fetchCategoriesStore.categories.geography
             .map(
               (category) => NavButtonItem(
                 title: category.title,
@@ -85,18 +81,18 @@ class _NavbarState extends State<Navbar> {
       padding: EdgeInsets.symmetric(
         horizontal: DeviceUtils.getPageHorizontalPadding(context),
       ),
-      height: isMobile ? MediaQuery.of(context).size.height * 0.075 : null,
+      height: _isMobile ? MediaQuery.of(context).size.height * 0.075 : null,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
             '${AppAssets.images}/logo.png',
-            width: isMobile ? null : width * 0.3,
-            height: isMobile ? double.infinity : null,
+            width: _isMobile ? null : width * 0.3,
+            height: _isMobile ? double.infinity : null,
           ),
           Observer(
             builder: (context) {
-              if (isMobile) {
+              if (_isMobile) {
                 return AppIconButton(
                   icon: Icons.menu,
                   color: AppTheme.colors.orange,
@@ -109,8 +105,8 @@ class _NavbarState extends State<Navbar> {
                 children: buildNavbarMenu(
                   context,
                   navButtonItens,
-                  fetchCategoriesStore.selectedCategory,
-                  fetchCategoriesStore.setSelectedCategory,
+                  _fetchCategoriesStore.selectedCategory,
+                  _fetchCategoriesStore.setSelectedCategory,
                 ),
               );
             },
@@ -130,7 +126,7 @@ class _NavbarState extends State<Navbar> {
       pageBuilder: (context, animation, secondaryAnimation) {
         return NavbarMobileMenu(
           navButtonItens: navButtonItens,
-          onCategorySelected: fetchCategoriesStore.setSelectedCategory,
+          onCategorySelected: _fetchCategoriesStore.setSelectedCategory,
         );
       },
     );

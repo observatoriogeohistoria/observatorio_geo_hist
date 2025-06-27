@@ -33,6 +33,12 @@ abstract class PostsStoreBase with Store {
     for (PostType type in PostType.values) type: null
   };
 
+  final Map<PostType, bool?> _lastIsPublished = {for (PostType type in PostType.values) type: null};
+
+  final Map<PostType, bool?> _lastIsHighlighted = {
+    for (PostType type in PostType.values) type: null
+  };
+
   final Map<PostType, DocumentSnapshot?> _lastDocument = {
     for (PostType type in PostType.values) type: null
   };
@@ -45,12 +51,16 @@ abstract class PostsStoreBase with Store {
     String? searchText,
     PostsAreas? searchArea,
     CategoryModel? searchCategory,
+    bool? isPublished,
+    bool? isHighlighted,
   }) async {
     if (state is CrudLoadingState) return;
 
     if (searchText != _lastSearchText[type] ||
         searchArea != _lastSearchArea[type] ||
-        searchCategory?.key != _lastSearchCategory[type]?.key) {
+        searchCategory?.key != _lastSearchCategory[type]?.key ||
+        isPublished != _lastIsPublished[type] ||
+        isHighlighted != _lastIsHighlighted[type]) {
       posts[type] = [];
       _hasMore[type] = true;
       _lastDocument[type] = null;
@@ -66,6 +76,8 @@ abstract class PostsStoreBase with Store {
       searchText: normalizedSearchText,
       searchArea: searchArea,
       searchCategory: searchCategory,
+      isPublished: isPublished,
+      isHighlighted: isHighlighted,
       startAfterDocument: _lastDocument[type],
     );
 
@@ -80,6 +92,9 @@ abstract class PostsStoreBase with Store {
         _lastSearchText[type] = normalizedSearchText;
         _lastSearchArea[type] = searchArea;
         _lastSearchCategory[type] = searchCategory;
+        _lastIsPublished[type] = isPublished;
+        _lastIsHighlighted[type] = isHighlighted;
+
         _lastDocument[type] = paginatedPosts.lastDocument;
         _hasMore[type] = paginatedPosts.hasMore;
 
@@ -128,9 +143,7 @@ abstract class PostsStoreBase with Store {
       (_) {
         posts[post.type]?.removeWhere((p) => p.id == post.id);
 
-        state = CrudSuccessState(
-          message: 'Post deletado com sucesso',
-        );
+        state = CrudSuccessState(message: 'Post deletado com sucesso');
       },
     );
   }

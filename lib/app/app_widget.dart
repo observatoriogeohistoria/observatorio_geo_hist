@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,7 +14,7 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
-  late final FetchCategoriesStore fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
+  late final _fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
 
   @override
   void initState() {
@@ -27,17 +25,15 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addObserver(this);
 
-    fetchCategoriesStore.fetchHistoryCategories();
-    fetchCategoriesStore.fetchGeographyCategories();
+    _fetchCategoriesStore.fetchCategories();
   }
 
   @override
-  Future<void> dispose() async {
+  void dispose() async {
     WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
-
-  void navigationListener() {}
 
   @override
   Widget build(BuildContext context) {

@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class PrimaryButton extends StatelessWidget {
-  const PrimaryButton.small({
+class AppTextButton extends StatefulWidget {
+  const AppTextButton.small({
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
     super.key,
   }) : size = ButtonSize.small;
 
-  const PrimaryButton.medium({
+  const AppTextButton.medium({
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
     super.key,
   }) : size = ButtonSize.medium;
 
-  const PrimaryButton.big({
+  const AppTextButton.big({
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
@@ -31,20 +32,25 @@ class PrimaryButton extends StatelessWidget {
   final bool isDisabled;
 
   @override
+  State<AppTextButton> createState() => _AppTextButtonState();
+}
+
+class _AppTextButtonState extends State<AppTextButton> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
     EdgeInsetsGeometry padding;
-    AppTitle buttonText;
-    Color buttonTextColor = isDisabled ? AppTheme.colors.gray : AppTheme.colors.white;
+    AppLabel buttonText;
+    Color buttonTextColor =
+        (widget.isDisabled || _isHovering) ? AppTheme.colors.gray : AppTheme.colors.orange;
 
-    switch (size) {
+    switch (widget.size) {
       case ButtonSize.small:
-        padding = EdgeInsets.symmetric(
-          horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
-          vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-        );
+        padding = EdgeInsets.all(AppTheme.dimensions.space.small.scale);
 
-        buttonText = AppTitle.small(
-          text: text,
+        buttonText = AppLabel.small(
+          text: widget.text,
           textAlign: TextAlign.center,
           color: buttonTextColor,
           notSelectable: true,
@@ -54,8 +60,8 @@ class PrimaryButton extends StatelessWidget {
       case ButtonSize.medium:
         padding = EdgeInsets.all(AppTheme.dimensions.space.medium.scale);
 
-        buttonText = AppTitle.medium(
-          text: text,
+        buttonText = AppLabel.medium(
+          text: widget.text,
           textAlign: TextAlign.center,
           color: buttonTextColor,
           notSelectable: true,
@@ -65,8 +71,8 @@ class PrimaryButton extends StatelessWidget {
       case ButtonSize.big:
         padding = EdgeInsets.all(AppTheme.dimensions.space.medium.scale);
 
-        buttonText = AppTitle.big(
-          text: text,
+        buttonText = AppLabel.big(
+          text: widget.text,
           textAlign: TextAlign.center,
           color: buttonTextColor,
           notSelectable: true,
@@ -75,26 +81,16 @@ class PrimaryButton extends StatelessWidget {
         break;
     }
 
-    return TextButton(
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.resolveWith((states) {
-          if (isDisabled) {
-            return AppTheme.colors.lighterGray;
-          }
-          if (states.contains(WidgetState.hovered)) {
-            return AppTheme.colors.orange.withValues(alpha: 0.8);
-          }
-          return AppTheme.colors.orange;
-        }),
-        shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
-          ),
+    return AppMouseRegion(
+      onEnter: (_) => setState(() => _isHovering = true),
+      onExit: (_) => setState(() => _isHovering = false),
+      child: GestureDetector(
+        onTap: widget.isDisabled ? null : widget.onPressed,
+        child: Padding(
+          padding: padding,
+          child: buttonText,
         ),
-        padding: WidgetStateProperty.all(padding),
       ),
-      onPressed: isDisabled ? null : onPressed,
-      child: buttonText,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/infra/repositories/fetch_categories_repository.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/united/categories_by_area.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
@@ -15,10 +16,7 @@ abstract class FetchCategoriesStoreBase with Store {
   FetchCategoriesStoreBase(this._repository);
 
   @observable
-  ObservableList<CategoryModel> historyCategories = ObservableList<CategoryModel>();
-
-  @observable
-  ObservableList<CategoryModel> geographyCategories = ObservableList<CategoryModel>();
+  CategoriesByArea categories = CategoriesByArea();
 
   @observable
   CategoryModel? selectedCategory;
@@ -27,34 +25,17 @@ abstract class FetchCategoriesStoreBase with Store {
   FetchCategoriesState state = FetchCategoriesInitialState();
 
   @action
-  Future<void> fetchHistoryCategories() async {
+  Future<void> fetchCategories() async {
     state = FetchCategoriesLoadingState();
 
-    final result = await _repository.fetchHistoryCategories();
+    final result = await _repository.fetchCategories();
 
     result.fold(
       (error) {
         state = FetchCategoriesErrorState(error.message);
       },
       (categories) {
-        historyCategories = categories.asObservable();
-        state = FetchCategoriesSuccessState();
-      },
-    );
-  }
-
-  @action
-  Future<void> fetchGeographyCategories() async {
-    state = FetchCategoriesLoadingState();
-
-    final result = await _repository.fetchGeographyCategories();
-
-    result.fold(
-      (error) {
-        state = FetchCategoriesErrorState(error.message);
-      },
-      (categories) {
-        geographyCategories = categories.asObservable();
+        this.categories = categories;
         state = FetchCategoriesSuccessState();
       },
     );
@@ -68,7 +49,9 @@ abstract class FetchCategoriesStoreBase with Store {
   CategoryModel? getCategoryByAreaAndKey(PostsAreas area, String key) {
     if (area != PostsAreas.history && area != PostsAreas.geography) return null;
 
-    final categories = area == PostsAreas.history ? historyCategories : geographyCategories;
+    final categories =
+        area == PostsAreas.history ? this.categories.history : this.categories.geography;
+
     return categories.firstWhereOrNull(
       (category) => category.areas.first == area && category.key == key,
     );

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
@@ -16,35 +15,61 @@ abstract class FetchPostsStoreBase with Store {
   FetchPostsStoreBase(this._repository);
 
   @observable
-  ObservableList<PostModel> posts = ObservableList<PostModel>();
+  FetchPostsState state = FetchPostsInitialState();
 
   @observable
-  FetchPostsState state = FetchPostsInitialState();
+  ObservableMap<PostType, List<PostModel>> postsByType = ObservableMap<PostType, List<PostModel>>();
+
+  @observable
+  Observable<PostModel>? selectedPost;
+
+  @observable
+  Map<PostType, bool> hasMore = {for (PostType type in PostType.values) type: true};
+
+  Map<PostType, DocumentSnapshot?> _lastDocument = {
+    for (PostType type in PostType.values) type: null
+  };
 
   CategoryModel? _lastCategory;
 
   String? _lastSearchText;
 
-  DocumentSnapshot? _lastDocument;
+  @action
+  void reset() {
+    postsByType.clear();
+    selectedPost = null;
+
+    state = FetchPostsInitialState();
+
+    _lastDocument = {for (PostType type in PostType.values) type: null};
+    hasMore = {for (PostType type in PostType.values) type: true};
+
+    _lastCategory = null;
+    _lastSearchText = null;
+  }
 
   @action
-  Future<void> fetchPosts(
-    CategoryModel category, {
+  Future<void> fetchPostsByType(
+    CategoryModel category,
+    PostType postType, {
     String? searchText,
   }) async {
-    if (state is FetchPostsLoadingState) return;
-
     if (category != _lastCategory || searchText != _lastSearchText) {
-      state = FetchPostsLoadingState();
-      posts.clear();
+      postsByType.clear();
 
-      _lastDocument = null;
+      hasMore = {for (PostType type in PostType.values) type: true};
+      _lastDocument = {for (PostType type in PostType.values) type: null};
     }
+
+    if (hasMore[postType] == false) return;
+
+    state = FetchPostsLoadingState(isRefreshing: state is! FetchPostsInitialState);
 
     final result = await _repository.fetchPosts(
       category,
+      postType: postType,
       searchText: searchText,
-      startAfterDocument: _lastDocument,
+      startAfterDocument: _lastDocument[postType],
     );
 
     result.fold(
@@ -52,20 +77,35 @@ abstract class FetchPostsStoreBase with Store {
         state = FetchPostsErrorState(failure.message);
       },
       (paginatedPosts) {
-        final newPosts = posts;
+        final newPosts = postsByType[postType] ?? [];
         newPosts.addAll(paginatedPosts.posts);
-        posts = newPosts.asObservable();
+
+        postsByType[postType] = newPosts.asObservable();
+        hasMore[postType] = paginatedPosts.hasMore;
 
         _lastCategory = category;
         _lastSearchText = searchText;
-        _lastDocument = paginatedPosts.lastDocument;
+        _lastDocument[postType] = paginatedPosts.lastDocument;
 
         state = FetchPostsSuccessState();
       },
     );
   }
 
-  PostModel? getPostById(String id) {
-    return posts.firstWhereOrNull((element) => element.id == id);
+  @action
+  Future<void> fetchPostById(String postId) async {
+    state = FetchPostsLoadingState(isRefreshing: state is! FetchPostsInitialState);
+
+    final result = await _repository.fetchPostById(postId);
+
+    result.fold(
+      (failure) {
+        state = FetchPostsErrorState(failure.message);
+      },
+      (post) {
+        selectedPost = Observable<PostModel>(post);
+        state = FetchPostsSuccessState();
+      },
+    );
   }
 }

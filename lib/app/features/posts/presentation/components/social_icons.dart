@@ -6,7 +6,7 @@ import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.da
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class SocialIcons extends StatefulWidget {
+class SocialIcons extends StatelessWidget {
   const SocialIcons({
     required this.post,
     super.key,
@@ -14,11 +14,6 @@ class SocialIcons extends StatefulWidget {
 
   final PostModel post;
 
-  @override
-  State<SocialIcons> createState() => _SocialIconsState();
-}
-
-class _SocialIconsState extends State<SocialIcons> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -41,9 +36,8 @@ class _SocialIconsState extends State<SocialIcons> {
       hoverColor: color,
       onTap: () {
         String currentUrl = getEncodedCurrentUrl();
-        String linkTo = link
-            .replaceAll('[TEXT]', widget.post.body?.title ?? '')
-            .replaceAll('[URL]', currentUrl);
+        String linkTo =
+            link.replaceAll('[TEXT]', post.body?.title ?? '').replaceAll('[URL]', currentUrl);
 
         openUrl(linkTo);
       },

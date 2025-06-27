@@ -58,19 +58,11 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Timer? _debounce;
 
-  void _onChangedDebounced(String value) {
-    if (widget.onChanged == null) return;
-
-    _debounce?.cancel();
-    _debounce = Timer(widget.debounceDuration, () {
-      widget.onChanged!(value);
-    });
-  }
-
   @override
   void dispose() {
     _debounce?.cancel();
     _focusNode.dispose();
+
     super.dispose();
   }
 
@@ -131,11 +123,22 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 
-  OutlineInputBorder _buildBorder(Color color) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-        borderSide: BorderSide(
-          width: AppTheme.dimensions.stroke.small,
-          color: color,
-        ),
-      );
+  OutlineInputBorder _buildBorder(Color color) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+      borderSide: BorderSide(
+        width: AppTheme.dimensions.stroke.small,
+        color: color,
+      ),
+    );
+  }
+
+  void _onChangedDebounced(String value) {
+    if (widget.onChanged == null) return;
+
+    _debounce?.cancel();
+    _debounce = Timer(widget.debounceDuration, () {
+      widget.onChanged!(value);
+    });
+  }
 }

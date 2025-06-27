@@ -21,12 +21,12 @@ class SwitchButton extends StatefulWidget {
 }
 
 class _SwitchStateButton extends State<SwitchButton> {
-  bool value = false;
+  bool _value = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    value = widget.initialValue;
+    _value = widget.initialValue;
   }
 
   @override
@@ -40,11 +40,11 @@ class _SwitchStateButton extends State<SwitchButton> {
           ),
         ),
         Switch(
-          value: value,
+          value: _value,
           onChanged: (value) {
             if (widget.isDisabled) return;
 
-            setState(() => this.value = value);
+            setState(() => this._value = value);
             widget.onChanged(value);
           },
           activeColor: AppTheme.colors.orange,

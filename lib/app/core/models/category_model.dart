@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 class CategoryModel extends Equatable {
@@ -11,6 +12,7 @@ class CategoryModel extends Equatable {
     required this.areas,
     this.hasCollaborateOption = false,
     this.numberOfPosts = 0,
+    this.postsTypes = const [],
   });
 
   final String key;
@@ -19,7 +21,9 @@ class CategoryModel extends Equatable {
   final List<PostsAreas> areas;
   final ImageModel backgroundImg;
   final bool hasCollaborateOption;
+
   final int numberOfPosts;
+  final List<PostType> postsTypes;
 
   @override
   List<Object?> get props => [
@@ -30,6 +34,7 @@ class CategoryModel extends Equatable {
         backgroundImg,
         hasCollaborateOption,
         numberOfPosts,
+        postsTypes,
       ];
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
@@ -63,6 +68,7 @@ class CategoryModel extends Equatable {
     ImageModel? backgroundImgUrl,
     bool? hasCollaborateOption,
     int? numberOfPosts,
+    List<PostType>? postsTypes,
   }) {
     return CategoryModel(
       key: key ?? this.key,
@@ -72,6 +78,7 @@ class CategoryModel extends Equatable {
       areas: areas ?? this.areas,
       hasCollaborateOption: hasCollaborateOption ?? this.hasCollaborateOption,
       numberOfPosts: numberOfPosts ?? this.numberOfPosts,
+      postsTypes: postsTypes ?? this.postsTypes,
     );
   }
 }

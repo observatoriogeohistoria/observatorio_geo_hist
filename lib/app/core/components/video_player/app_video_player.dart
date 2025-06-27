@@ -57,20 +57,6 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     super.dispose();
   }
 
-  void _togglePlayPause() {
-    setState(() {
-      _isPlaying ? _controller.pause() : _controller.play();
-      _isPlaying = !_isPlaying;
-    });
-  }
-
-  void _toggleMute() {
-    setState(() {
-      _controller.setVolume(_isMuted ? 1 : 0);
-      _isMuted = !_isMuted;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_error) return const SizedBox();
@@ -123,5 +109,19 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
         },
       ),
     );
+  }
+
+  void _togglePlayPause() {
+    setState(() {
+      _isPlaying ? _controller.pause() : _controller.play();
+      _isPlaying = !_isPlaying;
+    });
+  }
+
+  void _toggleMute() {
+    setState(() {
+      _controller.setVolume(_isMuted ? 1 : 0);
+      _isMuted = !_isMuted;
+    });
   }
 }

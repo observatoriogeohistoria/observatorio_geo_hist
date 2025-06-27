@@ -38,7 +38,6 @@ class MagazineContent extends StatelessWidget {
               children: [
                 if (magazine.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: magazine.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),

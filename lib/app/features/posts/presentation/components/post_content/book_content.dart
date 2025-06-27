@@ -38,7 +38,6 @@ class BookContent extends StatelessWidget {
               children: [
                 if (book.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: book.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),

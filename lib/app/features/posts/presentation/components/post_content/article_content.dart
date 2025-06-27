@@ -61,7 +61,6 @@ class ArticleContent extends StatelessWidget {
           if (article.image.url?.isNotEmpty ?? false)
             AppNetworkImage(
               imageUrl: article.image.url!,
-              height: null,
             ),
           Align(
             alignment: Alignment.center,
@@ -88,7 +87,7 @@ class ArticleContent extends StatelessWidget {
                     vertical: AppTheme.dimensions.space.medium.verticalSpacing,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.colors.lightGray,
+                    color: AppTheme.colors.lighterGray,
                     borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
                   ),
                   child: ViewQuill(initialContent: article.observation),

@@ -9,7 +9,7 @@ class AppNetworkImage extends StatelessWidget {
   const AppNetworkImage({
     required this.imageUrl,
     this.width = double.infinity,
-    this.height = 253,
+    this.height,
     this.radius,
     this.fit = BoxFit.cover,
     this.noPlaceholder = false,

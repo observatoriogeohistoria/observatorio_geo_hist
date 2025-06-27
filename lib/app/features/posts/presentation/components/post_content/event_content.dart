@@ -38,7 +38,6 @@ class EventContent extends StatelessWidget {
               children: [
                 if (event.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: event.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),

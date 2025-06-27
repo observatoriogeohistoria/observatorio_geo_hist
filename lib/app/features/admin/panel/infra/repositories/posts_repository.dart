@@ -20,6 +20,8 @@ abstract class PostsRepository {
     String? searchText,
     PostsAreas? searchArea,
     CategoryModel? searchCategory,
+    bool? isPublished,
+    bool? isHighlighted,
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
   });
@@ -42,6 +44,8 @@ class PostsRepositoryImpl implements PostsRepository {
     String? searchText,
     PostsAreas? searchArea,
     CategoryModel? searchCategory,
+    bool? isPublished,
+    bool? isHighlighted,
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
   }) async {
@@ -51,6 +55,8 @@ class PostsRepositoryImpl implements PostsRepository {
         searchText: searchText,
         searchArea: searchArea,
         searchCategory: searchCategory,
+        isPublished: isPublished,
+        isHighlighted: isHighlighted,
         startAfterDocument: startAfterDocument,
         limit: limit,
       );

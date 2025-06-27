@@ -25,11 +25,9 @@ class Team extends StatefulWidget {
 }
 
 class _TeamState extends State<Team> {
-  final carouselController = CarouselSliderController();
+  final _carouselController = CarouselSliderController();
 
-  bool get isMobile => DeviceUtils.isMobile(context);
-  bool get isTablet => DeviceUtils.isTablet(context);
-  bool get isDesktop => DeviceUtils.isDesktop(context);
+  bool get _isMobile => DeviceUtils.isMobile(context);
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +47,14 @@ class _TeamState extends State<Team> {
             children: [
               CustomIconButton(
                 icon: Icons.arrow_back_ios_outlined,
-                onTap: () => carouselController.previousPage(),
+                onTap: () => _carouselController.previousPage(),
               ),
               Expanded(
                 child: CarouselSlider.builder(
                   options: carouselOptions.copyWith(
-                    height: isMobile ? null : 100.verticalSpacing,
+                    height: _isMobile ? null : 100.verticalSpacing,
                   ),
-                  carouselController: carouselController,
+                  carouselController: _carouselController,
                   itemCount: widget.team.length,
                   itemBuilder: (context, index, realIndex) {
                     final member = widget.team[index];
@@ -95,8 +93,8 @@ class _TeamState extends State<Team> {
               ),
               CustomIconButton(
                 icon: Icons.arrow_forward_ios_outlined,
-                onTap: () => carouselController.nextPage(),
-              )
+                onTap: () => _carouselController.nextPage(),
+              ),
             ],
           ),
         ],

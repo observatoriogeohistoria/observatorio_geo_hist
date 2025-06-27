@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
+import 'package:observatorio_geo_hist/app/features/home/infra/datasources/fetch_highlights_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/datasources/fetch_team_datasource.dart';
+import 'package:observatorio_geo_hist/app/features/home/infra/repositories/fetch_highlights_repository.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/repositories/fetch_team_repository.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
 
 class HomeSetup {
@@ -18,6 +21,17 @@ class HomeSetup {
     );
     getIt.registerLazySingleton<FetchTeamStore>(
       () => FetchTeamStore(getIt<FetchTeamRepository>()),
+    );
+
+    // Fetch Highlights
+    getIt.registerFactory<FetchHighlightsDatasource>(
+      () => FetchHighlightsDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
+    );
+    getIt.registerFactory<FetchHighlightsRepository>(
+      () => FetchHighlightsRepositoryImpl(getIt<FetchHighlightsDatasource>()),
+    );
+    getIt.registerLazySingleton<FetchHighlightsStore>(
+      () => FetchHighlightsStore(getIt<FetchHighlightsRepository>()),
     );
   }
 }

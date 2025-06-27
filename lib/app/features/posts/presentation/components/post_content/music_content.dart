@@ -39,7 +39,6 @@ class MusicContent extends StatelessWidget {
               children: [
                 if (music.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: music.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),

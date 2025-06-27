@@ -46,7 +46,6 @@ class SearchContent extends StatelessWidget {
           if (search.image.url?.isNotEmpty ?? false)
             AppNetworkImage(
               imageUrl: search.image.url!,
-              height: null,
             ),
           Align(
             alignment: Alignment.center,

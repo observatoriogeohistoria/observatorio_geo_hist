@@ -38,7 +38,6 @@ class PodcastContent extends StatelessWidget {
               children: [
                 if (podcast.image.url?.isNotEmpty ?? false)
                   AppNetworkImage(
-                    height: null,
                     imageUrl: podcast.image.url!,
                   ),
                 SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),

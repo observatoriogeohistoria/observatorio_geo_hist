@@ -2,11 +2,10 @@ import 'package:fpdart/fpdart.dart';
 import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
 import 'package:observatorio_geo_hist/app/core/errors/fetch_categories_failures.dart';
 import 'package:observatorio_geo_hist/app/core/infra/datasources/fetch_categories_datasource.dart';
-import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/united/categories_by_area.dart';
 
 abstract class FetchCategoriesRepository {
-  Future<Either<Failure, List<CategoryModel>>> fetchHistoryCategories();
-  Future<Either<Failure, List<CategoryModel>>> fetchGeographyCategories();
+  Future<Either<Failure, CategoriesByArea>> fetchCategories();
 }
 
 class FetchCategoriesRepositoryImpl implements FetchCategoriesRepository {
@@ -15,19 +14,9 @@ class FetchCategoriesRepositoryImpl implements FetchCategoriesRepository {
   FetchCategoriesRepositoryImpl(this._datasource);
 
   @override
-  Future<Either<Failure, List<CategoryModel>>> fetchHistoryCategories() async {
+  Future<Either<Failure, CategoriesByArea>> fetchCategories() async {
     try {
-      final categories = await _datasource.fetchHistoryCategories();
-      return Right(categories);
-    } catch (error) {
-      return const Left(FetchCategoriesFailure());
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<CategoryModel>>> fetchGeographyCategories() async {
-    try {
-      final categories = await _datasource.fetchGeographyCategories();
+      final categories = await _datasource.fetchCategories();
       return Right(categories);
     } catch (error) {
       return const Left(FetchCategoriesFailure());

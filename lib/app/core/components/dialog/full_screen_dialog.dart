@@ -44,7 +44,7 @@ class FullScreenDialog extends StatelessWidget {
                     AppTitle.big(
                       text: title!,
                       textAlign: TextAlign.center,
-                      color: AppTheme.colors.lightGray,
+                      color: AppTheme.colors.lighterGray,
                     ),
                   ],
                   Align(

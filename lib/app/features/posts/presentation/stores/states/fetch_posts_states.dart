@@ -7,7 +7,10 @@ sealed class FetchPostsState extends Equatable {
 
 final class FetchPostsInitialState extends FetchPostsState {}
 
-final class FetchPostsLoadingState extends FetchPostsState {}
+final class FetchPostsLoadingState extends FetchPostsState {
+  final bool isRefreshing;
+  FetchPostsLoadingState({this.isRefreshing = false});
+}
 
 final class FetchPostsSuccessState extends FetchPostsState {}
 

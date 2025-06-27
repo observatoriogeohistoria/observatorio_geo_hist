@@ -16,6 +16,8 @@ class PostCard extends StatefulWidget {
     required this.category,
     required this.post,
     required this.index,
+    required this.backgroundColor,
+    required this.borderColor,
     super.key,
   });
 
@@ -23,31 +25,34 @@ class PostCard extends StatefulWidget {
   final PostModel post;
   final int index;
 
+  final Color backgroundColor;
+  final Color borderColor;
+
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
-  bool isHovered = false;
+  bool _isHovered = false;
 
-  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get _isMobile => DeviceUtils.isMobile(context);
 
   @override
   Widget build(BuildContext context) {
-    BorderSide border = BorderSide(color: AppTheme.colors.lightGray);
+    BorderSide border = BorderSide(color: widget.borderColor);
 
     return AppMouseRegion(
-      onEnter: (_) => setState(() => isHovered = true),
-      onExit: (_) => setState(() => isHovered = false),
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        transform: isHovered ? (Matrix4.identity()..scale(1.02)) : Matrix4.identity(),
+        transform: _isHovered ? (Matrix4.identity()..scale(1.02)) : Matrix4.identity(),
         padding: EdgeInsets.all(AppTheme.dimensions.space.medium.horizontalSpacing),
         decoration: BoxDecoration(
-          color: isHovered ? AppTheme.colors.white : null,
+          color: _isHovered ? widget.backgroundColor : null,
           borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-          border: isHovered
+          border: _isHovered
               ? Border(
                   top: border,
                   left: border,
@@ -65,7 +70,6 @@ class _PostCardState extends State<PostCard> {
             children: [
               if (widget.post.body?.image.url?.isNotEmpty ?? false)
                 AppNetworkImage(
-                  height: null,
                   imageUrl: widget.post.body!.image.url!,
                   radius: 0,
                   fit: BoxFit.contain,
@@ -82,9 +86,9 @@ class _PostCardState extends State<PostCard> {
                         padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
                         child: AppTitle.big(
                           text: widget.post.body!.title,
-                          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+                          textAlign: _isMobile ? TextAlign.center : TextAlign.start,
                           notSelectable: true,
-                          color: isHovered ? AppTheme.colors.orange : AppTheme.colors.darkGray,
+                          color: _isHovered ? AppTheme.colors.orange : AppTheme.colors.darkGray,
                         ),
                       ),
                     SizedBox(height: AppTheme.dimensions.space.small),
@@ -93,7 +97,7 @@ class _PostCardState extends State<PostCard> {
                         padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
                         child: AppBody.medium(
                           text: _subtitle,
-                          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+                          textAlign: _isMobile ? TextAlign.center : TextAlign.start,
                           notSelectable: true,
                           color: AppTheme.colors.gray,
                         ),

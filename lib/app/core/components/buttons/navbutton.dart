@@ -32,9 +32,9 @@ class NavButton extends StatefulWidget {
 }
 
 class _NavButtonState extends State<NavButton> {
-  final controller = WidgetStatesController();
+  final _controller = WidgetStatesController();
 
-  bool get hasMenu => (widget.menuChildren?.isNotEmpty ?? false);
+  bool get _hasMenu => (widget.menuChildren?.isNotEmpty ?? false);
 
   void showSubMenu(BuildContext context) {
     showGeneralDialog(
@@ -55,13 +55,13 @@ class _NavButtonState extends State<NavButton> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      statesController: controller,
+      statesController: _controller,
       style: ButtonStyle(
         padding: WidgetStateProperty.all(
           EdgeInsets.all(AppTheme.dimensions.space.medium.scale),
         ),
         overlayColor: WidgetStateProperty.all(
-          !hasMenu ? Colors.transparent : AppTheme.colors.gray.withValues(alpha: 0.1),
+          !_hasMenu ? Colors.transparent : AppTheme.colors.gray.withValues(alpha: 0.1),
         ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
@@ -95,7 +95,7 @@ class _NavButtonState extends State<NavButton> {
       ),
       onPressed: () {
         widget.onPressed?.call();
-        if (hasMenu) showSubMenu(context);
+        if (_hasMenu) showSubMenu(context);
       },
       child: Text(widget.text),
     );
