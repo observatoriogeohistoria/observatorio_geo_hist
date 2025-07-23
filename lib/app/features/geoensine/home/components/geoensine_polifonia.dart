@@ -5,8 +5,8 @@ import 'package:observatorio_geo_hist/app/core/components/image/app_rounded_imag
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class GeoensinePolifonia extends StatelessWidget {
@@ -14,9 +14,9 @@ class GeoensinePolifonia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
-    bool isSmallMobile = DeviceUtils.isSmallMobile(context);
-    bool isTablet = DeviceUtils.isTablet(context);
+    bool isMobile = ScreenUtils.isMobile(context);
+    bool isSmallMobile = ScreenUtils.isSmallMobile(context);
+    bool isTablet = ScreenUtils.isTablet(context);
 
     List<Map<String, String>> images = [
       {
@@ -39,7 +39,7 @@ class GeoensinePolifonia extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
+        horizontal: ScreenUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.massive.verticalSpacing,
       ),
       child: Column(

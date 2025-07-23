@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ActionsHeader extends StatelessWidget {
@@ -24,7 +24,7 @@ class ActionsHeader extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
+        horizontal: ScreenUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       child: Column(

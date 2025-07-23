@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class Footer extends StatelessWidget {
@@ -13,7 +13,7 @@ class Footer extends StatelessWidget {
     return Container(
       color: AppTheme.colors.orange,
       padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
+        horizontal: ScreenUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       child: Column(

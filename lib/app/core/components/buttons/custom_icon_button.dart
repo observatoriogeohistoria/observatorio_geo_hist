@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class CustomIconButton extends StatelessWidget {
@@ -16,7 +16,7 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
+    bool isMobile = ScreenUtils.isMobile(context);
 
     return AppMouseRegion(
       child: GestureDetector(

@@ -8,6 +8,7 @@ import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/log
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
+import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
 
 class AppSetup {
@@ -41,5 +42,8 @@ class AppSetup {
 
     // Admin
     AdminSetup.setup();
+
+    // Library
+    LibrarySetup.setup();
   }
 }

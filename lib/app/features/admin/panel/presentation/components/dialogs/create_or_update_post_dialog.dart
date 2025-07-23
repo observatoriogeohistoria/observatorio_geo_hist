@@ -6,9 +6,9 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_fie
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_academic_production_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_article_dialog.dart';
@@ -65,7 +65,7 @@ class CreateOrUpdatePostDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
-  bool get isMobile => DeviceUtils.isMobile(context);
+  bool get isMobile => ScreenUtils.isMobile(context);
 
   List<PostType> types = PostType.values.toList();
 

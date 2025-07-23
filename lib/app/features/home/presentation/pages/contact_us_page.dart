@@ -8,8 +8,8 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -24,7 +24,7 @@ class ContactUsPage extends StatefulWidget {
 class _ContactUsPageState extends State<ContactUsPage> {
   final _formKey = GlobalKey<FormState>();
 
-  bool get _isMobile => DeviceUtils.isMobile(context);
+  bool get _isMobile => ScreenUtils.isMobile(context);
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -33,7 +33,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 
   @override
   Widget build(BuildContext context) {
-    double horizontalPadding = DeviceUtils.getPageHorizontalPadding(context);
+    double horizontalPadding = ScreenUtils.getPageHorizontalPadding(context);
 
     double width = MediaQuery.of(context).size.width -
         2 * horizontalPadding -

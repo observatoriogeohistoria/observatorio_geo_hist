@@ -4,8 +4,8 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/navbutton.dart
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 List<Widget> buildNavbarMenu(
@@ -14,7 +14,7 @@ List<Widget> buildNavbarMenu(
   CategoryModel? categorySelected,
   void Function(CategoryModel?) onCategorySelected,
 ) {
-  bool isMobile = DeviceUtils.isMobile(context);
+  bool isMobile = ScreenUtils.isMobile(context);
 
   return navButtonItens.map(
     (option) {

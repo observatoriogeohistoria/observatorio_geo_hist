@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ContactUs extends StatelessWidget {
@@ -15,7 +15,7 @@ class ContactUs extends StatelessWidget {
       color: AppTheme.colors.gray,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: DeviceUtils.getPageHorizontalPadding(context),
+          horizontal: ScreenUtils.getPageHorizontalPadding(context),
           vertical: AppTheme.dimensions.space.massive.verticalSpacing,
         ),
         child: Column(

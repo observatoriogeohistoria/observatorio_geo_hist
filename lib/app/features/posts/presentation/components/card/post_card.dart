@@ -7,8 +7,8 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostCard extends StatefulWidget {
@@ -35,7 +35,7 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   bool _isHovered = false;
 
-  bool get _isMobile => DeviceUtils.isMobile(context);
+  bool get _isMobile => ScreenUtils.isMobile(context);
 
   @override
   Widget build(BuildContext context) {

@@ -4,8 +4,8 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class CategoryHeader extends StatelessWidget {
@@ -18,13 +18,13 @@ class CategoryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = DeviceUtils.isMobile(context);
+    final isMobile = ScreenUtils.isMobile(context);
 
     return Container(
       width: MediaQuery.of(context).size.width,
       height: isMobile ? null : MediaQuery.of(context).size.height * 0.5,
       padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
+        horizontal: ScreenUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       decoration: BoxDecoration(

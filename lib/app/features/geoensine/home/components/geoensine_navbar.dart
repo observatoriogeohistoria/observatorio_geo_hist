@@ -3,8 +3,8 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/navbutton.dart
 import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class GeoensineNavbar extends StatefulWidget {
@@ -40,11 +40,11 @@ class _GeoensineNavbarState extends State<GeoensineNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
+    bool isMobile = ScreenUtils.isMobile(context);
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
+        horizontal: ScreenUtils.getPageHorizontalPadding(context),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

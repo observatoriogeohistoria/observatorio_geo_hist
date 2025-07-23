@@ -7,8 +7,8 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -45,7 +45,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: DeviceUtils.getPageHorizontalPadding(context),
+                  horizontal: ScreenUtils.getPageHorizontalPadding(context),
                   vertical: AppTheme.dimensions.space.large.verticalSpacing,
                 ),
                 child: Column(

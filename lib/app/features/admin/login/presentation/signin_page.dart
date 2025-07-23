@@ -8,9 +8,9 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.d
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
@@ -68,8 +68,8 @@ class _SigninPageState extends State<SigninPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    bool isMobile = DeviceUtils.isMobile(context);
-    bool isTablet = DeviceUtils.isTablet(context);
+    bool isMobile = ScreenUtils.isMobile(context);
+    bool isTablet = ScreenUtils.isTablet(context);
 
     return Scaffold(
       backgroundColor: AppTheme.colors.lighterGray,

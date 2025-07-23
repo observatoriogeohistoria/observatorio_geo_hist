@@ -3,8 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
@@ -67,7 +67,7 @@ class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
     double widthWhenCollapsed = 32.0.scale + 2 * AppTheme.dimensions.space.medium.scale;
-    bool isMobile = DeviceUtils.isMobile(context);
+    bool isMobile = ScreenUtils.isMobile(context);
 
     return Observer(
       builder: (context) {

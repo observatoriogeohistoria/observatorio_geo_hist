@@ -8,8 +8,8 @@ import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -23,7 +23,7 @@ class Navbar extends StatefulWidget {
 class _NavbarState extends State<Navbar> {
   late final _fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
 
-  bool get _isMobile => DeviceUtils.isMobile(context);
+  bool get _isMobile => ScreenUtils.isMobile(context);
 
   @override
   void initState() {
@@ -69,6 +69,10 @@ class _NavbarState extends State<Navbar> {
             .toList(),
         area: PostsAreas.geography,
       ),
+      const NavButtonItem(
+        title: 'BIBLIOTECA',
+        route: AppRoutes.library,
+      ),
     ];
   }
 
@@ -79,7 +83,7 @@ class _NavbarState extends State<Navbar> {
     return Container(
       color: AppTheme.colors.white,
       padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
+        horizontal: ScreenUtils.getPageHorizontalPadding(context),
       ),
       height: _isMobile ? MediaQuery.of(context).size.height * 0.075 : null,
       child: Row(
@@ -87,7 +91,7 @@ class _NavbarState extends State<Navbar> {
         children: [
           Image.asset(
             '${AppAssets.images}/logo.png',
-            width: _isMobile ? null : width * 0.3,
+            width: _isMobile ? null : width * 0.2,
             height: _isMobile ? double.infinity : null,
           ),
           Observer(

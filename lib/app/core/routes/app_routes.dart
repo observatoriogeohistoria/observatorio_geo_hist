@@ -5,6 +5,7 @@ abstract class AppRoutes {
   static const root = '/';
   static const geoensine = '/geoensine';
   static const geoensineProjeto = '/geoensine/projeto';
+  static const library = '/biblioteca';
 
   static String currentPath(BuildContext context) {
     return GoRouterState.of(context).uri.toString();

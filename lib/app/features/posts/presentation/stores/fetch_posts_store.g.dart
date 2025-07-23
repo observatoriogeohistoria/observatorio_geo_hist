@@ -61,13 +61,13 @@ mixin _$FetchPostsStore on FetchPostsStoreBase, Store {
       Atom(name: 'FetchPostsStoreBase.hasMore', context: context);
 
   @override
-  Map<PostType, bool> get hasMore {
+  ObservableMap<PostType, bool> get hasMore {
     _$hasMoreAtom.reportRead();
     return super.hasMore;
   }
 
   @override
-  set hasMore(Map<PostType, bool> value) {
+  set hasMore(ObservableMap<PostType, bool> value) {
     _$hasMoreAtom.reportWrite(value, super.hasMore, () {
       super.hasMore = value;
     });

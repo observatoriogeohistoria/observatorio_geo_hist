@@ -5,9 +5,9 @@ import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/partners_images.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -16,8 +16,8 @@ class Support extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
-    bool isTablet = DeviceUtils.isTablet(context);
+    bool isMobile = ScreenUtils.isMobile(context);
+    bool isTablet = ScreenUtils.isTablet(context);
 
     const images = [
       PartnersImages.ufu,
@@ -29,7 +29,7 @@ class Support extends StatelessWidget {
     return Container(
       color: AppTheme.colors.lighterGray,
       padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
+        horizontal: ScreenUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.massive.verticalSpacing,
       ),
       child: Column(
