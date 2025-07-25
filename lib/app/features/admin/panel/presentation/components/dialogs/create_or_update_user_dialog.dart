@@ -6,7 +6,7 @@ import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.da
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_role.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateUserDialog(
@@ -53,7 +53,7 @@ class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return FormDialog(
+    return PostFormDialog(
       onSubmit: _onCreateOrUpdate,
       isUpdate: _isUpdate,
       isFullScreen: false,

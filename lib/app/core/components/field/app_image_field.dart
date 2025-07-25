@@ -19,7 +19,7 @@ class AppImageField extends StatefulWidget {
   });
 
   final TextEditingController imageUrlController;
-  final StreamController<Completer<ImageModel?>> imageController;
+  final StreamController<Completer<FileModel?>> imageController;
 
   @override
   State<AppImageField> createState() => _AppImageFieldState();
@@ -40,7 +40,7 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
 
     widget.imageController.stream.listen((event) {
       if (_uploadedImageBytes != null && _uploadedImageName != null) {
-        event.complete(ImageModel(
+        event.complete(FileModel(
           bytes: _uploadedImageBytes,
           name: _uploadedImageName,
         ));

@@ -28,6 +28,12 @@ List<Widget> buildNavbarMenu(
         child: NavButton(
           text: option.title,
           onPressed: () {
+            if (option.onTap != null) {
+              if (isMobile) GoRouter.of(context).pop();
+              option.onTap?.call();
+              return;
+            }
+
             if (!noOptions) return;
             if (isMobile) GoRouter.of(context).pop();
 

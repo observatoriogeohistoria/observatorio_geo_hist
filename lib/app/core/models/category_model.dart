@@ -19,7 +19,7 @@ class CategoryModel extends Equatable {
   final String title;
   final String description;
   final List<PostsAreas> areas;
-  final ImageModel backgroundImg;
+  final FileModel backgroundImg;
   final bool hasCollaborateOption;
 
   final int numberOfPosts;
@@ -43,7 +43,7 @@ class CategoryModel extends Equatable {
       title: json['title'] as String,
       description: json['description'] as String,
       areas: (json['areas'] as List).map((area) => PostsAreas.fromKey(area as String)).toList(),
-      backgroundImg: ImageModel(url: json['backgroundImgUrl'] as String),
+      backgroundImg: FileModel(url: json['backgroundImgUrl'] as String),
       hasCollaborateOption: json['hasCollaborateOption'] as bool,
     );
   }
@@ -65,7 +65,7 @@ class CategoryModel extends Equatable {
     String? title,
     String? description,
     List<PostsAreas>? areas,
-    ImageModel? backgroundImgUrl,
+    FileModel? backgroundImgUrl,
     bool? hasCollaborateOption,
     int? numberOfPosts,
     List<PostType>? postsTypes,

@@ -4,7 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/users_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 
 part 'users_store.g.dart';
 

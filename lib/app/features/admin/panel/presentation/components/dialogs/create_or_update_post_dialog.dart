@@ -21,7 +21,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_music_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_podcast_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_search_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdatePostDialog(
@@ -98,7 +98,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return FormDialog(
+    return PostFormDialog(
       onSubmit: _onSubmit,
       isUpdate: _isUpdate,
       isFullScreen: false,

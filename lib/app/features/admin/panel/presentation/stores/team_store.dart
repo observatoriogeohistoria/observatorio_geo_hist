@@ -3,7 +3,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/team_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 
 part 'team_store.g.dart';

@@ -23,24 +23,26 @@ class MediaDatasourceImpl implements MediaDatasource {
       List<MediaModel> medias = [];
 
       final ListResult result = await _storage.refFromURL(_bucket).child('media').listAll();
-      for (final ref in result.items) {
+
+      final mediaFutures = result.items.map((ref) async {
         final metadata = await ref.getMetadata();
         final fileSize = metadata.size;
 
         int lastUnderscoreIndex = ref.name.lastIndexOf('_');
-
         String name = ref.name.substring(0, lastUnderscoreIndex);
         String id = ref.name.substring(lastUnderscoreIndex + 1).split('.').first;
         String extension = ref.name.split('.').last;
         String url = await ref.getDownloadURL();
 
         if (fileSize == null || fileSize > 10 * 1024 * 1024) {
-          medias.add(MediaModel(id: id, name: name, extension: extension, bytes: null, url: url));
+          return MediaModel(id: id, name: name, extension: extension, bytes: null, url: url);
         } else {
           final bytes = await ref.getData();
-          medias.add(MediaModel(id: id, name: name, extension: extension, bytes: bytes, url: url));
+          return MediaModel(id: id, name: name, extension: extension, bytes: bytes, url: url);
         }
-      }
+      }).toList();
+
+      medias = await Future.wait(mediaFutures);
 
       return medias;
     } catch (exception, stackTrace) {

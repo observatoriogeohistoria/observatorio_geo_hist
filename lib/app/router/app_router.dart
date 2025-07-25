@@ -12,6 +12,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/manifest_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/team_member_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_document_detailed_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_list_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/collaborate_page.dart';
@@ -122,6 +123,17 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/admin/painel/biblioteca/:area',
+        builder: (BuildContext context, GoRouterState state) {
+          final area = DocumentArea.fromRouteKey(state.pathParameters['area']);
+
+          final invalidRoute = area == null;
+          if (invalidRoute) return const PageNotFound();
+
+          return LibraryListPage(area: area);
+        },
+      ),
+      GoRoute(
         path: '/geoensine',
         builder: (BuildContext context, GoRouterState state) {
           return const GeoensineHomePage();
@@ -148,6 +160,17 @@ class AppRouter {
           if (invalidRoute) return const PageNotFound();
 
           return LibraryListPage(area: area);
+        },
+      ),
+      GoRoute(
+        path: '/biblioteca/:area/documento/:slug',
+        builder: (BuildContext context, GoRouterState state) {
+          final slug = state.pathParameters['slug'];
+
+          final invalidRoute = slug == null;
+          if (invalidRoute) return const PageNotFound();
+
+          return LibraryDocumentDetailedPage(slug: slug);
         },
       ),
     ],

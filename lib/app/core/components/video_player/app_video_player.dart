@@ -45,8 +45,10 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     if (widget.startMuted) _toggleMute();
 
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
+      if (!mounted) return;
       setState(() => _isLoading = false);
     }).catchError((error) {
+      if (!mounted) return;
       setState(() => _error = true);
     });
   }
@@ -112,6 +114,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   }
 
   void _togglePlayPause() {
+    if (!mounted) return;
     setState(() {
       _isPlaying ? _controller.pause() : _controller.play();
       _isPlaying = !_isPlaying;
@@ -119,6 +122,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   }
 
   void _toggleMute() {
+    if (!mounted) return;
     setState(() {
       _controller.setVolume(_isMuted ? 1 : 0);
       _isMuted = !_isMuted;

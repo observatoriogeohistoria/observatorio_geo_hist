@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
@@ -9,6 +10,7 @@ class NavButtonItem extends Equatable {
     this.area,
     this.category,
     this.options,
+    this.onTap,
   });
 
   final String title;
@@ -16,6 +18,7 @@ class NavButtonItem extends Equatable {
   final PostsAreas? area;
   final CategoryModel? category;
   final List<NavButtonItem>? options;
+  final VoidCallback? onTap;
 
   @override
   List<Object?> get props => [title, route, area, category, options];

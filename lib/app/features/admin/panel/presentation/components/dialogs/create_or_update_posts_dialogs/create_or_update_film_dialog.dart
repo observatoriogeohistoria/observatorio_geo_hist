@@ -12,7 +12,7 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -47,7 +47,7 @@ class CreateOrUpdateFilmDialog extends StatefulWidget {
 
 class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
   final StreamController<Completer<String>> _synopsisController = StreamController();
-  final StreamController<Completer<ImageModel?>> _imageController = StreamController();
+  final StreamController<Completer<FileModel?>> _imageController = StreamController();
 
   late final FilmModel? _initialBody = widget.post.body as FilmModel?;
 
@@ -72,8 +72,8 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
     return complete.future;
   }
 
-  Future<ImageModel?> _getImage() {
-    final completer = Completer<ImageModel?>();
+  Future<FileModel?> _getImage() {
+    final completer = Completer<FileModel?>();
     _imageController.add(completer);
 
     return completer.future;
@@ -88,7 +88,7 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return FormDialog(
+    return PostFormDialog(
       onSubmit: _onCreateOrUpdate,
       isUpdate: _isUpdate,
       child: Column(
@@ -169,7 +169,7 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
 
   Future<void> _onCreateOrUpdate() async {
     String synopsis = await _getSynopsis();
-    ImageModel? image = await _getImage();
+    FileModel? image = await _getImage();
 
     if (synopsis.isEmpty) {
       _showErrorMessage('Preencha a sinopse do post');
@@ -192,7 +192,7 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
         body: FilmModel(
           category: _selectedCategory!,
           title: _titleController.text,
-          image: ImageModel(
+          image: FileModel(
             url: _imageUrlController.text,
             bytes: image?.bytes,
             name: image?.name,

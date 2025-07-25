@@ -9,10 +9,28 @@ class FetchLibraryFailure extends Failure {
   List<Object> get props => [message];
 }
 
-class FetchLibraryDocumentByIdFailure extends Failure {
-  const FetchLibraryDocumentByIdFailure({
+class FetchLibraryDocumentBySlugFailure extends Failure {
+  const FetchLibraryDocumentBySlugFailure({
     String? message,
-  }) : super("Erro ao buscar documento por id${message != null ? ": $message" : ""}");
+  }) : super("Erro ao buscar documento por slug${message != null ? ": $message" : ""}");
+
+  @override
+  List<Object> get props => [message];
+}
+
+class CreateOrUpdateLibraryDocumentFailure extends Failure {
+  const CreateOrUpdateLibraryDocumentFailure({
+    String? message,
+  }) : super("Erro ao criar ou atualizar documento${message != null ? ": $message" : ""}");
+
+  @override
+  List<Object> get props => [message];
+}
+
+class DeleteLibraryDocumentFailure extends Failure {
+  const DeleteLibraryDocumentFailure({
+    String? message,
+  }) : super("Erro ao deletar documento${message != null ? ": $message" : ""}");
 
   @override
   List<Object> get props => [message];

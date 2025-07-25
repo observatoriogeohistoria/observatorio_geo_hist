@@ -16,6 +16,7 @@ class UserModel {
       canEditCategoriesSection: isAdmin || isEditor,
       canEditPostsSection: isAdmin || isEditor,
       canEditTeamSection: isAdmin || isEditor,
+      canEditLibrarySection: isAdmin || isEditor,
     );
   }
 

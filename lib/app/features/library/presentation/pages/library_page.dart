@@ -6,9 +6,9 @@ import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.da
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/components/library_collection_card.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/components/library_header.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/components/library_navbar.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_collection_card.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_header.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_navbar.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class LibraryPage extends StatelessWidget {

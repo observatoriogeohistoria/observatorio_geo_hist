@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/navbar_mobile_menu.dart';
@@ -11,6 +12,8 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/dialog/highlights_dialog_carousel.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class Navbar extends StatefulWidget {
@@ -22,81 +25,75 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   late final _fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
+  late final _fetchHighlightsStore = AppSetup.getIt.get<FetchHighlightsStore>();
 
-  bool get _isMobile => ScreenUtils.isMobile(context);
+  List<ReactionDisposer> _reactions = [];
+
+  VoidCallback? _showHighlights;
 
   @override
   void initState() {
     super.initState();
-    _fetchCategoriesStore.fetchCategories();
-  }
 
-  List<NavButtonItem> get navButtonItens {
-    return [
-      const NavButtonItem(
-        title: 'SOBRE',
-        route: AppRoutes.root,
-      ),
-      const NavButtonItem(
-        title: 'GEOENSINE',
-        route: AppRoutes.geoensine,
-      ),
-      const NavButtonItem(
-        title: 'EXPOGEO',
-        route: AppRoutes.root,
-      ),
-      NavButtonItem(
-        title: PostsAreas.history.portuguese.toUpperCase(),
-        options: _fetchCategoriesStore.categories.history
-            .map(
-              (category) => NavButtonItem(
-                title: category.title,
-                category: category,
-              ),
-            )
-            .toList(),
-        area: PostsAreas.history,
-      ),
-      NavButtonItem(
-        title: PostsAreas.geography.portuguese.toUpperCase(),
-        options: _fetchCategoriesStore.categories.geography
-            .map(
-              (category) => NavButtonItem(
-                title: category.title,
-                category: category,
-              ),
-            )
-            .toList(),
-        area: PostsAreas.geography,
-      ),
-      const NavButtonItem(
-        title: 'BIBLIOTECA',
-        route: AppRoutes.library,
-      ),
+    _fetchCategoriesStore.fetchCategories();
+
+    _reactions = [
+      reaction((_) => _fetchCategoriesStore.categories, (_) {
+        _fetchHighlightsStore.fetchHighlights([
+          ...(_fetchCategoriesStore.categories.geography),
+          ...(_fetchCategoriesStore.categories.history),
+        ]);
+      }),
+      reaction((_) => _fetchHighlightsStore.highlights, (highlights) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          if (!mounted) return;
+
+          setState(() {
+            _showHighlights = highlights.isEmpty
+                ? null
+                : () {
+                    showHighlightsDialog(
+                      context,
+                      highlights: _fetchHighlightsStore.highlights,
+                      onClose: _fetchHighlightsStore.hideHighlights,
+                    );
+                  };
+          });
+        });
+      }),
     ];
   }
 
   @override
+  void dispose() {
+    for (var reaction in _reactions) {
+      reaction();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width * 0.8;
+    final width = MediaQuery.of(context).size.width * 0.8;
+    final isMobile = ScreenUtils.isMobile(context);
 
     return Container(
       color: AppTheme.colors.white,
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtils.getPageHorizontalPadding(context),
       ),
-      height: _isMobile ? MediaQuery.of(context).size.height * 0.075 : null,
+      height: isMobile ? MediaQuery.of(context).size.height * 0.075 : null,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
             '${AppAssets.images}/logo.png',
-            width: _isMobile ? null : width * 0.2,
-            height: _isMobile ? double.infinity : null,
+            width: isMobile ? null : width * 0.2,
+            height: isMobile ? double.infinity : null,
           ),
           Observer(
             builder: (context) {
-              if (_isMobile) {
+              if (isMobile) {
                 return AppIconButton(
                   icon: Icons.menu,
                   color: AppTheme.colors.orange,
@@ -118,6 +115,56 @@ class _NavbarState extends State<Navbar> {
         ],
       ),
     );
+  }
+
+  List<NavButtonItem> get navButtonItens {
+    return [
+      const NavButtonItem(
+        title: 'Sobre',
+        route: AppRoutes.root,
+      ),
+      const NavButtonItem(
+        title: 'Geoensine',
+        route: AppRoutes.geoensine,
+      ),
+      const NavButtonItem(
+        title: 'Expogeo',
+        route: AppRoutes.root,
+      ),
+      NavButtonItem(
+        title: PostsAreas.history.portuguese,
+        options: _fetchCategoriesStore.categories.history
+            .map(
+              (category) => NavButtonItem(
+                title: category.title,
+                category: category,
+              ),
+            )
+            .toList(),
+        area: PostsAreas.history,
+      ),
+      NavButtonItem(
+        title: PostsAreas.geography.portuguese,
+        options: _fetchCategoriesStore.categories.geography
+            .map(
+              (category) => NavButtonItem(
+                title: category.title,
+                category: category,
+              ),
+            )
+            .toList(),
+        area: PostsAreas.geography,
+      ),
+      const NavButtonItem(
+        title: 'Biblioteca',
+        route: AppRoutes.library,
+      ),
+      if (_showHighlights != null)
+        NavButtonItem(
+          title: 'Destaques',
+          onTap: _showHighlights,
+        ),
+    ];
   }
 
   void _showMobileMenu() {

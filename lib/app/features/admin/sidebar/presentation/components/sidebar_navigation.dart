@@ -52,6 +52,7 @@ class _SidebarState extends State<Sidebar> {
         SidebarItem.categories,
         SidebarItem.posts,
         SidebarItem.team,
+        SidebarItem.library,
       ];
     });
   }

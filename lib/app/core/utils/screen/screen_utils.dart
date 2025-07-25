@@ -30,7 +30,7 @@ class ScreenUtils {
 
   static double getPageHorizontalPadding(BuildContext context) {
     return ((isSmallDesktop(context) || isTablet(context))
-            ? AppTheme.dimensions.space.gigantic
+            ? AppTheme.dimensions.space.huge
             : isDesktop(context)
                 ? (2 * AppTheme.dimensions.space.gigantic)
                 : AppTheme.dimensions.space.large)

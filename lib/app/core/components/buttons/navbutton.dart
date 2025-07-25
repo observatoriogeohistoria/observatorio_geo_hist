@@ -82,8 +82,8 @@ class _NavButtonState extends State<NavButton> {
           (states) {
             return (widget.textStyle ??
                     (ScreenUtils.isSmallDesktop(context)
-                        ? AppTheme.typography.label.big
-                        : AppTheme.typography.title.medium))
+                        ? AppTheme.typography.label.medium
+                        : AppTheme.typography.label.big))
                 .copyWith(
               color: states.contains(WidgetState.hovered)
                   ? widget.textColorOnHover ?? AppTheme.colors.orange

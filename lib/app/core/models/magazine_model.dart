@@ -29,7 +29,7 @@ class MagazineModel extends PostBody {
   factory MagazineModel.fromJson(Map<String, dynamic> json) {
     return MagazineModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       category: MagazineCategory.values.byName(json['category']),
       teaser: json['teaser'],
       description: json['description'],
@@ -53,7 +53,7 @@ class MagazineModel extends PostBody {
   @override
   MagazineModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     MagazineCategory? category,
     String? teaser,
     String? description,

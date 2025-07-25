@@ -8,6 +8,7 @@ import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.d
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
@@ -20,7 +21,6 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -200,7 +200,7 @@ class _PostsSectionState extends State<PostsSection> {
                               post.copyWith(
                                 isPublished: !post.isPublished,
                                 body: post.body?.copyWith(
-                                  image: ImageModel(url: post.body?.image.url),
+                                  image: FileModel(url: post.body?.image.url),
                                 ),
                               ),
                               null,
@@ -211,7 +211,7 @@ class _PostsSectionState extends State<PostsSection> {
                               post.copyWith(
                                 isHighlighted: !post.isHighlighted,
                                 body: post.body?.copyWith(
-                                  image: ImageModel(url: post.body?.image.url),
+                                  image: FileModel(url: post.body?.image.url),
                                 ),
                               ),
                               null,

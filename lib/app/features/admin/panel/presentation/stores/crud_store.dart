@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 
 abstract class CrudStore<T> {
   ObservableList<T> items = ObservableList<T>();

@@ -21,13 +21,13 @@ abstract class PostBody extends Equatable {
   });
 
   final String title;
-  final ImageModel image;
+  final FileModel image;
 
   Map<String, dynamic> toJson();
 
   PostBody copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
   });
 }
 

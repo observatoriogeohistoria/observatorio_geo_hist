@@ -13,7 +13,7 @@ import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class CrudSection<T> extends StatefulWidget {

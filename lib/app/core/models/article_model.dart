@@ -35,7 +35,7 @@ class ArticleModel extends PostBody {
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
     return ArticleModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       subtitle: json['subtitle'],
       authors: List<String>.from(json['authors']),
       date: json['date'],
@@ -63,7 +63,7 @@ class ArticleModel extends PostBody {
   @override
   ArticleModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     String? subtitle,
     List<String>? authors,
     String? date,

@@ -5,6 +5,7 @@ class UserPermissions {
     this.canEditCategoriesSection = false,
     this.canEditPostsSection = false,
     this.canEditTeamSection = false,
+    this.canEditLibrarySection = false,
   });
 
   final bool canAccessUsersSection;
@@ -12,4 +13,5 @@ class UserPermissions {
   final bool canEditCategoriesSection;
   final bool canEditPostsSection;
   final bool canEditTeamSection;
+  final bool canEditLibrarySection;
 }

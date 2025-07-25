@@ -1,93 +1,116 @@
 import 'package:collection/collection.dart';
+import 'package:equatable/equatable.dart';
 
-class LibraryDocumentModel {
-  final String author;
+class LibraryDocumentModel extends Equatable {
   final DocumentArea area;
-  final List<DocumentCategory> categories;
-  final String createdAt;
-  final String documentUrl;
-  final String institution;
-  final String slug;
-  final String status;
   final String title;
-  final DocumentType type;
-  final int year;
+  final String author;
+  final String? id;
+  final DocumentType? type;
+  final List<DocumentCategory> categories;
+  final String? documentUrl;
+  final String? institution;
+  final String? slug;
+  final int? year;
+  final String? status;
+  final DateTime? createdAt;
 
-  LibraryDocumentModel({
-    required this.author,
+  const LibraryDocumentModel({
     required this.area,
-    required this.categories,
-    required this.createdAt,
-    required this.documentUrl,
-    required this.institution,
-    required this.slug,
-    required this.status,
     required this.title,
-    required this.type,
-    required this.year,
+    required this.author,
+    this.id,
+    this.type,
+    this.categories = const [],
+    this.documentUrl,
+    this.institution,
+    this.slug,
+    this.year,
+    this.status,
+    this.createdAt,
   });
+
+  @override
+  List<Object?> get props => [
+        area,
+        title,
+        author,
+        id,
+        type,
+        categories,
+        documentUrl,
+        institution,
+        slug,
+        year,
+        status,
+        createdAt,
+      ];
 
   factory LibraryDocumentModel.fromJson(Map<String, dynamic> json) {
     return LibraryDocumentModel(
-      author: json['author'] ?? '',
       area: DocumentArea.fromKey(json['area']) ?? DocumentArea.geografia,
-      categories: json['categories']
+      title: json['title'],
+      author: json['author'],
+      id: json['id'],
+      type: DocumentType.fromKey(json['type']),
+      categories: json['category']
               ?.map((e) => DocumentCategory.fromKey(e))
               .whereType<DocumentCategory>()
               .toList() ??
           [],
-      createdAt: json['createdAt'] ?? '',
-      documentUrl: json['documentUrl'] ?? '',
-      institution: json['institution'] ?? '',
-      slug: json['slug'] ?? '',
-      status: json['status'] ?? '',
-      title: json['title'] ?? '',
-      type: DocumentType.fromKey(json['type']) ?? DocumentType.tese,
-      year: json['year'] is int ? json['year'] : int.tryParse(json['year']?.toString() ?? '0') ?? 0,
+      documentUrl: json['documentUrl'],
+      institution: json['institution'],
+      slug: json['slug'],
+      year: json['year'] != null ? int.tryParse(json['year'].toString()) : null,
+      status: json['status'],
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
-      'author': author,
       'area': area.value,
-      'categories': categories.map((e) => e.value).toList(),
-      'createdAt': createdAt,
+      'title': title,
+      'author': author,
+      'id': id,
+      'type': type?.value,
+      'category': categories.map((e) => e.value).toList(),
       'documentUrl': documentUrl,
       'institution': institution,
       'slug': slug,
-      'status': status,
-      'title': title,
-      'type': type.value,
       'year': year,
+      'status': status,
+      'createdAt': createdAt?.toIso8601String(),
     };
   }
 
   LibraryDocumentModel copyWith({
-    String? author,
     DocumentArea? area,
+    String? title,
+    String? author,
+    String? id,
+    DocumentType? type,
     List<DocumentCategory>? categories,
-    String? createdAt,
     String? documentUrl,
     String? institution,
     String? slug,
-    String? status,
-    String? title,
-    DocumentType? type,
     int? year,
+    String? status,
+    DateTime? createdAt,
   }) {
     return LibraryDocumentModel(
-      author: author ?? this.author,
       area: area ?? this.area,
+      title: title ?? this.title,
+      author: author ?? this.author,
+      id: id ?? this.id,
+      type: type ?? this.type,
       categories: categories ?? this.categories,
-      createdAt: createdAt ?? this.createdAt,
       documentUrl: documentUrl ?? this.documentUrl,
       institution: institution ?? this.institution,
       slug: slug ?? this.slug,
-      status: status ?? this.status,
-      title: title ?? this.title,
-      type: type ?? this.type,
       year: year ?? this.year,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 }
@@ -102,6 +125,11 @@ enum DocumentArea {
   String get routeKey => switch (this) {
         DocumentArea.geografia => 'geografia',
         DocumentArea.historia => 'historia',
+      };
+
+  String get bucketKey => switch (this) {
+        DocumentArea.geografia => 'geography',
+        DocumentArea.historia => 'history',
       };
 
   static DocumentArea? fromRouteKey(String? key) {
