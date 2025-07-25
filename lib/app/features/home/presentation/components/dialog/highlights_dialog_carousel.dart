@@ -9,6 +9,7 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/carousel_options/carousel_options.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showHighlightsDialog(
@@ -49,6 +50,8 @@ class _HighlightsCarouselState extends State<HighlightsCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ScreenUtils.isMobile(context);
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -66,7 +69,10 @@ class _HighlightsCarouselState extends State<HighlightsCarousel> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(AppTheme.dimensions.space.massive),
+          padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtils.getPageHorizontalPadding(context),
+            vertical: AppTheme.dimensions.space.massive.verticalSpacing,
+          ),
           child: Row(
             children: [
               IntrinsicHeight(
@@ -79,9 +85,11 @@ class _HighlightsCarouselState extends State<HighlightsCarousel> {
               Expanded(
                 child: AppCard(
                   isHover: true,
-                  borderRadius: AppTheme.dimensions.radius.huge,
+                  borderRadius: AppTheme.dimensions.radius.large,
                   child: CarouselSlider.builder(
-                    options: carouselOptions,
+                    options: carouselOptions.copyWith(
+                      height: isMobile ? MediaQuery.of(context).size.height * 0.3 : null,
+                    ),
                     carouselController: _carouselController,
                     itemCount: widget.highlights.length,
                     itemBuilder: (context, index, realIndex) {
@@ -107,6 +115,7 @@ class _HighlightsCarouselState extends State<HighlightsCarousel> {
                             if (highlight.body?.image.url != null)
                               AppNetworkImage(
                                 imageUrl: highlight.body!.image.url!,
+                                noPlaceholder: true,
                               ),
                           ],
                         ),

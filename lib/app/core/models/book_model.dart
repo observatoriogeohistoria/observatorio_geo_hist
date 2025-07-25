@@ -35,7 +35,7 @@ class BookModel extends PostBody {
   factory BookModel.fromJson(Map<String, dynamic> json) {
     return BookModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       category: BookCategory.values.byName(json['category']),
       author: json['author'],
       year: json['year'],
@@ -63,7 +63,7 @@ class BookModel extends PostBody {
   @override
   BookModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     BookCategory? category,
     String? author,
     int? year,

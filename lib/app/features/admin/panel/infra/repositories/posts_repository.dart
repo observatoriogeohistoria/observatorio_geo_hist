@@ -92,7 +92,7 @@ class PostsRepositoryImpl implements PostsRepository {
 
         post = post.copyWith(
           body: post.body!.copyWith(
-            image: ImageModel(
+            image: FileModel(
               url: media.url,
               bytes: media.bytes,
               name: media.name,

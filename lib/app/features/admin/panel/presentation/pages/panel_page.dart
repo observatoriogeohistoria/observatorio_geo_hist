@@ -5,15 +5,16 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/categories_section.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/library_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/media_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/posts_section.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/team_section.dart';
@@ -38,8 +39,8 @@ class PanelPage extends StatefulWidget {
 }
 
 class _PanelPageState extends State<PanelPage> {
-  late final SidebarStore sidebarStore = PanelSetup.getIt<SidebarStore>();
-  late final AuthStore authStore = AdminSetup.getIt<AuthStore>();
+  late final _sidebarStore = PanelSetup.getIt<SidebarStore>();
+  late final _authStore = AdminSetup.getIt<AuthStore>();
 
   List<ReactionDisposer> _reactions = [];
 
@@ -47,14 +48,14 @@ class _PanelPageState extends State<PanelPage> {
   void initState() {
     super.initState();
 
-    sidebarStore.selectItem(widget.tab);
-    if (widget.postType != null) sidebarStore.selectPostType(widget.postType!);
+    _sidebarStore.selectItem(widget.tab);
+    if (widget.postType != null) _sidebarStore.selectPostType(widget.postType!);
 
-    authStore.currentUser();
+    _authStore.currentUser();
 
     _reactions = [
       reaction(
-        (_) => authStore.user,
+        (_) => _authStore.user,
         (UserModel? user) {
           if (user == null) {
             GoRouter.of(context).go('/admin');
@@ -62,7 +63,7 @@ class _PanelPageState extends State<PanelPage> {
         },
       ),
       reaction(
-        (_) => authStore.state,
+        (_) => _authStore.state,
         (AuthState state) {
           if (state.logoutState is LogoutStateSuccess) {
             GoRouter.of(context).go('/admin');
@@ -87,8 +88,8 @@ class _PanelPageState extends State<PanelPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
-    bool isDesktop = DeviceUtils.isDesktop(context);
+    bool isMobile = ScreenUtils.isMobile(context);
+    bool isDesktop = ScreenUtils.isDesktop(context);
 
     return Scaffold(
       drawer: isDesktop ? null : const Sidebar(),
@@ -117,7 +118,7 @@ class _PanelPageState extends State<PanelPage> {
               icon: Icons.exit_to_app,
               color: AppTheme.colors.white,
               size: 32,
-              onPressed: authStore.logout,
+              onPressed: _authStore.logout,
             ),
           ),
         ],
@@ -131,7 +132,7 @@ class _PanelPageState extends State<PanelPage> {
               right: AppTheme.dimensions.space.small.horizontalSpacing,
               left: AppTheme.dimensions.space.large.horizontalSpacing,
             ),
-            child: _buildBody(sidebarStore.selectedItem),
+            child: _buildBody(_sidebarStore.selectedItem),
           );
 
           if (!isDesktop) return body;
@@ -162,6 +163,8 @@ class _PanelPageState extends State<PanelPage> {
         return const PostsSection();
       case SidebarItem.team:
         return const TeamSection();
+      case SidebarItem.library:
+        return const LibrarySection();
     }
   }
 }

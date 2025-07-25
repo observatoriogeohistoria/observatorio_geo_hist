@@ -61,6 +61,9 @@ dependencies:
   url_launcher: ^6.3.1
   image_picker_for_web: ^3.0.6
   web: ^1.1.1
+  pdfx: ^2.9.2
+  http: ^1.2.0
+  file_saver: ^0.3.1
 
 dev_dependencies:
   flutter_test:

@@ -41,7 +41,7 @@ class AcademicProductionModel extends PostBody {
   factory AcademicProductionModel.fromJson(Map<String, dynamic> json) {
     return AcademicProductionModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       category: AcademicProductionCategory.values.byName(json['category']),
       author: json['author'],
       advisor: json['advisor'],
@@ -73,7 +73,7 @@ class AcademicProductionModel extends PostBody {
   @override
   AcademicProductionModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     AcademicProductionCategory? category,
     String? author,
     String? advisor,

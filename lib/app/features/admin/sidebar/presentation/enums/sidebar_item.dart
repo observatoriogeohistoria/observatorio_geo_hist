@@ -6,7 +6,8 @@ enum SidebarItem {
   media,
   categories,
   posts,
-  team;
+  team,
+  library;
 
   String get value {
     switch (this) {
@@ -20,6 +21,8 @@ enum SidebarItem {
         return 'posts';
       case SidebarItem.team:
         return 'equipe';
+      case SidebarItem.library:
+        return 'biblioteca';
     }
   }
 
@@ -35,6 +38,8 @@ enum SidebarItem {
         return 'Posts';
       case SidebarItem.team:
         return 'Equipe';
+      case SidebarItem.library:
+        return 'Biblioteca';
     }
   }
 
@@ -50,6 +55,8 @@ enum SidebarItem {
         return Icons.post_add_outlined;
       case SidebarItem.team:
         return Icons.workspaces;
+      case SidebarItem.library:
+        return Icons.library_books;
     }
   }
 
@@ -68,6 +75,8 @@ enum SidebarItem {
         return sorted;
       case SidebarItem.team:
         return [];
+      case SidebarItem.library:
+        return [];
     }
   }
 
@@ -83,6 +92,8 @@ enum SidebarItem {
         return SidebarItem.posts;
       case 'equipe':
         return SidebarItem.team;
+      case 'biblioteca':
+        return SidebarItem.library;
       default:
         return null;
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/geoensine/home/components/geoensine_carousel.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -10,15 +10,15 @@ class GeoensineIntroduction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = DeviceUtils.isMobile(context);
+    bool isMobile = ScreenUtils.isMobile(context);
 
     double width = MediaQuery.of(context).size.width -
-        2 * DeviceUtils.getPageHorizontalPadding(context) -
+        2 * ScreenUtils.getPageHorizontalPadding(context) -
         AppTheme.dimensions.space.massive.horizontalSpacing;
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: DeviceUtils.getPageHorizontalPadding(context),
+        horizontal: ScreenUtils.getPageHorizontalPadding(context),
         vertical: !isMobile ? AppTheme.dimensions.space.massive.verticalSpacing : 0,
       ),
       child: isMobile

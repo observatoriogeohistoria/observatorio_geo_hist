@@ -23,7 +23,7 @@ class PodcastModel extends PostBody {
   factory PodcastModel.fromJson(Map<String, dynamic> json) {
     return PodcastModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       description: json['description'],
       link: json['link'],
     );
@@ -43,7 +43,7 @@ class PodcastModel extends PostBody {
   @override
   PodcastModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     String? description,
     String? link,
   }) {

@@ -6,8 +6,8 @@ import 'package:observatorio_geo_hist/app/core/components/loading_content/loadin
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
@@ -74,7 +74,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                 hasScrollBody: false,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: DeviceUtils.getPageHorizontalPadding(context),
+                    horizontal: ScreenUtils.getPageHorizontalPadding(context),
                     vertical: AppTheme.dimensions.space.massive.verticalSpacing,
                   ),
                   child: Column(

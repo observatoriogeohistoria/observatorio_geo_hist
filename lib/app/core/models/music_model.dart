@@ -29,7 +29,7 @@ class MusicModel extends PostBody {
   factory MusicModel.fromJson(Map<String, dynamic> json) {
     return MusicModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       artistName: json['artistName'],
       description: json['description'],
       lyrics: json['lyrics'],
@@ -53,7 +53,7 @@ class MusicModel extends PostBody {
   @override
   MusicModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     String? artistName,
     String? description,
     String? lyrics,

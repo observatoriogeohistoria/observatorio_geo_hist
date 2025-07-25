@@ -3,8 +3,8 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class OurHistory extends StatelessWidget {
@@ -41,7 +41,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
         space,
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: DeviceUtils.getPageHorizontalPadding(context),
+            horizontal: ScreenUtils.getPageHorizontalPadding(context),
           ),
           child: Column(
             children: [

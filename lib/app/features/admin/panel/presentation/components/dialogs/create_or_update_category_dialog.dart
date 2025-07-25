@@ -12,7 +12,7 @@ import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.da
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateCategoryDialog(
@@ -45,7 +45,7 @@ class CreateOrUpdateCategoryDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDialog> {
-  final StreamController<Completer<ImageModel?>> _imageController = StreamController();
+  final StreamController<Completer<FileModel?>> _imageController = StreamController();
 
   late final _keyController =
       TextEditingController(text: widget.category?.key ?? IdGenerator.generate());
@@ -59,8 +59,8 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
 
   bool get _isUpdate => widget.category != null;
 
-  Future<ImageModel?> _getImage() {
-    final completer = Completer<ImageModel?>();
+  Future<FileModel?> _getImage() {
+    final completer = Completer<FileModel?>();
     _imageController.add(completer);
 
     return completer.future;
@@ -74,7 +74,7 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
 
   @override
   Widget build(BuildContext context) {
-    return FormDialog(
+    return PostFormDialog(
       onSubmit: _onCreateOrUpdate,
       isUpdate: _isUpdate,
       isFullScreen: false,
@@ -137,7 +137,7 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
   }
 
   Future<void> _onCreateOrUpdate() async {
-    ImageModel? image = await _getImage();
+    FileModel? image = await _getImage();
 
     if ((image?.isNull ?? true) && _imageUrlController.text.isEmpty) {
       _showErrorMessage('Preencha a imagem do post');
@@ -148,7 +148,7 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
       key: _keyController.text,
       title: _titleController.text,
       description: _descriptionController.text,
-      backgroundImg: ImageModel(
+      backgroundImg: FileModel(
         url: _imageUrlController.text,
         bytes: image?.bytes,
         name: image?.name,

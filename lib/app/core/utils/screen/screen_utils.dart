@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class DeviceUtils {
+class ScreenUtils {
   static bool isMobile(BuildContext context) {
     return MediaQuery.of(context).size.width < 600;
   }
@@ -30,7 +30,7 @@ class DeviceUtils {
 
   static double getPageHorizontalPadding(BuildContext context) {
     return ((isSmallDesktop(context) || isTablet(context))
-            ? AppTheme.dimensions.space.gigantic
+            ? AppTheme.dimensions.space.huge
             : isDesktop(context)
                 ? (2 * AppTheme.dimensions.space.gigantic)
                 : AppTheme.dimensions.space.large)

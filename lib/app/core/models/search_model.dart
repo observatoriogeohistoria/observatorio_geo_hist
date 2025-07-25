@@ -44,7 +44,7 @@ class SearchModel extends PostBody {
   factory SearchModel.fromJson(Map<String, dynamic> json) {
     return SearchModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       state: SearchState.values.byName(json['state']),
       imageCaption: json['imageCaption'],
       description: json['description'],
@@ -78,7 +78,7 @@ class SearchModel extends PostBody {
   @override
   SearchModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     SearchState? state,
     String? imageCaption,
     String? description,

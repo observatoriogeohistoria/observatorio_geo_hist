@@ -4,9 +4,9 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/app_text_butto
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class SectionHeaderActions extends StatelessWidget {
@@ -43,7 +43,7 @@ class SectionHeaderActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = DeviceUtils.isMobile(context);
+    final isMobile = ScreenUtils.isMobile(context);
 
     return Padding(
       padding: EdgeInsets.only(

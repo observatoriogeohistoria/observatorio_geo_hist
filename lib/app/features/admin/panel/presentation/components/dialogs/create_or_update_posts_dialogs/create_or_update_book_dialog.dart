@@ -11,7 +11,7 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateBookDialog(
@@ -44,7 +44,7 @@ class CreateOrUpdateBookDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateBookDialogState extends State<CreateOrUpdateBookDialog> {
-  final StreamController<Completer<ImageModel?>> _imageController = StreamController();
+  final StreamController<Completer<FileModel?>> _imageController = StreamController();
 
   late final BookModel? _initialBody = widget.post.body as BookModel?;
 
@@ -60,8 +60,8 @@ class _CreateOrUpdateBookDialogState extends State<CreateOrUpdateBookDialog> {
 
   bool get _isUpdate => widget.post.id != null;
 
-  Future<ImageModel?> _getImage() {
-    final completer = Completer<ImageModel?>();
+  Future<FileModel?> _getImage() {
+    final completer = Completer<FileModel?>();
     _imageController.add(completer);
 
     return completer.future;
@@ -75,7 +75,7 @@ class _CreateOrUpdateBookDialogState extends State<CreateOrUpdateBookDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return FormDialog(
+    return PostFormDialog(
       onSubmit: _onCreateOrUpdate,
       isUpdate: _isUpdate,
       child: Column(
@@ -150,7 +150,7 @@ class _CreateOrUpdateBookDialogState extends State<CreateOrUpdateBookDialog> {
   }
 
   Future<void> _onCreateOrUpdate() async {
-    ImageModel? image = await _getImage();
+    FileModel? image = await _getImage();
 
     if ((image?.isNull ?? true) && _imageUrlController.text.isEmpty) {
       _showErrorMessage('Preencha a imagem do post');
@@ -168,7 +168,7 @@ class _CreateOrUpdateBookDialogState extends State<CreateOrUpdateBookDialog> {
         body: BookModel(
           category: _selectedCategory!,
           title: _titleController.text,
-          image: ImageModel(
+          image: FileModel(
             url: _imageUrlController.text,
             bytes: image?.bytes,
             name: image?.name,

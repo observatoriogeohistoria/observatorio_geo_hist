@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 class AppMouseRegion extends StatelessWidget {
   const AppMouseRegion({
     required this.child,
-    this.showClickCursor = false,
+    this.showClickCursor = true,
     this.onEnter,
     this.onExit,
     super.key,

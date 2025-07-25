@@ -38,7 +38,7 @@ class FilmModel extends PostBody {
   factory FilmModel.fromJson(Map<String, dynamic> json) {
     return FilmModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       category: FilmCategory.values.byName(json['category']),
       releaseYear: json['releaseYear'],
       duration: json['duration'],
@@ -68,7 +68,7 @@ class FilmModel extends PostBody {
   @override
   FilmModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     FilmCategory? category,
     int? releaseYear,
     String? duration,

@@ -24,7 +24,7 @@ abstract class FetchPostsStoreBase with Store {
   Observable<PostModel>? selectedPost;
 
   @observable
-  Map<PostType, bool> hasMore = {for (PostType type in PostType.values) type: true};
+  ObservableMap<PostType, bool> hasMore = ObservableMap<PostType, bool>();
 
   Map<PostType, DocumentSnapshot?> _lastDocument = {
     for (PostType type in PostType.values) type: null
@@ -36,14 +36,13 @@ abstract class FetchPostsStoreBase with Store {
 
   @action
   void reset() {
-    postsByType.clear();
-    selectedPost = null;
-
     state = FetchPostsInitialState();
 
-    _lastDocument = {for (PostType type in PostType.values) type: null};
-    hasMore = {for (PostType type in PostType.values) type: true};
+    postsByType.clear();
+    selectedPost = null;
+    hasMore = {for (PostType type in PostType.values) type: true}.asObservable();
 
+    _lastDocument = {for (PostType type in PostType.values) type: null};
     _lastCategory = null;
     _lastSearchText = null;
   }
@@ -56,8 +55,8 @@ abstract class FetchPostsStoreBase with Store {
   }) async {
     if (category != _lastCategory || searchText != _lastSearchText) {
       postsByType.clear();
+      hasMore = {for (PostType type in PostType.values) type: true}.asObservable();
 
-      hasMore = {for (PostType type in PostType.values) type: true};
       _lastDocument = {for (PostType type in PostType.values) type: null};
     }
 

@@ -13,7 +13,7 @@ import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.da
 import 'package:observatorio_geo_hist/app/core/utils/formatters/mont_year_input_formatter.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -49,7 +49,7 @@ class CreateOrUpdateArticleDialog extends StatefulWidget {
 class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialog> {
   final StreamController<Completer<String>> _contentController = StreamController();
   final StreamController<Completer<String>> _observationController = StreamController();
-  final StreamController<Completer<ImageModel?>> _imageController = StreamController();
+  final StreamController<Completer<FileModel?>> _imageController = StreamController();
 
   late final ArticleModel? _initialBody = widget.post.body as ArticleModel?;
 
@@ -82,8 +82,8 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
     return complete.future;
   }
 
-  Future<ImageModel?> _getImage() async {
-    final completer = Completer<ImageModel?>();
+  Future<FileModel?> _getImage() async {
+    final completer = Completer<FileModel?>();
     _imageController.add(completer);
 
     return completer.future;
@@ -99,7 +99,7 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
 
   @override
   Widget build(BuildContext context) {
-    return FormDialog(
+    return PostFormDialog(
       onSubmit: _onCreateOrUpdate,
       isUpdate: _isUpdate,
       child: Column(
@@ -198,7 +198,7 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
   Future<void> _onCreateOrUpdate() async {
     String content = await _getContent();
     String observation = await _getObservation();
-    ImageModel? image = await _getImage();
+    FileModel? image = await _getImage();
 
     if (content.isEmpty) {
       _showErrorMessage('Preencha o conteúdo do post');
@@ -220,7 +220,7 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
         isHighlighted: widget.post.isHighlighted,
         body: ArticleModel(
           title: _titleController.text,
-          image: ImageModel(
+          image: FileModel(
             url: _imageUrlController.text,
             bytes: image?.bytes,
             name: image?.name,

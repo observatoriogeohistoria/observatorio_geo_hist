@@ -26,7 +26,7 @@ class DocumentModel extends PostBody {
   factory DocumentModel.fromJson(Map<String, dynamic> json) {
     return DocumentModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       category: DocumentCategory.values.byName(json['category']),
       description: json['description'],
       link: json['link'],
@@ -48,7 +48,7 @@ class DocumentModel extends PostBody {
   @override
   DocumentModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     DocumentCategory? category,
     String? description,
     String? link,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class RightAlignedDialog extends StatelessWidget {
@@ -18,8 +18,8 @@ class RightAlignedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double getWidth() {
-      final isMobile = DeviceUtils.isMobile(context);
-      final isTablet = DeviceUtils.isTablet(context);
+      final isMobile = ScreenUtils.isMobile(context);
+      final isTablet = ScreenUtils.isTablet(context);
 
       if (isMobile) {
         return MediaQuery.of(context).size.width;

@@ -4,8 +4,8 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/card/post_card.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -30,8 +30,8 @@ class PostsSectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = DeviceUtils.isMobile(context);
-    final isTablet = DeviceUtils.isTablet(context);
+    final isMobile = ScreenUtils.isMobile(context);
+    final isTablet = ScreenUtils.isTablet(context);
 
     return ListView.builder(
       shrinkWrap: true,
@@ -64,7 +64,7 @@ class PostsSectionList extends StatelessWidget {
                 ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: DeviceUtils.getPageHorizontalPadding(context),
+                  horizontal: ScreenUtils.getPageHorizontalPadding(context),
                   vertical: AppTheme.dimensions.space.huge.verticalSpacing,
                 ),
                 child: StaggeredGrid.count(

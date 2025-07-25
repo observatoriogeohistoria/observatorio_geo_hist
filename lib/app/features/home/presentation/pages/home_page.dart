@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/device/device_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/dialog/highlights_dialog_carousel.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart';
@@ -40,7 +38,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _fetchTeamStore.fetchTeam();
-    _fetchHighlightsStore.fetchHighlights([]);
 
     _setupReactions();
   }
@@ -64,7 +61,7 @@ class _HomePageState extends State<HomePage> {
           SliverToBoxAdapter(
             child: AppVideoPlayer(
               padding: EdgeInsets.symmetric(
-                horizontal: DeviceUtils.getPageHorizontalPadding(context),
+                horizontal: ScreenUtils.getPageHorizontalPadding(context),
                 vertical: AppTheme.dimensions.space.massive.verticalSpacing,
               ),
               url: AppStrings.presentationVideoUrl,
@@ -88,17 +85,6 @@ class _HomePageState extends State<HomePage> {
           const SliverToBoxAdapter(child: Footer()),
         ],
       ),
-      floatingActionButton: Observer(builder: (context) {
-        final highlights = _fetchHighlightsStore.highlights;
-        final isOpen = _fetchHighlightsStore.highlightsDialogIsOpen;
-
-        if (highlights.isEmpty || isOpen) return const SizedBox.shrink();
-
-        return PrimaryButton.big(
-          text: "Visualizar Destaques",
-          onPressed: _showHighlights,
-        );
-      }),
     );
   }
 
@@ -110,26 +96,6 @@ class _HomePageState extends State<HomePage> {
           ...(_fetchCategoriesStore.categories.history),
         ]);
       }),
-      reaction((_) => _fetchHighlightsStore.highlights, (_) {
-        if (_fetchHighlightsStore.highlightsDialogWasShown) return;
-
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-          if (!mounted) return;
-
-          _fetchHighlightsStore.showHighlights();
-          await Future.delayed(const Duration(seconds: 5));
-
-          _showHighlights();
-        });
-      }),
     ];
-  }
-
-  void _showHighlights() {
-    showHighlightsDialog(
-      context,
-      highlights: _fetchHighlightsStore.highlights,
-      onClose: _fetchHighlightsStore.hideHighlights,
-    );
   }
 }

@@ -38,7 +38,7 @@ class EventModel extends PostBody {
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
       title: json['title'],
-      image: ImageModel(url: json['image']),
+      image: FileModel(url: json['image']),
       scope: EventScope.values.byName(json['scope']),
       link: json['link'],
       location: json['location'],
@@ -68,7 +68,7 @@ class EventModel extends PostBody {
   @override
   EventModel copyWith({
     String? title,
-    ImageModel? image,
+    FileModel? image,
     EventScope? scope,
     String? link,
     String? location,

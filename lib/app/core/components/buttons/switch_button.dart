@@ -44,7 +44,7 @@ class _SwitchStateButton extends State<SwitchButton> {
           onChanged: (value) {
             if (widget.isDisabled) return;
 
-            setState(() => this._value = value);
+            setState(() => _value = value);
             widget.onChanged(value);
           },
           activeColor: AppTheme.colors.orange,
