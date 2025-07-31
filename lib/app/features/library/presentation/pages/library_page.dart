@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
@@ -8,7 +9,6 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_collection_card.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_header.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_navbar.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class LibraryPage extends StatelessWidget {
@@ -20,7 +20,7 @@ class LibraryPage extends StatelessWidget {
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: LibraryNavbar()),
+          const SliverToBoxAdapter(child: Navbar()),
           const SliverToBoxAdapter(child: LibraryHeader()),
           SliverToBoxAdapter(
             child: Container(

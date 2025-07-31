@@ -17,6 +17,7 @@ class PostsSectionList extends StatelessWidget {
     required this.hasMorePosts,
     required this.loadMorePosts,
     required this.loadMorePostsIsDisabled,
+    required this.scrollController,
     super.key,
   });
 
@@ -28,6 +29,8 @@ class PostsSectionList extends StatelessWidget {
   final void Function(PostType postType) loadMorePosts;
   final bool loadMorePostsIsDisabled;
 
+  final ScrollController scrollController;
+
   @override
   Widget build(BuildContext context) {
     final isMobile = ScreenUtils.isMobile(context);
@@ -36,6 +39,7 @@ class PostsSectionList extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      controller: scrollController,
       itemCount: posts.entries.length,
       itemBuilder: (context, index) {
         final entry = posts.entries.elementAt(index);
