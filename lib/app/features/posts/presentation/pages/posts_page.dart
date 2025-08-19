@@ -40,7 +40,9 @@ class _PostsPageState extends State<PostsPage> {
 
   List<ReactionDisposer> _reactions = [];
 
-  final _scrollController = ScrollController();
+  final _screenScrollController = ScrollController();
+  final _postsScrollController = ScrollController();
+
   final ValueNotifier<CategoryModel?> _categoryNotifier = ValueNotifier(null);
 
   String? _searchText;
@@ -77,7 +79,7 @@ class _PostsPageState extends State<PostsPage> {
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
-        controller: _scrollController,
+        controller: _screenScrollController,
         slivers: [
           const SliverToBoxAdapter(child: Navbar()),
           ValueListenableBuilder<CategoryModel?>(
@@ -148,6 +150,7 @@ class _PostsPageState extends State<PostsPage> {
                   hasMorePosts: (type) => _fetchPostsStore.hasMore[type] ?? false,
                   loadMorePosts: (type) => fetchPosts(postType: type),
                   loadMorePostsIsDisabled: state is FetchPostsLoadingState && state.isRefreshing,
+                  scrollController: _postsScrollController,
                 ),
             ],
           ),

@@ -9,9 +9,11 @@ import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
+import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
+import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/dialog/highlights_dialog_carousel.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -123,14 +125,6 @@ class _NavbarState extends State<Navbar> {
         title: 'Sobre',
         route: AppRoutes.root,
       ),
-      const NavButtonItem(
-        title: 'Geoensine',
-        route: AppRoutes.geoensine,
-      ),
-      const NavButtonItem(
-        title: 'Expogeo',
-        route: AppRoutes.root,
-      ),
       NavButtonItem(
         title: PostsAreas.history.portuguese,
         options: _fetchCategoriesStore.categories.history
@@ -145,25 +139,28 @@ class _NavbarState extends State<Navbar> {
       ),
       NavButtonItem(
         title: PostsAreas.geography.portuguese,
-        options: _fetchCategoriesStore.categories.geography
-            .map(
-              (category) => NavButtonItem(
-                title: category.title,
-                category: category,
-              ),
-            )
-            .toList(),
+        options: [
+          NavButtonItem(
+            title: 'Geoensine',
+            onTap: () => openUrl(AppStrings.geoensineUrl),
+          ),
+          for (var category in _fetchCategoriesStore.categories.geography)
+            NavButtonItem(
+              title: category.title,
+              category: category,
+            ),
+        ],
         area: PostsAreas.geography,
       ),
       const NavButtonItem(
         title: 'Biblioteca',
         route: AppRoutes.library,
       ),
-      if (_showHighlights != null)
-        NavButtonItem(
-          title: 'Destaques',
-          onTap: _showHighlights,
-        ),
+      NavButtonItem(
+        title: 'Destaques',
+        onTap: _showHighlights,
+        isDisabled: _showHighlights == null,
+      ),
     ];
   }
 

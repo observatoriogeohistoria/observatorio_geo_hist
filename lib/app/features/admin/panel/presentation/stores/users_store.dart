@@ -1,10 +1,10 @@
 // ignore_for_file: overridden_fields
 
 import 'package:mobx/mobx.dart';
+import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositories/users_repository.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
-import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 
 part 'users_store.g.dart';
 
@@ -47,7 +47,7 @@ abstract class UsersStoreBase extends CrudStore<UserModel> with Store {
   Future<void> createOrUpdateItem(UserModel item, {dynamic extra}) async {
     state = CrudLoadingState(isRefreshing: true);
 
-    bool isCreating = extra == null && extra is String;
+    bool isCreating = extra != null && extra is String;
 
     final result = isCreating
         ? await _usersRepository.createUser(item, extra)

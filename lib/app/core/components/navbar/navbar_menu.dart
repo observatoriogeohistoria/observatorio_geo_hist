@@ -28,6 +28,8 @@ List<Widget> buildNavbarMenu(
         child: NavButton(
           text: option.title,
           onPressed: () {
+            if (option.isDisabled) return;
+
             if (option.onTap != null) {
               if (isMobile) GoRouter.of(context).pop();
               option.onTap?.call();
@@ -47,6 +49,14 @@ List<Widget> buildNavbarMenu(
                     return NavButton(
                       text: suboption.title,
                       onPressed: () {
+                        if (suboption.isDisabled) return;
+
+                        if (suboption.onTap != null) {
+                          GoRouter.of(context).pop();
+                          suboption.onTap?.call();
+                          return;
+                        }
+
                         onCategorySelected.call(suboption.category);
                         if (isMobile) GoRouter.of(context).pop();
 

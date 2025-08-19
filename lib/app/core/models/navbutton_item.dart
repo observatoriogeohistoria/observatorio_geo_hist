@@ -11,6 +11,7 @@ class NavButtonItem extends Equatable {
     this.category,
     this.options,
     this.onTap,
+    this.isDisabled = false,
   });
 
   final String title;
@@ -19,6 +20,7 @@ class NavButtonItem extends Equatable {
   final CategoryModel? category;
   final List<NavButtonItem>? options;
   final VoidCallback? onTap;
+  final bool isDisabled;
 
   @override
   List<Object?> get props => [title, route, area, category, options];

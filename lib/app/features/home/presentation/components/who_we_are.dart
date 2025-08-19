@@ -13,9 +13,11 @@ class WhoWeAre extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ScreenUtils.isMobile(context);
+
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+      height: isMobile ? null : MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: const AssetImage('${AppAssets.images}/who-we-are.jpg'),
