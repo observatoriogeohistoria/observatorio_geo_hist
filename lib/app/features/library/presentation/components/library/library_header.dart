@@ -21,7 +21,7 @@ class LibraryHeader extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: const AssetImage('${AppAssets.images}/library.jpg'),
+          image: const AssetImage('${AppAssets.images}/library.webp'),
           colorFilter: ColorFilter.mode(
             Colors.black.withValues(alpha: 0.5),
             BlendMode.darken,

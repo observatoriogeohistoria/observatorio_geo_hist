@@ -35,7 +35,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: const AssetImage('${AppAssets.images}/collaborate.jpg'),
+                  image: const AssetImage('${AppAssets.images}/collaborate.webp'),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withValues(alpha: 0.35),

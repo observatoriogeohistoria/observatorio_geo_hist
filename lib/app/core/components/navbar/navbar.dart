@@ -68,9 +68,7 @@ class _NavbarState extends State<Navbar> {
 
   @override
   void dispose() {
-    for (var reaction in _reactions) {
-      reaction();
-    }
+    _reactions.forEach((reaction) => reaction.reaction.dispose());
     super.dispose();
   }
 
@@ -89,7 +87,7 @@ class _NavbarState extends State<Navbar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            '${AppAssets.images}/logo.png',
+            '${AppAssets.images}/logo.webp',
             width: isMobile ? null : width * 0.2,
             height: isMobile ? double.infinity : null,
           ),
