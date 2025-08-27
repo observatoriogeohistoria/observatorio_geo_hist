@@ -20,7 +20,7 @@ class LibraryNavbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            '${AppAssets.images}/logo.png',
+            '${AppAssets.images}/logo.webp',
             width: width * (isMobile ? 0.4 : 0.2),
             height: isMobile ? double.infinity : null,
           ),

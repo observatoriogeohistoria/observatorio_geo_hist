@@ -19,7 +19,7 @@ class SidebarHeader extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(padding.scale),
       child: Image.asset(
-        '${AppAssets.images}/${isCollapsed ? 'lupa.png' : 'logo.png'}',
+        '${AppAssets.images}/${isCollapsed ? 'lupa.webp' : 'logo.webp'}',
         width: double.infinity,
       ),
     );

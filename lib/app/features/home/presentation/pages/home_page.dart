@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
-import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
+import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart' deferred as footer;
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart';
+import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart'
+    deferred as video_player;
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart'
+    deferred as contact_us;
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart'
+    deferred as our_history;
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart'
+    deferred as partners;
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart'
+    deferred as team;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
@@ -59,30 +64,89 @@ class _HomePageState extends State<HomePage> {
           const SliverToBoxAdapter(child: Navbar()),
           const SliverToBoxAdapter(child: WhoWeAre()),
           SliverToBoxAdapter(
-            child: AppVideoPlayer(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtils.getPageHorizontalPadding(context),
-                vertical: AppTheme.dimensions.space.massive.verticalSpacing,
-              ),
-              url: AppStrings.presentationVideoUrl,
-              startPlaying: true,
-              startMuted: true,
+            child: FutureBuilder(
+              future: video_player.loadLibrary(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox.shrink();
+                }
+
+                return video_player.AppVideoPlayer(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtils.getPageHorizontalPadding(context),
+                    vertical: AppTheme.dimensions.space.massive.verticalSpacing,
+                  ),
+                  url: AppStrings.presentationVideoUrl,
+                  startPlaying: true,
+                  startMuted: true,
+                );
+              },
             ),
           ),
-          const SliverToBoxAdapter(child: OurHistory()),
-          const SliverToBoxAdapter(child: AppDivider()),
           SliverToBoxAdapter(
-            child: Observer(
-              builder: (context) {
-                final team = _fetchTeamStore.team;
-                return team.isEmpty ? const SizedBox.shrink() : Team(team: _fetchTeamStore.team);
+            child: FutureBuilder(
+              future: our_history.loadLibrary(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox.shrink();
+                }
+                return our_history.OurHistory();
               },
             ),
           ),
           const SliverToBoxAdapter(child: AppDivider()),
-          const SliverToBoxAdapter(child: Partners()),
-          const SliverToBoxAdapter(child: ContactUs()),
-          const SliverToBoxAdapter(child: Footer()),
+          SliverToBoxAdapter(
+            child: Observer(
+              builder: (context) {
+                final teamList = _fetchTeamStore.team;
+                if (teamList.isEmpty) return const SizedBox.shrink();
+
+                return FutureBuilder(
+                  future: team.loadLibrary(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const SizedBox.shrink();
+                    }
+                    return team.Team(team: teamList);
+                  },
+                );
+              },
+            ),
+          ),
+          const SliverToBoxAdapter(child: AppDivider()),
+          SliverToBoxAdapter(
+            child: FutureBuilder(
+              future: partners.loadLibrary(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox.shrink();
+                }
+                return partners.Partners();
+              },
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: FutureBuilder(
+              future: contact_us.loadLibrary(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox.shrink();
+                }
+                return contact_us.ContactUs();
+              },
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: FutureBuilder(
+              future: footer.loadLibrary(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox.shrink();
+                }
+                return footer.Footer();
+              },
+            ),
+          ),
         ],
       ),
     );

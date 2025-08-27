@@ -53,7 +53,7 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
               Column(
                 children: [
                   Image.asset(
-                    '${AppAssets.images}/our-history.jpg',
+                    '${AppAssets.images}/our-history.webp',
                   ),
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppLabel.small(

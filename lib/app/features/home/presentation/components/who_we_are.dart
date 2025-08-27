@@ -20,7 +20,7 @@ class WhoWeAre extends StatelessWidget {
       height: isMobile ? null : MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: const AssetImage('${AppAssets.images}/who-we-are.jpg'),
+          image: const AssetImage('${AppAssets.images}/who-we-are.webp'),
           colorFilter: ColorFilter.mode(
             Colors.black.withValues(alpha: 0.35),
             BlendMode.darken,
