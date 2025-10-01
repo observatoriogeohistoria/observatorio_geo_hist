@@ -11,6 +11,7 @@ class AppDimensions {
     large: 24.0,
     huge: 32.0,
     massive: 48.0,
+    immense: 64.0,
     gigantic: 96.0,
   );
 
@@ -21,6 +22,7 @@ class AppDimensions {
     large: 12.0,
     huge: 24.0,
     massive: 48.0,
+    immense: 64.0,
     gigantic: double.infinity,
   );
 
@@ -31,7 +33,8 @@ class AppDimensions {
     large: 3.0,
     huge: 4.0,
     massive: 5.0,
-    gigantic: 6.0,
+    immense: 6.0,
+    gigantic: 7.0,
   );
 }
 
@@ -43,6 +46,7 @@ class DimensionStyle {
     required this.large,
     required this.huge,
     required this.massive,
+    required this.immense,
     required this.gigantic,
   });
 
@@ -52,5 +56,6 @@ class DimensionStyle {
   final double large;
   final double huge;
   final double massive;
+  final double immense;
   final double gigantic;
 }

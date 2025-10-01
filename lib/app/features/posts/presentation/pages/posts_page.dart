@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/empty_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
+import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -12,6 +13,7 @@ import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dar
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/header/actions_header.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/header/category_header.dart';
@@ -59,7 +61,10 @@ class _PostsPageState extends State<PostsPage> {
   @override
   void didUpdateWidget(covariant PostsPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    updateCategory();
+
+    final isAreaChanged = oldWidget.area != widget.area;
+
+    updateCategory(isAreaChanged: isAreaChanged);
   }
 
   @override
@@ -107,11 +112,14 @@ class _PostsPageState extends State<PostsPage> {
   }
 
   Widget _buildPostsSection(CategoryModel category) {
+    final isMobile = ScreenUtils.isMobile(context);
+
     return Observer(
       builder: (context) {
         final state = _fetchPostsStore.state;
+        final isLoading = state is FetchPostsLoadingState;
 
-        if (state is FetchPostsLoadingState && !state.isRefreshing) {
+        if (isLoading && !state.isRefreshing) {
           return Column(
             children: [
               SizedBox(height: AppTheme.dimensions.space.gigantic.verticalSpacing),
@@ -128,7 +136,11 @@ class _PostsPageState extends State<PostsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+              SizedBox(
+                height: isMobile
+                    ? AppTheme.dimensions.space.huge.verticalSpacing
+                    : AppTheme.dimensions.space.massive.verticalSpacing,
+              ),
               ActionsHeader(
                 category: category,
                 searchText: _searchText,
@@ -137,8 +149,15 @@ class _PostsPageState extends State<PostsPage> {
                   fetchPosts();
                 },
               ),
-              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-              if (posts.isEmpty) ...[
+              SizedBox(
+                height: isMobile
+                    ? AppTheme.dimensions.space.huge.verticalSpacing
+                    : AppTheme.dimensions.space.immense.verticalSpacing,
+              ),
+              if (isLoading) ...[
+                const Center(child: CircularLoading()),
+                SizedBox(height: AppTheme.dimensions.space.massive.verticalSpacing),
+              ] else if (posts.isEmpty) ...[
                 const Center(child: EmptyContent(isSliver: false)),
                 SizedBox(height: AppTheme.dimensions.space.massive.verticalSpacing),
               ],
@@ -176,16 +195,17 @@ class _PostsPageState extends State<PostsPage> {
     ];
   }
 
-  void updateCategory() {
+  void updateCategory({bool isAreaChanged = false}) {
     final category = _fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
     if (category == null) return;
 
-    if (_categoryNotifier.value?.key != category.key) {
+    if (_categoryNotifier.value?.key != category.key || isAreaChanged) {
       _categoryNotifier.value = category;
 
       _fetchPostsStore.reset();
-      fetchPosts();
       _fetchCategoriesStore.setSelectedCategory(category);
+
+      fetchPosts();
     }
   }
 

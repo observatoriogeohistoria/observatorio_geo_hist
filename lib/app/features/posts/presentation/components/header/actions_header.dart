@@ -25,7 +25,6 @@ class ActionsHeader extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtils.getPageHorizontalPadding(context),
-        vertical: AppTheme.dimensions.space.huge.verticalSpacing,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -47,16 +47,13 @@ class PostsSectionList extends StatelessWidget {
 
         return Container(
           color: isEven ? AppTheme.colors.lighterGray : AppTheme.colors.white,
-          padding: EdgeInsets.symmetric(
-            vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-          ),
           child: Column(
             children: [
               if (numberOfPostsTypes > 1 && entry.value.isNotEmpty)
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: AppTheme.dimensions.space.massive.horizontalSpacing,
-                    vertical: AppTheme.dimensions.space.medium.verticalSpacing,
+                    vertical: AppTheme.dimensions.space.huge.verticalSpacing,
                   ),
                   width: double.infinity,
                   child: Center(
@@ -66,10 +63,13 @@ class PostsSectionList extends StatelessWidget {
                     ),
                   ),
                 ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtils.getPageHorizontalPadding(context),
-                  vertical: AppTheme.dimensions.space.huge.verticalSpacing,
+              Container(
+                padding: EdgeInsets.only(
+                  left: ScreenUtils.getPageHorizontalPadding(context),
+                  right: ScreenUtils.getPageHorizontalPadding(context),
+                  bottom: isMobile
+                      ? AppTheme.dimensions.space.huge.verticalSpacing
+                      : AppTheme.dimensions.space.immense.verticalSpacing,
                 ),
                 child: StaggeredGrid.count(
                   crossAxisCount: isMobile
@@ -77,8 +77,16 @@ class PostsSectionList extends StatelessWidget {
                       : isTablet
                           ? 2
                           : 3,
-                  mainAxisSpacing: AppTheme.dimensions.space.gigantic.verticalSpacing,
-                  crossAxisSpacing: AppTheme.dimensions.space.massive.horizontalSpacing,
+                  mainAxisSpacing: isMobile
+                      ? AppTheme.dimensions.space.medium.horizontalSpacing
+                      : isTablet
+                          ? AppTheme.dimensions.space.massive.horizontalSpacing
+                          : AppTheme.dimensions.space.immense.horizontalSpacing,
+                  crossAxisSpacing: isMobile
+                      ? AppTheme.dimensions.space.medium.horizontalSpacing
+                      : isTablet
+                          ? AppTheme.dimensions.space.small.horizontalSpacing
+                          : AppTheme.dimensions.space.massive.horizontalSpacing,
                   children: [
                     for (final post in entry.value)
                       PostCard(
