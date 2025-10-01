@@ -24,6 +24,7 @@ class NavbarSubMenu extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 for (var item in menuChildren)
                   NavButton(

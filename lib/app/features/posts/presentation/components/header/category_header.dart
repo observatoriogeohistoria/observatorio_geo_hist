@@ -22,7 +22,7 @@ class CategoryHeader extends StatelessWidget {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: isMobile ? null : MediaQuery.of(context).size.height * 0.5,
+      height: isMobile ? null : MediaQuery.of(context).size.height * 0.6,
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtils.getPageHorizontalPadding(context),
         vertical: AppTheme.dimensions.space.huge.verticalSpacing,

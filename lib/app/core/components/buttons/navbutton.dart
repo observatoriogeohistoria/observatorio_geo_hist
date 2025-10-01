@@ -57,6 +57,7 @@ class _NavButtonState extends State<NavButton> {
     return TextButton(
       statesController: _controller,
       style: ButtonStyle(
+        alignment: Alignment.center,
         padding: WidgetStateProperty.all(
           EdgeInsets.all(AppTheme.dimensions.space.medium.scale),
         ),
@@ -97,7 +98,7 @@ class _NavButtonState extends State<NavButton> {
         widget.onPressed?.call();
         if (_hasMenu) showSubMenu(context);
       },
-      child: Text(widget.text),
+      child: Text(widget.text, textAlign: TextAlign.center),
     );
   }
 }
