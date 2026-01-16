@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
@@ -37,10 +41,13 @@ class CreateOrUpdateTeamMemberDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMemberDialog> {
+  final StreamController<Completer<FileModel?>> _imageController = StreamController();
+
   late final _nameController = TextEditingController(text: widget.member?.name);
   late final _roleController = TextEditingController(text: widget.member?.role.toString());
-  late final _lattesUrlController = TextEditingController(text: widget.member?.lattesUrl);
   late final _descriptionController = TextEditingController(text: widget.member?.description);
+  late final _lattesUrlController = TextEditingController(text: widget.member?.lattesUrl);
+  late final _imageUrlController = TextEditingController(text: widget.member?.image?.url);
 
   bool get _isUpdate => widget.member != null;
 
@@ -83,12 +90,26 @@ class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMembe
             minLines: 10,
             maxLines: 10,
           ),
+          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          AppImageField(
+            imageUrlController: _imageUrlController,
+            imageController: _imageController,
+          ),
         ],
       ),
     );
   }
 
-  void _onCreateOrUpdate() {
+  Future<FileModel?> _getImage() async {
+    final completer = Completer<FileModel?>();
+    _imageController.add(completer);
+
+    return completer.future;
+  }
+
+  Future<void> _onCreateOrUpdate() async {
+    FileModel? image = await _getImage();
+
     widget.onCreateOrUpdate(
       TeamMemberModel(
         id: widget.member?.id,
@@ -96,6 +117,13 @@ class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMembe
         role: _roleController.text,
         lattesUrl: _lattesUrlController.text,
         description: _descriptionController.text,
+        image: (_imageUrlController.text.isNotEmpty || image != null)
+            ? FileModel(
+                url: _imageUrlController.text,
+                bytes: image?.bytes,
+                name: image?.name,
+              )
+            : null,
       ),
     );
   }

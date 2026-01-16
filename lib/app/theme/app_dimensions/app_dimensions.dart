@@ -23,7 +23,7 @@ class AppDimensions {
     huge: 24.0,
     massive: 48.0,
     immense: 64.0,
-    gigantic: double.infinity,
+    gigantic: 100.0,
   );
 
   DimensionStyle stroke = const DimensionStyle._(

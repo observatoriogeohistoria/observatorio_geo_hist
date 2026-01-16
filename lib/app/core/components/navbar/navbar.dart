@@ -14,7 +14,6 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/dialog/highlights_dialog_carousel.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -31,7 +30,7 @@ class _NavbarState extends State<Navbar> {
 
   List<ReactionDisposer> _reactions = [];
 
-  VoidCallback? _showHighlights;
+  // VoidCallback? _showHighlights;
 
   @override
   void initState() {
@@ -46,29 +45,31 @@ class _NavbarState extends State<Navbar> {
           ...(_fetchCategoriesStore.categories.history),
         ]);
       }),
-      reaction((_) => _fetchHighlightsStore.highlights, (highlights) {
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          if (!mounted) return;
+      // reaction((_) => _fetchHighlightsStore.highlights, (highlights) {
+      //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //     if (!mounted) return;
 
-          setState(() {
-            _showHighlights = highlights.isEmpty
-                ? null
-                : () {
-                    showHighlightsDialog(
-                      context,
-                      highlights: _fetchHighlightsStore.highlights,
-                      onClose: _fetchHighlightsStore.hideHighlights,
-                    );
-                  };
-          });
-        });
-      }),
+      //     setState(() {
+      //       _showHighlights = highlights.isEmpty
+      //           ? null
+      //           : () {
+      //               showHighlightsDialog(
+      //                 context,
+      //                 highlights: _fetchHighlightsStore.highlights,
+      //                 onClose: _fetchHighlightsStore.hideHighlights,
+      //               );
+      //             };
+      //     });
+      //   });
+      // }),
     ];
   }
 
   @override
   void dispose() {
-    _reactions.forEach((reaction) => reaction.reaction.dispose());
+    for (var reaction in _reactions) {
+      reaction.reaction.dispose();
+    }
     super.dispose();
   }
 
@@ -139,6 +140,10 @@ class _NavbarState extends State<Navbar> {
         title: PostsAreas.geography.portuguese,
         options: [
           NavButtonItem(
+            title: 'Expogeo',
+            onTap: () => openUrl(AppStrings.expogeoUrl),
+          ),
+          NavButtonItem(
             title: 'Geoensine',
             onTap: () => openUrl(AppStrings.geoensineUrl),
           ),
@@ -154,11 +159,11 @@ class _NavbarState extends State<Navbar> {
         title: 'Biblioteca',
         route: AppRoutes.library,
       ),
-      NavButtonItem(
-        title: 'Destaques',
-        onTap: _showHighlights,
-        isDisabled: _showHighlights == null,
-      ),
+      // NavButtonItem(
+      //   title: 'Destaques',
+      //   onTap: _showHighlights,
+      //   isDisabled: _showHighlights == null,
+      // ),
     ];
   }
 

@@ -11,6 +11,7 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/avatar.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -82,16 +83,30 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
                     children: [
                       Align(
                         alignment: Alignment.topLeft,
-                        child: AppHeadline.small(
-                          text: member.name.toUpperCase(),
-                          color: AppTheme.colors.orange,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: AppHeadline.medium(
-                          text: member.role.toUpperCase(),
-                          color: AppTheme.colors.gray,
+                        child: Row(
+                          children: [
+                            if (member.image?.url?.isNotEmpty ?? false) ...[
+                              Avatar(imageUrl: member.image!.url!),
+                            ],
+                            SizedBox(width: AppTheme.dimensions.space.large.horizontalSpacing),
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AppHeadline.small(
+                                    text: member.name.toUpperCase(),
+                                    textAlign: TextAlign.start,
+                                    color: AppTheme.colors.orange,
+                                  ),
+                                  AppHeadline.medium(
+                                    text: member.role.toUpperCase(),
+                                    textAlign: TextAlign.start,
+                                    color: AppTheme.colors.gray,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       if (member.description?.isNotEmpty ?? false) ...[

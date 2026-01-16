@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
+import 'package:observatorio_geo_hist/app/core/components/image/app_network_image.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
@@ -30,11 +31,20 @@ class TeamMemberCard extends StatelessWidget {
       width: double.infinity,
       child: IntrinsicHeight(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Flexible(
+            if (member.image?.url?.isNotEmpty ?? false) ...[
+              SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+              AppNetworkImage(
+                imageUrl: member.image!.url!,
+                width: 100.scale,
+                radius: 0,
+                fit: BoxFit.contain,
+              ),
+            ],
+            Expanded(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppLabel.small(
@@ -56,7 +66,7 @@ class TeamMemberCard extends StatelessWidget {
                       text: member.lattesUrl!,
                       color: AppTheme.colors.lightOrange,
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),

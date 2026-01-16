@@ -73,7 +73,7 @@ class PanelSetup {
       () => TeamDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );
     getIt.registerFactory<TeamRepository>(
-      () => TeamRepositoryImpl(getIt<TeamDatasource>()),
+      () => TeamRepositoryImpl(getIt<TeamDatasource>(), getIt<MediaDatasource>()),
     );
     getIt.registerLazySingleton<TeamStore>(
       () => TeamStore(getIt<TeamRepository>()),

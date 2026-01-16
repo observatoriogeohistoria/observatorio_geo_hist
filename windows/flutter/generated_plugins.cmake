@@ -10,6 +10,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   firebase_storage
   pdfx
+  quill_native_bridge_windows
   url_launcher_windows
 )
 

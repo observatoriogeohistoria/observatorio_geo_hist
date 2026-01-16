@@ -13,6 +13,8 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart'
     deferred as contact_us;
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights.dart'
+    deferred as highlights;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart'
     deferred as our_history;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart'
@@ -62,6 +64,17 @@ class _HomePageState extends State<HomePage> {
       body: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(child: Navbar()),
+          SliverToBoxAdapter(
+            child: FutureBuilder(
+              future: highlights.loadLibrary(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox.shrink();
+                }
+                return highlights.Highlights();
+              },
+            ),
+          ),
           const SliverToBoxAdapter(child: WhoWeAre()),
           SliverToBoxAdapter(
             child: FutureBuilder(

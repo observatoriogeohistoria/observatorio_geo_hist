@@ -1,7 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:observatorio_geo_hist/app/core/errors/failures.dart';
+import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/media_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/team_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/team_failures.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 
 abstract class TeamRepository {
@@ -12,8 +15,9 @@ abstract class TeamRepository {
 
 class TeamRepositoryImpl implements TeamRepository {
   final TeamDatasource _teamDatasource;
+  final MediaDatasource _mediaDatasource;
 
-  TeamRepositoryImpl(this._teamDatasource);
+  TeamRepositoryImpl(this._teamDatasource, this._mediaDatasource);
 
   @override
   Future<Either<Failure, List<TeamMemberModel>>> getTeamMembers() async {
@@ -30,6 +34,30 @@ class TeamRepositoryImpl implements TeamRepository {
     TeamMemberModel teamMember,
   ) async {
     try {
+      if (teamMember.image?.bytes != null) {
+        final name = teamMember.image!.name ?? IdGenerator.generate();
+        final hasExtension = name.contains('.');
+        final extension = hasExtension ? name.split('.').last : '';
+        final finalName = hasExtension ? name.split('.').first : name;
+
+        final media = await _mediaDatasource.createMedia(
+          MediaModel(
+            name: finalName,
+            extension: extension,
+            bytes: teamMember.image!.bytes!,
+            url: teamMember.image!.url,
+          ),
+        );
+
+        teamMember = teamMember.copyWith(
+          image: teamMember.image!.copyWith(
+            url: media.url,
+            bytes: media.bytes,
+            name: media.name,
+          ),
+        );
+      }
+
       final result = await _teamDatasource.createOrUpdateTeamMember(teamMember);
       return Right(result);
     } catch (error) {

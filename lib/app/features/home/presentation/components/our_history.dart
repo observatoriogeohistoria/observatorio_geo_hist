@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -50,19 +48,19 @@ Embora o foco inicial seja o nosso estado de Minas Gerais, entendemos que a miss
                 color: AppTheme.colors.darkGray,
               ),
               space,
-              Column(
-                children: [
-                  Image.asset(
-                    '${AppAssets.images}/our-history.webp',
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                  AppLabel.small(
-                    text: 'Foto: Antônio César Ortega',
-                    color: AppTheme.colors.darkGray,
-                  ),
-                ],
-              ),
-              space,
+              // Column(
+              //   children: [
+              //     Image.asset(
+              //       '${AppAssets.images}/our-history.webp',
+              //     ),
+              //     SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+              //     AppLabel.small(
+              //       text: 'Foto: Antônio César Ortega',
+              //       color: AppTheme.colors.darkGray,
+              //     ),
+              //   ],
+              // ),
+              // space,
               AppBody.medium(
                 text: secondText,
                 color: AppTheme.colors.darkGray,

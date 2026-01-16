@@ -10,6 +10,7 @@ import 'package:observatorio_geo_hist/app/core/utils/carousel_options/carousel_o
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/avatar.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class Team extends StatefulWidget {
@@ -52,7 +53,7 @@ class _TeamState extends State<Team> {
               Expanded(
                 child: CarouselSlider.builder(
                   options: carouselOptions.copyWith(
-                    height: _isMobile ? null : 100.verticalSpacing,
+                    height: _isMobile ? null : 200.verticalSpacing,
                   ),
                   carouselController: _carouselController,
                   itemCount: widget.team.length,
@@ -72,6 +73,13 @@ class _TeamState extends State<Team> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            if (member.image?.url?.isNotEmpty ?? false) ...[
+                              Avatar(
+                                imageUrl: member.image!.url!,
+                                size: 100,
+                              ),
+                              SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                            ],
                             AppBody.big(
                               text: member.name.toUpperCase(),
                               textAlign: TextAlign.center,
