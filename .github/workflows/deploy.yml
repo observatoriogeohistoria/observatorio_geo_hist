@@ -27,15 +27,15 @@ jobs:
     - name: Build Flutter Web app
       run: flutter build web --release
 
-    - name: Sync all files to HostGator (excluding build/web)
-      uses: SamKirkland/FTP-Deploy-Action@4.3.0
-      with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./
-        exclude: |
-          build/web/**
+    # - name: Sync all files to HostGator (excluding build/web)
+    #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
+    #   with:
+    #     server: ${{ secrets.FTP_HOST }}
+    #     username: ${{ secrets.FTP_USER }}
+    #     password: ${{ secrets.FTP_PASSWORD }}
+    #     local-dir: ./
+    #     exclude: |
+    #       build/web/**
 
     - name: Sync build/web to HostGator
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
@@ -44,3 +44,4 @@ jobs:
         username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: build/web/
+        server-dir: public_html/
