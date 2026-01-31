@@ -227,7 +227,7 @@ enum PostType {
       case PostType.event:
         return 'Eventos';
       case PostType.film:
-        return 'Filmes';
+        return 'Filmes e Vídeos';
       case PostType.magazine:
         return 'Revistas';
       case PostType.music:
