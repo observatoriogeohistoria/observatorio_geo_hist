@@ -5,9 +5,10 @@ import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/datasources/media_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/errors/media_failures.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/paginated_medias.dart';
 
 abstract class MediaRepository {
-  Future<Either<Failure, List<MediaModel>>> getMedias();
+  Future<Either<Failure, PaginatedMedias>> getMedias({String? pageToken});
   Future<Either<Failure, MediaModel>> createMedia(MediaModel media);
   Future<Either<Failure, Unit>> deleteMedia(MediaModel media);
 }
@@ -18,9 +19,9 @@ class MediaRepositoryImpl implements MediaRepository {
   MediaRepositoryImpl(this._mediaDatasource);
 
   @override
-  Future<Either<Failure, List<MediaModel>>> getMedias() async {
+  Future<Either<Failure, PaginatedMedias>> getMedias({String? pageToken}) async {
     try {
-      final medias = await _mediaDatasource.getMedias();
+      final medias = await _mediaDatasource.getMedias(pageToken: pageToken);
       return Right(medias);
     } on FirebaseAuthException catch (error) {
       return Left(AuthFailure.fromException(error));

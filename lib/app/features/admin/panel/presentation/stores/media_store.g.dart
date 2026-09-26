@@ -47,6 +47,14 @@ mixin _$MediaStore on MediaStoreBase, Store {
     return _$getItemsAsyncAction.run(() => super.getItems());
   }
 
+  late final _$loadMoreAsyncAction =
+      AsyncAction('MediaStoreBase.loadMore', context: context);
+
+  @override
+  Future<void> loadMore() {
+    return _$loadMoreAsyncAction.run(() => super.loadMore());
+  }
+
   late final _$createOrUpdateItemAsyncAction =
       AsyncAction('MediaStoreBase.createOrUpdateItem', context: context);
 

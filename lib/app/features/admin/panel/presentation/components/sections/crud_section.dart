@@ -22,6 +22,7 @@ class CrudSection<T> extends StatefulWidget {
   final CrudStore<T> store;
   final Widget Function(T item, int index) itemBuilder;
   final VoidCallback onCreatePressed;
+  final bool paginated;
 
   const CrudSection({
     required this.title,
@@ -29,6 +30,7 @@ class CrudSection<T> extends StatefulWidget {
     required this.store,
     required this.itemBuilder,
     required this.onCreatePressed,
+    this.paginated = false,
     super.key,
   });
 
@@ -47,6 +49,8 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
     super.initState();
 
     widget.store.getItems();
+
+    if (widget.paginated) _scrollController.addListener(_onScroll);
 
     _reactions = [
       reaction((_) => widget.store.state, (state) {
@@ -69,8 +73,16 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
     ];
   }
 
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      widget.store.loadMore();
+    }
+  }
+
   @override
   void dispose() {
+    _scrollController.dispose();
+
     for (var reaction in _reactions) {
       reaction();
     }

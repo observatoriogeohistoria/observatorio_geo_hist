@@ -2,9 +2,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/paginated_medias.dart';
 
 abstract class MediaDatasource {
-  Future<List<MediaModel>> getMedias();
+  Future<PaginatedMedias> getMedias({int pageSize = 20, String? pageToken});
   Future<MediaModel> createMedia(MediaModel media);
   Future<void> deleteMedia(MediaModel media);
 }
@@ -18,33 +19,25 @@ class MediaDatasourceImpl implements MediaDatasource {
   static String get _bucket => 'gs://observatorio-geo-hist.firebasestorage.app';
 
   @override
-  Future<List<MediaModel>> getMedias() async {
+  Future<PaginatedMedias> getMedias({int pageSize = 20, String? pageToken}) async {
     try {
-      List<MediaModel> medias = [];
+      final ListResult result = await _storage
+          .refFromURL(_bucket)
+          .child('media')
+          .list(ListOptions(maxResults: pageSize, pageToken: pageToken));
 
-      final ListResult result = await _storage.refFromURL(_bucket).child('media').listAll();
-
-      final mediaFutures = result.items.map((ref) async {
-        final metadata = await ref.getMetadata();
-        final fileSize = metadata.size;
-
+      final medias = await Future.wait(result.items.map((ref) async {
         int lastUnderscoreIndex = ref.name.lastIndexOf('_');
         String name = ref.name.substring(0, lastUnderscoreIndex);
         String id = ref.name.substring(lastUnderscoreIndex + 1).split('.').first;
         String extension = ref.name.split('.').last;
         String url = await ref.getDownloadURL();
 
-        if (fileSize == null || fileSize > 10 * 1024 * 1024) {
-          return MediaModel(id: id, name: name, extension: extension, bytes: null, url: url);
-        } else {
-          final bytes = await ref.getData();
-          return MediaModel(id: id, name: name, extension: extension, bytes: bytes, url: url);
-        }
-      }).toList();
+        // Os bytes não são baixados na listagem: o preview usa a url.
+        return MediaModel(id: id, name: name, extension: extension, url: url);
+      }));
 
-      medias = await Future.wait(mediaFutures);
-
-      return medias;
+      return PaginatedMedias(medias: medias, nextPageToken: result.nextPageToken);
     } catch (exception, stackTrace) {
       _loggerService.error('Error getting medias: $exception', stackTrace: stackTrace);
       rethrow;

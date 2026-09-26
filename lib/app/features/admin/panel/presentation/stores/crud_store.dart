@@ -6,6 +6,7 @@ abstract class CrudStore<T> {
   CrudState state = CrudInitialState();
 
   Future<void> getItems() async {}
+  Future<void> loadMore() async {}
   Future<void> createOrUpdateItem(T item, {dynamic extra}) async {}
   Future<void> deleteItem(T item) async {}
 }

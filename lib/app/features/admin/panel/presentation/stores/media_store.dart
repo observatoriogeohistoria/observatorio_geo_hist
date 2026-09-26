@@ -15,6 +15,9 @@ abstract class MediaStoreBase extends CrudStore<MediaModel> with Store {
 
   MediaStoreBase(this._mediaRepository);
 
+  String? _nextPageToken;
+  bool _hasMore = true;
+
   @override
   @observable
   ObservableList<MediaModel> items = ObservableList<MediaModel>();
@@ -35,8 +38,32 @@ abstract class MediaStoreBase extends CrudStore<MediaModel> with Store {
 
     result.fold(
       (failure) => state = CrudErrorState(failure),
-      (medias) {
-        items = medias.asObservable();
+      (page) {
+        items = page.medias.asObservable();
+        _nextPageToken = page.nextPageToken;
+        _hasMore = page.hasMore;
+        state = CrudSuccessState();
+      },
+    );
+  }
+
+  @override
+  @action
+  Future<void> loadMore() async {
+    if (state is CrudLoadingState) return;
+    if (!_hasMore) return;
+
+    state = CrudLoadingState(isRefreshing: true);
+
+    final result = await _mediaRepository.getMedias(pageToken: _nextPageToken);
+
+    result.fold(
+      (failure) => state = CrudErrorState(failure),
+      (page) {
+        final loadedIds = items.map((media) => media.id).toSet();
+        items.addAll(page.medias.where((media) => !loadedIds.contains(media.id)));
+        _nextPageToken = page.nextPageToken;
+        _hasMore = page.hasMore;
         state = CrudSuccessState();
       },
     );

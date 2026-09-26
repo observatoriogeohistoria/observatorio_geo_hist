@@ -29,6 +29,7 @@ class _MediaSectionState extends State<MediaSection> {
           title: 'Mídias',
           canEdit: canEdit,
           store: mediaStore,
+          paginated: true,
           itemBuilder: (item, index) {
             return MediaCard(
               media: item,
