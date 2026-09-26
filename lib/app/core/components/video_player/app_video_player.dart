@@ -16,6 +16,7 @@ class AppVideoPlayer extends StatefulWidget {
     this.onError,
     this.loadingPlaceholder,
     this.shouldStartPlaying,
+    this.onAutoplayBlocked,
     this.autofocusControls = false,
     this.showControlsScrim = false,
     super.key,
@@ -44,6 +45,12 @@ class AppVideoPlayer extends StatefulWidget {
   /// senão, fica pausado e pronto.
   final bool Function()? shouldStartPlaying;
 
+  /// Chamado, no lugar de [onError], se o navegador recusar o início
+  /// automático pedido por [shouldStartPlaying] (por exemplo, som bloqueado).
+  /// O controller fica inutilizável depois disso: quem usa deve montar um
+  /// player novo, sem início automático.
+  final VoidCallback? onAutoplayBlocked;
+
   /// Leva o foco do teclado ao botão de reproduzir/pausar quando o vídeo fica pronto.
   final bool autofocusControls;
 
@@ -68,7 +75,11 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   final FocusNode _playPauseFocus = FocusNode(debugLabel: 'Reproduzir ou pausar vídeo');
 
   /// Só acompanha o estado do controller quando quem usa quer saber de erros.
-  bool get _followsController => widget.onError != null;
+  bool get _followsController => widget.onError != null || widget.onAutoplayBlocked != null;
+
+  /// O início automático foi pedido e o vídeo ainda não avançou: um erro
+  /// nesse intervalo é o navegador recusando a reprodução.
+  bool _autoStartPending = false;
 
   @override
   void initState() {
@@ -99,7 +110,10 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   }
 
   void _handleInitialized() {
-    if (!_isPlaying && (widget.shouldStartPlaying?.call() ?? false)) _togglePlayPause();
+    if (!_isPlaying && (widget.shouldStartPlaying?.call() ?? false)) {
+      _autoStartPending = true;
+      _togglePlayPause();
+    }
     widget.onInitialized?.call();
 
     if (widget.autofocusControls) {
@@ -121,9 +135,16 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     final value = _controller.value;
 
     if (value.hasError) {
+      if (_autoStartPending && widget.onAutoplayBlocked != null) {
+        _autoStartPending = false;
+        setState(() => _error = true);
+        widget.onAutoplayBlocked!();
+        return;
+      }
       _handleError();
       return;
     }
+    if (_autoStartPending && value.position > Duration.zero) _autoStartPending = false;
     if (value.isInitialized && value.isPlaying != _isPlaying) {
       setState(() => _isPlaying = value.isPlaying);
     }

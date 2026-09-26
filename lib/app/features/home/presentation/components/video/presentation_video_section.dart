@@ -42,6 +42,10 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
   final FocusNode _playButtonFocus = FocusNode(debugLabel: 'Assistir');
   bool _focusControls = false;
 
+  /// O navegador recusou tocar sozinho (som bloqueado): o player é montado de
+  /// novo, pausado e pronto, esperando um clique em "Reproduzir vídeo".
+  bool _autoplayBlocked = false;
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +62,7 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
   Future<void> _watch() async {
     setState(() {
       _focusControls = _playButtonFocus.hasFocus;
+      _autoplayBlocked = false;
       _state = _VideoState.loading;
       _attempt++;
     });
@@ -75,6 +80,14 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
   void _handleReady() {
     if (!mounted || _state != _VideoState.loading) return;
     setState(() => _state = _VideoState.playing);
+  }
+
+  void _handleAutoplayBlocked() {
+    if (!mounted) return;
+    setState(() {
+      _autoplayBlocked = true;
+      _attempt++;
+    });
   }
 
   void _handleError() {
@@ -135,7 +148,8 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
                 loadingPlaceholder: const SizedBox.shrink(),
                 onInitialized: _handleReady,
                 onError: _handleError,
-                shouldStartPlaying: hasUserActivation,
+                onAutoplayBlocked: _handleAutoplayBlocked,
+                shouldStartPlaying: _autoplayBlocked ? null : hasUserActivation,
                 autofocusControls: _focusControls,
                 showControlsScrim: true,
               ),
