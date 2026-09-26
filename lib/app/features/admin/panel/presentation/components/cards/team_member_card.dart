@@ -34,13 +34,17 @@ class TeamMemberCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (member.image?.url?.isNotEmpty ?? false) ...[
-              SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-              AppNetworkImage(
-                imageUrl: member.image!.url!,
-                width: 100.scale,
-                radius: 0,
-                fit: BoxFit.contain,
+              Align(
+                alignment: Alignment.center,
+                child: AppNetworkImage(
+                  imageUrl: member.image!.url!,
+                  width: 96.scale,
+                  height: 96.scale,
+                  radius: 12.scale,
+                  fit: BoxFit.cover,
+                ),
               ),
+              SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
             ],
             Expanded(
               child: Column(

@@ -53,7 +53,7 @@ class _TeamState extends State<Team> {
               Expanded(
                 child: CarouselSlider.builder(
                   options: carouselOptions.copyWith(
-                    height: _isMobile ? null : 200.verticalSpacing,
+                    height: 200.verticalSpacing,
                   ),
                   carouselController: _carouselController,
                   itemCount: widget.team.length,
