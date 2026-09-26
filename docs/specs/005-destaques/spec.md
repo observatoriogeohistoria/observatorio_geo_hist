@@ -1,6 +1,6 @@
 # 005. Home: destaques
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 1, seção 1.2
 - **Protótipo:** aba "Home", bloco "Destaques" logo abaixo do hero (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -115,3 +115,5 @@ O cartão inteiro é um link para a página do post (`/posts/:area/:categoria/:i
 ## Histórico de mudanças
 - 2026-09-26: criada e aprovada no modo autônomo (execução da Fase 1).
 - 2026-09-26: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-09-26: diagnóstico da A1: a busca de destaques responde sem erro e com 0 documentos (não há post publicado marcado como destaque). Com os dados de hoje, a seção fica escondida no site.
+- 2026-09-26: implementada. Ajustes de plano sem mudar o comportamento: largura máxima do título principal em 12 em (equivale aos 22 caracteres; o plano dizia "22 em" por engano); faixa de esmaecimento desenhada acima do texto sem tirar altura dele; busca também disparada quando as categorias falham depois de a Home abrir.

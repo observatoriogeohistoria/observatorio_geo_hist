@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart'
     deferred as video_player;
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
+import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
@@ -14,7 +15,7 @@ import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart'
     deferred as contact_us;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/hero/home_hero.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights.dart'
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/highlights_section.dart'
     deferred as highlights;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart'
     deferred as our_history;
@@ -24,6 +25,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
     deferred as team;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_highlights_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -48,6 +50,16 @@ class _HomePageState extends State<HomePage> {
     _fetchTeamStore.fetchTeam();
 
     _setupReactions();
+
+    // A reação só dispara quando as categorias mudam. Se elas já chegaram (volta
+    // de outra página) ou falharam, busca os destaques agora mesmo.
+    final categoriesSettled = switch (_fetchCategoriesStore.state) {
+      FetchCategoriesSuccessState() || FetchCategoriesErrorState() => true,
+      _ => false,
+    };
+    if (categoriesSettled && _fetchHighlightsStore.state is FetchHighlightsInitialState) {
+      _fetchHighlights();
+    }
   }
 
   @override
@@ -67,7 +79,7 @@ class _HomePageState extends State<HomePage> {
           const NavbarSliver(),
           // Hero e atalhos (spec 004): sem carregamento adiado, aparece junto com a navbar.
           const SliverToBoxAdapter(child: HomeHero()),
-          // Destaques: redesenho na spec 005.
+          // Destaques (spec 005).
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: highlights.loadLibrary(),
@@ -75,7 +87,10 @@ class _HomePageState extends State<HomePage> {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return const SizedBox.shrink();
                 }
-                return highlights.Highlights();
+                return highlights.HighlightsSection(
+                  store: _fetchHighlightsStore,
+                  onRetry: _fetchHighlights,
+                );
               },
             ),
           ),
@@ -175,13 +190,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Busca os destaques com as categorias que já estiverem carregadas (podem
+  /// faltar, se a busca de categorias falhou).
+  void _fetchHighlights() {
+    _fetchHighlightsStore.fetchHighlights([
+      ...(_fetchCategoriesStore.categories.geography),
+      ...(_fetchCategoriesStore.categories.history),
+    ]);
+  }
+
   void _setupReactions() {
     _reactions = [
-      reaction((_) => _fetchCategoriesStore.categories, (_) {
-        _fetchHighlightsStore.fetchHighlights([
-          ...(_fetchCategoriesStore.categories.geography),
-          ...(_fetchCategoriesStore.categories.history),
-        ]);
+      reaction((_) => _fetchCategoriesStore.categories, (_) => _fetchHighlights()),
+      // Se as categorias falham, os destaques são buscados mesmo assim (sem categorias).
+      reaction((_) => _fetchCategoriesStore.state, (state) {
+        if (state is FetchCategoriesErrorState && _fetchHighlightsStore.state is FetchHighlightsInitialState) {
+          _fetchHighlights();
+        }
       }),
     ];
   }
