@@ -19,6 +19,8 @@ planejamento.md ──► /sdd-spec ──► (aprovação) ──► /sdd-plan 
 
 Em cada etapa a skill **para** e espera a sua aprovação antes de seguir.
 
+**Modo autônomo:** `/sdd-fase <fase ou itens>` (ex.: `/sdd-fase Fase 1`) roda o fluxo inteiro sem paradas. Divide a fase em specs, faz cada etapa numa sessão separada, corrige o que a verificação achar (até 2 tentativas por problema), faz commits por entrega numa branch própria da fase (`refactor/redesign-<fase>`, criada a partir da `develop`), abre PR para a `develop` e termina com um resumo. O andamento fica em `docs/specs/execucao-<fase>.md`, que também serve para retomar se a execução for interrompida.
+
 ## Regras
 - Numeração sequencial de três dígitos (`001`, `002`...). O nome é curto, em `kebab-case`, sem acentos.
 - A spec tem um **status** no topo: `rascunho`, `aprovada`, `implementada` ou `verificada`.
