@@ -78,7 +78,6 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/images/partners/
-    - assets/images/geoensine/
 
   fonts:
     - family: Dosis

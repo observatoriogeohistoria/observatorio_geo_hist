@@ -16,7 +16,7 @@ lib/
     ├── router/               # GoRouter (app_router.dart) e PageNotFound
     ├── theme/                # app_colors, app_typography, app_dimensions, app_theme
     ├── core/                 # Código compartilhado entre features
-    └── features/             # admin, geoensine, home, library, posts
+    └── features/             # admin, home, library, posts
 ```
 
 ## Camadas de uma feature
@@ -55,7 +55,6 @@ Fluxo de dados: `Widget → Store → Repository → Datasource → Firebase`. O
 | `home` | Página inicial: equipe, destaques e navbar dinâmica |
 | `posts` | Listagem paginada com filtros e página de detalhe do post |
 | `library` | Biblioteca de documentos por área, com busca por `slug` |
-| `geoensine` | Seção do projeto Geoensine (`geoensine_setup.dart` ainda vazio) |
 | `admin` | Login, painel de conteúdo e sidebar (ver [documento do painel](arquitetura-painel-admin.md)) |
 
 ## Rotas
@@ -73,8 +72,6 @@ Definidas em [app_router.dart](../lib/app/router/app_router.dart):
 /biblioteca                           Biblioteca
 /biblioteca/:area                     Documentos da área
 /biblioteca/:area/documento/:slug     Detalhe de documento
-/geoensine                            Geoensine
-/geoensine/projeto                    Projeto Geoensine
 /admin                                Login
 /admin/painel                         Redireciona para /admin/painel/categorias
 /admin/painel/:tab                    Painel (?postType=... para a aba de posts)

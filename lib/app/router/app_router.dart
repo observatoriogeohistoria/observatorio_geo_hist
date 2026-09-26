@@ -6,7 +6,6 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/panel_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
-import 'package:observatorio_geo_hist/app/features/geoensine/home/geoensine_home_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/contact_us_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/manifest_page.dart';
@@ -131,18 +130,6 @@ class AppRouter {
           if (invalidRoute) return const PageNotFound();
 
           return LibraryListPage(area: area);
-        },
-      ),
-      GoRoute(
-        path: '/geoensine',
-        builder: (BuildContext context, GoRouterState state) {
-          return const GeoensineHomePage();
-        },
-      ),
-      GoRoute(
-        path: '/geoensine/projeto',
-        builder: (BuildContext context, GoRouterState state) {
-          return const GeoensineHomePage();
         },
       ),
       GoRoute(
