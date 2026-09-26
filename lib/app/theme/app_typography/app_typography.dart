@@ -6,6 +6,12 @@ class AppTypography {
   /// The singleton instance of the [AppTypography] class.
   static const AppTypography instance = AppTypography._();
 
+  /// Estilos de texto do redesign (Bricolage Grotesque e Figtree), na faixa de
+  /// largura atual. Os getters abaixo (Dosis) seguem para as telas antigas.
+  AppTextStyles of(BuildContext context) {
+    return AppTextStyles.forWidth(MediaQuery.sizeOf(context).width);
+  }
+
   TypographyStyle get headline => TypographyStyle._(
         small: GoogleFonts.dosis(
           fontSize: 26.fontSize(min: 26),
