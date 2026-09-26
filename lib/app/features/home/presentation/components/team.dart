@@ -28,8 +28,6 @@ class Team extends StatefulWidget {
 class _TeamState extends State<Team> {
   final _carouselController = CarouselSliderController();
 
-  bool get _isMobile => ScreenUtils.isMobile(context);
-
   @override
   Widget build(BuildContext context) {
     return Padding(
