@@ -1,6 +1,6 @@
 # 004. Home: hero e atalhos
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 1, seção 1.1
 - **Protótipo:** aba "Home", bloco do topo (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -55,6 +55,7 @@ Escolher uma categoria fecha a janela e abre a página da categoria (`/posts/:ar
 - **Celular (390):** margens laterais de 20 px. Título grande (≈ 35 px), texto de apoio ≈ 17 px. Botões um abaixo do outro quando não couberem lado a lado. Atalhos em **uma coluna**, cada um em linha (ícone, textos, seta). Janela de categorias ocupa quase toda a largura, com margem.
 - **Tablet (768):** margens de 32 px. Título ≈ 54 px. Atalhos em **três colunas**, com o ícone acima do título e da descrição, para caber sem apertar o texto. Janela centralizada com largura máxima.
 - **Desktop (1280):** conteúdo limitado a 1120 px. Título ≈ 64 px. Atalhos em três colunas, em linha (ícone, textos, seta), como no protótipo. Janela centralizada com largura máxima.
+- Com o texto ampliado a partir de 130%, os atalhos ficam em uma coluna em qualquer largura, para os títulos não quebrarem no meio (decidido na verificação).
 - Em todas: sem rolagem horizontal e sem aviso de `overflow`.
 
 ## Acessibilidade
@@ -105,3 +106,4 @@ Escolher uma categoria fecha a janela e abre a página da categoria (`/posts/:ar
 - 2026-09-26: criada e aprovada no modo autônomo (execução da Fase 1).
 - 2026-09-26: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-09-26: implementada. Ajustes de plano, sem mudar o comportamento da spec: altura de linha do título 1,12 e largura do título em 8,4 em (reproduz as três linhas do protótipo, que usa `text-wrap: balance`); texto de apoio com 770 px; `AppFocusRing` ganhou `fit` opcional para os cartões terem a mesma altura.
+- 2026-09-26: verificada com ressalvas ([verificacao.md](verificacao.md)). Correções: ação de toque na semântica dos atalhos e botões, janela anunciada como diálogo, título e atalhos acompanham o texto ampliado. Ressalva: opções do menu de categorias da navbar (fora do escopo).
