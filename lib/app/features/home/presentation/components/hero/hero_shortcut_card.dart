@@ -59,6 +59,8 @@ class _HeroShortcutCardState extends State<HeroShortcutCard> {
       button: !widget.isLink,
       link: widget.isLink,
       label: widget.semanticLabel,
+      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o cartão.
+      onTap: widget.onTap,
       excludeSemantics: true,
       child: AppFocusRing(
         borderRadius: radius,

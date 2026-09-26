@@ -70,6 +70,8 @@ class _AppButtonBaseState extends State<AppButtonBase> {
       button: true,
       enabled: !widget.isDisabled,
       label: widget.text,
+      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o botão.
+      onTap: widget.isDisabled ? null : widget.onPressed,
       excludeSemantics: true,
       child: Opacity(
         opacity: widget.isDisabled ? 0.5 : 1,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_categories_menu.dart';
@@ -66,6 +67,7 @@ class AreaCategoriesDialog extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: components.categoriesDialogMaxWidth),
               child: Semantics(
+                role: SemanticsRole.dialog,
                 scopesRoute: true,
                 namesRoute: true,
                 explicitChildNodes: true,
