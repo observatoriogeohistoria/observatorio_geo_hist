@@ -1,22 +1,32 @@
-name: Deploy Flutter Web to HostGator
+name: Deploy Flutter Web (produção)
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: PROD
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Ler versão do Flutter do .fvmrc
+      id: fvm
+      run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
+
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.44.0'
+        flutter-version: ${{ steps.fvm.outputs.version }}
         cache: true
 
     - name: Install dependencies
@@ -25,11 +35,14 @@ jobs:
     - name: Build Flutter Web app
       run: flutter build web --release
 
-    - name: Sync build/web to HostGator
+    - name: Sync build/web to HostGator (produção)
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: ${{ secrets.FTP_HOST }}
         username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASSWORD }}
+        protocol: ftps
+        port: 21
+        security: loose
+        server-dir: ./
         local-dir: build/web/
-        timeout: 120000
