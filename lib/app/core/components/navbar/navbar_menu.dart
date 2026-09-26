@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/navbutton.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_dropdown.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
@@ -20,6 +21,46 @@ List<Widget> buildNavbarMenu(
     (option) {
       bool isFirst = option == navButtonItens.first;
       bool noOptions = (option.options?.isEmpty ?? true);
+
+      // Not evaluated on mobile: the menu is built inside a dialog, which has
+      // no GoRouterState above its context.
+      final isActive = !isMobile &&
+          (((categorySelected?.areas.isNotEmpty ?? false) &&
+                  categorySelected!.areas.first == option.area) ||
+              (option.route != null && AppRoutes.isCurrentRoute(context, option.route!)));
+
+      if (!isMobile && !noOptions) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: isFirst ? 0 : AppTheme.dimensions.space.mini.horizontalSpacing,
+          ),
+          child: NavbarDropdown(
+            title: option.title,
+            backgroundColor: isActive ? AppTheme.colors.lighterGray : null,
+            entries: [
+              for (final suboption in option.options!)
+                NavbarDropdownEntry(
+                  title: suboption.title,
+                  isDisabled: suboption.isDisabled,
+                  isSelected:
+                      suboption.category != null && suboption.category == categorySelected,
+                  onTap: () {
+                    if (suboption.onTap != null) {
+                      suboption.onTap!.call();
+                      return;
+                    }
+
+                    onCategorySelected.call(suboption.category);
+                    GoRouter.of(context).go(
+                      '/posts/${suboption.category!.areas.first.key}/${suboption.category!.key}',
+                      extra: suboption.category,
+                    );
+                  },
+                ),
+            ],
+          ),
+        );
+      }
 
       return Padding(
         padding: isMobile
@@ -70,13 +111,7 @@ List<Widget> buildNavbarMenu(
                     );
                   },
                 ).toList(),
-          backgroundColor: isMobile
-              ? null
-              : ((categorySelected?.areas.isNotEmpty ?? false) &&
-                          categorySelected!.areas.first == option.area) ||
-                      (option.route != null && AppRoutes.isCurrentRoute(context, option.route!))
-                  ? AppTheme.colors.lighterGray
-                  : null,
+          backgroundColor: isActive ? AppTheme.colors.lighterGray : null,
           textStyle: isMobile ? AppTheme.typography.headline.big : null,
           textColor: isMobile ? AppTheme.colors.white : null,
           textColorOnHover: isMobile ? AppTheme.colors.darkGray : null,

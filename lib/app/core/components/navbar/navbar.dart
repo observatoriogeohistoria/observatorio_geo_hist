@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
@@ -92,27 +93,26 @@ class _NavbarState extends State<Navbar> {
             width: isMobile ? null : width * 0.2,
             height: isMobile ? double.infinity : null,
           ),
-          Observer(
-            builder: (context) {
-              if (isMobile) {
-                return AppIconButton(
-                  icon: Icons.menu,
-                  color: AppTheme.colors.orange,
-                  size: 32,
-                  onPressed: _showMobileMenu,
+          if (isMobile)
+            AppIconButton(
+              icon: Icons.menu,
+              color: AppTheme.colors.orange,
+              size: 32,
+              onPressed: _showMobileMenu,
+            )
+          else
+            Observer(
+              builder: (context) {
+                return Row(
+                  children: buildNavbarMenu(
+                    context,
+                    navButtonItens,
+                    _fetchCategoriesStore.selectedCategory,
+                    _fetchCategoriesStore.setSelectedCategory,
+                  ),
                 );
-              }
-
-              return Row(
-                children: buildNavbarMenu(
-                  context,
-                  navButtonItens,
-                  _fetchCategoriesStore.selectedCategory,
-                  _fetchCategoriesStore.setSelectedCategory,
-                ),
-              );
-            },
-          ),
+              },
+            ),
         ],
       ),
     );
@@ -167,6 +167,26 @@ class _NavbarState extends State<Navbar> {
     ];
   }
 
+  void _onMobileItemSelected(NavButtonItem item) {
+    if (item.onTap != null) {
+      item.onTap!.call();
+      return;
+    }
+
+    final category = item.category;
+    _fetchCategoriesStore.setSelectedCategory(category);
+
+    if (category != null) {
+      GoRouter.of(context).go(
+        '/posts/${category.areas.first.key}/${category.key}',
+        extra: category,
+      );
+      return;
+    }
+
+    if (item.route != null) GoRouter.of(context).replace(item.route!);
+  }
+
   void _showMobileMenu() {
     showGeneralDialog(
       context: context,
@@ -177,7 +197,8 @@ class _NavbarState extends State<Navbar> {
       pageBuilder: (context, animation, secondaryAnimation) {
         return NavbarMobileMenu(
           navButtonItens: navButtonItens,
-          onCategorySelected: _fetchCategoriesStore.setSelectedCategory,
+          categorySelected: _fetchCategoriesStore.selectedCategory,
+          onItemSelected: _onMobileItemSelected,
         );
       },
     );
