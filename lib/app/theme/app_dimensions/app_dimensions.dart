@@ -42,6 +42,51 @@ class AppDimensions {
   RadiiScale radii = const RadiiScale._();
   ShadowStyle shadows = const ShadowStyle._();
   FocusStyle focus = const FocusStyle._();
+  ComponentSizes components = const ComponentSizes._();
+}
+
+/// Tamanhos fixos de componentes compartilhados (botões, navbar, menus).
+class ComponentSizes {
+  const ComponentSizes._();
+
+  /// Altura da navbar fixa.
+  final double navbarHeight = 68.0;
+
+  /// Altura mínima dos botões: pequeno e médio/grande.
+  final double buttonMinHeightSmall = 40.0;
+  final double buttonMinHeightRegular = 44.0;
+
+  /// Tamanho do texto dos botões pequeno, médio e grande.
+  final double buttonTextSmall = 14.0;
+  final double buttonTextMedium = 16.0;
+  final double buttonTextBig = 18.0;
+
+  /// Logo: tamanho da marca e dos textos.
+  final double logoMark = 34.0;
+  final double logoName = 19.0;
+  final double logoSubtitle = 11.5;
+
+  /// Texto dos itens da navbar e das opções dos menus.
+  final double navItemText = 15.5;
+  final double navIcon = 20.0;
+
+  /// Opacidade do fundo da navbar e do véu atrás do menu de celular.
+  final double navbarOpacity = 0.94;
+  final double scrimOpacity = 0.4;
+
+  /// Ícone do botão de menu (três traços / fechar) e área tocável mínima.
+  final double menuIconSize = 24.0;
+  final double minTapTarget = 44.0;
+
+  /// Larguras do menu suspenso de categorias (desktop).
+  final double dropdownMinWidth = 260.0;
+  final double dropdownMaxWidth = 340.0;
+
+  /// Largura máxima do painel do menu de celular e tablet.
+  final double mobileMenuMaxWidth = 420.0;
+
+  /// Duração das animações de menu (zero com movimento reduzido).
+  final Duration menuAnimation = const Duration(milliseconds: 160);
 }
 
 /// Escala de espaçamento em passos de 4 px.

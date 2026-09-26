@@ -89,33 +89,31 @@ class PostCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Tooltip(
-                    message: post.isPublished ? 'Despublicar post' : 'Publicar post',
-                    child: AppIconButton(
-                      icon: post.isPublished ? Icons.public_off : Icons.public,
-                      color: AppTheme.colors.orange,
-                      onPressed: onPublish,
-                    ),
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                  Tooltip(
-                    message: post.isHighlighted ? 'Remover dos destaques' : 'Destacar post',
-                    child: AppIconButton(
-                      icon: post.isHighlighted
-                          ? Icons.bookmark_remove_outlined
-                          : Icons.bookmark_add_outlined,
-                      color: AppTheme.colors.orange,
-                      onPressed: onHighlight,
-                    ),
+                  AppIconButton(
+                    tooltip: post.isPublished ? 'Despublicar post' : 'Publicar post',
+                    icon: post.isPublished ? Icons.public_off : Icons.public,
+                    color: AppTheme.colors.orange,
+                    onPressed: onPublish,
                   ),
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppIconButton(
+                    tooltip: post.isHighlighted ? 'Remover dos destaques' : 'Destacar post',
+                    icon: post.isHighlighted
+                        ? Icons.bookmark_remove_outlined
+                        : Icons.bookmark_add_outlined,
+                    color: AppTheme.colors.orange,
+                    onPressed: onHighlight,
+                  ),
+                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  AppIconButton(
+                    tooltip: 'Editar post',
                     icon: Icons.edit,
                     color: AppTheme.colors.gray,
                     onPressed: onEdit,
                   ),
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppIconButton(
+                    tooltip: 'Excluir post',
                     icon: Icons.delete,
                     color: AppTheme.colors.red,
                     onPressed: onDelete,

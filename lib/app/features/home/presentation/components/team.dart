@@ -45,6 +45,7 @@ class _TeamState extends State<Team> {
           Row(
             children: [
               CustomIconButton(
+                tooltip: 'Membro anterior',
                 icon: Icons.arrow_back_ios_outlined,
                 onTap: () => _carouselController.previousPage(),
               ),
@@ -98,6 +99,7 @@ class _TeamState extends State<Team> {
                 ),
               ),
               CustomIconButton(
+                tooltip: 'Próximo membro',
                 icon: Icons.arrow_forward_ios_outlined,
                 onTap: () => _carouselController.nextPage(),
               ),

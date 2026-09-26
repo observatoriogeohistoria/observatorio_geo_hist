@@ -66,6 +66,7 @@ class CategoryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   AppIconButton(
+                    tooltip: 'Editar categoria',
                     icon: Icons.edit,
                     color: AppTheme.colors.orange,
                     onPressed: onEdit,
@@ -73,6 +74,7 @@ class CategoryCard extends StatelessWidget {
                   if (category.numberOfPosts == 0) ...[
                     SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                     AppIconButton(
+                      tooltip: 'Excluir categoria',
                       icon: Icons.delete,
                       color: AppTheme.colors.red,
                       onPressed: onDelete,

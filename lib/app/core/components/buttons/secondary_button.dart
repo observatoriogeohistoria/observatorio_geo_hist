@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart';
+
+export 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart' show ButtonSize;
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton.small({
@@ -32,71 +32,12 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    EdgeInsetsGeometry padding;
-    AppTitle buttonText;
-    Color buttonTextColor = isDisabled ? AppTheme.colors.gray : AppTheme.colors.orange;
-
-    switch (size) {
-      case ButtonSize.small:
-        padding = EdgeInsets.symmetric(
-          horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
-          vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-        );
-
-        buttonText = AppTitle.small(
-          text: text,
-          textAlign: TextAlign.center,
-          color: buttonTextColor,
-          notSelectable: true,
-        );
-
-        break;
-      case ButtonSize.medium:
-        padding = EdgeInsets.all(AppTheme.dimensions.space.medium.scale);
-
-        buttonText = AppTitle.medium(
-          text: text,
-          textAlign: TextAlign.center,
-          color: buttonTextColor,
-          notSelectable: true,
-        );
-
-        break;
-      case ButtonSize.big:
-        padding = EdgeInsets.all(AppTheme.dimensions.space.medium.scale);
-
-        buttonText = AppTitle.big(
-          text: text,
-          textAlign: TextAlign.center,
-          color: buttonTextColor,
-          notSelectable: true,
-        );
-
-        break;
-    }
-
-    return TextButton(
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.resolveWith((states) {
-          if (isDisabled || states.contains(WidgetState.hovered)) {
-            return AppTheme.colors.lighterGray.withValues(alpha: 0.2);
-          }
-          return AppTheme.colors.white;
-        }),
-        shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(
-            side: BorderSide(
-              color: isDisabled ? AppTheme.colors.gray : AppTheme.colors.orange,
-            ),
-            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.small),
-          ),
-        ),
-        padding: WidgetStateProperty.all(padding),
-      ),
-      onPressed: isDisabled ? null : onPressed,
-      child: buttonText,
+    return AppButtonBase(
+      kind: AppButtonKind.secondary,
+      size: size,
+      text: text,
+      onPressed: onPressed,
+      isDisabled: isDisabled,
     );
   }
 }
-
-enum ButtonSize { small, medium, big }

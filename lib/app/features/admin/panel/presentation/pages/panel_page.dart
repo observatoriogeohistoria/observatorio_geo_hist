@@ -115,6 +115,7 @@ class _PanelPageState extends State<PanelPage> {
               horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
             ),
             child: AppIconButton(
+              tooltip: 'Sair',
               icon: Icons.exit_to_app,
               color: AppTheme.colors.white,
               size: 32,

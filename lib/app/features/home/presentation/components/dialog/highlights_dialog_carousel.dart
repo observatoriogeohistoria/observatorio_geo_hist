@@ -77,6 +77,7 @@ class _HighlightsCarouselState extends State<HighlightsCarousel> {
             children: [
               IntrinsicHeight(
                 child: CustomIconButton(
+                  tooltip: 'Destaque anterior',
                   icon: Icons.arrow_back_ios_outlined,
                   onTap: () => _carouselController.previousPage(),
                 ),
@@ -127,6 +128,7 @@ class _HighlightsCarouselState extends State<HighlightsCarousel> {
               SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
               IntrinsicHeight(
                 child: CustomIconButton(
+                  tooltip: 'Próximo destaque',
                   icon: Icons.arrow_forward_ios_outlined,
                   onTap: () => _carouselController.nextPage(),
                 ),

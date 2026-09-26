@@ -67,6 +67,7 @@ class _FiltersState extends State<Filters> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: AppIconButton(
+                            tooltip: 'Fechar filtros',
                             icon: Icons.close,
                             color: AppTheme.colors.orange,
                             size: 32,

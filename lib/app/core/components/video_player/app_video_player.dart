@@ -80,12 +80,14 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
                   child: Row(
                     children: [
                       AppIconButton(
+                        tooltip: _isPlaying ? 'Pausar vídeo' : 'Reproduzir vídeo',
                         icon: _isPlaying ? Icons.pause : Icons.play_arrow,
                         color: Colors.white,
                         size: 32,
                         onPressed: _togglePlayPause,
                       ),
                       AppIconButton(
+                        tooltip: _isMuted ? 'Ativar som' : 'Silenciar',
                         icon: _isMuted ? Icons.volume_off : Icons.volume_up,
                         color: Colors.white,
                         size: 32,

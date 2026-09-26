@@ -71,6 +71,7 @@ class LibraryDocumentCard extends StatelessWidget {
                 children: [
                   if (enabledEdit) ...[
                     AppIconButton(
+                      tooltip: 'Editar documento',
                       icon: Icons.edit,
                       color: AppTheme.colors.gray,
                       onPressed: () => onEdit?.call(),
@@ -79,6 +80,7 @@ class LibraryDocumentCard extends StatelessWidget {
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   if (enabledDelete) ...[
                     AppIconButton(
+                      tooltip: 'Excluir documento',
                       icon: Icons.delete,
                       color: AppTheme.colors.red,
                       onPressed: () => onDelete?.call(),
