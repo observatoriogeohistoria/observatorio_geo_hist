@@ -90,6 +90,66 @@ class ComponentSizes {
 
   /// Duração das animações de menu (zero com movimento reduzido).
   final Duration menuAnimation = const Duration(milliseconds: 160);
+
+  // Hero da Home (spec 004). Origem: `.hero`, `.hero h1`, `.lead` e `.area`
+  // do protótipo; os `clamp()` do CSS viraram um valor fixo por faixa.
+
+  /// Respiro acima do conteúdo do hero (`padding-block` inicial).
+  double heroPaddingTop(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 48, 80, 104);
+
+  /// Respiro abaixo dos atalhos (`padding-block` final).
+  double heroPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 48, 64);
+
+  /// Vão entre os botões e os atalhos (`.areas` `margin-top`).
+  double heroShortcutsGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 36, 48, 60);
+
+  /// Vão entre o rótulo e o título (`margin-top: 14px`).
+  final double heroTitleGap = 14.0;
+
+  /// Vão entre o texto de apoio e os botões (`.hero-actions` `margin-top: 30px`).
+  final double heroActionsGap = 30.0;
+
+  /// Largura máxima do título, em múltiplos do tamanho da fonte. O protótipo usa
+  /// `max-width: 15ch` com `text-wrap: balance` (três linhas equilibradas); sem
+  /// `balance` no Flutter, 8,4 em reproduz a mesma quebra.
+  final double heroTitleMaxWidthEm = 8.4;
+
+  /// Largura máxima do texto de apoio (60 caracteres a 20 px).
+  final double heroLeadMaxWidth = 770.0;
+
+  /// Quadro laranja suave do ícone dos atalhos e o ícone dentro dele.
+  final double shortcutIconBox = 46.0;
+  final double shortcutIcon = 22.0;
+
+  /// Subida do cartão de atalho no hover.
+  final double shortcutHoverLift = 2.0;
+
+  /// Duração das transições do cartão de atalho (zero com movimento reduzido).
+  final Duration shortcutAnimation = const Duration(milliseconds: 150);
+
+  /// Largura máxima da janela de categorias de uma área.
+  final double categoriesDialogMaxWidth = 420.0;
+
+  /// Anéis do fundo do hero: opacidade da cor, passo entre anéis e fração da
+  /// altura em que o desenho começa a se apagar em direção à base.
+  final double heroRingAccentOpacity = 0.11;
+  final double heroRingInkOpacity = 0.06;
+  final double heroRingAccentStep = 27.0;
+  final double heroRingInkStep = 35.0;
+  final double heroRingFadeStart = 0.55;
+
+  /// Centro de cada conjunto de anéis, em fração da largura e da altura
+  /// (`circle at 86% 18%` e `circle at 8% 110%`).
+  final Offset heroRingAccentCenter = const Offset(0.86, 0.18);
+  final Offset heroRingInkCenter = const Offset(0.08, 1.10);
+
+  double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
+    return switch (breakpoint) {
+      Breakpoint.mobile => mobile,
+      Breakpoint.tablet => tablet,
+      Breakpoint.desktop => desktop,
+    };
+  }
 }
 
 /// Escala de espaçamento em passos de 4 px.

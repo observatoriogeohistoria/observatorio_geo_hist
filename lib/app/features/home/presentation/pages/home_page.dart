@@ -13,6 +13,7 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart'
     deferred as contact_us;
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/hero/home_hero.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights.dart'
     deferred as highlights;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart'
@@ -64,6 +65,9 @@ class _HomePageState extends State<HomePage> {
       body: CustomScrollView(
         slivers: [
           const NavbarSliver(),
+          // Hero e atalhos (spec 004): sem carregamento adiado, aparece junto com a navbar.
+          const SliverToBoxAdapter(child: HomeHero()),
+          // Destaques: redesenho na spec 005.
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: highlights.loadLibrary(),
@@ -75,7 +79,9 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
+          // Quem somos: redesenho na spec 006.
           const SliverToBoxAdapter(child: WhoWeAre()),
+          // Vídeo: redesenho na spec 006.
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: video_player.loadLibrary(),
@@ -96,6 +102,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
+          // Nossa história (resumo): redesenho na spec 007.
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: our_history.loadLibrary(),
@@ -108,6 +115,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SliverToBoxAdapter(child: AppDivider()),
+          // Equipe: redesenho na spec 008.
           SliverToBoxAdapter(
             child: Observer(
               builder: (context) {
@@ -127,6 +135,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SliverToBoxAdapter(child: AppDivider()),
+          // Realização e apoio: redesenho na spec 009.
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: partners.loadLibrary(),
@@ -138,6 +147,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
+          // Chamada para contato: redesenho na spec 009.
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: contact_us.loadLibrary(),

@@ -1,6 +1,6 @@
 # 004. Home: hero e atalhos
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 1, seção 1.1
 - **Protótipo:** aba "Home", bloco do topo (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -104,3 +104,4 @@ Escolher uma categoria fecha a janela e abre a página da categoria (`/posts/:ar
 ## Histórico de mudanças
 - 2026-09-26: criada e aprovada no modo autônomo (execução da Fase 1).
 - 2026-09-26: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-09-26: implementada. Ajustes de plano, sem mudar o comportamento da spec: altura de linha do título 1,12 e largura do título em 8,4 em (reproduz as três linhas do protótipo, que usa `text-wrap: balance`); texto de apoio com 770 px; `AppFocusRing` ganhou `fit` opcional para os cartões terem a mesma altura.

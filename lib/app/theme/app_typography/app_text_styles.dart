@@ -6,10 +6,12 @@ part of '../app_theme.dart';
 //
 // | Estilo   | Família             | Peso | Altura | Espaçamento | Origem no protótipo        |
 // |----------|---------------------|------|--------|-------------|----------------------------|
+// | display  | Bricolage Grotesque | 800  | 1,12   | -0,035 em   | `.hero h1`                 |
 // | h1       | Bricolage Grotesque | 800  | 1,12   | -0,03 em    | `.page-head h1`            |
 // | h2       | Bricolage Grotesque | 700  | 1,12   | -0,02 em    | `.section-head h2`         |
 // | h3       | Bricolage Grotesque | 700  | 1,20   | -0,01 em    | `.area b`, `.feat h3`      |
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
+// | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | padrão   | Figtree             | 400  | 1,55   | 0           | `body`                     |
 // | pequeno  | Figtree             | 400  | 1,50   | 0           | `.meta`, `.area span`      |
 // | rótulo   | Figtree             | 700  | 1,40   | 0,08 em     | `.eyebrow`, `.tag`         |
@@ -78,6 +80,14 @@ class AppTextStyles {
     );
   }
 
+  /// Título de destaque (hero da Home). Valores da spec 004.
+  TextStyle get display => _display(
+        size: _size(mobile: 35, tablet: 54, desktop: 64),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.035,
+      );
+
   /// Título de página.
   TextStyle get h1 => _display(
         size: _size(mobile: 32, tablet: 40, desktop: 52),
@@ -107,6 +117,13 @@ class AppTextStyles {
         size: _size(mobile: 17, tablet: 18, desktop: 18),
         weight: FontWeight.w400,
         height: 1.75,
+      );
+
+  /// Texto de apoio abaixo de títulos grandes (hero). Valores da spec 004.
+  TextStyle get lead => _body(
+        size: _size(mobile: 17, tablet: 20, desktop: 20),
+        weight: FontWeight.w400,
+        height: 1.55,
       );
 
   /// Texto padrão.

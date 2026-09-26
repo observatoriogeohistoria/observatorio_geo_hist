@@ -100,6 +100,10 @@ Os tipos de post são os valores de `PostType`: produção acadêmica, artigo, l
 
 A `Navbar` fica fixa no topo (`NavbarSliver` em páginas com `CustomScrollView`). Em ≥ 1024 px mostra os itens em linha; História e Geografia usam o `NavbarDropdown` (hover, clique e teclado) com o conteúdo de `NavbarCategoriesMenu`. Abaixo disso, um botão abre `NavbarMobileMenu`, painel com sanfonas. O item ativo vem de `NavbarLocation`, calculado pela rota e entregue ao painel.
 
+## Home
+
+A `HomePage` é um `CustomScrollView` com um bloco por sliver, abaixo da `NavbarSliver`. O primeiro é o `HomeHero` (`features/home/presentation/components/hero/`), carregado junto com a página: rótulo, título, texto de apoio, botões para a biblioteca e o manifesto e três atalhos (`HeroShortcutCard`). Os atalhos História e Geografia abrem `showAreaCategoriesDialog`, uma janela que reaproveita o `NavbarCategoriesMenu` e o `FetchCategoriesStore` da navbar (sem consulta nova). O fundo desenhado é o `HeroBackgroundPainter`. Os demais blocos são carregados sob demanda (`deferred`) e cada um indica, em comentário, a spec que o redesenha.
+
 ## Tratamento de erros
 
 Repositórios retornam `Either<Failure, T>`; cada feature define suas próprias falhas.

@@ -10,6 +10,7 @@ class AppFocusRing extends StatefulWidget {
     required this.child,
     this.borderRadius = BorderRadius.zero,
     this.color,
+    this.fit = StackFit.loose,
   });
 
   final Widget child;
@@ -19,6 +20,11 @@ class AppFocusRing extends StatefulWidget {
 
   /// Cor do contorno. Por padrão, a cor de acento; use outra sobre fundo escuro.
   final Color? color;
+
+  /// Como as restrições do pai chegam ao [child]. Use `StackFit.passthrough`
+  /// quando o filho precisa ocupar a altura imposta pelo pai (por exemplo,
+  /// cartões de mesma altura numa `Row` com `IntrinsicHeight`).
+  final StackFit fit;
 
   @override
   State<AppFocusRing> createState() => _AppFocusRingState();
@@ -59,6 +65,7 @@ class _AppFocusRingState extends State<AppFocusRing> {
       skipTraversal: true,
       onFocusChange: _handleFocusChange,
       child: Stack(
+        fit: widget.fit,
         clipBehavior: Clip.none,
         children: [
           widget.child,
