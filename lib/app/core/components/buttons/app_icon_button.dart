@@ -10,6 +10,7 @@ class AppIconButton extends StatelessWidget {
     required this.onPressed,
     required this.tooltip,
     this.size = 24,
+    this.focusNode,
     super.key,
   });
 
@@ -21,6 +22,9 @@ class AppIconButton extends StatelessWidget {
   final String tooltip;
   final double size;
 
+  /// Nó de foco opcional, para quem precisa mover o foco até o botão.
+  final FocusNode? focusNode;
+
   @override
   Widget build(BuildContext context) {
     final minTarget = AppTheme.dimensions.components.minTapTarget;
@@ -29,6 +33,7 @@ class AppIconButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(minTarget),
       child: IconButton(
         tooltip: tooltip,
+        focusNode: focusNode,
         padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
         constraints: BoxConstraints(minWidth: minTarget, minHeight: minTarget),
         iconSize: size.scale,

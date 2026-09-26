@@ -128,3 +128,8 @@ O vídeo só é baixado depois de "Assistir": abrir a Home não baixa os 14 MB.
 ## Histórico de mudanças
 - 2026-09-26: criada e aprovada no modo autônomo (execução da Fase 1).
 - 2026-09-26: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-09-26: ajustes na implementação (modo autônomo, sem mudar o comportamento descrito acima):
+  - **Foco depois de "Assistir".** O foco vai para "Pausar vídeo" só quando "Assistir" foi ativado pelo teclado (estava com o foco). Com clique do mouse, o foco fica onde está: o Flutter trata o mouse como modo de destaque "tradicional" e o contorno de foco apareceria sem a pessoa ter usado o teclado. Por isso o `AppIconButton` ganhou `focusNode` opcional (no lugar do `autofocus` do plano, que não vale quando outro elemento já tem o foco).
+  - **Controles do player afastados da borda.** Com o véu ligado, os controles ficam 8 px afastados da borda esquerda e da base, para o contorno de foco não ser cortado pelos cantos arredondados do quadro.
+  - **Ativação do usuário em arquivo próprio.** A consulta a `navigator.userActivation` fica em `core/utils/browser/user_activation.dart`, com import condicional (fora da web devolve `true`), para o código continuar compilando fora do navegador.
+  - **Correção no `AppVideoPlayer`.** Reproduzir/pausar agora muda o estado interno antes de chamar o controller (que avisa os ouvintes ainda dentro de `play()`); sem os parâmetros novos, o comportamento é o mesmo de antes.

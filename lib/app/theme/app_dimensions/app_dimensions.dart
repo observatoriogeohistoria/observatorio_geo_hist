@@ -91,6 +91,12 @@ class ComponentSizes {
   /// Duração das animações de menu (zero com movimento reduzido).
   final Duration menuAnimation = const Duration(milliseconds: 160);
 
+  /// Link com seta (`.link-arrow`): vão entre o texto e a seta, em repouso e
+  /// no hover, e duração da transição (zero com movimento reduzido).
+  final double arrowLinkGap = 6.0;
+  final double arrowLinkGapHover = 9.0;
+  final Duration arrowLinkAnimation = const Duration(milliseconds: 150);
+
   // Hero da Home (spec 004). Origem: `.hero`, `.hero h1`, `.lead` e `.area`
   // do protótipo; os `clamp()` do CSS viraram um valor fixo por faixa.
 
@@ -200,6 +206,20 @@ class ComponentSizes {
 
   /// Duração da entrada da foto depois de carregada (zero com movimento reduzido).
   final Duration featuredImageFade = const Duration(milliseconds: 200);
+
+  // Vídeo da Home (spec 006).
+
+  /// Véu atrás dos controles do player: opacidade na base e altura. Ícones
+  /// brancos ficam acima de 3:1 mesmo sobre um quadro branco.
+  final double videoControlsScrimOpacity = 0.72;
+  final double videoControlsScrimHeight = 72.0;
+
+  /// Fração da altura do véu dos controles em que ele chega à opacidade cheia.
+  final double videoControlsScrimSolidFrom = 0.4;
+
+  /// Afastamento dos controles do player em relação à borda esquerda e à base
+  /// do quadro, para o contorno de foco não ser cortado pelos cantos.
+  final double videoControlsInset = 8.0;
 
   double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
     return switch (breakpoint) {
