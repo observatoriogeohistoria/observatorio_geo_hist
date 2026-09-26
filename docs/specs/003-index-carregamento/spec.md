@@ -1,6 +1,6 @@
 # 003. Página base (`index.html`) e tela de carregamento
 
-- **Status:** aprovada
+- **Status:** verificada
 - **Item do planejamento:** Fase 0, entrega 0.7
 - **Protótipo:** sem aba própria. Usa a marca e as cores da aba "Fundamentos" (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -90,3 +90,6 @@ Marca, nome e mensagens ficam centralizados e legíveis em 390, 768 e 1280 px, s
 ## Histórico de mudanças
 - 2026-09-26: criada.
 - 2026-09-26: aprovada.
+- 2026-09-26: ajustes na implementação. (1) O `title` do `MaterialApp` em `app_widget.dart` passou a "Observatório do Ensino de História e Geografia | UFU": o Flutter sobrescreve o `<title>` quando o app abre, e sem isso o critério da aba não seria atendido (única mudança em Dart). (2) `<meta name="viewport">` no `index.html` para a tela de carregamento ficar certa no celular antes do app (o Flutter troca pela dele ao abrir). (3) A trilha do anel usa a cor `line` da 001. (4) A salvaguarda dos 15 s procura o `<canvas>` dentro do shadow DOM de `flt-glass-pane`, onde o Flutter desenha.
+- 2026-09-26: implementada.
+- 2026-09-26: verificada ([verificacao.md](verificacao.md)). Na verificação entrou `twitter:image:alt` no `index.html`.

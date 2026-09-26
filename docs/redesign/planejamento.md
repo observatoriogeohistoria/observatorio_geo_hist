@@ -97,7 +97,7 @@ Dividida em três specs: 0.1 a 0.3 → specs/001-fundacao; 0.4 a 0.6 → specs/0
 | 0.4 | Botões: primário, secundário e discreto, com foco visível e estado desativado → specs/002-botoes-navbar-rodape, concluído | `core/components/buttons/*` |
 | 0.5 | Navbar: fixa, item ativo sublinhado, dropdown com links externos separados, menu de celular → specs/002-botoes-navbar-rodape, concluído | `core/components/navbar/*`, `navbar_mobile_menu.dart` |
 | 0.6 | Rodapé escuro em colunas, com redes sociais, contatos clicáveis e ano dinâmico → specs/002-botoes-navbar-rodape, concluído | `core/components/footer/footer.dart` |
-| 0.7 | Cabeçalho `<title>` e descrição do `web/index.html`, tela de carregamento inicial | `web/index.html` |
+| 0.7 | Cabeçalho `<title>` e descrição do `web/index.html`, tela de carregamento inicial → specs/003-index-carregamento, concluído | `web/index.html`, `web/manifest.json`, `tool/web_icons/` |
 
 **Aceite:** todas as páginas existentes abrem sem erro com a navbar, o rodapé e os botões novos. Contraste de texto ≥ 4,5:1. Navegação completa por teclado na navbar.
 

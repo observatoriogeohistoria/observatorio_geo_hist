@@ -127,6 +127,13 @@ Future<Either<Failure, PaginatedPosts>> fetchPosts(...) async {
 2. Criar `{feature}_setup.dart` e chamá-lo em `app_setup.dart`.
 3. Registrar as rotas em `app_router.dart`.
 
+## Página base e tela de carregamento (`web/`)
+
+- [web/index.html](../web/index.html) traz título, descrição, `lang="pt-BR"`, cor de tema, tags de compartilhamento (Open Graph e Twitter/X, com `og-image.png` de 1200×630) e o link canônico `https://observatoriogeohistoria.net.br/`. Os blocos do Google Analytics e do `pdf.js` (usado pelo `pdfx` na biblioteca) não devem ser mexidos.
+- A **tela de carregamento** é HTML e CSS inline no começo do `<body>`, com a marca em SVG e fonte do sistema, para aparecer antes de qualquer script. Um script inline a remove quando o motor do Flutter dispara o evento `flutter-first-frame` na janela (esmaecimento de 200 ms, sem animação com movimento reduzido). Se o app não abrir em 15 s, mostra a mensagem de demora e o botão "Recarregar". Sem JavaScript, um `<noscript>` mostra o aviso. As cores ficam num bloco de variáveis CSS espelhando `AppColors`.
+- O título da aba depois que o app abre vem do `title` do `MaterialApp` em `app_widget.dart`; mantenha-o igual ao `<title>` do `index.html`.
+- **Ícones e imagem de compartilhamento** (`favicon.svg`, `favicon.png`, `icons/*`, `og-image.png`) são gerados por `tool/web_icons/gerar.sh`, que fotografa as páginas de `tool/web_icons/` com o Google Chrome em modo headless. Rode de novo só se a marca (`assets/images/logo.svg`) mudar, lembrando de atualizar o SVG copiado nessas páginas e no `index.html`.
+
 ## Ferramentas e versões
 
 - Flutter fixado via FVM em [.fvmrc](../.fvmrc); o deploy usa a mesma versão em [deploy.yml](../.github/workflows/deploy.yml). Ao trocar de versão, atualize os dois.
