@@ -1,6 +1,6 @@
 # 005. Home: destaques
 
-- **Status:** implementada
+- **Status:** verificada
 - **Item do planejamento:** Fase 1, seção 1.2
 - **Protótipo:** aba "Home", bloco "Destaques" logo abaixo do hero (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -75,22 +75,22 @@ O cartão inteiro é um link para a página do post (`/posts/:area/:categoria/:i
 - Nada muda em modelos de dados, coleções, regras ou índices do Firebase, nem em rotas. Nenhum dado real é alterado para testar.
 
 ## Critérios de aceite
-1. [ ] Com pelo menos um destaque, a seção aparece logo abaixo do hero e acima de "Quem somos", com o título "Destaques" anunciado como cabeçalho; o carrossel antigo, as setas e as faixas cinza não aparecem mais.
-2. [ ] Com 0 destaques, a seção não aparece (nem título nem espaço vazio) e a Home vai do hero direto para "Quem somos".
-3. [ ] Com 1 destaque, aparece um único cartão principal na largura toda do conteúdo, em 390, 768 e 1280 px.
-4. [ ] Com 2 destaques, em 768 e 1280 px aparecem duas colunas (principal mais larga, 1,6 : 1, as duas com a altura toda); em 390 px, um abaixo do outro.
-5. [ ] Com 3 destaques, em 768 e 1280 px o principal fica à esquerda na altura toda e os outros dois empilhados à direita; em 390 px, os três em coluna, principal primeiro.
-6. [ ] Com mais de 3 destaques (ex.: 5), aparecem só os três mais recentes pela data de criação, e o mais recente é o principal; nada troca sozinho e não há setas.
-7. [ ] Cada cartão mostra a foto recortada preenchendo o cartão, o degradê só na parte de baixo, o rótulo "TIPO · ÁREA", o título e, no principal, a data no formato "12 mar 2026".
-8. [ ] Clicar ou apertar Enter num cartão abre `/posts/:area/:categoria/:id` do post; o mesmo vale para a ativação pelo leitor de tela.
-9. [ ] Sem imagem ou com imagem que falha, o cartão mantém o tamanho, mostra o fundo escuro com o ícone de imagem e o texto continua legível.
-10. [ ] Carregando: título e esqueleto na disposição de três cartões; erro: "Não foi possível carregar os destaques." com "Tentar de novo", que refaz a busca.
-11. [ ] Títulos longos param em 3 linhas com reticências, e o nome acessível traz o título completo.
-12. [ ] Cartões alcançáveis por Tab na ordem visual, com contorno de foco visível arredondado e nome acessível (título, rótulo e data); foto e ícones ignorados pelo leitor de tela.
-13. [ ] Contraste de rótulo, título e data ≥ 4,5:1 sobre o degradê com uma foto branca por trás; mensagem de erro ≥ 4,5:1.
-14. [ ] Em 390, 768 e 1280 px (e com texto a 200%), sem rolagem horizontal e sem `overflow`; alturas e tamanhos de título conforme "Responsivo".
-15. [ ] Com movimento reduzido, nenhuma transição no bloco nem na imagem, e esqueleto parado.
-16. [ ] O código novo usa só tokens de `lib/app/theme/` (nenhuma cor, tamanho de fonte ou espaçamento solto) e não usa `num_extension`; `fvm flutter analyze` sem problemas novos e `fvm flutter build web --release` sem erro.
+1. [x] Com pelo menos um destaque, a seção aparece logo abaixo do hero e acima de "Quem somos", com o título "Destaques" anunciado como cabeçalho; o carrossel antigo, as setas e as faixas cinza não aparecem mais.
+2. [x] Com 0 destaques, a seção não aparece (nem título nem espaço vazio) e a Home vai do hero direto para "Quem somos".
+3. [x] Com 1 destaque, aparece um único cartão principal na largura toda do conteúdo, em 390, 768 e 1280 px.
+4. [x] Com 2 destaques, em 768 e 1280 px aparecem duas colunas (principal mais larga, 1,6 : 1, as duas com a altura toda); em 390 px, um abaixo do outro.
+5. [x] Com 3 destaques, em 768 e 1280 px o principal fica à esquerda na altura toda e os outros dois empilhados à direita; em 390 px, os três em coluna, principal primeiro.
+6. [x] Com mais de 3 destaques (ex.: 5), aparecem só os três mais recentes pela data de criação, e o mais recente é o principal; nada troca sozinho e não há setas.
+7. [x] Cada cartão mostra a foto recortada preenchendo o cartão, o degradê só na parte de baixo, o rótulo "TIPO · ÁREA", o título e, no principal, a data no formato "12 mar 2026".
+8. [x] Clicar ou apertar Enter num cartão abre `/posts/:area/:categoria/:id` do post; o mesmo vale para a ativação pelo leitor de tela.
+9. [x] Sem imagem ou com imagem que falha, o cartão mantém o tamanho, mostra o fundo escuro com o ícone de imagem e o texto continua legível.
+10. [x] Carregando: título e esqueleto na disposição de três cartões; erro: "Não foi possível carregar os destaques." com "Tentar de novo", que refaz a busca.
+11. [x] Títulos longos param em 3 linhas com reticências, e o nome acessível traz o título completo.
+12. [x] Cartões alcançáveis por Tab na ordem visual, com contorno de foco visível arredondado e nome acessível (título, rótulo e data); foto e ícones ignorados pelo leitor de tela.
+13. [x] Contraste de rótulo, título e data ≥ 4,5:1 sobre o degradê com uma foto branca por trás; mensagem de erro ≥ 4,5:1.
+14. [x] Em 390, 768 e 1280 px (e com texto a 200%), sem rolagem horizontal e sem `overflow`; alturas e tamanhos de título conforme "Responsivo".
+15. [x] Com movimento reduzido, nenhuma transição no bloco nem na imagem, e esqueleto parado.
+16. [x] O código novo usa só tokens de `lib/app/theme/` (nenhuma cor, tamanho de fonte ou espaçamento solto) e não usa `num_extension`; `fvm flutter analyze` sem problemas novos e `fvm flutter build web --release` sem erro.
 
 ## Fora do escopo
 - Escolher, editar ou reordenar destaques (feito no painel administrativo) e qualquer mudança na busca, nos modelos, nas coleções, nas regras ou nos índices do Firebase.
@@ -117,3 +117,4 @@ O cartão inteiro é um link para a página do post (`/posts/:area/:categoria/:i
 - 2026-09-26: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-09-26: diagnóstico da A1: a busca de destaques responde sem erro e com 0 documentos (não há post publicado marcado como destaque). Com os dados de hoje, a seção fica escondida no site.
 - 2026-09-26: implementada. Ajustes de plano sem mudar o comportamento: largura máxima do título principal em 12 em (equivale aos 22 caracteres; o plano dizia "22 em" por engano); faixa de esmaecimento desenhada acima do texto sem tirar altura dele; busca também disparada quando as categorias falham depois de a Home abrir.
+- 2026-09-26: verificada ([verificacao.md](verificacao.md)). Corrigidas as buscas de destaques repetidas (a navbar também buscava destaques e a Home buscava de novo a cada navbar montada): agora só a Home busca, uma vez, e de novo apenas após erro ou se a última busca foi feita sem categorias. Decidido no modo autônomo: tirar a busca de destaques da navbar, porque só a Home usa os destaques.

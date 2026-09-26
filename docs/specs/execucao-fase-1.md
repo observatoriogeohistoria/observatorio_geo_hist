@@ -6,7 +6,7 @@
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |
 |---|---|---|---|---|---|
 | 004-hero-atalhos | 1.1 | feita (14 critérios, 12 tarefas) | feita (2 commits) | feita (2 fix) | verificada com ressalvas (6 commits) |
-| 005-destaques | 1.2 | feita (16 critérios, 13 tarefas) | pendente | pendente | |
+| 005-destaques | 1.2 | feita (16 critérios, 13 tarefas) | feita (2 commits) | feita (1 fix) | verificada (5 commits) |
 | 006-quem-somos-video | 1.3, 1.4 | pendente | pendente | pendente | |
 | 007-resumo-nossa-historia | 1.5 | pendente | pendente | pendente | |
 | 008-equipe | 1.6 | pendente | pendente | pendente | |
@@ -34,6 +34,7 @@
 ## Ressalvas
 - 004: as opções do menu de categorias da navbar (reaproveitadas na janela dos atalhos) não respondem ao toque pela semântica do leitor de tela; não corrigido por ser navbar (fora do escopo da 004). Sugerida correção própria.
 - 004: sem teste com leitor de tela real (VoiceOver/NVDA), só árvore de semântica.
+- 005: o banco real tem 0 posts marcados como destaque, então a seção fica escondida no site hoje. Casos 1, 2, 3 e 5 conferidos só com dados simulados (testes temporários fora do repositório).
 
 ## Ocorrências
 - Branch criada a partir de origin/develop sem upstream configurado, para que nenhum `git push` sem argumentos vá para a develop.

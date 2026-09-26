@@ -107,7 +107,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | # | Seção | Notas técnicas | Depende de |
 |---|---|---|---|
 | 1.1 | Hero e atalhos → specs/004-hero-atalhos, concluído | Proposta de valor, dois botões, três atalhos (História, Geografia, Biblioteca) | 0.x |
-| 1.2 | Destaques → specs/005-destaques | Três visíveis de uma vez (o primeiro em destaque). Tratar 0, 1, 2 e mais de 3 destaques. Degradê apenas sob o título. Sem carrossel automático | `FetchHighlightsStore` |
+| 1.2 | Destaques → specs/005-destaques, concluído | Três visíveis de uma vez (o primeiro em destaque). Tratar 0, 1, 2 e mais de 3 destaques. Degradê apenas sob o título. Sem carrossel automático | `FetchHighlightsStore` |
 | 1.3 | Quem somos | Missão e três públicos (professores, pesquisadores, estudantes). Substitui o bloco de tela cheia com foto | |
 | 1.4 | Vídeo | Capa com botão de reproduzir. Sem autoplay | `AppVideoPlayer` |
 | 1.5 | Nossa história (resumo) | Resumo com o marco da FAPEMIG e link para a página completa | T-03 (rota nova) |
