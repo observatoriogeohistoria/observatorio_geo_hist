@@ -36,6 +36,79 @@ class AppDimensions {
     immense: 6.0,
     gigantic: 7.0,
   );
+
+  // Tokens do redesign. Escalas nomeadas pelo valor em px lógicos.
+  SpacingScale spacing = const SpacingScale._();
+  RadiiScale radii = const RadiiScale._();
+  ShadowStyle shadows = const ShadowStyle._();
+  FocusStyle focus = const FocusStyle._();
+}
+
+/// Escala de espaçamento em passos de 4 px.
+class SpacingScale {
+  const SpacingScale._();
+
+  final double s4 = 4.0;
+  final double s8 = 8.0;
+  final double s12 = 12.0;
+  final double s16 = 16.0;
+  final double s20 = 20.0;
+  final double s24 = 24.0;
+  final double s32 = 32.0;
+  final double s40 = 40.0;
+  final double s48 = 48.0;
+  final double s64 = 64.0;
+  final double s96 = 96.0;
+}
+
+/// Raios de canto usados no protótipo.
+class RadiiScale {
+  const RadiiScale._();
+
+  final double r6 = 6.0;
+  final double r8 = 8.0;
+  final double r10 = 10.0;
+  final double r12 = 12.0;
+  final double r14 = 14.0;
+  final double r16 = 16.0;
+  final double r18 = 18.0;
+  final double r20 = 20.0;
+
+  /// Totalmente arredondado.
+  final double pill = 999.0;
+}
+
+/// Sombras prontas para `BoxDecoration.boxShadow`.
+class ShadowStyle {
+  const ShadowStyle._();
+
+  /// Cartões em repouso.
+  List<BoxShadow> get soft => const [
+        BoxShadow(
+          color: Color(0x141F1B18),
+          blurRadius: 26,
+          offset: Offset(0, 10),
+        ),
+      ];
+
+  /// Menus, painéis e cartões em hover.
+  List<BoxShadow> get elevated => const [
+        BoxShadow(
+          color: Color(0x241F1B18),
+          blurRadius: 36,
+          offset: Offset(0, 14),
+        ),
+      ];
+}
+
+/// Contorno de foco visível padrão (teclado).
+class FocusStyle {
+  const FocusStyle._();
+
+  final double width = 3.0;
+  final double offset = 2.0;
+
+  Color get color => AppColors.instance.accent;
 }
 
 class DimensionStyle {

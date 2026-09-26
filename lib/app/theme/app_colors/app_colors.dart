@@ -18,4 +18,24 @@ class AppColors {
   Color red = const Color(0xFFE53935);
   Color green = const Color(0xFF43A047);
   Color blue = const Color(0xFF1E88E5);
+
+  // Cores do redesign, nomeadas por função.
+  Color page = const Color(0xFFFFFFFF);
+  Color surface = const Color(0xFFF7F5F2);
+  Color ink = const Color(0xFF1F1B18);
+  Color inkSecondary = const Color(0xFF5E5852);
+  Color line = const Color(0xFFE6E1DA);
+
+  Color accent = const Color(0xFFC94400);
+  Color accentStrong = const Color(0xFFA33600);
+  Color accentSoft = const Color(0xFFFFF0E6);
+
+  Color footerBackground = const Color(0xFF1C1917);
+  Color footerLine = const Color(0xFF37322E);
+  Color footerText = const Color(0xFFD8D2CA);
+  Color footerHighlight = const Color(0xFFFF9A62);
+
+  Color error = const Color(0xFFB3261E);
+  Color success = const Color(0xFF1C6B34);
+  Color successSurface = const Color(0xFFE4F3E8);
 }
