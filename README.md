@@ -1,16 +1,33 @@
-# observatorio_geo_hist
+# Observatório Geo-Hist
 
-A new Flutter project.
+Site do Observatório Geo-Hist, feito em Flutter Web com Firebase (Firestore, Auth e Storage). Reúne posts, biblioteca de documentos e o projeto Geoensine, e inclui um painel administrativo para gerenciar o conteúdo.
 
-## Getting Started
+## Requisitos
 
-This project is a starting point for a Flutter application.
+- [FVM](https://fvm.app/) com o Flutter da versão definida em [.fvmrc](.fvmrc)
+- Acesso ao projeto Firebase `observatorio-geo-hist`
 
-A few resources to get you started if this is your first Flutter project:
+## Como rodar
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```sh
+fvm install
+fvm flutter pub get
+fvm flutter run -d chrome
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Os stores MobX usam código gerado. Após alterar um store, rode:
+
+```sh
+fvm dart run build_runner build --delete-conflicting-outputs
+```
+
+Para compilar: `fvm flutter build web --release`.
+
+## Deploy
+
+A cada push na `main`, o GitHub Actions ([deploy.yml](.github/workflows/deploy.yml)) compila o app web e envia os arquivos por FTP para a HostGator. A versão do Flutter no workflow deve ser a mesma do `.fvmrc`.
+
+## Documentação
+
+- [Arquitetura do projeto](docs/arquitetura.md): camadas, features, rotas e dados no Firestore
+- [Arquitetura do painel administrativo](docs/arquitetura-painel-admin.md): CRUD, autenticação e permissões
