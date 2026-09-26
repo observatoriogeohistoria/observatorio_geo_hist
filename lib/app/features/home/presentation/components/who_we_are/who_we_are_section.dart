@@ -10,7 +10,8 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 /// manifesto e os três públicos. Estática, aparece junto com a página.
 ///
 /// Desktop: duas colunas (apresentação 1 : públicos 1,15) alinhadas pelo topo.
-/// Tablet e celular: uma coluna, apresentação e depois públicos.
+/// Tablet e celular (e desktop com texto muito ampliado): uma coluna,
+/// apresentação e depois públicos.
 class WhoWeAreSection extends StatelessWidget {
   const WhoWeAreSection({super.key});
 
@@ -38,7 +39,13 @@ class WhoWeAreSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final components = AppTheme.dimensions.components;
     final breakpoint = ScreenUtils.breakpointOf(context);
-    final gap = components.whoWeAreGap(breakpoint);
+    // Com o texto muito ampliado, a coluna da apresentação fica estreita demais
+    // para o título: a seção passa para uma coluna, como no tablet.
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >= components.whoWeAreStackTextScale;
+    final twoColumns = breakpoint == Breakpoint.desktop && !largeText;
+    final gap = components.whoWeAreGap(
+      breakpoint == Breakpoint.desktop && !twoColumns ? Breakpoint.tablet : breakpoint,
+    );
 
     const intro = _Intro(onOpenManifest: _openManifest);
     final audiences = Padding(
@@ -64,7 +71,7 @@ class WhoWeAreSection extends StatelessWidget {
       child: PageContent(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: components.sectionPaddingVertical(breakpoint)),
-          child: breakpoint == Breakpoint.desktop
+          child: twoColumns
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

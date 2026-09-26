@@ -217,6 +217,10 @@ class ComponentSizes {
   final int whoWeAreIntroFlex = 20;
   final int whoWeAreAudienceFlex = 23;
 
+  /// A partir desta ampliação do texto (1,3 = 130%), Quem somos fica em uma
+  /// coluna também no desktop, para o título não quebrar palavras ao meio.
+  final double whoWeAreStackTextScale = 1.3;
+
   /// Vãos da apresentação: rótulo → título, título → texto e texto → link
   /// (`.split h2` `margin-block: 10px 16px`; link com `margin-top: 22px`).
   final double whoWeAreTitleGap = 10.0;
