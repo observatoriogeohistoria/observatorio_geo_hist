@@ -7,6 +7,20 @@ Uberlândia/MG | CEP 38400-192''';
 
   static const String email = 'contato@observatoriogeohistoria.net.br';
 
+  static const String emailUrl = 'mailto:$email';
+
+  // Rodapé: endereço sem CEP e telefones separados (texto e link `tel:`).
+  static const String footerAddress = '''Faculdade de Educação, sala 1G156 · UFU
+Av. João Naves de Ávila, 2121 · Santa Mônica
+Uberlândia/MG''';
+
+  static const String footerLicense = 'Conteúdo sob licença Creative Commons 4.0 Internacional';
+
+  static const String phoneOne = '34 3239-4163';
+  static const String phoneOneUrl = 'tel:+553432394163';
+  static const String phoneTwo = '34 3239-4212';
+  static const String phoneTwoUrl = 'tel:+553432394212';
+
   static const String facebook = 'https://www.facebook.com/observatoriogeohistoria';
 
   static const String instagram = 'https://www.instagram.com/observatoriogeohistoria/';
