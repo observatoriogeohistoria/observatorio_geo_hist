@@ -86,7 +86,7 @@ class _PostsPageState extends State<PostsPage> {
       body: CustomScrollView(
         controller: _screenScrollController,
         slivers: [
-          const SliverToBoxAdapter(child: Navbar()),
+          const NavbarSliver(),
           ValueListenableBuilder<CategoryModel?>(
             valueListenable: _categoryNotifier,
             builder: (context, category, child) {

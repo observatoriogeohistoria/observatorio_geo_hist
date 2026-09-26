@@ -1,38 +1,28 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/navbutton.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
+import 'package:flutter/services.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class NavbarDropdownEntry {
-  const NavbarDropdownEntry({
-    required this.title,
-    required this.onTap,
-    this.isDisabled = false,
-    this.isSelected = false,
-  });
-
-  final String title;
-  final VoidCallback onTap;
-  final bool isDisabled;
-  final bool isSelected;
-}
-
-/// Navbar item that reveals its sub options in a floating panel on hover
-/// (mouse) or on tap (touch devices).
+/// Item da navbar que abre um menu flutuante.
+///
+/// Abre ao passar o mouse ou ao clicar, tocar, Enter, Espaço ou seta para
+/// baixo (nos dois últimos casos o foco vai ao primeiro item). Fecha ao tirar o
+/// mouse, clicar fora, Esc, Tab ou ao escolher uma opção.
 class NavbarDropdown extends StatefulWidget {
   const NavbarDropdown({
-    required this.title,
-    required this.entries,
-    this.backgroundColor,
     super.key,
+    required this.label,
+    required this.menuBuilder,
+    this.isActive = false,
   });
 
-  final String title;
-  final List<NavbarDropdownEntry> entries;
-  final Color? backgroundColor;
+  final String label;
+  final bool isActive;
+
+  /// Conteúdo do menu. [close] fecha o menu (chame ao escolher uma opção).
+  final Widget Function(BuildContext context, VoidCallback close) menuBuilder;
 
   @override
   State<NavbarDropdown> createState() => _NavbarDropdownState();
@@ -40,54 +30,142 @@ class NavbarDropdown extends StatefulWidget {
 
 class _NavbarDropdownState extends State<NavbarDropdown> {
   static const _closeDelay = Duration(milliseconds: 150);
-  static const _panelMaxWidth = 300.0;
 
   final _overlayController = OverlayPortalController();
   final _link = LayerLink();
+  final _triggerFocus = FocusNode(debugLabel: 'NavbarDropdown trigger');
+  final _panelScope = FocusScopeNode(debugLabel: 'NavbarDropdown panel');
 
   Timer? _closeTimer;
   bool _isOpen = false;
-  bool _openedByTap = false;
+
+  /// Aberto por clique ou teclado: o mouse sair não fecha.
+  bool _isPinned = false;
   bool _alignRight = false;
 
   @override
   void dispose() {
     _closeTimer?.cancel();
+    _triggerFocus.dispose();
+    _panelScope.dispose();
     super.dispose();
   }
 
-  void _open({bool byTap = false}) {
+  void _open({bool pinned = false, bool focusFirst = false}) {
     _closeTimer?.cancel();
-    if (byTap) _openedByTap = true;
-    if (_isOpen) return;
+    if (pinned) _isPinned = true;
 
-    final box = context.findRenderObject() as RenderBox?;
-    if (box != null && box.hasSize) {
-      final left = box.localToGlobal(Offset.zero).dx;
-      final screenWidth = MediaQuery.of(context).size.width;
-      _alignRight = left + _panelMaxWidth > screenWidth;
+    if (!_isOpen) {
+      final box = context.findRenderObject() as RenderBox?;
+      if (box != null && box.hasSize) {
+        final left = box.localToGlobal(Offset.zero).dx;
+        final screenWidth = MediaQuery.sizeOf(context).width;
+        _alignRight = left + AppTheme.dimensions.components.dropdownMaxWidth > screenWidth;
+      }
+
+      setState(() => _isOpen = true);
+      _overlayController.show();
     }
 
-    setState(() => _isOpen = true);
-    _overlayController.show();
+    if (focusFirst) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _isOpen) _focusFirstOption();
+      });
+    }
+  }
+
+  /// Foca a primeira opção do menu. Pedir foco ao escopo não basta: sem um
+  /// filho já focado, o foco fica no próprio painel e nada aparece marcado.
+  void _focusFirstOption() {
+    final policy = FocusTraversalGroup.maybeOfNode(_panelScope) ?? ReadingOrderTraversalPolicy();
+    final first = policy.findFirstFocus(_panelScope, ignoreCurrentFocus: true);
+    (first ?? _panelScope).requestFocus();
+  }
+
+  /// Fecha o menu e leva o foco ao item seguinte (ou anterior) da navbar.
+  ///
+  /// O foco só anda depois que o painel sai da tela; antes disso, as opções
+  /// ainda contam na ordem de Tab e o foco pularia o item seguinte.
+  void _closeAndMoveFocus({required bool backwards}) {
+    _triggerFocus.requestFocus();
+    _close();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      backwards ? _triggerFocus.previousFocus() : _triggerFocus.nextFocus();
+    });
   }
 
   void _close() {
     _closeTimer?.cancel();
     if (!_isOpen) return;
 
-    _openedByTap = false;
+    _isPinned = false;
     setState(() => _isOpen = false);
     _overlayController.hide();
   }
 
   void _scheduleClose() {
-    if (_openedByTap) return;
+    if (_isPinned || _panelScope.hasFocus) return;
     _closeTimer?.cancel();
     _closeTimer = Timer(_closeDelay, _close);
   }
 
-  void _toggleByTap() => _isOpen && _openedByTap ? _close() : _open(byTap: true);
+  void _onTap() {
+    if (_isOpen && _isPinned) {
+      _close();
+      return;
+    }
+
+    final byKeyboard = FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
+    _open(pinned: true, focusFirst: byKeyboard);
+  }
+
+  KeyEventResult _onTriggerKey(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+
+    if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+      _open(pinned: true, focusFirst: true);
+      return KeyEventResult.handled;
+    }
+    if (event.logicalKey == LogicalKeyboardKey.escape && _isOpen) {
+      _close();
+      return KeyEventResult.handled;
+    }
+    if (event.logicalKey == LogicalKeyboardKey.tab && _isOpen) {
+      _closeAndMoveFocus(backwards: HardwareKeyboard.instance.isShiftPressed);
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  KeyEventResult _onPanelKey(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+    final key = event.logicalKey;
+
+    if (key == LogicalKeyboardKey.escape) {
+      _triggerFocus.requestFocus();
+      _close();
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.arrowDown) {
+      FocusManager.instance.primaryFocus?.nextFocus();
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.arrowUp) {
+      FocusManager.instance.primaryFocus?.previousFocus();
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.tab) {
+      if (HardwareKeyboard.instance.isShiftPressed) {
+        _triggerFocus.requestFocus();
+        _close();
+      } else {
+        _closeAndMoveFocus(backwards: false);
+      }
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +177,18 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
         child: MouseRegion(
           onEnter: (_) => _open(),
           onExit: (_) => _scheduleClose(),
-          child: NavButton(
-            text: widget.title,
-            onPressed: _toggleByTap,
-            menuChildren: null,
-            backgroundColor: widget.backgroundColor,
-            textColor: _isOpen ? AppTheme.colors.orange : null,
+          child: Focus(
+            canRequestFocus: false,
+            skipTraversal: true,
+            onKeyEvent: _onTriggerKey,
+            child: NavbarItem(
+              label: widget.label,
+              isActive: widget.isActive,
+              hasMenu: true,
+              isExpanded: _isOpen,
+              focusNode: _triggerFocus,
+              onTap: _onTap,
+            ),
           ),
         ),
       ),
@@ -112,12 +196,20 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
   }
 
   Widget _buildOverlay(BuildContext context) {
-    final maxWidth = _panelMaxWidth.clamp(0.0, MediaQuery.of(context).size.width - 32).toDouble();
+    final components = AppTheme.dimensions.components;
+    final spacing = AppTheme.dimensions.spacing;
+    final screen = MediaQuery.sizeOf(context);
+    final maxWidth = components.dropdownMaxWidth.clamp(0.0, screen.width - spacing.s32).toDouble();
+    // O item termina 12 px acima da linha da navbar; o vão de 20 deixa o menu
+    // 8 px abaixo dela. A altura segue o conteúdo e só rola se faltar tela.
+    final gapAboveMenu = spacing.s20;
+    final maxHeight = (screen.height - components.navbarHeight - spacing.s20 - spacing.s16).clamp(0.0, double.infinity);
+    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
 
     return Stack(
       children: [
-        // Lets touch users dismiss the panel by tapping anywhere else.
-        if (_openedByTap)
+        // Clique fora fecha o menu.
+        if (_isPinned)
           Positioned.fill(
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -136,23 +228,22 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
               onExit: (_) => _scheduleClose(),
               child: TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: 1),
-                duration: const Duration(milliseconds: 180),
+                duration: duration,
                 curve: Curves.easeOut,
-                builder: (context, value, child) => Opacity(
-                  opacity: value,
-                  child: Transform.translate(
-                    offset: Offset(0, (1 - value) * -8),
-                    child: child,
-                  ),
-                ),
+                builder: (context, value, child) => Opacity(opacity: value, child: child),
                 child: Padding(
-                  // Transparent gap between trigger and panel, still inside
-                  // the MouseRegion so the pointer can cross it.
-                  padding: const EdgeInsets.only(top: 26),
-                  child: _DropdownPanel(
-                    entries: widget.entries,
-                    maxWidth: maxWidth,
-                    onSelected: _close,
+                  // Vão transparente entre o item e o menu, ainda dentro da
+                  // área do mouse, para o ponteiro poder atravessá-lo.
+                  padding: EdgeInsets.only(top: gapAboveMenu),
+                  child: FocusScope(
+                    node: _panelScope,
+                    onKeyEvent: _onPanelKey,
+                    child: _Panel(
+                      minWidth: components.dropdownMinWidth.clamp(0.0, maxWidth).toDouble(),
+                      maxWidth: maxWidth,
+                      maxHeight: maxHeight,
+                      child: widget.menuBuilder(context, _close),
+                    ),
                   ),
                 ),
               ),
@@ -164,114 +255,43 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
   }
 }
 
-class _DropdownPanel extends StatelessWidget {
-  const _DropdownPanel({
-    required this.entries,
+class _Panel extends StatelessWidget {
+  const _Panel({
+    required this.minWidth,
     required this.maxWidth,
-    required this.onSelected,
+    required this.maxHeight,
+    required this.child,
   });
 
-  final List<NavbarDropdownEntry> entries;
+  final double minWidth;
   final double maxWidth;
-  final VoidCallback onSelected;
+  final double maxHeight;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final maxHeight = MediaQuery.of(context).size.height * 0.7;
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r12);
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppTheme.colors.white,
-        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-        border: Border.all(color: AppTheme.colors.lighterGray),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
+        color: AppTheme.colors.page,
+        borderRadius: radius,
+        border: Border.all(color: AppTheme.colors.line),
+        boxShadow: AppTheme.dimensions.shadows.elevated,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-        child: _buildContent(context, maxHeight),
-      ),
-    );
-  }
-
-  Widget _buildContent(BuildContext context, double maxHeight) {
-    return Material(
-      type: MaterialType.transparency,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: 200.scale.clamp(0, maxWidth).toDouble(),
-          maxWidth: maxWidth,
-          maxHeight: maxHeight,
-        ),
-        child: IntrinsicWidth(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: AppTheme.dimensions.space.mini.verticalSpacing),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final entry in entries)
-                  _DropdownItem(
-                    entry: entry,
-                    onSelected: onSelected,
-                  ),
-              ],
+        borderRadius: radius,
+        child: Material(
+          type: MaterialType.transparency,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight),
+            child: IntrinsicWidth(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(AppTheme.dimensions.spacing.s8),
+                child: child,
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _DropdownItem extends StatefulWidget {
-  const _DropdownItem({required this.entry, required this.onSelected});
-
-  final NavbarDropdownEntry entry;
-  final VoidCallback onSelected;
-
-  @override
-  State<_DropdownItem> createState() => _DropdownItemState();
-}
-
-class _DropdownItemState extends State<_DropdownItem> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final style = (ScreenUtils.isSmallDesktop(context)
-            ? AppTheme.typography.title.small
-            : AppTheme.typography.title.medium)
-        .copyWith(
-      fontWeight: widget.entry.isSelected ? FontWeight.w700 : FontWeight.w500,
-      color: _hovered || widget.entry.isSelected
-          ? AppTheme.colors.orange
-          : AppTheme.colors.darkGray.withValues(alpha: 0.7),
-    );
-    final padding = EdgeInsets.symmetric(
-      horizontal: AppTheme.dimensions.space.medium.scale,
-      vertical: AppTheme.dimensions.space.small.verticalSpacing,
-    );
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          if (widget.entry.isDisabled) return;
-          widget.onSelected();
-          widget.entry.onTap();
-        },
-        child: Padding(
-          padding: padding,
-          child: Text(widget.entry.title, style: style),
         ),
       ),
     );

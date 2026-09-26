@@ -20,7 +20,7 @@ class LibraryPage extends StatelessWidget {
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: Navbar()),
+          const NavbarSliver(),
           const SliverToBoxAdapter(child: LibraryHeader()),
           SliverToBoxAdapter(
             child: Container(

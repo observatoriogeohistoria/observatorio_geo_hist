@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/document/library_document_content.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_navbar.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -39,7 +39,7 @@ class _LibraryDocumentDetailedPageState extends State<LibraryDocumentDetailedPag
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: LibraryNavbar()),
+          const NavbarSliver(),
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(

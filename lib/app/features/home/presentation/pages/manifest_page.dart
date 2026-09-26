@@ -24,7 +24,7 @@ class _ManifestPageState extends State<ManifestPage> {
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: Navbar()),
+          const NavbarSliver(),
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(

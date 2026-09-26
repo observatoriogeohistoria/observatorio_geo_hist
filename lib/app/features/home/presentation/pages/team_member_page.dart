@@ -62,7 +62,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: Navbar()),
+          const NavbarSliver(),
           ValueListenableBuilder<TeamMemberModel?>(
             valueListenable: _teamMemberNotifier,
             builder: (context, member, child) {
