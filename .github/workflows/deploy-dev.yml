@@ -1,0 +1,53 @@
+name: Deploy Flutter Web (dev)
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: DEV
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Ler versão do Flutter do .fvmrc
+      id: fvm
+      run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ steps.fvm.outputs.version }}
+        cache: true
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build Flutter Web app
+      run: flutter build web --release
+
+    - name: Bloquear indexação do ambiente de dev
+      run: printf 'User-agent: *\nDisallow: /\n' > build/web/robots.txt
+
+    # O .htaccess do dev (senha e reescrita de rotas) fica só no servidor e
+    # não é enviado por aqui: o deploy só apaga arquivos que ele mesmo enviou.
+    - name: Sync build/web to HostGator (dev)
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        protocol: ftps
+        port: 21
+        security: loose
+        server-dir: ./
+        local-dir: build/web/
