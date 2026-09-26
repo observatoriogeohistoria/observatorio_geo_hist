@@ -1,0 +1,24 @@
+# Tarefas da 003. Página base (`index.html`) e tela de carregamento
+
+Legenda: `- [ ]` a fazer, `- [x]` feita.
+
+Cada tarefa termina com `fvm flutter analyze` limpo. Critérios numerados na ordem da spec (1 = aba, 12 = build).
+
+## Grupo A: Ícones e imagem de compartilhamento
+- [ ] **A1.** Criar o gerador: `tool/web_icons/gerar.sh` (Chrome headless, `--screenshot`, `--window-size`, fundo transparente quando preciso) e as páginas-fonte `tool/web_icons/icon.html` (marca sobre transparente ou branco, conforme parâmetro), `maskable.html` (fundo acento, anéis na zona segura) e `og.html` (1200×630, fonte Bricolage de `assets/fonts`). Cores num bloco de variáveis CSS com os valores de `AppColors`. Conferir: o script roda sem erro e cria os PNG no scratchpad. Atende: critérios 1, 3, 4 e 11.
+- [ ] **A2.** Gerar e gravar em `web/`: `favicon.svg`, `favicon.png` (32), `icons/Icon-192.png`, `icons/Icon-512.png`, `icons/Icon-maskable-192.png`, `icons/Icon-maskable-512.png`, `icons/apple-touch-icon.png` (180) e `og-image.png` (1200×630). Remover `web/logo.png` e `web/icons/android-chrome-*.png` depois de conferir por busca que nada mais os cita. Conferir: `sips -g pixelWidth -g pixelHeight` com os tamanhos certos; abrir cada PNG e ver a marca nítida. Atende: critérios 1, 3 e 4.
+
+## Grupo B: Cabeçalho e manifesto
+- [ ] **B1.** `web/index.html`, `<head>`: `<html lang="pt-BR">`, título e descrição da spec, `theme-color` `#C94400`, `apple-mobile-web-app-title` "Observatório", favicon SVG + PNG de reserva, `apple-touch-icon` 180, `canonical`, `og:type/site_name/locale/url/title/description/image` (com largura, altura e `alt`) e `twitter:card=summary_large_image` com título, descrição e imagem. Bloco do Google Analytics e scripts do `pdf.js` sem mudança. Conferir: `git diff` mostra GA e `pdf.js` intactos; no navegador, título e ícone da aba certos. Atende: critérios 1, 2, 3 e 9.
+- [ ] **B2.** `web/manifest.json`: nome, nome curto, descrição, `theme_color` `#C94400`, `background_color` `#FFFFFF`, sem `orientation`, ícones apontando para os arquivos do A2. Conferir: JSON válido (`python3 -m json.tool`) e os quatro ícones existem. Atende: critério 4.
+
+## Grupo C: Tela de carregamento
+- [ ] **C1.** Marcação e estilo da tela no começo do `<body>`, antes dos scripts: contêiner fixo em tela cheia, fundo `page`, marca SVG inline (`aria-hidden`), "Observatório" em fonte do sistema, anel de progresso laranja, `role="status"` com "Carregando" visualmente oculto. Variáveis CSS com as cores da 001. Regra `prefers-reduced-motion` sem rotação e sem transição. Conferir: com o app parado (sem `flutter_bootstrap.js`), a tela aparece centralizada em 390, 768 e 1280 px, sem rolagem. Atende: critérios 5, 8 e 11.
+- [ ] **C2.** Script inline: no `flutter-first-frame`, `aria-hidden="true"`, esmaecimento de ~200 ms (sem esmaecimento com movimento reduzido) e remoção do DOM no fim. Temporizador de 15 s que mostra "Está demorando mais que o normal. Verifique sua conexão e recarregue a página." e o botão "Recarregar" (`location.reload()`), cancelado se o app abrir; salvaguarda: se já houver `flutter-view` desenhado, some com a tela em vez de mostrar a mensagem. Botão com foco visível (3 px, afastado 2 px, acento). Conferir: com o app normal, a tela some ao abrir; ao remover a tela, nada fica por cima do app. Atende: critérios 5, 6 e 8.
+- [ ] **C3.** `<noscript>`: mensagem "Este site precisa de JavaScript para funcionar." dentro da tela, e `<style>` em `<noscript>` no `<head>` escondendo o anel. Conferir: com JS desligado, marca + mensagem, sem anel. Atende: critério 7.
+
+## Grupo D: Conferência
+- [ ] **D1.** `fvm flutter analyze` e `fvm flutter build web --release` sem erros. Atende: critério 12.
+- [ ] **D2.** Servidor local em Python (no scratchpad, fora do repositório) servindo `build/web` com três modos: normal, `main.dart.js` atrasado (~5 s) e `main.dart.js` sem resposta. Conferir: tela aparece em < 1 s e some sem piscar (normal e lento); abrir direto uma rota interna (ex.: `/biblioteca` ou um post) mostra a mesma tela; voltar/avançar não a reexibe; sem resposta, aos 15 s aparecem mensagem e botão, e o botão recarrega. Atende: critérios 5 e 6.
+- [ ] **D3.** No app servido: `document.documentElement.lang === 'pt-BR'`, metas de tema/descrição/Open Graph presentes, `typeof gtag === 'function'` e pedido ao `googletagmanager` na rede, `globalThis.pdfjsLib` definido e um documento da biblioteca abrindo. Conferir as tags de compartilhamento e a imagem 1200×630 (validação em rede social real só após o deploy: registrar na verificação). Atende: critérios 2, 3, 9 e 10.
+- [ ] **D4.** Documentação: marcar a 0.7 em `docs/redesign/planejamento.md` como concluída (`→ specs/003-index-carregamento`), status da spec para `implementada` e nota curta em `docs/arquitetura.md` sobre a tela de carregamento (onde fica, evento usado e como regerar os ícones com `tool/web_icons/gerar.sh`). Atende: registro.
