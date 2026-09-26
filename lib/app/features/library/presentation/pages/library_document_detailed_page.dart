@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/document/library_document_content.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_navbar.dart';
@@ -38,6 +40,25 @@ class _LibraryDocumentDetailedPageState extends State<LibraryDocumentDetailedPag
       body: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(child: LibraryNavbar()),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtils.getPageHorizontalPadding(context),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: () {
+                    final router = GoRouter.of(context);
+                    router.canPop() ? router.pop() : router.go('/biblioteca');
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text('Voltar'),
+                  style: TextButton.styleFrom(foregroundColor: AppTheme.colors.orange),
+                ),
+              ),
+            ),
+          ),
           Observer(
             builder: (_) {
               final state = _store.fetchState;

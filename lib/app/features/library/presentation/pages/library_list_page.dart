@@ -100,6 +100,17 @@ class _LibraryListPageState extends State<LibraryListPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          tooltip: 'Voltar',
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            final router = GoRouter.of(context);
+            final isAdminRoute = GoRouterState.of(context).uri.path.startsWith('/admin');
+            router.canPop()
+                ? router.pop()
+                : router.go(isAdminRoute ? '/admin/painel/biblioteca' : '/biblioteca');
+          },
+        ),
         title: AppHeadline.big(
           text: widget.area.value,
           color: AppTheme.colors.white,
