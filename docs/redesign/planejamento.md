@@ -20,7 +20,7 @@ Este documento registra as decisões de design tomadas, o que ainda falta no pro
 | Modo escuro | Fora do escopo por enquanto |
 | Imagens | Enviadas pelos autores, sem controle de proporção. O layout precisa aceitar qualquer imagem (proporção fixa 16:10 com `cover`, degradê só sob o título, placeholder quando não há imagem) |
 | Menu História/Geografia | As categorias reais permanecem como estão e **não são agrupadas**. Os nomes do protótipo são apenas exemplos |
-| Logo | A marca provisória do protótipo (círculos concêntricos em laranja) passa a ser a marca oficial. **Falta criar o arquivo SVG** (Fase 0) |
+| Logo | A marca provisória do protótipo (círculos concêntricos em laranja) passa a ser a marca oficial. Arquivo SVG criado em `assets/images/logo.svg` → specs/002-botoes-navbar-rodape, concluído |
 | Biblioteca: categoria | Seleção livre de quantas categorias o usuário quiser, como já é hoje (documento aparece se tiver qualquer uma delas). Sem "Todas" e sem agrupar |
 | Categorias | Permanecem como estão em **ambos** os lugares: menu de posts e as 16 categorias de documentos. Nada é agrupado |
 | Fale com a gente | Mantém o comportamento atual: o botão **abre o programa de e-mail** com os dados preenchidos, e a pessoa só aperta Enviar. Sem servidor. Melhorias: validação e tela de confirmação com "Copiar mensagem" para quem não tem programa de e-mail |
@@ -91,12 +91,12 @@ Dividida em três specs: 0.1 a 0.3 → specs/001-fundacao; 0.4 a 0.6 → specs/0
 
 | # | Entrega | Principais arquivos |
 |---|---|---|
-| 0.1 | Tokens: cores novas, raios, espaçamentos, sombras | `theme/app_colors`, `theme/app_dimensions` |
-| 0.2 | Tipografia nova (Bricolage + Figtree). **Decisão D-01:** embutir as fontes em `assets/fonts` em vez de baixar do Google em tempo de execução | `theme/app_typography`, `pubspec.yaml` |
-| 0.3 | Breakpoints e largura máxima de conteúdo (~1120px) | `core/utils/screen/screen_utils.dart` |
-| 0.4 | Botões: primário, secundário e discreto, com foco visível e estado desativado | `core/components/buttons/*` |
-| 0.5 | Navbar: fixa, item ativo sublinhado, dropdown com links externos separados, menu de celular | `core/components/navbar/*`, `navbar_mobile_menu.dart` |
-| 0.6 | Rodapé escuro em colunas, com redes sociais, contatos clicáveis e ano dinâmico | `core/components/footer/footer.dart` |
+| 0.1 | Tokens: cores novas, raios, espaçamentos, sombras → specs/001-fundacao, concluído | `theme/app_colors`, `theme/app_dimensions` |
+| 0.2 | Tipografia nova (Bricolage + Figtree). **Decisão D-01:** embutir as fontes em `assets/fonts` em vez de baixar do Google em tempo de execução → specs/001-fundacao, concluído | `theme/app_typography`, `pubspec.yaml` |
+| 0.3 | Breakpoints e largura máxima de conteúdo (~1120px) → specs/001-fundacao, concluído | `core/utils/screen/screen_utils.dart` |
+| 0.4 | Botões: primário, secundário e discreto, com foco visível e estado desativado → specs/002-botoes-navbar-rodape, concluído | `core/components/buttons/*` |
+| 0.5 | Navbar: fixa, item ativo sublinhado, dropdown com links externos separados, menu de celular → specs/002-botoes-navbar-rodape, concluído | `core/components/navbar/*`, `navbar_mobile_menu.dart` |
+| 0.6 | Rodapé escuro em colunas, com redes sociais, contatos clicáveis e ano dinâmico → specs/002-botoes-navbar-rodape, concluído | `core/components/footer/footer.dart` |
 | 0.7 | Cabeçalho `<title>` e descrição do `web/index.html`, tela de carregamento inicial | `web/index.html` |
 
 **Aceite:** todas as páginas existentes abrem sem erro com a navbar, o rodapé e os botões novos. Contraste de texto ≥ 4,5:1. Navegação completa por teclado na navbar.

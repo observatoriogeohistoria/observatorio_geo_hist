@@ -1,6 +1,6 @@
 # 002. Botões, navbar e rodapé
 
-- **Status:** aprovada
+- **Status:** verificada
 - **Item do planejamento:** Fase 0, entregas 0.4, 0.5 e 0.6 (e o logo em SVG, citado nas decisões)
 - **Protótipo:** navbar e rodapé de qualquer aba; aba "Fundamentos" para os botões (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -24,7 +24,7 @@ Três tipos e três tamanhos. Textos e tamanhos vêm da spec 001.
 |---|---|---|---|
 | **Primário** | Fundo laranja de acento, texto branco | Fundo laranja forte | Ação principal da tela |
 | **Secundário** | Sem fundo, borda e texto na cor do texto principal | Fundo na cor do texto principal, texto branco | Ação alternativa |
-| **Discreto** | Sem fundo nem borda, texto laranja | Fundo laranja suave, texto laranja forte | Ações de baixa ênfase |
+| **Discreto** | Sem fundo nem borda, texto laranja forte | Fundo laranja suave, texto laranja forte | Ações de baixa ênfase |
 
 - **Tamanhos:** pequeno (texto 14), médio (texto 16) e grande (texto 18). Cantos arredondados (10 px). Altura mínima de 40 px (pequeno) e 44 px (médio e grande).
 - **Foco por teclado:** contorno visível de 3 px na cor de acento, afastado 2 px, em qualquer tipo. Enter e Espaço acionam.
@@ -140,3 +140,8 @@ Fundo escuro em colunas, no fim de todas as páginas do site público que já o 
 - 2026-09-26: aprovada.
 - 2026-09-26: pontos do plano aprovados. 404 ganha navbar e rodapé; (a seção interna do Geoensine foi removida do projeto em 2026-09-26; ficou só o link externo no menu de Geografia); `LibraryNavbar` substituída pela navbar nova; `tooltip` obrigatório nos botões de ícone; Biblioteca ativa em subrotas; "Equipe" leva à Home.
 - 2026-09-26: por causa do contraste (ver 001), o botão discreto no hover usa o acento forte para o texto, sobre o fundo laranja suave. Vale também para texto laranja sobre a superfície `#F7F5F2`.
+
+- 2026-09-26: implementada. Divergências pequenas: a 404 usa `NavbarSliver` (e não `Navbar` solta); o item ativo vem da rota, não do `selectedCategory`.
+- 2026-09-26: (verificação) o botão discreto usa o acento forte também em repouso, para passar de 4,5:1 sobre a superfície `#F7F5F2`.
+- 2026-09-26: (verificação, 2ª rodada) corrigidos: abrir o menu por Enter, Espaço ou seta leva o foco à primeira opção; Tab com o menu aberto fecha e segue para o próximo item da navbar; a faixa inferior do rodapé ganhou a linha da licença Creative Commons; no desktop, as colunas Explorar e Institucional do rodapé ocupam só a largura dos links, e marca e contato dividem o resto (4:3), para o endereço e o e-mail não quebrarem.
+- 2026-09-26: verificada (aprovada com ressalvas; ver `verificacao.md`).

@@ -1,6 +1,6 @@
 # 001. Fundação visual (tokens, fontes e breakpoints)
 
-- **Status:** implementada
+- **Status:** verificada
 - **Item do planejamento:** Fase 0, entregas 0.1, 0.2 e 0.3
 - **Protótipo:** aba "Fundamentos" (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -123,3 +123,4 @@ Cada valor novo tem uma versão por faixa (390, 768 e 1280 px) e não muda com a
 - 2026-09-26: aprovada.
 - 2026-09-26: contraste. Acento sobre `#F7F5F2` (4,48) e sobre `#FFF0E6` (4,38) ficam abaixo de 4,5:1. Decisão: manter o acento e usar o acento forte nesses dois fundos (regra em Acessibilidade).
 - 2026-09-26: implementada (aguarda `/sdd-verify`).
+- 2026-09-26: verificada (aprovada com ressalvas; ver `verificacao.md`).

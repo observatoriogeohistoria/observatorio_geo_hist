@@ -40,7 +40,7 @@ Fluxo de dados: `Widget → Store → Repository → Datasource → Firebase`. O
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | buttons, card, dialog, divider, error_content, field, footer, image, loading, loading_content, mouse_region, navbar (`navbar`, `navbar_menu`, `navbar_dropdown`), pages_circles, quill, scroll, skeleton, support, text, video_player |
+| `components/` | buttons, card, dialog, divider, error_content, field, footer, image, loading, loading_content, mouse_region, navbar (`navbar`, `navbar_item`, `navbar_dropdown`, `navbar_categories_menu`, `navbar_location`), focus (`AppFocusRing`), logo (`AppLogo`), pages_circles, quill, scroll, skeleton, support, text, video_player |
 | `models/` | `PostModel` e os corpos de post (`academic_production`, `article`, `book`, `document`, `event`, `film`, `magazine`, `music`, `podcast`, `search`), além de `category`, `image`, `navbutton_item`, `general_state`, `paginated/`, `states/` (estados de CRUD) e `united/` |
 | `utils/` | carousel_options, constants, date, enums, extensions, formatters, generator, image, messenger, screen, strings, transitions, url, validators |
 | `infra/` | datasource/repository de categorias e `services/logger_service` |
@@ -98,7 +98,7 @@ Os tipos de post são os valores de `PostType`: produção acadêmica, artigo, l
 
 ## Navbar
 
-Em telas largas, itens da navbar com subopções (`buildNavbarMenu` em `navbar_menu.dart`) usam o `NavbarDropdown`, um painel flutuante que abre ao passar o mouse ou tocar. No mobile, o menu é montado dentro de um dialog, sem `GoRouterState` acima do contexto, e por isso o destaque do item ativo não é calculado ali.
+A `Navbar` fica fixa no topo (`NavbarSliver` em páginas com `CustomScrollView`). Em ≥ 1024 px mostra os itens em linha; História e Geografia usam o `NavbarDropdown` (hover, clique e teclado) com o conteúdo de `NavbarCategoriesMenu`. Abaixo disso, um botão abre `NavbarMobileMenu`, painel com sanfonas. O item ativo vem de `NavbarLocation`, calculado pela rota e entregue ao painel.
 
 ## Tratamento de erros
 
