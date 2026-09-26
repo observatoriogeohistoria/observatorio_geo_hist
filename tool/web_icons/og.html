@@ -1,0 +1,66 @@
+<!doctype html>
+<!--
+  Imagem de compartilhamento (Open Graph), 1200×630. Usado por gerar.sh.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        font-weight: 700;
+        src: url("../../assets/fonts/BricolageGrotesque-Bold.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "Figtree";
+        font-weight: 500;
+        src: url("../../assets/fonts/Figtree-Medium.ttf") format("truetype");
+      }
+      /* Cores de AppColors (lib/app/theme/app_colors/app_colors.dart). */
+      :root {
+        --surface: #f7f5f2;
+        --ink: #1f1b18;
+        --ink-secondary: #5e5852;
+        --accent: #c94400;
+      }
+      html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: var(--surface); }
+      main {
+        box-sizing: border-box;
+        height: 606px;
+        padding: 0 96px;
+        display: flex;
+        align-items: center;
+        gap: 72px;
+      }
+      svg { flex: none; width: 260px; height: 260px; }
+      h1 {
+        margin: 0;
+        font: 700 64px/1.08 "Bricolage Grotesque", sans-serif;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+      }
+      p {
+        margin: 28px 0 0;
+        font: 500 30px/1.3 "Figtree", sans-serif;
+        color: var(--ink-secondary);
+      }
+      .faixa { height: 24px; background: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <!-- Mesmo desenho de assets/images/logo.svg -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 34">
+        <circle cx="17" cy="17" r="16" fill="#C94400"/>
+        <circle cx="17" cy="17" r="10.5" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.4"/>
+        <circle cx="17" cy="17" r="5" fill="none" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="1.4"/>
+        <circle cx="17" cy="17" r="1.9" fill="#FFFFFF"/>
+      </svg>
+      <div>
+        <h1>Observatório do Ensino de História e Geografia</h1>
+        <p>Faculdade de Educação · UFU</p>
+      </div>
+    </main>
+    <div class="faixa"></div>
+  </body>
+</html>
