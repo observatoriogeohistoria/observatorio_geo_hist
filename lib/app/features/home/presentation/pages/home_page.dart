@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
       FetchCategoriesSuccessState() || FetchCategoriesErrorState() => true,
       _ => false,
     };
-    if (categoriesSettled && _fetchHighlightsStore.state is FetchHighlightsInitialState) {
+    if (categoriesSettled && _highlightsNeedFetch) {
       _fetchHighlights();
     }
   }
@@ -199,9 +199,28 @@ class _HomePageState extends State<HomePage> {
     ]);
   }
 
+  /// Evita buscas repetidas: as categorias são buscadas de novo a cada navbar
+  /// montada (e ao abrir o site, duas vezes). Só busca se ainda não buscou, se a
+  /// busca falhou ou se a última busca foi feita sem categorias e agora elas
+  /// existem. Busca em andamento não é repetida.
+  bool get _highlightsNeedFetch {
+    return switch (_fetchHighlightsStore.state) {
+      FetchHighlightsInitialState() || FetchHighlightsErrorState() => true,
+      FetchHighlightsLoadingState() => false,
+      FetchHighlightsSuccessState() => _fetchHighlightsStore.fetchedWithoutCategories && _hasCategories,
+    };
+  }
+
+  bool get _hasCategories {
+    final categories = _fetchCategoriesStore.categories;
+    return categories.geography.isNotEmpty || categories.history.isNotEmpty;
+  }
+
   void _setupReactions() {
     _reactions = [
-      reaction((_) => _fetchCategoriesStore.categories, (_) => _fetchHighlights()),
+      reaction((_) => _fetchCategoriesStore.categories, (_) {
+        if (_highlightsNeedFetch) _fetchHighlights();
+      }),
       // Se as categorias falham, os destaques são buscados mesmo assim (sem categorias).
       reaction((_) => _fetchCategoriesStore.state, (state) {
         if (state is FetchCategoriesErrorState && _fetchHighlightsStore.state is FetchHighlightsInitialState) {
