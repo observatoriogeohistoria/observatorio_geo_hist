@@ -1,12 +1,12 @@
 {
-    "name": "observatorio_geo_hist",
-    "short_name": "observatorio_geo_hist",
+    "name": "Observatório do Ensino de História e Geografia",
+    "short_name": "Observatório",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#FFFFFF",
+    "theme_color": "#C94400",
+    "description": "Pesquisas, materiais e recursos para o ensino de História e Geografia. Projeto da Faculdade de Educação da UFU.",
+    "lang": "pt-BR",
     "prefer_related_applications": false,
     "icons": [
         {

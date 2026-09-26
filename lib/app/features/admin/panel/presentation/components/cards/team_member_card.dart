@@ -80,12 +80,14 @@ class TeamMemberCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   AppIconButton(
+                    tooltip: 'Editar membro',
                     icon: Icons.edit,
                     color: AppTheme.colors.orange,
                     onPressed: onEdit,
                   ),
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppIconButton(
+                    tooltip: 'Excluir membro',
                     icon: Icons.delete,
                     color: AppTheme.colors.red,
                     onPressed: onDelete,

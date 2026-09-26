@@ -1,23 +1,28 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/navbar_mobile_menu.dart';
-import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_menu.dart';
-import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
+import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
+import 'package:observatorio_geo_hist/app/core/components/logo/app_logo.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_categories_menu.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_dropdown.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_item.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_location.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
-import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
-import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
-import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
-import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
+/// Navbar fixa do site: marca e, em telas largas (≥ 1024), os itens em linha;
+/// abaixo disso, a marca e um botão que abre o painel de menu.
+///
+/// Em páginas com `CustomScrollView`, use [NavbarSliver] para fixá-la no topo.
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
 
@@ -29,9 +34,10 @@ class _NavbarState extends State<Navbar> {
   late final _fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
   late final _fetchHighlightsStore = AppSetup.getIt.get<FetchHighlightsStore>();
 
-  List<ReactionDisposer> _reactions = [];
+  final _menuButtonFocus = FocusNode(debugLabel: 'Navbar menu button');
 
-  // VoidCallback? _showHighlights;
+  List<ReactionDisposer> _reactions = [];
+  bool _isMenuOpen = false;
 
   @override
   void initState() {
@@ -46,23 +52,6 @@ class _NavbarState extends State<Navbar> {
           ...(_fetchCategoriesStore.categories.history),
         ]);
       }),
-      // reaction((_) => _fetchHighlightsStore.highlights, (highlights) {
-      //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      //     if (!mounted) return;
-
-      //     setState(() {
-      //       _showHighlights = highlights.isEmpty
-      //           ? null
-      //           : () {
-      //               showHighlightsDialog(
-      //                 context,
-      //                 highlights: _fetchHighlightsStore.highlights,
-      //                 onClose: _fetchHighlightsStore.hideHighlights,
-      //               );
-      //             };
-      //     });
-      //   });
-      // }),
     ];
   }
 
@@ -71,136 +60,181 @@ class _NavbarState extends State<Navbar> {
     for (var reaction in _reactions) {
       reaction.reaction.dispose();
     }
+    _menuButtonFocus.dispose();
     super.dispose();
+  }
+
+  void _goTo(String route) {
+    _fetchCategoriesStore.setSelectedCategory(null);
+    GoRouter.of(context).go(route);
+  }
+
+  Future<void> _openMenu(NavbarLocation location) async {
+    final components = AppTheme.dimensions.components;
+    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
+
+    setState(() => _isMenuOpen = true);
+
+    await showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Fechar menu',
+      barrierColor: AppTheme.colors.ink.withValues(alpha: components.scrimOpacity),
+      transitionDuration: duration,
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return SlideTransition(
+          position: Tween(begin: const Offset(1, 0), end: Offset.zero).animate(
+            CurvedAnimation(parent: animation, curve: Curves.easeOut),
+          ),
+          child: child,
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return NavbarMobileMenu(store: _fetchCategoriesStore, location: location);
+      },
+    );
+
+    if (!mounted) return;
+    setState(() => _isMenuOpen = false);
+    _menuButtonFocus.requestFocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width * 0.8;
-    final isMobile = ScreenUtils.isMobile(context);
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final spacing = AppTheme.dimensions.spacing;
+    final location = NavbarLocation.of(context);
+    final isDesktop = ScreenUtils.breakpointOf(context) == Breakpoint.desktop;
 
-    return Container(
-      color: AppTheme.colors.white,
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtils.getPageHorizontalPadding(context),
-      ),
-      height: isMobile ? MediaQuery.of(context).size.height * 0.075 : null,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Image.asset(
-            '${AppAssets.images}/logo.webp',
-            width: isMobile ? null : width * 0.2,
-            height: isMobile ? double.infinity : null,
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: colors.page.withValues(alpha: components.navbarOpacity),
+            border: Border(bottom: BorderSide(color: colors.line)),
           ),
-          if (isMobile)
-            AppIconButton(
-              icon: Icons.menu,
-              color: AppTheme.colors.orange,
-              size: 32,
-              onPressed: _showMobileMenu,
-            )
-          else
-            Observer(
-              builder: (context) {
-                return Row(
-                  children: buildNavbarMenu(
-                    context,
-                    navButtonItens,
-                    _fetchCategoriesStore.selectedCategory,
-                    _fetchCategoriesStore.setSelectedCategory,
-                  ),
-                );
-              },
-            ),
-        ],
-      ),
-    );
-  }
-
-  List<NavButtonItem> get navButtonItens {
-    return [
-      const NavButtonItem(
-        title: 'Sobre',
-        route: AppRoutes.root,
-      ),
-      NavButtonItem(
-        title: PostsAreas.history.portuguese,
-        options: _fetchCategoriesStore.categories.history
-            .map(
-              (category) => NavButtonItem(
-                title: category.title,
-                category: category,
+          child: PageContent(
+            child: SizedBox(
+              height: components.navbarHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const AppLogo(),
+                  if (isDesktop)
+                    Row(
+                      children: [
+                        NavbarItem(
+                          label: 'Sobre',
+                          isActive: location.section == NavbarSection.about,
+                          onTap: () => _goTo(AppRoutes.root),
+                        ),
+                        SizedBox(width: spacing.s4),
+                        _areaDropdown(PostsAreas.history, NavbarSection.history, location),
+                        SizedBox(width: spacing.s4),
+                        _areaDropdown(PostsAreas.geography, NavbarSection.geography, location),
+                        SizedBox(width: spacing.s4),
+                        NavbarItem(
+                          label: 'Biblioteca',
+                          isActive: location.section == NavbarSection.library,
+                          onTap: () => _goTo(AppRoutes.library),
+                        ),
+                      ],
+                    )
+                  else
+                    _MenuButton(
+                      focusNode: _menuButtonFocus,
+                      isOpen: _isMenuOpen,
+                      onPressed: () => _openMenu(location),
+                    ),
+                ],
               ),
-            )
-            .toList(),
-        area: PostsAreas.history,
-      ),
-      NavButtonItem(
-        title: PostsAreas.geography.portuguese,
-        options: [
-          NavButtonItem(
-            title: 'Expogeo',
-            onTap: () => openUrl(AppStrings.expogeoUrl),
-          ),
-          NavButtonItem(
-            title: 'Geoensine',
-            onTap: () => openUrl(AppStrings.geoensineUrl),
-          ),
-          for (var category in _fetchCategoriesStore.categories.geography)
-            NavButtonItem(
-              title: category.title,
-              category: category,
             ),
-        ],
-        area: PostsAreas.geography,
+          ),
+        ),
       ),
-      const NavButtonItem(
-        title: 'Biblioteca',
-        route: AppRoutes.library,
-      ),
-      // NavButtonItem(
-      //   title: 'Destaques',
-      //   onTap: _showHighlights,
-      //   isDisabled: _showHighlights == null,
-      // ),
-    ];
-  }
-
-  void _onMobileItemSelected(NavButtonItem item) {
-    if (item.onTap != null) {
-      item.onTap!.call();
-      return;
-    }
-
-    final category = item.category;
-    _fetchCategoriesStore.setSelectedCategory(category);
-
-    if (category != null) {
-      GoRouter.of(context).go(
-        '/posts/${category.areas.first.key}/${category.key}',
-        extra: category,
-      );
-      return;
-    }
-
-    if (item.route != null) GoRouter.of(context).replace(item.route!);
-  }
-
-  void _showMobileMenu() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: 'Mobile Menu',
-      transitionDuration: const Duration(milliseconds: 300),
-      transitionBuilder: TransitionsBuilder.slide,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return NavbarMobileMenu(
-          navButtonItens: navButtonItens,
-          categorySelected: _fetchCategoriesStore.selectedCategory,
-          onItemSelected: _onMobileItemSelected,
-        );
-      },
     );
   }
+
+  Widget _areaDropdown(PostsAreas area, NavbarSection section, NavbarLocation location) {
+    return NavbarDropdown(
+      label: area.portuguese,
+      isActive: location.section == section,
+      menuBuilder: (context, close) => NavbarCategoriesMenu(
+        area: area,
+        store: _fetchCategoriesStore,
+        selectedCategoryKey: location.categoryKeyFor(area),
+        onSelected: close,
+      ),
+    );
+  }
+}
+
+/// Botão de menu (três traços) das telas com menos de 1024 px.
+class _MenuButton extends StatelessWidget {
+  const _MenuButton({required this.focusNode, required this.isOpen, required this.onPressed});
+
+  final FocusNode focusNode;
+  final bool isOpen;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r10);
+    final label = isOpen ? 'Fechar menu' : 'Abrir menu';
+
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        button: true,
+        expanded: isOpen,
+        label: label,
+        excludeSemantics: true,
+        child: AppFocusRing(
+          borderRadius: radius,
+          child: InkWell(
+            focusNode: focusNode,
+            borderRadius: radius,
+            onTap: onPressed,
+            mouseCursor: SystemMouseCursors.click,
+            child: SizedBox(
+              width: components.minTapTarget,
+              height: components.minTapTarget,
+              child: Icon(
+                Icons.menu,
+                size: components.menuIconSize,
+                color: AppTheme.colors.ink,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Fixa a [Navbar] no topo de um `CustomScrollView`.
+class NavbarSliver extends StatelessWidget {
+  const NavbarSliver({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(pinned: true, delegate: _NavbarHeaderDelegate());
+  }
+}
+
+class _NavbarHeaderDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  double get minExtent => AppTheme.dimensions.components.navbarHeight;
+
+  @override
+  double get maxExtent => AppTheme.dimensions.components.navbarHeight;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => const Navbar();
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }

@@ -1,204 +1,223 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/full_screen_dialog.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/no_scroll_configuration.dart';
-import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/navbutton_item.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_categories_menu.dart';
+import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_location.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
+import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
+import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Full screen mobile menu. Items with sub options expand in place (accordion).
+/// Painel de menu para celular e tablet (< 1024 px), aberto sobre a página.
+/// História e Geografia são sanfonas com as categorias da área.
+///
+/// Fecha pelo botão "Fechar menu", por Esc, por toque fora ou ao escolher uma
+/// opção. O foco fica dentro do painel enquanto ele está aberto.
 class NavbarMobileMenu extends StatefulWidget {
-  const NavbarMobileMenu({
-    required this.navButtonItens,
-    required this.onItemSelected,
-    this.categorySelected,
-    super.key,
-  });
+  const NavbarMobileMenu({super.key, required this.store, required this.location});
 
-  final List<NavButtonItem> navButtonItens;
+  final FetchCategoriesStore store;
 
-  /// Called after the menu is closed, with the tapped item.
-  final void Function(NavButtonItem item) onItemSelected;
-  final CategoryModel? categorySelected;
+  /// Onde a pessoa está, calculado pela navbar (o painel não tem `GoRouterState`).
+  final NavbarLocation location;
 
   @override
   State<NavbarMobileMenu> createState() => _NavbarMobileMenuState();
 }
 
 class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
-  NavButtonItem? _expanded;
+  late final Set<NavbarSection> _expanded = {
+    if (widget.location.section == NavbarSection.history ||
+        widget.location.section == NavbarSection.geography)
+      widget.location.section!,
+  };
 
-  @override
-  void initState() {
-    super.initState();
-    final selectedArea = widget.categorySelected?.areas.firstOrNull;
-    if (selectedArea != null) {
-      _expanded = widget.navButtonItens.where((item) => item.area == selectedArea).firstOrNull;
-    }
+  void _close() => Navigator.of(context).pop();
+
+  void _goTo(String route) {
+    final router = GoRouter.of(context);
+    _close();
+    widget.store.setSelectedCategory(null);
+    router.go(route);
   }
 
-  void _select(NavButtonItem item) {
-    if (item.isDisabled) return;
-    Navigator.of(context).pop();
-    widget.onItemSelected(item);
+  void _toggle(NavbarSection section) {
+    setState(() => _expanded.contains(section) ? _expanded.remove(section) : _expanded.add(section));
   }
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenDialog(
-      child: NoScrollConfiguration(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: AppTheme.dimensions.space.large.verticalSpacing),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (final item in widget.navButtonItens)
-                _MobileSection(
-                  item: item,
-                  isExpanded: item == _expanded,
-                  selectedCategory: widget.categorySelected,
-                  onHeaderTap: () {
-                    if (item.options?.isEmpty ?? true) {
-                      _select(item);
-                      return;
-                    }
-                    setState(() => _expanded = item == _expanded ? null : item);
-                  },
-                  onOptionTap: _select,
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final spacing = AppTheme.dimensions.spacing;
+    final width = MediaQuery.sizeOf(context).width;
+
+    return CallbackShortcuts(
+      bindings: {const SingleActivator(LogicalKeyboardKey.escape): _close},
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: SizedBox(
+          width: width < components.mobileMenuMaxWidth ? width : components.mobileMenuMaxWidth,
+          height: double.infinity,
+          child: DecoratedBox(
+            decoration: BoxDecoration(color: colors.page, boxShadow: AppTheme.dimensions.shadows.elevated),
+            child: Material(
+              type: MaterialType.transparency,
+              child: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: spacing.s20, right: spacing.s8),
+                      child: SizedBox(
+                        height: components.navbarHeight,
+                        child: Row(
+                          children: [
+                            Expanded(child: Text('Menu', style: AppTheme.typography.of(context).h3)),
+                            AppIconButton(
+                              tooltip: 'Fechar menu',
+                              icon: Icons.close,
+                              color: colors.ink,
+                              onPressed: _close,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(height: 1, thickness: 1, color: colors.line),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.symmetric(horizontal: spacing.s20, vertical: spacing.s8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _PanelRow(
+                              label: 'Sobre',
+                              isActive: widget.location.section == NavbarSection.about,
+                              onTap: () => _goTo(AppRoutes.root),
+                            ),
+                            _areaSection(PostsAreas.history, NavbarSection.history),
+                            _areaSection(PostsAreas.geography, NavbarSection.geography),
+                            _PanelRow(
+                              label: 'Biblioteca',
+                              isActive: widget.location.section == NavbarSection.library,
+                              onTap: () => _goTo(AppRoutes.library),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-            ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
+
+  Widget _areaSection(PostsAreas area, NavbarSection section) {
+    final isExpanded = _expanded.contains(section);
+    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : AppTheme.dimensions.components.menuAnimation;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _PanelRow(
+          label: area.portuguese,
+          isActive: widget.location.section == section,
+          isExpandable: true,
+          isExpanded: isExpanded,
+          onTap: () => _toggle(section),
+        ),
+        AnimatedSize(
+          duration: duration,
+          curve: Curves.easeOut,
+          alignment: Alignment.topCenter,
+          child: isExpanded
+              ? Container(
+                  margin: EdgeInsets.only(bottom: AppTheme.dimensions.spacing.s8),
+                  padding: EdgeInsets.all(AppTheme.dimensions.spacing.s8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.colors.surface,
+                    borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r12),
+                  ),
+                  child: NavbarCategoriesMenu(
+                    area: area,
+                    store: widget.store,
+                    selectedCategoryKey: widget.location.categoryKeyFor(area),
+                    onSelected: _close,
+                  ),
+                )
+              : const SizedBox(width: double.infinity),
+        ),
+      ],
+    );
+  }
 }
 
-class _MobileSection extends StatelessWidget {
-  const _MobileSection({
-    required this.item,
-    required this.isExpanded,
-    required this.selectedCategory,
-    required this.onHeaderTap,
-    required this.onOptionTap,
+/// Linha principal do painel: link simples ou cabeçalho de sanfona.
+class _PanelRow extends StatelessWidget {
+  const _PanelRow({
+    required this.label,
+    required this.onTap,
+    this.isActive = false,
+    this.isExpandable = false,
+    this.isExpanded = false,
   });
 
-  final NavButtonItem item;
+  final String label;
+  final VoidCallback onTap;
+  final bool isActive;
+  final bool isExpandable;
   final bool isExpanded;
-  final CategoryModel? selectedCategory;
-  final VoidCallback onHeaderTap;
-  final void Function(NavButtonItem) onOptionTap;
 
   @override
   Widget build(BuildContext context) {
-    final options = item.options ?? const <NavButtonItem>[];
-    final hasOptions = options.isNotEmpty;
+    final colors = AppTheme.colors;
+    final spacing = AppTheme.dimensions.spacing;
+    final components = AppTheme.dimensions.components;
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r8);
+    final color = isActive ? colors.accent : colors.ink;
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: AppTheme.colors.white.withValues(alpha: 0.3)),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          InkWell(
-            onTap: onHeaderTap,
+    return Semantics(
+      button: true,
+      selected: isActive,
+      expanded: isExpandable ? isExpanded : null,
+      label: label,
+      excludeSemantics: true,
+      child: AppFocusRing(
+        borderRadius: radius,
+        child: InkWell(
+          borderRadius: radius,
+          onTap: onTap,
+          mouseCursor: SystemMouseCursors.click,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: components.minTapTarget),
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: spacing.s4, vertical: spacing.s12),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      item.title.toUpperCase(),
-                      style: AppTheme.typography.headline.medium.copyWith(
-                        color: AppTheme.colors.white,
-                      ),
+                      label,
+                      style: AppTheme.typography.of(context).regular.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: color,
+                          ),
                     ),
                   ),
-                  if (hasOptions)
-                    AnimatedRotation(
-                      turns: isExpanded ? 0.5 : 0,
-                      duration: const Duration(milliseconds: 200),
-                      child: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: AppTheme.colors.white,
-                        size: 32,
-                      ),
+                  if (isExpandable)
+                    Icon(
+                      isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                      size: components.menuIconSize,
+                      color: color,
                     ),
                 ],
               ),
-            ),
-          ),
-          AnimatedSize(
-            duration: const Duration(milliseconds: 220),
-            curve: Curves.easeInOut,
-            alignment: Alignment.topCenter,
-            child: isExpanded && hasOptions
-                ? Padding(
-                    padding: EdgeInsets.only(
-                      bottom: AppTheme.dimensions.space.medium.verticalSpacing,
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: AppTheme.colors.white.withValues(alpha: 0.16),
-                        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          for (final option in options)
-                            _MobileOption(
-                              option: option,
-                              isSelected:
-                                  option.category != null && option.category == selectedCategory,
-                              onTap: () => onOptionTap(option),
-                            ),
-                        ],
-                      ),
-                    ),
-                  )
-                : const SizedBox(width: double.infinity),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _MobileOption extends StatelessWidget {
-  const _MobileOption({
-    required this.option,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final NavButtonItem option;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: isSelected ? AppTheme.colors.white : Colors.transparent,
-      borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppTheme.dimensions.space.medium.scale,
-            vertical: AppTheme.dimensions.space.small.verticalSpacing,
-          ),
-          child: Text(
-            option.title,
-            style: AppTheme.typography.title.medium.copyWith(
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              color: isSelected ? AppTheme.colors.orange : AppTheme.colors.white,
             ),
           ),
         ),

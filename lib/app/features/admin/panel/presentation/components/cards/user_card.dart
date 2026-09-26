@@ -63,12 +63,14 @@ class UserCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 AppIconButton(
+                  tooltip: 'Editar usuário',
                   color: AppTheme.colors.orange,
                   icon: Icons.edit,
                   onPressed: onEdit,
                 ),
                 SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                 AppIconButton(
+                  tooltip: 'Excluir usuário',
                   color: AppTheme.colors.red,
                   icon: Icons.delete,
                   onPressed: onDelete,

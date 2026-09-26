@@ -93,7 +93,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: Navbar()),
+          const NavbarSliver(),
           ValueListenableBuilder<PostModel?>(
             valueListenable: _postNotifier,
             builder: (context, post, child) {

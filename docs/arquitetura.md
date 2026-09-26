@@ -16,7 +16,7 @@ lib/
     ├── router/               # GoRouter (app_router.dart) e PageNotFound
     ├── theme/                # app_colors, app_typography, app_dimensions, app_theme
     ├── core/                 # Código compartilhado entre features
-    └── features/             # admin, geoensine, home, library, posts
+    └── features/             # admin, home, library, posts
 ```
 
 ## Camadas de uma feature
@@ -40,7 +40,7 @@ Fluxo de dados: `Widget → Store → Repository → Datasource → Firebase`. O
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | buttons, card, dialog, divider, error_content, field, footer, image, loading, loading_content, mouse_region, navbar (`navbar`, `navbar_menu`, `navbar_dropdown`), pages_circles, quill, scroll, skeleton, support, text, video_player |
+| `components/` | buttons, card, dialog, divider, error_content, field, footer, image, loading, loading_content, mouse_region, navbar (`navbar`, `navbar_item`, `navbar_dropdown`, `navbar_categories_menu`, `navbar_location`), focus (`AppFocusRing`), logo (`AppLogo`), pages_circles, quill, scroll, skeleton, support, text, video_player |
 | `models/` | `PostModel` e os corpos de post (`academic_production`, `article`, `book`, `document`, `event`, `film`, `magazine`, `music`, `podcast`, `search`), além de `category`, `image`, `navbutton_item`, `general_state`, `paginated/`, `states/` (estados de CRUD) e `united/` |
 | `utils/` | carousel_options, constants, date, enums, extensions, formatters, generator, image, messenger, screen, strings, transitions, url, validators |
 | `infra/` | datasource/repository de categorias e `services/logger_service` |
@@ -55,7 +55,6 @@ Fluxo de dados: `Widget → Store → Repository → Datasource → Firebase`. O
 | `home` | Página inicial: equipe, destaques e navbar dinâmica |
 | `posts` | Listagem paginada com filtros e página de detalhe do post |
 | `library` | Biblioteca de documentos por área, com busca por `slug` |
-| `geoensine` | Seção do projeto Geoensine (`geoensine_setup.dart` ainda vazio) |
 | `admin` | Login, painel de conteúdo e sidebar (ver [documento do painel](arquitetura-painel-admin.md)) |
 
 ## Rotas
@@ -73,8 +72,6 @@ Definidas em [app_router.dart](../lib/app/router/app_router.dart):
 /biblioteca                           Biblioteca
 /biblioteca/:area                     Documentos da área
 /biblioteca/:area/documento/:slug     Detalhe de documento
-/geoensine                            Geoensine
-/geoensine/projeto                    Projeto Geoensine
 /admin                                Login
 /admin/painel                         Redireciona para /admin/painel/categorias
 /admin/painel/:tab                    Painel (?postType=... para a aba de posts)
@@ -101,7 +98,7 @@ Os tipos de post são os valores de `PostType`: produção acadêmica, artigo, l
 
 ## Navbar
 
-Em telas largas, itens da navbar com subopções (`buildNavbarMenu` em `navbar_menu.dart`) usam o `NavbarDropdown`, um painel flutuante que abre ao passar o mouse ou tocar. No mobile, o menu é montado dentro de um dialog, sem `GoRouterState` acima do contexto, e por isso o destaque do item ativo não é calculado ali.
+A `Navbar` fica fixa no topo (`NavbarSliver` em páginas com `CustomScrollView`). Em ≥ 1024 px mostra os itens em linha; História e Geografia usam o `NavbarDropdown` (hover, clique e teclado) com o conteúdo de `NavbarCategoriesMenu`. Abaixo disso, um botão abre `NavbarMobileMenu`, painel com sanfonas. O item ativo vem de `NavbarLocation`, calculado pela rota e entregue ao painel.
 
 ## Tratamento de erros
 
@@ -129,6 +126,13 @@ Future<Either<Failure, PaginatedPosts>> fetchPosts(...) async {
 1. Criar `lib/app/features/{feature}/` com `infra/` e `presentation/`.
 2. Criar `{feature}_setup.dart` e chamá-lo em `app_setup.dart`.
 3. Registrar as rotas em `app_router.dart`.
+
+## Página base e tela de carregamento (`web/`)
+
+- [web/index.html](../web/index.html) traz título, descrição, `lang="pt-BR"`, cor de tema, tags de compartilhamento (Open Graph e Twitter/X, com `og-image.png` de 1200×630) e o link canônico `https://observatoriogeohistoria.net.br/`. Os blocos do Google Analytics e do `pdf.js` (usado pelo `pdfx` na biblioteca) não devem ser mexidos.
+- A **tela de carregamento** é HTML e CSS inline no começo do `<body>`, com a marca em SVG e fonte do sistema, para aparecer antes de qualquer script. Um script inline a remove quando o motor do Flutter dispara o evento `flutter-first-frame` na janela (esmaecimento de 200 ms, sem animação com movimento reduzido). Se o app não abrir em 15 s, mostra a mensagem de demora e o botão "Recarregar". Sem JavaScript, um `<noscript>` mostra o aviso. As cores ficam num bloco de variáveis CSS espelhando `AppColors`.
+- O título da aba depois que o app abre vem do `title` do `MaterialApp` em `app_widget.dart`; mantenha-o igual ao `<title>` do `index.html`.
+- **Ícones e imagem de compartilhamento** (`favicon.svg`, `favicon.png`, `icons/*`, `og-image.png`) são gerados por `tool/web_icons/gerar.sh`, que fotografa as páginas de `tool/web_icons/` com o Google Chrome em modo headless. Rode de novo só se a marca (`assets/images/logo.svg`) mudar, lembrando de atualizar o SVG copiado nessas páginas e no `index.html`.
 
 ## Ferramentas e versões
 

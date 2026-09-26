@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: Navbar()),
+          const NavbarSliver(),
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: highlights.loadLibrary(),

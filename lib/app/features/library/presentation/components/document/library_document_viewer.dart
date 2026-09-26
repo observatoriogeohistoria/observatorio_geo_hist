@@ -100,6 +100,7 @@ class _LibraryDocumentViewerState extends State<LibraryDocumentViewer> {
           children: [
             IntrinsicHeight(
               child: CustomIconButton(
+                tooltip: 'Página anterior',
                 icon: Icons.arrow_back_ios_outlined,
                 onTap: () => _jumpToPage(false),
               ),
@@ -107,6 +108,7 @@ class _LibraryDocumentViewerState extends State<LibraryDocumentViewer> {
             SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
             IntrinsicHeight(
               child: CustomIconButton(
+                tooltip: 'Próxima página',
                 icon: Icons.arrow_forward_ios_outlined,
                 onTap: () => _jumpToPage(true),
               ),

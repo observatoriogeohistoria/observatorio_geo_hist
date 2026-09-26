@@ -66,6 +66,7 @@ class MediaCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 AppIconButton(
+                  tooltip: 'Ver imagem',
                   icon: Icons.visibility,
                   color: AppTheme.colors.orange,
                   onPressed: () => showViewImageDialog(context, media),
@@ -73,6 +74,7 @@ class MediaCard extends StatelessWidget {
                 if (media.url?.isNotEmpty ?? false) ...[
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppIconButton(
+                    tooltip: 'Copiar link',
                     icon: Icons.copy,
                     color: AppTheme.colors.gray,
                     onPressed: () async {
@@ -83,6 +85,7 @@ class MediaCard extends StatelessWidget {
                 if (canEdit) ...[
                   SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
                   AppIconButton(
+                    tooltip: 'Excluir imagem',
                     icon: Icons.delete,
                     color: AppTheme.colors.red,
                     onPressed: onDelete,

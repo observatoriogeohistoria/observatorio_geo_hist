@@ -1,0 +1,28 @@
+<!doctype html>
+<!--
+  Ícone "maskable" do manifesto: fundo de acento cheio e os anéis da marca
+  dentro da zona segura (círculo central de 80%). Usado por gerar.sh.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      /* Cores de AppColors (lib/app/theme/app_colors/app_colors.dart). */
+      :root {
+        --accent: #c94400;
+      }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--accent); }
+      svg { display: block; width: 100%; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <!-- Anéis de assets/images/logo.svg, escalados para caber na zona segura. -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 34">
+      <g transform="translate(17 17) scale(1.2) translate(-17 -17)">
+        <circle cx="17" cy="17" r="10.5" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.4"/>
+        <circle cx="17" cy="17" r="5" fill="none" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="1.4"/>
+        <circle cx="17" cy="17" r="1.9" fill="#FFFFFF"/>
+      </g>
+    </svg>
+  </body>
+</html>

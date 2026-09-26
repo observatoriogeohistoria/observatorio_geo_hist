@@ -1,39 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
+/// Ícones de Instagram, Facebook e YouTube. Abrem em outra aba.
 class SocialButtons extends StatelessWidget {
-  const SocialButtons({super.key});
+  const SocialButtons({super.key, this.onDark = false});
+
+  /// Versão para fundo escuro (rodapé).
+  final bool onDark;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        _buildIcon('instagram', AppStrings.instagram),
-        _buildIcon('facebook', AppStrings.facebook),
-        _buildIcon('youtube', AppStrings.youtube),
+        _SocialButton(name: 'instagram', label: 'Instagram', url: AppStrings.instagram, onDark: onDark),
+        SizedBox(width: AppTheme.dimensions.spacing.s8),
+        _SocialButton(name: 'facebook', label: 'Facebook', url: AppStrings.facebook, onDark: onDark),
+        SizedBox(width: AppTheme.dimensions.spacing.s8),
+        _SocialButton(name: 'youtube', label: 'YouTube', url: AppStrings.youtube, onDark: onDark),
       ],
     );
   }
+}
 
-  Widget _buildIcon(
-    String name,
-    String link,
-  ) {
-    return InkWell(
-      customBorder: const CircleBorder(),
-      hoverColor: AppTheme.colors.orange,
-      onTap: () => openUrl(link),
-      mouseCursor: SystemMouseCursors.click,
-      child: Padding(
-        padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
-        child: Image.asset(
-          '${AppAssets.icons}/$name.png',
-          width: 40.scale,
-          height: 40.scale,
+class _SocialButton extends StatefulWidget {
+  const _SocialButton({
+    required this.name,
+    required this.label,
+    required this.url,
+    required this.onDark,
+  });
+
+  final String name;
+  final String label;
+  final String url;
+  final bool onDark;
+
+  @override
+  State<_SocialButton> createState() => _SocialButtonState();
+}
+
+class _SocialButtonState extends State<_SocialButton> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r10);
+
+    final highlight = widget.onDark ? colors.footerHighlight : colors.accent;
+    final iconColor = _hovered ? highlight : (widget.onDark ? colors.footerText : colors.ink);
+    final borderColor = _hovered ? highlight : (widget.onDark ? colors.footerLine : colors.line);
+
+    return Tooltip(
+      message: widget.label,
+      child: Semantics(
+        link: true,
+        label: '${widget.label}, abre em outra aba',
+        excludeSemantics: true,
+        child: AppFocusRing(
+          borderRadius: radius,
+          color: widget.onDark ? colors.footerHighlight : null,
+          child: InkWell(
+            borderRadius: radius,
+            onTap: () => openUrl(widget.url),
+            onHover: (value) => setState(() => _hovered = value),
+            hoverColor: Colors.transparent,
+            mouseCursor: SystemMouseCursors.click,
+            child: Ink(
+              width: AppTheme.dimensions.spacing.s40,
+              height: AppTheme.dimensions.spacing.s40,
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                border: Border.all(color: borderColor),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  '${AppAssets.icons}/${widget.name}.svg',
+                  width: components.navIcon,
+                  height: components.navIcon,
+                  colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

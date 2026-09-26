@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="pt-BR">
   <head>
     <!-- Google tag (gtag.js) -->
     <script
@@ -33,22 +33,262 @@
 
     <meta charset="UTF-8" />
     <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-    <meta name="description" content="A new Flutter project." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Observatório do Ensino de História e Geografia | UFU</title>
+    <meta
+      name="description"
+      content="Pesquisas, materiais e recursos para o ensino de História e Geografia. Projeto da Faculdade de Educação da UFU."
+    />
+    <meta name="theme-color" content="#C94400" />
+    <link rel="canonical" href="https://observatoriogeohistoria.net.br/" />
+
+    <!-- Compartilhamento em redes (Open Graph e Twitter/X) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Observatório do Ensino de História e Geografia" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content="https://observatoriogeohistoria.net.br/" />
+    <meta property="og:title" content="Observatório do Ensino de História e Geografia | UFU" />
+    <meta
+      property="og:description"
+      content="Pesquisas, materiais e recursos para o ensino de História e Geografia. Projeto da Faculdade de Educação da UFU."
+    />
+    <meta property="og:image" content="https://observatoriogeohistoria.net.br/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Marca do Observatório, círculos concêntricos em laranja, ao lado do nome Observatório do Ensino de História e Geografia."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Observatório do Ensino de História e Geografia | UFU" />
+    <meta
+      name="twitter:description"
+      content="Pesquisas, materiais e recursos para o ensino de História e Geografia. Projeto da Faculdade de Educação da UFU."
+    />
+    <meta name="twitter:image" content="https://observatoriogeohistoria.net.br/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Marca do Observatório, círculos concêntricos em laranja, ao lado do nome Observatório do Ensino de História e Geografia."
+    />
 
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="observatorio_geo_hist" />
-    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+    <meta name="apple-mobile-web-app-title" content="Observatório" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="logo.png" />
+    <!-- Favicon (gerado por tool/web_icons/gerar.sh) -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
 
-    <title>observatorio_geo_hist</title>
     <link rel="manifest" href="manifest.json" />
+
+    <!-- Tela de carregamento inicial (some no evento flutter-first-frame). -->
+    <style>
+      /* Cores de AppColors (lib/app/theme/app_colors/app_colors.dart, spec 001). */
+      :root {
+        --page: #ffffff;
+        --ink: #1f1b18;
+        --ink-secondary: #5e5852;
+        --line: #e6e1da;
+        --accent: #c94400;
+        --accent-strong: #a33600;
+      }
+      #carregamento {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 24px;
+        overflow: hidden;
+        background: var(--page);
+        color: var(--ink);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        text-align: center;
+        opacity: 1;
+        transition: opacity 200ms ease-out;
+      }
+      #carregamento.saindo {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #carregamento .marca {
+        width: 64px;
+        height: 64px;
+      }
+      #carregamento .nome {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.3;
+      }
+      #carregamento .anel {
+        box-sizing: border-box;
+        width: 28px;
+        height: 28px;
+        margin-top: 8px;
+        border: 3px solid var(--line);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: carregamento-giro 900ms linear infinite;
+      }
+      @keyframes carregamento-giro {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #carregamento .mensagem {
+        max-width: 360px;
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--ink-secondary);
+      }
+      #carregamento-demora {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      #carregamento-demora[hidden] {
+        display: none;
+      }
+      #carregamento button {
+        min-height: 44px;
+        padding: 10px 24px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--accent);
+        color: var(--page);
+        font: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      #carregamento button:hover {
+        background: var(--accent-strong);
+      }
+      #carregamento button:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+      }
+      #carregamento .oculto {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      #carregamento.demorou .anel,
+      #carregamento.demorou .oculto {
+        display: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #carregamento {
+          transition: none;
+        }
+        #carregamento .anel {
+          animation: none;
+        }
+      }
+    </style>
+    <noscript>
+      <style>
+        #carregamento .anel,
+        #carregamento .oculto {
+          display: none;
+        }
+      </style>
+    </noscript>
   </head>
 
   <body>
+    <div id="carregamento" role="status">
+      <!-- Mesmo desenho de assets/images/logo.svg -->
+      <svg class="marca" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 34">
+        <circle cx="17" cy="17" r="16" fill="#C94400" />
+        <circle cx="17" cy="17" r="10.5" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.4" />
+        <circle cx="17" cy="17" r="5" fill="none" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="1.4" />
+        <circle cx="17" cy="17" r="1.9" fill="#FFFFFF" />
+      </svg>
+      <p class="nome" aria-hidden="true">Observatório</p>
+      <span class="anel" aria-hidden="true"></span>
+      <span class="oculto">Carregando</span>
+      <div id="carregamento-demora" hidden>
+        <p class="mensagem">
+          Está demorando mais que o normal. Verifique sua conexão e recarregue a página.
+        </p>
+        <button type="button" id="carregamento-recarregar">Recarregar</button>
+      </div>
+      <noscript>
+        <p class="mensagem">Este site precisa de JavaScript para funcionar.</p>
+      </noscript>
+    </div>
+    <script>
+      (function () {
+        var tela = document.getElementById("carregamento");
+        var LIMITE_DEMORA_MS = 15000;
+        var semMovimento = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+        function remover() {
+          if (tela.parentNode) tela.parentNode.removeChild(tela);
+        }
+
+        function esconder() {
+          window.clearTimeout(temporizador);
+          window.removeEventListener("flutter-first-frame", esconder);
+          if (!tela.parentNode || tela.classList.contains("saindo")) return;
+          tela.setAttribute("aria-hidden", "true");
+          if (semMovimento.matches) {
+            remover();
+            return;
+          }
+          tela.classList.add("saindo");
+          tela.addEventListener("transitionend", function (evento) {
+            if (evento.target === tela) remover();
+          });
+          // Reserva caso a transição não dispare (aba em segundo plano, por exemplo).
+          window.setTimeout(remover, 400);
+        }
+
+        function appDesenhou() {
+          // O Flutter desenha em <canvas> dentro do shadow DOM de flt-glass-pane.
+          var vidro = document.querySelector("flutter-view flt-glass-pane");
+          var raiz = vidro && (vidro.shadowRoot || vidro);
+          return !!(raiz && raiz.querySelector("flt-scene canvas"));
+        }
+
+        function mostrarDemora() {
+          // Salvaguarda: se o app já desenhou algo e o evento não chegou, só some.
+          if (appDesenhou()) {
+            esconder();
+            return;
+          }
+          tela.classList.add("demorou");
+          document.getElementById("carregamento-demora").hidden = false;
+        }
+
+        document
+          .getElementById("carregamento-recarregar")
+          .addEventListener("click", function () {
+            window.location.reload();
+          });
+
+        // Disparado pelo motor do Flutter Web quando a primeira tela é desenhada.
+        window.addEventListener("flutter-first-frame", esconder);
+        var temporizador = window.setTimeout(mostrarDemora, LIMITE_DEMORA_MS);
+      })();
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.min.mjs"
       type="module"

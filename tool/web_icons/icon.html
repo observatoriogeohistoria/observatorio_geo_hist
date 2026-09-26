@@ -1,0 +1,36 @@
+<!doctype html>
+<!--
+  Ícone quadrado com a marca do Observatório.
+  Parâmetro ?fundo=transparente (padrão) ou ?fundo=branco.
+  Usado por gerar.sh; o tamanho vem da janela do Chrome.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      /* Cores de AppColors (lib/app/theme/app_colors/app_colors.dart). */
+      :root {
+        --page: #ffffff;
+      }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+      body.branco { background: var(--page); }
+      svg { display: block; width: 100%; height: 100%; }
+      /* No fundo branco a marca ganha margem para não encostar nas bordas arredondadas do iOS. */
+      body.branco svg { width: 84%; height: 84%; margin: 8%; }
+    </style>
+  </head>
+  <body>
+    <!-- Mesmo desenho de assets/images/logo.svg -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 34">
+      <circle cx="17" cy="17" r="16" fill="#C94400"/>
+      <circle cx="17" cy="17" r="10.5" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.4"/>
+      <circle cx="17" cy="17" r="5" fill="none" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="1.4"/>
+      <circle cx="17" cy="17" r="1.9" fill="#FFFFFF"/>
+    </svg>
+    <script>
+      if (new URLSearchParams(location.search).get("fundo") === "branco") {
+        document.body.className = "branco";
+      }
+    </script>
+  </body>
+</html>

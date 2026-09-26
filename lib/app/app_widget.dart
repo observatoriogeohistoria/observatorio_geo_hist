@@ -46,7 +46,7 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         }
       },
       child: MaterialApp.router(
-        title: 'Observatório de História e Geografia',
+        title: 'Observatório do Ensino de História e Geografia | UFU',
         debugShowCheckedModeBanner: false,
         scrollBehavior: const CustomScrollBehavior(),
         localizationsDelegates: const [

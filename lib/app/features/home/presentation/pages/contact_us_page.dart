@@ -43,7 +43,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: Navbar()),
+          const NavbarSliver(),
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(

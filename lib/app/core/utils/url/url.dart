@@ -10,12 +10,14 @@ String encodeUrlComponent(String url) {
   return Uri.encodeComponent(url);
 }
 
-Future<void> openUrl(String url) async {
+/// Abre [url] em outra aba. Use [sameTab] para `mailto:` e `tel:`, que não
+/// devem deixar uma aba em branco.
+Future<void> openUrl(String url, {bool sameTab = false}) async {
   final Uri uri = Uri.parse(url);
 
   try {
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      await launchUrl(uri, webOnlyWindowName: sameTab ? '_self' : null);
     } else {
       if (kDebugMode) print('Could not launch $url');
     }

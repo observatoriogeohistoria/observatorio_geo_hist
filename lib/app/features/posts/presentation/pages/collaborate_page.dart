@@ -29,7 +29,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: Navbar()),
+          const NavbarSliver(),
           SliverToBoxAdapter(
             child: Container(
               width: MediaQuery.of(context).size.width,

@@ -123,12 +123,14 @@ class _HighlightsState extends State<Highlights> {
                               children: [
                                 IntrinsicHeight(
                                   child: CustomIconButton(
+                                    tooltip: 'Destaque anterior',
                                     icon: Icons.arrow_back_ios_outlined,
                                     onTap: () => _carouselController.previousPage(),
                                   ),
                                 ),
                                 IntrinsicHeight(
                                   child: CustomIconButton(
+                                    tooltip: 'Próximo destaque',
                                     icon: Icons.arrow_forward_ios_outlined,
                                     onTap: () => _carouselController.nextPage(),
                                   ),

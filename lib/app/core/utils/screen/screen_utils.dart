@@ -2,7 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
+/// Faixas de largura do redesign: celular (< 600), tablet (600–1023) e desktop (≥ 1024).
+enum Breakpoint {
+  mobile,
+  tablet,
+  desktop;
+
+  static const double tabletMinWidth = 600;
+  static const double desktopMinWidth = 1024;
+
+  static Breakpoint fromWidth(double width) {
+    if (width >= desktopMinWidth) return Breakpoint.desktop;
+    if (width >= tabletMinWidth) return Breakpoint.tablet;
+    return Breakpoint.mobile;
+  }
+}
+
 class ScreenUtils {
+  /// Largura máxima do conteúdo das telas novas.
+  static const double contentMaxWidth = 1120;
+
+  static Breakpoint breakpointOf(BuildContext context) {
+    return Breakpoint.fromWidth(MediaQuery.sizeOf(context).width);
+  }
+
+  /// Margem lateral do conteúdo das telas novas (20 no celular, 32 do tablet para cima).
+  static double contentMargin(Breakpoint breakpoint) {
+    return switch (breakpoint) {
+      Breakpoint.mobile => AppTheme.dimensions.spacing.s20,
+      Breakpoint.tablet || Breakpoint.desktop => AppTheme.dimensions.spacing.s32,
+    };
+  }
+
   static bool isMobile(BuildContext context) {
     return MediaQuery.of(context).size.width < 600;
   }
