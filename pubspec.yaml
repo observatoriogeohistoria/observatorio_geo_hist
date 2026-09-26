@@ -21,7 +21,7 @@ scripts:
     $script: fvm flutter build web
 
   run:
-    $script: fvm flutter run -d chrome --web-renderer html
+    $script: fvm flutter run -d chrome
 
   test:
     $before: dart pub global run full_coverage

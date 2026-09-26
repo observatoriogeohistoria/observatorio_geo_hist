@@ -42,7 +42,7 @@ class _HighlightsState extends State<Highlights> {
               opacity: animation,
               child: SizeTransition(
                 sizeFactor: animation,
-                axisAlignment: -1.0,
+                alignment: Alignment.topCenter,
                 child: child,
               ),
             );

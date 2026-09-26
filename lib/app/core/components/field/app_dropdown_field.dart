@@ -94,7 +94,7 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
           );
         },
       ).toList(),
-      value: _selectedValue,
+      initialValue: _selectedValue,
       onChanged: widget.isDisabled
           ? null
           : (value) {

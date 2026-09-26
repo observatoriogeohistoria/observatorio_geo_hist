@@ -47,7 +47,7 @@ class _PostCardState extends State<PostCard> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        transform: _isHovered ? (Matrix4.identity()..scale(1.02)) : Matrix4.identity(),
+        transform: _isHovered ? (Matrix4.identity()..scaleByDouble(1.02, 1.02, 1.02, 1.0)) : Matrix4.identity(),
         padding: EdgeInsets.all(AppTheme.dimensions.space.medium.horizontalSpacing),
         decoration: BoxDecoration(
           color: _isHovered ? widget.backgroundColor : null,
