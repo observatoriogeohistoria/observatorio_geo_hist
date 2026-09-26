@@ -7,7 +7,6 @@ import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/support/support.dart';
 import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/artist_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/book_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
@@ -23,7 +22,6 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/academic_production_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/article_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/artist_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/book_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/document_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/event_content.dart';
@@ -156,12 +154,6 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
         content = MusicContent(
           post: post,
           music: post.body! as MusicModel,
-        );
-        break;
-      case PostType.artist:
-        content = ArtistContent(
-          post: post,
-          artis: post.body! as ArtistModel,
         );
         break;
       case PostType.academicProduction:

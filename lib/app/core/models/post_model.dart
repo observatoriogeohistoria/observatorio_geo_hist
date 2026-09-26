@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/artist_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/book_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
@@ -63,7 +62,6 @@ class PostModel extends Equatable {
 
   bool get isAcademicProduction => type == PostType.academicProduction;
   bool get isArticle => type == PostType.article;
-  bool get isArtist => type == PostType.artist;
   bool get isBook => type == PostType.book;
   bool get isDocument => type == PostType.document;
   bool get isEvent => type == PostType.event;
@@ -148,7 +146,6 @@ class PostModel extends Equatable {
 enum PostType {
   academicProduction,
   article,
-  artist,
   book,
   document,
   event,
@@ -164,8 +161,6 @@ enum PostType {
         return 'producoes-academicas';
       case PostType.article:
         return 'artigos';
-      case PostType.artist:
-        return 'artistas';
       case PostType.book:
         return 'livros';
       case PostType.document:
@@ -191,8 +186,6 @@ enum PostType {
         return 'Produção Acadêmica';
       case PostType.article:
         return 'Artigo';
-      case PostType.artist:
-        return 'Artista';
       case PostType.book:
         return 'Livro';
       case PostType.document:
@@ -218,8 +211,6 @@ enum PostType {
         return 'Produções Acadêmicas';
       case PostType.article:
         return 'Artigos';
-      case PostType.artist:
-        return 'Artistas';
       case PostType.book:
         return 'Livros';
       case PostType.document:
@@ -245,8 +236,6 @@ enum PostType {
         return AcademicProductionModel.fromJson(json);
       case PostType.article:
         return ArticleModel.fromJson(json);
-      case PostType.artist:
-        return ArtistModel.fromJson(json);
       case PostType.book:
         return BookModel.fromJson(json);
       case PostType.document:
@@ -272,8 +261,6 @@ enum PostType {
         return PostType.academicProduction;
       case 'artigos':
         return PostType.article;
-      case 'artistas':
-        return PostType.artist;
       case 'livros':
         return PostType.book;
       case 'documentos':

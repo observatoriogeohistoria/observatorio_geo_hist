@@ -12,7 +12,6 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_academic_production_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_article_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_artist_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_book_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_document_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_event_dialog.dart';
@@ -211,10 +210,6 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
 
       case PostType.music:
         showCreateOrUpdateMusicDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
-        break;
-
-      case PostType.artist:
-        showCreateOrUpdateArtistDialog(context, onCreateOrUpdate: onCreateOrUpdate, post: post);
         break;
     }
   }
