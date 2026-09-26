@@ -59,22 +59,30 @@ class ArticleContent extends StatelessWidget {
           const AppDivider(),
           SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
           if (article.image.url?.isNotEmpty ?? false)
-            AppNetworkImage(
-              imageUrl: article.image.url!,
+            LayoutBuilder(
+              builder: (_, constraints) {
+                // Banner panorâmico: proporção 21:9 limitada a uma altura máxima.
+                final height = (constraints.maxWidth * 9 / 21).clamp(180.0, 420.0);
+
+                return AppNetworkImage(
+                  imageUrl: article.image.url!,
+                  height: height,
+                  radius: AppTheme.dimensions.radius.medium,
+                );
+              },
             ),
-          Align(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                AppTitle.small(
+          if (article.imageCaption.isNotEmpty)
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: AppTheme.dimensions.space.small.verticalSpacing),
+                child: AppTitle.small(
                   text: article.imageCaption,
-                  textAlign: TextAlign.start,
+                  textAlign: TextAlign.center,
                   color: AppTheme.colors.gray,
                 ),
-              ],
+              ),
             ),
-          ),
           SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
           ViewQuill(initialContent: article.content),
           if (!ViewQuill.isQuillContentEmpty(article.observation))
