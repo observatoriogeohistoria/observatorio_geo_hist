@@ -9,7 +9,8 @@ enum PartnersImages {
   ppged,
   proexc,
   propp,
-  ufu;
+  ufu,
+  uniube;
 
   /// The path of the image.
   String get path {

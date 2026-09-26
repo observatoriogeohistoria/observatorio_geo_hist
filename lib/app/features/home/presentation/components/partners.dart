@@ -13,7 +13,6 @@ class Partners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isMobile = ScreenUtils.isMobile(context);
-    bool isTablet = ScreenUtils.isTablet(context);
 
     const images = PartnersImages.values;
 
@@ -37,7 +36,7 @@ class Partners extends StatelessWidget {
               AlignedGridView.count(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                crossAxisCount: isMobile ? 2 : (isTablet ? 3 : 4),
+                crossAxisCount: isMobile ? 2 : 3,
                 crossAxisSpacing: AppTheme.dimensions.space.medium.horizontalSpacing,
                 mainAxisSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
                 itemCount: images.length,
