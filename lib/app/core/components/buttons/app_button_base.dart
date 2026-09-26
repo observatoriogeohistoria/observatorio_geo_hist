@@ -17,6 +17,7 @@ class AppButtonBase extends StatefulWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.trailingIcon,
   });
 
   final AppButtonKind kind;
@@ -24,6 +25,10 @@ class AppButtonBase extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
   final bool isDisabled;
+
+  /// Ícone opcional depois do texto (por exemplo, uma seta). É decorativo:
+  /// o leitor de tela lê só o [text].
+  final IconData? trailingIcon;
 
   @override
   State<AppButtonBase> createState() => _AppButtonBaseState();
@@ -91,7 +96,20 @@ class _AppButtonBaseState extends State<AppButtonBase> {
                     widthFactor: 1,
                     heightFactor: 1,
                     child: SelectionContainer.disabled(
-                      child: Text(widget.text, textAlign: TextAlign.center, style: textStyle),
+                      child: widget.trailingIcon == null
+                          ? Text(widget.text, textAlign: TextAlign.center, style: textStyle)
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(child: Text(widget.text, textAlign: TextAlign.center, style: textStyle)),
+                                SizedBox(width: spacing.s8),
+                                Icon(
+                                  widget.trailingIcon,
+                                  size: fontSize * components.buttonIconScale,
+                                  color: foreground,
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                 ),

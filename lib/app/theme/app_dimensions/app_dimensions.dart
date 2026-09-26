@@ -61,6 +61,9 @@ class ComponentSizes {
   final double buttonTextMedium = 16.0;
   final double buttonTextBig = 18.0;
 
+  /// Ícone dos botões em relação ao texto (`.i` do protótipo: 1,15 em).
+  final double buttonIconScale = 1.15;
+
   /// Logo: tamanho da marca e dos textos.
   final double logoMark = 34.0;
   final double logoName = 19.0;

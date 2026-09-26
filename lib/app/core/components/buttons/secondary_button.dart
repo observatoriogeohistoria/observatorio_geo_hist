@@ -8,6 +8,7 @@ class SecondaryButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.trailingIcon,
     super.key,
   }) : size = ButtonSize.small;
 
@@ -15,6 +16,7 @@ class SecondaryButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.trailingIcon,
     super.key,
   }) : size = ButtonSize.medium;
 
@@ -22,6 +24,7 @@ class SecondaryButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.trailingIcon,
     super.key,
   }) : size = ButtonSize.big;
 
@@ -29,6 +32,9 @@ class SecondaryButton extends StatelessWidget {
   final void Function() onPressed;
   final ButtonSize size;
   final bool isDisabled;
+
+  /// Ícone opcional depois do texto (decorativo).
+  final IconData? trailingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +44,7 @@ class SecondaryButton extends StatelessWidget {
       text: text,
       onPressed: onPressed,
       isDisabled: isDisabled,
+      trailingIcon: trailingIcon,
     );
   }
 }
