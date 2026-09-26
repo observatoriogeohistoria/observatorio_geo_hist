@@ -61,6 +61,10 @@ class _SigninPageState extends State<SigninPage> {
     for (var reaction in _reactions) {
       reaction.reaction.dispose();
     }
+
+    _emailController.dispose();
+    _passwordController.dispose();
+
     super.dispose();
   }
 
