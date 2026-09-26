@@ -1,6 +1,6 @@
 # 006. Home: Quem somos e vídeo
 
-- **Status:** implementada
+- **Status:** verificada
 - **Item do planejamento:** Fase 1, seções 1.3 (Quem somos) e 1.4 (Vídeo)
 - **Protótipo:** aba "Home", blocos "Quem somos" (fundo de superfície, duas colunas) e vídeo (capa com botão "Assistir"), logo abaixo de "Destaques" (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -133,3 +133,6 @@ O vídeo só é baixado depois de "Assistir": abrir a Home não baixa os 14 MB.
   - **Controles do player afastados da borda.** Com o véu ligado, os controles ficam 8 px afastados da borda esquerda e da base, para o contorno de foco não ser cortado pelos cantos arredondados do quadro.
   - **Ativação do usuário em arquivo próprio.** A consulta a `navigator.userActivation` fica em `core/utils/browser/user_activation.dart`, com import condicional (fora da web devolve `true`), para o código continuar compilando fora do navegador.
   - **Correção no `AppVideoPlayer`.** Reproduzir/pausar agora muda o estado interno antes de chamar o controller (que avisa os ouvintes ainda dentro de `play()`); sem os parâmetros novos, o comportamento é o mesmo de antes.
+- 2026-09-26: verificada no modo autônomo ([verificacao.md](verificacao.md)), com duas correções que fazem o código cumprir o que a spec já dizia:
+  - **Bloqueio de som pelo navegador.** Se o navegador recusa o início automático mesmo com a ativação valendo, o `AppVideoPlayer` avisa por `onAutoplayBlocked` (opcional, desligado por padrão) e a seção monta o player de novo, pausado e pronto, em vez de cair no estado de erro.
+  - **Quem somos com texto ampliado.** A partir de 130% de ampliação do texto, a seção fica em uma coluna também no desktop, para o título não quebrar palavras ao meio.

@@ -7,7 +7,7 @@
 |---|---|---|---|---|---|
 | 004-hero-atalhos | 1.1 | feita (14 critérios, 12 tarefas) | feita (2 commits) | feita (2 fix) | verificada com ressalvas (6 commits) |
 | 005-destaques | 1.2 | feita (16 critérios, 13 tarefas) | feita (2 commits) | feita (1 fix) | verificada (5 commits) |
-| 006-quem-somos-video | 1.3, 1.4 | feita (16 critérios, 13 tarefas) | pendente | pendente | |
+| 006-quem-somos-video | 1.3, 1.4 | feita (16 critérios, 13 tarefas) | feita (3 commits) | feita (2 fix) | verificada (6 commits) |
 | 007-resumo-nossa-historia | 1.5 | pendente | pendente | pendente | |
 | 008-equipe | 1.6 | pendente | pendente | pendente | |
 | 009-apoio-contato | 1.7, 1.8 | pendente | pendente | pendente | |
@@ -40,6 +40,9 @@
 - 004: as opções do menu de categorias da navbar (reaproveitadas na janela dos atalhos) não respondem ao toque pela semântica do leitor de tela; não corrigido por ser navbar (fora do escopo da 004). Sugerida correção própria.
 - 004: sem teste com leitor de tela real (VoiceOver/NVDA), só árvore de semântica.
 - 005: o banco real tem 0 posts marcados como destaque, então a seção fica escondida no site hoje. Casos 1, 2, 3 e 5 conferidos só com dados simulados (testes temporários fora do repositório).
+- 006: a 390 px com texto a 200%, a palavra "conhecimento." do título de Quem somos ainda quebra ao meio (só resolveria limitando a ampliação).
+- 006: bloqueio real de som no Safari/Firefox e painel admin no navegador não conferidos (bloqueio simulado; admin conferido pelo código).
 
 ## Ocorrências
 - Branch criada a partir de origin/develop sem upstream configurado, para que nenhum `git push` sem argumentos vá para a develop.
+- 2026-09-26: limite de uso atingido após fechar a 006. Retomar com `/sdd-fase Fase 1` a partir da 007 (spec+plano pendente).
