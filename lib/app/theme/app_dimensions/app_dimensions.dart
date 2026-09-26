@@ -147,6 +147,60 @@ class ComponentSizes {
   final Offset heroRingAccentCenter = const Offset(0.86, 0.18);
   final Offset heroRingInkCenter = const Offset(0.08, 1.10);
 
+  // Seções da Home (spec 005 em diante). Origem: `.section` e `.section-head`.
+
+  /// Respiro vertical de uma seção (`.section` `padding-block`).
+  double sectionPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 48, 72, 96);
+
+  /// Vão entre o título da seção e o conteúdo (`.section-head` `margin-bottom`).
+  final double sectionHeadGap = 28.0;
+
+  // Destaques da Home (spec 005). Origem: `.featured` e `.feat` do protótipo.
+
+  /// Altura total da grade de destaques no tablet e no desktop (`.featured`
+  /// `min-height: 440px`; menor no tablet). No celular os cartões ficam em
+  /// coluna, com as alturas abaixo, e este valor não é usado.
+  double featuredGridHeight(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 0, 400, 440);
+
+  /// Alturas dos cartões no celular, em coluna (`.feat.big` 340 px; menores 220 px).
+  final double featuredMainHeightMobile = 340.0;
+  final double featuredSmallHeightMobile = 220.0;
+
+  /// Vão entre os cartões (`.featured` `gap`).
+  final double featuredGap = 16.0;
+
+  /// Proporção das colunas (`1.6fr 1fr`), em fatores de `flex`.
+  final int featuredMainFlex = 16;
+  final int featuredSideFlex = 10;
+
+  /// Preenchimento interno do texto (`.feat .body` `padding`; menor no celular).
+  double featuredTextPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 24);
+
+  /// Vão entre rótulo, título e data (`.feat .body` `gap`).
+  final double featuredTextGap = 8.0;
+
+  /// Largura máxima do título do destaque principal, em múltiplos do tamanho
+  /// da fonte (`max-width: 22ch`; na Bricolage Grotesque o "0" mede cerca de
+  /// 0,55 em, então 22 caracteres ≈ 12 em).
+  final double featuredTitleMaxWidthEm = 12.0;
+
+  /// Linhas máximas do título antes das reticências.
+  final int featuredTitleMaxLines = 3;
+
+  /// Opacidade do véu escuro atrás do texto: na base e no topo do bloco de
+  /// texto. Garante 4,5:1 mesmo com foto branca por trás.
+  final double featuredScrimBottomOpacity = 0.88;
+  final double featuredScrimTextOpacity = 0.72;
+
+  /// Altura da faixa em que o véu esmaece até sumir, acima do texto.
+  final double featuredScrimFade = 72.0;
+
+  /// Ícone de "sem imagem" no canto do cartão.
+  final double featuredPlaceholderIcon = 28.0;
+
+  /// Duração da entrada da foto depois de carregada (zero com movimento reduzido).
+  final Duration featuredImageFade = const Duration(milliseconds: 200);
+
   double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
     return switch (breakpoint) {
       Breakpoint.mobile => mobile,

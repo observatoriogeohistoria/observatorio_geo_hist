@@ -9,7 +9,9 @@ part of '../app_theme.dart';
 // | display  | Bricolage Grotesque | 800  | 1,12   | -0,035 em   | `.hero h1`                 |
 // | h1       | Bricolage Grotesque | 800  | 1,12   | -0,03 em    | `.page-head h1`            |
 // | h2       | Bricolage Grotesque | 700  | 1,12   | -0,02 em    | `.section-head h2`         |
-// | h3       | Bricolage Grotesque | 700  | 1,20   | -0,01 em    | `.area b`, `.feat h3`      |
+// | h3       | Bricolage Grotesque | 700  | 1,20   | -0,01 em    | `.area b`                  |
+// | destaque | Bricolage Grotesque | 700  | 1,12   | -0,02 em    | `.feat.big h3`             |
+// | destaque menor | Bricolage     | 700  | 1,20   | -0,01 em    | `.feat h3`                 |
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | padrão   | Figtree             | 400  | 1,55   | 0           | `body`                     |
@@ -107,6 +109,22 @@ class AppTextStyles {
   /// Título de cartão.
   TextStyle get h3 => _display(
         size: _size(mobile: 18, tablet: 20, desktop: 20),
+        weight: FontWeight.w700,
+        height: 1.2,
+        letterSpacingEm: -0.01,
+      );
+
+  /// Título do destaque principal da Home (`.feat.big h3`). Valores da spec 005.
+  TextStyle get featureTitle => _display(
+        size: _size(mobile: 24, tablet: 32, desktop: 35),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  /// Título dos destaques menores da Home (`.feat h3`). Valores da spec 005.
+  TextStyle get featureTitleSmall => _display(
+        size: _size(mobile: 18, tablet: 22, desktop: 24),
         weight: FontWeight.w700,
         height: 1.2,
         letterSpacingEm: -0.01,

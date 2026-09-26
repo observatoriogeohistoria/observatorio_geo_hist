@@ -17,4 +17,11 @@ extension DateTimeFormatting on DateTime {
 
     return months[month - 1];
   }
+
+  /// Data curta, como "12 mar 2026" (mês abreviado em minúsculas).
+  String get shortDate {
+    const months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
+    return '$day ${months[month - 1]} $year';
+  }
 }
