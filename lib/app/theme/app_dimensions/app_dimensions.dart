@@ -239,7 +239,52 @@ class ComponentSizes {
   final double audienceIconBox = 44.0;
   final double audienceIcon = 20.0;
 
-  // Vídeo da Home (spec 006).
+  // Vídeo da Home (spec 006). Origem: `.video`, `.video-cap` e `.play`.
+
+  /// Proporção do quadro (largura ÷ altura): 16 : 10 no celular, 16 : 8 no
+  /// tablet e no desktop.
+  double videoAspectRatio(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 1.6, 2.0, 2.0);
+
+  /// Altura máxima do quadro (`max-height: 460px`).
+  final double videoMaxHeight = 460.0;
+
+  /// Preenchimento da legenda: laterais e base (`left/right: 24px`,
+  /// `bottom: 20px`; menor no celular).
+  double videoCaptionPaddingHorizontal(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 24);
+  double videoCaptionPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 20, 20);
+
+  /// Linhas máximas da legenda antes das reticências (texto ampliado).
+  final int videoCaptionMaxLines = 2;
+
+  /// Véu escuro atrás da legenda e faixa em que ele esmaece acima dela.
+  /// Branco sobre 0,72 de véu com capa branca dá cerca de 7,6:1.
+  final double videoCaptionScrimOpacity = 0.72;
+  final double videoCaptionScrimFade = 72.0;
+
+  /// Botão "Assistir": círculo laranja, ícone, preenchimento (`padding:
+  /// 10px 22px 10px 10px`), vão entre círculo e texto, crescimento no hover
+  /// e duração das transições (zero com movimento reduzido).
+  final double videoPlayCircle = 46.0;
+  final double videoPlayIcon = 26.0;
+  final double videoPlayPadding = 10.0;
+  final double videoPlayPaddingEnd = 22.0;
+  final double videoPlayGap = 14.0;
+  final double videoPlayHoverScale = 1.03;
+  final Duration videoAnimation = const Duration(milliseconds: 150);
+
+  /// Indicador de "Carregando vídeo" dentro do círculo.
+  final double videoLoadingIndicator = 22.0;
+
+  /// Anéis da capa gerada (`.video::after`): passo, opacidade do branco e
+  /// centro em fração da largura e da altura (`circle at 75% 35%`).
+  final double videoRingStep = 31.0;
+  final double videoRingOpacity = 0.08;
+  final Offset videoRingCenter = const Offset(0.75, 0.35);
+
+  /// Ângulo do degradê da capa gerada (`linear-gradient(150deg, …)`) e posição
+  /// da cor do meio (`60%`).
+  final double videoCoverAngleDegrees = 150.0;
+  final double videoCoverMidStop = 0.6;
 
   /// Véu atrás dos controles do player: opacidade na base e altura. Ícones
   /// brancos ficam acima de 3:1 mesmo sobre um quadro branco.
@@ -252,6 +297,9 @@ class ComponentSizes {
   /// Afastamento dos controles do player em relação à borda esquerda e à base
   /// do quadro, para o contorno de foco não ser cortado pelos cantos.
   final double videoControlsInset = 8.0;
+
+  /// Largura máxima da caixa de erro sobre a capa.
+  final double videoErrorMaxWidth = 360.0;
 
   double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
     return switch (breakpoint) {

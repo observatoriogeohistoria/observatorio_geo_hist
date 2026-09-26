@@ -4,13 +4,8 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart' deferred as footer;
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart'
-    deferred as video_player;
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
-import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart'
     deferred as contact_us;
@@ -23,6 +18,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
     deferred as partners;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart'
     deferred as team;
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/video/presentation_video_section.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are/who_we_are_section.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_highlights_states.dart';
@@ -96,27 +92,8 @@ class _HomePageState extends State<HomePage> {
           ),
           // Quem somos (spec 006): estático, aparece junto com a página.
           const SliverToBoxAdapter(child: WhoWeAreSection()),
-          // Vídeo: redesenho na spec 006.
-          SliverToBoxAdapter(
-            child: FutureBuilder(
-              future: video_player.loadLibrary(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const SizedBox.shrink();
-                }
-
-                return video_player.AppVideoPlayer(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtils.getPageHorizontalPadding(context),
-                    vertical: AppTheme.dimensions.space.massive.verticalSpacing,
-                  ),
-                  url: AppStrings.presentationVideoUrl,
-                  startPlaying: true,
-                  startMuted: true,
-                );
-              },
-            ),
-          ),
+          // Vídeo de apresentação (spec 006): capa com "Assistir"; o vídeo só é baixado depois do clique.
+          const SliverToBoxAdapter(child: PresentationVideoSection()),
           // Nossa história (resumo): redesenho na spec 007.
           SliverToBoxAdapter(
             child: FutureBuilder(

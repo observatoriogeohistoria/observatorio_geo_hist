@@ -1,6 +1,6 @@
 # 006. Home: Quem somos e vídeo
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 1, seções 1.3 (Quem somos) e 1.4 (Vídeo)
 - **Protótipo:** aba "Home", blocos "Quem somos" (fundo de superfície, duas colunas) e vídeo (capa com botão "Assistir"), logo abaixo de "Destaques" (link no CLAUDE.md)
 - **Criada em:** 2026-09-26

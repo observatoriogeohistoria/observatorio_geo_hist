@@ -14,6 +14,7 @@ part of '../app_theme.dart';
 // | destaque menor | Bricolage     | 700  | 1,20   | -0,01 em    | `.feat h3`                 |
 // | título em colunas | Bricolage | 700  | 1,12   | -0,02 em    | `.split h2`                |
 // | item de lista | Bricolage      | 700  | 1,30   | 0           | `.for b`                   |
+// | legenda de vídeo | Bricolage   | 600  | 1,20   | 0           | `.video-cap`               |
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
@@ -147,6 +148,14 @@ class AppTextStyles {
         size: _size(mobile: 18, tablet: 18, desktop: 18),
         weight: FontWeight.w700,
         height: 1.3,
+        letterSpacingEm: 0,
+      );
+
+  /// Legenda sobre a capa do vídeo da Home (`.video-cap`). Spec 006.
+  TextStyle get videoCaption => _display(
+        size: _size(mobile: 18, tablet: 24, desktop: 26),
+        weight: FontWeight.w600,
+        height: 1.2,
         letterSpacingEm: 0,
       );
 

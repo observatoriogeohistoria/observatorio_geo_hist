@@ -48,6 +48,14 @@ class AppColors {
   /// Fundo do cartão sem imagem, enquanto a imagem carrega ou quando ela falha.
   Color imagePlaceholder = const Color(0xFF2B2622);
 
+  // Vídeo de apresentação da Home (spec 006).
+  /// Meio e fim do degradê da capa gerada (`.video` do protótipo); o início é [ink].
+  Color videoCoverMid = const Color(0xFF3D4A4D);
+  Color videoCoverEnd = const Color(0xFF7FA39B);
+
+  /// Fundo do quadro atrás do player (faixas escuras quando o vídeo é mais estreito).
+  Color videoBackdrop = const Color(0xFF1C1917);
+
   Color error = const Color(0xFFB3261E);
   Color success = const Color(0xFF1C6B34);
   Color successSurface = const Color(0xFFE4F3E8);
