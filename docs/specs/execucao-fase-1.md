@@ -7,7 +7,7 @@
 |---|---|---|---|---|---|
 | 004-hero-atalhos | 1.1 | feita (14 critérios, 12 tarefas) | feita (2 commits) | feita (2 fix) | verificada com ressalvas (6 commits) |
 | 005-destaques | 1.2 | feita (16 critérios, 13 tarefas) | feita (2 commits) | feita (1 fix) | verificada (5 commits) |
-| 006-quem-somos-video | 1.3, 1.4 | pendente | pendente | pendente | |
+| 006-quem-somos-video | 1.3, 1.4 | feita (16 critérios, 13 tarefas) | pendente | pendente | |
 | 007-resumo-nossa-historia | 1.5 | pendente | pendente | pendente | |
 | 008-equipe | 1.6 | pendente | pendente | pendente | |
 | 009-apoio-contato | 1.7, 1.8 | pendente | pendente | pendente | |
@@ -30,6 +30,11 @@
 - 005: 1 destaque ocupa a largura toda; 2 destaques em colunas 1,6 : 1; 0 destaques some a seção.
 - 005: sem imagem, fundo escuro com ícone (o laranja claro do protótipo não dá contraste com texto branco).
 - 005: cartão mostra "Tipo · Área" e, só no principal, a data; sem autor.
+- 006: capa do vídeo gerada com os tokens do tema até existir assets/images/video-capa.webp (usada sem mudar código quando for adicionada).
+- 006: legenda "Conheça o Observatório", sem "em 2 minutos" (o vídeo tem 1 min 20 s).
+- 006: o parágrafo longo atual de "Quem somos" sai da Home e dá lugar aos textos do protótipo (missão e três públicos); em Pesquisadores, "artigos" virou "pesquisas".
+- 006: sem autoplay; o MP4 só baixa depois de "Assistir". Erro do vídeo mostra "Tentar de novo" em vez de esconder o bloco.
+- 006: AppVideoPlayer e AppIconButton ganham só parâmetros opcionais (painel admin inalterado); novo ArrowLink compartilhado.
 
 ## Ressalvas
 - 004: as opções do menu de categorias da navbar (reaproveitadas na janela dos atalhos) não respondem ao toque pela semântica do leitor de tela; não corrigido por ser navbar (fora do escopo da 004). Sugerida correção própria.
