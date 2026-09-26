@@ -80,7 +80,11 @@ class _HomeHeroState extends State<HomeHero> {
                   Semantics(
                     header: true,
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: styles.display.fontSize! * components.heroTitleMaxWidthEm),
+                      // Em "em": acompanha o texto ampliado, senão as palavras quebram no meio.
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.textScalerOf(context).scale(styles.display.fontSize!) *
+                            components.heroTitleMaxWidthEm,
+                      ),
                       child: Text.rich(
                         TextSpan(
                           text: 'Ensino de História e Geografia, ',
@@ -130,7 +134,14 @@ class _HomeHeroState extends State<HomeHero> {
 
   Widget _shortcuts(Breakpoint breakpoint) {
     final gap = AppTheme.dimensions.spacing.s16;
-    final layout = breakpoint == Breakpoint.tablet ? HeroShortcutLayout.vertical : HeroShortcutLayout.horizontal;
+    // Com o texto muito ampliado, três colunas não cabem os títulos sem quebrar
+    // palavras ao meio: os atalhos passam para uma coluna, como no celular.
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >=
+        AppTheme.dimensions.components.heroShortcutsStackTextScale;
+    final singleColumn = breakpoint == Breakpoint.mobile || largeText;
+    final layout = breakpoint == Breakpoint.tablet && !singleColumn
+        ? HeroShortcutLayout.vertical
+        : HeroShortcutLayout.horizontal;
 
     final cards = [
       HeroShortcutCard(
@@ -162,7 +173,7 @@ class _HomeHeroState extends State<HomeHero> {
       ),
     ];
 
-    if (breakpoint == Breakpoint.mobile) {
+    if (singleColumn) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

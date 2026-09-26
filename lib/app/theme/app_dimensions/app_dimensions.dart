@@ -117,6 +117,10 @@ class ComponentSizes {
   /// Largura máxima do texto de apoio (60 caracteres a 20 px).
   final double heroLeadMaxWidth = 770.0;
 
+  /// A partir desta ampliação do texto (1,3 = 130%), os atalhos do hero ficam
+  /// em uma coluna em qualquer largura, para os títulos não quebrarem no meio.
+  final double heroShortcutsStackTextScale = 1.3;
+
   /// Quadro laranja suave do ícone dos atalhos e o ícone dentro dele.
   final double shortcutIconBox = 46.0;
   final double shortcutIcon = 22.0;
