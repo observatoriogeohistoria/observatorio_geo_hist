@@ -23,7 +23,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
     deferred as partners;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart'
     deferred as team;
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are/who_we_are_section.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_highlights_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
@@ -94,8 +94,8 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Quem somos: redesenho na spec 006.
-          const SliverToBoxAdapter(child: WhoWeAre()),
+          // Quem somos (spec 006): estático, aparece junto com a página.
+          const SliverToBoxAdapter(child: WhoWeAreSection()),
           // Vídeo: redesenho na spec 006.
           SliverToBoxAdapter(
             child: FutureBuilder(

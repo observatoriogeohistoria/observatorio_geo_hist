@@ -207,6 +207,38 @@ class ComponentSizes {
   /// Duração da entrada da foto depois de carregada (zero com movimento reduzido).
   final Duration featuredImageFade = const Duration(milliseconds: 200);
 
+  // Quem somos da Home (spec 006). Origem: `.split`, `.for-list` e `.for`.
+
+  /// Vão entre a apresentação e os públicos (`.split` `gap`; em coluna no
+  /// celular e no tablet, lado a lado no desktop).
+  double whoWeAreGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 44, 72);
+
+  /// Proporção das colunas no desktop (`1fr 1.15fr`), em fatores de `flex`.
+  final int whoWeAreIntroFlex = 20;
+  final int whoWeAreAudienceFlex = 23;
+
+  /// Vãos da apresentação: rótulo → título, título → texto e texto → link
+  /// (`.split h2` `margin-block: 10px 16px`; link com `margin-top: 22px`).
+  final double whoWeAreTitleGap = 10.0;
+  final double whoWeAreTextGap = 16.0;
+  final double whoWeAreLinkGap = 22.0;
+
+  /// Largura máxima do texto de missão (60 caracteres a 18 px).
+  final double whoWeAreTextMaxWidth = 560.0;
+
+  /// Lista de públicos: distância do topo (`.for-list` `margin-top`), vão
+  /// entre itens (`gap`), preenchimento vertical de cada item (`.for`
+  /// `padding`), vão entre ícone e texto e entre nome e descrição (`.for p`).
+  final double audienceListTop = 8.0;
+  final double audienceItemGap = 12.0;
+  final double audienceItemPadding = 18.0;
+  final double audienceIconGap = 16.0;
+  final double audienceTextGap = 2.0;
+
+  /// Círculo laranja suave do ícone do público e o ícone dentro dele.
+  final double audienceIconBox = 44.0;
+  final double audienceIcon = 20.0;
+
   // Vídeo da Home (spec 006).
 
   /// Véu atrás dos controles do player: opacidade na base e altura. Ícones

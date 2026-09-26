@@ -12,8 +12,11 @@ part of '../app_theme.dart';
 // | h3       | Bricolage Grotesque | 700  | 1,20   | -0,01 em    | `.area b`                  |
 // | destaque | Bricolage Grotesque | 700  | 1,12   | -0,02 em    | `.feat.big h3`             |
 // | destaque menor | Bricolage     | 700  | 1,20   | -0,01 em    | `.feat h3`                 |
+// | título em colunas | Bricolage | 700  | 1,12   | -0,02 em    | `.split h2`                |
+// | item de lista | Bricolage      | 700  | 1,30   | 0           | `.for b`                   |
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
+// | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
 // | padrão   | Figtree             | 400  | 1,55   | 0           | `body`                     |
 // | pequeno  | Figtree             | 400  | 1,50   | 0           | `.meta`, `.area span`      |
 // | rótulo   | Figtree             | 700  | 1,40   | 0,08 em     | `.eyebrow`, `.tag`         |
@@ -130,6 +133,23 @@ class AppTextStyles {
         letterSpacingEm: -0.01,
       );
 
+  /// Título das seções em duas colunas da Home, como Quem somos (`.split h2`).
+  /// Valores da spec 006.
+  TextStyle get splitTitle => _display(
+        size: _size(mobile: 27, tablet: 36, desktop: 40),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  /// Nome de item em lista, como os públicos de Quem somos (`.for b`). Spec 006.
+  TextStyle get listTitle => _display(
+        size: _size(mobile: 18, tablet: 18, desktop: 18),
+        weight: FontWeight.w700,
+        height: 1.3,
+        letterSpacingEm: 0,
+      );
+
   /// Texto de leitura (artigos).
   TextStyle get reading => _body(
         size: _size(mobile: 17, tablet: 18, desktop: 18),
@@ -140,6 +160,14 @@ class AppTextStyles {
   /// Texto de apoio abaixo de títulos grandes (hero). Valores da spec 004.
   TextStyle get lead => _body(
         size: _size(mobile: 17, tablet: 20, desktop: 20),
+        weight: FontWeight.w400,
+        height: 1.55,
+      );
+
+  /// Texto de apoio de uma seção, como a missão em Quem somos (`.lead` com
+  /// `font-size: 1.1rem`). Spec 006.
+  TextStyle get sectionLead => _body(
+        size: _size(mobile: 17, tablet: 18, desktop: 18),
         weight: FontWeight.w400,
         height: 1.55,
       );
