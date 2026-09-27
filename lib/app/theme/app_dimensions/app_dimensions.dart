@@ -52,6 +52,9 @@ class ComponentSizes {
   /// Altura da navbar fixa.
   final double navbarHeight = 68.0;
 
+  /// Altura da faixa de aviso de ambiente de testes (acima da navbar).
+  final double environmentBannerHeight = 32.0;
+
   /// Altura mínima dos botões: pequeno e médio/grande.
   final double buttonMinHeightSmall = 40.0;
   final double buttonMinHeightRegular = 44.0;

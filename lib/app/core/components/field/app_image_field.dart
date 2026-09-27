@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -85,33 +86,40 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
                 hintText: 'https://',
                 validator: Validators.isValidUrl,
               ),
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      PrimaryButton.small(
-                        text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
-                        onPressed: _pickImageWeb,
-                      ),
-                      SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-                      if (_uploadedImageBytes == null)
-                        AppLabel.small(
-                          text: 'Nenhuma imagem selecionada',
-                          color: AppTheme.colors.gray,
+              if (!AppEnvironment.current.isProd)
+                AppLabel.small(
+                  text: 'Upload desabilitado no ambiente de testes (sem Storage configurado). '
+                      'Use a aba URL.',
+                  color: AppTheme.colors.accentStrong,
+                )
+              else
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PrimaryButton.small(
+                          text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
+                          onPressed: _pickImageWeb,
                         ),
-                    ],
-                  ),
-                  if (_uploadedImageBytes != null) ...[
-                    SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-                    Image.memory(
-                      _uploadedImageBytes!,
-                      height: 120.verticalSpacing,
-                      fit: BoxFit.cover,
+                        SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                        if (_uploadedImageBytes == null)
+                          AppLabel.small(
+                            text: 'Nenhuma imagem selecionada',
+                            color: AppTheme.colors.gray,
+                          ),
+                      ],
                     ),
+                    if (_uploadedImageBytes != null) ...[
+                      SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+                      Image.memory(
+                        _uploadedImageBytes!,
+                        height: 120.verticalSpacing,
+                        fit: BoxFit.cover,
+                      ),
+                    ],
                   ],
-                ],
-              ),
+                ),
             ],
           ),
         ),
