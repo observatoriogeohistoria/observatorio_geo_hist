@@ -10,7 +10,7 @@
 | 006-quem-somos-video | 1.3, 1.4 | feita (16 critérios, 13 tarefas) | feita (3 commits) | feita (2 fix) | verificada (6 commits) |
 | 007-resumo-nossa-historia | 1.5 | feita (14 critérios, 10 tarefas) | feita (4 commits) | feita (1 fix) | verificada (7 commits) |
 | 008-equipe | 1.6 | feita (17 critérios, 11 tarefas) | feita (2 commits) | feita (0 fix) | verificada com ressalvas (4 commits) |
-| 009-apoio-contato | 1.7, 1.8 | pendente | pendente | pendente | |
+| 009-apoio-contato | 1.7, 1.8 | feita (18 critérios, 13 tarefas) | pendente | pendente | |
 
 ## Divisão
 - 1.3 e 1.4 juntas: dois blocos simples e vizinhos da Home.
@@ -46,6 +46,13 @@
 - 008: sem foto, iniciais em laranja forte sobre laranja suave (o protótipo usa uma cor por membro, que não existe nos dados).
 - 008: colunas pela largura (mínimo 190 px × ampliação do texto), como o `auto-fill` do protótipo: 5, 3 e 1 colunas.
 - 008: 0 membros esconde a seção; sai a divisória depois da Equipe; a Home só busca a equipe se ainda não buscou ou se falhou.
+
+- 009: lista única de 9 parceiros (enum `Partner` com sigla, nome completo e site), na ordem do protótipo; bloco "Realização e apoio" compartilhado pela Home, Biblioteca e Colabore.
+- 009: no post, o `Support` só troca os 4 cartões pelos 9 logos (Q-06); o redesenho do bloco fica para a fase do post (P-07).
+- 009: logos com link para o site oficial (conferido na implementação; o que não abrir fica sem link); nome acessível completo; subida de 3 px e cinza a 55 % como no protótipo.
+- 009: chamada com os textos do protótipo; botão à direita só no desktop.
+- 009: o respiro entre Equipe e Realização e apoio passa para cima de Realização e apoio, para não sumir quando a equipe está escondida.
+- 009: plano inclui a conferência da Home inteira (aceite da Fase 1) com dados simulados e com o Firebase de testes.
 
 ## Ressalvas
 - 004: as opções do menu de categorias da navbar (reaproveitadas na janela dos atalhos) não respondem ao toque pela semântica do leitor de tela; não corrigido por ser navbar (fora do escopo da 004). Sugerida correção própria.
