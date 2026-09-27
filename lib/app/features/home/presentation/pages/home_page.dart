@@ -108,13 +108,15 @@ class _HomePageState extends State<HomePage> {
                     if (snapshot.connectionState != ConnectionState.done) {
                       return const SizedBox.shrink();
                     }
-                    return team.Team(team: teamList);
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [team.Team(team: teamList), const AppDivider()],
+                    );
                   },
                 );
               },
             ),
           ),
-          const SliverToBoxAdapter(child: AppDivider()),
           // Realização e apoio: redesenho na spec 009.
           SliverToBoxAdapter(
             child: FutureBuilder(
