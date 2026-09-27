@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart' deferred as footer;
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
@@ -15,7 +13,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history/our_history_summary_section.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart'
     deferred as partners;
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart'
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/team_section.dart'
     deferred as team;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/video/presentation_video_section.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are/who_we_are_section.dart';
@@ -42,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _fetchTeamStore.fetchTeam();
+    if (_fetchTeamStore.needsFetch) _fetchTeamStore.fetchTeam();
 
     _setupReactions();
 
@@ -95,25 +93,15 @@ class _HomePageState extends State<HomePage> {
           const SliverToBoxAdapter(child: PresentationVideoSection()),
           // Nossa história (spec 007): resumo estático, com link para a página completa.
           const SliverToBoxAdapter(child: OurHistorySummarySection()),
-          // Equipe: redesenho na spec 008.
+          // Equipe (spec 008): grade com todos os membros; some sem membros.
           SliverToBoxAdapter(
-            child: Observer(
-              builder: (context) {
-                final teamList = _fetchTeamStore.team;
-                if (teamList.isEmpty) return const SizedBox.shrink();
-
-                return FutureBuilder(
-                  future: team.loadLibrary(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done) {
-                      return const SizedBox.shrink();
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [team.Team(team: teamList), const AppDivider()],
-                    );
-                  },
-                );
+            child: FutureBuilder(
+              future: team.loadLibrary(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox.shrink();
+                }
+                return team.TeamSection(store: _fetchTeamStore, onRetry: _fetchTeamStore.fetchTeam);
               },
             ),
           ),

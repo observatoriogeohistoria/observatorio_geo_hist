@@ -15,6 +15,9 @@ part of '../app_theme.dart';
 // | título em colunas | Bricolage | 700  | 1,12   | -0,02 em    | `.split h2`                |
 // | item de lista | Bricolage      | 700  | 1,30   | 0           | `.for b`                   |
 // | legenda de vídeo | Bricolage   | 600  | 1,20   | 0           | `.video-cap`               |
+// | nome de membro | Bricolage     | 700  | 1,30   | 0           | `.member b`                |
+// | iniciais | Bricolage Grotesque | 700  | 1,00   | 0           | `.avatar`                  |
+// | função de membro | Figtree     | 400  | 1,45   | 0           | `.member span`             |
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
@@ -158,6 +161,29 @@ class AppTextStyles {
         weight: FontWeight.w600,
         height: 1.2,
         letterSpacingEm: 0,
+      );
+
+  /// Nome de membro da equipe (`.member b`). Spec 008.
+  TextStyle get memberName => _display(
+        size: _size(mobile: 17, tablet: 17, desktop: 17),
+        weight: FontWeight.w700,
+        height: 1.3,
+        letterSpacingEm: 0,
+      );
+
+  /// Iniciais no círculo de membro sem foto (`.avatar`). Spec 008.
+  TextStyle get memberInitials => _display(
+        size: _size(mobile: 24, tablet: 24, desktop: 24),
+        weight: FontWeight.w700,
+        height: 1,
+        letterSpacingEm: 0,
+      );
+
+  /// Função de membro da equipe (`.member span`). Spec 008.
+  TextStyle get memberRole => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w400,
+        height: 1.45,
       );
 
   /// Texto de leitura (artigos).

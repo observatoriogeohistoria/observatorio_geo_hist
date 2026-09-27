@@ -332,6 +332,29 @@ class ComponentSizes {
   final double readingMaxWidth = 680.0;
   final double readingParagraphGap = 20.0;
 
+  // Equipe na Home (spec 008). Origem: `.team`, `.member` e `.avatar` do protótipo.
+
+  /// Largura mínima de coluna da grade (`minmax(190px, 1fr)`), antes da ampliação do texto.
+  final double teamColumnMinWidth = 190.0;
+
+  /// Vão entre colunas e entre linhas da grade (`gap: 28px 20px`).
+  final double teamColumnGap = 20.0;
+  final double teamRowGap = 28.0;
+
+  /// Diâmetro da foto do membro e vãos foto → nome e nome → função.
+  final double memberAvatar = 76.0;
+  final double memberAvatarGap = 10.0;
+  final double memberTextGap = 4.0;
+
+  /// Aumento da foto no hover de membro clicável e duração (`transition: transform .15s`).
+  final double memberAvatarHoverScale = 1.05;
+  final Duration memberAnimation = const Duration(milliseconds: 150);
+
+  /// Barras do esqueleto do membro: altura e larguras (fração da coluna) do nome e da função.
+  final double memberSkeletonBarHeight = 14.0;
+  final double memberSkeletonNameWidth = 0.7;
+  final double memberSkeletonRoleWidth = 0.5;
+
   /// Respiro acima e abaixo do título no cabeçalho de página (`.page-head .wrap`).
   double pageHeadPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 40, 56);
 
