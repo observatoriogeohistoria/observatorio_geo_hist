@@ -56,15 +56,22 @@ class Footer extends StatelessWidget {
             Expanded(flex: 3, child: columns[3]),
           ],
         ),
-      Breakpoint.tablet => LayoutBuilder(
-          builder: (context, constraints) {
-            final width = (constraints.maxWidth - gap) / 2;
-            return Wrap(
-              spacing: gap,
-              runSpacing: gap,
-              children: [for (final column in columns) SizedBox(width: width, child: column)],
-            );
-          },
+      // Sem LayoutBuilder: páginas que prendem o rodapé na base medem a altura intrínseca dele.
+      Breakpoint.tablet => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < columns.length; i += 2) ...[
+              if (i > 0) SizedBox(height: gap),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: columns[i]),
+                  SizedBox(width: gap),
+                  Expanded(child: columns[i + 1]),
+                ],
+              ),
+            ],
+          ],
         ),
       Breakpoint.mobile => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

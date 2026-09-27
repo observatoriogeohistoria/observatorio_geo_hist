@@ -36,7 +36,7 @@ Página nova no endereço **`/nossa-historia`**, com a navbar e o rodapé do sit
 - **Cabeçalho:** faixa de superfície com o título "Nossa história" (fonte de títulos, tamanho de título de página), alinhado à esquerda dentro da largura máxima, com uma linha fina na base.
 - **Texto:** os três parágrafos atuais, na ordem de hoje, em tamanho de leitura e cor de tinta, numa coluna de leitura centralizada (até 680 px), com espaço entre os parágrafos.
 - A página abre no topo. O botão voltar do navegador leva de volta à Home.
-- Com pouco conteúdo na tela (janela muito alta), o rodapé fica colado na base da janela, como no Manifesto.
+- Com pouco conteúdo na tela (janela muito alta), o rodapé fica colado na base da janela.
 
 ### Rodapé
 Na coluna "Institucional", entra o link "Nossa história" entre "Manifesto" e "Equipe", abrindo `/nossa-historia`, com o mesmo estilo e foco dos demais.
@@ -108,3 +108,4 @@ Na coluna "Institucional", entra o link "Nossa história" entre "Manifesto" e "E
 ## Histórico de mudanças
 - 2026-09-26: criada e aprovada no modo autônomo (execução da Fase 1).
 - 2026-09-26: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-09-26: na implementação, o padrão do Manifesto (`SliverFillRemaining` vazio seguido do rodapé) deixava o rodapé abaixo da janela alta, com um vão em branco. Decidido no modo autônomo: o rodapé da página nova fica dentro do `SliverFillRemaining`, alinhado à base; para isso o rodapé no tablet troca o `LayoutBuilder` + `Wrap` por duas linhas de duas colunas (mesmo visual), porque o `SliverFillRemaining` mede o filho por altura intrínseca. As demais páginas com o padrão antigo ficam como estão (fora do escopo).
