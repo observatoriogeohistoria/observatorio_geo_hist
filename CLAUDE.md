@@ -5,6 +5,10 @@ Site do Observatório do Ensino de História e Geografia (UFU). Flutter Web com 
 ## Idioma
 Texto de interface, documentação, comentários e mensagens de commit em **português do Brasil**. Nomes de código em inglês, como já é no projeto.
 
+## Estilo de escrita e de código
+- **Sempre evite prolixidade**, em respostas, docs, comentários e mensagens de commit. Seja direto, sem repetir o que já foi dito.
+- **Sem comentários no meio do código.** O código deve se explicar por nomes claros. Só comente o que não é óbvio (o porquê, nunca o quê), em uma linha curta e sem repetir o que o código já diz.
+
 ## Comandos
 Sempre com FVM (versão em `.fvmrc`):
 
@@ -19,7 +23,7 @@ fvm flutter build web --release
 Os arquivos gerados (`*.g.dart`, `*.freezed.dart`) ficam no repositório. Ainda não existe pasta `test/`.
 
 ## Cuidados com o git
-- **Push na `main` publica o site** (GitHub Actions faz o deploy por FTP). Nunca faça push sem pedido explícito.
+- **Push na `main` publica o site** e push na `develop` publica o dev (GitHub Actions, por FTP). Nunca faça push sem pedido explícito. Detalhes em [docs/deploy-ambientes.md](docs/deploy-ambientes.md).
 - Só faça commit quando for pedido. Mensagens no formato `tipo: descrição` (`feat`, `fix`, `refactor`, `docs`, `chore`), em português.
 
 ## Arquitetura
