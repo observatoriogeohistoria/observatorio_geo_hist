@@ -66,7 +66,7 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 | ID | Tela | Rota atual | Observações |
 |---|---|---|---|
 | T-01 | Manifesto | `/manifest` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original) |
-| T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição |
+| T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição. Corrigir a busca em laço com id inexistente (ver verificação da 008) |
 | T-03 | Nossa história (completa) | `/nossa-historia` | Criada na spec 007 como página provisória, com o texto completo que estava na Home. A Home mostra só o resumo. Redesenho na Fase 2 |
 | T-04 | Fale com a gente | `/contato` | Continua abrindo o programa de e-mail (`mailto:`). Novidades: validação dos campos e tela de confirmação com "Copiar mensagem" |
 | T-05 | Colabore | `/colaborar` | Continua existindo, acessada pelo cabeçalho da categoria |
@@ -111,7 +111,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | 1.3 | Quem somos → specs/006-quem-somos-video, concluído | Missão e três públicos (professores, pesquisadores, estudantes). Substitui o bloco de tela cheia com foto | |
 | 1.4 | Vídeo → specs/006-quem-somos-video, concluído | Capa com botão de reproduzir. Sem autoplay | `AppVideoPlayer` |
 | 1.5 | Nossa história (resumo) → specs/007-resumo-nossa-historia, concluído | Resumo com o marco da FAPEMIG e link para a página completa | T-03 (rota nova) |
-| 1.6 | Equipe → specs/008-equipe | Grade com todos os membros. Só é clicável quando há descrição | `FetchTeamStore`, T-02 |
+| 1.6 | Equipe → specs/008-equipe, concluído | Grade com todos os membros. Só é clicável quando há descrição | `FetchTeamStore`, T-02 |
 | 1.7 | Realização e apoio | Logos reais com efeito de hover (P-03) | P-03 |
 | 1.8 | Chamada para contato | Bloco de chamada para `/contato` | |
 

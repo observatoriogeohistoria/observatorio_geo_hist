@@ -1,6 +1,6 @@
 # 008. Home: equipe
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 1, seção 1.6 (Equipe), com o acesso à tela T-02 (Pessoa da equipe)
 - **Protótipo:** aba "Home", bloco "Equipe" (grade de membros), logo abaixo de Nossa história; aba "Membro" como referência da página da pessoa (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -117,3 +117,4 @@ A página da pessoa não muda nesta spec.
 - 2026-09-26: criada e aprovada no modo autônomo (execução da Fase 1).
 - 2026-09-27: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-09-27: implementada. Ajustes decididos no modo autônomo: iniciais sem ampliação do texto (o círculo tem 76 px fixos); tokens `memberAnimation` e `memberSkeletonBarHeight` além dos do plano.
+- 2026-09-27: verificada com ressalvas ([verificacao.md](verificacao.md)): o laço de busca em `/membro/<id inexistente>` já existia antes desta spec e fica para a T-02.

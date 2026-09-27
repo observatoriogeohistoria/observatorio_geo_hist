@@ -9,7 +9,7 @@
 | 005-destaques | 1.2 | feita (16 critérios, 13 tarefas) | feita (2 commits) | feita (1 fix) | verificada (5 commits) |
 | 006-quem-somos-video | 1.3, 1.4 | feita (16 critérios, 13 tarefas) | feita (3 commits) | feita (2 fix) | verificada (6 commits) |
 | 007-resumo-nossa-historia | 1.5 | feita (14 critérios, 10 tarefas) | feita (4 commits) | feita (1 fix) | verificada (7 commits) |
-| 008-equipe | 1.6 | feita (17 critérios, 11 tarefas) | pendente | pendente | |
+| 008-equipe | 1.6 | feita (17 critérios, 11 tarefas) | feita (2 commits) | feita (0 fix) | verificada com ressalvas (4 commits) |
 | 009-apoio-contato | 1.7, 1.8 | pendente | pendente | pendente | |
 
 ## Divisão
@@ -53,9 +53,13 @@
 - 005: o banco real tem 0 posts marcados como destaque, então a seção fica escondida no site hoje. Casos 1, 2, 3 e 5 conferidos só com dados simulados (testes temporários fora do repositório).
 - 006: a 390 px com texto a 200%, a palavra "conhecimento." do título de Quem somos ainda quebra ao meio (só resolveria limitando a ampliação).
 - 006: bloqueio real de som no Safari/Firefox e painel admin no navegador não conferidos (bloqueio simulado; admin conferido pelo código).
+- 008: `/membro/<id inexistente>` carrega para sempre e busca a equipe em laço (~35 leituras em 10 s). Já acontecia antes da 008; anotado na T-02 para a Fase 2, com prioridade.
+- 008: o Firebase de testes não tem membros; todos os estados com dados foram conferidos só com dados simulados.
+- 008: contorno de foco por teclado conferido só em teste de widget.
 
 ## Ocorrências
 - Branch criada a partir de origin/develop sem upstream configurado, para que nenhum `git push` sem argumentos vá para a develop.
 - 2026-09-26: limite de uso atingido após fechar a 006. Retomar com `/sdd-fase Fase 1` a partir da 007 (spec+plano pendente).
 - 2026-09-26: retomada na 007. A primeira chamada da implementação foi interrompida pela pessoa depois de já ter feito 2 commits; a segunda sessão continuou a partir do tasks.md.
 - 007: a implementação ajustou o rodapé do tablet (duas linhas, sem LayoutBuilder) em commit próprio; a verificação conferiu /manifest, /biblioteca e /nossa-historia a 768 px sem regressão.
+- 2026-09-27: a primeira sessão de verificação da 008 foi interrompida sem efeito; refeita do zero.
