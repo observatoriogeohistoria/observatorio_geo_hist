@@ -6,8 +6,10 @@ Cada tarefa termina com `fvm flutter analyze` limpo (rodado na cópia em caminho
 
 ## Grupo A: Tokens e store
 - [ ] **A1.** Tokens da grade, do membro e do esqueleto em `ComponentSizes` e estilos `memberName`, `memberRole` e `memberInitials`, com comentário de origem no protótipo. Arquivos: `app_dimensions.dart`, `app_text_styles.dart`. Conferir: valores iguais ao plano. Atende: critérios 3, 4 e 17.
-- [ ] **A2.** `sortTeamByName` (sem acentos e sem caixa, desempate estável) e `memberInitials`. Arquivo: `components/team/sort_team.dart`. Conferir: teste temporário na cópia com "Álvaro", "alvaro", "Bruna", "Érica", "Zé", nome de uma palavra, espaços extras e nome vazio. Atende: critérios 2 e 5.
-- [ ] **A3.** Estados `FetchTeam*State` e store com `state`, ordenação no sucesso, erro guardado e `needsFetch`; rodar `build_runner`. Arquivos: `stores/states/fetch_team_states.dart`, `stores/fetch_team_store.dart`, `stores/fetch_team_store.g.dart`. Conferir: `team` e `getTeamMemberById` com a mesma assinatura; `team_member_page.dart` compila sem mudança. Atende: critérios 2, 8, 9, 11 e 16.
+- [x] **A2.** `sortTeamByName` (sem acentos e sem caixa, desempate estável) e `memberInitials`. Arquivo: `components/team/sort_team.dart`. Conferir: teste temporário na cópia com "Álvaro", "alvaro", "Bruna", "Érica", "Zé", nome de uma palavra, espaços extras e nome vazio. Atende: critérios 2 e 5.
+  - Feito com tabela de vogais acentuadas, `ç` e `ñ` (sem pacote); desempate pela posição original.
+- [x] **A3.** Estados `FetchTeam*State` e store com `state`, ordenação no sucesso, erro guardado e `needsFetch`; rodar `build_runner`. Arquivos: `stores/states/fetch_team_states.dart`, `stores/fetch_team_store.dart`, `stores/fetch_team_store.g.dart`. Conferir: `team` e `getTeamMemberById` com a mesma assinatura; `team_member_page.dart` compila sem mudança. Atende: critérios 2, 8, 9, 11 e 16.
+  - `.g.dart` gerado na cópia ASCII e trazido de volta; `team_member_page.dart` sem mudança.
 
 ## Grupo B: Componentes
 - [ ] **B1.** `MemberAvatar`: círculo de 76 px, iniciais `memberInitials` em `accentStrong` sobre `accentSoft`, foto `cover` por cima com `errorBuilder` → só iniciais, `ExcludeSemantics`. Arquivo: `components/team/member_avatar.dart`. Atende: critérios 4, 5, 13 e 14.
