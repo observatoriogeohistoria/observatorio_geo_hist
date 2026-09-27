@@ -9,7 +9,7 @@
 | 005-destaques | 1.2 | feita (16 critérios, 13 tarefas) | feita (2 commits) | feita (1 fix) | verificada (5 commits) |
 | 006-quem-somos-video | 1.3, 1.4 | feita (16 critérios, 13 tarefas) | feita (3 commits) | feita (2 fix) | verificada (6 commits) |
 | 007-resumo-nossa-historia | 1.5 | feita (14 critérios, 10 tarefas) | feita (4 commits) | feita (1 fix) | verificada (7 commits) |
-| 008-equipe | 1.6 | pendente | pendente | pendente | |
+| 008-equipe | 1.6 | feita (17 critérios, 11 tarefas) | pendente | pendente | |
 | 009-apoio-contato | 1.7, 1.8 | pendente | pendente | pendente | |
 
 ## Divisão
@@ -40,6 +40,12 @@
 - 007: resumo na Home com os textos do protótipo e selo FAPEMIG 2016–2018; link com ArrowLink.
 - 007: rodapé ganha "Nossa história" entre Manifesto e Equipe; nenhum item da navbar ativo na página nova.
 - 007: sai a divisória entre Nossa história e Equipe.
+
+- 008: o membro com descrição abre a página `/membro/:id` que já existe, sem mudá-la (redesenho e bloqueio de acesso direto sem descrição na Fase 2).
+- 008: ordem alfabética pelo nome, sem acentos nem caixa, feita no store (a consulta não muda).
+- 008: sem foto, iniciais em laranja forte sobre laranja suave (o protótipo usa uma cor por membro, que não existe nos dados).
+- 008: colunas pela largura (mínimo 190 px × ampliação do texto), como o `auto-fill` do protótipo: 5, 3 e 1 colunas.
+- 008: 0 membros esconde a seção; sai a divisória depois da Equipe; a Home só busca a equipe se ainda não buscou ou se falhou.
 
 ## Ressalvas
 - 004: as opções do menu de categorias da navbar (reaproveitadas na janela dos atalhos) não respondem ao toque pela semântica do leitor de tela; não corrigido por ser navbar (fora do escopo da 004). Sugerida correção própria.
