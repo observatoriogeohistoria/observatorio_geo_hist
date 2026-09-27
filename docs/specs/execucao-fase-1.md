@@ -8,7 +8,7 @@
 | 004-hero-atalhos | 1.1 | feita (14 critérios, 12 tarefas) | feita (2 commits) | feita (2 fix) | verificada com ressalvas (6 commits) |
 | 005-destaques | 1.2 | feita (16 critérios, 13 tarefas) | feita (2 commits) | feita (1 fix) | verificada (5 commits) |
 | 006-quem-somos-video | 1.3, 1.4 | feita (16 critérios, 13 tarefas) | feita (3 commits) | feita (2 fix) | verificada (6 commits) |
-| 007-resumo-nossa-historia | 1.5 | feita (14 critérios, 10 tarefas) | pendente | pendente | |
+| 007-resumo-nossa-historia | 1.5 | feita (14 critérios, 10 tarefas) | feita (4 commits) | feita (1 fix) | verificada (7 commits) |
 | 008-equipe | 1.6 | pendente | pendente | pendente | |
 | 009-apoio-contato | 1.7, 1.8 | pendente | pendente | pendente | |
 
@@ -51,3 +51,5 @@
 ## Ocorrências
 - Branch criada a partir de origin/develop sem upstream configurado, para que nenhum `git push` sem argumentos vá para a develop.
 - 2026-09-26: limite de uso atingido após fechar a 006. Retomar com `/sdd-fase Fase 1` a partir da 007 (spec+plano pendente).
+- 2026-09-26: retomada na 007. A primeira chamada da implementação foi interrompida pela pessoa depois de já ter feito 2 commits; a segunda sessão continuou a partir do tasks.md.
+- 007: a implementação ajustou o rodapé do tablet (duas linhas, sem LayoutBuilder) em commit próprio; a verificação conferiu /manifest, /biblioteca e /nossa-historia a 768 px sem regressão.
