@@ -1,6 +1,6 @@
 # 007. Home: resumo de Nossa história
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 1, seção 1.5 (Nossa história, resumo), com a rota nova de T-03
 - **Protótipo:** aba "Home", bloco "Nossa história" (fundo de superfície, coluna estreita), logo abaixo do vídeo; aba "História" como referência da página completa (link no CLAUDE.md)
 - **Criada em:** 2026-09-26
@@ -109,3 +109,4 @@ Na coluna "Institucional", entra o link "Nossa história" entre "Manifesto" e "E
 - 2026-09-26: criada e aprovada no modo autônomo (execução da Fase 1).
 - 2026-09-26: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-09-26: na implementação, o padrão do Manifesto (`SliverFillRemaining` vazio seguido do rodapé) deixava o rodapé abaixo da janela alta, com um vão em branco. Decidido no modo autônomo: o rodapé da página nova fica dentro do `SliverFillRemaining`, alinhado à base; para isso o rodapé no tablet troca o `LayoutBuilder` + `Wrap` por duas linhas de duas colunas (mesmo visual), porque o `SliverFillRemaining` mede o filho por altura intrínseca. As demais páginas com o padrão antigo ficam como estão (fora do escopo).
+- 2026-09-26: implementada.

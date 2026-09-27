@@ -31,6 +31,7 @@ class Footer extends StatelessWidget {
       ]),
       _LinksColumn(title: 'Institucional', links: [
         _FooterLinkData('Manifesto', (context) => context.go('/manifest')),
+        _FooterLinkData('Nossa história', (context) => context.go(AppRoutes.ourHistory)),
         _FooterLinkData('Equipe', (context) => context.go(AppRoutes.root)),
         _FooterLinkData('Fale com a gente', (context) => context.go('/contato')),
       ]),
