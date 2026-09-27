@@ -110,7 +110,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | 1.2 | Destaques → specs/005-destaques, concluído | Três visíveis de uma vez (o primeiro em destaque). Tratar 0, 1, 2 e mais de 3 destaques. Degradê apenas sob o título. Sem carrossel automático | `FetchHighlightsStore` |
 | 1.3 | Quem somos → specs/006-quem-somos-video, concluído | Missão e três públicos (professores, pesquisadores, estudantes). Substitui o bloco de tela cheia com foto | |
 | 1.4 | Vídeo → specs/006-quem-somos-video, concluído | Capa com botão de reproduzir. Sem autoplay | `AppVideoPlayer` |
-| 1.5 | Nossa história (resumo) | Resumo com o marco da FAPEMIG e link para a página completa | T-03 (rota nova) |
+| 1.5 | Nossa história (resumo) → specs/007-resumo-nossa-historia | Resumo com o marco da FAPEMIG e link para a página completa | T-03 (rota nova) |
 | 1.6 | Equipe | Grade com todos os membros. Só é clicável quando há descrição | `FetchTeamStore`, T-02 |
 | 1.7 | Realização e apoio | Logos reais com efeito de hover (P-03) | P-03 |
 | 1.8 | Chamada para contato | Bloco de chamada para `/contato` | |
