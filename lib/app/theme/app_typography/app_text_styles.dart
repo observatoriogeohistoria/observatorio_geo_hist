@@ -18,6 +18,7 @@ part of '../app_theme.dart';
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
+// | selo     | Figtree             | 600  | 1,35   | 0           | `.fact`                    |
 // | padrão   | Figtree             | 400  | 1,55   | 0           | `body`                     |
 // | pequeno  | Figtree             | 400  | 1,50   | 0           | `.meta`, `.area span`      |
 // | rótulo   | Figtree             | 700  | 1,40   | 0,08 em     | `.eyebrow`, `.tag`         |
@@ -179,6 +180,13 @@ class AppTextStyles {
         size: _size(mobile: 17, tablet: 18, desktop: 18),
         weight: FontWeight.w400,
         height: 1.55,
+      );
+
+  /// Texto de selo, como o marco de Nossa história (`.fact`). Spec 007.
+  TextStyle get badge => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w600,
+        height: 1.35,
       );
 
   /// Texto padrão.

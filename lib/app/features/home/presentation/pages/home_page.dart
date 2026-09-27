@@ -12,8 +12,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/hero/home_hero.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/highlights_section.dart'
     deferred as highlights;
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history.dart'
-    deferred as our_history;
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history/our_history_summary_section.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart'
     deferred as partners;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team.dart'
@@ -94,19 +93,8 @@ class _HomePageState extends State<HomePage> {
           const SliverToBoxAdapter(child: WhoWeAreSection()),
           // Vídeo de apresentação (spec 006): capa com "Assistir"; o vídeo só é baixado depois do clique.
           const SliverToBoxAdapter(child: PresentationVideoSection()),
-          // Nossa história (resumo): redesenho na spec 007.
-          SliverToBoxAdapter(
-            child: FutureBuilder(
-              future: our_history.loadLibrary(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const SizedBox.shrink();
-                }
-                return our_history.OurHistory();
-              },
-            ),
-          ),
-          const SliverToBoxAdapter(child: AppDivider()),
+          // Nossa história (spec 007): resumo estático, com link para a página completa.
+          const SliverToBoxAdapter(child: OurHistorySummarySection()),
           // Equipe: redesenho na spec 008.
           SliverToBoxAdapter(
             child: Observer(

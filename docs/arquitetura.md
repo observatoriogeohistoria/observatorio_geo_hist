@@ -61,6 +61,7 @@ Definidas em [app_router.dart](../lib/app/router/app_router.dart):
 /contato                              Contato
 /colaborar                            Colaboração
 /manifest                             Manifesto
+/nossa-historia                       Nossa história (provisória, redesenho na Fase 2)
 /biblioteca                           Biblioteca
 /biblioteca/:area                     Documentos da área
 /biblioteca/:area/documento/:slug     Detalhe de documento
@@ -98,6 +99,7 @@ A `HomePage` é um `CustomScrollView` com um bloco por sliver, abaixo da navbar.
 - **Destaques** (`components/highlights/`): observa o `FetchHighlightsStore` (posts publicados com `isHighlighted`). `selectHighlights` descarta posts sem `body`, `id` ou área, ordena por `createdAt` (mais recente primeiro) e fica com três; o primeiro é o principal. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem destaques, a seção some. Só a `HomePage` dispara a busca, e só se ainda não buscou, se falhou ou se a última busca foi feita sem categorias (`fetchedWithoutCategories`).
 - **Quem somos** (`components/who_we_are/`): missão, `ArrowLink` para o manifesto e três públicos. Duas colunas só no desktop.
 - **Vídeo de apresentação** (`components/video/`): capa (`assets/images/video-capa.webp` se existir, senão `VideoCoverPainter`) e `VideoPlayButton`. Nada é baixado antes de "Assistir": o `AppVideoPlayer` (import `deferred`) só é montado após o clique. Estados: capa → carregando → tocando ou erro. O vídeo toca com som só se a ativação do usuário ainda vale quando fica pronto (`hasUserActivation`); senão fica pausado e pronto. Se o navegador recusar o início automático (`onAutoplayBlocked`), o player é remontado pausado, sem mostrar erro.
+- **Nossa história** (`components/our_history/`): resumo estático com `MilestoneBadge` (marco da FAPEMIG) e `ArrowLink` para `/nossa-historia` (`OurHistoryPage`, com o texto completo).
 
 O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o usa sem eles): `onInitialized`, `onError`, `loadingPlaceholder`, `shouldStartPlaying`, `onAutoplayBlocked`, `autofocusControls` e `showControlsScrim`.
 

@@ -308,7 +308,24 @@ class ComponentSizes {
   /// Largura máxima da caixa de erro sobre a capa.
   final double videoErrorMaxWidth = 360.0;
 
-  // Nossa história (spec 007). Origem: `.prose` e `.page-head .wrap` do protótipo.
+  // Nossa história (spec 007). Origem: `.narrow`, `.fact`, `.prose` e
+  // `.page-head .wrap` do protótipo.
+
+  /// Largura máxima da coluna do resumo na Home (`.narrow`).
+  final double ourHistorySummaryMaxWidth = 720.0;
+
+  /// Vãos do resumo: rótulo → título, título → selo, selo → texto e texto → link.
+  final double ourHistoryTitleGap = 10.0;
+  final double ourHistoryBadgeGap = 20.0;
+  final double ourHistoryTextGap = 22.0;
+  final double ourHistoryLinkGap = 22.0;
+
+  /// Selo do marco (`.fact`): preenchimento vertical e lateral, vão entre
+  /// ícone e texto e tamanho do ícone.
+  final double milestoneBadgePaddingVertical = 8.0;
+  final double milestoneBadgePaddingHorizontal = 16.0;
+  final double milestoneBadgeIconGap = 10.0;
+  final double milestoneBadgeIcon = 16.0;
 
   /// Coluna de leitura das páginas de texto (`.prose` `max-width`) e vão entre
   /// parágrafos (1,1 em a 18 px).

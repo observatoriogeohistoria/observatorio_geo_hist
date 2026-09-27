@@ -67,7 +67,7 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 |---|---|---|---|
 | T-01 | Manifesto | `/manifest` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original) |
 | T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição |
-| T-03 | Nossa história (completa) | não existe | Hoje o texto completo está na Home (`OurHistory`). A Home passa a mostrar só um resumo com link para esta página. **Precisa de rota nova** |
+| T-03 | Nossa história (completa) | `/nossa-historia` | Criada na spec 007 como página provisória, com o texto completo que estava na Home. A Home mostra só o resumo. Redesenho na Fase 2 |
 | T-04 | Fale com a gente | `/contato` | Continua abrindo o programa de e-mail (`mailto:`). Novidades: validação dos campos e tela de confirmação com "Copiar mensagem" |
 | T-05 | Colabore | `/colaborar` | Continua existindo, acessada pelo cabeçalho da categoria |
 | T-06 | Biblioteca: lista por área | `/biblioteca/:area` | Filtros, resultados e paginação |
