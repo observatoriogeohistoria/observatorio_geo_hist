@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/panel_page.dart';
@@ -9,6 +10,7 @@ import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/en
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/contact_us_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/manifest_page.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/pages/our_history_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/team_member_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_document_detailed_page.dart';
@@ -97,6 +99,12 @@ class AppRouter {
         path: '/manifest',
         builder: (BuildContext context, GoRouterState state) {
           return const ManifestPage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.ourHistory,
+        builder: (BuildContext context, GoRouterState state) {
+          return const OurHistoryPage();
         },
       ),
       GoRoute(

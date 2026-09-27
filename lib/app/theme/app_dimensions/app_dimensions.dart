@@ -308,6 +308,16 @@ class ComponentSizes {
   /// Largura máxima da caixa de erro sobre a capa.
   final double videoErrorMaxWidth = 360.0;
 
+  // Nossa história (spec 007). Origem: `.prose` e `.page-head .wrap` do protótipo.
+
+  /// Coluna de leitura das páginas de texto (`.prose` `max-width`) e vão entre
+  /// parágrafos (1,1 em a 18 px).
+  final double readingMaxWidth = 680.0;
+  final double readingParagraphGap = 20.0;
+
+  /// Respiro acima e abaixo do título no cabeçalho de página (`.page-head .wrap`).
+  double pageHeadPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 40, 56);
+
   double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
     return switch (breakpoint) {
       Breakpoint.mobile => mobile,

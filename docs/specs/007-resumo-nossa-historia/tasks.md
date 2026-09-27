@@ -6,11 +6,11 @@ Cada tarefa termina com `fvm flutter analyze` limpo (rodado na cópia em caminho
 
 ## Grupo A: Tokens e rota
 - [ ] **A1.** Tokens do resumo, do selo e da página listados no plano (`ComponentSizes`, com comentário de origem no protótipo) e, se preciso, o estilo `badge`. Arquivos: `app_dimensions.dart`, `app_text_styles.dart`. Conferir: valores iguais ao plano. Atende: critérios 8, 9 e 14.
-- [ ] **A2.** `AppRoutes.ourHistory = '/nossa-historia'`. Arquivo: `core/routes/app_routes.dart`. Atende: critério 4.
+- [x] **A2.** `AppRoutes.ourHistory = '/nossa-historia'`. Arquivo: `core/routes/app_routes.dart`. Atende: critério 4.
 
 ## Grupo B: Página Nossa história
-- [ ] **B1.** `OurHistoryPage`: `NavbarSliver`; cabeçalho de superfície dentro de `PageContent` com "Nossa história" em `h1`/`ink` (`Semantics(header)`) e linha `line` na base; coluna de 680 px centralizada com os três parágrafos atuais copiados literalmente de `our_history.dart`, em `reading`/`ink`, com `readingParagraphGap`; `SliverFillRemaining(hasScrollBody: false)` e `Footer`. Arquivo: `pages/our_history_page.dart`. Conferir: texto idêntico ao atual (comparar as strings). Atende: critérios 4, 8, 10, 11, 12 e 13.
-- [ ] **B2.** Rota nova `GoRoute(path: AppRoutes.ourHistory)` → `OurHistoryPage`, sem tocar nas rotas existentes. Arquivo: `router/app_router.dart`. Conferir: `git diff` só com acréscimo. Atende: critérios 4, 5 e 7.
+- [x] **B1.** `OurHistoryPage`: `NavbarSliver`; cabeçalho de superfície dentro de `PageContent` com "Nossa história" em `h1`/`ink` (`Semantics(header)`) e linha `line` na base; coluna de 680 px centralizada com os três parágrafos atuais copiados literalmente de `our_history.dart`, em `reading`/`ink`, com `readingParagraphGap`; `SliverFillRemaining(hasScrollBody: false)` e `Footer`. Arquivo: `pages/our_history_page.dart`. Conferir: texto idêntico ao atual (comparar as strings). Atende: critérios 4, 8, 10, 11, 12 e 13. Feito; texto conferido por script contra `our_history.dart` (idêntico). Rodapé dentro do `SliverFillRemaining` com `Spacer`, e não no padrão do Manifesto, que deixava o rodapé abaixo da janela alta (ver histórico da spec).
+- [x] **B2.** Rota nova `GoRoute(path: AppRoutes.ourHistory)` → `OurHistoryPage`, sem tocar nas rotas existentes. Arquivo: `router/app_router.dart`. Conferir: `git diff` só com acréscimo. Atende: critérios 4, 5 e 7. `git diff` só com acréscimo.
 
 ## Grupo C: Resumo na Home
 - [ ] **C1.** `MilestoneBadge`: fundo `accentSoft`, raio `r20`, preenchimento 8 × 16, ícone `schedule_outlined` decorativo (`ExcludeSemantics`) em `accentStrong`, texto que quebra linha em `accentStrong`. Arquivo: `components/our_history/milestone_badge.dart`. Atende: critérios 2, 9, 10 e 11.
