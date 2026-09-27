@@ -4,7 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
@@ -65,30 +67,36 @@ class _CreateMediaDialogState extends State<CreateMediaDialog> {
             isDisabled: true,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          SecondaryButton.small(
-            text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
-            onPressed: () async {
-              setState(() => _isLoading = true);
+          if (!AppEnvironment.current.isProd)
+            AppLabel.small(
+              text: 'Upload desabilitado no ambiente de testes (sem Storage configurado).',
+              color: AppTheme.colors.accentStrong,
+            )
+          else
+            SecondaryButton.small(
+              text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
+              onPressed: () async {
+                setState(() => _isLoading = true);
 
-              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                type: FileType.custom,
-                allowMultiple: false,
-                allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'webm'],
-              );
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowMultiple: false,
+                  allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'webm'],
+                );
 
-              if (result != null) {
-                Uint8List? fileBytes = result.files.first.bytes;
+                if (result != null) {
+                  Uint8List? fileBytes = result.files.first.bytes;
 
-                if (fileBytes != null) {
-                  _selectedFile = fileBytes;
-                  _nameController.text = result.files.first.name;
+                  if (fileBytes != null) {
+                    _selectedFile = fileBytes;
+                    _nameController.text = result.files.first.name;
+                  }
                 }
-              }
 
-              setState(() => _isLoading = false);
-            },
-            isDisabled: _isLoading,
-          ),
+                setState(() => _isLoading = false);
+              },
+              isDisabled: _isLoading,
+            ),
         ],
       ),
     );

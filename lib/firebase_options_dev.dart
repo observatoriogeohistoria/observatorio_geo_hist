@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options.dart';
+/// import 'firebase_options_dev.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -31,9 +31,15 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -47,31 +53,12 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAU-rKGRA0oZxtYhFPfEdT_LPWrdYfOPo8',
-    appId: '1:415910016951:web:44597f77be6534a14e9a32',
-    messagingSenderId: '415910016951',
-    projectId: 'observatorio-geo-hist',
-    authDomain: 'observatorio-geo-hist.firebaseapp.com',
-    storageBucket: 'observatorio-geo-hist.appspot.com',
-    measurementId: 'G-SXPB6RX0SV',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBfgmUiYcZCC5mOih-h0LM2-m664nL5K5E',
-    appId: '1:415910016951:ios:d0d25de6411f04de4e9a32',
-    messagingSenderId: '415910016951',
-    projectId: 'observatorio-geo-hist',
-    storageBucket: 'observatorio-geo-hist.appspot.com',
-    iosBundleId: 'com.example.observatorioGeoHist',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAU-rKGRA0oZxtYhFPfEdT_LPWrdYfOPo8',
-    appId: '1:415910016951:web:39f792aa18bdffa74e9a32',
-    messagingSenderId: '415910016951',
-    projectId: 'observatorio-geo-hist',
-    authDomain: 'observatorio-geo-hist.firebaseapp.com',
-    storageBucket: 'observatorio-geo-hist.appspot.com',
-    measurementId: 'G-C6C45C3NZP',
+    apiKey: 'AIzaSyC5Dl6KukLusmya7_2Rq51-QcGETrc_uWk',
+    appId: '1:642673012519:web:f56a239756ea010bac0302',
+    messagingSenderId: '642673012519',
+    projectId: 'observatorio-geo-hist-dev',
+    authDomain: 'observatorio-geo-hist-dev.firebaseapp.com',
+    storageBucket: 'observatorio-geo-hist-dev.firebasestorage.app',
+    measurementId: 'G-9Q4KS65HSN',
   );
 }

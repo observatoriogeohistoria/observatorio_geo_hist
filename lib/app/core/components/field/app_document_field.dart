@@ -8,6 +8,7 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.d
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -92,33 +93,40 @@ class _AppDocumentFieldState extends State<AppDocumentField> with SingleTickerPr
                 hintText: 'https://',
                 validator: Validators.isValidUrl,
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      PrimaryButton.small(
-                        text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
-                        onPressed: _pickDocumentWeb,
-                      ),
-                      SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-                      if (_uploadedDocumentBytes == null)
-                        AppLabel.small(
-                          text: 'Nenhum arquivo selecionado',
-                          color: AppTheme.colors.gray,
+              if (!AppEnvironment.current.isProd)
+                AppLabel.small(
+                  text: 'Upload desabilitado no ambiente de testes (sem Storage configurado). '
+                      'Use a aba URL.',
+                  color: AppTheme.colors.accentStrong,
+                )
+              else
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PrimaryButton.small(
+                          text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
+                          onPressed: _pickDocumentWeb,
                         ),
-                    ],
-                  ),
-                  if (_uploadedDocumentName != null) ...[
-                    SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-                    AppTitle.small(
-                      text: _uploadedDocumentName!,
-                      color: AppTheme.colors.darkGray,
+                        SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                        if (_uploadedDocumentBytes == null)
+                          AppLabel.small(
+                            text: 'Nenhum arquivo selecionado',
+                            color: AppTheme.colors.gray,
+                          ),
+                      ],
                     ),
+                    if (_uploadedDocumentName != null) ...[
+                      SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+                      AppTitle.small(
+                        text: _uploadedDocumentName!,
+                        color: AppTheme.colors.darkGray,
+                      ),
+                    ],
                   ],
-                ],
-              ),
+                ),
             ],
           ),
         ),

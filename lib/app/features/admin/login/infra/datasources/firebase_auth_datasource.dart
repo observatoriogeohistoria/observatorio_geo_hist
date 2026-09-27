@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
+import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
-import 'package:observatorio_geo_hist/firebase_options.dart';
 
 abstract class FirebaseAuthDatasource {
   Future<UserModel?> signIn(String email, String password);
@@ -24,7 +24,7 @@ class FirebaseAuthDatasourceImpl implements FirebaseAuthDatasource {
     try {
       final app = await Firebase.initializeApp(
         name: 'TemporaryApp',
-        options: DefaultFirebaseOptions.currentPlatform,
+        options: AppEnvironment.current.firebaseOptions,
       );
 
       final userCredential = await FirebaseAuth.instanceFor(app: app)
