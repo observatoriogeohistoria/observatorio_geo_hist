@@ -10,7 +10,7 @@
 | 006-quem-somos-video | 1.3, 1.4 | feita (16 critérios, 13 tarefas) | feita (3 commits) | feita (2 fix) | verificada (6 commits) |
 | 007-resumo-nossa-historia | 1.5 | feita (14 critérios, 10 tarefas) | feita (4 commits) | feita (1 fix) | verificada (7 commits) |
 | 008-equipe | 1.6 | feita (17 critérios, 11 tarefas) | feita (2 commits) | feita (0 fix) | verificada com ressalvas (4 commits) |
-| 009-apoio-contato | 1.7, 1.8 | feita (18 critérios, 13 tarefas) | pendente | pendente | |
+| 009-apoio-contato | 1.7, 1.8 | feita (18 critérios, 13 tarefas) | feita (2 commits) | feita (1 fix) | verificada com ressalvas (5 commits) |
 
 ## Divisão
 - 1.3 e 1.4 juntas: dois blocos simples e vizinhos da Home.
@@ -63,6 +63,9 @@
 - 008: `/membro/<id inexistente>` carrega para sempre e busca a equipe em laço (~35 leituras em 10 s). Já acontecia antes da 008; anotado na T-02 para a Fase 2, com prioridade.
 - 008: o Firebase de testes não tem membros; todos os estados com dados foram conferidos só com dados simulados.
 - 008: contorno de foco por teclado conferido só em teste de widget.
+- 009: faixa lilás embaixo de `/colaborar` em janelas mais altas que o conteúdo (Scaffold sem cor de fundo, anterior à 009; Fase 5).
+- 009: links de semântica sem `href` (padrão do site inteiro); logos aparecem um instante depois do resto no primeiro carregamento, sem deslocar a grade.
+- 009: `Support` do post conferido só em pré-visualização com dados simulados (Firebase de testes sem posts); `overflow` do aceite da fase conferido por testes de widget (o build release não imprime o aviso).
 
 ## Ocorrências
 - Branch criada a partir de origin/develop sem upstream configurado, para que nenhum `git push` sem argumentos vá para a develop.
@@ -70,3 +73,5 @@
 - 2026-09-26: retomada na 007. A primeira chamada da implementação foi interrompida pela pessoa depois de já ter feito 2 commits; a segunda sessão continuou a partir do tasks.md.
 - 007: a implementação ajustou o rodapé do tablet (duas linhas, sem LayoutBuilder) em commit próprio; a verificação conferiu /manifest, /biblioteca e /nossa-historia a 768 px sem regressão.
 - 2026-09-27: a primeira sessão de verificação da 008 foi interrompida sem efeito; refeita do zero.
+- 2026-09-27: a primeira sessão de implementação da 009 foi interrompida pela pessoa e deixou código sem commit; a sessão seguinte revisou, corrigiu um bug (quadro da chamada encolhendo no tablet) e fez os commits.
+- 2026-09-29: o classificador do modo automático falhou durante a verificação da 009; a orquestradora fez o commit do fix pendente e a mesma sessão concluiu a documentação.
