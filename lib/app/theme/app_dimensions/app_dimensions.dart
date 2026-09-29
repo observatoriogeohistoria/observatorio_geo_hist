@@ -355,6 +355,27 @@ class ComponentSizes {
   final double memberSkeletonNameWidth = 0.7;
   final double memberSkeletonRoleWidth = 0.5;
 
+  // Realização e apoio (spec 009). Origem: `.logos`, `.logos.small` e `.logo`.
+
+  /// Largura mínima de coluna da grade de logos (`minmax(150px, 1fr)`) e da
+  /// variante menor do post (`.logos.small`, 130 px).
+  final double partnerColumnMinWidth = 150.0;
+  final double partnerColumnMinWidthSmall = 130.0;
+
+  /// Vão entre logos (`gap`) e respiro da área de cada logo (`.logo` `padding`).
+  final double partnerGap = 12.0;
+  final double partnerPadding = 12.0;
+
+  /// Largura máxima do logo e proporção dos arquivos (280 × 186 px).
+  final double partnerLogoMaxWidth = 150.0;
+  final double partnerLogoAspectRatio = 280 / 186;
+
+  /// Opacidade do logo em repouso, subida e crescimento no hover/foco e duração.
+  final double partnerRestOpacity = 0.55;
+  final double partnerHoverLift = 3.0;
+  final double partnerHoverScale = 1.05;
+  final Duration partnerAnimation = const Duration(milliseconds: 200);
+
   /// Respiro acima e abaixo do título no cabeçalho de página (`.page-head .wrap`).
   double pageHeadPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 40, 56);
 

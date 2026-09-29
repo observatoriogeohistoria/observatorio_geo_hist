@@ -14,6 +14,9 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 ///
 /// Carregando: título e esqueleto de uma linha. Erro: título, mensagem e
 /// "Tentar de novo". Sem membros: a seção inteira some.
+///
+/// Só tem respiro de seção em cima (spec 009): o espaço até o bloco seguinte
+/// fica em Realização e apoio.
 class TeamSection extends StatelessWidget {
   const TeamSection({super.key, required this.store, required this.onRetry});
 
@@ -63,7 +66,7 @@ class _Section extends StatelessWidget {
       color: AppTheme.colors.page,
       child: PageContent(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: components.sectionPaddingVertical(breakpoint)),
+          padding: EdgeInsets.only(top: components.sectionPaddingVertical(breakpoint)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

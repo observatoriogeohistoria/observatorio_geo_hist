@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_collection_card.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/library/library_header.dart';
@@ -54,7 +54,7 @@ class LibraryPage extends StatelessWidget {
               ),
             ),
           ),
-          const SliverToBoxAdapter(child: Partners()),
+          const SliverToBoxAdapter(child: PartnersSection()),
           const SliverToBoxAdapter(child: Footer()),
         ],
       ),

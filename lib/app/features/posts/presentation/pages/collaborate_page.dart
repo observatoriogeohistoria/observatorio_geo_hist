@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
@@ -10,7 +11,6 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart'
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class CollaboratePage extends StatelessWidget {
@@ -96,7 +96,7 @@ Exceto quando expressamente indicado, todo o conteúdo publicado no Observatóri
               ),
             ),
           ),
-          const SliverToBoxAdapter(child: Partners()),
+          const SliverToBoxAdapter(child: PartnersSection()),
           const SliverFillRemaining(hasScrollBody: false, child: SizedBox.shrink()),
           const SliverToBoxAdapter(child: Footer()),
         ],

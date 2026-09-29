@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart' deferred as footer;
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart' deferred as partners;
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
@@ -11,8 +12,6 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/highlights_section.dart'
     deferred as highlights;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history/our_history_summary_section.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/partners.dart'
-    deferred as partners;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/team_section.dart'
     deferred as team;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/video/presentation_video_section.dart';
@@ -105,7 +104,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Realização e apoio: redesenho na spec 009.
+          // Realização e apoio (spec 009): mesma seção da Biblioteca e de Colabore.
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: partners.loadLibrary(),
@@ -113,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return const SizedBox.shrink();
                 }
-                return partners.Partners();
+                return partners.PartnersSection();
               },
             ),
           ),
