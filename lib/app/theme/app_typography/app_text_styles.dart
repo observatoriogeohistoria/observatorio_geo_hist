@@ -16,6 +16,7 @@ part of '../app_theme.dart';
 // | item de lista | Bricolage      | 700  | 1,30   | 0           | `.for b`                   |
 // | legenda de vídeo | Bricolage   | 600  | 1,20   | 0           | `.video-cap`               |
 // | nome de membro | Bricolage     | 700  | 1,30   | 0           | `.member b`                |
+// | chamada  | Bricolage Grotesque | 700  | 1,12   | -0,02 em    | `.cta h2`                  |
 // | iniciais | Bricolage Grotesque | 700  | 1,00   | 0           | `.avatar`                  |
 // | função de membro | Figtree     | 400  | 1,45   | 0           | `.member span`             |
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
@@ -184,6 +185,14 @@ class AppTextStyles {
         size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
         weight: FontWeight.w400,
         height: 1.45,
+      );
+
+  /// Título da chamada para contato no fim da Home (`.cta h2`). Spec 009.
+  TextStyle get ctaTitle => _display(
+        size: _size(mobile: 24, tablet: 32, desktop: 35),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
       );
 
   /// Texto de leitura (artigos).

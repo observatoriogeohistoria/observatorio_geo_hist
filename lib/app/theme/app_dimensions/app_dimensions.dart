@@ -376,6 +376,25 @@ class ComponentSizes {
   final double partnerHoverScale = 1.05;
   final Duration partnerAnimation = const Duration(milliseconds: 200);
 
+  // Chamada para contato (spec 009). Origem: `.cta`, `.cta h2` e `.cta p`.
+
+  /// Respiro interno do quadro (`clamp(28px, 6cqi, 56px)`).
+  double ctaPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 46, 56);
+
+  /// Vãos título → texto (`.cta p` `margin-top`) e textos → botão (`gap`).
+  final double ctaTextGap = 8.0;
+  final double ctaButtonGap = 24.0;
+
+  /// Largura máxima do título em múltiplos do tamanho da fonte e do texto,
+  /// medidas no protótipo (`max-width: 22ch` a 700 dá 14,3 em; `52ch` a 16 px
+  /// dá 533 px).
+  final double ctaTitleMaxWidthEm = 14.3;
+  final double ctaTextMaxWidth = 533.0;
+
+  /// A partir desta ampliação do texto (1,3 = 130%), o botão fica abaixo do
+  /// texto também no desktop.
+  final double ctaStackTextScale = 1.3;
+
   /// Respiro acima e abaixo do título no cabeçalho de página (`.page-head .wrap`).
   double pageHeadPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 40, 56);
 

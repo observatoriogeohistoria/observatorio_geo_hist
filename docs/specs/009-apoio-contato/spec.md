@@ -1,6 +1,6 @@
 # 009. Home: realização e apoio, chamada para contato
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 1, seções 1.7 (Realização e apoio, P-03, Q-06) e 1.8 (Chamada para contato). Última spec da Fase 1: inclui a conferência da Home inteira contra o aceite da fase.
 - **Protótipo:** aba "Home", blocos "Realização e apoio" (`.logos`) e chamada final (`.cta`), abaixo da Equipe; aba "Post", bloco "Apoio" (`.logos.small`) como referência da lista compartilhada (link no CLAUDE.md)
 - **Criada em:** 2026-09-27
@@ -137,3 +137,4 @@ Com este bloco a Home fica completa, na ordem do protótipo: navbar, hero com at
 ## Histórico de mudanças
 - 2026-09-27: criada e aprovada no modo autônomo (execução da Fase 1).
 - 2026-09-27: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-09-29: implementada. Os 9 sites abriram na conferência (nenhum logo sem link). Post não conferido no app real por falta de categorias no Firebase de testes.

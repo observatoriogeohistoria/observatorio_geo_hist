@@ -32,7 +32,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, skeleton, video_player, entre outros |
+| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), skeleton, video_player, entre outros |
 | `models/` | `PostModel` e os corpos de post, `category`, `image`, `paginated/`, `states/` (CRUD) e demais modelos comuns |
 | `utils/` | Constantes, datas, enums, formatters, validators, `environment/`, `browser/` e demais utilitários |
 | `infra/` | Datasource/repository de categorias e `services/logger_service` |
@@ -44,7 +44,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 
 | Feature | Responsabilidade |
 |---|---|
-| `home` | Página inicial: hero, destaques, quem somos, vídeo e equipe |
+| `home` | Página inicial: hero, destaques, quem somos, vídeo, nossa história, equipe, realização e apoio e chamada para contato |
 | `posts` | Listagem paginada com filtros e detalhe do post |
 | `library` | Biblioteca de documentos por área, com busca por `slug` |
 | `admin` | Login, painel de conteúdo e sidebar |
@@ -100,7 +100,9 @@ A `HomePage` é um `CustomScrollView` com um bloco por sliver, abaixo da navbar.
 - **Quem somos** (`components/who_we_are/`): missão, `ArrowLink` para o manifesto e três públicos. Duas colunas só no desktop.
 - **Vídeo de apresentação** (`components/video/`): capa (`assets/images/video-capa.webp` se existir, senão `VideoCoverPainter`) e `VideoPlayButton`. Nada é baixado antes de "Assistir": o `AppVideoPlayer` (import `deferred`) só é montado após o clique. Estados: capa → carregando → tocando ou erro. O vídeo toca com som só se a ativação do usuário ainda vale quando fica pronto (`hasUserActivation`); senão fica pausado e pronto. Se o navegador recusar o início automático (`onAutoplayBlocked`), o player é remontado pausado, sem mostrar erro.
 - **Nossa história** (`components/our_history/`): resumo estático com `MilestoneBadge` (marco da FAPEMIG) e `ArrowLink` para `/nossa-historia` (`OurHistoryPage`, com o texto completo).
-- **Equipe** (`components/team/`): observa o `FetchTeamStore`, que tem estado (inicial, carregando, sucesso, erro) e guarda a lista em ordem alfabética (`sortTeamByName`, sem acentos nem caixa). `TeamGrid` põe quantas colunas de 190 px (× ampliação do texto) couberem. Só membro com descrição é link para `/membro/:id`; sem foto, `MemberAvatar` mostra as iniciais. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem membros, a seção some. A `HomePage` só busca se ainda não buscou ou se falhou (`needsFetch`).
+- **Equipe** (`components/team/`): observa o `FetchTeamStore`, que tem estado (inicial, carregando, sucesso, erro) e guarda a lista em ordem alfabética (`sortTeamByName`, sem acentos nem caixa). `TeamGrid` põe quantas colunas de 190 px (× ampliação do texto) couberem. Só membro com descrição é link para `/membro/:id`; sem foto, `MemberAvatar` mostra as iniciais. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem membros, a seção some. A `HomePage` só busca se ainda não buscou ou se falhou (`needsFetch`). Só tem respiro de seção em cima; o de baixo fica em Realização e apoio, para o espaço não sumir quando a equipe está escondida.
+- **Realização e apoio** (`core/components/partners/`): `PartnersSection` com a `PartnerLogoGrid` (colunas de no mínimo 150 px) e um `PartnerLogo` por instituição do enum `Partner` (sigla, nome completo, site e logo; a ordem do enum é a de exibição). O logo é link para o site em outra aba, com nome acessível completo; `url` nula deixa o logo sem link. A mesma seção aparece na Biblioteca e em Colabore; o `Support` do post usa a mesma grade, com colunas de 130 px.
+- **Chamada para contato** (`components/contact_call/`): quadro com "Fale com a gente" para `/contato` (`AppRoutes.contact`). Botão à direita só no desktop.
 
 O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o usa sem eles): `onInitialized`, `onError`, `loadingPlaceholder`, `shouldStartPlaying`, `onAutoplayBlocked`, `autofocusControls` e `showControlsScrim`.
 

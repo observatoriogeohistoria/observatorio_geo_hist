@@ -6,8 +6,8 @@ import 'package:observatorio_geo_hist/app/core/components/partners/partners_sect
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_us.dart'
-    deferred as contact_us;
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/contact_call/contact_call_section.dart'
+    deferred as contact_call;
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/hero/home_hero.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/highlights_section.dart'
     deferred as highlights;
@@ -116,15 +116,15 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Chamada para contato: redesenho na spec 009.
+          // Chamada para contato (spec 009).
           SliverToBoxAdapter(
             child: FutureBuilder(
-              future: contact_us.loadLibrary(),
+              future: contact_call.loadLibrary(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return const SizedBox.shrink();
                 }
-                return contact_us.ContactUs();
+                return contact_call.ContactCallSection();
               },
             ),
           ),
