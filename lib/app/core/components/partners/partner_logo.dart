@@ -65,7 +65,7 @@ class _PartnerLogoState extends State<PartnerLogo> {
 
     return Semantics(
       link: true,
-      label: _partner.fullName,
+      label: '${_partner.fullName}, abre em outra aba',
       // Repete a ação do InkWell (excluído da semântica) para o leitor de tela abrir o site.
       onTap: _open,
       excludeSemantics: true,
