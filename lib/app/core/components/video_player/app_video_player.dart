@@ -166,6 +166,19 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
             child: Stack(
               children: [
                 VideoPlayer(_controller),
+                // Tocar em qualquer ponto do vídeo reproduz ou pausa; teclado e
+                // leitor de tela usam o botão próprio. Fica por cima do vídeo
+                // porque, na web, o elemento do vídeo ficaria com o toque.
+                Positioned.fill(
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      excludeFromSemantics: true,
+                      onTap: _togglePlayPause,
+                    ),
+                  ),
+                ),
                 if (widget.showControlsScrim) const Positioned(left: 0, right: 0, bottom: 0, child: _ControlsScrim()),
                 Align(
                   alignment: Alignment.bottomCenter,

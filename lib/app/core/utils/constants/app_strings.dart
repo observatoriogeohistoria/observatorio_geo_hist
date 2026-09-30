@@ -14,8 +14,6 @@ Uberlândia/MG | CEP 38400-192''';
 Av. João Naves de Ávila, 2121 · Santa Mônica
 Uberlândia/MG''';
 
-  static const String footerLicense = 'Conteúdo sob licença Creative Commons 4.0 Internacional';
-
   static const String phoneOne = '34 3239-4163';
   static const String phoneOneUrl = 'tel:+553432394163';
   static const String phoneTwo = '34 3239-4212';
