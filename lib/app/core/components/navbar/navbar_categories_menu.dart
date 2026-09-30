@@ -5,6 +5,7 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/app_text_butto
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
@@ -39,7 +40,7 @@ class NavbarCategoriesMenu extends StatelessWidget {
     final router = GoRouter.of(context);
     onSelected?.call();
     store.setSelectedCategory(category);
-    router.go('/posts/${category.areas.first.key}/${category.key}', extra: category);
+    router.go(AppRoutes.category(category.areas.first.key, category.key), extra: category);
   }
 
   void _openExternal(String url) {

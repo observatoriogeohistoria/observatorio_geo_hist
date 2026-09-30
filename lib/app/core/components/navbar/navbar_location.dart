@@ -28,7 +28,7 @@ class NavbarLocation {
     switch (segments.first) {
       case 'biblioteca':
         return const NavbarLocation(section: NavbarSection.library);
-      case 'posts':
+      case 'publicacoes':
         if (segments.length < 2) return const NavbarLocation();
         final section = switch (segments[1]) {
           'historia' => NavbarSection.history,
@@ -46,7 +46,7 @@ class NavbarLocation {
 
   final NavbarSection? section;
 
-  /// Chave da categoria aberta (só em rotas de posts).
+  /// Chave da categoria aberta (só em rotas de publicações).
   final String? categoryKey;
 
   /// Chave da categoria marcada no menu de [area], se for a área ativa.

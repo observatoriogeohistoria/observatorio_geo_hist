@@ -40,9 +40,9 @@ O enum `SidebarItem` define as abas e a URL `/admin/painel/:tab`:
 | Item | `:tab` |
 |---|---|
 | `users` | `usuarios` |
-| `media` | `mídias` |
+| `media` | `midias` |
 | `categories` | `categorias` |
-| `posts` | `posts` (aceita `?postType=`) |
+| `posts` | `publicacoes` (aceita `?tipo=`) |
 | `team` | `equipe` |
 | `library` | `biblioteca` |
 

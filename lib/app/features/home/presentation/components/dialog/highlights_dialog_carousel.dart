@@ -1,5 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/custom_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/image/app_network_imag
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/carousel_options/carousel_options.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
@@ -99,7 +100,7 @@ class _HighlightsCarouselState extends State<HighlightsCarousel> {
                       return GestureDetector(
                         onTap: () {
                           GoRouter.of(context).go(
-                              '/posts/${highlight.category?.areas.first.key}/${highlight.categoryId}/${highlight.id}');
+                              AppRoutes.post(highlight.category!.areas.first.key, highlight.categoryId, highlight.id!));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

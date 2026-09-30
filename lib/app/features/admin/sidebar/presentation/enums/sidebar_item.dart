@@ -14,11 +14,11 @@ enum SidebarItem {
       case SidebarItem.users:
         return 'usuarios';
       case SidebarItem.media:
-        return 'mídias';
+        return 'midias';
       case SidebarItem.categories:
         return 'categorias';
       case SidebarItem.posts:
-        return 'posts';
+        return 'publicacoes';
       case SidebarItem.team:
         return 'equipe';
       case SidebarItem.library:
@@ -84,11 +84,11 @@ enum SidebarItem {
     switch (value) {
       case 'usuarios':
         return SidebarItem.users;
-      case 'mídias':
+      case 'midias':
         return SidebarItem.media;
       case 'categorias':
         return SidebarItem.categories;
-      case 'posts':
+      case 'publicacoes':
         return SidebarItem.posts;
       case 'equipe':
         return SidebarItem.team;

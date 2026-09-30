@@ -33,6 +33,8 @@ Resumo: `lib/app/features/{feature}/` com `infra/` (datasources, repositories, m
 
 Convenções: arquivos em `snake_case`; sufixos `*_datasource`, `*_repository`, `*_store`, `*_model`, `*_page`, `*_setup`, `*_failures`.
 
+**Rotas sempre em português**, minúsculas, sem acento e com hífen (`/nossa-historia`, `/publicacoes/:area/:category`), inclusive no painel e nos parâmetros de consulta (`?tipo=`). Em código novo, use os caminhos de `AppRoutes` em vez de escrever a rota solta. Ao renomear uma rota pública, mantenha a antiga redirecionando para a nova.
+
 ## Redesign do site público (em andamento)
 - **Fonte de verdade:** [docs/redesign/planejamento.md](docs/redesign/planejamento.md) (decisões, fases, telas, ideias futuras).
 - **Protótipo navegável:** https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH. É a referência visual. Confira cada tela nele antes de implementar.

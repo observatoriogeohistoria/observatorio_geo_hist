@@ -1,4 +1,5 @@
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 /// Quantos destaques aparecem na Home (spec 005).
@@ -37,7 +38,7 @@ PostsAreas? highlightArea(PostModel post) {
   return null;
 }
 
-/// Endereço da página do post (`/posts/:area/:categoria/:id`).
+/// Endereço da página do post (`/publicacoes/:area/:categoria/:id`).
 String highlightPath(PostModel post) {
-  return '/posts/${highlightArea(post)!.key}/${post.categoryId}/${post.id}';
+  return AppRoutes.post(highlightArea(post)!.key, post.categoryId, post.id!);
 }

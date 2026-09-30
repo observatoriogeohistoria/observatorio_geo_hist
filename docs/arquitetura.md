@@ -56,20 +56,22 @@ Definidas em [app_router.dart](../lib/app/router/app_router.dart):
 ```
 /                                     Home
 /membro/:id                           Membro da equipe
-/posts/:area/:category                Lista de posts
-/posts/:area/:category/:id            Detalhe do post
+/publicacoes/:area/:category          Lista de posts da categoria
+/publicacoes/:area/:category/:id      Detalhe do post
 /contato                              Contato
 /colaborar                            Colaboração
-/manifest                             Manifesto
+/manifesto                            Manifesto
 /nossa-historia                       Nossa história (provisória, redesenho na Fase 2)
 /biblioteca                           Biblioteca
 /biblioteca/:area                     Documentos da área
 /biblioteca/:area/documento/:slug     Detalhe de documento
 /admin                                Login
 /admin/painel                         Redireciona para /admin/painel/categorias
-/admin/painel/:tab                    Painel (?postType=... na aba de posts)
+/admin/painel/:tab                    Painel (?tipo=... na aba de publicações)
 /admin/painel/biblioteca/:area        Biblioteca no painel
 ```
+
+Rotas sempre em português, sem acento (os caminhos ficam em `AppRoutes`). Os endereços antigos `/manifest` e `/posts/...` redirecionam para os novos.
 
 ## Dados
 

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/arrow_link.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/word_safe_text.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are/audience_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -16,7 +17,6 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class WhoWeAreSection extends StatelessWidget {
   const WhoWeAreSection({super.key});
 
-  static const _manifestRoute = '/manifest';
 
   static const _audiences = [
     (
@@ -90,7 +90,7 @@ class WhoWeAreSection extends StatelessWidget {
     );
   }
 
-  static void _openManifest(BuildContext context) => GoRouter.of(context).go(_manifestRoute);
+  static void _openManifest(BuildContext context) => GoRouter.of(context).go(AppRoutes.manifesto);
 }
 
 /// Rótulo, título, texto de missão e link para o manifesto.
@@ -129,7 +129,7 @@ class _Intro extends StatelessWidget {
         SizedBox(height: components.whoWeAreLinkGap),
         ArrowLink(
           text: 'Conheça o manifesto',
-          url: WhoWeAreSection._manifestRoute,
+          url: AppRoutes.manifesto,
           onTap: () => onOpenManifest(context),
         ),
       ],

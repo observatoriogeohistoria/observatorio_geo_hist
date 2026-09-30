@@ -28,7 +28,6 @@ class _HomeHeroState extends State<HomeHero> {
   final _historyFocus = FocusNode(debugLabel: 'Atalho História');
   final _geographyFocus = FocusNode(debugLabel: 'Atalho Geografia');
 
-  static const _manifestRoute = '/manifest';
 
   @override
   void dispose() {
@@ -117,7 +116,7 @@ class _HomeHeroState extends State<HomeHero> {
                       ),
                       SecondaryButton.medium(
                         text: 'Ler o manifesto',
-                        onPressed: () => GoRouter.of(context).go(_manifestRoute),
+                        onPressed: () => GoRouter.of(context).go(AppRoutes.manifesto),
                       ),
                     ],
                   ),

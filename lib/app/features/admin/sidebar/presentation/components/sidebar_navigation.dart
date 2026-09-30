@@ -121,7 +121,7 @@ class _SidebarState extends State<Sidebar> {
                                       final postType =
                                           (sidebarStore.selectedPostType ?? PostType.article).value;
                                       GoRouter.of(context)
-                                          .go('/admin/painel/posts?postType=$postType');
+                                          .go('/admin/painel/${SidebarItem.posts.value}?tipo=$postType');
 
                                       return;
                                     }
@@ -136,7 +136,7 @@ class _SidebarState extends State<Sidebar> {
 
                                     sidebarStore.selectPostType(subItem);
                                     GoRouter.of(context)
-                                        .go('/admin/painel/posts?postType=${subItem.value}');
+                                        .go('/admin/painel/${SidebarItem.posts.value}?tipo=${subItem.value}');
 
                                     if (isMobile) GoRouter.of(context).pop();
                                   },

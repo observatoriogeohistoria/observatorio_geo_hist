@@ -56,7 +56,7 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/posts/:area/:category',
+            path: '${AppRoutes.publications}/:area/:category',
             builder: (BuildContext context, GoRouterState state) {
               final area = state.pathParameters['area'];
               final categoryKey = state.pathParameters['category'];
@@ -71,7 +71,7 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/posts/:area/:category/:id',
+            path: '${AppRoutes.publications}/:area/:category/:id',
             builder: (BuildContext context, GoRouterState state) {
               final area = state.pathParameters['area'];
               final categoryKey = state.pathParameters['category'];
@@ -100,7 +100,7 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/manifest',
+            path: AppRoutes.manifesto,
             builder: (BuildContext context, GoRouterState state) {
               return const ManifestPage();
             },
@@ -141,6 +141,26 @@ class AppRouter {
           ),
         ],
       ),
+      // Endereços antigos em inglês, mantidos para não quebrar links já compartilhados.
+      GoRoute(
+        path: '/manifest',
+        redirect: (context, state) => AppRoutes.manifesto,
+      ),
+      GoRoute(
+        path: '/posts/:area/:category',
+        redirect: (context, state) => AppRoutes.category(
+          state.pathParameters['area']!,
+          state.pathParameters['category']!,
+        ),
+      ),
+      GoRoute(
+        path: '/posts/:area/:category/:id',
+        redirect: (context, state) => AppRoutes.post(
+          state.pathParameters['area']!,
+          state.pathParameters['category']!,
+          state.pathParameters['id']!,
+        ),
+      ),
       GoRoute(
         path: '/admin',
         builder: (BuildContext context, GoRouterState state) {
@@ -155,7 +175,7 @@ class AppRouter {
         path: '/admin/painel/:tab',
         builder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
-          final postType = PostType.fromString(state.uri.queryParameters['postType']);
+          final postType = PostType.fromString(state.uri.queryParameters['tipo']);
 
           final invalidRoute = tab == null;
           if (invalidRoute) return const PageNotFound();

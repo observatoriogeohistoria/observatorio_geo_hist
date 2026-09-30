@@ -30,10 +30,10 @@ class Footer extends StatelessWidget {
         _FooterLinkData('Biblioteca', AppRoutes.library),
       ]),
       const _LinksColumn(title: 'Institucional', links: [
-        _FooterLinkData('Manifesto', '/manifest'),
+        _FooterLinkData('Manifesto', AppRoutes.manifesto),
         _FooterLinkData('Nossa história', AppRoutes.ourHistory),
         _FooterLinkData('Equipe', AppRoutes.root),
-        _FooterLinkData('Fale com a gente', '/contato'),
+        _FooterLinkData('Fale com a gente', AppRoutes.contact),
       ]),
       const _LinksColumn(title: 'Contato', links: [
         _FooterLinkData(AppStrings.email, AppStrings.emailUrl),
