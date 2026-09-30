@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_title.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
@@ -34,7 +35,7 @@ class _LibrarySectionState extends State<LibrarySection> {
             for (var area in DocumentArea.values)
               AppMouseRegion(
                 child: GestureDetector(
-                  onTap: () => GoRouter.of(context).go('/admin/painel/biblioteca/${area.routeKey}'),
+                  onTap: () => GoRouter.of(context).go(AppRoutes.panelLibraryArea(area.routeKey)),
                   child: Container(
                     padding: EdgeInsets.all(AppTheme.dimensions.space.large.scale),
                     decoration: BoxDecoration(

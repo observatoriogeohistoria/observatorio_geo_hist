@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -26,16 +27,16 @@ class AppLogo extends StatelessWidget {
     return Semantics(
       link: true,
       label: 'Observatório do Ensino de História e Geografia, início',
-      linkUrl: Uri.parse('/'),
+      linkUrl: Uri.parse(AppRoutes.root),
       // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
-      onTap: () => context.go('/'),
+      onTap: () => context.go(AppRoutes.root),
       excludeSemantics: true,
       child: AppFocusRing(
         borderRadius: radius,
         color: onDark ? colors.footerHighlight : null,
         child: InkWell(
           borderRadius: radius,
-          onTap: () => context.go('/'),
+          onTap: () => context.go(AppRoutes.root),
           mouseCursor: SystemMouseCursors.click,
           child: Row(
             mainAxisSize: MainAxisSize.min,

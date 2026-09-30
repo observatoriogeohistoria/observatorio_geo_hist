@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 /// Seções da navbar que podem estar ativas.
@@ -26,9 +27,9 @@ class NavbarLocation {
     if (segments.isEmpty) return const NavbarLocation(section: NavbarSection.about);
 
     switch (segments.first) {
-      case 'biblioteca':
+      case AppRoutes.librarySegment:
         return const NavbarLocation(section: NavbarSection.library);
-      case 'publicacoes':
+      case AppRoutes.publicationsSegment:
         if (segments.length < 2) return const NavbarLocation();
         final section = switch (segments[1]) {
           'historia' => NavbarSection.history,

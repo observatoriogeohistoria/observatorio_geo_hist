@@ -5,6 +5,7 @@ import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -38,7 +39,7 @@ class PageNotFound extends StatelessWidget {
                       SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                       PrimaryButton.big(
                         text: 'HOME',
-                        onPressed: () => GoRouter.of(context).go('/'),
+                        onPressed: () => GoRouter.of(context).go(AppRoutes.root),
                       ),
                     ],
                   ),

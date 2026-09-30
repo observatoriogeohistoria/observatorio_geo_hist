@@ -10,6 +10,7 @@ import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.d
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
@@ -57,7 +58,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
         (_) => _authStore.user,
         (UserModel? user) {
           if (user == null) {
-            GoRouter.of(context).go('/admin');
+            GoRouter.of(context).go(AppRoutes.admin);
           }
         },
       ),
@@ -105,10 +106,10 @@ class _LibraryListPageState extends State<LibraryListPage> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             final router = GoRouter.of(context);
-            final isAdminRoute = GoRouterState.of(context).uri.path.startsWith('/admin');
+            final isAdminRoute = GoRouterState.of(context).uri.path.startsWith(AppRoutes.admin);
             router.canPop()
                 ? router.pop()
-                : router.go(isAdminRoute ? '/admin/painel/biblioteca' : '/biblioteca');
+                : router.go(isAdminRoute ? AppRoutes.panelTab(AppRoutes.librarySegment) : AppRoutes.library);
           },
         ),
         title: AppHeadline.big(

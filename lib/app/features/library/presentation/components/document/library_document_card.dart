@@ -4,6 +4,7 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_butto
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -34,7 +35,7 @@ class LibraryDocumentCard extends StatelessWidget {
     return AppMouseRegion(
       child: GestureDetector(
         onTap: () {
-          final path = '/biblioteca/${document.area.routeKey}/documento/${document.slug}';
+          final path = AppRoutes.libraryDocument(document.area.routeKey, document.slug ?? '');
           GoRouter.of(context).go(path);
         },
         child: Row(

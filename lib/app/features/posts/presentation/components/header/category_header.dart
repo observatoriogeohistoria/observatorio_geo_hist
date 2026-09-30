@@ -4,6 +4,7 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button
 import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -53,7 +54,7 @@ class CategoryHeader extends StatelessWidget {
           if (category.hasCollaborateOption)
             PrimaryButton.medium(
               text: 'COLABORE',
-              onPressed: () => GoRouter.of(context).go('/colaborar'),
+              onPressed: () => GoRouter.of(context).go(AppRoutes.collaborate),
             ),
         ],
       ),

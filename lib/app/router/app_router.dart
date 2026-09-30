@@ -24,13 +24,13 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
-    initialLocation: '/',
+    initialLocation: AppRoutes.root,
     errorBuilder: (_, __) => _selectable(const PageNotFound()),
     redirect: (BuildContext context, GoRouterState state) async {
       bool isLogged = FirebaseAuth.instance.currentUser != null;
-      bool isPanel = state.fullPath == '/admin/painel';
+      bool isPanel = state.fullPath == AppRoutes.panel;
 
-      if (isPanel && !isLogged) return '/admin';
+      if (isPanel && !isLogged) return AppRoutes.admin;
 
       return null;
     },
@@ -39,13 +39,13 @@ class AppRouter {
         builder: (context, state, child) => _selectable(child),
         routes: <RouteBase>[
           GoRoute(
-            path: '/',
+            path: AppRoutes.root,
             builder: (BuildContext context, GoRouterState state) {
               return const HomePage();
             },
           ),
           GoRoute(
-            path: '/membro/:id',
+            path: AppRoutes.memberPattern,
             builder: (BuildContext context, GoRouterState state) {
               final id = state.pathParameters['id'];
 
@@ -56,7 +56,7 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '${AppRoutes.publications}/:area/:category',
+            path: AppRoutes.categoryPattern,
             builder: (BuildContext context, GoRouterState state) {
               final area = state.pathParameters['area'];
               final categoryKey = state.pathParameters['category'];
@@ -71,7 +71,7 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '${AppRoutes.publications}/:area/:category/:id',
+            path: AppRoutes.postPattern,
             builder: (BuildContext context, GoRouterState state) {
               final area = state.pathParameters['area'];
               final categoryKey = state.pathParameters['category'];
@@ -88,13 +88,13 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/contato',
+            path: AppRoutes.contact,
             builder: (BuildContext context, GoRouterState state) {
               return const ContactUsPage();
             },
           ),
           GoRoute(
-            path: '/colaborar',
+            path: AppRoutes.collaborate,
             builder: (BuildContext context, GoRouterState state) {
               return const CollaboratePage();
             },
@@ -112,13 +112,13 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/biblioteca',
+            path: AppRoutes.library,
             builder: (BuildContext context, GoRouterState state) {
               return const LibraryPage();
             },
           ),
           GoRoute(
-            path: '/biblioteca/:area',
+            path: AppRoutes.libraryAreaPattern,
             builder: (BuildContext context, GoRouterState state) {
               final area = DocumentArea.fromRouteKey(state.pathParameters['area']);
 
@@ -129,7 +129,7 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/biblioteca/:area/documento/:slug',
+            path: AppRoutes.libraryDocumentPattern,
             builder: (BuildContext context, GoRouterState state) {
               final slug = state.pathParameters['slug'];
 
@@ -143,18 +143,18 @@ class AppRouter {
       ),
       // Endereços antigos em inglês, mantidos para não quebrar links já compartilhados.
       GoRoute(
-        path: '/manifest',
+        path: AppRoutes.legacyManifest,
         redirect: (context, state) => AppRoutes.manifesto,
       ),
       GoRoute(
-        path: '/posts/:area/:category',
+        path: AppRoutes.legacyCategoryPattern,
         redirect: (context, state) => AppRoutes.category(
           state.pathParameters['area']!,
           state.pathParameters['category']!,
         ),
       ),
       GoRoute(
-        path: '/posts/:area/:category/:id',
+        path: AppRoutes.legacyPostPattern,
         redirect: (context, state) => AppRoutes.post(
           state.pathParameters['area']!,
           state.pathParameters['category']!,
@@ -162,20 +162,20 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/admin',
+        path: AppRoutes.admin,
         builder: (BuildContext context, GoRouterState state) {
           return const SigninPage();
         },
       ),
       GoRoute(
-        path: '/admin/painel',
-        redirect: (context, state) => '/admin/painel/categorias',
+        path: AppRoutes.panel,
+        redirect: (context, state) => AppRoutes.panelTab(SidebarItem.categories.value),
       ),
       GoRoute(
-        path: '/admin/painel/:tab',
+        path: AppRoutes.panelTabPattern,
         builder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
-          final postType = PostType.fromString(state.uri.queryParameters['tipo']);
+          final postType = PostType.fromString(state.uri.queryParameters[AppRoutes.panelPostTypeParam]);
 
           final invalidRoute = tab == null;
           if (invalidRoute) return const PageNotFound();
@@ -184,7 +184,7 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/admin/painel/biblioteca/:area',
+        path: AppRoutes.panelLibraryAreaPattern,
         builder: (BuildContext context, GoRouterState state) {
           final area = DocumentArea.fromRouteKey(state.pathParameters['area']);
 

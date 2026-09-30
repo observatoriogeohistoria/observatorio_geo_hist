@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/member_avatar.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -25,7 +26,7 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
 
   bool get _isLink => _member.id != null && (_member.description?.trim().isNotEmpty ?? false);
 
-  String get _path => '/membro/${_member.id}';
+  String get _path => AppRoutes.member(_member.id!);
 
   void _open() => GoRouter.of(context).go(_path);
 

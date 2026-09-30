@@ -8,6 +8,7 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.d
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
@@ -44,7 +45,7 @@ class _SigninPageState extends State<SigninPage> {
     _reactions = [
       reaction((_) => _authStore.user, (UserModel? user) {
         if (user != null) {
-          GoRouter.of(context).go('/admin/painel');
+          GoRouter.of(context).go(AppRoutes.panel);
         }
       }),
       reaction((_) => _authStore.state, (AuthState state) {
