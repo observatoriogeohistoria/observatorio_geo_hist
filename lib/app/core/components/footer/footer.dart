@@ -99,17 +99,9 @@ class Footer extends StatelessWidget {
               SizedBox(height: spacing.s40),
               Divider(height: 1, thickness: 1, color: colors.footerLine),
               SizedBox(height: spacing.s20),
-              Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                spacing: spacing.s12,
-                runSpacing: spacing.s8,
-                children: [
-                  Text(
-                    '© ${DateTime.now().year} Observatório do Ensino de História e Geografia',
-                    style: bottomStyle,
-                  ),
-                  Text(AppStrings.footerLicense, style: bottomStyle),
-                ],
+              Text(
+                '© ${DateTime.now().year} Observatório do Ensino de História e Geografia',
+                style: bottomStyle,
               ),
             ],
           ),

@@ -45,6 +45,13 @@ Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP
 - **Indexação**: o deploy de dev gera `robots.txt` com `Disallow: /`.
 - **Senha**: o dev fica atrás de senha (`.htpasswd`, pelo cPanel).
 - **`.htaccess`**: o app usa `usePathUrlStrategy`, então o servidor reescreve rotas desconhecidas para `index.html`. O `.htaccess` de cada ambiente (com a senha, no dev) fica só no servidor: o deploy apaga apenas arquivos que ele mesmo enviou.
+- **Cache**: os arquivos do Flutter mantêm o mesmo nome a cada build (`main.dart.js`, `assets/fonts/MaterialIcons-Regular.otf`...). Sem `Cache-Control`, o navegador reaproveita versões antigas por conta própria, e aparecem, por exemplo, ícones sumidos (fonte de ícones antiga com código novo). O `.htaccess` de cada ambiente deve mandar revalidar sempre (o servidor responde 304 quando nada mudou):
+
+  ```apache
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-cache"
+  </IfModule>
+  ```
 - **Firebase**: os dois ambientes usam o projeto `observatorio-geo-hist`. O painel admin no dev altera dados reais.
 
 ## Operação
