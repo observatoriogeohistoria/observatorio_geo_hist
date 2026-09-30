@@ -6,10 +6,23 @@ part of '../app_theme.dart';
 //
 // | Estilo   | Família             | Peso | Altura | Espaçamento | Origem no protótipo        |
 // |----------|---------------------|------|--------|-------------|----------------------------|
+// | display  | Bricolage Grotesque | 800  | 1,12   | -0,035 em   | `.hero h1`                 |
 // | h1       | Bricolage Grotesque | 800  | 1,12   | -0,03 em    | `.page-head h1`            |
 // | h2       | Bricolage Grotesque | 700  | 1,12   | -0,02 em    | `.section-head h2`         |
-// | h3       | Bricolage Grotesque | 700  | 1,20   | -0,01 em    | `.area b`, `.feat h3`      |
+// | h3       | Bricolage Grotesque | 700  | 1,20   | -0,01 em    | `.area b`                  |
+// | destaque | Bricolage Grotesque | 700  | 1,12   | -0,02 em    | `.feat.big h3`             |
+// | destaque menor | Bricolage     | 700  | 1,20   | -0,01 em    | `.feat h3`                 |
+// | título em colunas | Bricolage | 700  | 1,12   | -0,02 em    | `.split h2`                |
+// | item de lista | Bricolage      | 700  | 1,30   | 0           | `.for b`                   |
+// | legenda de vídeo | Bricolage   | 600  | 1,20   | 0           | `.video-cap`               |
+// | nome de membro | Bricolage     | 700  | 1,30   | 0           | `.member b`                |
+// | chamada  | Bricolage Grotesque | 700  | 1,12   | -0,02 em    | `.cta h2`                  |
+// | iniciais | Bricolage Grotesque | 700  | 1,00   | 0           | `.avatar`                  |
+// | função de membro | Figtree     | 400  | 1,45   | 0           | `.member span`             |
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
+// | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
+// | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
+// | selo     | Figtree             | 600  | 1,35   | 0           | `.fact`                    |
 // | padrão   | Figtree             | 400  | 1,55   | 0           | `body`                     |
 // | pequeno  | Figtree             | 400  | 1,50   | 0           | `.meta`, `.area span`      |
 // | rótulo   | Figtree             | 700  | 1,40   | 0,08 em     | `.eyebrow`, `.tag`         |
@@ -78,6 +91,14 @@ class AppTextStyles {
     );
   }
 
+  /// Título de destaque (hero da Home). Valores da spec 004.
+  TextStyle get display => _display(
+        size: _size(mobile: 35, tablet: 54, desktop: 64),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.035,
+      );
+
   /// Título de página.
   TextStyle get h1 => _display(
         size: _size(mobile: 32, tablet: 40, desktop: 52),
@@ -102,11 +123,105 @@ class AppTextStyles {
         letterSpacingEm: -0.01,
       );
 
+  /// Título do destaque principal da Home (`.feat.big h3`). Valores da spec 005.
+  TextStyle get featureTitle => _display(
+        size: _size(mobile: 24, tablet: 32, desktop: 35),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  /// Título dos destaques menores da Home (`.feat h3`). Valores da spec 005.
+  TextStyle get featureTitleSmall => _display(
+        size: _size(mobile: 18, tablet: 22, desktop: 24),
+        weight: FontWeight.w700,
+        height: 1.2,
+        letterSpacingEm: -0.01,
+      );
+
+  /// Título das seções em duas colunas da Home, como Quem somos (`.split h2`).
+  /// Valores da spec 006.
+  TextStyle get splitTitle => _display(
+        size: _size(mobile: 27, tablet: 36, desktop: 40),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  /// Nome de item em lista, como os públicos de Quem somos (`.for b`). Spec 006.
+  TextStyle get listTitle => _display(
+        size: _size(mobile: 18, tablet: 18, desktop: 18),
+        weight: FontWeight.w700,
+        height: 1.3,
+        letterSpacingEm: 0,
+      );
+
+  /// Legenda sobre a capa do vídeo da Home (`.video-cap`). Spec 006.
+  TextStyle get videoCaption => _display(
+        size: _size(mobile: 18, tablet: 24, desktop: 26),
+        weight: FontWeight.w600,
+        height: 1.2,
+        letterSpacingEm: 0,
+      );
+
+  /// Nome de membro da equipe (`.member b`). Spec 008.
+  TextStyle get memberName => _display(
+        size: _size(mobile: 17, tablet: 17, desktop: 17),
+        weight: FontWeight.w700,
+        height: 1.3,
+        letterSpacingEm: 0,
+      );
+
+  /// Iniciais no círculo de membro sem foto (`.avatar`). Spec 008.
+  TextStyle get memberInitials => _display(
+        size: _size(mobile: 24, tablet: 24, desktop: 24),
+        weight: FontWeight.w700,
+        height: 1,
+        letterSpacingEm: 0,
+      );
+
+  /// Função de membro da equipe (`.member span`). Spec 008.
+  TextStyle get memberRole => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w400,
+        height: 1.45,
+      );
+
+  /// Título da chamada para contato no fim da Home (`.cta h2`). Spec 009.
+  TextStyle get ctaTitle => _display(
+        size: _size(mobile: 24, tablet: 32, desktop: 35),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
   /// Texto de leitura (artigos).
   TextStyle get reading => _body(
         size: _size(mobile: 17, tablet: 18, desktop: 18),
         weight: FontWeight.w400,
         height: 1.75,
+      );
+
+  /// Texto de apoio abaixo de títulos grandes (hero). Valores da spec 004.
+  TextStyle get lead => _body(
+        size: _size(mobile: 17, tablet: 20, desktop: 20),
+        weight: FontWeight.w400,
+        height: 1.55,
+      );
+
+  /// Texto de apoio de uma seção, como a missão em Quem somos (`.lead` com
+  /// `font-size: 1.1rem`). Spec 006.
+  TextStyle get sectionLead => _body(
+        size: _size(mobile: 17, tablet: 18, desktop: 18),
+        weight: FontWeight.w400,
+        height: 1.55,
+      );
+
+  /// Texto de selo, como o marco de Nossa história (`.fact`). Spec 007.
+  TextStyle get badge => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w600,
+        height: 1.35,
       );
 
   /// Texto padrão.

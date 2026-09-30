@@ -6,6 +6,7 @@ import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/document/library_document_content.dart';
@@ -50,7 +51,7 @@ class _LibraryDocumentDetailedPageState extends State<LibraryDocumentDetailedPag
                 child: TextButton.icon(
                   onPressed: () {
                     final router = GoRouter.of(context);
-                    router.canPop() ? router.pop() : router.go('/biblioteca');
+                    router.canPop() ? router.pop() : router.go(AppRoutes.library);
                   },
                   icon: const Icon(Icons.arrow_back),
                   label: const Text('Voltar'),

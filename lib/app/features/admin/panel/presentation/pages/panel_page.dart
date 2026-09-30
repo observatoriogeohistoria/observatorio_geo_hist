@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
@@ -58,7 +59,7 @@ class _PanelPageState extends State<PanelPage> {
         (_) => _authStore.user,
         (UserModel? user) {
           if (user == null) {
-            GoRouter.of(context).go('/admin');
+            GoRouter.of(context).go(AppRoutes.admin);
           }
         },
       ),
@@ -66,7 +67,7 @@ class _PanelPageState extends State<PanelPage> {
         (_) => _authStore.state,
         (AuthState state) {
           if (state.logoutState is LogoutStateSuccess) {
-            GoRouter.of(context).go('/admin');
+            GoRouter.of(context).go(AppRoutes.admin);
           }
 
           if (state.logoutState is LogoutStateError) {

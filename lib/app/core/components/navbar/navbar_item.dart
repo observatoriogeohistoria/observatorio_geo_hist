@@ -45,6 +45,8 @@ class _NavbarItemState extends State<NavbarItem> {
       selected: widget.isActive,
       expanded: widget.hasMenu ? widget.isExpanded : null,
       label: widget.label,
+      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o item.
+      onTap: widget.onTap,
       excludeSemantics: true,
       child: AppFocusRing(
         borderRadius: radius,

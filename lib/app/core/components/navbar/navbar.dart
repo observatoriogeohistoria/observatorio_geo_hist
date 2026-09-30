@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/navbar_mobile_menu.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
@@ -16,7 +15,6 @@ import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Navbar fixa do site: marca e, em telas largas (≥ 1024), os itens em linha;
@@ -32,11 +30,9 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   late final _fetchCategoriesStore = AppSetup.getIt.get<FetchCategoriesStore>();
-  late final _fetchHighlightsStore = AppSetup.getIt.get<FetchHighlightsStore>();
 
   final _menuButtonFocus = FocusNode(debugLabel: 'Navbar menu button');
 
-  List<ReactionDisposer> _reactions = [];
   bool _isMenuOpen = false;
 
   @override
@@ -44,22 +40,10 @@ class _NavbarState extends State<Navbar> {
     super.initState();
 
     _fetchCategoriesStore.fetchCategories();
-
-    _reactions = [
-      reaction((_) => _fetchCategoriesStore.categories, (_) {
-        _fetchHighlightsStore.fetchHighlights([
-          ...(_fetchCategoriesStore.categories.geography),
-          ...(_fetchCategoriesStore.categories.history),
-        ]);
-      }),
-    ];
   }
 
   @override
   void dispose() {
-    for (var reaction in _reactions) {
-      reaction.reaction.dispose();
-    }
     _menuButtonFocus.dispose();
     super.dispose();
   }
@@ -191,6 +175,8 @@ class _MenuButton extends StatelessWidget {
         button: true,
         expanded: isOpen,
         label: label,
+        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o menu.
+        onTap: onPressed,
         excludeSemantics: true,
         child: AppFocusRing(
           borderRadius: radius,

@@ -19,6 +19,11 @@ abstract class FetchHighlightsStoreBase with Store {
   @observable
   FetchHighlightsState state = FetchHighlightsInitialState();
 
+  /// Se a última busca foi feita sem categorias (a busca delas ainda não tinha
+  /// chegado ou falhou). Nesse caso os posts vêm sem a categoria e vale buscar
+  /// de novo quando as categorias chegarem.
+  bool fetchedWithoutCategories = false;
+
   @observable
   bool highlightsDialogWasShown = false;
 
@@ -28,6 +33,7 @@ abstract class FetchHighlightsStoreBase with Store {
   @action
   Future<void> fetchHighlights(List<CategoryModel> categories) async {
     state = FetchHighlightsLoadingState();
+    fetchedWithoutCategories = categories.isEmpty;
 
     final result = await _repository.fetchHighlights(categories);
 

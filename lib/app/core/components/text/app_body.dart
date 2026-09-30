@@ -48,21 +48,15 @@ class AppBody extends StatelessWidget {
         break;
     }
 
-    return notSelectable
-        ? Text(
-            text,
-            textAlign: textAlign,
-            softWrap: true,
-            style: textStyle.copyWith(
-              color: color,
-            ),
-          )
-        : SelectableText(
-            text,
-            textAlign: textAlign,
-            style: textStyle.copyWith(
-              color: color,
-            ),
-          );
+    final content = Text(
+      text,
+      textAlign: textAlign,
+      softWrap: true,
+      style: textStyle.copyWith(
+        color: color,
+      ),
+    );
+
+    return notSelectable ? SelectionContainer.disabled(child: content) : content;
   }
 }

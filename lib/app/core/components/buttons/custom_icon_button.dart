@@ -28,6 +28,8 @@ class CustomIconButton extends StatelessWidget {
       child: Semantics(
         button: true,
         label: tooltip,
+        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o botão.
+        onTap: onTap,
         excludeSemantics: true,
         child: AppFocusRing(
           borderRadius: radius,

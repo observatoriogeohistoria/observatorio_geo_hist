@@ -25,6 +25,22 @@ mixin _$FetchTeamStore on FetchTeamStoreBase, Store {
     });
   }
 
+  late final _$stateAtom =
+      Atom(name: 'FetchTeamStoreBase.state', context: context);
+
+  @override
+  FetchTeamState get state {
+    _$stateAtom.reportRead();
+    return super.state;
+  }
+
+  @override
+  set state(FetchTeamState value) {
+    _$stateAtom.reportWrite(value, super.state, () {
+      super.state = value;
+    });
+  }
+
   late final _$fetchTeamAsyncAction =
       AsyncAction('FetchTeamStoreBase.fetchTeam', context: context);
 
@@ -36,7 +52,8 @@ mixin _$FetchTeamStore on FetchTeamStoreBase, Store {
   @override
   String toString() {
     return '''
-team: ${team}
+team: ${team},
+state: ${state}
     ''';
   }
 }

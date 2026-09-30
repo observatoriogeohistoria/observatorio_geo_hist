@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 
 enum SidebarItem {
   users,
@@ -14,15 +15,15 @@ enum SidebarItem {
       case SidebarItem.users:
         return 'usuarios';
       case SidebarItem.media:
-        return 'mídias';
+        return 'midias';
       case SidebarItem.categories:
         return 'categorias';
       case SidebarItem.posts:
-        return 'posts';
+        return AppRoutes.publicationsSegment;
       case SidebarItem.team:
         return 'equipe';
       case SidebarItem.library:
-        return 'biblioteca';
+        return AppRoutes.librarySegment;
     }
   }
 
@@ -84,15 +85,15 @@ enum SidebarItem {
     switch (value) {
       case 'usuarios':
         return SidebarItem.users;
-      case 'mídias':
+      case 'midias':
         return SidebarItem.media;
       case 'categorias':
         return SidebarItem.categories;
-      case 'posts':
+      case AppRoutes.publicationsSegment:
         return SidebarItem.posts;
       case 'equipe':
         return SidebarItem.team;
-      case 'biblioteca':
+      case AppRoutes.librarySegment:
         return SidebarItem.library;
       default:
         return null;

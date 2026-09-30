@@ -64,6 +64,9 @@ class ComponentSizes {
   final double buttonTextMedium = 16.0;
   final double buttonTextBig = 18.0;
 
+  /// Ícone dos botões em relação ao texto (`.i` do protótipo: 1,15 em).
+  final double buttonIconScale = 1.15;
+
   /// Logo: tamanho da marca e dos textos.
   final double logoMark = 34.0;
   final double logoName = 19.0;
@@ -90,6 +93,318 @@ class ComponentSizes {
 
   /// Duração das animações de menu (zero com movimento reduzido).
   final Duration menuAnimation = const Duration(milliseconds: 160);
+
+  /// Link com seta (`.link-arrow`): vão entre o texto e a seta, em repouso e
+  /// no hover, e duração da transição (zero com movimento reduzido).
+  final double arrowLinkGap = 6.0;
+  final double arrowLinkGapHover = 9.0;
+  final Duration arrowLinkAnimation = const Duration(milliseconds: 150);
+
+  // Hero da Home (spec 004). Origem: `.hero`, `.hero h1`, `.lead` e `.area`
+  // do protótipo; os `clamp()` do CSS viraram um valor fixo por faixa.
+
+  /// Respiro acima do conteúdo do hero (`padding-block` inicial).
+  double heroPaddingTop(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 48, 80, 104);
+
+  /// Respiro abaixo dos atalhos (`padding-block` final).
+  double heroPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 48, 64);
+
+  /// Vão entre os botões e os atalhos (`.areas` `margin-top`).
+  double heroShortcutsGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 36, 48, 60);
+
+  /// Vão entre o rótulo e o título (`margin-top: 14px`).
+  final double heroTitleGap = 14.0;
+
+  /// Vão entre o texto de apoio e os botões (`.hero-actions` `margin-top: 30px`).
+  final double heroActionsGap = 30.0;
+
+  /// Largura máxima do título, em múltiplos do tamanho da fonte. O protótipo usa
+  /// `max-width: 15ch` com `text-wrap: balance` (três linhas equilibradas); sem
+  /// `balance` no Flutter, 8,4 em reproduz a mesma quebra.
+  final double heroTitleMaxWidthEm = 8.4;
+
+  /// Largura máxima do texto de apoio (60 caracteres a 20 px).
+  final double heroLeadMaxWidth = 770.0;
+
+  /// A partir desta ampliação do texto (1,3 = 130%), os atalhos do hero ficam
+  /// em uma coluna em qualquer largura, para os títulos não quebrarem no meio.
+  final double heroShortcutsStackTextScale = 1.3;
+
+  /// Quadro laranja suave do ícone dos atalhos e o ícone dentro dele.
+  final double shortcutIconBox = 46.0;
+  final double shortcutIcon = 22.0;
+
+  /// Subida do cartão de atalho no hover.
+  final double shortcutHoverLift = 2.0;
+
+  /// Duração das transições do cartão de atalho (zero com movimento reduzido).
+  final Duration shortcutAnimation = const Duration(milliseconds: 150);
+
+  /// Largura máxima da janela de categorias de uma área.
+  final double categoriesDialogMaxWidth = 420.0;
+
+  /// Anéis do fundo do hero: opacidade da cor, passo entre anéis e fração da
+  /// altura em que o desenho começa a se apagar em direção à base.
+  final double heroRingAccentOpacity = 0.11;
+  final double heroRingInkOpacity = 0.06;
+  final double heroRingAccentStep = 27.0;
+  final double heroRingInkStep = 35.0;
+  final double heroRingFadeStart = 0.55;
+
+  /// Centro de cada conjunto de anéis, em fração da largura e da altura
+  /// (`circle at 86% 18%` e `circle at 8% 110%`).
+  final Offset heroRingAccentCenter = const Offset(0.86, 0.18);
+  final Offset heroRingInkCenter = const Offset(0.08, 1.10);
+
+  // Seções da Home (spec 005 em diante). Origem: `.section` e `.section-head`.
+
+  /// Respiro vertical de uma seção (`.section` `padding-block`).
+  double sectionPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 48, 72, 96);
+
+  /// Vão entre o título da seção e o conteúdo (`.section-head` `margin-bottom`).
+  final double sectionHeadGap = 28.0;
+
+  // Destaques da Home (spec 005). Origem: `.featured` e `.feat` do protótipo.
+
+  /// Altura total da grade de destaques no tablet e no desktop (`.featured`
+  /// `min-height: 440px`; menor no tablet). No celular os cartões ficam em
+  /// coluna, com as alturas abaixo, e este valor não é usado.
+  double featuredGridHeight(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 0, 400, 440);
+
+  /// Alturas dos cartões no celular, em coluna (`.feat.big` 340 px; menores 220 px).
+  final double featuredMainHeightMobile = 340.0;
+  final double featuredSmallHeightMobile = 220.0;
+
+  /// Vão entre os cartões (`.featured` `gap`).
+  final double featuredGap = 16.0;
+
+  /// Proporção das colunas (`1.6fr 1fr`), em fatores de `flex`.
+  final int featuredMainFlex = 16;
+  final int featuredSideFlex = 10;
+
+  /// Preenchimento interno do texto (`.feat .body` `padding`; menor no celular).
+  double featuredTextPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 24);
+
+  /// Vão entre rótulo, título e data (`.feat .body` `gap`).
+  final double featuredTextGap = 8.0;
+
+  /// Largura máxima do título do destaque principal, em múltiplos do tamanho
+  /// da fonte (`max-width: 22ch`; na Bricolage Grotesque o "0" mede cerca de
+  /// 0,55 em, então 22 caracteres ≈ 12 em).
+  final double featuredTitleMaxWidthEm = 12.0;
+
+  /// Linhas máximas do título antes das reticências.
+  final int featuredTitleMaxLines = 3;
+
+  /// Opacidade do véu escuro atrás do texto: na base e no topo do bloco de
+  /// texto. Garante 4,5:1 mesmo com foto branca por trás.
+  final double featuredScrimBottomOpacity = 0.88;
+  final double featuredScrimTextOpacity = 0.72;
+
+  /// Altura da faixa em que o véu esmaece até sumir, acima do texto.
+  final double featuredScrimFade = 72.0;
+
+  /// Ícone de "sem imagem" no canto do cartão.
+  final double featuredPlaceholderIcon = 28.0;
+
+  /// Duração da entrada da foto depois de carregada (zero com movimento reduzido).
+  final Duration featuredImageFade = const Duration(milliseconds: 200);
+
+  // Quem somos da Home (spec 006). Origem: `.split`, `.for-list` e `.for`.
+
+  /// Vão entre a apresentação e os públicos (`.split` `gap`; em coluna no
+  /// celular e no tablet, lado a lado no desktop).
+  double whoWeAreGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 44, 72);
+
+  /// Proporção das colunas no desktop (`1fr 1.15fr`), em fatores de `flex`.
+  final int whoWeAreIntroFlex = 20;
+  final int whoWeAreAudienceFlex = 23;
+
+  /// A partir desta ampliação do texto (1,3 = 130%), Quem somos fica em uma
+  /// coluna também no desktop, para o título não quebrar palavras ao meio.
+  final double whoWeAreStackTextScale = 1.3;
+
+  /// Vãos da apresentação: rótulo → título, título → texto e texto → link
+  /// (`.split h2` `margin-block: 10px 16px`; link com `margin-top: 22px`).
+  final double whoWeAreTitleGap = 10.0;
+  final double whoWeAreTextGap = 16.0;
+  final double whoWeAreLinkGap = 22.0;
+
+  /// Largura máxima do texto de missão (60 caracteres a 18 px).
+  final double whoWeAreTextMaxWidth = 560.0;
+
+  /// Lista de públicos: distância do topo (`.for-list` `margin-top`), vão
+  /// entre itens (`gap`), preenchimento vertical de cada item (`.for`
+  /// `padding`), vão entre ícone e texto e entre nome e descrição (`.for p`).
+  final double audienceListTop = 8.0;
+  final double audienceItemGap = 12.0;
+  final double audienceItemPadding = 18.0;
+  final double audienceIconGap = 16.0;
+  final double audienceTextGap = 2.0;
+
+  /// Círculo laranja suave do ícone do público e o ícone dentro dele.
+  final double audienceIconBox = 44.0;
+  final double audienceIcon = 20.0;
+
+  // Vídeo da Home (spec 006). Origem: `.video`, `.video-cap` e `.play`.
+
+  /// Proporção do quadro (largura ÷ altura): 16 : 10 no celular, 16 : 8 no
+  /// tablet e no desktop.
+  double videoAspectRatio(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 1.6, 2.0, 2.0);
+
+  /// Altura máxima do quadro (`max-height: 460px`).
+  final double videoMaxHeight = 460.0;
+
+  /// Preenchimento da legenda: laterais e base (`left/right: 24px`,
+  /// `bottom: 20px`; menor no celular).
+  double videoCaptionPaddingHorizontal(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 24);
+  double videoCaptionPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 20, 20);
+
+  /// Linhas máximas da legenda antes das reticências (texto ampliado).
+  final int videoCaptionMaxLines = 2;
+
+  /// Véu escuro atrás da legenda e faixa em que ele esmaece acima dela.
+  /// Branco sobre 0,72 de véu com capa branca dá cerca de 7,6:1.
+  final double videoCaptionScrimOpacity = 0.72;
+  final double videoCaptionScrimFade = 72.0;
+
+  /// Botão "Assistir": círculo laranja, ícone, preenchimento (`padding:
+  /// 10px 22px 10px 10px`), vão entre círculo e texto, crescimento no hover
+  /// e duração das transições (zero com movimento reduzido).
+  final double videoPlayCircle = 46.0;
+  final double videoPlayIcon = 26.0;
+  final double videoPlayPadding = 10.0;
+  final double videoPlayPaddingEnd = 22.0;
+  final double videoPlayGap = 14.0;
+  final double videoPlayHoverScale = 1.03;
+  final Duration videoAnimation = const Duration(milliseconds: 150);
+
+  /// Indicador de "Carregando vídeo" dentro do círculo.
+  final double videoLoadingIndicator = 22.0;
+
+  /// Anéis da capa gerada (`.video::after`): passo, opacidade do branco e
+  /// centro em fração da largura e da altura (`circle at 75% 35%`).
+  final double videoRingStep = 31.0;
+  final double videoRingOpacity = 0.08;
+  final Offset videoRingCenter = const Offset(0.75, 0.35);
+
+  /// Ângulo do degradê da capa gerada (`linear-gradient(150deg, …)`) e posição
+  /// da cor do meio (`60%`).
+  final double videoCoverAngleDegrees = 150.0;
+  final double videoCoverMidStop = 0.6;
+
+  /// Véu atrás dos controles do player: opacidade na base e altura. Ícones
+  /// brancos ficam acima de 3:1 mesmo sobre um quadro branco.
+  final double videoControlsScrimOpacity = 0.72;
+  final double videoControlsScrimHeight = 72.0;
+
+  /// Fração da altura do véu dos controles em que ele chega à opacidade cheia.
+  final double videoControlsScrimSolidFrom = 0.4;
+
+  /// Afastamento dos controles do player em relação à borda esquerda e à base
+  /// do quadro, para o contorno de foco não ser cortado pelos cantos.
+  final double videoControlsInset = 8.0;
+
+  /// Largura máxima da caixa de erro sobre a capa.
+  final double videoErrorMaxWidth = 360.0;
+
+  // Nossa história (spec 007). Origem: `.narrow`, `.fact`, `.prose` e
+  // `.page-head .wrap` do protótipo.
+
+  /// Largura máxima da coluna do resumo na Home (`.narrow`).
+  final double ourHistorySummaryMaxWidth = 720.0;
+
+  /// Vãos do resumo: rótulo → título, título → selo, selo → texto e texto → link.
+  final double ourHistoryTitleGap = 10.0;
+  final double ourHistoryBadgeGap = 20.0;
+  final double ourHistoryTextGap = 22.0;
+  final double ourHistoryLinkGap = 22.0;
+
+  /// Selo do marco (`.fact`): preenchimento vertical e lateral, vão entre
+  /// ícone e texto e tamanho do ícone.
+  final double milestoneBadgePaddingVertical = 8.0;
+  final double milestoneBadgePaddingHorizontal = 16.0;
+  final double milestoneBadgeIconGap = 10.0;
+  final double milestoneBadgeIcon = 16.0;
+
+  /// Coluna de leitura das páginas de texto (`.prose` `max-width`) e vão entre
+  /// parágrafos (1,1 em a 18 px).
+  final double readingMaxWidth = 680.0;
+  final double readingParagraphGap = 20.0;
+
+  // Equipe na Home (spec 008). Origem: `.team`, `.member` e `.avatar` do protótipo.
+
+  /// Largura mínima de coluna da grade (`minmax(190px, 1fr)`), antes da ampliação do texto.
+  final double teamColumnMinWidth = 190.0;
+
+  /// Vão entre colunas e entre linhas da grade (`gap: 28px 20px`).
+  final double teamColumnGap = 20.0;
+  final double teamRowGap = 28.0;
+
+  /// Diâmetro da foto do membro e vãos foto → nome e nome → função.
+  final double memberAvatar = 76.0;
+  final double memberAvatarGap = 10.0;
+  final double memberTextGap = 4.0;
+
+  /// Aumento da foto no hover de membro clicável e duração (`transition: transform .15s`).
+  final double memberAvatarHoverScale = 1.05;
+  final Duration memberAnimation = const Duration(milliseconds: 150);
+
+  /// Barras do esqueleto do membro: altura e larguras (fração da coluna) do nome e da função.
+  final double memberSkeletonBarHeight = 14.0;
+  final double memberSkeletonNameWidth = 0.7;
+  final double memberSkeletonRoleWidth = 0.5;
+
+  // Realização e apoio (spec 009). Origem: `.logos`, `.logos.small` e `.logo`.
+
+  /// Largura mínima de coluna da grade de logos (`minmax(150px, 1fr)`) e da
+  /// variante menor do post (`.logos.small`, 130 px).
+  final double partnerColumnMinWidth = 150.0;
+  final double partnerColumnMinWidthSmall = 130.0;
+
+  /// Vão entre logos (`gap`) e respiro da área de cada logo (`.logo` `padding`).
+  final double partnerGap = 12.0;
+  final double partnerPadding = 12.0;
+
+  /// Largura máxima do logo e proporção dos arquivos (280 × 186 px).
+  final double partnerLogoMaxWidth = 150.0;
+  final double partnerLogoAspectRatio = 280 / 186;
+
+  /// Opacidade do logo em repouso, subida e crescimento no hover/foco e duração.
+  final double partnerRestOpacity = 0.55;
+  final double partnerHoverLift = 3.0;
+  final double partnerHoverScale = 1.05;
+  final Duration partnerAnimation = const Duration(milliseconds: 200);
+
+  // Chamada para contato (spec 009). Origem: `.cta`, `.cta h2` e `.cta p`.
+
+  /// Respiro interno do quadro (`clamp(28px, 6cqi, 56px)`).
+  double ctaPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 46, 56);
+
+  /// Vãos título → texto (`.cta p` `margin-top`) e textos → botão (`gap`).
+  final double ctaTextGap = 8.0;
+  final double ctaButtonGap = 24.0;
+
+  /// Largura máxima do título em múltiplos do tamanho da fonte e do texto,
+  /// medidas no protótipo (`max-width: 22ch` a 700 dá 14,3 em; `52ch` a 16 px
+  /// dá 533 px).
+  final double ctaTitleMaxWidthEm = 14.3;
+  final double ctaTextMaxWidth = 533.0;
+
+  /// A partir desta ampliação do texto (1,3 = 130%), o botão fica abaixo do
+  /// texto também no desktop.
+  final double ctaStackTextScale = 1.3;
+
+  /// Respiro acima e abaixo do título no cabeçalho de página (`.page-head .wrap`).
+  double pageHeadPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 40, 56);
+
+  double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
+    return switch (breakpoint) {
+      Breakpoint.mobile => mobile,
+      Breakpoint.tablet => tablet,
+      Breakpoint.desktop => desktop,
+    };
+  }
 }
 
 /// Escala de espaçamento em passos de 4 px.
@@ -146,6 +461,13 @@ class ShadowStyle {
           blurRadius: 36,
           offset: Offset(0, 14),
         ),
+      ];
+
+  /// [shadows] com cor transparente, para o estado sem sombra de uma animação.
+  /// Animar até uma lista vazia encolhe a sombra com a cor cheia, e ela
+  /// aparece nítida por um instante sob um fundo que também esmaece.
+  List<BoxShadow> hidden(List<BoxShadow> shadows) => [
+        for (final shadow in shadows) shadow.copyWith(color: shadow.color.withValues(alpha: 0)),
       ];
 }
 

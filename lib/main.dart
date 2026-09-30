@@ -4,6 +4,7 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get_it/get_it.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
 import 'package:observatorio_geo_hist/app/app_widget.dart';
+import 'package:observatorio_geo_hist/app/core/utils/browser/semantic_links.dart';
 import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 
 final GetIt locator = GetIt.instance;
@@ -18,5 +19,6 @@ Future<void> main() async {
   AppSetup.setup();
 
   usePathUrlStrategy();
+  preventSemanticLinkNavigation();
   runApp(const AppWidget());
 }

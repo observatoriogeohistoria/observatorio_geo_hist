@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
+import 'package:observatorio_geo_hist/app/core/components/partners/partner_logo_grid.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/enums/partners_images.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
@@ -16,16 +14,6 @@ class Support extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = ScreenUtils.isMobile(context);
-    bool isTablet = ScreenUtils.isTablet(context);
-
-    const images = [
-      PartnersImages.ufu,
-      PartnersImages.fapemig,
-      PartnersImages.cnpq,
-      PartnersImages.capes,
-    ];
-
     return Container(
       color: AppTheme.colors.lighterGray,
       padding: EdgeInsets.symmetric(
@@ -53,27 +41,7 @@ class Support extends StatelessWidget {
             color: AppTheme.colors.orange,
           ),
           SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: AppTheme.dimensions.space.medium.horizontalSpacing,
-            runSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
-            children: [
-              AlignedGridView.count(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                crossAxisCount: isMobile ? 2 : (isTablet ? 3 : 4),
-                crossAxisSpacing: AppTheme.dimensions.space.medium.horizontalSpacing,
-                mainAxisSpacing: AppTheme.dimensions.space.medium.verticalSpacing,
-                itemCount: images.length,
-                itemBuilder: (context, index) {
-                  return AppCard(
-                    padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
-                    child: Image.asset(images[index].path),
-                  );
-                },
-              ),
-            ],
-          ),
+          PartnerLogoGrid(minColumnWidth: AppTheme.dimensions.components.partnerColumnMinWidthSmall),
         ],
       ),
     );

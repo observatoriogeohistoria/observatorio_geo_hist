@@ -65,16 +65,17 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 
 | ID | Tela | Rota atual | Observações |
 |---|---|---|---|
-| T-01 | Manifesto | `/manifest` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original) |
-| T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição |
-| T-03 | Nossa história (completa) | não existe | Hoje o texto completo está na Home (`OurHistory`). A Home passa a mostrar só um resumo com link para esta página. **Precisa de rota nova** |
+| T-01 | Manifesto | `/manifesto` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original) |
+| T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição (id inexistente ou sem descrição já mostra o 404, sem busca em laço) |
+| T-03 | Nossa história (completa) | `/nossa-historia` | Criada na spec 007 como página provisória, com o texto completo que estava na Home. A Home mostra só o resumo. Redesenho na Fase 2 |
 | T-04 | Fale com a gente | `/contato` | Continua abrindo o programa de e-mail (`mailto:`). Novidades: validação dos campos e tela de confirmação com "Copiar mensagem" |
 | T-05 | Colabore | `/colaborar` | Continua existindo, acessada pelo cabeçalho da categoria |
 | T-06 | Biblioteca: lista por área | `/biblioteca/:area` | Filtros, resultados e paginação |
 | T-07 | Biblioteca: detalhe do documento | `/biblioteca/:area/documento/:slug` | Metadados e visualizador do documento |
-| T-08 | Tipos de post | `/posts/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos |
+| T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos |
 | T-09 | Busca | novo | **Ideia futura.** Desenhada no protótipo (aba "Busca (ideia)"), sem implementação planejada. Ver seção 9 |
 | T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento |
+| T-11 | Todas as publicações | `/publicacoes` (novo) | Mesma listagem da categoria (cards, busca, chips de tipo), sem o filtro de categoria, ordenada pela data de publicação e com paginação. Consulta `collectionGroup('category_posts')`; pode pedir índice novo no Firestore. Ao existir, entra o link "Ver todas as publicações" dos Destaques da Home (retirado na spec 005) |
 
 ---
 
@@ -106,14 +107,14 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 
 | # | Seção | Notas técnicas | Depende de |
 |---|---|---|---|
-| 1.1 | Hero e atalhos | Proposta de valor, dois botões, três atalhos (História, Geografia, Biblioteca) | 0.x |
-| 1.2 | Destaques | Três visíveis de uma vez (o primeiro em destaque). Tratar 0, 1, 2 e mais de 3 destaques. Degradê apenas sob o título. Sem carrossel automático | `FetchHighlightsStore` |
-| 1.3 | Quem somos | Missão e três públicos (professores, pesquisadores, estudantes). Substitui o bloco de tela cheia com foto | |
-| 1.4 | Vídeo | Capa com botão de reproduzir. Sem autoplay | `AppVideoPlayer` |
-| 1.5 | Nossa história (resumo) | Resumo com o marco da FAPEMIG e link para a página completa | T-03 (rota nova) |
-| 1.6 | Equipe | Grade com todos os membros. Só é clicável quando há descrição | `FetchTeamStore`, T-02 |
-| 1.7 | Realização e apoio | Logos reais com efeito de hover (P-03) | P-03 |
-| 1.8 | Chamada para contato | Bloco de chamada para `/contato` | |
+| 1.1 | Hero e atalhos → specs/004-hero-atalhos, concluído | Proposta de valor, dois botões, três atalhos (História, Geografia, Biblioteca) | 0.x |
+| 1.2 | Destaques → specs/005-destaques, concluído | Três visíveis de uma vez (o primeiro em destaque). Tratar 0, 1, 2 e mais de 3 destaques. Degradê apenas sob o título. Sem carrossel automático | `FetchHighlightsStore` |
+| 1.3 | Quem somos → specs/006-quem-somos-video, concluído | Missão e três públicos (professores, pesquisadores, estudantes). Substitui o bloco de tela cheia com foto | |
+| 1.4 | Vídeo → specs/006-quem-somos-video, concluído | Capa com botão de reproduzir. Sem autoplay | `AppVideoPlayer` |
+| 1.5 | Nossa história (resumo) → specs/007-resumo-nossa-historia, concluído | Resumo com o marco da FAPEMIG e link para a página completa | T-03 (rota nova) |
+| 1.6 | Equipe → specs/008-equipe, concluído | Grade com todos os membros. Só é clicável quando há descrição | `FetchTeamStore`, T-02 |
+| 1.7 | Realização e apoio → specs/009-apoio-contato, concluído | Logos reais com efeito de hover (P-03) | P-03 |
+| 1.8 | Chamada para contato → specs/009-apoio-contato, concluído | Bloco de chamada para `/contato` | |
 
 **Aceite:** a Home reproduz o protótipo em 390px, 768px e 1280px. Sem rolagem horizontal. Estados de carregamento (esqueleto) e de erro tratados. Sem `overflow` no console.
 
@@ -121,7 +122,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | Fase | Escopo | Motivo da posição |
 |---|---|---|
 | 2 | Leitura: layout-base do post (artigo primeiro), Manifesto, Nossa história, Pessoa da equipe | Compartilham o mesmo layout de leitura |
-| 3 | Listagem de categoria e cards de post | Maior volume de navegação |
+| 3 | Listagem de categoria, todas as publicações (T-11) e cards de post | Maior volume de navegação |
 | 4 | Biblioteca (índice, lista, detalhe, filtros) | Categorias e filtros já definidos |
 | 5 | Acabamento: Fale com a gente, Colabore, 404/erros e demais tipos de post | Antes ficava na fase 6 |
 | 6 | Reservada | Sem escopo definido |

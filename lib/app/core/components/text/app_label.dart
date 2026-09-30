@@ -52,22 +52,15 @@ class AppLabel extends StatelessWidget {
         break;
     }
 
-    return notSelectable
-        ? Text(
-            text,
-            textAlign: textAlign,
-            style: textStyle.copyWith(
-              decoration: decoration,
-              color: color,
-            ),
-          )
-        : SelectableText(
-            text,
-            textAlign: textAlign,
-            style: textStyle.copyWith(
-              decoration: decoration,
-              color: color,
-            ),
-          );
+    final content = Text(
+      text,
+      textAlign: textAlign,
+      style: textStyle.copyWith(
+        decoration: decoration,
+        color: color,
+      ),
+    );
+
+    return notSelectable ? SelectionContainer.disabled(child: content) : content;
   }
 }

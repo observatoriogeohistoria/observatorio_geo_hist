@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
@@ -120,14 +121,13 @@ class _SidebarState extends State<Sidebar> {
 
                                       final postType =
                                           (sidebarStore.selectedPostType ?? PostType.article).value;
-                                      GoRouter.of(context)
-                                          .go('/admin/painel/posts?postType=$postType');
+                                      GoRouter.of(context).go(AppRoutes.panelPosts(postType));
 
                                       return;
                                     }
 
                                     sidebarStore.selectItem(item);
-                                    GoRouter.of(context).go('/admin/painel/${item.value}');
+                                    GoRouter.of(context).go(AppRoutes.panelTab(item.value));
 
                                     if (isMobile) GoRouter.of(context).pop();
                                   },
@@ -135,8 +135,7 @@ class _SidebarState extends State<Sidebar> {
                                     if (!isPosts) return;
 
                                     sidebarStore.selectPostType(subItem);
-                                    GoRouter.of(context)
-                                        .go('/admin/painel/posts?postType=${subItem.value}');
+                                    GoRouter.of(context).go(AppRoutes.panelPosts(subItem.value));
 
                                     if (isMobile) GoRouter.of(context).pop();
                                   },

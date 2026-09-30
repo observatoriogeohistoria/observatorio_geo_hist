@@ -7,6 +7,7 @@ import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -64,7 +65,7 @@ class _PostCardState extends State<PostCard> {
         child: GestureDetector(
           onTap: () {
             GoRouter.of(context).go(
-                '/posts/${widget.category.areas.first.key}/${widget.category.key}/${widget.post.id}');
+                AppRoutes.post(widget.category.areas.first.key, widget.category.key, widget.post.id!));
           },
           child: Column(
             children: [
