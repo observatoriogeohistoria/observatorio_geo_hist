@@ -53,6 +53,7 @@ class _HighlightCardState extends State<HighlightCard> {
     return Semantics(
       link: true,
       label: _semanticLabel,
+      linkUrl: Uri.parse(highlightPath(_post)),
       // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o cartão.
       onTap: _open,
       excludeSemantics: true,

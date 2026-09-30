@@ -25,20 +25,20 @@ class Footer extends StatelessWidget {
 
     final columns = [
       const _BrandColumn(),
-      _LinksColumn(title: 'Explorar', links: [
-        _FooterLinkData('Sobre', (context) => context.go(AppRoutes.root)),
-        _FooterLinkData('Biblioteca', (context) => context.go(AppRoutes.library)),
+      const _LinksColumn(title: 'Explorar', links: [
+        _FooterLinkData('Sobre', AppRoutes.root),
+        _FooterLinkData('Biblioteca', AppRoutes.library),
       ]),
-      _LinksColumn(title: 'Institucional', links: [
-        _FooterLinkData('Manifesto', (context) => context.go('/manifest')),
-        _FooterLinkData('Nossa história', (context) => context.go(AppRoutes.ourHistory)),
-        _FooterLinkData('Equipe', (context) => context.go(AppRoutes.root)),
-        _FooterLinkData('Fale com a gente', (context) => context.go('/contato')),
+      const _LinksColumn(title: 'Institucional', links: [
+        _FooterLinkData('Manifesto', '/manifest'),
+        _FooterLinkData('Nossa história', AppRoutes.ourHistory),
+        _FooterLinkData('Equipe', AppRoutes.root),
+        _FooterLinkData('Fale com a gente', '/contato'),
       ]),
-      _LinksColumn(title: 'Contato', links: [
-        _FooterLinkData(AppStrings.email, (_) => openUrl(AppStrings.emailUrl, sameTab: true)),
-        _FooterLinkData(AppStrings.phoneOne, (_) => openUrl(AppStrings.phoneOneUrl, sameTab: true)),
-        _FooterLinkData(AppStrings.phoneTwo, (_) => openUrl(AppStrings.phoneTwoUrl, sameTab: true)),
+      const _LinksColumn(title: 'Contato', links: [
+        _FooterLinkData(AppStrings.email, AppStrings.emailUrl),
+        _FooterLinkData(AppStrings.phoneOne, AppStrings.phoneOneUrl),
+        _FooterLinkData(AppStrings.phoneTwo, AppStrings.phoneTwoUrl),
       ]),
     ];
 
@@ -146,10 +146,12 @@ class _BrandColumn extends StatelessWidget {
 }
 
 class _FooterLinkData {
-  const _FooterLinkData(this.label, this.onTap);
+  const _FooterLinkData(this.label, this.url);
 
   final String label;
-  final void Function(BuildContext context) onTap;
+
+  /// Rota do site ou endereço `mailto:`/`tel:`.
+  final String url;
 }
 
 class _LinksColumn extends StatelessWidget {
@@ -173,17 +175,17 @@ class _LinksColumn extends StatelessWidget {
           ),
         ),
         SizedBox(height: spacing.s12),
-        for (final link in links) _FooterLink(label: link.label, onTap: () => link.onTap(context)),
+        for (final link in links) _FooterLink(label: link.label, url: link.url),
       ],
     );
   }
 }
 
 class _FooterLink extends StatefulWidget {
-  const _FooterLink({required this.label, required this.onTap});
+  const _FooterLink({required this.label, required this.url});
 
   final String label;
-  final VoidCallback onTap;
+  final String url;
 
   @override
   State<_FooterLink> createState() => _FooterLinkState();
@@ -191,6 +193,10 @@ class _FooterLink extends StatefulWidget {
 
 class _FooterLinkState extends State<_FooterLink> {
   bool _hovered = false;
+
+  bool get _isRoute => widget.url.startsWith('/');
+
+  void _open() => _isRoute ? context.go(widget.url) : openUrl(widget.url, sameTab: true);
 
   @override
   Widget build(BuildContext context) {
@@ -201,13 +207,16 @@ class _FooterLinkState extends State<_FooterLink> {
     return Semantics(
       link: true,
       label: widget.label,
+      linkUrl: Uri.parse(widget.url),
+      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
+      onTap: _open,
       excludeSemantics: true,
       child: AppFocusRing(
         borderRadius: radius,
         color: colors.footerHighlight,
         child: InkWell(
           borderRadius: radius,
-          onTap: widget.onTap,
+          onTap: _open,
           onHover: (value) => setState(() => _hovered = value),
           hoverColor: Colors.transparent,
           mouseCursor: SystemMouseCursors.click,

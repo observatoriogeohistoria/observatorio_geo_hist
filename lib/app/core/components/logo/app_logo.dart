@@ -26,6 +26,9 @@ class AppLogo extends StatelessWidget {
     return Semantics(
       link: true,
       label: 'Observatório do Ensino de História e Geografia, início',
+      linkUrl: Uri.parse('/'),
+      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
+      onTap: () => context.go('/'),
       excludeSemantics: true,
       child: AppFocusRing(
         borderRadius: radius,

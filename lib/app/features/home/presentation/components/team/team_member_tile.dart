@@ -25,7 +25,9 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
 
   bool get _isLink => _member.id != null && (_member.description?.trim().isNotEmpty ?? false);
 
-  void _open() => GoRouter.of(context).go('/membro/${_member.id}');
+  String get _path => '/membro/${_member.id}';
+
+  void _open() => GoRouter.of(context).go(_path);
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
     return Semantics(
       link: true,
       label: '${_member.name}, ${_member.role}',
+      linkUrl: Uri.parse(_path),
       // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o membro.
       onTap: _open,
       excludeSemantics: true,

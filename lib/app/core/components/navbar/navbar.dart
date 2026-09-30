@@ -175,6 +175,8 @@ class _MenuButton extends StatelessWidget {
         button: true,
         expanded: isOpen,
         label: label,
+        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o menu.
+        onTap: onPressed,
         excludeSemantics: true,
         child: AppFocusRing(
           borderRadius: radius,

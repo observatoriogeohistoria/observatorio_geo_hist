@@ -167,7 +167,7 @@ class _HomeHeroState extends State<HomeHero> {
         title: 'Biblioteca',
         description: 'Teses e dissertações',
         semanticLabel: 'Biblioteca. Teses e dissertações',
-        isLink: true,
+        url: AppRoutes.library,
         layout: layout,
         onTap: () => GoRouter.of(context).go(AppRoutes.library),
       ),

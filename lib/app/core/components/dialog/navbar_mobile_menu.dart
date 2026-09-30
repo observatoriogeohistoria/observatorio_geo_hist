@@ -188,6 +188,8 @@ class _PanelRow extends StatelessWidget {
       selected: isActive,
       expanded: isExpandable ? isExpanded : null,
       label: label,
+      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o item.
+      onTap: onTap,
       excludeSemantics: true,
       child: AppFocusRing(
         borderRadius: radius,

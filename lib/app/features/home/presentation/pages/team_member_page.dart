@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
@@ -13,6 +14,8 @@ import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/avatar.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_team_states.dart';
+import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class TeamMemberPage extends StatefulWidget {
@@ -30,126 +33,103 @@ class TeamMemberPage extends StatefulWidget {
 class _TeamMemberPageState extends State<TeamMemberPage> {
   late final _fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
 
-  List<ReactionDisposer> _reactions = [];
-  final ValueNotifier<TeamMemberModel?> _teamMemberNotifier = ValueNotifier(null);
-
   @override
   void initState() {
     super.initState();
-
-    _setupReactions();
-    _updateData();
-  }
-
-  @override
-  void didUpdateWidget(covariant TeamMemberPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _updateData();
-  }
-
-  @override
-  void dispose() {
-    for (final disposer in _reactions) {
-      disposer();
-    }
-    _teamMemberNotifier.dispose();
-    super.dispose();
+    if (_fetchTeamStore.needsFetch) _fetchTeamStore.fetchTeam();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.colors.white,
-      body: CustomScrollView(
-        slivers: [
-          const NavbarSliver(),
-          ValueListenableBuilder<TeamMemberModel?>(
-            valueListenable: _teamMemberNotifier,
-            builder: (context, member, child) {
-              if (member == null) {
-                _fetchTeamStore.fetchTeam();
-                return const LoadingContent(isSliver: true);
-              }
+    return Observer(
+      builder: (context) {
+        final state = _fetchTeamStore.state;
+        final member = _fetchTeamStore.getTeamMemberById(widget.memberId);
+        final hasPage = member?.description?.trim().isNotEmpty ?? false;
 
-              return SliverFillRemaining(
-                hasScrollBody: false,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtils.getPageHorizontalPadding(context),
-                    vertical: AppTheme.dimensions.space.massive.verticalSpacing,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Row(
-                          children: [
-                            if (member.image?.url?.isNotEmpty ?? false) ...[
-                              Avatar(imageUrl: member.image!.url!),
-                            ],
-                            SizedBox(width: AppTheme.dimensions.space.large.horizontalSpacing),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AppHeadline.small(
-                                    text: member.name.toUpperCase(),
-                                    textAlign: TextAlign.start,
-                                    color: AppTheme.colors.orange,
-                                  ),
-                                  AppHeadline.medium(
-                                    text: member.role.toUpperCase(),
-                                    textAlign: TextAlign.start,
-                                    color: AppTheme.colors.gray,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (member.description?.isNotEmpty ?? false) ...[
-                        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                        AppBody.big(
-                          text: member.description!,
-                          textAlign: TextAlign.justify,
-                          color: AppTheme.colors.darkGray,
-                        ),
-                      ],
-                      if (member.lattesUrl?.isNotEmpty ?? false)
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: AppTheme.dimensions.space.massive.verticalSpacing,
-                          ),
-                          child: PrimaryButton.medium(
-                            text: 'Currículo Lattes',
-                            onPressed: () {
-                              if (member.lattesUrl == null) return;
-                              openUrl(member.lattesUrl!);
-                            },
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              );
-            },
+        if (state is FetchTeamSuccessState && !hasPage) return const PageNotFound();
+
+        return Scaffold(
+          backgroundColor: AppTheme.colors.white,
+          body: CustomScrollView(
+            slivers: [
+              const NavbarSliver(),
+              switch (state) {
+                FetchTeamErrorState() => const PageErrorContent(isSliver: true),
+                FetchTeamSuccessState() => _content(member!),
+                _ => const LoadingContent(isSliver: true),
+              },
+              const SliverToBoxAdapter(child: Footer()),
+            ],
           ),
-          const SliverToBoxAdapter(child: Footer()),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  void _setupReactions() {
-    _reactions = [
-      reaction((_) => _fetchTeamStore.team, (_) => _updateData()),
-    ];
-  }
-
-  void _updateData() {
-    _teamMemberNotifier.value = _fetchTeamStore.getTeamMemberById(widget.memberId);
-    if (_teamMemberNotifier.value == null) _fetchTeamStore.fetchTeam();
+  Widget _content(TeamMemberModel member) {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtils.getPageHorizontalPadding(context),
+          vertical: AppTheme.dimensions.space.massive.verticalSpacing,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Row(
+                children: [
+                  if (member.image?.url?.isNotEmpty ?? false) ...[
+                    Avatar(imageUrl: member.image!.url!),
+                  ],
+                  SizedBox(width: AppTheme.dimensions.space.large.horizontalSpacing),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppHeadline.small(
+                          text: member.name.toUpperCase(),
+                          textAlign: TextAlign.start,
+                          color: AppTheme.colors.orange,
+                        ),
+                        AppHeadline.medium(
+                          text: member.role.toUpperCase(),
+                          textAlign: TextAlign.start,
+                          color: AppTheme.colors.gray,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (member.description?.isNotEmpty ?? false) ...[
+              SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+              AppBody.big(
+                text: member.description!,
+                textAlign: TextAlign.justify,
+                color: AppTheme.colors.darkGray,
+              ),
+            ],
+            if (member.lattesUrl?.isNotEmpty ?? false)
+              Container(
+                margin: EdgeInsets.only(
+                  top: AppTheme.dimensions.space.massive.verticalSpacing,
+                ),
+                child: PrimaryButton.medium(
+                  text: 'Currículo Lattes',
+                  onPressed: () {
+                    if (member.lattesUrl == null) return;
+                    openUrl(member.lattesUrl!);
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

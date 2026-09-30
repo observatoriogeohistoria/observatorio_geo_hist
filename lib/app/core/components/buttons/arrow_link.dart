@@ -8,10 +8,13 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 /// e seta decorativa, que se afasta um pouco do texto no hover. O leitor de
 /// tela ouve só o [text], como link.
 class ArrowLink extends StatefulWidget {
-  const ArrowLink({super.key, required this.text, required this.onTap});
+  const ArrowLink({super.key, required this.text, required this.onTap, this.url});
 
   final String text;
   final VoidCallback onTap;
+
+  /// Endereço de destino, para o leitor de tela anunciar o link.
+  final String? url;
 
   @override
   State<ArrowLink> createState() => _ArrowLinkState();
@@ -31,6 +34,7 @@ class _ArrowLinkState extends State<ArrowLink> {
     return Semantics(
       link: true,
       label: widget.text,
+      linkUrl: widget.url == null ? null : Uri.parse(widget.url!),
       // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
       onTap: widget.onTap,
       excludeSemantics: true,

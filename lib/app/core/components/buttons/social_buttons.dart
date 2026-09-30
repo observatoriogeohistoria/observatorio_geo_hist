@@ -63,6 +63,9 @@ class _SocialButtonState extends State<_SocialButton> {
       child: Semantics(
         link: true,
         label: '${widget.label}, abre em outra aba',
+        linkUrl: Uri.parse(widget.url),
+        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
+        onTap: () => openUrl(widget.url),
         excludeSemantics: true,
         child: AppFocusRing(
           borderRadius: radius,

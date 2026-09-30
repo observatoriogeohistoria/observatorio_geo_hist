@@ -19,7 +19,7 @@ class HeroShortcutCard extends StatefulWidget {
     required this.description,
     required this.semanticLabel,
     required this.onTap,
-    this.isLink = false,
+    this.url,
     this.layout = HeroShortcutLayout.horizontal,
     this.focusNode,
   });
@@ -32,8 +32,8 @@ class HeroShortcutCard extends StatefulWidget {
   final String semanticLabel;
   final VoidCallback onTap;
 
-  /// Leva a outra página (lido como link); senão, é um botão.
-  final bool isLink;
+  /// Página de destino: com ela, o cartão é lido como link; sem ela, como botão.
+  final String? url;
   final HeroShortcutLayout layout;
 
   /// Para devolver o foco ao cartão depois de fechar uma janela aberta por ele.
@@ -51,13 +51,15 @@ class _HeroShortcutCardState extends State<HeroShortcutCard> {
     final colors = AppTheme.colors;
     final spacing = AppTheme.dimensions.spacing;
     final components = AppTheme.dimensions.components;
+    final shadows = AppTheme.dimensions.shadows;
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r14);
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final lift = _hovered && !reduceMotion ? components.shortcutHoverLift : 0.0;
 
     return Semantics(
-      button: !widget.isLink,
-      link: widget.isLink,
+      button: widget.url == null,
+      link: widget.url != null,
+      linkUrl: widget.url == null ? null : Uri.parse(widget.url!),
       label: widget.semanticLabel,
       // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o cartão.
       onTap: widget.onTap,
@@ -77,7 +79,7 @@ class _HeroShortcutCardState extends State<HeroShortcutCard> {
               color: _hovered ? colors.accent : colors.line,
               width: AppTheme.dimensions.stroke.small,
             ),
-            boxShadow: _hovered ? AppTheme.dimensions.shadows.soft : null,
+            boxShadow: _hovered ? shadows.soft : shadows.hidden(shadows.soft),
           ),
           child: Material(
             type: MaterialType.transparency,

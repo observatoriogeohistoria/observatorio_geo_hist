@@ -3,7 +3,8 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Desenha o contorno de foco visível (3 px, afastado 2 px, cor de acento)
 /// ao redor de [child] quando algum widget dentro dele recebe foco pelo
-/// teclado. Não altera o layout e não aparece no clique do mouse.
+/// teclado. Não altera o layout e não aparece no clique do mouse. O texto de
+/// [child] fica fora da seleção, como em todo elemento clicável.
 class AppFocusRing extends StatefulWidget {
   const AppFocusRing({
     super.key,
@@ -68,7 +69,7 @@ class _AppFocusRingState extends State<AppFocusRing> {
         fit: widget.fit,
         clipBehavior: Clip.none,
         children: [
-          widget.child,
+          SelectionContainer.disabled(child: widget.child),
           if (showRing)
             Positioned(
               left: -outset,

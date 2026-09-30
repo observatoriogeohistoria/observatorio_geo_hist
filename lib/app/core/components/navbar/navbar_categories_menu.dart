@@ -140,6 +140,8 @@ class _NavbarMenuOptionState extends State<NavbarMenuOption> {
       selected: widget.isSelected,
       link: widget.isExternal,
       label: widget.isExternal ? '${widget.label}, abre em outra aba' : widget.label,
+      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar a opção.
+      onTap: widget.onTap,
       excludeSemantics: true,
       child: AppFocusRing(
         borderRadius: radius,

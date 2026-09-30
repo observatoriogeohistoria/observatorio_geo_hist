@@ -462,6 +462,13 @@ class ShadowStyle {
           offset: Offset(0, 14),
         ),
       ];
+
+  /// [shadows] com cor transparente, para o estado sem sombra de uma animação.
+  /// Animar até uma lista vazia encolhe a sombra com a cor cheia, e ela
+  /// aparece nítida por um instante sob um fundo que também esmaece.
+  List<BoxShadow> hidden(List<BoxShadow> shadows) => [
+        for (final shadow in shadows) shadow.copyWith(color: shadow.color.withValues(alpha: 0)),
+      ];
 }
 
 /// Contorno de foco visível padrão (teclado).

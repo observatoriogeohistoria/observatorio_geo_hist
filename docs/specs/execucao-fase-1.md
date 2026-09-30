@@ -68,6 +68,17 @@
 - 009: links de semântica sem `href` (padrão do site inteiro); logos aparecem um instante depois do resto no primeiro carregamento, sem deslocar a grade.
 - 009: `Support` do post conferido só em pré-visualização com dados simulados (Firebase de testes sem posts); `overflow` do aceite da fase conferido por testes de widget (o build release não imprime o aviso).
 
+### Ressalvas depois do encerramento (2026-09-30)
+- Aceitas pela pessoa: destaques e membro de equipe cadastrados e conferidos no Firebase de testes; leitor de tela real e bloqueio de som dispensados.
+- Corrigidas:
+  - Menu de categorias da navbar, botão de menu, itens do painel de celular, links do rodapé, redes, logo e `CustomIconButton` repetem `onTap` na semântica.
+  - Links com `href` (`linkUrl`): um ouvinte web cancela a navegação nativa do `<a>`, e quem navega é o `onTap`.
+  - "conhecimento." a 390 px e 200%: `WordSafeText` reduz a fonte só quando a maior palavra não cabe (títulos de Quem somos e Nossa história).
+  - `/membro/:id`: busca só se `needsFetch`; id inexistente ou membro sem descrição mostra o 404.
+  - Piscada dos logos de apoio ao tirar o mouse: a sombra ia para lista vazia, encolhendo com a cor cheia sob o fundo que esmaecia. Agora anima até a mesma sombra transparente (`shadows.hidden`).
+  - Texto selecionável nas páginas públicas (`SelectionArea` num `ShellRoute`, realce `textSelection`). O que é clicável fica fora da seleção (`AppFocusRing` e `notSelectable`). Painel administrativo sem mudança.
+- Nova, não corrigida: a 390 px e 200%, o botão "Assistir" do vídeo encosta na legenda "Conheça o Observatório".
+
 ## Ocorrências
 - Branch criada a partir de origin/develop sem upstream configurado, para que nenhum `git push` sem argumentos vá para a develop.
 - 2026-09-26: limite de uso atingido após fechar a 006. Retomar com `/sdd-fase Fase 1` a partir da 007 (spec+plano pendente).

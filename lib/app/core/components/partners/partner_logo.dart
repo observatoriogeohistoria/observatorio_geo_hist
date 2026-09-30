@@ -66,6 +66,7 @@ class _PartnerLogoState extends State<PartnerLogo> {
     return Semantics(
       link: true,
       label: '${_partner.fullName}, abre em outra aba',
+      linkUrl: Uri.parse(_partner.url!),
       // Repete a ação do InkWell (excluído da semântica) para o leitor de tela abrir o site.
       onTap: _open,
       excludeSemantics: true,
@@ -94,6 +95,7 @@ class _PartnerLogoState extends State<PartnerLogo> {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final active = _active;
     final duration = components.partnerAnimation;
+    final shadows = AppTheme.dimensions.shadows;
 
     return AnimatedContainer(
       duration: duration,
@@ -107,7 +109,7 @@ class _PartnerLogoState extends State<PartnerLogo> {
           color: active ? colors.line : colors.line.withValues(alpha: 0),
           width: AppTheme.dimensions.stroke.small,
         ),
-        boxShadow: active ? AppTheme.dimensions.shadows.soft : const [],
+        boxShadow: active ? shadows.soft : shadows.hidden(shadows.soft),
       ),
       child: Center(
         child: ConstrainedBox(

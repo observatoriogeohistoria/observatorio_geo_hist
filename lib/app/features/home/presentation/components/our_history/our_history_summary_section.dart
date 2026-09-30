@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/arrow_link.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/word_safe_text.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history/milestone_badge.dart';
@@ -45,7 +46,7 @@ class OurHistorySummarySection extends StatelessWidget {
                   SizedBox(height: components.ourHistoryTitleGap),
                   Semantics(
                     header: true,
-                    child: Text(
+                    child: WordSafeText(
                       'Da pesquisa em Minas Gerais a um observatório aberto.',
                       style: styles.splitTitle.copyWith(color: colors.ink),
                     ),
@@ -61,6 +62,7 @@ class OurHistorySummarySection extends StatelessWidget {
                   SizedBox(height: components.ourHistoryLinkGap),
                   ArrowLink(
                     text: 'Ler a história completa',
+                    url: AppRoutes.ourHistory,
                     onTap: () => GoRouter.of(context).go(AppRoutes.ourHistory),
                   ),
                 ],

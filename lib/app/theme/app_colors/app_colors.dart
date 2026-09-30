@@ -30,6 +30,9 @@ class AppColors {
   Color accentStrong = const Color(0xFFA33600);
   Color accentSoft = const Color(0xFFFFF0E6);
 
+  /// Fundo do texto selecionado: acento a 25 %, que mantém [accentStrong] acima de 4,5:1.
+  Color textSelection = const Color(0x40C94400);
+
   Color footerBackground = const Color(0xFF1C1917);
   Color footerLine = const Color(0xFF37322E);
   Color footerText = const Color(0xFFD8D2CA);
