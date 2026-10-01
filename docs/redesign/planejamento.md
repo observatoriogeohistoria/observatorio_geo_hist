@@ -44,7 +44,7 @@ Itens vindos da revisão do protótipo. Todos já estão refletidos no protótip
 
 ### Post
 - **P-05** Remover o "tempo de leitura". → specs/012-post-base, concluído
-- **P-06** Ampliar o compartilhamento. Proposta: Copiar link, WhatsApp, Facebook, X, LinkedIn, Telegram e E-mail. No celular, oferecer também o compartilhamento nativo do sistema. Em telas estreitas, agrupar os menos usados em "Mais".
+- **P-06** Ampliar o compartilhamento. Proposta: Copiar link, WhatsApp, Facebook, X, LinkedIn, Telegram e E-mail. No celular, oferecer também o compartilhamento nativo do sistema. Em telas estreitas, agrupar os menos usados em "Mais". → specs/013-compartilhamento-post
 - **P-07** Reincluir a seção **Apoio** (redes sociais e os 9 apoiadores), que existe hoje no `Support` (com 4 apoiadores) e foi omitida no protótipo. Posição: depois do conteúdo e do "Leia também", antes do rodapé. → specs/012-post-base, concluído
 - **P-08** Layout-base do post com variações por tipo (ver seção 3, item "Tipos de post"). → specs/012-post-base, concluído (layout-base com ponto único por tipo; blocos dos demais tipos na Fase 5)
 
