@@ -43,10 +43,10 @@ Itens vindos da revisão do protótipo. Todos já estão refletidos no protótip
 - **P-04** Menu: dentro de História e Geografia continuam listadas as **categorias reais** (vindas do banco de dados), sem agrupamento. No desktop abrem ao passar o mouse ou clicar. No celular, cada área é uma sanfona com suas categorias, como no site atual (`NavbarMobileMenu`). Em Geografia, Expogeo e Geoensine ficam antes, separados por um divisor. Os nomes no protótipo são exemplos.
 
 ### Post
-- **P-05** Remover o "tempo de leitura". → specs/012-post-base
+- **P-05** Remover o "tempo de leitura". → specs/012-post-base, concluído
 - **P-06** Ampliar o compartilhamento. Proposta: Copiar link, WhatsApp, Facebook, X, LinkedIn, Telegram e E-mail. No celular, oferecer também o compartilhamento nativo do sistema. Em telas estreitas, agrupar os menos usados em "Mais".
-- **P-07** Reincluir a seção **Apoio** (redes sociais e os 9 apoiadores), que existe hoje no `Support` (com 4 apoiadores) e foi omitida no protótipo. Posição: depois do conteúdo e do "Leia também", antes do rodapé. → specs/012-post-base
-- **P-08** Layout-base do post com variações por tipo (ver seção 3, item "Tipos de post"). → specs/012-post-base (layout-base com ponto único por tipo; blocos dos demais tipos na Fase 5)
+- **P-07** Reincluir a seção **Apoio** (redes sociais e os 9 apoiadores), que existe hoje no `Support` (com 4 apoiadores) e foi omitida no protótipo. Posição: depois do conteúdo e do "Leia também", antes do rodapé. → specs/012-post-base, concluído
+- **P-08** Layout-base do post com variações por tipo (ver seção 3, item "Tipos de post"). → specs/012-post-base, concluído (layout-base com ponto único por tipo; blocos dos demais tipos na Fase 5)
 
 ### Biblioteca
 - **P-09** A entrada da biblioteca lista as **áreas** (Geografia e História), como no site atual, e não tipos de documento. Remover os cartões inventados ("Artigos científicos", "Livros e capítulos"). Mostrar a contagem por área.
@@ -72,7 +72,7 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 | T-05 | Colabore | `/colaborar` | Continua existindo, acessada pelo cabeçalho da categoria |
 | T-06 | Biblioteca: lista por área | `/biblioteca/:area` | Filtros, resultados e paginação |
 | T-07 | Biblioteca: detalhe do documento | `/biblioteca/:area/documento/:slug` | Metadados e visualizador do documento |
-| T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos. Só o artigo foi feito; os outros 9 tipos ficam para a Fase 5 → specs/012-post-base |
+| T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos. Só o artigo foi feito; os outros 9 tipos ficam para a Fase 5 → specs/012-post-base (artigo concluído; parcial) |
 | T-09 | Busca | novo | **Ideia futura.** Desenhada no protótipo (aba "Busca (ideia)"), sem implementação planejada. Ver seção 9 |
 | T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento |
 | T-11 | Todas as publicações | `/publicacoes` (novo) | Mesma listagem da categoria (cards, busca, chips de tipo), sem o filtro de categoria, ordenada pela data de publicação e com paginação. Consulta `collectionGroup('category_posts')`; pode pedir índice novo no Firestore. Ao existir, entra o link "Ver todas as publicações" dos Destaques da Home (retirado na spec 005) |
