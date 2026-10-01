@@ -37,3 +37,9 @@ String memberInitials(String name) {
   if (words.length == 1) return first.toUpperCase();
   return '$first${String.fromCharCode(words.last.runes.first)}'.toUpperCase();
 }
+
+/// Membro com página própria (`/membro/:id`): tem id e descrição não vazia.
+/// A mesma regra decide quem é link na grade da Home.
+bool memberHasPage(TeamMemberModel member) {
+  return member.id != null && (member.description?.trim().isNotEmpty ?? false);
+}

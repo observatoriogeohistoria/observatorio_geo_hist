@@ -4,6 +4,7 @@ import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.d
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/member_avatar.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/sort_team.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Membro da equipe na grade da Home (spec 008): foto, nome e função.
@@ -24,7 +25,7 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
 
   TeamMemberModel get _member => widget.member;
 
-  bool get _isLink => _member.id != null && (_member.description?.trim().isNotEmpty ?? false);
+  bool get _isLink => memberHasPage(_member);
 
   String get _path => AppRoutes.member(_member.id!);
 
