@@ -65,7 +65,7 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 
 | ID | Tela | Rota atual | Observações |
 |---|---|---|---|
-| T-01 | Manifesto | `/manifesto` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original). Layout de leitura compartilhado da Fase 2 → specs/010-leitura-manifesto |
+| T-01 | Manifesto | `/manifesto` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original). Layout de leitura compartilhado da Fase 2 → specs/010-leitura-manifesto, concluído |
 | T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição (id inexistente ou sem descrição já mostra o 404, sem busca em laço) |
 | T-03 | Nossa história (completa) | `/nossa-historia` | Criada na spec 007 como página provisória, com o texto completo que estava na Home. A Home mostra só o resumo. Redesenho na Fase 2 |
 | T-04 | Fale com a gente | `/contato` | Continua abrindo o programa de e-mail (`mailto:`). Novidades: validação dos campos e tela de confirmação com "Copiar mensagem" |

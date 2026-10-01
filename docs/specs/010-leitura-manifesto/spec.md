@@ -1,6 +1,6 @@
 # 010. Layout de leitura compartilhado e Manifesto
 
-- **Status:** implementada
+- **Status:** verificada
 - **Item do planejamento:** Fase 2 (leitura), T-01 Manifesto, e a base de leitura usada depois por T-03, T-02 e T-08
 - **Protótipo:** aba "Manifesto"; abas "História", "Membro" e "Post" como referência do que vai reaproveitar o layout (link no CLAUDE.md)
 - **Criada em:** 2026-10-01
@@ -83,20 +83,20 @@ O título laranja em caixa alta, a divisória, o texto cinza claro e os prefixos
 - A navbar não marca item ativo em `/manifesto` (como hoje).
 
 ## Critérios de aceite
-1. [ ] `/manifesto` mostra navbar, cabeçalho de superfície com linha na base, migalhas "Início › Manifesto", título "Manifesto" e, abaixo, a coluna de leitura e o rodapé.
-2. [ ] O texto da página é exatamente o desta spec, na ordem: abertura, "O trabalho é movido…", lista de 1 a 5, parágrafo final, destaque e botão; nenhuma frase do texto atual falta.
-3. [ ] Os cinco compromissos aparecem como lista numerada de 1 a 5, com o número num círculo laranja suave à esquerda e o texto quebrado alinhado ao texto (não ao número); os prefixos "1)" a "5)" não aparecem.
-4. [ ] O destaque "Faça parte dessa criação!" tem barra laranja à esquerda e fonte de títulos maior que o texto; o botão primário "Fale com a gente" abre `/contato` por clique e por Enter.
-5. [ ] "Início" nas migalhas abre a Home por clique e Enter; o item "Manifesto" não é link.
-6. [ ] `/manifesto` funciona por acesso direto (atualizar) e `/manifest` redireciona para ela; o hero, Quem somos e o rodapé continuam abrindo a página; o voltar do navegador retorna à página anterior.
-7. [ ] Nenhuma rota muda (`/`, `/manifesto`, `/manifest`, `/nossa-historia`, `/membro/:id`, `/contato`, `/colaborar`, posts, biblioteca e admin abrem como antes).
-8. [ ] Em 1280 px, cabeçalho alinhado à esquerda dentro de 1120 px e coluna de 680 px centralizada; em 768 e 390 px, conforme "Responsivo".
-9. [ ] Com a janela alta, o rodapé fica na base da janela, sem vão em branco abaixo dele.
-10. [ ] Título anunciado como cabeçalho; migalhas como navegação "Você está em", com o item atual marcado; cada item da lista lido com seu número; setas, círculos e barra do destaque não lidos separados; ordem de Tab: migalhas → botão → rodapé, com contorno de foco visível.
-11. [ ] Contraste ≥ 4,5:1 em migalhas (repouso e hover), número sobre o círculo, título, abertura, parágrafos, itens e destaque; nenhum texto em cinza claro.
-12. [ ] Em 390, 768 e 1280 px (e com texto a 200%): sem rolagem horizontal, sem sobreposição, sem `overflow`; o número não vaza do círculo.
-13. [ ] A base de leitura é única e reaproveitável: aceita migalhas de dois ou três níveis e texto de apoio opcional no cabeçalho, e a coluna pode ser usada sem a faixa de cabeçalho (conferido no código e descrito em `docs/arquitetura.md`).
-14. [ ] O código novo usa só tokens de `lib/app/theme/` (nenhuma cor, tamanho de fonte ou espaçamento solto) e não usa `num_extension`; `fvm flutter analyze` sem problemas novos e `fvm flutter build web --release` sem erro.
+1. [x] `/manifesto` mostra navbar, cabeçalho de superfície com linha na base, migalhas "Início › Manifesto", título "Manifesto" e, abaixo, a coluna de leitura e o rodapé.
+2. [x] O texto da página é exatamente o desta spec, na ordem: abertura, "O trabalho é movido…", lista de 1 a 5, parágrafo final, destaque e botão; nenhuma frase do texto atual falta.
+3. [x] Os cinco compromissos aparecem como lista numerada de 1 a 5, com o número num círculo laranja suave à esquerda e o texto quebrado alinhado ao texto (não ao número); os prefixos "1)" a "5)" não aparecem.
+4. [x] O destaque "Faça parte dessa criação!" tem barra laranja à esquerda e fonte de títulos maior que o texto; o botão primário "Fale com a gente" abre `/contato` por clique e por Enter.
+5. [x] "Início" nas migalhas abre a Home por clique e Enter; o item "Manifesto" não é link.
+6. [x] `/manifesto` funciona por acesso direto (atualizar) e `/manifest` redireciona para ela; o hero, Quem somos e o rodapé continuam abrindo a página; o voltar do navegador retorna à página anterior.
+7. [x] Nenhuma rota muda (`/`, `/manifesto`, `/manifest`, `/nossa-historia`, `/membro/:id`, `/contato`, `/colaborar`, posts, biblioteca e admin abrem como antes).
+8. [x] Em 1280 px, cabeçalho alinhado à esquerda dentro de 1120 px e coluna de 680 px centralizada; em 768 e 390 px, conforme "Responsivo".
+9. [x] Com a janela alta, o rodapé fica na base da janela, sem vão em branco abaixo dele.
+10. [x] Título anunciado como cabeçalho; migalhas como navegação "Você está em", com o item atual marcado; cada item da lista lido com seu número; setas, círculos e barra do destaque não lidos separados; ordem de Tab: migalhas → botão → rodapé, com contorno de foco visível.
+11. [x] Contraste ≥ 4,5:1 em migalhas (repouso e hover), número sobre o círculo, título, abertura, parágrafos, itens e destaque; nenhum texto em cinza claro.
+12. [x] Em 390, 768 e 1280 px (e com texto a 200%): sem rolagem horizontal, sem sobreposição, sem `overflow`; o número não vaza do círculo.
+13. [x] A base de leitura é única e reaproveitável: aceita migalhas de dois ou três níveis e texto de apoio opcional no cabeçalho, e a coluna pode ser usada sem a faixa de cabeçalho (conferido no código e descrito em `docs/arquitetura.md`).
+14. [x] O código novo usa só tokens de `lib/app/theme/` (nenhuma cor, tamanho de fonte ou espaçamento solto) e não usa `num_extension`; `fvm flutter analyze` sem problemas novos e `fvm flutter build web --release` sem erro.
 
 ## Fora do escopo
 - Redesenho de Nossa história (foto, selo, subtítulos, lista com marcadores) e da Pessoa da equipe: spec 011, que reaproveita esta base. A página provisória `/nossa-historia` fica como está nesta entrega.
@@ -120,3 +120,4 @@ O título laranja em caixa alta, a divisória, o texto cinza claro e os prefixos
 - 2026-10-01: criada e aprovada no modo autônomo (execução da Fase 2).
 - 2026-10-01: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-01: implementada. Ajuste na implementação: o título da página sai como cabeçalho de nível 1 (`h1`), não só "cabeçalho", por ser o título da página.
+- 2026-10-01: verificada ([verificacao.md](verificacao.md)). Correção: migalhas com papel de navegação (`SemanticsRole.navigation`), não só grupo.
