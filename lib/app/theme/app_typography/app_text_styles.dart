@@ -24,6 +24,9 @@ part of '../app_theme.dart';
 // | número do item | Figtree       | 700  | 1,00   | 0           | `.manifest-list li::before`|
 // | destaque de leitura | Bricolage | 500 | 1,35   | -0,02 em    | `.prose blockquote`        |
 // | subtítulo de leitura | Bricolage | 700 | 1,12  | -0,02 em    | `.article .prose h2`       |
+// | nome na página da pessoa | Bricolage | 800 | 1,12 | -0,03 em | `#s-member h1`             |
+// | iniciais da pessoa | Bricolage   | 800  | 1,00   | 0           | `.portrait`                |
+// | título de estado | Bricolage   | 700  | 1,12   | -0,02 em    | `.state-box b`             |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
 // | selo     | Figtree             | 600  | 1,35   | 0           | `.fact`                    |
@@ -231,6 +234,30 @@ class AppTextStyles {
   /// Subtítulo na coluna de leitura (`.article .prose h2`). Spec 011.
   TextStyle get readingSubtitle => _display(
         size: _size(mobile: 24, tablet: 27.2, desktop: 27.2),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  /// Nome na página da pessoa da equipe (`#s-member h1`). Spec 011.
+  TextStyle get memberPageName => _display(
+        size: _size(mobile: 32, tablet: 42, desktop: 48),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.03,
+      );
+
+  /// Iniciais na foto da pessoa sem foto (`.portrait`). Spec 011.
+  TextStyle get memberPageInitials => _display(
+        size: _size(mobile: 48, tablet: 64, desktop: 64),
+        weight: FontWeight.w800,
+        height: 1,
+        letterSpacingEm: 0,
+      );
+
+  /// Título da caixa de estado, como o erro (`.state-box b`). Spec 011.
+  TextStyle get stateTitle => _display(
+        size: _size(mobile: 20.8, tablet: 20.8, desktop: 20.8),
         weight: FontWeight.w700,
         height: 1.12,
         letterSpacingEm: -0.02,

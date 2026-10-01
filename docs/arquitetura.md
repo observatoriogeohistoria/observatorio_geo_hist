@@ -32,7 +32,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), skeleton, video_player, entre outros |
+| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), error_content (`StateErrorBox`, caixa de erro com "Tentar de novo"), skeleton, video_player, entre outros |
 | `models/` | `PostModel` e os corpos de post, `category`, `image`, `paginated/`, `states/` (CRUD) e demais modelos comuns |
 | `utils/` | Constantes, datas, enums, formatters, validators, `environment/`, `browser/` e demais utilitários |
 | `infra/` | Datasource/repository de categorias e `services/logger_service` |
@@ -102,7 +102,7 @@ A `HomePage` é um `CustomScrollView` com um bloco por sliver, abaixo da navbar.
 - **Quem somos** (`components/who_we_are/`): missão, `ArrowLink` para o manifesto e três públicos. Duas colunas só no desktop.
 - **Vídeo de apresentação** (`components/video/`): capa (`assets/images/video-capa.webp` se existir, senão `VideoCoverPainter`) e `VideoPlayButton`. Nada é baixado antes de "Assistir": o `AppVideoPlayer` (import `deferred`) só é montado após o clique. Estados: capa → carregando → tocando ou erro. O vídeo toca com som só se a ativação do usuário ainda vale quando fica pronto (`hasUserActivation`); senão fica pausado e pronto. Se o navegador recusar o início automático (`onAutoplayBlocked`), o player é remontado pausado, sem mostrar erro.
 - **Nossa história** (`components/our_history/`): resumo estático com `MilestoneBadge` (marco da FAPEMIG) e `ArrowLink` para `/nossa-historia` (`OurHistoryPage`, com o texto completo).
-- **Equipe** (`components/team/`): observa o `FetchTeamStore`, que tem estado (inicial, carregando, sucesso, erro) e guarda a lista em ordem alfabética (`sortTeamByName`, sem acentos nem caixa). `TeamGrid` põe quantas colunas de 190 px (× ampliação do texto) couberem. Só membro com descrição é link para `/membro/:id`; sem foto, `MemberAvatar` mostra as iniciais. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem membros, a seção some. A `HomePage` só busca se ainda não buscou ou se falhou (`needsFetch`). Só tem respiro de seção em cima; o de baixo fica em Realização e apoio, para o espaço não sumir quando a equipe está escondida.
+- **Equipe** (`components/team/`): observa o `FetchTeamStore`, que tem estado (inicial, carregando, sucesso, erro) e guarda a lista em ordem alfabética (`sortTeamByName`, sem acentos nem caixa). `TeamGrid` põe quantas colunas de 190 px (× ampliação do texto) couberem. Só membro com página (`memberHasPage`: id e descrição não vazia) é link para `/membro/:id`; sem foto, `MemberAvatar` mostra as iniciais. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem membros, a seção some. A `HomePage` só busca se ainda não buscou ou se falhou (`needsFetch`). Só tem respiro de seção em cima; o de baixo fica em Realização e apoio, para o espaço não sumir quando a equipe está escondida.
 - **Realização e apoio** (`core/components/partners/`): `PartnersSection` com a `PartnerLogoGrid` (colunas de no mínimo 150 px) e um `PartnerLogo` por instituição do enum `Partner` (sigla, nome completo, site e logo; a ordem do enum é a de exibição). O logo é link para o site em outra aba, com nome acessível completo; `url` nula deixa o logo sem link. A mesma seção aparece na Biblioteca e em Colabore; o `Support` do post usa a mesma grade, com colunas de 130 px.
 - **Chamada para contato** (`components/contact_call/`): quadro com "Fale com a gente" para `/contato` (`AppRoutes.contact`). Botão à direita só no desktop.
 
@@ -110,12 +110,13 @@ O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o 
 
 ## Páginas de leitura
 
-Páginas de texto (Manifesto e, depois, Nossa história, Pessoa da equipe e post) se montam com as peças de `core/components/reading/`:
+Páginas de texto (Manifesto, Nossa história, Pessoa da equipe e, depois, post) se montam com as peças de `core/components/reading/`:
 
 - `ReadingPageScaffold(header:, body:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela.
 - `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último, sem `route`, é a página atual), título e `lead` opcional.
 - `ReadingColumn`: coluna de 680 px centralizada; funciona sem `PageHeader` (Pessoa e post têm cabeçalho próprio). `paddingTop` opcional troca o respiro de cima (abaixo de uma figura).
 - `ReadingFigure`: imagem em 21:9 até 920 px, mais larga que a coluna, com legenda opcional, recorte por `alignment` e placeholder na falha. Fica entre o cabeçalho e a `ReadingColumn`, que recebe `paddingTop: readingFigureMarginBottom`.
+- Pessoa da equipe (`TeamMemberPage`) usa só o `ReadingPageScaffold`, com corpo próprio de 920 px: `MemberPageLayout` (foto | texto, empilha abaixo de 700 px de largura útil), `MemberPortrait` e `MemberPageSkeleton`. Erro mostra `StateErrorBox`; sem página (`memberHasPage`), a 404. A equipe só é buscada no `initState`, se `needsFetch`.
 - Blocos, que já trazem a própria margem: `ReadingLead`, `ReadingParagraph`, `ReadingSubtitle` (cabeçalho de nível 2), `ReadingNumberedList`, `ReadingBulletList` e `ReadingQuote`. Novos blocos entram no mesmo arquivo.
 
 ## Tratamento de erros

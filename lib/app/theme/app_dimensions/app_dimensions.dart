@@ -452,6 +452,47 @@ class ComponentSizes {
   final double readingFigureMarginBottom = 40.0;
   final double readingFigurePlaceholderIcon = 34.0;
 
+  // Pessoa da equipe (spec 011). Origem: `.member-page`, `.portrait` e
+  // `.article-head` da aba "Membro" do protótipo.
+
+  /// Largura do bloco, coluna da foto lado a lado e empilhada, e largura útil
+  /// abaixo da qual foto e texto empilham (`@container (max-width:700px)`).
+  final double memberPageMaxWidth = 920.0;
+  final double memberPortraitMaxWidth = 300.0;
+  final double memberPortraitStackedMaxWidth = 280.0;
+  final double memberPageStackBreak = 700.0;
+
+  /// Vão entre foto e texto (`clamp(24px, 5cqi, 56px)`).
+  double memberPageGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 38, 56);
+
+  /// Vãos migalhas → foto, rótulo → nome, nome → descrição, descrição →
+  /// Lattes e respiro antes do rodapé.
+  final double memberPageTopGap = 12.0;
+  final double memberNameTopGap = 8.0;
+  final double memberNameBottomGap = 18.0;
+  final double memberLattesGap = 22.0;
+  final double memberPageBottomGap = 64.0;
+
+  /// Esqueleto da pessoa: altura da barra do nome e larguras (fração da
+  /// coluna) das migalhas, do rótulo, do nome e da última linha do texto.
+  final double memberPageSkeletonNameHeight = 40.0;
+  final double memberPageSkeletonCrumbsWidth = 0.3;
+  final double memberPageSkeletonLabelWidth = 0.25;
+  final double memberPageSkeletonNameWidth = 0.7;
+  final double memberPageSkeletonLastLineWidth = 0.6;
+
+  // Caixa de estado (`.state-box` e `.err-state` da aba "Estados").
+
+  /// Preenchimento, ícone, vão entre itens, vão extra antes do botão e
+  /// largura máxima do texto (44 ch a 16 px).
+  final double stateBoxPaddingVertical = 40.0;
+  final double stateBoxPaddingHorizontal = 20.0;
+  final double stateBoxIcon = 52.0;
+  final double stateBoxIconGlyph = 24.0;
+  final double stateBoxGap = 10.0;
+  final double stateBoxButtonGap = 6.0;
+  final double stateBoxTextMaxWidth = 380.0;
+
   double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
     return switch (breakpoint) {
       Breakpoint.mobile => mobile,
