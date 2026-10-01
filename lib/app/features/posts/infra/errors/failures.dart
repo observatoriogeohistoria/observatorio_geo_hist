@@ -18,6 +18,13 @@ class FetchPostByIdFailure extends Failure {
   List<Object> get props => [message];
 }
 
+class PostNotFoundFailure extends Failure {
+  const PostNotFoundFailure() : super("Post não encontrado");
+
+  @override
+  List<Object> get props => [message];
+}
+
 class FetchHighlightsFailure extends Failure {
   const FetchHighlightsFailure({
     String? message,

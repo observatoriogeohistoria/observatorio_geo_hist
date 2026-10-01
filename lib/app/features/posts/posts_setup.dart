@@ -4,6 +4,7 @@ import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/log
 import 'package:observatorio_geo_hist/app/features/posts/infra/datasources/fetch_posts_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/posts/infra/repositories/fetch_posts_repository.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/post_detail_store.dart';
 
 class PostsSetup {
   static final GetIt getIt = GetIt.instance;
@@ -18,6 +19,9 @@ class PostsSetup {
     );
     getIt.registerLazySingleton<FetchPostsStore>(
       () => FetchPostsStore(getIt<FetchPostsRepository>()),
+    );
+    getIt.registerFactory<PostDetailStore>(
+      () => PostDetailStore(getIt<FetchPostsRepository>()),
     );
   }
 }

@@ -4,6 +4,11 @@ import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/paginated/paginated_posts.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
+/// Post inexistente ou não publicado: o site público trata como não encontrado.
+class PostNotFoundException implements Exception {
+  const PostNotFoundException();
+}
+
 abstract class FetchPostsDatasource {
   Future<PaginatedPosts> fetchPosts(
     CategoryModel category, {
@@ -93,10 +98,14 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
           _firestore.collectionGroup('category_posts').where('id', isEqualTo: postId).limit(1);
 
       final snapshot = await query.get();
-      if (snapshot.docs.isEmpty) throw Exception('Post not found');
+      if (snapshot.docs.isEmpty) throw const PostNotFoundException();
 
       final data = snapshot.docs.first.data() as Map<String, dynamic>;
+      if (data['isPublished'] != true) throw const PostNotFoundException();
+
       return PostModel.fromJson(data);
+    } on PostNotFoundException {
+      rethrow;
     } catch (exception) {
       _loggerService.error('Error fetching post by id: $exception');
       rethrow;
