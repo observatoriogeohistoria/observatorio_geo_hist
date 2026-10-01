@@ -25,3 +25,29 @@ extension DateTimeFormatting on DateTime {
     return '$day ${months[month - 1]} $year';
   }
 }
+
+const _monthNamesLower = [
+  'janeiro',
+  'fevereiro',
+  'março',
+  'abril',
+  'maio',
+  'junho',
+  'julho',
+  'agosto',
+  'setembro',
+  'outubro',
+  'novembro',
+  'dezembro',
+];
+
+/// "03/2026" → "março de 2026". Fora do formato "MM/aaaa", devolve o texto
+/// sem os espaços das pontas.
+String formatMonthYear(String value) {
+  final text = value.trim();
+  final match = RegExp(r'^(\d{1,2})/(\d{4})$').firstMatch(text);
+  if (match == null) return text;
+  final month = int.parse(match.group(1)!);
+  if (month < 1 || month > 12) return text;
+  return '${_monthNamesLower[month - 1]} de ${match.group(2)}';
+}

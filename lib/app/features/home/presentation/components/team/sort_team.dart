@@ -27,17 +27,6 @@ List<TeamMemberModel> sortTeamByName(List<TeamMemberModel> team) {
   return [for (final item in indexed) item.member];
 }
 
-/// Iniciais para o círculo sem foto: primeira letra do primeiro e do último
-/// nome, em maiúsculas; uma letra se o nome tiver uma palavra só; vazio se não
-/// houver nome.
-String memberInitials(String name) {
-  final words = name.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty).toList();
-  if (words.isEmpty) return '';
-  final first = String.fromCharCode(words.first.runes.first);
-  if (words.length == 1) return first.toUpperCase();
-  return '$first${String.fromCharCode(words.last.runes.first)}'.toUpperCase();
-}
-
 /// Membro com página própria (`/membro/:id`): tem id e descrição não vazia.
 /// A mesma regra decide quem é link na grade da Home.
 bool memberHasPage(TeamMemberModel member) {

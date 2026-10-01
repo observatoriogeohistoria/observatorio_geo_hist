@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Um nível das migalhas. Sem [route], é a página atual.
+/// Um nível das migalhas. O último é a página atual; um nível do meio sem
+/// [route] é texto comum, sem link nem foco.
 class BreadcrumbItem {
   const BreadcrumbItem(this.label, {this.route});
 
@@ -51,13 +52,15 @@ class Breadcrumbs extends StatelessWidget {
                   SizedBox(width: components.breadcrumbGap),
                 ],
                 Flexible(
-                  child: index == items.length - 1 || item.route == null
-                      ? Semantics(
-                          label: '${item.label}, página atual',
-                          excludeSemantics: true,
-                          child: Text(item.label, style: style.copyWith(color: colors.ink, fontWeight: FontWeight.w600)),
-                        )
-                      : _BreadcrumbLink(label: item.label, route: item.route!, style: style),
+                  child: switch ((index == items.length - 1, item.route)) {
+                    (true, _) => Semantics(
+                        label: '${item.label}, página atual',
+                        excludeSemantics: true,
+                        child: Text(item.label, style: style.copyWith(color: colors.ink, fontWeight: FontWeight.w600)),
+                      ),
+                    (false, null) => Text(item.label, style: style.copyWith(color: colors.inkSecondary)),
+                    (false, final route?) => _BreadcrumbLink(label: item.label, route: route, style: style),
+                  },
                 ),
               ],
             ),

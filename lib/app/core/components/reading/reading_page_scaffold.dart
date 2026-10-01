@@ -6,10 +6,14 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 /// Esqueleto das páginas de leitura: navbar, cabeçalho opcional, corpo e
 /// rodapé, que fica na base da janela quando a página é curta.
 class ReadingPageScaffold extends StatelessWidget {
-  const ReadingPageScaffold({super.key, this.header, required this.body});
+  const ReadingPageScaffold({super.key, this.header, required this.body, this.beforeFooter});
 
   final Widget? header;
   final Widget body;
+
+  /// Faixa colada ao rodapé, que desce com ele quando a página é curta (a
+  /// seção Apoio do post).
+  final Widget? beforeFooter;
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +30,11 @@ class ReadingPageScaffold extends StatelessWidget {
             const FocusTraversalOrder(order: NumericFocusOrder(0), child: NavbarSliver()),
             if (header != null) SliverToBoxAdapter(child: header),
             SliverToBoxAdapter(child: body),
-            const SliverFillRemaining(
+            SliverFillRemaining(
               hasScrollBody: false,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [Spacer(), Footer()],
+                children: [const Spacer(), if (beforeFooter != null) beforeFooter!, const Footer()],
               ),
             ),
           ],

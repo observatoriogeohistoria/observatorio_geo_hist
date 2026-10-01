@@ -4,8 +4,8 @@ Legenda: `- [ ]` a fazer, `- [x]` feita. Cada tarefa termina com `fvm flutter an
 
 ## Grupo A: fundações
 - [ ] **A1.** Tokens do post, do Leia também, do Apoio, do compartilhar e da imagem no texto; estilos `postTitle`, `postSubtitle`, `relatedCardTitle` (e `overline` se `label` não servir). Arquivos: `app_dimensions.dart`, `app_text_styles.dart`. Atende: 17, 18.
-- [ ] **A2.** Utilitários: `PostsAreas.tryFromKey`, `formatMonthYear`, `joinNames`, `initialsOf` (movido de `memberInitials`, com os usos da Home atualizados). Arquivos: `posts_areas.dart`, `date.dart`, `strings.dart`, `sort_team.dart` e quem importa `memberInitials`. Conferir: "03/2026" → "março de 2026", "2026" → "2026", ["A","B","C"] → "A, B e C"; iniciais da Home iguais. Atende: 3, 13.
-- [ ] **A3.** Migalhas: item do meio sem rota vira texto comum, sem foco e sem "página atual". Arquivo: `breadcrumbs.dart`. Conferir Manifesto, Nossa história e Pessoa sem mudança. Atende: 2.
+- [x] **A2.** Utilitários: `PostsAreas.tryFromKey`, `formatMonthYear`, `joinNames`, `initialsOf` (movido de `memberInitials`, com os usos da Home atualizados). Arquivos: `posts_areas.dart`, `date.dart`, `strings.dart`, `sort_team.dart` e quem importa `memberInitials`. Conferir: "03/2026" → "março de 2026", "2026" → "2026", ["A","B","C"] → "A, B e C"; iniciais da Home iguais. Atende: 3, 13.
+- [x] **A3.** Migalhas: item do meio sem rota vira texto comum, sem foco e sem "página atual". Arquivo: `breadcrumbs.dart`. Conferir Manifesto, Nossa história e Pessoa sem mudança. Atende: 2. _Feito: as três telas conferidas sem mudança. Junto, `ReadingPageScaffold` ganhou `beforeFooter` (Apoio colado ao rodapé)._
 
 ## Grupo B: dados
 - [ ] **B1.** Não encontrado separado de falha: `PostNotFoundException` no `fetchPostById` (sem documento ou não publicado) e `PostNotFoundFailure` no repositório. Arquivos: `fetch_posts_datasource.dart`, `fetch_posts_repository.dart`, `failures.dart`. Atende: 13, 14.

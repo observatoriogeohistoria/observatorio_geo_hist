@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/sort_team.dart';
+import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Foto redonda do membro da equipe (spec 008). As iniciais ficam sempre por
@@ -28,7 +28,7 @@ class MemberAvatar extends StatelessWidget {
                 color: colors.accentSoft,
                 child: Center(
                   child: Text(
-                    memberInitials(name),
+                    initialsOf(name),
                     maxLines: 1,
                     // O círculo tem tamanho fixo; ampliar as iniciais as faria vazar.
                     textScaler: TextScaler.noScaling,
