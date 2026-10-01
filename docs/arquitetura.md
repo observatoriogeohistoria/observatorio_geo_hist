@@ -112,7 +112,7 @@ O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o 
 
 Páginas de texto (Manifesto, Nossa história, Pessoa da equipe e, depois, post) se montam com as peças de `core/components/reading/`:
 
-- `ReadingPageScaffold(header:, body:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela.
+- `ReadingPageScaffold(header:, body:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela. No Tab, a navbar vem antes do conteúdo e o item focado é rolado para fora de baixo da navbar fixa.
 - `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último, sem `route`, é a página atual), título e `lead` opcional.
 - `ReadingColumn`: coluna de 680 px centralizada; funciona sem `PageHeader` (Pessoa e post têm cabeçalho próprio). `paddingTop` opcional troca o respiro de cima (abaixo de uma figura).
 - `ReadingFigure`: imagem em 21:9 até 920 px, mais larga que a coluna, com legenda opcional, recorte por `alignment` e placeholder na falha. Fica entre o cabeçalho e a `ReadingColumn`, que recebe `paddingTop: readingFigureMarginBottom`.

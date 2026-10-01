@@ -15,20 +15,48 @@ class ReadingPageScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.page,
-      body: CustomScrollView(
-        slivers: [
-          const NavbarSliver(),
-          if (header != null) SliverToBoxAdapter(child: header),
-          SliverToBoxAdapter(child: body),
-          const SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [Spacer(), Footer()],
+      body: FocusTraversalGroup(
+        // A navbar vem antes no Tab mesmo com a página rolada e as migalhas sob ela.
+        policy: OrderedTraversalPolicy(
+          secondary: ReadingOrderTraversalPolicy(requestFocusCallback: _focusAndReveal),
+          requestFocusCallback: _focusAndReveal,
+        ),
+        child: CustomScrollView(
+          slivers: [
+            const FocusTraversalOrder(order: NumericFocusOrder(0), child: NavbarSliver()),
+            if (header != null) SliverToBoxAdapter(child: header),
+            SliverToBoxAdapter(child: body),
+            const SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [Spacer(), Footer()],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+// O padrão só rola no sentido do Tab: um link acima da tela ou sob a navbar
+// fixa (as migalhas, com a página rolada) recebia foco sem aparecer.
+void _focusAndReveal(
+  FocusNode node, {
+  ScrollPositionAlignmentPolicy? alignmentPolicy,
+  double? alignment,
+  Duration? duration,
+  Curve? curve,
+}) {
+  FocusTraversalPolicy.defaultTraversalRequestFocusCallback(
+    node,
+    alignmentPolicy: alignmentPolicy,
+    alignment: alignment,
+    duration: duration,
+    curve: curve,
+  );
+  final context = node.context;
+  if (context == null || !context.mounted) return;
+  Scrollable.ensureVisible(context, alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart);
 }
