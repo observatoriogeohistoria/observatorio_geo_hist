@@ -6,7 +6,7 @@
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |
 |---|---|---|---|---|---|
 | 010-leitura-manifesto | layout de leitura, T-01 | feita (14 critérios, 11 tarefas) | feita (2 commits) | feita (1 fix) | verificada (5 commits) |
-| 011-nossa-historia-pessoa | T-03, T-02 | feita (17 critérios, 12 tarefas) | pendente | pendente | |
+| 011-nossa-historia-pessoa | T-03, T-02 | feita (17 critérios, 12 tarefas) | feita (4 commits) | feita (1 fix) | verificada com ressalvas (7 commits) |
 | 012-post-base | T-08 (artigo), P-05, P-07, P-08 | pendente | pendente | pendente | |
 | 013-compartilhamento-post | P-06 | pendente | pendente | pendente | |
 
@@ -22,6 +22,8 @@
 
 ## Ressalvas
 - 010: a seta do `PrimaryButton` (spec 002) não cresce com o texto a 200%; não quebra o layout. Anotada para quando o botão for revisto.
+- 011: offline, o Firestore responde do cache vazio e a pessoa cai na 404 em vez da caixa de erro (comportamento anterior; mudar exige mexer no datasource). Membro sem descrição e botão Lattes só conferidos com dados injetados (não há no banco de dev).
 
 ## Ocorrências
 - 010: na verificação, as migalhas saíam como grupo; passaram a `navigation` "Você está em" (`fix:` próprio). Texto a 200% conferido ampliando a fonte raiz do documento, que o Flutter web respeita.
+- 011: na verificação, com a página rolada as migalhas recebiam foco escondidas sob a navbar fixa (e vinham antes da navbar no Tab). Corrigido no `ReadingPageScaffold` (`fix:` próprio): navbar primeiro na ordem e item focado rolado para aparecer. Vale também para o Manifesto.

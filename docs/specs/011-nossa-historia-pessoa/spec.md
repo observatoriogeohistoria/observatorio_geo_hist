@@ -1,6 +1,6 @@
 # 011. Nossa história completa e Pessoa da equipe
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 2, T-03 (Nossa história completa) e T-02 (Pessoa da equipe)
 - **Protótipo:** abas "História" e "Membro"; aba "Estados" para o erro (link no CLAUDE.md)
 - **Criada em:** 2026-10-01
@@ -141,3 +141,4 @@ O nome em caixa alta laranja, a função em cinza claro, o texto justificado e o
 - 2026-10-01: criada e aprovada no modo autônomo (execução da Fase 2).
 - 2026-10-01: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-01: ajustes na implementação (modo autônomo): cor `errorSurface` no tema para o ícone da caixa de erro; layout foto | texto em `MemberPageLayout` (arquivo próprio, usado pela página e pelo esqueleto); no erro da pessoa, sem migalhas; a caixa de erro ocupa toda a largura. Status: implementada.
+- 2026-10-01: verificação (modo autônomo): na base de leitura, a navbar passa a vir antes no Tab e o item focado sai de baixo da navbar fixa (`fix:` próprio, vale também para a 010). Ressalvas em [verificacao.md](verificacao.md). Status: verificada com ressalvas.
