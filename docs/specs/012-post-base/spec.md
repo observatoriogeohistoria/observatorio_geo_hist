@@ -1,6 +1,6 @@
 # 012. Layout-base do post (tipo artigo) e seção Apoio
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 2: T-08 (só o tipo artigo), P-05, P-07, P-08; Q-06
 - **Protótipo:** aba "Post"; aba "Tipos de post" para os blocos por tipo; aba "Estados" para esqueleto e erro (link no CLAUDE.md)
 - **Criada em:** 2026-10-01
@@ -137,3 +137,5 @@ Documento, livro, filme, revista, podcast, música, produção acadêmica, event
 ## Histórico de mudanças
 - 2026-10-01: criada e aprovada no modo autônomo (execução da Fase 2).
 - 2026-10-01: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-01: ajustes durante a implementação (modo autônomo): o texto do editor também ignora tamanhos (`size`), junta linhas em branco seguidas e descarta embutidos que não são imagem (antes ficavam como linhas vazias); links do texto abrem pelo mouse, mas não recebem foco de teclado (limite do Quill só leitura), o que deixa parcial a ordem de Tab de "Acessibilidade"; post sem corpo também dá 404; o Apoio fica colado ao rodapé (`beforeFooter` no `ReadingPageScaffold`); o compartilhar codifica o título e preenche o assunto do e-mail; ao abrir outro post pelo Leia também, a página volta ao topo.
+- 2026-10-01: implementada. Conferência em build `APP_ENV=prod` só leitura (o Firebase dev não tem artigos).

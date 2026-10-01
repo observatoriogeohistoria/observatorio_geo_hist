@@ -77,11 +77,12 @@ class AppRouter {
               final categoryKey = state.pathParameters['category'];
               final id = state.pathParameters['id'];
 
-              final invalidRoute = id == null || area == null || categoryKey == null;
+              final postsArea = area == null ? null : PostsAreas.tryFromKey(area);
+              final invalidRoute = id == null || postsArea == null || categoryKey == null;
               if (invalidRoute) return const PageNotFound();
 
               return PostDetailedPage(
-                area: PostsAreas.fromKey(area),
+                area: postsArea,
                 categoryKey: categoryKey,
                 postId: id,
               );

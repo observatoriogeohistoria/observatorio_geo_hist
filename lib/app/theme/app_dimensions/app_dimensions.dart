@@ -493,6 +493,78 @@ class ComponentSizes {
   final double stateBoxButtonGap = 6.0;
   final double stateBoxTextMaxWidth = 380.0;
 
+  // Post (spec 012). Origem: `.article-head`, `.byline`, `.who`, `.share`,
+  // `.banner`, `.article`, `.note` e `.cards`/`.card` da aba "Post".
+
+  /// Largura do cabeçalho do post, margens incluídas (`.wrap.narrow` a 820 px).
+  final double postHeadMaxWidth = 820.0;
+
+  /// Vãos do cabeçalho: migalhas → título, título → subtítulo, subtítulo →
+  /// autoria, preenchimento vertical da autoria e vão entre autor e compartilhar.
+  final double postTitleGap = 22.0;
+  final double postSubtitleGap = 14.0;
+  final double postBylineMarginTop = 26.0;
+  final double postBylinePaddingVertical = 18.0;
+  final double postBylineGap = 16.0;
+
+  /// Círculo de iniciais do autor e vão até o nome.
+  final double postAuthorAvatar = 44.0;
+  final double postAuthorGap = 12.0;
+
+  /// Capa: vão acima, proporção e vão até a legenda.
+  final double postCoverMarginTop = 28.0;
+  final double postCoverAspect = 21 / 9;
+  final double postCoverCaptionGap = 10.0;
+
+  /// Respiro acima do texto do artigo (`.article` `padding-top`).
+  final double postBodyPaddingTop = 40.0;
+
+  /// Compartilhar: botão, ícone e vão entre botões.
+  final double shareIconButton = 38.0;
+  final double shareIcon = 22.0;
+  final double shareGap = 4.0;
+
+  /// Imagem no texto: altura máxima, margem acima e abaixo e proporção do
+  /// placeholder na falha.
+  final double readingImageMaxHeight = 560.0;
+  final double readingImageMarginVertical = 24.0;
+  final double readingImagePlaceholderAspect = 16 / 10;
+
+  /// Nota (`.note`): margem acima, preenchimento e vão rótulo → texto e ícone → rótulo.
+  final double postNoteMarginTop = 40.0;
+  final double postNotePaddingVertical = 20.0;
+  final double postNotePaddingHorizontal = 24.0;
+  final double postNoteLabelGap = 6.0;
+  final double postNoteIconGap = 8.0;
+
+  /// Leia também: largura mínima de coluna, vão entre colunas e linhas, vão
+  /// imagem → texto, proporção da imagem, subida no hover, linhas do título e
+  /// vão rótulo → título → meta.
+  final double relatedCardMinWidth = 300.0;
+  final double relatedCardGapH = 28.0;
+  final double relatedCardGapV = 36.0;
+  final double relatedCardInnerGap = 14.0;
+  final double relatedThumbAspect = 16 / 10;
+  final double relatedThumbLift = 4.0;
+  final int relatedTitleMaxLines = 3;
+  final double relatedTitleGap = 4.0;
+  final Duration relatedAnimation = const Duration(milliseconds: 250);
+
+  /// Ícone do placeholder de imagem do cartão e da capa.
+  final double postPlaceholderIcon = 34.0;
+
+  /// Esqueleto do post: altura das barras e larguras (fração da coluna) das
+  /// migalhas, da segunda linha do título, do subtítulo, do nome e da data.
+  final double postSkeletonBarHeight = 14.0;
+  final double postSkeletonTitleHeight = 40.0;
+  final double postSkeletonCrumbsWidth = 0.35;
+  final double postSkeletonTitleLastWidth = 0.6;
+  final double postSkeletonSubtitleWidth = 0.8;
+  final double postSkeletonNameWidth = 0.3;
+  final double postSkeletonDateWidth = 0.2;
+  final double postSkeletonLastLineWidth = 0.6;
+  final int postSkeletonLines = 5;
+
   // Apoio do post (spec 012). Origem: `.support` e `.social` da aba "Post".
 
   /// Apoio (`.support`): respiro vertical, largura útil a partir da qual redes e

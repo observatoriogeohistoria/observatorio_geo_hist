@@ -27,6 +27,10 @@ part of '../app_theme.dart';
 // | nome na página da pessoa | Bricolage | 800 | 1,12 | -0,03 em | `#s-member h1`             |
 // | iniciais da pessoa | Bricolage   | 800  | 1,00   | 0           | `.portrait`                |
 // | título de estado | Bricolage   | 700  | 1,12   | -0,02 em    | `.state-box b`             |
+// | título do post | Bricolage     | 800  | 1,12   | -0,03 em    | `.article-head h1`         |
+// | subtítulo do post | Figtree    | 400  | 1,45   | 0           | `.article-head .sub`       |
+// | iniciais do autor | Bricolage  | 700  | 1,00   | 0           | `.who .avatar`             |
+// | título de cartão | Bricolage   | 600  | 1,20   | -0,02 em    | `.card h3`                 |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
 // | selo     | Figtree             | 600  | 1,35   | 0           | `.fact`                    |
@@ -260,6 +264,37 @@ class AppTextStyles {
         size: _size(mobile: 20.8, tablet: 20.8, desktop: 20.8),
         weight: FontWeight.w700,
         height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  /// Título do post (`.article-head h1`). Spec 012.
+  TextStyle get postTitle => _display(
+        size: _size(mobile: 32, tablet: 42, desktop: 53),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.03,
+      );
+
+  /// Subtítulo do post (`.article-head .sub`). Spec 012.
+  TextStyle get postSubtitle => _body(
+        size: _size(mobile: 18, tablet: 20, desktop: 22.4),
+        weight: FontWeight.w400,
+        height: 1.45,
+      );
+
+  /// Iniciais no círculo do autor do post (`.who .avatar`). Spec 012.
+  TextStyle get postAuthorInitials => _display(
+        size: _size(mobile: 16, tablet: 16, desktop: 16),
+        weight: FontWeight.w700,
+        height: 1,
+        letterSpacingEm: 0,
+      );
+
+  /// Título do cartão do Leia também (`.card h3`, peso 650). Spec 012.
+  TextStyle get relatedCardTitle => _display(
+        size: _size(mobile: 20, tablet: 20, desktop: 20),
+        weight: FontWeight.w600,
+        height: 1.2,
         letterSpacingEm: -0.02,
       );
 

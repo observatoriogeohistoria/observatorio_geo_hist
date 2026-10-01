@@ -110,14 +110,21 @@ O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o 
 
 ## Páginas de leitura
 
-Páginas de texto (Manifesto, Nossa história, Pessoa da equipe e, depois, post) se montam com as peças de `core/components/reading/`:
+Páginas de texto (Manifesto, Nossa história, Pessoa da equipe e post) se montam com as peças de `core/components/reading/`:
 
-- `ReadingPageScaffold(header:, body:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela. No Tab, a navbar vem antes do conteúdo e o item focado é rolado para fora de baixo da navbar fixa.
-- `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último, sem `route`, é a página atual), título e `lead` opcional.
+- `ReadingPageScaffold(header:, body:, beforeFooter:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela; `beforeFooter` fica colado ao rodapé (a seção Apoio do post). No Tab, a navbar vem antes do conteúdo e o item focado é rolado para fora de baixo da navbar fixa.
+- `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último é a página atual e um nível do meio sem `route` é texto comum, sem foco), título e `lead` opcional.
+- `ReadingRichText`: texto do editor rico (delta do Quill) com o estilo de leitura, só leitura e fora do Tab. Ignora cores, fundos, fontes, tamanhos, linhas em branco seguidas e conteúdo embutido que não seja imagem; imagens ficam na largura da coluna, sem recorte, com altura máxima e placeholder na falha. Links abrem em outra aba (só pelo mouse: o Quill não dá foco a links).
 - `ReadingColumn`: coluna de 680 px centralizada; funciona sem `PageHeader` (Pessoa e post têm cabeçalho próprio). `paddingTop` opcional troca o respiro de cima (abaixo de uma figura).
 - `ReadingFigure`: imagem em 21:9 até 920 px, mais larga que a coluna, com legenda opcional, recorte por `alignment` e placeholder na falha. Fica entre o cabeçalho e a `ReadingColumn`, que recebe `paddingTop: readingFigureMarginBottom`.
 - Pessoa da equipe (`TeamMemberPage`) usa só o `ReadingPageScaffold`, com corpo próprio de 920 px: `MemberPageLayout` (foto | texto, empilha abaixo de 700 px de largura útil), `MemberPortrait` e `MemberPageSkeleton`. Erro mostra `StateErrorBox`; sem página (`memberHasPage`), a 404. A equipe só é buscada no `initState`, se `needsFetch`.
 - Blocos, que já trazem a própria margem: `ReadingLead`, `ReadingParagraph`, `ReadingSubtitle` (cabeçalho de nível 2), `ReadingNumberedList`, `ReadingBulletList` e `ReadingQuote`. Novos blocos entram no mesmo arquivo.
+
+## Página do post
+
+`PostDetailedPage` (spec 012) usa o `ReadingPageScaffold` e um `PostDetailStore` próprio por página (fábrica no GetIt), com os estados carregando (`PostPageSkeleton`), sucesso, não encontrado (404) e erro (`StateErrorBox`). O datasource lança `PostNotFoundException` para post inexistente ou não publicado, que vira `PostNotFoundFailure`; categoria ou área inexistente também dão 404. A página só busca o post quando a categoria da URL aparece no `FetchCategoriesStore`, e não busca de novo quando a navbar recarrega as categorias.
+
+O conteúdo sai de um ponto único, `PostTypeContent` (`posts/presentation/components/post/`): artigo usa o layout-base (`ArticleBody`: `ArticleHeader` com migalhas, título, autoria, compartilhar e `PostCover`, mais `ReadingRichText` e `ArticleNote` na coluna); os outros tipos ainda usam o `*_content.dart` antigo. Na Fase 5, cada tipo troca ali para o layout-base com o seu bloco. Abaixo do conteúdo, só no artigo, vem o `RelatedPostsSection` (Leia também: até 3 artigos da mesma categoria, sem o atual, escondido se vazio ou com falha) e, em todos, o `Support` (Acompanhe + logos), colado ao rodapé.
 
 ## Tratamento de erros
 
