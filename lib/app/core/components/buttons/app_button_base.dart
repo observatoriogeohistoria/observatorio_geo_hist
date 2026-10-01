@@ -18,6 +18,8 @@ class AppButtonBase extends StatefulWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
+    this.reserveTexts = const [],
   });
 
   final AppButtonKind kind;
@@ -29,6 +31,13 @@ class AppButtonBase extends StatefulWidget {
   /// Ícone opcional depois do texto (por exemplo, uma seta). É decorativo:
   /// o leitor de tela lê só o [text].
   final IconData? trailingIcon;
+
+  /// Ícone opcional antes do texto. Também decorativo.
+  final IconData? leadingIcon;
+
+  /// Textos que o botão pode mostrar no lugar de [text] (por exemplo, uma
+  /// confirmação). A largura fica a do maior, para a linha não pular na troca.
+  final List<String> reserveTexts;
 
   @override
   State<AppButtonBase> createState() => _AppButtonBaseState();
@@ -66,6 +75,45 @@ class _AppButtonBaseState extends State<AppButtonBase> {
           color: foreground,
         );
 
+    final iconSize = fontSize * components.buttonIconScale;
+
+    Widget content(String text) {
+      final label = Text(text, textAlign: TextAlign.center, style: textStyle);
+      if (widget.trailingIcon == null && widget.leadingIcon == null) return label;
+
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.leadingIcon != null) ...[
+            Icon(widget.leadingIcon, size: iconSize, color: foreground),
+            SizedBox(width: spacing.s8),
+          ],
+          Flexible(child: label),
+          if (widget.trailingIcon != null) ...[
+            SizedBox(width: spacing.s8),
+            Icon(widget.trailingIcon, size: iconSize, color: foreground),
+          ],
+        ],
+      );
+    }
+
+    final child = widget.reserveTexts.isEmpty
+        ? content(widget.text)
+        : Stack(
+            alignment: Alignment.center,
+            children: [
+              for (final reserved in widget.reserveTexts)
+                Visibility(
+                  visible: false,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: content(reserved),
+                ),
+              content(widget.text),
+            ],
+          );
+
     return Semantics(
       button: true,
       enabled: !widget.isDisabled,
@@ -98,20 +146,7 @@ class _AppButtonBaseState extends State<AppButtonBase> {
                     widthFactor: 1,
                     heightFactor: 1,
                     child: SelectionContainer.disabled(
-                      child: widget.trailingIcon == null
-                          ? Text(widget.text, textAlign: TextAlign.center, style: textStyle)
-                          : Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(child: Text(widget.text, textAlign: TextAlign.center, style: textStyle)),
-                                SizedBox(width: spacing.s8),
-                                Icon(
-                                  widget.trailingIcon,
-                                  size: fontSize * components.buttonIconScale,
-                                  color: foreground,
-                                ),
-                              ],
-                            ),
+                      child: child,
                     ),
                   ),
                 ),

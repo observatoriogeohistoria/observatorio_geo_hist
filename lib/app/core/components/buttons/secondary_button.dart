@@ -9,6 +9,8 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
+    this.reserveTexts = const [],
     super.key,
   }) : size = ButtonSize.small;
 
@@ -17,6 +19,8 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
+    this.reserveTexts = const [],
     super.key,
   }) : size = ButtonSize.medium;
 
@@ -25,6 +29,8 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
+    this.reserveTexts = const [],
     super.key,
   }) : size = ButtonSize.big;
 
@@ -36,6 +42,12 @@ class SecondaryButton extends StatelessWidget {
   /// Ícone opcional depois do texto (decorativo).
   final IconData? trailingIcon;
 
+  /// Ícone opcional antes do texto (decorativo).
+  final IconData? leadingIcon;
+
+  /// Textos alternativos que reservam a largura do maior (ver `AppButtonBase`).
+  final List<String> reserveTexts;
+
   @override
   Widget build(BuildContext context) {
     return AppButtonBase(
@@ -45,6 +57,8 @@ class SecondaryButton extends StatelessWidget {
       onPressed: onPressed,
       isDisabled: isDisabled,
       trailingIcon: trailingIcon,
+      leadingIcon: leadingIcon,
+      reserveTexts: reserveTexts,
     );
   }
 }
