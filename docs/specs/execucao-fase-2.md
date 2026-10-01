@@ -7,7 +7,7 @@
 |---|---|---|---|---|---|
 | 010-leitura-manifesto | layout de leitura, T-01 | feita (14 critérios, 11 tarefas) | feita (2 commits) | feita (1 fix) | verificada (5 commits) |
 | 011-nossa-historia-pessoa | T-03, T-02 | feita (17 critérios, 12 tarefas) | feita (4 commits) | feita (1 fix) | verificada com ressalvas (7 commits) |
-| 012-post-base | T-08 (artigo), P-05, P-07, P-08 | pendente | pendente | pendente | |
+| 012-post-base | T-08 (artigo), P-05, P-07, P-08 | feita (18 critérios, 18 tarefas) | pendente | pendente | |
 | 013-compartilhamento-post | P-06 | pendente | pendente | pendente | |
 
 ## Divisão
@@ -19,6 +19,8 @@
 ## Decisões tomadas sem a pessoa
 - 010: texto do Manifesto com a revisão do protótipo (abertura, lista, destaque e pequenas correções, sem apagar frases); migalhas no cabeçalho de página; base de leitura só com os blocos do Manifesto (subtítulo e lista com marcadores na 011); Nossa história provisória não migra na 010. Detalhes em [010/spec.md](010-leitura-manifesto/spec.md).
 - 011: texto de Nossa história atual palavra por palavra na estrutura do protótipo (sem a reescrita dele); foto `our-history.webp` em 21:9 com recorte para cima; sem o botão "← Equipe"; "Equipe" nas migalhas vai para a Home; pessoa não encontrada usa a 404 atual; laço de leituras já resolvido no código, mantido como critério. Detalhes em [011/spec.md](011-nossa-historia-pessoa/spec.md).
+
+- 012: só o artigo no layout-base; os outros 9 tipos mantêm o conteúdo atual dentro da página nova (estados e Apoio novos); migalhas "Início › Área › Categoria › Artigo" com a área sem link; sem botão de voltar e sem barra de progresso; compartilhar atual (4 opções) no lugar do protótipo, só acessível; data "março de 2026"; Leia também com até 3 artigos da categoria, escondido se vazio; imagens do texto sem recorte; post não publicado → 404. Detalhes em [012/spec.md](012-post-base/spec.md).
 
 ## Ressalvas
 - 010: a seta do `PrimaryButton` (spec 002) não cresce com o texto a 200%; não quebra o layout. Anotada para quando o botão for revisto.

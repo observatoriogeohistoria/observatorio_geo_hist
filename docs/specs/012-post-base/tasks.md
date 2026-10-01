@@ -1,0 +1,31 @@
+# Tarefas da 012. Layout-base do post (tipo artigo) e seção Apoio
+
+Legenda: `- [ ]` a fazer, `- [x]` feita. Cada tarefa termina com `fvm flutter analyze` limpo (na cópia ASCII).
+
+## Grupo A: fundações
+- [ ] **A1.** Tokens do post, do Leia também, do Apoio, do compartilhar e da imagem no texto; estilos `postTitle`, `postSubtitle`, `relatedCardTitle` (e `overline` se `label` não servir). Arquivos: `app_dimensions.dart`, `app_text_styles.dart`. Atende: 17, 18.
+- [ ] **A2.** Utilitários: `PostsAreas.tryFromKey`, `formatMonthYear`, `joinNames`, `initialsOf` (movido de `memberInitials`, com os usos da Home atualizados). Arquivos: `posts_areas.dart`, `date.dart`, `strings.dart`, `sort_team.dart` e quem importa `memberInitials`. Conferir: "03/2026" → "março de 2026", "2026" → "2026", ["A","B","C"] → "A, B e C"; iniciais da Home iguais. Atende: 3, 13.
+- [ ] **A3.** Migalhas: item do meio sem rota vira texto comum, sem foco e sem "página atual". Arquivo: `breadcrumbs.dart`. Conferir Manifesto, Nossa história e Pessoa sem mudança. Atende: 2.
+
+## Grupo B: dados
+- [ ] **B1.** Não encontrado separado de falha: `PostNotFoundException` no `fetchPostById` (sem documento ou não publicado) e `PostNotFoundFailure` no repositório. Arquivos: `fetch_posts_datasource.dart`, `fetch_posts_repository.dart`, `failures.dart`. Atende: 13, 14.
+- [ ] **B2.** `PostDetailStore` (estados Initial/Loading/Success/NotFound/Error, `fetch`, `fetchRelated` com tipo artigo, `limit: 4`, sem o atual, até 3, falha → vazio), registrado como fábrica; `build_runner`. Arquivos: `post_detail_store.dart`, `post_detail_store.g.dart`, `states/post_detail_states.dart`, `posts_setup.dart`. Atende: 9, 10, 12, 13, 14.
+
+## Grupo C: componentes
+- [ ] **C1.** `ReadingRichText`: Quill só leitura com estilos de leitura, limpeza de `color`/`background`/`font`, imagem embutida (largura da coluna, sem recorte, altura máx., placeholder na falha), embed desconhecido ignorado, links em outra aba. Arquivo: `core/components/reading/reading_rich_text.dart`. Conferir com delta injetado temporário (parágrafos, H1–H3, listas, citação, link, cor, imagem válida, imagem quebrada, embed desconhecido), sem commitar o teste. Atende: 6, 7.
+- [ ] **C2.** `PostCover` (21:9, recorte, carregando em `surface`, placeholder na falha, legenda, nome acessível) e `ArticleNote` ("NOTA" em `accentStrong`, só com observação não vazia). Arquivos: `post/post_cover.dart`, `post/article_note.dart`. Atende: 5, 8.
+- [ ] **C3.** Compartilhar atual acessível: nome "Compartilhar no …", dica, foco visível, tamanhos de token, sem `num_extension`, mesmos links. Arquivo: `social_icons.dart`. Atende: 4.
+- [ ] **C4.** `ArticleHeader` com migalhas "Início › Área › Categoria › Artigo", título `h1`, subtítulo (some vazio), linha de autoria (iniciais só com 1 autor, nomes juntos com vários, data formatada, compartilhar à direita/abaixo) e capa (some sem imagem). Arquivo: `post/article_header.dart`. Atende: 1, 2, 3, 4, 5.
+- [ ] **C5.** `ArticleBody`: cabeçalho até 820 px + `ReadingColumn` com `ReadingRichText` do texto e `ArticleNote`; sem tempo de leitura. Arquivo: `post/article_body.dart`. Atende: 1, 3, 6, 8.
+- [ ] **C6.** Leia também: `RelatedPostCard` (link inteiro, imagem 16:10 ou placeholder, "ARTIGO" em `accentStrong`, título até 3 linhas, "autores · data" em `inkSecondary`, hover sem movimento com movimento reduzido) e `RelatedPostsSection` (título `h2`, "Mais em [categoria]", grade auto-fill ≥ 300 px, até 3; escondida se vazia). Arquivos: `post/related_post_card.dart`, `post/related_posts_section.dart`. Atende: 9, 16.
+- [ ] **C7.** Apoio: `SocialPills` e `Support` reescrito (surface + linha, "Acompanhe" e "Apoio" como cabeçalhos, 9 logos com colunas de 130 px, duas colunas ≥ 820 px). Arquivos: `social_buttons.dart`, `support/support.dart`. Atende: 11, 16.
+- [ ] **C8.** `PostPageSkeleton` parado no formato do artigo, anunciado como "Carregando". Arquivo: `post/post_page_skeleton.dart`. Atende: 12.
+
+## Grupo D: página
+- [ ] **D1.** Ponto único por tipo (`PostTypeContent`: artigo → `ArticleBody`; os outros 9 → `*_content` atual) e `PostDetailedPage` reescrita sobre `ReadingPageScaffold`: store próprio, reação às categorias, `didUpdateWidget`, esqueleto, 404 (categoria inexistente, `NotFound`), caixa de erro com "Tentar de novo", Leia também só no artigo, `Support` em todos; rota do post com área inválida → 404. Arquivos: `post/post_type_content.dart`, `post_detailed_page.dart`, `app_router.dart`. Atende: 1, 10, 12, 13, 14, 15, 17.
+- [ ] **D2.** Documentar em `docs/arquitetura.md`: `ReadingRichText`, migalha sem link, página do post e o ponto único por tipo para a Fase 5. Atende: 18.
+
+## Grupo E: conferência
+- [ ] **E1.** `fvm flutter analyze` (cópia ASCII) sem problemas novos e `fvm flutter build web --release` sem erro; `grep` confirma que os arquivos novos não importam `num_extension` e que o artigo não usa `AppHeadline`, `AppTitle`, `AppDivider`, `PageErrorContent` nem `LoadingContent`. Atende: 18.
+- [ ] **E2.** Conferência no app rodando (build servido localmente, navegador embutido) em **390, 768 e 1280 px**: abrir um **artigo real** (Firebase dev; sem artigo no dev, build com `APP_ENV=prod`, só leitura) e conferir ordem, migalhas (clique e Enter), autoria e data, compartilhar (destinos, foco, posição), capa, texto, nota, Leia também (cartões, "Mais em…", trocar de post e voltar à categoria com a lista intacta), Apoio, Tab, contraste e `scrollWidth` igual à largura; abrir **ao menos um post de outro tipo** (um de cada tipo que houver no banco) e confirmar conteúdo atual + Apoio novo sem erro; 404 com área inválida, categoria inexistente e id inexistente; erro com o Firestore bloqueado e "Tentar de novo"; esqueleto no acesso direto; janela alta com rodapé na base; Manifesto, Nossa história, Pessoa e página da categoria sem mudança; console sem `overflow`. Voltar o navegador ao preset desktop e parar os servidores. Atende: 1 a 17.
+- [ ] **E3.** Atualizar a spec: status `implementada` e registro no "Histórico de mudanças" (com qualquer divergência e o ambiente usado na E2). Arquivo: `spec.md`. Atende: todos (registro).
