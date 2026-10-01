@@ -32,7 +32,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), skeleton, video_player, entre outros |
+| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), skeleton, video_player, entre outros |
 | `models/` | `PostModel` e os corpos de post, `category`, `image`, `paginated/`, `states/` (CRUD) e demais modelos comuns |
 | `utils/` | Constantes, datas, enums, formatters, validators, `environment/`, `browser/` e demais utilitários |
 | `infra/` | Datasource/repository de categorias e `services/logger_service` |
@@ -107,6 +107,15 @@ A `HomePage` é um `CustomScrollView` com um bloco por sliver, abaixo da navbar.
 - **Chamada para contato** (`components/contact_call/`): quadro com "Fale com a gente" para `/contato` (`AppRoutes.contact`). Botão à direita só no desktop.
 
 O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o usa sem eles): `onInitialized`, `onError`, `loadingPlaceholder`, `shouldStartPlaying`, `onAutoplayBlocked`, `autofocusControls` e `showControlsScrim`.
+
+## Páginas de leitura
+
+Páginas de texto (Manifesto e, depois, Nossa história, Pessoa da equipe e post) se montam com as peças de `core/components/reading/`:
+
+- `ReadingPageScaffold(header:, body:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela.
+- `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último, sem `route`, é a página atual), título e `lead` opcional.
+- `ReadingColumn`: coluna de 680 px centralizada; funciona sem `PageHeader` (Pessoa e post têm cabeçalho próprio).
+- Blocos, que já trazem a própria margem: `ReadingLead`, `ReadingParagraph`, `ReadingNumberedList` e `ReadingQuote`. Novos blocos (subtítulo, lista com marcadores) entram no mesmo arquivo.
 
 ## Tratamento de erros
 

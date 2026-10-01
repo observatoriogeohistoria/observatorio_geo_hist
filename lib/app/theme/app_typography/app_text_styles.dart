@@ -20,6 +20,9 @@ part of '../app_theme.dart';
 // | iniciais | Bricolage Grotesque | 700  | 1,00   | 0           | `.avatar`                  |
 // | função de membro | Figtree     | 400  | 1,45   | 0           | `.member span`             |
 // | leitura  | Figtree             | 400  | 1,75   | 0           | `.prose`                   |
+// | item numerado | Figtree        | 400  | 1,65   | 0           | `.manifest-list li`        |
+// | número do item | Figtree       | 700  | 1,00   | 0           | `.manifest-list li::before`|
+// | destaque de leitura | Bricolage | 500 | 1,35   | -0,02 em    | `.prose blockquote`        |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
 // | selo     | Figtree             | 600  | 1,35   | 0           | `.fact`                    |
@@ -200,6 +203,28 @@ class AppTextStyles {
         size: _size(mobile: 17, tablet: 18, desktop: 18),
         weight: FontWeight.w400,
         height: 1.75,
+      );
+
+  /// Item de lista numerada na coluna de leitura (`.manifest-list li`). Spec 010.
+  TextStyle get readingListItem => _body(
+        size: _size(mobile: 17, tablet: 17.5, desktop: 17.5),
+        weight: FontWeight.w400,
+        height: 1.65,
+      );
+
+  /// Número dentro do círculo da lista numerada. Spec 010.
+  TextStyle get readingListNumber => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w700,
+        height: 1,
+      );
+
+  /// Frase de destaque na coluna de leitura (`.prose blockquote`). Spec 010.
+  TextStyle get readingQuote => _display(
+        size: _size(mobile: 20, tablet: 22.4, desktop: 22.4),
+        weight: FontWeight.w500,
+        height: 1.35,
+        letterSpacingEm: -0.02,
       );
 
   /// Texto de apoio abaixo de títulos grandes (hero). Valores da spec 004.

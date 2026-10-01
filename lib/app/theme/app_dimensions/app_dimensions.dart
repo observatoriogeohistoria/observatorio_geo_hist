@@ -398,6 +398,41 @@ class ComponentSizes {
   /// Respiro acima e abaixo do título no cabeçalho de página (`.page-head .wrap`).
   double pageHeadPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 40, 56);
 
+  // Base de leitura (spec 010). Origem: `.page-head .wrap`, `.crumbs`,
+  // `.article`, `.manifest-list` e `.prose blockquote` do protótipo.
+
+  /// Cabeçalho de página: respiro acima das migalhas e abaixo do título,
+  /// vão migalhas → título e título → texto de apoio.
+  final double pageHeadPaddingTop = 28.0;
+  double pageHeadPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 32, 46, 56);
+  final double pageHeadTitleGap = 22.0;
+  final double pageHeadLeadGap = 14.0;
+
+  /// Migalhas: vão entre item e seta e tamanho da seta.
+  final double breadcrumbGap = 6.0;
+  final double breadcrumbIcon = 13.0;
+
+  /// Respiro da coluna de leitura acima do texto e antes do rodapé.
+  final double readingPaddingTop = 40.0;
+  double readingPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 56, 64);
+
+  /// Lista numerada: diâmetro do círculo, largura da coluna do número, vão
+  /// número → texto, vão entre itens, descida do círculo para alinhar à
+  /// primeira linha e margem acima e abaixo da lista.
+  final double readingListNumberDiameter = 30.0;
+  final double readingListNumberColumn = 34.0;
+  final double readingListNumberGap = 14.0;
+  final double readingListItemGap = 14.0;
+  final double readingListNumberTopOffset = 3.0;
+  final double readingListMarginVertical = 25.0;
+
+  /// Destaque: espessura da barra, recuo do texto, preenchimento vertical e
+  /// margem acima e abaixo.
+  final double readingQuoteBar = 3.0;
+  final double readingQuotePaddingLeft = 22.0;
+  final double readingQuotePaddingVertical = 4.0;
+  final double readingQuoteMarginVertical = 29.0;
+
   double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
     return switch (breakpoint) {
       Breakpoint.mobile => mobile,
