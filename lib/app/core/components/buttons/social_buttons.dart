@@ -98,3 +98,94 @@ class _SocialButtonState extends State<_SocialButton> {
     );
   }
 }
+
+/// Pílulas de Instagram, Facebook e YouTube com ícone e nome (`.social`, seção
+/// Apoio do post). Abrem em outra aba.
+class SocialPills extends StatelessWidget {
+  const SocialPills({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final gap = AppTheme.dimensions.components.socialPillGap;
+
+    return Wrap(
+      spacing: gap,
+      runSpacing: gap,
+      children: const [
+        _SocialPill(name: 'instagram', label: 'Instagram', url: AppStrings.instagram),
+        _SocialPill(name: 'facebook', label: 'Facebook', url: AppStrings.facebook),
+        _SocialPill(name: 'youtube', label: 'YouTube', url: AppStrings.youtube),
+      ],
+    );
+  }
+}
+
+class _SocialPill extends StatefulWidget {
+  const _SocialPill({required this.name, required this.label, required this.url});
+
+  final String name;
+  final String label;
+  final String url;
+
+  @override
+  State<_SocialPill> createState() => _SocialPillState();
+}
+
+class _SocialPillState extends State<_SocialPill> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.pill);
+    final color = _hovered ? colors.accentStrong : colors.ink;
+    final iconSize = components.socialPillIcon * MediaQuery.textScalerOf(context).scale(1);
+
+    return Semantics(
+      link: true,
+      label: '${widget.label}, abre em outra aba',
+      linkUrl: Uri.parse(widget.url),
+      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
+      onTap: () => openUrl(widget.url),
+      excludeSemantics: true,
+      child: AppFocusRing(
+        borderRadius: radius,
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            borderRadius: radius,
+            onTap: () => openUrl(widget.url),
+            onHover: (value) => setState(() => _hovered = value),
+            hoverColor: Colors.transparent,
+            mouseCursor: SystemMouseCursors.click,
+            child: Ink(
+              padding: EdgeInsets.symmetric(
+                horizontal: components.socialPillPaddingH,
+                vertical: components.socialPillPaddingV,
+              ),
+              decoration: BoxDecoration(
+                color: colors.page,
+                borderRadius: radius,
+                border: Border.all(color: _hovered ? colors.accent : colors.line),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    '${AppAssets.icons}/${widget.name}.svg',
+                    width: iconSize,
+                    height: iconSize,
+                    colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                  ),
+                  SizedBox(width: components.socialPillGap),
+                  Text(widget.label, style: AppTheme.typography.of(context).badge.copyWith(color: color)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

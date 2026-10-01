@@ -493,6 +493,22 @@ class ComponentSizes {
   final double stateBoxButtonGap = 6.0;
   final double stateBoxTextMaxWidth = 380.0;
 
+  // Apoio do post (spec 012). Origem: `.support` e `.social` da aba "Post".
+
+  /// Apoio (`.support`): respiro vertical, largura útil a partir da qual redes e
+  /// logos ficam lado a lado, vãos entre as colunas e vão rótulo → conteúdo.
+  final double supportPaddingVertical = 48.0;
+  final double supportColumnsBreak = 820.0;
+  final double supportColumnGapH = 64.0;
+  final double supportColumnGapV = 32.0;
+  final double supportLabelGap = 14.0;
+
+  /// Pílula de rede social (`.social`): preenchimento, vão ícone → nome e ícone.
+  final double socialPillPaddingH = 14.0;
+  final double socialPillPaddingV = 9.0;
+  final double socialPillGap = 8.0;
+  final double socialPillIcon = 18.0;
+
   double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
     return switch (breakpoint) {
       Breakpoint.mobile => mobile,
