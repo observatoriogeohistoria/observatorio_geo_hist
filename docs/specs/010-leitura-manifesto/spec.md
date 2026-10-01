@@ -1,6 +1,6 @@
 # 010. Layout de leitura compartilhado e Manifesto
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 2 (leitura), T-01 Manifesto, e a base de leitura usada depois por T-03, T-02 e T-08
 - **Protótipo:** aba "Manifesto"; abas "História", "Membro" e "Post" como referência do que vai reaproveitar o layout (link no CLAUDE.md)
 - **Criada em:** 2026-10-01
@@ -119,3 +119,4 @@ O título laranja em caixa alta, a divisória, o texto cinza claro e os prefixos
 ## Histórico de mudanças
 - 2026-10-01: criada e aprovada no modo autônomo (execução da Fase 2).
 - 2026-10-01: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-01: implementada. Ajuste na implementação: o título da página sai como cabeçalho de nível 1 (`h1`), não só "cabeçalho", por ser o título da página.
