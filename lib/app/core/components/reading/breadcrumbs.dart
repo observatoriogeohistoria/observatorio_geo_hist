@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -25,6 +26,7 @@ class Breadcrumbs extends StatelessWidget {
     final style = AppTheme.typography.of(context).small;
 
     return Semantics(
+      role: SemanticsRole.navigation,
       container: true,
       explicitChildNodes: true,
       label: 'Você está em',
