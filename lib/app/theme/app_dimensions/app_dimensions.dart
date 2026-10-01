@@ -524,6 +524,14 @@ class ComponentSizes {
   final double shareIcon = 22.0;
   final double shareGap = 4.0;
 
+  /// Compartilhar ampliado (spec 013): vão rótulo → ícones (`.share-label`),
+  /// vão até "Copiar link" (`#copy-btn`), vão entre linhas (`.share` `gap`) e
+  /// tempo da confirmação da cópia.
+  final double shareLabelGap = 6.0;
+  final double shareCopyGap = 6.0;
+  final double shareRowGap = 4.0;
+  final Duration shareFeedbackDuration = const Duration(milliseconds: 1800);
+
   /// Imagem no texto: altura máxima, margem acima e abaixo e proporção do
   /// placeholder na falha.
   final double readingImageMaxHeight = 560.0;

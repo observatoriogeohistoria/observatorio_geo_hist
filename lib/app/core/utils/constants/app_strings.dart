@@ -29,7 +29,11 @@ Uberlândia/MG''';
 
   static const String shareOnFacebook = 'https://www.facebook.com/sharer/sharer.php?u=[URL]';
 
-  static const String shareOnTwitter = 'https://x.com/intent/post?text=[TEXT]&url=[URL]';
+  static const String shareOnX = 'https://x.com/intent/post?text=[TEXT]&url=[URL]';
+
+  static const String shareOnLinkedin = 'https://www.linkedin.com/sharing/share-offsite/?url=[URL]';
+
+  static const String shareOnTelegram = 'https://t.me/share/url?url=[URL]&text=[TEXT]';
 
   static const String shareOnWhatsapp = 'https://api.whatsapp.com/send?text=[TEXT]%20[URL]';
 

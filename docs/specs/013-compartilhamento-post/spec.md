@@ -1,6 +1,6 @@
 # 013. Compartilhamento ampliado do post
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 2: P-06
 - **Protótipo:** aba "Post", linha de autoria (botões "Desktop" e "Celular") (link no CLAUDE.md)
 - **Criada em:** 2026-10-01
@@ -36,7 +36,7 @@ Quem lê um artigo consegue copiar o link ou enviá-lo por WhatsApp, Facebook, X
 Na linha de autoria, à direita do autor (abaixo dele se não couber): rótulo "COMPARTILHAR" (pequeno, caixa alta, cor secundária), os seis ícones na ordem WhatsApp, Facebook, X, LinkedIn, Telegram, E-mail, e o botão secundário pequeno "Copiar link" com ícone de corrente. Sem botão nativo.
 
 ### Celular (< 600 px)
-Abaixo do autor, uma linha só, sem rótulo:
+Abaixo do autor, sem rótulo, numa linha que quebra se não couber (com o botão "Compartilhar", em 390 px, WhatsApp e "Mais" descem para uma segunda linha):
 1. **"Compartilhar"** (botão secundário pequeno com ícone de compartilhar), só quando o navegador oferece compartilhamento nativo. Abre a folha do sistema. Se a pessoa cancelar, nada acontece; se falhar por outro motivo, as opções de "Mais" se abrem.
 2. **"Copiar link"** (botão secundário pequeno).
 3. **WhatsApp** (ícone), a rede mais usada no Brasil.
@@ -44,7 +44,7 @@ Abaixo do autor, uma linha só, sem rótulo:
 
 ### Confirmação de "Copiar link"
 - Sucesso: o texto do botão vira "Link copiado" com ícone de confirmação por cerca de 2 segundos e volta a "Copiar link". O leitor de tela anuncia "Link copiado". A largura do botão não faz a linha pular (reserva o espaço do texto maior).
-- Falha (navegador bloqueou a área de transferência): o botão mostra "Não foi possível copiar" pelo mesmo tempo, também anunciado. Cliques repetidos reiniciam a contagem, sem empilhar avisos.
+- Falha (navegador bloqueou a área de transferência): o botão mostra "Erro ao copiar" pelo mesmo tempo e o leitor de tela anuncia "Não foi possível copiar o link". Cliques repetidos reiniciam a contagem, sem empilhar avisos.
 
 ### Outros 9 tipos
 Continuam **sem** compartilhar nesta spec. O componente fica pronto para a Fase 5 colocá-lo no cabeçalho do layout-base de cada tipo (um só componente; ver "Perguntas em aberto").
@@ -79,7 +79,7 @@ Continuam **sem** compartilhar nesta spec. O componente fica pronto para a Fase 
 2. [ ] Cada rede abre o destino da tabela em outra aba, com o link do post e, onde cabe, o título codificado (conferido com título que tem acento, aspas e "&").
 3. [ ] E-mail abre o programa de e-mail na mesma aba, com o título no assunto e título + link no corpo.
 4. [ ] "Copiar link" coloca o endereço do post na área de transferência; o botão mostra "Link copiado" com ícone por cerca de 2 s e volta, sem a linha mudar de largura.
-5. [ ] A confirmação "Link copiado" é anunciada ao leitor de tela; com a área de transferência bloqueada (falha injetada), aparece e é anunciado "Não foi possível copiar".
+5. [ ] A confirmação "Link copiado" é anunciada ao leitor de tela; com a área de transferência bloqueada (falha injetada), o botão mostra "Erro ao copiar" e é anunciado "Não foi possível copiar o link".
 6. [ ] Em 390, aparecem "Copiar link", WhatsApp e "Mais"; os outros cinco ficam escondidos até "Mais" ser acionado, e "Mais" os mostra e esconde por clique, Enter e Espaço, informando o estado aberto/fechado.
 7. [ ] Em 390, num navegador com compartilhamento nativo, aparece "Compartilhar", que abre a folha do sistema com título e link; cancelar não muda nada; sem suporte (ou em ≥ 600 px), o botão não aparece.
 8. [ ] Toda opção tem nome acessível conforme "Acessibilidade", dica ao passar o mouse e foco visível; a ordem de Tab segue a ordem visual, incluindo as opções reveladas por "Mais".
@@ -109,3 +109,5 @@ Continuam **sem** compartilhar nesta spec. O componente fica pronto para a Fase 
 ## Histórico de mudanças
 - 2026-10-01: criada e aprovada no modo autônomo (execução da Fase 2).
 - 2026-10-01: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-01: ajustes na implementação (modo autônomo). Texto de falha no botão passa a "Erro ao copiar" (o anúncio mantém a frase completa, "Não foi possível copiar o link"), porque a largura reservada para "Não foi possível copiar" deixava o botão com ~200 px e jogava o compartilhar para baixo do autor mesmo com nome curto. No celular, a linha deixa de ser "uma só": com o botão nativo, "Compartilhar" + "Copiar link" já ocupam os 350 px úteis de 390, e WhatsApp e "Mais" quebram para a linha seguinte.
+- 2026-10-01: implementada. Conferência em build `APP_ENV=prod` só leitura.

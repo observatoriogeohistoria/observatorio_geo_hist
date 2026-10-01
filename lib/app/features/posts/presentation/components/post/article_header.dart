@@ -9,7 +9,7 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_cover.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/social_icons.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_share.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Cabeçalho do artigo (`.article-head`): migalhas, título, subtítulo, linha
@@ -83,7 +83,7 @@ class _Byline extends StatelessWidget {
     final components = AppTheme.dimensions.components;
     final isMobile = ScreenUtils.breakpointOf(context) == Breakpoint.mobile;
     final author = _Author(authors: article.authors, date: article.date);
-    final share = SocialIcons(post: post);
+    final share = PostShare(post: post);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -96,12 +96,12 @@ class _Byline extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [author, SizedBox(height: components.postBylineGap), share],
               )
-            : Row(
-                children: [
-                  Expanded(child: author),
-                  SizedBox(width: components.postBylineGap),
-                  share,
-                ],
+            : Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: components.postBylineGap,
+                runSpacing: components.postBylineGap,
+                children: [author, share],
               ),
       ),
     );
@@ -139,6 +139,7 @@ class _Author extends StatelessWidget {
     final diameter = components.postAuthorAvatar * MediaQuery.textScalerOf(context).scale(1);
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         ExcludeSemantics(
           child: Container(
@@ -150,7 +151,7 @@ class _Author extends StatelessWidget {
           ),
         ),
         SizedBox(width: components.postAuthorGap),
-        Expanded(child: text),
+        Flexible(child: text),
       ],
     );
   }

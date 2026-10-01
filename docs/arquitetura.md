@@ -126,6 +126,8 @@ Páginas de texto (Manifesto, Nossa história, Pessoa da equipe e post) se monta
 
 O conteúdo sai de um ponto único, `PostTypeContent` (`posts/presentation/components/post/`): artigo usa o layout-base (`ArticleBody`: `ArticleHeader` com migalhas, título, autoria, compartilhar e `PostCover`, mais `ReadingRichText` e `ArticleNote` na coluna); os outros tipos ainda usam o `*_content.dart` antigo. Na Fase 5, cada tipo troca ali para o layout-base com o seu bloco. Abaixo do conteúdo, só no artigo, vem o `RelatedPostsSection` (Leia também: até 3 artigos da mesma categoria, sem o atual, escondido se vazio ou com falha) e, em todos, o `Support` (Acompanhe + logos), colado ao rodapé.
 
+O compartilhar do layout-base é o `PostShare` (spec 013): copiar link, redes e e-mail, e a folha do aparelho no celular (`core/utils/browser/native_share`). Na Fase 5, os outros tipos o usam no cabeçalho; o `SocialIcons` antigo some na Fase 7.
+
 ## Tratamento de erros
 
 Repositórios retornam `Either<Failure, T>`; cada feature define suas falhas.

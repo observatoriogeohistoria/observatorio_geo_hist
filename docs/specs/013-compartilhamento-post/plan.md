@@ -30,7 +30,7 @@ O `SocialIcons` continua no projeto (ainda importado pelo `ArticleContent` antig
 - **Resultado do nativo:** `AbortError` = cancelado (nada acontece); outro erro abre "Mais". `navigator.share` exige gesto da pessoa: a chamada sai direto do `onTap`, sem `await` antes.
 - **Cópia:** `Clipboard.setData(ClipboardData(text: Uri.base.toString()))` dentro de `try`; sucesso ou falha muda o texto do botão por `shareFeedbackDuration` com um `Timer` cancelado a cada clique e no `dispose`.
 - **Anúncio:** `SemanticsService.sendAnnouncement(View.of(context), texto, TextDirection.ltr)` (API do Flutter 3.44; se o analisador indicar outra, usar a equivalente não depreciada). Também o rótulo do botão muda, então quem volta ao botão ouve o estado.
-- **Largura estável:** `reserveTexts: ['Copiar link', 'Link copiado', 'Não foi possível copiar']` no botão. Alternativa (largura fixa em token) descartada: quebra com fonte ampliada.
+- **Largura estável:** `reserveTexts: ['Copiar link', 'Link copiado', 'Erro ao copiar']` no botão. Alternativa (largura fixa em token) descartada: quebra com fonte ampliada.
 - **"Mais":** `_ShareIconButton` com ícone `Icons.more_horiz`, `Semantics(expanded: aberto)`; a linha revelada fica num `Wrap` logo abaixo, dentro do mesmo grupo e na ordem de foco natural (sem `FocusTraversalOrder` manual). Abrir/fechar sem animação.
 - **Ícones de botão com texto:** `Icons.link`, `Icons.ios_share`/`Icons.share_outlined` e `Icons.check` do Material (decorativos); ícones das redes em SVG com `ColorFilter` na cor `muted` (ou `accent` no hover).
 - **Montagem dos links:** a mesma de hoje (`[TEXT]`, `[SUBJECT]`, `[URL]` com `encodeUrlComponent`/`getEncodedCurrentUrl`); e-mail com `sameTab: true`.
