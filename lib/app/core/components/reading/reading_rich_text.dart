@@ -133,19 +133,23 @@ class _ReadingRichTextState extends State<ReadingRichText> {
   Widget build(BuildContext context) {
     if (ReadingRichText.isEmpty(widget.content)) return const SizedBox.shrink();
 
-    return QuillEditor(
-      controller: _controller,
-      focusNode: _focusNode,
-      scrollController: _scrollController,
-      config: QuillEditorConfig(
-        scrollable: false,
-        showCursor: false,
-        expands: false,
-        padding: EdgeInsets.zero,
-        customStyles: _styles(context),
-        onLaunchUrl: (url) => openUrl(url),
-        embedBuilders: const [_ImageEmbedBuilder()],
-        unknownEmbedBuilder: const _IgnoredEmbedBuilder(),
+    // Na web o Quill cria um nó de foco próprio, que virava uma parada de Tab invisível.
+    return FocusTraversalGroup(
+      descendantsAreTraversable: false,
+      child: QuillEditor(
+        controller: _controller,
+        focusNode: _focusNode,
+        scrollController: _scrollController,
+        config: QuillEditorConfig(
+          scrollable: false,
+          showCursor: false,
+          expands: false,
+          padding: EdgeInsets.zero,
+          customStyles: _styles(context),
+          onLaunchUrl: (url) => openUrl(url),
+          embedBuilders: const [_ImageEmbedBuilder()],
+          unknownEmbedBuilder: const _IgnoredEmbedBuilder(),
+        ),
       ),
     );
   }
