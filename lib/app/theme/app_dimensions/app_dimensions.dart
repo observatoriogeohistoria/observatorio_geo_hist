@@ -395,9 +395,6 @@ class ComponentSizes {
   /// texto também no desktop.
   final double ctaStackTextScale = 1.3;
 
-  /// Respiro acima e abaixo do título no cabeçalho de página (`.page-head .wrap`).
-  double pageHeadPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 40, 56);
-
   // Base de leitura (spec 010). Origem: `.page-head .wrap`, `.crumbs`,
   // `.article`, `.manifest-list` e `.prose blockquote` do protótipo.
 
