@@ -9,8 +9,8 @@ Cada tarefa termina com `fvm flutter analyze` limpo (rodado na cópia em caminho
 - [ ] **A2.** Estilos `readingSubtitle`, `memberPageName`, `memberPageInitials` e `stateTitle`, com linhas na tabela do topo. Arquivo: `theme/app_typography/app_text_styles.dart`. Atende: critérios 3, 5, 13 e 17.
 
 ## Grupo B: Base de leitura
-- [ ] **B1.** `ReadingSubtitle` (cabeçalho nível 2) e `ReadingBulletList` (lista semântica, marcador decorativo que escala com o texto, texto quebrado alinhado ao texto). Arquivo: `core/components/reading/reading_blocks.dart`. Atende: critérios 3 e 16.
-- [ ] **B2.** `ReadingFigure`: até 920 px centralizada, 21:9, `r16`, `cover` com alinhamento configurável, fundo `surface` até o primeiro quadro, placeholder `accentSoft` com ícone decorativo na falha, legenda opcional, `semanticLabel`. Parâmetro opcional `paddingTop` em `ReadingColumn`. Arquivos: `core/components/reading/reading_figure.dart`, `core/components/reading/reading_column.dart`. Atende: critérios 4 e 16.
+- [x] **B1.** `ReadingSubtitle` (cabeçalho nível 2) e `ReadingBulletList` (lista semântica, marcador decorativo que escala com o texto, texto quebrado alinhado ao texto). Arquivo: `core/components/reading/reading_blocks.dart`. Atende: critérios 3 e 16.
+- [x] **B2.** `ReadingFigure`: até 920 px centralizada, 21:9, `r16`, `cover` com alinhamento configurável, fundo `surface` até o primeiro quadro, placeholder `accentSoft` com ícone decorativo na falha, legenda opcional, `semanticLabel`. Parâmetro opcional `paddingTop` em `ReadingColumn`. Arquivos: `core/components/reading/reading_figure.dart`, `core/components/reading/reading_column.dart`. Atende: critérios 4 e 16. _Nota: o fundo `surface` fica sob a imagem (sem `frameBuilder`), o que dá o mesmo efeito até o primeiro quadro. Tokens e estilo `readingSubtitle` entraram aqui, junto do primeiro uso._
 - [ ] **B3.** `StateErrorBox` (título, apoio, "Tentar de novo" primário pequeno, ícone decorativo, contraste ≥ 4,5:1). Arquivo: `core/components/error_content/state_error_box.dart`. Atende: critérios 9 e 12.
 
 ## Grupo C: Nossa história

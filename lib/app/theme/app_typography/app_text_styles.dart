@@ -23,6 +23,7 @@ part of '../app_theme.dart';
 // | item numerado | Figtree        | 400  | 1,65   | 0           | `.manifest-list li`        |
 // | número do item | Figtree       | 700  | 1,00   | 0           | `.manifest-list li::before`|
 // | destaque de leitura | Bricolage | 500 | 1,35   | -0,02 em    | `.prose blockquote`        |
+// | subtítulo de leitura | Bricolage | 700 | 1,12  | -0,02 em    | `.article .prose h2`       |
 // | apoio    | Figtree             | 400  | 1,55   | 0           | `.lead`                    |
 // | apoio de seção | Figtree       | 400  | 1,55   | 0           | `.lead` a 1,1 rem          |
 // | selo     | Figtree             | 600  | 1,35   | 0           | `.fact`                    |
@@ -224,6 +225,14 @@ class AppTextStyles {
         size: _size(mobile: 20, tablet: 22.4, desktop: 22.4),
         weight: FontWeight.w500,
         height: 1.35,
+        letterSpacingEm: -0.02,
+      );
+
+  /// Subtítulo na coluna de leitura (`.article .prose h2`). Spec 011.
+  TextStyle get readingSubtitle => _display(
+        size: _size(mobile: 24, tablet: 27.2, desktop: 27.2),
+        weight: FontWeight.w700,
+        height: 1.12,
         letterSpacingEm: -0.02,
       );
 

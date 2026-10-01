@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -32,6 +34,107 @@ class ReadingParagraph extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: AppTheme.dimensions.components.readingParagraphGap),
       child: Text(text, style: AppTheme.typography.of(context).reading.copyWith(color: AppTheme.colors.ink)),
+    );
+  }
+}
+
+/// Subtítulo da coluna de leitura (`.article .prose h2`), anunciado como
+/// cabeçalho de nível 2.
+class ReadingSubtitle extends StatelessWidget {
+  const ReadingSubtitle(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        top: components.readingSubtitleMarginTop - components.readingParagraphGap,
+        bottom: components.readingSubtitleMarginBottom,
+      ),
+      child: Semantics(
+        header: true,
+        headingLevel: 2,
+        child: Text(text, style: AppTheme.typography.of(context).readingSubtitle.copyWith(color: AppTheme.colors.ink)),
+      ),
+    );
+  }
+}
+
+/// Lista com marcadores (`.article .prose ul`): marcador redondo à esquerda e
+/// linhas quebradas alinhadas ao texto.
+class ReadingBulletList extends StatelessWidget {
+  const ReadingBulletList({super.key, required this.items});
+
+  final List<String> items;
+
+  @override
+  Widget build(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        top: math.max(0, components.readingBulletListMarginVertical - components.readingParagraphGap),
+        bottom: components.readingBulletListMarginVertical,
+      ),
+      child: Semantics(
+        role: SemanticsRole.list,
+        explicitChildNodes: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final (index, item) in items.indexed) ...[
+              if (index > 0) SizedBox(height: components.readingBulletItemGap),
+              _BulletItem(text: item),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BulletItem extends StatelessWidget {
+  const _BulletItem({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final style = AppTheme.typography.of(context).reading.copyWith(color: colors.ink);
+    final scale = MediaQuery.textScalerOf(context).scale(1);
+    final dot = components.readingBulletDot * scale;
+    final lineHeight = style.fontSize! * style.height! * scale;
+
+    return Semantics(
+      role: SemanticsRole.listItem,
+      label: text,
+      excludeSemantics: true,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: components.readingBulletIndent * scale,
+            child: Padding(
+              // Centraliza o marcador na primeira linha do texto.
+              padding: EdgeInsets.only(top: (lineHeight - dot) / 2),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  width: dot,
+                  height: dot,
+                  decoration: BoxDecoration(color: colors.ink, shape: BoxShape.circle),
+                ),
+              ),
+            ),
+          ),
+          Expanded(child: Text(text, style: style)),
+        ],
+      ),
     );
   }
 }

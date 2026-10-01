@@ -433,6 +433,28 @@ class ComponentSizes {
   final double readingQuotePaddingVertical = 4.0;
   final double readingQuoteMarginVertical = 29.0;
 
+  // Blocos de leitura da spec 011. Origem: `.article .prose h2`,
+  // `.article .prose ul` e `.banner` do protótipo.
+
+  /// Subtítulo: margem acima (1,7 em) e abaixo (0,6 em).
+  final double readingSubtitleMarginTop = 46.0;
+  final double readingSubtitleMarginBottom = 16.0;
+
+  /// Lista com marcadores: recuo do texto (1,2 em), diâmetro do marcador, vão
+  /// entre itens (0,4 em) e margem acima e abaixo (1 em).
+  final double readingBulletIndent = 22.0;
+  final double readingBulletDot = 6.0;
+  final double readingBulletItemGap = 7.0;
+  final double readingBulletListMarginVertical = 18.0;
+
+  /// Figura: largura máxima, proporção, vão imagem → legenda, vão até o texto
+  /// abaixo e ícone do placeholder (`.noimg`).
+  final double readingFigureMaxWidth = 920.0;
+  final double readingFigureAspect = 21 / 9;
+  final double readingFigureCaptionGap = 10.0;
+  final double readingFigureMarginBottom = 40.0;
+  final double readingFigurePlaceholderIcon = 34.0;
+
   double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
     return switch (breakpoint) {
       Breakpoint.mobile => mobile,

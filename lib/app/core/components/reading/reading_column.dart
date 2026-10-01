@@ -6,9 +6,13 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 /// Coluna de leitura (`.prose`): até 680 px, centralizada na largura do site,
 /// com respiro acima e abaixo. Funciona com ou sem `PageHeader` acima.
 class ReadingColumn extends StatelessWidget {
-  const ReadingColumn({super.key, required this.children});
+  const ReadingColumn({super.key, required this.children, this.paddingTop});
 
   final List<Widget> children;
+
+  /// Respiro acima do texto; sem valor, `readingPaddingTop`. Abaixo de uma
+  /// `ReadingFigure`, recebe só o vão da figura.
+  final double? paddingTop;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,7 @@ class ReadingColumn extends StatelessWidget {
     return PageContent(
       child: Padding(
         padding: EdgeInsets.only(
-          top: components.readingPaddingTop,
+          top: paddingTop ?? components.readingPaddingTop,
           bottom: components.readingPaddingBottom(breakpoint),
         ),
         child: Center(

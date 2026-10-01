@@ -114,8 +114,9 @@ Páginas de texto (Manifesto e, depois, Nossa história, Pessoa da equipe e post
 
 - `ReadingPageScaffold(header:, body:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela.
 - `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último, sem `route`, é a página atual), título e `lead` opcional.
-- `ReadingColumn`: coluna de 680 px centralizada; funciona sem `PageHeader` (Pessoa e post têm cabeçalho próprio).
-- Blocos, que já trazem a própria margem: `ReadingLead`, `ReadingParagraph`, `ReadingNumberedList` e `ReadingQuote`. Novos blocos (subtítulo, lista com marcadores) entram no mesmo arquivo.
+- `ReadingColumn`: coluna de 680 px centralizada; funciona sem `PageHeader` (Pessoa e post têm cabeçalho próprio). `paddingTop` opcional troca o respiro de cima (abaixo de uma figura).
+- `ReadingFigure`: imagem em 21:9 até 920 px, mais larga que a coluna, com legenda opcional, recorte por `alignment` e placeholder na falha. Fica entre o cabeçalho e a `ReadingColumn`, que recebe `paddingTop: readingFigureMarginBottom`.
+- Blocos, que já trazem a própria margem: `ReadingLead`, `ReadingParagraph`, `ReadingSubtitle` (cabeçalho de nível 2), `ReadingNumberedList`, `ReadingBulletList` e `ReadingQuote`. Novos blocos entram no mesmo arquivo.
 
 ## Tratamento de erros
 
