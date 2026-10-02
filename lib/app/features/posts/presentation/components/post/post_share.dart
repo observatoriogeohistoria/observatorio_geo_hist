@@ -167,12 +167,19 @@ class _PostShareState extends State<PostShare> {
                 ),
               ),
             _copyButton(),
-            _ShareIconButton(label: _whatsapp.label, asset: _whatsapp.icon, onTap: () => _open(_whatsapp)),
-            _ShareIconButton(
-              label: _moreText,
-              icon: Icons.more_horiz,
-              expanded: _moreOpen,
-              onTap: () => setState(() => _moreOpen = !_moreOpen),
+            // WhatsApp e "Mais" quebram juntos, para "Mais" não ficar sozinho na linha.
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: components.shareCopyGap,
+              children: [
+                _ShareIconButton(label: _whatsapp.label, asset: _whatsapp.icon, onTap: () => _open(_whatsapp)),
+                _ShareIconButton(
+                  label: _moreText,
+                  icon: Icons.more_horiz,
+                  expanded: _moreOpen,
+                  onTap: () => setState(() => _moreOpen = !_moreOpen),
+                ),
+              ],
             ),
           ],
         ),
@@ -234,7 +241,7 @@ class _ShareIconButtonState extends State<_ShareIconButton> {
     final colors = AppTheme.colors;
     final components = AppTheme.dimensions.components;
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r10);
-    final color = _hovered ? colors.accent : colors.inkSecondary;
+    final color = _hovered ? colors.accentStrong : colors.inkSecondary;
 
     return Tooltip(
       message: widget.label,
