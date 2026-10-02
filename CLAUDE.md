@@ -7,7 +7,13 @@ Texto de interface, documentação, comentários e mensagens de commit em **port
 
 ## Estilo de escrita e de código
 - **Sempre evite prolixidade**, em respostas, docs, comentários e mensagens de commit. Seja direto, sem repetir o que já foi dito.
-- **Sem comentários no meio do código.** O código deve se explicar por nomes claros. Só comente o que não é óbvio (o porquê, nunca o quê), em uma linha curta e sem repetir o que o código já diz.
+- **Comentários são exceção.** O código se explica por nomes claros. Comente só o que alguém não entenderia lendo o código:
+  - regra de negócio que não está à vista (ex.: quem ganha página na equipe);
+  - contorno de limitação do Flutter, de pacote ou do navegador (ex.: foco do Quill, altura intrínseca);
+  - motivo de um número ou cor que parece arbitrário (ex.: contraste mínimo).
+- Quando comentar: uma ou duas linhas, em tom de conversa, dizendo o **porquê**. Nunca o quê.
+- **Não comente:** o que o nome já diz (campos, tokens, getters), cabeçalhos de seção, a classe inteira em prosa, padrões repetidos (ficam em [docs/arquitetura.md](docs/arquitetura.md)) nem código desativado.
+- **Nunca cite spec, fase, protótipo ou seletor CSS** (`spec 012`, `.feat`, "aba Post"). Isso envelhece; o histórico fica nos docs e no git.
 
 ## Comandos
 Sempre com FVM (versão em `.fvmrc`):
