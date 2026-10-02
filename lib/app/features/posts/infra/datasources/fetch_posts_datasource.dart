@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:observatorio_geo_hist/app/core/errors/offline_exception.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/paginated/paginated_posts.dart';
@@ -72,6 +73,7 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
 
       // Um a mais diz se existe próxima página sem precisar de um clique que volte vazio.
       final snapshot = await query.limit(limit + 1).get();
+      if (snapshot.docs.isEmpty && snapshot.metadata.isFromCache) throw const OfflineException();
       final hasMore = snapshot.docs.length > limit;
       final docs = hasMore ? snapshot.docs.sublist(0, limit) : snapshot.docs;
 
