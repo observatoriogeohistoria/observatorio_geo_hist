@@ -16,7 +16,7 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Compartilhar do post (`.share`): copiar link, redes, e-mail e, no celular,
 /// a folha de compartilhamento do aparelho. Em tablet e desktop mostra tudo
-/// numa linha; no celular, as redes menos usadas ficam atrás de "Mais".
+/// numa linha; no celular, só ícones, com o aviso da cópia ao lado do rótulo.
 class PostShare extends StatefulWidget {
   const PostShare({super.key, required this.post});
 
@@ -37,9 +37,8 @@ class _ShareOption {
   final bool sameTab;
 }
 
-const _whatsapp = _ShareOption(icon: 'whatsapp', label: 'Compartilhar no WhatsApp', link: AppStrings.shareOnWhatsapp);
-
-const _moreOptions = [
+const _networks = [
+  _ShareOption(icon: 'whatsapp', label: 'Compartilhar no WhatsApp', link: AppStrings.shareOnWhatsapp),
   _ShareOption(icon: 'facebook', label: 'Compartilhar no Facebook', link: AppStrings.shareOnFacebook),
   _ShareOption(icon: 'x', label: 'Compartilhar no X', link: AppStrings.shareOnX),
   _ShareOption(icon: 'linkedin', label: 'Compartilhar no LinkedIn', link: AppStrings.shareOnLinkedin),
@@ -52,10 +51,9 @@ const _copiedText = 'Link copiado';
 const _copyFailedText = 'Erro ao copiar';
 const _copyFailedAnnouncement = 'Não foi possível copiar o link';
 const _nativeText = 'Compartilhar';
-const _moreText = 'Mais opções de compartilhar';
+const _nativeLabel = 'Compartilhar pelo aparelho';
 
 class _PostShareState extends State<PostShare> {
-  bool _moreOpen = false;
   _CopyStatus _copyStatus = _CopyStatus.idle;
   Timer? _copyTimer;
 
@@ -101,9 +99,7 @@ class _PostShareState extends State<PostShare> {
   }
 
   void _shareNatively() {
-    nativeShare(title: _title, url: Uri.base.toString()).then((result) {
-      if (result == NativeShareResult.failed && mounted) setState(() => _moreOpen = true);
-    });
+    nativeShare(title: _title, url: Uri.base.toString());
   }
 
   @override
@@ -114,7 +110,7 @@ class _PostShareState extends State<PostShare> {
       container: true,
       explicitChildNodes: true,
       label: 'Compartilhar',
-      child: isMobile ? _buildMobile() : _buildWide(context),
+      child: isMobile ? _buildMobile(context) : _buildWide(context),
     );
   }
 
@@ -134,7 +130,7 @@ class _PostShareState extends State<PostShare> {
             child: Text(_nativeText.toUpperCase(), style: styles.label.copyWith(color: colors.inkSecondary)),
           ),
         ),
-        for (final option in [_whatsapp, ..._moreOptions])
+        for (final option in _networks)
           _ShareIconButton(label: option.label, asset: option.icon, onTap: () => _open(option)),
         Padding(
           padding: EdgeInsets.only(left: components.shareCopyGap),
@@ -144,56 +140,44 @@ class _PostShareState extends State<PostShare> {
     );
   }
 
-  Widget _buildMobile() {
+  Widget _buildMobile(BuildContext context) {
+    final colors = AppTheme.colors;
     final components = AppTheme.dimensions.components;
+    final styles = AppTheme.typography.of(context);
+    final (copyLabel, copyIcon) = switch (_copyStatus) {
+      _CopyStatus.idle => (_copyText, Icons.link),
+      _CopyStatus.copied => (_copiedText, Icons.check),
+      _CopyStatus.failed => (_copyFailedText, Icons.error_outline),
+    };
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Wrap(
-          spacing: components.shareCopyGap,
-          runSpacing: components.shareRowGap,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            if (canNativeShare())
-              Tooltip(
-                message: _nativeText,
-                excludeFromSemantics: true,
-                child: SecondaryButton.small(
-                  text: _nativeText,
-                  leadingIcon: Icons.share_outlined,
-                  onPressed: _shareNatively,
-                ),
-              ),
-            _copyButton(),
-            // WhatsApp e "Mais" quebram juntos, para "Mais" não ficar sozinho na linha.
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              spacing: components.shareCopyGap,
+        ExcludeSemantics(
+          child: Text.rich(
+            TextSpan(
+              text: _nativeText.toUpperCase(),
+              style: styles.label.copyWith(color: colors.inkSecondary),
               children: [
-                _ShareIconButton(label: _whatsapp.label, asset: _whatsapp.icon, onTap: () => _open(_whatsapp)),
-                _ShareIconButton(
-                  label: _moreText,
-                  icon: Icons.more_horiz,
-                  expanded: _moreOpen,
-                  onTap: () => setState(() => _moreOpen = !_moreOpen),
-                ),
+                if (_copyStatus != _CopyStatus.idle)
+                  TextSpan(text: '  ·  $copyLabel', style: TextStyle(color: colors.accentStrong)),
               ],
             ),
+          ),
+        ),
+        SizedBox(height: components.shareLabelGap),
+        Wrap(
+          spacing: components.shareGap,
+          runSpacing: components.shareRowGap,
+          children: [
+            if (canNativeShare())
+              _ShareIconButton(label: _nativeLabel, icon: Icons.ios_share, onTap: _shareNatively),
+            _ShareIconButton(label: _copyText, icon: copyIcon, onTap: _copy),
+            for (final option in _networks)
+              _ShareIconButton(label: option.label, asset: option.icon, onTap: () => _open(option)),
           ],
         ),
-        if (_moreOpen) ...[
-          SizedBox(height: components.shareRowGap),
-          Wrap(
-            spacing: components.shareGap,
-            runSpacing: components.shareRowGap,
-            children: [
-              for (final option in _moreOptions)
-                _ShareIconButton(label: option.label, asset: option.icon, onTap: () => _open(option)),
-            ],
-          ),
-        ],
       ],
     );
   }
@@ -219,15 +203,14 @@ class _PostShareState extends State<PostShare> {
 }
 
 /// Botão de ícone do compartilhar: SVG de [asset] (em `assets/icons/share_*.svg`)
-/// ou [icon] do Material. Com [expanded], anuncia o estado aberto/fechado.
+/// ou [icon] do Material.
 class _ShareIconButton extends StatefulWidget {
-  const _ShareIconButton({required this.label, required this.onTap, this.asset, this.icon, this.expanded});
+  const _ShareIconButton({required this.label, required this.onTap, this.asset, this.icon});
 
   final String label;
   final VoidCallback onTap;
   final String? asset;
   final IconData? icon;
-  final bool? expanded;
 
   @override
   State<_ShareIconButton> createState() => _ShareIconButtonState();
@@ -249,7 +232,6 @@ class _ShareIconButtonState extends State<_ShareIconButton> {
       child: Semantics(
         button: true,
         label: widget.label,
-        expanded: widget.expanded,
         // Repete a ação do InkWell (excluído da semântica) para o leitor de tela.
         onTap: widget.onTap,
         excludeSemantics: true,
