@@ -1,6 +1,6 @@
 # 016. Biblioteca: entrada por área e lista com filtros
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 4: índice da biblioteca (P-09) e lista por área com filtros, resultados e paginação (T-06, P-10, P-11, P-12). O detalhe do documento (T-07) fica na 017.
 - **Protótipo:** abas "Biblioteca" (entrada) e "Lista"; aba "Estados" para esqueleto, vazio e erro (link no CLAUDE.md)
 - **Criada em:** 2026-10-02
@@ -149,3 +149,4 @@ Não muda. `/painel/biblioteca/:area` continua com a página, os filtros, o card
 - 2026-10-02: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-02: ajustes na implementação, a partir dos dados de prod: (1) com busca, a ordem continua por data (a alfabética pedia índice novo até para a busca sozinha); (2) na instituição, termo todo em minúsculas vira caixa alta, porque 552 de 602 instituições estão gravadas assim (títulos e autores seguem com inicial maiúscula, como a maioria); (3) busca combinada com tipo, ano ou categoria pede índices novos, documentados em `docs/deploy-ambientes.md`, e até lá cai no erro tratado.
 - 2026-10-02: implementada; falta a verificação (`/sdd-verify 016`).
+- 2026-10-02: verificada com ressalvas no modo autônomo ([verificacao.md](verificacao.md)): clique fora dos menus passou a só fechá-los (abria o documento embaixo); ficam os índices da busca com filtro a publicar, o título do cartão de área sem `h2` para leitores de tela e o que não deu para conferir no app (área vazia, documento sem slug, painel).
