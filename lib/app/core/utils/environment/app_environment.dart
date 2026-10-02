@@ -15,6 +15,9 @@ enum AppEnvironment {
 
   bool get isProd => this == AppEnvironment.prod;
 
+  // O projeto de dev não tem Storage habilitado; mídias e arquivos da biblioteca só existem em prod.
+  bool get hasStorage => isProd;
+
   FirebaseOptions get firebaseOptions {
     switch (this) {
       case AppEnvironment.dev:

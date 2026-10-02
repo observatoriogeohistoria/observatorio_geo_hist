@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
+import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
@@ -26,8 +27,6 @@ class LibraryDatasourceImpl implements LibraryDatasource {
   final LoggerService _loggerService;
 
   LibraryDatasourceImpl(this._firestore, this._storage, this._loggerService);
-
-  static String get _bucket => 'gs://observatorio-geo-hist.firebasestorage.app';
 
   Query _baseQuery({required String area}) {
     return _firestore.collection('library').where('area', isEqualTo: area);
@@ -180,12 +179,14 @@ class LibraryDatasourceImpl implements LibraryDatasource {
       String? url;
 
       if (file != null && file.bytes != null) {
+        if (!AppEnvironment.current.hasStorage) {
+          throw UnsupportedError('Storage desabilitado no ambiente de dev');
+        }
+
         final name = '${document.slug ?? document.title}_&&&_$documentId';
         final extension = file.extension ?? '';
 
-        final ref = _storage
-            .refFromURL(_bucket)
-            .child('library/${document.area.bucketKey}/$name.$extension');
+        final ref = _storage.ref('library/${document.area.bucketKey}/$name.$extension');
         await ref.putData(file.bytes!);
 
         url = await ref.getDownloadURL();
@@ -212,13 +213,13 @@ class LibraryDatasourceImpl implements LibraryDatasource {
       final docRef = _firestore.collection('library').doc(id);
       await docRef.delete();
 
+      if (!AppEnvironment.current.hasStorage) return;
+
       try {
         final name = '${document.slug ?? document.title}_&&&_$id';
         final extension = getFileExtension(document.documentUrl);
 
-        final fileRef = _storage
-            .refFromURL(_bucket)
-            .child('library/${document.area.bucketKey}/$name.$extension');
+        final fileRef = _storage.ref('library/${document.area.bucketKey}/$name.$extension');
 
         await fileRef.delete();
       } catch (exception, stackTrace) {
