@@ -1,0 +1,28 @@
+# Tarefas da 014. Listagem de categoria e card de post
+
+Legenda: `- [ ]` a fazer, `- [x]` feita.
+
+## Grupo A: dados e store
+- [ ] **A1.** Datasource e repositório: categoria opcional, busca com `trim()` e cursor, `limit + 1` com `hasMore` real, `countPosts` (`count()`, busca como `>=`/`<` em `body.title_lower`) e `CountPostsFailure`; ajustar a chamada do `PostDetailStore`. Arquivos: `fetch_posts_datasource.dart`, `fetch_posts_repository.dart`, `infra/errors/failures.dart`, `post_detail_store.dart`. Atende: critérios 4, 6, 8. Conferir: analyze limpo; o "Leia também" de um artigo continua com até 3.
+- [ ] **A2.** `PostsListingStore` e estados (escopo, blocos por tipo na ordem do escopo, contagens anuláveis, tipo marcado, busca, página de 12, descarte de respostas velhas, `loadMore` com falha por bloco, `retry`); fábrica no `posts_setup.dart`; `build_runner`. Arquivos: `posts_listing_store.dart` (+ `.g.dart`), `states/posts_listing_states.dart`, `posts_setup.dart`. Atende: critérios 5, 6, 7, 8, 13, 14. Conferir: analyze limpo.
+
+## Grupo B: tokens e componentes do core
+- [ ] **B1.** Tokens e estilos: `related*` → `postCard*` (atualizando o `RelatedPostCard` até ele sair), tokens de busca, chip, listagem, `pageHeadActionGap` e esqueletos; `postCardTitle`, `postCardSummary`, `listingBlockTitle`, `chip`. Arquivos: `app_dimensions.dart`, `app_text_styles.dart`, `related_post_card.dart`. Atende: critério 18.
+- [ ] **B2.** `SearchField`, `FilterChipButton` e `StateMessageBox`; `StateErrorBox` passa a usá-la sem mudar a aparência; `PageHeader` ganha `action` opcional. Arquivos: `field/search_field.dart`, `chips/filter_chip_button.dart`, `error_content/state_message_box.dart`, `state_error_box.dart`, `reading/page_header.dart`. Atende: critérios 3, 4, 5, 16. Conferir: Manifesto, Nossa história, Pessoa e erro do post iguais a antes.
+
+## Grupo C: card de post
+- [ ] **C1.** `plainTextFromRich` e `postCardInfo` com a tabela de tipos da spec. Arquivos: `core/utils/strings/plain_text.dart`, `card/post_card_info.dart`. Atende: critério 9.
+- [ ] **C2.** `PostCard` novo (link acessível, foco, hover, movimento reduzido, 16:10 com placeholder, resumo opcional), `PostCardGrid` e `PostCardSkeleton`. Arquivos: `card/post_card.dart`, `card/post_card_grid.dart`, `card/post_card_skeleton.dart`. Atende: critérios 9, 10.
+- [ ] **C3.** "Leia também" com `PostCard(showSummary: false)` e `PostCardGrid`; apagar `related_post_card.dart`. Arquivos: `related_posts_section.dart`, `related_post_card.dart`. Atende: critério 11. Conferir: artigo com 3 relacionados igual à 012 em 390/768/1280.
+
+## Grupo D: listagem e página
+- [ ] **D1.** Listagem genérica: barra (busca + chips, só com 2+ tipos), contagem com `liveRegion`, blocos com título `h2` e quantidade, "Ver mais [tipo]" com "Carregando…" e erro abaixo, estados (esqueleto da grade, categoria vazia, busca vazia com "Limpar busca", erro com "Tentar de novo", números escondidos sem contagem). Recebe store e `routeFor(PostModel)`, sem depender de categoria. Arquivos: `listing/posts_listing.dart`, `listing/listing_toolbar.dart`, `listing/listing_type_block.dart`. Atende: critérios 4, 5, 6, 7, 8, 12, 13, 14, 18.
+- [ ] **D2.** Página: `PostsPage` reescrita com `ReadingPageScaffold`, `PageHeader` (migalhas, título, descrição, "Colabore com esta categoria" condicionado a `hasCollaborateOption`), `PostsListing` e `CategoryPageSkeleton`; categorias com erro → `StateErrorBox`; categoria inexistente → 404; troca de categoria recarrega, zera busca e chip e volta ao topo; `setSelectedCategory` como no detalhe. Roteador: `tryFromKey` no builder de `categoryPattern`. Arquivos: `pages/posts_page.dart`, `listing/category_page_skeleton.dart`, `router/app_router.dart`. Atende: critérios 1, 2, 3, 12, 15.
+- [ ] **D3.** Apagar o que ficou sem uso: `posts_section_list.dart`, `header/category_header.dart`, `header/actions_header.dart`, `fetch_posts_store.dart` (+ `.g.dart`), `states/fetch_posts_states.dart`; tirar o `FetchPostsStore` do setup; `build_runner`. Atende: critério 18. Conferir: `grep` sem referências; analyze limpo.
+
+## Grupo E: documentação
+- [ ] **E1.** `docs/arquitetura.md` (seção "Listagem de posts": store por página e escopo, card único com `postCardInfo`, grade, reuso pela 015). Atende: critério 18.
+
+## Grupo F: conferência
+- [ ] **F1.** Qualidade: `fvm dart format` nos `.dart` alterados; `fvm flutter analyze` na cópia ASCII sem problemas novos; `grep` sem `num_extension`, `AppHeadline`, `AppTitle`, `GestureDetector`, `EmptyContent`, `PageErrorContent` e `LoadingContent` nos arquivos novos; cores, fontes e espaços só de tokens. Atende: critério 18.
+- [ ] **F2.** Rodar o app: `fvm flutter build web --release --dart-define=APP_ENV=prod` (só leitura), servir `build/web` com fallback de SPA e conferir no navegador embutido em 390, 768 e 1280: cabeçalho, migalhas e Colabore (com e sem a opção); busca (prefixo, caixa, Enter, Limpar, espaços); chips (com 1 e 2+ tipos, troca de categoria pelo menu); contagem; blocos e ordem; "Ver mais" até acabar e com busca; cards (imagem, placeholder, falha, títulos longos, tipo não artigo); foco e ordem de Tab; contraste; hover; esqueleto; categoria vazia; busca vazia; rede bloqueada (lista, "Ver mais" e contagem); área inválida e categoria inexistente (404); rodapé na base; sem rolagem horizontal. Depois, `fvm flutter run -d web-server` na cópia ASCII (debug) em 390, 768 e 1280 sem `overflow` nem asserções no console. Conferir também artigo com "Leia também", Manifesto, Nossa história e Pessoa da equipe. Voltar o navegador ao preset desktop e parar os servidores. Casos sem dado real (falha de imagem, 13+ itens, título longo) em build temporário com dados injetados, não commitado. Atende: critérios 1 a 17.
