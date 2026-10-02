@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+import 'package:observatorio_geo_hist/app/core/components/image/fitted_network_image.dart';
 
 class PostCover extends StatelessWidget {
   const PostCover({super.key, required this.imageUrl, this.caption});
@@ -22,7 +23,7 @@ class PostCover extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r16),
             child: ColoredBox(
               color: colors.surface,
-              child: Image.network(
+              child: FittedNetworkImage(
                 imageUrl,
                 fit: BoxFit.cover,
                 semanticLabel: caption.isEmpty ? 'Imagem de capa do artigo' : caption,

@@ -6,6 +6,7 @@ import 'package:observatorio_geo_hist/app/core/utils/date/date.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/select_highlights.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+import 'package:observatorio_geo_hist/app/core/components/image/fitted_network_image.dart';
 
 class HighlightCard extends StatefulWidget {
   const HighlightCard({super.key, required this.post, this.isMain = false});
@@ -287,7 +288,7 @@ class _HighlightImage extends StatelessWidget {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
     return ExcludeSemantics(
-      child: Image.network(
+      child: FittedNetworkImage(
         url,
         fit: BoxFit.cover,
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {

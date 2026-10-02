@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+import 'package:observatorio_geo_hist/app/core/components/image/fitted_network_image.dart';
 
 class MemberPortrait extends StatelessWidget {
   const MemberPortrait({super.key, required this.name, this.imageUrl});
@@ -36,7 +37,7 @@ class MemberPortrait extends StatelessWidget {
               ),
             ),
             if (url.isNotEmpty)
-              Image.network(
+              FittedNetworkImage(
                 url,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
