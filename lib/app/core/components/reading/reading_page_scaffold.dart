@@ -30,12 +30,21 @@ class ReadingPageScaffold extends StatelessWidget {
             const FocusTraversalOrder(order: NumericFocusOrder(0), child: NavbarSliver()),
             if (header != null) SliverToBoxAdapter(child: header),
             SliverToBoxAdapter(child: body),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [const Spacer(), if (beforeFooter != null) beforeFooter!, const Footer()],
-              ),
+            // SliverFillRemaining mediria a altura intrínseca, que o LayoutBuilder do Apoio não suporta.
+            SliverLayoutBuilder(
+              builder: (context, constraints) {
+                final remaining = constraints.viewportMainAxisExtent - constraints.precedingScrollExtent;
+                return SliverToBoxAdapter(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: remaining > 0 ? remaining : 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [if (beforeFooter != null) beforeFooter!, const Footer()],
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
