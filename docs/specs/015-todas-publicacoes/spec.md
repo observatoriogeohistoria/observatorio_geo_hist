@@ -1,6 +1,6 @@
 # 015. Todas as publicações e "Ver todas" nos Destaques
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 3, tela T-11 (seção 3)
 - **Protótipo:** aba "Categoria" (mesma listagem, sem tela própria para T-11); aba "Home", bloco "Destaques", para o link; aba "Estados" (link no CLAUDE.md)
 - **Criada em:** 2026-10-02
@@ -111,3 +111,4 @@ Não muda (ver decisões). Em `/publicacoes` nenhum item fica ativo.
 ## Histórico de mudanças
 - 2026-10-02: criada e aprovada no modo autônomo (execução da Fase 3).
 - 2026-10-02: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-02: implementada, sem divergência da spec.

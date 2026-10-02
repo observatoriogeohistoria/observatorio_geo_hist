@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/arrow_link.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/highlight_card.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/highlights_grid.dart';
@@ -58,6 +61,19 @@ class _Section extends StatelessWidget {
     final breakpoint = ScreenUtils.breakpointOf(context);
     final padding = components.sectionPaddingVertical(breakpoint);
 
+    final title = Semantics(
+      header: true,
+      child: Text(
+        'Destaques',
+        style: AppTheme.typography.of(context).h2.copyWith(color: AppTheme.colors.ink),
+      ),
+    );
+    final more = ArrowLink(
+      text: 'Ver todas as publicações',
+      url: AppRoutes.publications,
+      onTap: () => GoRouter.of(context).go(AppRoutes.publications),
+    );
+
     return ColoredBox(
       color: AppTheme.colors.page,
       child: PageContent(
@@ -66,13 +82,23 @@ class _Section extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Semantics(
-                header: true,
-                child: Text(
-                  'Destaques',
-                  style: AppTheme.typography.of(context).h2.copyWith(color: AppTheme.colors.ink),
+              if (breakpoint == Breakpoint.mobile)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    title,
+                    SizedBox(height: components.postSubtitleGap),
+                    more,
+                  ],
+                )
+              else
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.end,
+                  spacing: components.postBylineGap,
+                  runSpacing: components.postSubtitleGap,
+                  children: [title, more],
                 ),
-              ),
               SizedBox(height: components.sectionHeadGap),
               child,
             ],
