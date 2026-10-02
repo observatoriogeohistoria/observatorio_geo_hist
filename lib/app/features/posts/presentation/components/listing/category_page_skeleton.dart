@@ -28,6 +28,7 @@ class CategoryPageSkeleton extends StatelessWidget {
         );
 
     return Semantics(
+      liveRegion: true,
       label: 'Carregando',
       excludeSemantics: true,
       child: Column(

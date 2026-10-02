@@ -3,13 +3,13 @@ import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/card/post_card_grid.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Uma linha de cards-esqueleto, tantos quantas colunas couberem.
 class PostCardSkeletonRow extends StatelessWidget {
   const PostCardSkeletonRow({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      liveRegion: true,
       label: 'Carregando',
       excludeSemantics: true,
       child: LayoutBuilder(

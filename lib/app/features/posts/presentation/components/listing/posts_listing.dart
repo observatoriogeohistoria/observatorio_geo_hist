@@ -13,8 +13,8 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/pos
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/posts_listing_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Busca, chips, contagem e blocos por tipo. Não sabe de categoria: quem monta
-/// a página carrega o [store] com o escopo e diz a rota de cada post.
+/// Não sabe de categoria: quem monta a página carrega o [store] com o escopo e diz a rota de
+/// cada post.
 class PostsListing extends StatefulWidget {
   const PostsListing({super.key, required this.store, required this.routeFor});
 
