@@ -35,3 +35,12 @@ class DeleteLibraryDocumentFailure extends Failure {
   @override
   List<Object> get props => [message];
 }
+
+class CountLibraryFailure extends Failure {
+  const CountLibraryFailure({
+    String? message,
+  }) : super("Erro ao contar documentos da biblioteca${message != null ? ": $message" : ""}");
+
+  @override
+  List<Object> get props => [message];
+}

@@ -7,15 +7,15 @@ Legenda: `- [ ]` a fazer, `- [x]` feita.
 - [ ] **A2.** Repositório e falhas: `fetchListing`, `countListing`, `countByType`, `countByCategory` com `Either`; `CountLibraryFailure`. Arquivos: `infra/repositories/library_repository.dart`, `infra/errors/failures.dart`. Atende: critério 14.
 
 ## Grupo B: stores
-- [ ] **B1.** `LibraryIndexStore` (contagens por área e tipo, status) e registro como fábrica. Arquivos: `stores/library_index_store.dart` (+ `.g.dart`), `library_setup.dart`. Atende: critérios 2, 12, 14.
+- [x] **B1.** `LibraryIndexStore` (contagens por área e tipo, status) e registro como fábrica. Arquivos: `stores/library_index_store.dart` (+ `.g.dart`), `library_setup.dart`. Atende: critérios 2, 12, 14.
 - [ ] **B2.** `LibraryListingStore` e estados: filtros, busca (trim, inicial maiúscula se tudo minúsculo, troca de campo refaz), lista paginada de 20, "ver mais" com falha própria, total e contagens (nulos se falharem), vazio da área × sem resultado, `visibleCategories` (alfabéticas, sem zeradas, todas sem contagem), descarte de respostas velhas; registro como fábrica; `build_runner`. Arquivos: `stores/library_listing_store.dart` (+ `.g.dart`), `stores/states/library_listing_states.dart`, `library_setup.dart`. Atende: critérios 4, 5, 6, 7, 8, 9, 11, 13, 14.
 
 ## Grupo C: tema
 - [ ] **C1.** Tokens e estilos de texto da entrada e da lista (valores do plano). Arquivos: `theme/app_dimensions/app_dimensions.dart`, `theme/app_typography/app_text_styles.dart`. Atende: critério 18.
 
 ## Grupo D: entrada
-- [ ] **D1.** `LibraryAreaTile` (link, foco, ícone, `h2`, descrição, números com esqueleto e ocultos no erro, "Explorar [área]", hover sem subida com movimento reduzido). Arquivo: `components/index/library_area_tile.dart`. Atende: critérios 2, 12, 14, 16.
-- [ ] **D2.** Reescrever `LibraryPage` (`ReadingPageScaffold`, `PageHeader` com migalhas e texto da spec, grade de 1/2 colunas); apagar `LibraryHeader` e `LibraryCollectionCard`. Arquivos: `pages/library_page.dart`, `components/library/*`. Atende: critérios 1, 2, 17.
+- [x] **D1.** `LibraryAreaTile` (link, foco, ícone, `h2`, descrição, números com esqueleto e ocultos no erro, "Explorar [área]", hover sem subida com movimento reduzido). Arquivo: `components/index/library_area_tile.dart`. Atende: critérios 2, 12, 14, 16. Nota: o cartão é lido como um link só (rótulo com nome, números e "Explorar"), como o card de post; o `h2` fica visual, porque um link com rótulo próprio esconde o cabeçalho de dentro.
+- [x] **D2.** Reescrever `LibraryPage` (`ReadingPageScaffold`, `PageHeader` com migalhas e texto da spec, grade de 1/2 colunas); apagar `LibraryHeader` e `LibraryCollectionCard`. Arquivos: `pages/library_page.dart`, `components/library/*`. Atende: critérios 1, 2, 17.
 
 ## Grupo E: lista
 - [ ] **E1.** `LibraryFilterSelect` (`MenuAnchor`, 42 px, rótulo com valor, opções com quantidade, nome acessível) e `LibraryYearField`. Arquivos: `components/listing/library_filter_select.dart`, `components/listing/library_year_field.dart`. Atende: critérios 5, 6, 16.

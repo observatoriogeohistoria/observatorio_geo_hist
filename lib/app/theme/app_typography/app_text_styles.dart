@@ -241,6 +241,19 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
+  TextStyle get areaTileTitle => _display(
+        size: _size(mobile: 25.6, tablet: 32, desktop: 33.6),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get meta => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w400,
+        height: 1.5,
+      );
+
   TextStyle get chip => _body(
         size: _size(mobile: 14, tablet: 14, desktop: 14),
         weight: FontWeight.w600,

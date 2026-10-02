@@ -466,6 +466,20 @@ class ComponentSizes {
   final double socialPillGap = 8.0;
   final double socialPillIcon = 18.0;
 
+  double areaTilePadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 30, 36);
+  final double areaTileGap = 14.0;
+  final double areaTileIconBox = 52.0;
+  final double areaTileIcon = 26.0;
+  final double areaTileStatsPaddingTop = 14.0;
+  final double areaTileStatsGap = 20.0;
+  final double areaTileLift = 3.0;
+  final double areaTileGridGap = 20.0;
+  final double areaTilesPaddingTop = 40.0;
+  final double areaTilesPaddingBottom = 72.0;
+  final double areaTileSkeletonWidth = 110.0;
+  final double areaTileSkeletonHeight = 16.0;
+  final Duration areaTileAnimation = const Duration(milliseconds: 200);
+
   double _byBreakpoint(
     Breakpoint breakpoint,
     double mobile,
@@ -516,6 +530,10 @@ class ShadowStyle {
 
   List<BoxShadow> get soft => const [
         BoxShadow(color: Color(0x141F1B18), blurRadius: 26, offset: Offset(0, 10)),
+      ];
+
+  List<BoxShadow> get lifted => const [
+        BoxShadow(color: Color(0x1A1F1B18), blurRadius: 34, offset: Offset(0, 14)),
       ];
 
   List<BoxShadow> get elevated => const [
