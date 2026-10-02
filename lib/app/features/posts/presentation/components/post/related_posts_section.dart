@@ -10,7 +10,8 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/related_post_card.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/card/post_card.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/card/post_card_grid.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class RelatedPostsSection extends StatelessWidget {
@@ -25,14 +26,11 @@ class RelatedPostsSection extends StatelessWidget {
   final PostsAreas area;
   final CategoryModel category;
 
-  static const maxColumns = 3;
-
   @override
   Widget build(BuildContext context) {
     final articles = [
       for (final post in posts)
-        if (post.id != null && post.body is ArticleModel)
-          (id: post.id!, article: post.body! as ArticleModel),
+        if (post.id != null && post.body is ArticleModel) post,
     ];
     if (articles.isEmpty) return const SizedBox.shrink();
 
@@ -45,8 +43,10 @@ class RelatedPostsSection extends StatelessWidget {
     final title = Semantics(
       header: true,
       headingLevel: 2,
-      child: Text('Leia também',
-          style: AppTheme.typography.of(context).h2.copyWith(color: colors.ink)),
+      child: Text(
+        'Leia também',
+        style: AppTheme.typography.of(context).h2.copyWith(color: colors.ink),
+      ),
     );
     final more = ArrowLink(
       text: 'Mais em ${category.title}',
@@ -57,7 +57,10 @@ class RelatedPostsSection extends StatelessWidget {
     return PageContent(
       child: Padding(
         padding: EdgeInsets.only(
-          top: math.max(0, sectionPadding - components.readingPaddingBottom(breakpoint)),
+          top: math.max(
+            0,
+            sectionPadding - components.readingPaddingBottom(breakpoint),
+          ),
           bottom: sectionPadding,
         ),
         child: Column(
@@ -66,7 +69,11 @@ class RelatedPostsSection extends StatelessWidget {
             if (breakpoint == Breakpoint.mobile)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [title, SizedBox(height: components.postSubtitleGap), more],
+                children: [
+                  title,
+                  SizedBox(height: components.postSubtitleGap),
+                  more,
+                ],
               )
             else
               Wrap(
@@ -77,42 +84,15 @@ class RelatedPostsSection extends StatelessWidget {
                 children: [title, more],
               ),
             SizedBox(height: components.sectionHeadGap),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final gap = components.postCardGapH;
-                final columns = math.min(
-                  maxColumns,
-                  math.max(1,
-                      ((constraints.maxWidth + gap) / (components.postCardMinWidth + gap)).floor()),
-                );
-                final rows = (articles.length / columns).ceil();
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    for (var row = 0; row < rows; row++) ...[
-                      if (row > 0) SizedBox(height: components.postCardGapV),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (var column = 0; column < columns; column++) ...[
-                            if (column > 0) SizedBox(width: gap),
-                            Expanded(
-                              child: row * columns + column < articles.length
-                                  ? RelatedPostCard(
-                                      article: articles[row * columns + column].article,
-                                      route: AppRoutes.post(area.key, category.key,
-                                          articles[row * columns + column].id),
-                                    )
-                                  : const SizedBox.shrink(),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ],
-                  ],
-                );
-              },
+            PostCardGrid(
+              children: [
+                for (final post in articles)
+                  PostCard(
+                    post: post,
+                    route: AppRoutes.post(area.key, category.key, post.id!),
+                    showSummary: false,
+                  ),
+              ],
             ),
           ],
         ),
