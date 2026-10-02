@@ -10,6 +10,8 @@ abstract class LibraryRepository {
   Future<Either<Failure, PaginatedLibraryDocuments>> fetchDocuments(LibraryDocumentsQuery query);
   Future<Either<Failure, LibraryDocumentModel?>> fetchDocumentBySlug(String slug);
 
+  Future<Either<Failure, PaginatedLibraryDocuments>> fetchListing(LibraryListingQuery query);
+  Future<Either<Failure, int>> countListing(LibraryListingQuery query);
   Future<Either<Failure, Map<DocumentType, int>>> countByType(DocumentArea area);
   Future<Either<Failure, Map<DocumentCategory, int>>> countByCategory(DocumentArea area);
 
@@ -44,6 +46,26 @@ class LibraryRepositoryImpl implements LibraryRepository {
       return Right(response);
     } catch (_) {
       return const Left(FetchLibraryFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, PaginatedLibraryDocuments>> fetchListing(
+    LibraryListingQuery query,
+  ) async {
+    try {
+      return Right(await _datasource.fetchListing(query));
+    } catch (_) {
+      return const Left(FetchLibraryFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> countListing(LibraryListingQuery query) async {
+    try {
+      return Right(await _datasource.countListing(query));
+    } catch (_) {
+      return const Left(CountLibraryFailure());
     }
   }
 

@@ -1,6 +1,6 @@
 # 016. Biblioteca: entrada por área e lista com filtros
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 4: índice da biblioteca (P-09) e lista por área com filtros, resultados e paginação (T-06, P-10, P-11, P-12). O detalhe do documento (T-07) fica na 017.
 - **Protótipo:** abas "Biblioteca" (entrada) e "Lista"; aba "Estados" para esqueleto, vazio e erro (link no CLAUDE.md)
 - **Criada em:** 2026-10-02
@@ -41,7 +41,7 @@ Passa a ter navbar e rodapé como as outras páginas, sem `AppBar` própria.
 2. **Busca**, na largura do conteúdo:
    - Seletor "Buscar em" com **Título** (padrão), **Autor** e **Instituição**, à esquerda do campo.
    - Campo de busca da 014 (lupa, "Limpar"), com texto de ajuda conforme o seletor: "Buscar por título", "Buscar por autor", "Buscar por instituição". Pesquisa depois da pausa (~400 ms) e com Enter. Trocar o seletor com texto no campo refaz a busca no campo novo.
-   - Busca pelo começo do texto, como hoje. Se o termo vier todo em minúsculas, a primeira letra vira maiúscula antes de buscar ("ensino" encontra "Ensino de…"), porque os títulos e nomes estão gravados com inicial maiúscula e o banco diferencia maiúsculas. Espaços nas pontas são ignorados.
+   - Busca pelo começo do texto, como hoje. Se o termo vier todo em minúsculas, a primeira letra vira maiúscula antes de buscar em título e autor ("ensino" encontra "Ensino de…") e o termo todo vira maiúsculo na instituição ("ufu" encontra "UFU", "universidade" encontra "UNIVERSIDADE FEDERAL…"), porque o banco diferencia maiúsculas e é assim que a maioria dos registros está gravada. Espaços nas pontas são ignorados.
 3. **Filtros em linha**, abaixo da busca (no celular quebram em linhas):
    - **Tipo:** seletor com "Tipo: todos", "Tese (N)" e "Dissertação (N)". Só esses dois tipos (P-10). Seleção única.
    - **Ano:** campo curto "Ano", só números, com até 4 dígitos. Filtra quando tem 4 dígitos ou quando é esvaziado.
@@ -50,7 +50,7 @@ Passa a ter navbar e rodapé como as outras páginas, sem `AppBar` própria.
    - Sem botão "Aplicar": cada filtro vale na hora.
 4. **Filtros ativos:** abaixo dos filtros, um chip removível por filtro aplicado ("Tipo: Tese", "Ano: 2024", um por categoria marcada), cada um com "×" (nome "Remover filtro [nome]"), e o botão "Limpar tudo", que tira filtros e busca. A busca não vira chip (tem o próprio "Limpar"). A fileira some sem filtros.
 5. **Contagem:** "1 documento", "37 documentos"; com busca, "3 documentos para “mapa”". Conta todos os documentos do filtro, não só os carregados. Anunciada a leitores de tela quando muda.
-6. **Resultados:** lista de linhas separadas por fio, do mais recente para o mais antigo (data de cadastro); com busca, em ordem alfabética do campo buscado (limite da busca por prefixo). Cada linha é um link para o detalhe do documento (`/biblioteca/:area/documento/:slug`, página atual, que a 017 redesenha):
+6. **Resultados:** lista de linhas separadas por fio, do mais recente para o mais antigo (data de cadastro), também com busca. Cada linha é um link para o detalhe do documento (`/biblioteca/:area/documento/:slug`, página atual, que a 017 redesenha):
    - **Título** do documento (`h3`), até 3 linhas com reticências;
    - **Detalhes** em cor secundária: "Autor · Instituição · Ano", sem as partes vazias;
    - **Categorias:** até 2 etiquetas pequenas e "+N" para as demais (some sem categorias);
@@ -93,6 +93,7 @@ Não muda. `/painel/biblioteca/:area` continua com a página, os filtros, o card
 ## Dados e regras de negócio
 - Documentos da coleção `library`, filtrados por área, com os filtros que o datasource já aceita: tipo (igual), categorias (qualquer uma), ano (igual) e busca por começo de título, autor ou instituição.
 - Contagens no banco: por área e tipo (entrada e seletor de tipo), por área e categoria (painel), e o total do filtro atual (linha de contagem). As quantidades do tipo e das categorias são da área inteira, sem considerar os outros filtros.
+- Busca combinada com tipo, ano ou categoria pede índices compostos que o banco não tem (conferido em prod: busca sozinha e filtros sozinhos ou combinados entre si funcionam). Essas combinações caem no estado de erro até os índices serem publicados.
 - Contagem e lista sem combinações conhecidas de índice: combinações de filtros que o Firestore recusar por falta de índice caem no estado de erro tratado, nunca carregando para sempre. Índices que faltarem são documentados em `docs/deploy-ambientes.md`, como na 015.
 - `LibraryDocumentModel`, os enums de área, tipo e categoria, coleções, regras e índices do Firebase não mudam. Rotas não mudam (`/biblioteca`, `/biblioteca/:area`, `/biblioteca/:area/documento/:slug`, `/painel/biblioteca/:area`).
 - O painel não muda: a página do painel, `Filters`, `LibraryDocumentCard`, o diálogo de documento, `LibraryStore` e `FilterDocumentsStore` continuam com o mesmo comportamento. A página pública deixa de mostrar as ações de edição (o painel tem as suas).
@@ -107,7 +108,7 @@ Não muda. `/painel/biblioteca/:area` continua com a página, os filtros, o card
 7. [ ] Categoria: painel com as categorias da área em ordem alfabética e quantidades, seleção livre, documento aparece com qualquer uma marcada; selo com a quantidade marcada; "Limpar" do painel desmarca; fecha com Esc (foco volta ao botão), clique fora e Tab; sem a contagem, mostra as 16 sem números.
 8. [ ] Filtros ativos: um chip por filtro, "×" remove só aquele, "Limpar tudo" tira filtros e busca; a fileira some sem filtros.
 9. [ ] Contagem "N documento(s)" com o total do filtro (não só o carregado) e "para “termo”" com busca, anunciada a leitores de tela.
-10. [ ] Linha do documento: título até 3 linhas, detalhes sem partes vazias, até 2 categorias e "+N", selo do tipo e seta; abre o detalhe atual por clique e Enter, com foco visível; hover com fundo e título laranja; ordem por data (alfabética do campo com busca).
+10. [ ] Linha do documento: título até 3 linhas, detalhes sem partes vazias, até 2 categorias e "+N", selo do tipo e seta; abre o detalhe atual por clique e Enter, com foco visível; hover com fundo e título laranja; ordem por data, também com busca.
 11. [ ] Paginação: 20 por vez; "Ver mais documentos" só quando há mais; durante a carga fica desativado com "Carregando…" e as linhas ficam; nunca traz página vazia nem repete itens.
 12. [ ] Carregando: esqueleto da linha de números na entrada e 5 linhas de esqueleto na lista, anunciado "Carregando".
 13. [ ] Vazio: área sem documentos mostra "Ainda não há documentos em [Área]" sem busca nem filtros; sem resultado mostra "Nenhum documento encontrado" com "Limpar filtros", que restaura a lista completa.
@@ -137,7 +138,7 @@ Não muda. `/painel/biblioteca/:area` continua com a página, os filtros, o card
   - **Categorias zeradas escondidas e ordem alfabética.** Decidido no modo autônomo: as 16 categorias valem para as duas áreas, mas várias são de uma área só; esconder as com zero evita opções que levam a vazio. Ordem alfabética porque a ordem do código não é intencional. Sem contagem, aparecem as 16.
   - **Filtros na hora, sem "Aplicar".** Decidido no modo autônomo: como no protótipo e na listagem de posts; o painel lateral de 20% sai (nota do protótipo).
   - **Lista em linhas, 20 por vez, "Ver mais".** Decidido no modo autônomo: linhas como no protótipo (documentos não têm imagem); 20 por página porque a linha é baixa; "Ver mais documentos" e "nunca página vazia" como na 014.
-  - **Ordem com busca.** Decidido no modo autônomo: alfabética do campo buscado, porque a busca por prefixo no Firestore ordena por esse campo (mesma regra da 014).
+  - **Ordem com busca.** Decidido no modo autônomo: por data, como sem busca. A ordem alfabética do campo buscado pedia um índice novo para a busca sozinha (área + campo); com o filtro de intervalo e ordem por data, a consulta é a mesma do painel e usa os índices que já existem.
   - **Textos de vazio.** Decidido no modo autônomo: "Nenhum documento encontrado" com "Limpar filtros" (aba "Estados" e lista do protótipo) e um texto próprio para área sem documentos, que não tem o que limpar.
   - **Sem ações de edição na página pública.** Decidido no modo autônomo: hoje quem tem login vê "Criar", "Editar" e "Excluir" também em `/biblioteca/:area`; a página nova não mostra, porque o painel tem a mesma tela com essas ações e o site público fica só de leitura.
   - **Sem parceiros na entrada.** Decidido no modo autônomo: o protótipo não tem a seção na biblioteca e a listagem de categoria (014) também não usa; os parceiros seguem na Home e no post.
@@ -146,3 +147,5 @@ Não muda. `/painel/biblioteca/:area` continua com a página, os filtros, o card
 ## Histórico de mudanças
 - 2026-10-02: criada e aprovada no modo autônomo (execução da Fase 4).
 - 2026-10-02: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-02: ajustes na implementação, a partir dos dados de prod: (1) com busca, a ordem continua por data (a alfabética pedia índice novo até para a busca sozinha); (2) na instituição, termo todo em minúsculas vira caixa alta, porque 552 de 602 instituições estão gravadas assim (títulos e autores seguem com inicial maiúscula, como a maioria); (3) busca combinada com tipo, ano ou categoria pede índices novos, documentados em `docs/deploy-ambientes.md`, e até lá cai no erro tratado.
+- 2026-10-02: implementada; falta a verificação (`/sdd-verify 016`).

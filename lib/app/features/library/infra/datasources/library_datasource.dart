@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:observatorio_geo_hist/app/core/errors/offline_exception.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
@@ -12,6 +13,9 @@ abstract class LibraryDatasource {
   Future<PaginatedLibraryDocuments> fetchGeographyDocuments(LibraryDocumentsQuery query);
   Future<PaginatedLibraryDocuments> fetchHistoryDocuments(LibraryDocumentsQuery query);
   Future<LibraryDocumentModel?> fetchDocumentBySlug(String slug);
+
+  Future<PaginatedLibraryDocuments> fetchListing(LibraryListingQuery query);
+  Future<int> countListing(LibraryListingQuery query);
 
   Future<Map<DocumentType, int>> countByType(String area);
   Future<Map<DocumentCategory, int>> countByCategory(String area);
@@ -130,6 +134,74 @@ class LibraryDatasourceImpl implements LibraryDatasource {
 
     final data = snapshot.docs.first.data();
     return LibraryDocumentModel.fromJson(data);
+  }
+
+  // A contagem usa a mesma ordenação da lista para aproveitar os mesmos índices.
+  Query _listingQuery(LibraryListingQuery listing) {
+    Query query = _baseQuery(area: listing.area.value);
+
+    if (listing.type != null) {
+      query = query.where('type', isEqualTo: listing.type!.value);
+    }
+    if (listing.categories.isNotEmpty) {
+      query = query.where(
+        'category',
+        arrayContainsAny: listing.categories.map((category) => category.value).toList(),
+      );
+    }
+    if (listing.year != null) {
+      query = query.where('year', isEqualTo: listing.year);
+    }
+
+    final search = listing.searchText.trim();
+    if (search.isNotEmpty) {
+      final field = listing.searchField.field;
+      query = query
+          .where(field, isGreaterThanOrEqualTo: search)
+          .where(field, isLessThanOrEqualTo: '$search\uf8ff');
+    }
+
+    // Com busca, a ordem continua por data: é o formato que os índices do painel já cobrem.
+    return query.orderBy('createdAt', descending: true);
+  }
+
+  @override
+  Future<PaginatedLibraryDocuments> fetchListing(LibraryListingQuery listing) async {
+    try {
+      Query query = _listingQuery(listing);
+      if (listing.startAfterDocument != null) {
+        query = query.startAfterDocument(listing.startAfterDocument!);
+      }
+
+      // Um a mais diz se existe próxima página sem precisar de um clique que volte vazio.
+      final snapshot = await query.limit(listing.limit + 1).get();
+      if (snapshot.docs.isEmpty && snapshot.metadata.isFromCache) throw const OfflineException();
+      final hasMore = snapshot.docs.length > listing.limit;
+      final docs = hasMore ? snapshot.docs.sublist(0, listing.limit) : snapshot.docs;
+
+      return PaginatedLibraryDocuments(
+        documents: [
+          for (final doc in docs)
+            LibraryDocumentModel.fromJson(doc.data() as Map<String, dynamic>).copyWith(id: doc.id),
+        ],
+        lastDocument: docs.isNotEmpty ? docs.last : null,
+        hasMore: hasMore,
+      );
+    } catch (exception) {
+      _loggerService.error('Error fetching library listing: $exception');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<int> countListing(LibraryListingQuery listing) async {
+    try {
+      final snapshot = await _listingQuery(listing).count().get();
+      return snapshot.count ?? 0;
+    } catch (exception) {
+      _loggerService.error('Error counting library listing: $exception');
+      rethrow;
+    }
   }
 
   @override
@@ -252,5 +324,37 @@ class LibraryDocumentsQuery {
     this.year,
     this.startAfterDocument,
     this.limit = 10,
+  });
+}
+
+enum LibrarySearchField {
+  title('title', 'título'),
+  author('author', 'autor'),
+  institution('institution', 'instituição');
+
+  final String field;
+  final String label;
+  const LibrarySearchField(this.field, this.label);
+}
+
+class LibraryListingQuery {
+  final DocumentArea area;
+  final DocumentType? type;
+  final List<DocumentCategory> categories;
+  final int? year;
+  final LibrarySearchField searchField;
+  final String searchText;
+  final DocumentSnapshot? startAfterDocument;
+  final int limit;
+
+  const LibraryListingQuery({
+    required this.area,
+    this.type,
+    this.categories = const [],
+    this.year,
+    this.searchField = LibrarySearchField.title,
+    this.searchText = '',
+    this.startAfterDocument,
+    this.limit = 20,
   });
 }

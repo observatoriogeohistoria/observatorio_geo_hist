@@ -13,6 +13,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/pages/manif
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/our_history_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/team_member_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_area_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_document_detailed_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_list_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_page.dart';
@@ -133,7 +134,7 @@ class AppRouter {
               final invalidRoute = area == null;
               if (invalidRoute) return const PageNotFound();
 
-              return LibraryListPage(area: area);
+              return LibraryAreaPage(area: area);
             },
           ),
           GoRoute(
