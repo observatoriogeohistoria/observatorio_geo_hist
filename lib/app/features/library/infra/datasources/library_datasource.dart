@@ -136,14 +136,14 @@ class LibraryDatasourceImpl implements LibraryDatasource {
   Future<Map<DocumentType, int>> countByType(String area) async {
     try {
       const types = DocumentType.values;
+      final snapshots = await Future.wait([
+        for (final type in types)
+          _baseQuery(area: area).where('type', isEqualTo: type.value).count().get(),
+      ]);
 
-      final Map<DocumentType, int> counts = {};
-      for (final type in types) {
-        final countSnap = await _baseQuery(area: area).where('type', isEqualTo: type).count().get();
-        counts[type] = countSnap.count ?? 0;
-      }
-
-      return counts;
+      return {
+        for (final (index, type) in types.indexed) type: snapshots[index].count ?? 0,
+      };
     } catch (exception) {
       _loggerService.error('Error counting by type: $exception');
       rethrow;
@@ -154,15 +154,14 @@ class LibraryDatasourceImpl implements LibraryDatasource {
   Future<Map<DocumentCategory, int>> countByCategory(String area) async {
     try {
       const categories = DocumentCategory.values;
+      final snapshots = await Future.wait([
+        for (final category in categories)
+          _baseQuery(area: area).where('category', arrayContains: category.value).count().get(),
+      ]);
 
-      final counts = <DocumentCategory, int>{};
-      for (final category in categories) {
-        final countSnap =
-            await _baseQuery(area: area).where('category', arrayContains: category).count().get();
-        counts[category] = countSnap.count ?? 0;
-      }
-
-      return counts;
+      return {
+        for (final (index, category) in categories.indexed) category: snapshots[index].count ?? 0,
+      };
     } catch (exception) {
       _loggerService.error('Error counting by category: $exception');
       rethrow;
