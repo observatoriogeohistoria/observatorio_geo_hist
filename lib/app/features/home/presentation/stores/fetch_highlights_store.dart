@@ -19,9 +19,7 @@ abstract class FetchHighlightsStoreBase with Store {
   @observable
   FetchHighlightsState state = FetchHighlightsInitialState();
 
-  /// Se a última busca foi feita sem categorias (a busca delas ainda não tinha
-  /// chegado ou falhou). Nesse caso os posts vêm sem a categoria e vale buscar
-  /// de novo quando as categorias chegarem.
+  /// Busca feita sem categorias: vale buscar de novo quando elas chegarem.
   bool fetchedWithoutCategories = false;
 
   @observable

@@ -16,10 +16,10 @@ Executa o plano **uma tarefa por vez**, com a spec como referência.
 
 ## Ciclo de cada tarefa
 1. Diga em uma linha qual tarefa vai fazer.
-2. Releia os arquivos que ela toca antes de editar. Siga o padrão do código ao redor (nomes, comentários, idioma).
+2. Releia os arquivos que ela toca antes de editar. Siga o padrão do código ao redor (nomes, idioma). Comentários só pelas regras do `CLAUDE.md`: raros, curtos, dizendo o porquê, sem citar spec, fase ou protótipo.
 3. Implemente **só** o que a tarefa pede. Não adiante tarefas seguintes nem "aproveite" para refatorar outras áreas.
 4. Se alterou stores MobX ou modelos gerados, rode `fvm dart run build_runner build --delete-conflicting-outputs`.
-5. Rode `fvm flutter analyze`. Corrija o que a tarefa introduziu. Não deixe avisos novos.
+5. Rode `fvm dart format` nos `.dart` que a tarefa alterou (não nos gerados) e depois `fvm flutter analyze`. Corrija o que a tarefa introduziu. Não deixe avisos novos.
 6. Confira a tarefa contra o critério de aceite ligado a ela. Quando fizer sentido, rode o app (`fvm flutter run -d chrome`) e olhe a tela em 390, 768 e 1280 px, comparando com o protótipo.
 7. Marque `- [x]` no `tasks.md` e acrescente, se útil, uma nota curta ("feito com X porque Y").
 8. Ao fim de cada **grupo** de tarefas, faça um resumo (o que mudou, o que conferir) e **pare** para a pessoa revisar antes do grupo seguinte.

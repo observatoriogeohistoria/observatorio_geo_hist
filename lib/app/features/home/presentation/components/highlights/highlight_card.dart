@@ -7,19 +7,11 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/select_highlights.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Cartão de destaque da Home (spec 005).
-///
-/// A foto preenche o cartão (recortada, sem distorcer). Só na parte de baixo,
-/// atrás do texto, um degradê escuro garante contraste mesmo sobre foto branca.
-/// O cartão inteiro é um link para a página do post; o leitor de tela ouve
-/// "Título. Tipo, Área. data" e ignora a foto.
 class HighlightCard extends StatefulWidget {
   const HighlightCard({super.key, required this.post, this.isMain = false});
 
-  /// Post completo (com `body`, `id` e área), já filtrado por [selectHighlights].
   final PostModel post;
 
-  /// Cartão principal: título maior e data.
   final bool isMain;
 
   @override
@@ -48,60 +40,128 @@ class _HighlightCardState extends State<HighlightCard> {
 
   @override
   Widget build(BuildContext context) {
-    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r16);
+    final compact = !widget.isMain && ScreenUtils.breakpointOf(context) == Breakpoint.mobile;
 
     return Semantics(
       link: true,
       label: _semanticLabel,
       linkUrl: Uri.parse(highlightPath(_post)),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o cartão.
       onTap: _open,
       excludeSemantics: true,
-      child: AppFocusRing(
-        borderRadius: radius,
-        fit: StackFit.expand,
-        child: ClipRRect(
+      child: compact ? _buildCompact(context) : _buildOverlay(context),
+    );
+  }
+
+  Widget _buildCompact(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final styles = AppTheme.typography.of(context);
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r10);
+
+    return AppFocusRing(
+      borderRadius: radius,
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: _open,
+          onHover: (value) => setState(() => _hovered = value),
           borderRadius: radius,
-          child: Material(
-            color: AppTheme.colors.imagePlaceholder,
-            child: InkWell(
-              onTap: _open,
-              onHover: (value) => setState(() => _hovered = value),
-              splashFactory: NoSplash.splashFactory,
-              overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-              mouseCursor: SystemMouseCursors.click,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  _HighlightImage(url: _post.body!.image.url),
-                  Positioned.fill(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Flexible(
-                          child: Stack(
-                            // Mantém a largura toda do cartão para o bloco de texto.
-                            fit: StackFit.passthrough,
-                            clipBehavior: Clip.none,
-                            children: [
-                              _textBlock(context),
-                              // Desenhada acima do texto, sem tirar altura dele.
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                top: -AppTheme.dimensions.components.featuredScrimFade,
-                                height: AppTheme.dimensions.components.featuredScrimFade,
-                                child: const _ScrimFade(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+          mouseCursor: SystemMouseCursors.click,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: components.featuredCompactThumbWidth,
+                child: AspectRatio(
+                  aspectRatio: components.featuredCompactThumbAspectRatio,
+                  child: ClipRRect(
+                    borderRadius: radius,
+                    child: ColoredBox(
+                      color: colors.imagePlaceholder,
+                      child: _HighlightImage(url: _post.body!.image.url, compact: true),
                     ),
                   ),
-                ],
+                ),
               ),
+              SizedBox(width: components.featuredCompactGap),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _typeAndArea.toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: styles.label.copyWith(color: colors.accentStrong),
+                    ),
+                    SizedBox(height: components.featuredCompactTextGap),
+                    Text(
+                      _post.body!.title,
+                      maxLines: components.featuredTitleMaxLines,
+                      overflow: TextOverflow.ellipsis,
+                      style: styles.featureTitleSmall.copyWith(
+                        color: colors.ink,
+                        decoration: _hovered ? TextDecoration.underline : TextDecoration.none,
+                        decorationColor: colors.ink,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOverlay(BuildContext context) {
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r16);
+
+    return AppFocusRing(
+      borderRadius: radius,
+      fit: StackFit.expand,
+      child: ClipRRect(
+        borderRadius: radius,
+        child: Material(
+          color: AppTheme.colors.imagePlaceholder,
+          child: InkWell(
+            onTap: _open,
+            onHover: (value) => setState(() => _hovered = value),
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+            mouseCursor: SystemMouseCursors.click,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _HighlightImage(url: _post.body!.image.url),
+                Positioned.fill(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Flexible(
+                        child: Stack(
+                          fit: StackFit.passthrough,
+                          clipBehavior: Clip.none,
+                          children: [
+                            _textBlock(context),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              top: -AppTheme.dimensions.components.featuredScrimFade,
+                              height: AppTheme.dimensions.components.featuredScrimFade,
+                              child: const _ScrimFade(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -151,13 +211,15 @@ class _HighlightCardState extends State<HighlightCard> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     maxWidth: widget.isMain
-                        ? textScaler.scale(titleStyle.fontSize!) * components.featuredTitleMaxWidthEm
+                        ? textScaler.scale(titleStyle.fontSize!) *
+                            components.featuredTitleMaxWidthEm
                         : double.infinity,
                   ),
-                  // Com pouco espaço (texto ampliado), corta em menos linhas, com reticências.
+                  // Com texto ampliado, corta em menos linhas em vez de vazar.
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final lineHeight = textScaler.scale(titleStyle.fontSize!) * titleStyle.height!;
+                      final lineHeight =
+                          textScaler.scale(titleStyle.fontSize!) * titleStyle.height!;
                       final fitting = (constraints.maxHeight / lineHeight).floor();
                       final maxLines = fitting.clamp(1, components.featuredTitleMaxLines);
 
@@ -188,8 +250,6 @@ class _HighlightCardState extends State<HighlightCard> {
   }
 }
 
-/// Faixa acima do texto em que o véu escuro esmaece até sumir. A parte de
-/// cima da foto fica limpa.
 class _ScrimFade extends StatelessWidget {
   const _ScrimFade();
 
@@ -213,18 +273,16 @@ class _ScrimFade extends StatelessWidget {
   }
 }
 
-/// Foto do post em `cover`. Sem URL, carregando ou com falha: fica o fundo
-/// escuro do cartão (sem salto de layout); sem URL ou com falha, também o
-/// ícone de imagem no canto. Decorativa para o leitor de tela.
 class _HighlightImage extends StatelessWidget {
-  const _HighlightImage({required this.url});
+  const _HighlightImage({required this.url, this.compact = false});
 
   final String? url;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final url = this.url;
-    if (url == null || url.isEmpty) return const _NoImage();
+    if (url == null || url.isEmpty) return _NoImage(compact: compact);
 
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
@@ -236,18 +294,21 @@ class _HighlightImage extends StatelessWidget {
           if (wasSynchronouslyLoaded) return child;
           return AnimatedOpacity(
             opacity: frame == null ? 0 : 1,
-            duration: reduceMotion ? Duration.zero : AppTheme.dimensions.components.featuredImageFade,
+            duration:
+                reduceMotion ? Duration.zero : AppTheme.dimensions.components.featuredImageFade,
             child: child,
           );
         },
-        errorBuilder: (context, error, stackTrace) => const _NoImage(),
+        errorBuilder: (context, error, stackTrace) => _NoImage(compact: compact),
       ),
     );
   }
 }
 
 class _NoImage extends StatelessWidget {
-  const _NoImage();
+  const _NoImage({this.compact = false});
+
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -257,9 +318,11 @@ class _NoImage extends StatelessWidget {
       child: ColoredBox(
         color: AppTheme.colors.imagePlaceholder,
         child: Align(
-          alignment: Alignment.topLeft,
+          alignment: compact ? Alignment.center : Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.all(AppTheme.dimensions.components.featuredTextPadding(breakpoint)),
+            padding: compact
+                ? EdgeInsets.zero
+                : EdgeInsets.all(AppTheme.dimensions.components.featuredTextPadding(breakpoint)),
             child: Icon(
               Icons.image_outlined,
               size: AppTheme.dimensions.components.featuredPlaceholderIcon,

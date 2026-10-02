@@ -13,8 +13,6 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/hero/hero_shortcut_card.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Topo da Home (spec 004): o que é o Observatório, para quem serve e atalhos
-/// para História, Geografia e Biblioteca. Textos fixos, sem carregamento.
 class HomeHero extends StatefulWidget {
   const HomeHero({super.key});
 
@@ -28,7 +26,6 @@ class _HomeHeroState extends State<HomeHero> {
   final _historyFocus = FocusNode(debugLabel: 'Atalho História');
   final _geographyFocus = FocusNode(debugLabel: 'Atalho Geografia');
 
-
   @override
   void dispose() {
     _historyFocus.dispose();
@@ -38,7 +35,6 @@ class _HomeHeroState extends State<HomeHero> {
 
   Future<void> _openArea(PostsAreas area, FocusNode origin) async {
     await showAreaCategoriesDialog(context, area: area, store: _fetchCategoriesStore);
-    // Se a pessoa escolheu uma categoria, a Home já saiu da tela.
     if (!mounted) return;
     origin.requestFocus();
   }
@@ -56,7 +52,8 @@ class _HomeHeroState extends State<HomeHero> {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surface,
-        border: Border(bottom: BorderSide(color: colors.line, width: AppTheme.dimensions.stroke.small)),
+        border:
+            Border(bottom: BorderSide(color: colors.line, width: AppTheme.dimensions.stroke.small)),
       ),
       child: Stack(
         children: [
@@ -73,13 +70,14 @@ class _HomeHeroState extends State<HomeHero> {
                   Semantics(
                     label: label,
                     excludeSemantics: true,
-                    child: Text(label.toUpperCase(), style: styles.label.copyWith(color: colors.accentStrong)),
+                    child: Text(label.toUpperCase(),
+                        style: styles.label.copyWith(color: colors.accentStrong)),
                   ),
                   SizedBox(height: components.heroTitleGap),
                   Semantics(
                     header: true,
                     child: ConstrainedBox(
-                      // Em "em": acompanha o texto ampliado, senão as palavras quebram no meio.
+                      // Em "em" para acompanhar o texto ampliado; senão, as palavras quebram no meio.
                       constraints: BoxConstraints(
                         maxWidth: MediaQuery.textScalerOf(context).scale(styles.display.fontSize!) *
                             components.heroTitleMaxWidthEm,
@@ -88,7 +86,8 @@ class _HomeHeroState extends State<HomeHero> {
                         TextSpan(
                           text: 'Ensino de História e Geografia, ',
                           children: [
-                            TextSpan(text: 'em um só lugar.', style: TextStyle(color: colors.accent)),
+                            TextSpan(
+                                text: 'em um só lugar.', style: TextStyle(color: colors.accent)),
                           ],
                         ),
                         style: styles.display.copyWith(color: colors.ink),
@@ -133,8 +132,6 @@ class _HomeHeroState extends State<HomeHero> {
 
   Widget _shortcuts(Breakpoint breakpoint) {
     final gap = AppTheme.dimensions.spacing.s16;
-    // Com o texto muito ampliado, três colunas não cabem os títulos sem quebrar
-    // palavras ao meio: os atalhos passam para uma coluna, como no celular.
     final largeText = MediaQuery.textScalerOf(context).scale(1) >=
         AppTheme.dimensions.components.heroShortcutsStackTextScale;
     final singleColumn = breakpoint == Breakpoint.mobile || largeText;

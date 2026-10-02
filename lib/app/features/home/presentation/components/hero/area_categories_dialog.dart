@@ -7,18 +7,15 @@ import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dar
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Abre a janela com as categorias de [area] sobre a página.
-///
-/// Fecha por "Fechar", Esc, clique/toque fora ou ao escolher uma opção. O foco
-/// fica preso na janela enquanto ela está aberta; quem chama devolve o foco
-/// ao elemento que a abriu quando o `Future` termina.
+/// Quem chama devolve o foco ao elemento que abriu a janela quando o `Future` termina.
 Future<void> showAreaCategoriesDialog(
   BuildContext context, {
   required PostsAreas area,
   required FetchCategoriesStore store,
 }) {
   final components = AppTheme.dimensions.components;
-  final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
+  final duration =
+      MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
 
   return showGeneralDialog(
     context: context,
@@ -38,9 +35,6 @@ Future<void> showAreaCategoriesDialog(
   );
 }
 
-/// Janela "Categorias de {área}": o mesmo conteúdo do menu da área na navbar
-/// (carregando, vazio, erro com "Tentar de novo", Expogeo e Geoensine em
-/// Geografia), rolável quando não cabe na tela.
 class AreaCategoriesDialog extends StatelessWidget {
   const AreaCategoriesDialog({super.key, required this.area, required this.store});
 
@@ -85,7 +79,8 @@ class AreaCategoriesDialog extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(spacing.s20, spacing.s12, spacing.s8, spacing.s12),
+                          padding: EdgeInsets.fromLTRB(
+                              spacing.s20, spacing.s12, spacing.s8, spacing.s12),
                           child: Row(
                             children: [
                               Expanded(
@@ -113,7 +108,8 @@ class AreaCategoriesDialog extends StatelessWidget {
                         Flexible(
                           child: SingleChildScrollView(
                             padding: EdgeInsets.all(spacing.s8),
-                            child: NavbarCategoriesMenu(area: area, store: store, onSelected: close),
+                            child:
+                                NavbarCategoriesMenu(area: area, store: store, onSelected: close),
                           ),
                         ),
                       ],

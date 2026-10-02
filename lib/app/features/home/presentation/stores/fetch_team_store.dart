@@ -14,14 +14,13 @@ abstract class FetchTeamStoreBase with Store {
 
   FetchTeamStoreBase(this._repository);
 
-  /// Membros em ordem alfabética do nome.
   @observable
   ObservableList<TeamMemberModel> team = ObservableList<TeamMemberModel>();
 
   @observable
   FetchTeamState state = FetchTeamInitialState();
 
-  /// Ainda não buscou ou a última busca falhou. Evita o esqueleto piscar ao voltar à Home.
+  /// Evita o esqueleto piscar ao voltar à Home.
   bool get needsFetch => switch (state) {
         FetchTeamInitialState() || FetchTeamErrorState() => true,
         FetchTeamLoadingState() || FetchTeamSuccessState() => false,

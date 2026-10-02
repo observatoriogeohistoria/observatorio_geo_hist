@@ -17,10 +17,6 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Navbar fixa do site: marca e, em telas largas (≥ 1024), os itens em linha;
-/// abaixo disso, a marca e um botão que abre o painel de menu.
-///
-/// Em páginas com `CustomScrollView`, use [NavbarSliver] para fixá-la no topo.
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
 
@@ -55,7 +51,8 @@ class _NavbarState extends State<Navbar> {
 
   Future<void> _openMenu(NavbarLocation location) async {
     final components = AppTheme.dimensions.components;
-    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
+    final duration =
+        MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
 
     setState(() => _isMenuOpen = true);
 
@@ -155,7 +152,6 @@ class _NavbarState extends State<Navbar> {
   }
 }
 
-/// Botão de menu (três traços) das telas com menos de 1024 px.
 class _MenuButton extends StatelessWidget {
   const _MenuButton({required this.focusNode, required this.isOpen, required this.onPressed});
 
@@ -175,7 +171,6 @@ class _MenuButton extends StatelessWidget {
         button: true,
         expanded: isOpen,
         label: label,
-        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o menu.
         onTap: onPressed,
         excludeSemantics: true,
         child: AppFocusRing(
@@ -201,7 +196,6 @@ class _MenuButton extends StatelessWidget {
   }
 }
 
-/// Fixa a [Navbar] no topo de um `CustomScrollView`.
 class NavbarSliver extends StatelessWidget {
   const NavbarSliver({super.key});
 

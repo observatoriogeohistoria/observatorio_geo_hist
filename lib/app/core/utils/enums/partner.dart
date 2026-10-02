@@ -1,7 +1,6 @@
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 
-/// Instituições que realizam e apoiam o Observatório (spec 009). A ordem do
-/// enum é a ordem de exibição em todo o site (a do protótipo).
+/// A ordem do enum é a ordem de exibição no site.
 enum Partner {
   ufu(
     acronym: 'UFU',
@@ -53,10 +52,8 @@ enum Partner {
 
   final String acronym;
 
-  /// Nome acessível do logo.
   final String fullName;
 
-  /// Site oficial. `null` deixa o logo sem link.
   final String? url;
 
   String get assetPath => '${AppAssets.partners}/$name.webp';

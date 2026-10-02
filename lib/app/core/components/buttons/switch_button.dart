@@ -47,7 +47,7 @@ class _SwitchStateButton extends State<SwitchButton> {
             setState(() => _value = value);
             widget.onChanged(value);
           },
-          activeThumbColor:AppTheme.colors.orange,
+          activeThumbColor: AppTheme.colors.orange,
         ),
       ],
     );

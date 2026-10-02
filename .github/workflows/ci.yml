@@ -31,6 +31,11 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
+    - name: Conferir formatação
+      run: |
+        find lib -name '*.dart' ! -name '*.g.dart' ! -name '*.freezed.dart' -print0 \
+          | xargs -0 dart format --output=none --set-exit-if-changed
+
     - name: Analyze
       run: flutter analyze --no-fatal-infos
 

@@ -11,17 +11,11 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetc
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_highlights_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Seção "Destaques" da Home (spec 005): até três publicações escolhidas pela
-/// equipe, todas visíveis de uma vez.
-///
-/// Carregando: título e esqueleto. Erro: título, mensagem e "Tentar de novo".
-/// Sem destaques: a seção inteira some.
 class HighlightsSection extends StatelessWidget {
   const HighlightsSection({super.key, required this.store, required this.onRetry});
 
   final FetchHighlightsStore store;
 
-  /// Refaz a busca dos destaques.
   final VoidCallback onRetry;
 
   @override
@@ -42,7 +36,8 @@ class HighlightsSection extends StatelessWidget {
           case FetchHighlightsSuccessState():
             content = HighlightsGrid(
               itemCount: highlights.length,
-              itemBuilder: (context, index) => HighlightCard(post: highlights[index], isMain: index == 0),
+              itemBuilder: (context, index) =>
+                  HighlightCard(post: highlights[index], isMain: index == 0),
             );
         }
 
@@ -88,24 +83,68 @@ class _Section extends StatelessWidget {
   }
 }
 
-/// Esqueleto na disposição de três cartões. Parado (sem animação).
 class _Loading extends StatelessWidget {
   const _Loading();
 
   @override
   Widget build(BuildContext context) {
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r16);
+    final isMobile = ScreenUtils.breakpointOf(context) == Breakpoint.mobile;
 
     return Semantics(
       label: 'Carregando destaques',
       excludeSemantics: true,
       child: HighlightsGrid(
         itemCount: maxHighlights,
-        itemBuilder: (context, index) => ClipRRect(
-          borderRadius: radius,
-          child: const Skeleton(width: null, height: null),
-        ),
+        itemBuilder: (context, index) => isMobile && index > 0
+            ? const _CompactSkeleton()
+            : ClipRRect(
+                borderRadius: radius,
+                child: const Skeleton(width: null, height: null),
+              ),
       ),
+    );
+  }
+}
+
+class _CompactSkeleton extends StatelessWidget {
+  const _CompactSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+    final styles = AppTheme.typography.of(context);
+    final textScaler = MediaQuery.textScalerOf(context);
+    final thumbWidth = components.featuredCompactThumbWidth;
+
+    Widget bar(double widthFactor, TextStyle style) => FractionallySizedBox(
+          widthFactor: widthFactor,
+          alignment: Alignment.centerLeft,
+          child: Skeleton(width: null, height: textScaler.scale(style.fontSize!)),
+        );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r10),
+          child: Skeleton(
+              width: thumbWidth, height: thumbWidth / components.featuredCompactThumbAspectRatio),
+        ),
+        SizedBox(width: components.featuredCompactGap),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              bar(0.5, styles.label),
+              SizedBox(height: components.featuredCompactTextGap * 2),
+              bar(1, styles.featureTitleSmall),
+              SizedBox(height: components.featuredCompactTextGap),
+              bar(0.7, styles.featureTitleSmall),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

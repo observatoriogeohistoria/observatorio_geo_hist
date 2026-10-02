@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/social_buttons.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/partners/partner_logo_grid.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
-import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
-import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class Support extends StatelessWidget {
@@ -14,55 +9,71 @@ class Support extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppTheme.colors.lighterGray,
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtils.getPageHorizontalPadding(context),
-        vertical: AppTheme.dimensions.space.massive.verticalSpacing,
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+
+    const follow = _SupportGroup(title: 'Acompanhe', child: SocialPills());
+    final partners = _SupportGroup(
+      title: 'Apoio',
+      child: PartnerLogoGrid(minColumnWidth: components.partnerColumnMinWidthSmall),
+    );
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: Border(top: BorderSide(color: colors.line)),
       ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildIcon('instagram', AppStrings.instagram),
-              _buildIcon('facebook', AppStrings.facebook),
-              _buildIcon('youtube', AppStrings.youtube),
-            ],
+      child: PageContent(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: components.supportPaddingVertical),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < components.supportColumnsBreak) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [follow, SizedBox(height: components.supportColumnGapV), partners],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  follow,
+                  SizedBox(width: components.supportColumnGapH),
+                  Expanded(child: partners),
+                ],
+              );
+            },
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: AppTheme.dimensions.space.large.verticalSpacing,
-            ),
-            child: const AppDivider(),
-          ),
-          CommonTitle(
-            title: 'APOIO',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-          PartnerLogoGrid(minColumnWidth: AppTheme.dimensions.components.partnerColumnMinWidthSmall),
-        ],
+        ),
       ),
     );
   }
+}
 
-  Widget _buildIcon(
-    String name,
-    String link,
-  ) {
-    return InkWell(
-      customBorder: const CircleBorder(),
-      onTap: () => openUrl(link),
-      mouseCursor: SystemMouseCursors.click,
-      child: Padding(
-        padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
-        child: Image.asset(
-          '${AppAssets.icons}/$name.png',
-          width: 40.scale,
-          height: 40.scale,
+class _SupportGroup extends StatelessWidget {
+  const _SupportGroup({required this.title, required this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Semantics(
+          header: true,
+          child: Text(
+            title.toUpperCase(),
+            style: AppTheme.typography.of(context).label.copyWith(color: colors.inkSecondary),
+          ),
         ),
-      ),
+        SizedBox(height: AppTheme.dimensions.components.supportLabelGap),
+        child,
+      ],
     );
   }
 }

@@ -7,21 +7,14 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Capa do vídeo de apresentação da Home (spec 006).
-///
-/// Fundo: a imagem `assets/images/video-capa.webp`, recortada para preencher o
-/// quadro, quando ela existe no projeto; senão (ou se falhar), uma capa
-/// desenhada pelo site (degradê escuro com anéis). Na base, a legenda
-/// "Conheça o Observatório" sobre um véu escuro. [child] (o botão "Assistir"
-/// ou a caixa de erro) fica centralizado no quadro.
-///
-/// Recebe do pai uma altura mínima e cresce se o texto ampliado pedir.
+/// Usa `video-capa.webp` quando existe; senão, uma capa desenhada.
 class VideoCover extends StatelessWidget {
-  const VideoCover({super.key, required this.child});
+  const VideoCover({super.key, this.child, this.action});
 
   static const caption = 'Conheça o Observatório';
 
-  final Widget child;
+  final Widget? child;
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +30,13 @@ class VideoCover extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Cópia invisível da legenda: reserva no topo a mesma altura da
-            // base, para o botão ficar no centro do quadro sem encostar nela.
-            const ExcludeSemantics(child: Opacity(opacity: 0, child: _Caption())),
+            // Cópia invisível da legenda: reserva o mesmo espaço no topo, para o centro ficar no centro.
+            ExcludeSemantics(child: Opacity(opacity: 0, child: _Caption(action: action))),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontal),
               child: Center(child: child),
             ),
-            const _Caption(),
+            _Caption(action: action),
           ],
         ),
       ],
@@ -52,10 +44,10 @@ class VideoCover extends StatelessWidget {
   }
 }
 
-/// Legenda com véu escuro atrás do texto e uma faixa acima em que o véu
-/// esmaece. Branco sobre o véu fica acima de 4,5:1 mesmo com capa branca.
 class _Caption extends StatelessWidget {
-  const _Caption();
+  const _Caption({this.action});
+
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +55,27 @@ class _Caption extends StatelessWidget {
     final components = AppTheme.dimensions.components;
     final breakpoint = ScreenUtils.breakpointOf(context);
     final solid = colors.imageScrim.withValues(alpha: components.videoCaptionScrimOpacity);
+
+    // No celular, a legenda cobriria o título que a capa já traz. Ela segue só para o leitor de tela.
+    if (breakpoint == Breakpoint.mobile && action != null) {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(
+          components.videoCaptionPaddingHorizontal(breakpoint),
+          0,
+          components.videoCaptionPaddingHorizontal(breakpoint),
+          components.videoCaptionPaddingBottom(breakpoint),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Semantics(
+                  header: true, label: VideoCover.caption, child: const SizedBox.shrink()),
+            ),
+            action!,
+          ],
+        ),
+      );
+    }
 
     return Stack(
       clipBehavior: Clip.none,
@@ -77,14 +90,25 @@ class _Caption extends StatelessWidget {
               components.videoCaptionPaddingHorizontal(breakpoint),
               components.videoCaptionPaddingBottom(breakpoint),
             ),
-            child: Semantics(
-              header: true,
-              child: Text(
-                VideoCover.caption,
-                maxLines: components.videoCaptionMaxLines,
-                overflow: TextOverflow.ellipsis,
-                style: AppTheme.typography.of(context).videoCaption.copyWith(color: colors.white),
-              ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Semantics(
+                    header: true,
+                    child: Text(
+                      VideoCover.caption,
+                      maxLines: components.videoCaptionMaxLines,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTheme.typography
+                          .of(context)
+                          .videoCaption
+                          .copyWith(color: colors.white),
+                    ),
+                  ),
+                ),
+                if (action != null) ...[SizedBox(width: components.videoCaptionActionGap), action!],
+              ],
             ),
           ),
         ),
@@ -110,12 +134,10 @@ class _Caption extends StatelessWidget {
   }
 }
 
-/// Imagem escolhida, quando existe; senão, a capa desenhada. Decorativa.
 class _CoverBackground extends StatelessWidget {
   const _CoverBackground();
 
-  /// Consulta o manifesto de assets uma vez só. Evita pedir um arquivo que não
-  /// existe (e o 404 no console).
+  /// Consulta o manifesto uma vez, para não pedir um arquivo que não existe (e gerar 404).
   static final Future<bool> _hasCoverImage = AssetManifest.loadFromAssetBundle(rootBundle)
       .then((manifest) => manifest.listAssets().contains(AppAssets.videoCover))
       .catchError((Object _) => false);
@@ -143,8 +165,6 @@ class _CoverBackground extends StatelessWidget {
   }
 }
 
-/// Capa desenhada (`.video` do protótipo): degradê de 150° de [AppColors.ink]
-/// a [AppColors.videoCoverEnd], com anéis brancos bem suaves.
 class VideoCoverPainter extends CustomPainter {
   const VideoCoverPainter();
 
@@ -157,8 +177,7 @@ class VideoCoverPainter extends CustomPainter {
     final stroke = AppTheme.dimensions.stroke.small;
     final rect = Offset.zero & size;
 
-    // Linha do degradê como no CSS: o ângulo vale em pixels, e o comprimento
-    // faz os cantos opostos ficarem nas cores das pontas.
+    // Como no CSS: o ângulo vale em pixels e os cantos opostos ficam nas cores das pontas.
     final angle = components.videoCoverAngleDegrees * math.pi / 180;
     final direction = Offset(math.sin(angle), -math.cos(angle));
     final length = (size.width * math.sin(angle)).abs() + (size.height * math.cos(angle)).abs();
@@ -176,7 +195,12 @@ class VideoCoverPainter extends CustomPainter {
       size.width * components.videoRingCenter.dx,
       size.height * components.videoRingCenter.dy,
     );
-    final corners = [Offset.zero, Offset(size.width, 0), Offset(0, size.height), Offset(size.width, size.height)];
+    final corners = [
+      Offset.zero,
+      Offset(size.width, 0),
+      Offset(0, size.height),
+      Offset(size.width, size.height)
+    ];
     final farthest = corners.map((corner) => (corner - ringCenter).distance).reduce(math.max);
     final ring = Paint()
       ..style = PaintingStyle.stroke

@@ -4,11 +4,6 @@ import 'package:observatorio_geo_hist/app/core/components/partners/partner_logo_
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Seção "Realização e apoio" (spec 009): título e grade de logos. A mesma na
-/// Home, na Biblioteca e em Colabore.
-///
-/// Tem respiro de seção em cima e embaixo; na Home, a Equipe acima não soma
-/// respiro próprio embaixo, para o espaço não sumir quando ela está escondida.
 class PartnersSection extends StatelessWidget {
   const PartnersSection({super.key});
 

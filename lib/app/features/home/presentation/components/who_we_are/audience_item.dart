@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Um público do Observatório em Quem somos (spec 006): ícone num círculo
-/// laranja suave, nome e descrição, com uma linha fina acima (e abaixo, no
-/// último item). Não é clicável. O leitor de tela ouve "Nome. Descrição".
 class AudienceItem extends StatelessWidget {
   const AudienceItem({
     super.key,
@@ -17,7 +14,6 @@ class AudienceItem extends StatelessWidget {
   final String name;
   final String description;
 
-  /// Último item da lista: também tem a linha de baixo.
   final bool isLast;
 
   @override

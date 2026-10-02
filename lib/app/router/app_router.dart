@@ -77,11 +77,12 @@ class AppRouter {
               final categoryKey = state.pathParameters['category'];
               final id = state.pathParameters['id'];
 
-              final invalidRoute = id == null || area == null || categoryKey == null;
+              final postsArea = area == null ? null : PostsAreas.tryFromKey(area);
+              final invalidRoute = id == null || postsArea == null || categoryKey == null;
               if (invalidRoute) return const PageNotFound();
 
               return PostDetailedPage(
-                area: PostsAreas.fromKey(area),
+                area: postsArea,
                 categoryKey: categoryKey,
                 postId: id,
               );
@@ -175,7 +176,8 @@ class AppRouter {
         path: AppRoutes.panelTabPattern,
         builder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
-          final postType = PostType.fromString(state.uri.queryParameters[AppRoutes.panelPostTypeParam]);
+          final postType =
+              PostType.fromString(state.uri.queryParameters[AppRoutes.panelPostTypeParam]);
 
           final invalidRoute = tab == null;
           if (invalidRoute) return const PageNotFound();
@@ -197,7 +199,6 @@ class AppRouter {
     ],
   );
 
-  /// Texto das páginas públicas selecionável; o painel administrativo fica de fora.
   static Widget _selectable(Widget page) {
     return DefaultSelectionStyle.merge(
       selectionColor: AppTheme.colors.textSelection,

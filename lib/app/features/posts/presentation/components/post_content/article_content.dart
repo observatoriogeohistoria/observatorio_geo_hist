@@ -61,7 +61,6 @@ class ArticleContent extends StatelessWidget {
           if (article.image.url?.isNotEmpty ?? false)
             LayoutBuilder(
               builder: (_, constraints) {
-                // Banner panorâmico: proporção 21:9 limitada a uma altura máxima.
                 final height = (constraints.maxWidth * 9 / 21).clamp(180.0, 420.0);
 
                 return AppNetworkImage(

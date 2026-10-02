@@ -6,11 +6,6 @@ import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Chamada para contato no fim da Home (spec 009, `.cta` do protótipo).
-///
-/// Quadro laranja suave com título, texto e "Fale com a gente". No desktop o
-/// botão fica à direita; abaixo de 1024 px ou com texto ampliado a 130% ou
-/// mais, fica abaixo do texto. Só tem respiro de seção embaixo.
 class ContactCallSection extends StatelessWidget {
   const ContactCallSection({super.key});
 
@@ -21,7 +16,8 @@ class ContactCallSection extends StatelessWidget {
     final styles = AppTheme.typography.of(context);
     final breakpoint = ScreenUtils.breakpointOf(context);
     final textScaler = MediaQuery.textScalerOf(context);
-    final stacked = breakpoint != Breakpoint.desktop || textScaler.scale(1) >= components.ctaStackTextScale;
+    final stacked =
+        breakpoint != Breakpoint.desktop || textScaler.scale(1) >= components.ctaStackTextScale;
 
     final titleStyle = styles.ctaTitle.copyWith(color: colors.ink);
 
@@ -35,7 +31,8 @@ class ContactCallSection extends StatelessWidget {
           ),
           child: Semantics(
             header: true,
-            child: Text('Feito por e para professores, pesquisadores e estudantes.', style: titleStyle),
+            child: Text('Feito por e para professores, pesquisadores e estudantes.',
+                style: titleStyle),
           ),
         ),
         SizedBox(height: components.ctaTextGap),

@@ -48,7 +48,7 @@ O histórico deve contar a história da fase: cada commit é uma entrega que dá
 | `fix:` | correções da verificação. Agrupe as pequenas num só; separe só a que for relevante por si |
 | `docs: verificação da NNN` | `verificacao.md`, status, planejamento e arquivo de execução |
 
-Mensagens `tipo: descrição` em português, dizendo o que muda para quem usa o site. Corpo curto quando o título não basta. Terminar com a linha de coautoria definida pelo ambiente. Nunca `git add -A` às cegas: adicione os arquivos da entrega.
+Antes de cada commit, `fvm dart format` nos `.dart` alterados (não nos gerados). Mensagens `tipo: descrição` em português, dizendo o que muda para quem usa o site. Corpo curto quando o título não basta. Terminar com a linha de coautoria definida pelo ambiente. Nunca `git add -A` às cegas: adicione os arquivos da entrega.
 
 ## 1. Ciclo por spec (em ordem, uma de cada vez)
 Specs da mesma fase costumam mexer na mesma página: **não rode em paralelo**. Para cada spec, dispare **três sessões novas** com a ferramenta `Agent` (`subagent_type: general-purpose`, `run_in_background: false`), uma por etapa. Cada prompt deve ser autossuficiente: caminho do projeto, número da spec, o bloco "Regras do modo autônomo" abaixo (copiado inteiro) e o que devolver. Não repasse conteúdo de arquivos; passe caminhos.
@@ -87,12 +87,12 @@ Specs da mesma fase costumam mexer na mesma página: **não rode em paralelo**. 
 ## Regras do modo autônomo (copiar em todo prompt de etapa)
 ```
 MODO AUTÔNOMO: a pessoa está ausente e pré-aprovou o fluxo. Não use AskUserQuestion e não pare para aprovação; onde as skills sdd-* mandam parar ou perguntar, decida pela opção recomendada, registre a decisão no documento da spec e siga.
-Leia CLAUDE.md antes de tudo e siga suas regras de design, idioma e git.
+Leia CLAUDE.md antes de tudo e siga suas regras de design, idioma, comentários e git.
 Git: trabalhe na branch atual (refactor/redesign-<fase>); nunca push; nunca commit na main nem na develop; nunca --force, reset --hard ou apagar branch.
 Limites do que você pode decidir sozinha: não altere modelos de dados, regras/coleções do Firebase, rotas existentes, o painel admin nem nada em "Fora do escopo"; não adicione pacotes sem que o plano preveja; não apague conteúdo real. Se a tarefa exigir isso, registre como ressalva e pule só aquele ponto.
 Ambiente:
 - `fvm flutter analyze` quebra na pasta original por causa do "ó" no caminho. Rode-o numa cópia em caminho ASCII no scratchpad (rsync sem build/ e .dart_tool/, depois `fvm flutter pub get`). Symlink não resolve.
-- Para ver a tela: `fvm flutter build web --release`, servir build/web com um servidor Python próprio em background (com fallback de SPA para index.html) e abrir no navegador embutido (mcp__Claude_Browser__*). Conferir 390, 768 e 1280 px e voltar o navegador ao preset desktop no fim. Parar os servidores ao terminar.
+- Para ver a tela: `fvm flutter build web --release`, servir build/web com um servidor Python próprio em background (com fallback de SPA para index.html) e abrir no navegador embutido (mcp__Claude_Browser__*). Conferir 390, 768 e 1280 px e voltar o navegador ao preset desktop no fim. Abrir ao menos uma vez em modo debug (`fvm flutter run -d web-server --web-port <porta>` na cópia ASCII), que mostra asserções de layout escondidas no release. Parar os servidores ao terminar.
 - Protótipo: link no CLAUDE.md; ler com a ferramenta Artifact (action read), não com WebFetch.
 - Painel admin: só entrar se a tarefa exigir e se houver credenciais de teste neste prompt; senão marcar como não conferido.
 Resposta final: no máximo ~300 palavras, em tópicos, só o pedido. Não cole diffs nem conteúdo de arquivos.

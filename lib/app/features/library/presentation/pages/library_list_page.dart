@@ -109,7 +109,9 @@ class _LibraryListPageState extends State<LibraryListPage> {
             final isAdminRoute = GoRouterState.of(context).uri.path.startsWith(AppRoutes.admin);
             router.canPop()
                 ? router.pop()
-                : router.go(isAdminRoute ? AppRoutes.panelTab(AppRoutes.librarySegment) : AppRoutes.library);
+                : router.go(isAdminRoute
+                    ? AppRoutes.panelTab(AppRoutes.librarySegment)
+                    : AppRoutes.library);
           },
         ),
         title: AppHeadline.big(

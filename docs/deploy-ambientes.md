@@ -25,7 +25,7 @@ Nada vai para a `main` sem passar pela `develop`.
 
 | Arquivo | Gatilho | O que faz |
 |---|---|---|
-| [ci.yml](../.github/workflows/ci.yml) | PR para `develop` ou `main` | `pub get`, `analyze` e `build web`. Não publica. |
+| [ci.yml](../.github/workflows/ci.yml) | PR para `develop` ou `main` | `pub get`, conferência de formatação (`dart format`), `analyze` e `build web`. Não publica. |
 | `deploy-dev.yml` | push na `develop` ou manual | Build, `robots.txt` bloqueando indexação e FTP para o dev. |
 | `deploy-prod.yml` | push na `main` ou manual | Build e FTP para produção. |
 

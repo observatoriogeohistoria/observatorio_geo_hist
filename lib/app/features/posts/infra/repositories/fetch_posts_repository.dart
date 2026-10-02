@@ -51,6 +51,8 @@ class FetchPostsRepositoryImpl implements FetchPostsRepository {
     try {
       final post = await _datasource.fetchPostById(postId);
       return Right(post);
+    } on PostNotFoundException {
+      return const Left(PostNotFoundFailure());
     } catch (error) {
       return const Left(FetchPostByIdFailure());
     }

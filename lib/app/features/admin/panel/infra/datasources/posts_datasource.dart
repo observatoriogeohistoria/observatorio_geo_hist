@@ -43,22 +43,18 @@ class PostsDatasourceImpl implements PostsDatasource {
     int limit = 10,
   }) async {
     try {
-      /// Get all categories
       QuerySnapshot categoriesQuerySnapshot = await _firestore.collection('posts').get();
 
       List<CategoryModel> categories = categoriesQuerySnapshot.docs
           .map((category) => CategoryModel.fromJson(category.data() as Map<String, dynamic>))
           .toList();
 
-      /// Start building the base query from the collection group
       Query query = _firestore.collectionGroup('category_posts');
 
-      /// Filter by area if provided (array filter)
       if (searchArea != null) {
         query = query.where('areas', arrayContains: searchArea.key);
       }
 
-      /// Filter by category if provided (simple equality filter)
       if (searchCategory != null) {
         query = query.where('categoryId', isEqualTo: searchCategory.key);
       }
@@ -71,43 +67,34 @@ class PostsDatasourceImpl implements PostsDatasource {
         query = query.where('isHighlighted', isEqualTo: isHighlighted);
       }
 
-      /// Filter by title if provided (nested equality filter)
       if (searchText != null && searchText.isNotEmpty) {
-        /// If search text is provided, filter posts by title (nested inside body)
         query = query.where('type', isEqualTo: type.name).orderBy('body.title_lower').limit(limit);
 
-        /// If a previous document is available, apply pagination using title field
         if (startAfterDocument != null) {
           final previousTitle =
               (startAfterDocument.data() as Map<String, dynamic>)['body']['title_lower'];
           query = query.startAfter([previousTitle]);
         }
 
-        /// Use Firestore range query to get titles that start with searchText
         query = query.startAt([searchText]).endAt(['$searchText\uf8ff']);
       } else {
-        /// Default query with sorting by creation date
         query = query
             .where('type', isEqualTo: type.name)
             .orderBy('createdAt', descending: true)
             .limit(limit);
 
-        /// Apply pagination based on the last document
         if (startAfterDocument != null) {
           query = query.startAfterDocument(startAfterDocument);
         }
       }
 
-      /// Execute the query
       QuerySnapshot postsQuerySnapshot = await query.get();
 
-      /// Get the last document for pagination
       QueryDocumentSnapshot? lastDocument;
       if (postsQuerySnapshot.docs.isNotEmpty) {
         lastDocument = postsQuerySnapshot.docs.last;
       }
 
-      /// Map Firestore documents to PostModel and attach category data
       List<PostModel> posts = postsQuerySnapshot.docs.map((post) {
         final data = post.data() as Map<String, dynamic>;
         final fromJson = PostModel.fromJson(data);
@@ -119,7 +106,6 @@ class PostsDatasourceImpl implements PostsDatasource {
         );
       }).toList();
 
-      /// Return paginated result
       return PaginatedPosts(
         posts: posts,
         lastDocument: lastDocument,

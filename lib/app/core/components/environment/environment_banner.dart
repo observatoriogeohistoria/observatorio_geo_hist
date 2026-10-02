@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Faixa fixa no topo do site avisando que o ambiente atual é de testes.
-/// Não aparece em produção. Altura fixa em [ComponentSizes.environmentBannerHeight],
-/// para o [AppWidget] descontar do espaço disponível para o resto do app.
 class EnvironmentBanner extends StatelessWidget {
   const EnvironmentBanner({super.key});
 

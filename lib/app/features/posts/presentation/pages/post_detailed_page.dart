@@ -1,37 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
-import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
-import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_box.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/components/support/support.dart';
-import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/book_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/event_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/film_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/magazine_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
+import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/academic_production_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/article_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/book_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/document_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/event_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/film_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/magazine_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/music_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/podcast_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/search_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/fetch_posts_states.dart';
+import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/article_body.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_page_skeleton.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_type_content.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/related_posts_section.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/post_detail_store.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/post_detail_states.dart';
+import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostDetailedPage extends StatefulWidget {
@@ -51,175 +37,127 @@ class PostDetailedPage extends StatefulWidget {
 }
 
 class _PostDetailedPageState extends State<PostDetailedPage> {
-  late final _fetchCategoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
-  late final _fetchPostsStore = HomeSetup.getIt<FetchPostsStore>();
+  late final _categoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
+  late final _store = PostsSetup.getIt<PostDetailStore>();
+  late final ReactionDisposer _disposeReaction;
 
-  List<ReactionDisposer> _reactions = [];
+  CategoryModel? _category;
 
-  final ValueNotifier<CategoryModel?> _categoryNotifier = ValueNotifier(null);
-  final ValueNotifier<PostModel?> _postNotifier = ValueNotifier(null);
+  /// A navbar recarrega as categorias a cada página, e isso não deve buscar o post de novo.
+  String? _requested;
 
-  bool _error = false;
+  String get _address => '${widget.area.key}/${widget.categoryKey}/${widget.postId}';
 
   @override
   void initState() {
     super.initState();
-
-    _setupReactions();
-    _updateCategory();
+    _disposeReaction = reaction((_) => _categoriesStore.state, (_) => _load());
+    _load();
   }
 
   @override
   void didUpdateWidget(covariant PostDetailedPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _updateCategory();
+    if (oldWidget.area != widget.area ||
+        oldWidget.categoryKey != widget.categoryKey ||
+        oldWidget.postId != widget.postId) {
+      _requested = null;
+      _load();
+    }
   }
 
   @override
   void dispose() {
-    for (var dispose in _reactions) {
-      dispose();
+    _disposeReaction();
+    super.dispose();
+  }
+
+  void _load() {
+    final category = _categoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
+
+    if (category != null) {
+      if (_requested == _address) return;
+      _requested = _address;
+      _category = category;
+      _categoriesStore.setSelectedCategory(category);
+      _store.fetch(category, widget.postId);
+      return;
     }
 
-    _categoryNotifier.dispose();
-    _postNotifier.dispose();
+    _requested = null;
+    // A 404 monta outra navbar, que recarrega as categorias: só o primeiro carregamento
+    // mostra o esqueleto, senão a página alternaria sem parar.
+    final resolved = _store.state is PostDetailNotFoundState;
+    switch (_categoriesStore.state) {
+      case FetchCategoriesSuccessState():
+        if (!resolved) _store.setNotFound();
+      case FetchCategoriesErrorState():
+        if (!resolved) _store.setError();
+      case FetchCategoriesInitialState() || FetchCategoriesLoadingState():
+        if (_store.state is PostDetailInitialState) _store.setLoading();
+    }
+  }
 
-    super.dispose();
+  void _retry() {
+    if (_categoriesStore.state is FetchCategoriesErrorState) {
+      _store.setLoading();
+      _categoriesStore.fetchCategories();
+      return;
+    }
+    _requested = null;
+    _load();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.colors.white,
-      body: CustomScrollView(
-        slivers: [
-          const NavbarSliver(),
-          ValueListenableBuilder<PostModel?>(
-            valueListenable: _postNotifier,
-            builder: (context, post, child) {
-              if (_error) return const PageErrorContent(isSliver: true);
-              if (post == null) return const LoadingContent(isSliver: true);
+    return Observer(
+      builder: (context) {
+        final state = _store.state;
 
-              return _buildPostContent(context, post);
-            },
-          ),
-          const SliverToBoxAdapter(child: Support()),
-          const SliverToBoxAdapter(child: Footer()),
-        ],
-      ),
+        final Widget body;
+        switch (state) {
+          case PostDetailInitialState() || PostDetailLoadingState():
+            body = const PostPageSkeleton();
+          case PostDetailNotFoundState():
+            return const PageNotFound();
+          case PostDetailErrorState():
+            body = _ErrorFrame(onRetry: _retry);
+          case PostDetailSuccessState(:final post):
+            final category = _category!;
+            body = Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                PostTypeContent(post: post, area: widget.area, category: category),
+                if (post.isArticle)
+                  RelatedPostsSection(
+                      posts: _store.related.toList(), area: widget.area, category: category),
+              ],
+            );
+        }
+
+        // A chave por endereço volta ao topo ao abrir outro post pelo Leia também.
+        return ReadingPageScaffold(
+            key: ValueKey(_address), body: body, beforeFooter: const Support());
+      },
     );
   }
+}
 
-  Widget _buildPostContent(BuildContext context, PostModel post) {
-    Widget content;
+class _ErrorFrame extends StatelessWidget {
+  const _ErrorFrame({required this.onRetry});
 
-    switch (post.type) {
-      case PostType.article:
-        content = ArticleContent(
-          post: post,
-          article: post.body! as ArticleModel,
-        );
-        break;
-      case PostType.document:
-        content = DocumentContent(
-          post: post,
-          document: post.body! as DocumentModel,
-        );
-        break;
-      case PostType.book:
-        content = BookContent(
-          post: post,
-          book: post.body! as BookModel,
-        );
-        break;
-      case PostType.film:
-        content = FilmContent(
-          post: post,
-          film: post.body! as FilmModel,
-        );
-        break;
-      case PostType.magazine:
-        content = MagazineContent(
-          post: post,
-          magazine: post.body! as MagazineModel,
-        );
-        break;
-      case PostType.podcast:
-        content = PodcastContent(
-          post: post,
-          podcast: post.body! as PodcastModel,
-        );
-        break;
-      case PostType.music:
-        content = MusicContent(
-          post: post,
-          music: post.body! as MusicModel,
-        );
-        break;
-      case PostType.academicProduction:
-        content = AcademicProductionContent(
-          post: post,
-          academicProduction: post.body! as AcademicProductionModel,
-        );
-        break;
-      case PostType.event:
-        content = EventContent(
-          post: post,
-          event: post.body! as EventModel,
-        );
-        break;
-      case PostType.search:
-        content = SearchContent(
-          post: post,
-          search: post.body! as SearchModel,
-        );
-        break;
-    }
+  final VoidCallback onRetry;
 
-    return SliverToBoxAdapter(child: content);
-  }
+  @override
+  Widget build(BuildContext context) {
+    final breakpoint = ScreenUtils.breakpointOf(context);
 
-  void _setupReactions() {
-    _reactions = [
-      reaction((_) => _fetchCategoriesStore.selectedCategory, (_) {
-        _updateCategory();
-      }),
-      reaction((_) => _fetchCategoriesStore.categories, (_) {
-        _updateCategory();
-      }),
-      reaction((_) => _fetchPostsStore.state, (_) {
-        _updatePost();
-      }),
-      reaction((_) => _fetchCategoriesStore.state, (_) {
-        setState(() => _error = _fetchPostsStore.state is FetchPostsErrorState);
-      }),
-      reaction((_) => _fetchPostsStore.state, (_) {
-        setState(() => _error = _fetchPostsStore.state is FetchPostsErrorState);
-      }),
-    ];
-  }
-
-  void _updateCategory() {
-    final category = _fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
-    if (category == null) return;
-
-    if (_categoryNotifier.value?.key != category.key) {
-      _categoryNotifier.value = category;
-
-      _fetchPost();
-      _fetchCategoriesStore.setSelectedCategory(category);
-    }
-  }
-
-  void _updatePost() {
-    _postNotifier.value = _fetchPostsStore.selectedPost?.value;
-    if (_postNotifier.value != null) setState(() => _error = false);
-  }
-
-  void _fetchPost() {
-    if (_categoryNotifier.value == null) return;
-
-    _fetchPostsStore.fetchPostById(widget.postId);
-    return;
+    return PostHeadFrame(
+      child: Padding(
+        padding: EdgeInsets.only(
+            bottom: AppTheme.dimensions.components.readingPaddingBottom(breakpoint)),
+        child: StateErrorBox(onRetry: onRetry),
+      ),
+    );
   }
 }

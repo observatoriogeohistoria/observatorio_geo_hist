@@ -23,7 +23,6 @@ class PanelSetup {
   static final GetIt getIt = GetIt.instance;
 
   static void setup() {
-    /// Users
     getIt.registerFactory<UsersDatasource>(
       () => UsersDatasourceImpl(
           getIt<FirebaseAuthDatasource>(), getIt<FirebaseFirestore>(), getIt<LoggerService>()),
@@ -35,7 +34,6 @@ class PanelSetup {
       () => UsersStore(getIt<UsersRepository>()),
     );
 
-    /// Categories
     getIt.registerFactory<CategoriesDatasource>(
       () => CategoriesDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );
@@ -46,7 +44,6 @@ class PanelSetup {
       () => CategoriesStore(getIt<CategoriesRepository>()),
     );
 
-    /// Posts
     getIt.registerFactory<PostsDatasource>(
       () => PostsDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );
@@ -57,7 +54,6 @@ class PanelSetup {
       () => PostsStore(getIt<PostsRepository>()),
     );
 
-    /// Media
     getIt.registerFactory<MediaDatasource>(
       () => MediaDatasourceImpl(getIt<FirebaseStorage>(), getIt<LoggerService>()),
     );
@@ -68,7 +64,6 @@ class PanelSetup {
       () => MediaStore(getIt<MediaRepository>()),
     );
 
-    /// Team
     getIt.registerFactory<TeamDatasource>(
       () => TeamDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );

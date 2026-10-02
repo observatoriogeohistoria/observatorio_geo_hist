@@ -43,10 +43,10 @@ Itens vindos da revisão do protótipo. Todos já estão refletidos no protótip
 - **P-04** Menu: dentro de História e Geografia continuam listadas as **categorias reais** (vindas do banco de dados), sem agrupamento. No desktop abrem ao passar o mouse ou clicar. No celular, cada área é uma sanfona com suas categorias, como no site atual (`NavbarMobileMenu`). Em Geografia, Expogeo e Geoensine ficam antes, separados por um divisor. Os nomes no protótipo são exemplos.
 
 ### Post
-- **P-05** Remover o "tempo de leitura".
-- **P-06** Ampliar o compartilhamento. Proposta: Copiar link, WhatsApp, Facebook, X, LinkedIn, Telegram e E-mail. No celular, oferecer também o compartilhamento nativo do sistema. Em telas estreitas, agrupar os menos usados em "Mais".
-- **P-07** Reincluir a seção **Apoio** (redes sociais e os 9 apoiadores), que existe hoje no `Support` (com 4 apoiadores) e foi omitida no protótipo. Posição: depois do conteúdo e do "Leia também", antes do rodapé.
-- **P-08** Layout-base do post com variações por tipo (ver seção 3, item "Tipos de post").
+- **P-05** Remover o "tempo de leitura". → specs/012-post-base, concluído
+- **P-06** Ampliar o compartilhamento. Proposta: Copiar link, WhatsApp, Facebook, X, LinkedIn, Telegram e E-mail. No celular, oferecer também o compartilhamento nativo do sistema. No celular, todas as opções viram uma fileira só de ícones (sem "Mais"). → specs/013-compartilhamento-post, concluído
+- **P-07** Reincluir a seção **Apoio** (redes sociais e os 9 apoiadores), que existe hoje no `Support` (com 4 apoiadores) e foi omitida no protótipo. Posição: depois do conteúdo e do "Leia também", antes do rodapé. → specs/012-post-base, concluído
+- **P-08** Layout-base do post com variações por tipo (ver seção 3, item "Tipos de post"). → specs/012-post-base, concluído (layout-base com ponto único por tipo; blocos dos demais tipos na Fase 5)
 
 ### Biblioteca
 - **P-09** A entrada da biblioteca lista as **áreas** (Geografia e História), como no site atual, e não tipos de documento. Remover os cartões inventados ("Artigos científicos", "Livros e capítulos"). Mostrar a contagem por área.
@@ -65,14 +65,14 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 
 | ID | Tela | Rota atual | Observações |
 |---|---|---|---|
-| T-01 | Manifesto | `/manifesto` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original) |
-| T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição (id inexistente ou sem descrição já mostra o 404, sem busca em laço) |
-| T-03 | Nossa história (completa) | `/nossa-historia` | Criada na spec 007 como página provisória, com o texto completo que estava na Home. A Home mostra só o resumo. Redesenho na Fase 2 |
+| T-01 | Manifesto | `/manifesto` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original). Layout de leitura compartilhado da Fase 2 → specs/010-leitura-manifesto, concluído |
+| T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição (id inexistente ou sem descrição já mostra o 404, sem busca em laço) → specs/011-nossa-historia-pessoa, concluído |
+| T-03 | Nossa história (completa) | `/nossa-historia` | Criada na spec 007 como página provisória, com o texto completo que estava na Home. A Home mostra só o resumo. Redesenho na Fase 2 → specs/011-nossa-historia-pessoa, concluído |
 | T-04 | Fale com a gente | `/contato` | Continua abrindo o programa de e-mail (`mailto:`). Novidades: validação dos campos e tela de confirmação com "Copiar mensagem" |
 | T-05 | Colabore | `/colaborar` | Continua existindo, acessada pelo cabeçalho da categoria |
 | T-06 | Biblioteca: lista por área | `/biblioteca/:area` | Filtros, resultados e paginação |
 | T-07 | Biblioteca: detalhe do documento | `/biblioteca/:area/documento/:slug` | Metadados e visualizador do documento |
-| T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos |
+| T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos. Só o artigo foi feito; os outros 9 tipos ficam para a Fase 5 → specs/012-post-base (artigo concluído; parcial) |
 | T-09 | Busca | novo | **Ideia futura.** Desenhada no protótipo (aba "Busca (ideia)"), sem implementação planejada. Ver seção 9 |
 | T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento |
 | T-11 | Todas as publicações | `/publicacoes` (novo) | Mesma listagem da categoria (cards, busca, chips de tipo), sem o filtro de categoria, ordenada pela data de publicação e com paginação. Consulta `collectionGroup('category_posts')`; pode pedir índice novo no Firestore. Ao existir, entra o link "Ver todas as publicações" dos Destaques da Home (retirado na spec 005) |
@@ -112,7 +112,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | 1.3 | Quem somos → specs/006-quem-somos-video, concluído | Missão e três públicos (professores, pesquisadores, estudantes). Substitui o bloco de tela cheia com foto | |
 | 1.4 | Vídeo → specs/006-quem-somos-video, concluído | Capa com botão de reproduzir. Sem autoplay | `AppVideoPlayer` |
 | 1.5 | Nossa história (resumo) → specs/007-resumo-nossa-historia, concluído | Resumo com o marco da FAPEMIG e link para a página completa | T-03 (rota nova) |
-| 1.6 | Equipe → specs/008-equipe, concluído | Grade com todos os membros. Só é clicável quando há descrição | `FetchTeamStore`, T-02 |
+| 1.6 | Equipe → specs/008-equipe, concluído | Grade com todos os membros. Com descrição, abre a página da pessoa; sem descrição e com Lattes, abre o currículo | `FetchTeamStore`, T-02 |
 | 1.7 | Realização e apoio → specs/009-apoio-contato, concluído | Logos reais com efeito de hover (P-03) | P-03 |
 | 1.8 | Chamada para contato → specs/009-apoio-contato, concluído | Bloco de chamada para `/contato` | |
 
@@ -131,7 +131,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 ---
 
 ## 5. Vídeo de apresentação
-O vídeo é um arquivo MP4 no Firebase Storage e não tem capa. Proposta: extrair um quadro do próprio vídeo para servir de capa (`assets/images/video-capa.webp`), escolhido por você. Enquanto isso, o protótipo usa uma capa de exemplo.
+O vídeo é um arquivo MP4 no Firebase Storage. A capa é `assets/images/video-capa.webp`, enviada em 2026-10-01. Como ela já traz o título, o botão "Assistir" fica na faixa de baixo (ao lado da legenda no tablet e no desktop; sozinho e menor no celular), para não cobrir o texto.
 
 ---
 

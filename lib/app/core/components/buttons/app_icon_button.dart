@@ -18,11 +18,9 @@ class AppIconButton extends StatelessWidget {
   final Color color;
   final void Function() onPressed;
 
-  /// Nome acessível do botão (também aparece ao passar o mouse).
   final String tooltip;
   final double size;
 
-  /// Nó de foco opcional, para quem precisa mover o foco até o botão.
   final FocusNode? focusNode;
 
   @override

@@ -13,6 +13,13 @@ enum PostsAreas {
     }
   }
 
+  static PostsAreas? tryFromKey(String value) {
+    for (final area in PostsAreas.values) {
+      if (area.key == value) return area;
+    }
+    return null;
+  }
+
   String get key {
     switch (this) {
       case PostsAreas.history:

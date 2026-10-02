@@ -5,11 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Item da navbar que abre um menu flutuante.
-///
-/// Abre ao passar o mouse ou ao clicar, tocar, Enter, Espaço ou seta para
-/// baixo (nos dois últimos casos o foco vai ao primeiro item). Fecha ao tirar o
-/// mouse, clicar fora, Esc, Tab ou ao escolher uma opção.
 class NavbarDropdown extends StatefulWidget {
   const NavbarDropdown({
     super.key,
@@ -21,7 +16,6 @@ class NavbarDropdown extends StatefulWidget {
   final String label;
   final bool isActive;
 
-  /// Conteúdo do menu. [close] fecha o menu (chame ao escolher uma opção).
   final Widget Function(BuildContext context, VoidCallback close) menuBuilder;
 
   @override
@@ -39,7 +33,6 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
   Timer? _closeTimer;
   bool _isOpen = false;
 
-  /// Aberto por clique ou teclado: o mouse sair não fecha.
   bool _isPinned = false;
   bool _alignRight = false;
 
@@ -74,18 +67,14 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
     }
   }
 
-  /// Foca a primeira opção do menu. Pedir foco ao escopo não basta: sem um
-  /// filho já focado, o foco fica no próprio painel e nada aparece marcado.
+  /// Pedir foco ao escopo não basta: sem um filho focado, nada aparece marcado.
   void _focusFirstOption() {
     final policy = FocusTraversalGroup.maybeOfNode(_panelScope) ?? ReadingOrderTraversalPolicy();
     final first = policy.findFirstFocus(_panelScope, ignoreCurrentFocus: true);
     (first ?? _panelScope).requestFocus();
   }
 
-  /// Fecha o menu e leva o foco ao item seguinte (ou anterior) da navbar.
-  ///
-  /// O foco só anda depois que o painel sai da tela; antes disso, as opções
-  /// ainda contam na ordem de Tab e o foco pularia o item seguinte.
+  /// O foco só anda depois que o painel sai da tela; antes disso, as opções ainda contam no Tab.
   void _closeAndMoveFocus({required bool backwards}) {
     _triggerFocus.requestFocus();
     _close();
@@ -200,15 +189,15 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
     final spacing = AppTheme.dimensions.spacing;
     final screen = MediaQuery.sizeOf(context);
     final maxWidth = components.dropdownMaxWidth.clamp(0.0, screen.width - spacing.s32).toDouble();
-    // O item termina 12 px acima da linha da navbar; o vão de 20 deixa o menu
-    // 8 px abaixo dela. A altura segue o conteúdo e só rola se faltar tela.
+    // Deixa o menu 8 px abaixo da linha da navbar.
     final gapAboveMenu = spacing.s20;
-    final maxHeight = (screen.height - components.navbarHeight - spacing.s20 - spacing.s16).clamp(0.0, double.infinity);
-    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
+    final maxHeight = (screen.height - components.navbarHeight - spacing.s20 - spacing.s16)
+        .clamp(0.0, double.infinity);
+    final duration =
+        MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
 
     return Stack(
       children: [
-        // Clique fora fecha o menu.
         if (_isPinned)
           Positioned.fill(
             child: GestureDetector(
@@ -232,8 +221,7 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
                 curve: Curves.easeOut,
                 builder: (context, value, child) => Opacity(opacity: value, child: child),
                 child: Padding(
-                  // Vão transparente entre o item e o menu, ainda dentro da
-                  // área do mouse, para o ponteiro poder atravessá-lo.
+                  // Vão transparente dentro da área do mouse, para o ponteiro chegar ao menu sem fechá-lo.
                   padding: EdgeInsets.only(top: gapAboveMenu),
                   child: FocusScope(
                     node: _panelScope,
@@ -284,7 +272,8 @@ class _Panel extends StatelessWidget {
         child: Material(
           type: MaterialType.transparency,
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight),
+            constraints:
+                BoxConstraints(minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight),
             child: IntrinsicWidth(
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(AppTheme.dimensions.spacing.s8),

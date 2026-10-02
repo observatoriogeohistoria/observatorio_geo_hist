@@ -32,7 +32,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), skeleton, video_player, entre outros |
+| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), error_content (`StateErrorBox`, caixa de erro com "Tentar de novo"), skeleton, video_player, entre outros |
 | `models/` | `PostModel` e os corpos de post, `category`, `image`, `paginated/`, `states/` (CRUD) e demais modelos comuns |
 | `utils/` | Constantes, datas, enums, formatters, validators, `environment/`, `browser/` e demais utilitários |
 | `infra/` | Datasource/repository de categorias e `services/logger_service` |
@@ -100,13 +100,33 @@ A `HomePage` é um `CustomScrollView` com um bloco por sliver, abaixo da navbar.
 - **Hero** (`components/hero/`): título, botões e três atalhos. História e Geografia abrem `showAreaCategoriesDialog`, que reaproveita o `NavbarCategoriesMenu` e o `FetchCategoriesStore`.
 - **Destaques** (`components/highlights/`): observa o `FetchHighlightsStore` (posts publicados com `isHighlighted`). `selectHighlights` descarta posts sem `body`, `id` ou área, ordena por `createdAt` (mais recente primeiro) e fica com três; o primeiro é o principal. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem destaques, a seção some. Só a `HomePage` dispara a busca, e só se ainda não buscou, se falhou ou se a última busca foi feita sem categorias (`fetchedWithoutCategories`).
 - **Quem somos** (`components/who_we_are/`): missão, `ArrowLink` para o manifesto e três públicos. Duas colunas só no desktop.
-- **Vídeo de apresentação** (`components/video/`): capa (`assets/images/video-capa.webp` se existir, senão `VideoCoverPainter`) e `VideoPlayButton`. Nada é baixado antes de "Assistir": o `AppVideoPlayer` (import `deferred`) só é montado após o clique. Estados: capa → carregando → tocando ou erro. O vídeo toca com som só se a ativação do usuário ainda vale quando fica pronto (`hasUserActivation`); senão fica pausado e pronto. Se o navegador recusar o início automático (`onAutoplayBlocked`), o player é remontado pausado, sem mostrar erro.
+- **Vídeo de apresentação** (`components/video/`): capa (`assets/images/video-capa.webp` se existir, senão `VideoCoverPainter`) e `VideoPlayButton` na faixa de baixo, para não cobrir o título da capa (no celular, só o botão, menor). Nada é baixado antes de "Assistir": o `AppVideoPlayer` (import `deferred`) só é montado após o clique. Estados: capa → carregando → tocando ou erro. O vídeo toca com som só se a ativação do usuário ainda vale quando fica pronto (`hasUserActivation`); senão fica pausado e pronto. Se o navegador recusar o início automático (`onAutoplayBlocked`), o player é remontado pausado, sem mostrar erro.
 - **Nossa história** (`components/our_history/`): resumo estático com `MilestoneBadge` (marco da FAPEMIG) e `ArrowLink` para `/nossa-historia` (`OurHistoryPage`, com o texto completo).
-- **Equipe** (`components/team/`): observa o `FetchTeamStore`, que tem estado (inicial, carregando, sucesso, erro) e guarda a lista em ordem alfabética (`sortTeamByName`, sem acentos nem caixa). `TeamGrid` põe quantas colunas de 190 px (× ampliação do texto) couberem. Só membro com descrição é link para `/membro/:id`; sem foto, `MemberAvatar` mostra as iniciais. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem membros, a seção some. A `HomePage` só busca se ainda não buscou ou se falhou (`needsFetch`). Só tem respiro de seção em cima; o de baixo fica em Realização e apoio, para o espaço não sumir quando a equipe está escondida.
-- **Realização e apoio** (`core/components/partners/`): `PartnersSection` com a `PartnerLogoGrid` (colunas de no mínimo 150 px) e um `PartnerLogo` por instituição do enum `Partner` (sigla, nome completo, site e logo; a ordem do enum é a de exibição). O logo é link para o site em outra aba, com nome acessível completo; `url` nula deixa o logo sem link. A mesma seção aparece na Biblioteca e em Colabore; o `Support` do post usa a mesma grade, com colunas de 130 px.
+- **Equipe** (`components/team/`): observa o `FetchTeamStore`, que tem estado (inicial, carregando, sucesso, erro) e guarda a lista em ordem alfabética (`sortTeamByName`, sem acentos nem caixa). `TeamGrid` põe quantas colunas de 190 px (× ampliação do texto) couberem; no celular, duas fixas. Membro com página (`memberHasPage`: id e descrição não vazia) é link para `/membro/:id`; sem descrição e com Lattes, abre o currículo em outra aba; sem foto, `MemberAvatar` mostra as iniciais. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem membros, a seção some. A `HomePage` só busca se ainda não buscou ou se falhou (`needsFetch`). Só tem respiro de seção em cima; o de baixo fica em Realização e apoio, para o espaço não sumir quando a equipe está escondida.
+- **Realização e apoio** (`core/components/partners/`): `PartnersSection` com a `PartnerLogoGrid` (colunas de no mínimo 150 px; três fixas no celular) e um `PartnerLogo` por instituição do enum `Partner` (sigla, nome completo, site e logo; a ordem do enum é a de exibição). O logo é link para o site em outra aba, com nome acessível completo; `url` nula deixa o logo sem link. A mesma seção aparece na Biblioteca e em Colabore; o `Support` do post usa a mesma grade, com colunas de 130 px.
 - **Chamada para contato** (`components/contact_call/`): quadro com "Fale com a gente" para `/contato` (`AppRoutes.contact`). Botão à direita só no desktop.
 
 O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o usa sem eles): `onInitialized`, `onError`, `loadingPlaceholder`, `shouldStartPlaying`, `onAutoplayBlocked`, `autofocusControls` e `showControlsScrim`.
+
+## Páginas de leitura
+
+Páginas de texto (Manifesto, Nossa história, Pessoa da equipe e post) se montam com as peças de `core/components/reading/`:
+
+- `ReadingPageScaffold(header:, body:, beforeFooter:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela; `beforeFooter` fica colado ao rodapé (a seção Apoio do post). No Tab, a navbar vem antes do conteúdo e o item focado é rolado para fora de baixo da navbar fixa.
+- `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último é a página atual e um nível do meio sem `route` é texto comum, sem foco), título e `lead` opcional.
+- `ReadingRichText`: texto do editor rico (delta do Quill) com o estilo de leitura, só leitura e fora do Tab. Ignora cores, fundos, fontes, tamanhos, linhas em branco seguidas e conteúdo embutido que não seja imagem; imagens ficam na largura da coluna, sem recorte, com altura máxima e placeholder na falha. Links abrem em outra aba (só pelo mouse: o Quill não dá foco a links).
+- `ReadingColumn`: coluna de 680 px centralizada; funciona sem `PageHeader` (Pessoa e post têm cabeçalho próprio). `paddingTop` opcional troca o respiro de cima (abaixo de uma figura).
+- `ReadingFigure`: imagem em 21:9 até 920 px, mais larga que a coluna, com legenda opcional, recorte por `alignment` e placeholder na falha. Fica entre o cabeçalho e a `ReadingColumn`, que recebe `paddingTop: readingFigureMarginBottom`.
+- Pessoa da equipe (`TeamMemberPage`) usa só o `ReadingPageScaffold`, com corpo próprio de 920 px: `MemberPageLayout` (foto | texto, empilha abaixo de 700 px de largura útil), `MemberPortrait` e `MemberPageSkeleton`. Erro mostra `StateErrorBox`; sem página (`memberHasPage`), a 404. A equipe só é buscada no `initState`, se `needsFetch`.
+- Blocos, que já trazem a própria margem: `ReadingLead`, `ReadingParagraph`, `ReadingSubtitle` (cabeçalho de nível 2), `ReadingNumberedList`, `ReadingBulletList` e `ReadingQuote`. Novos blocos entram no mesmo arquivo.
+
+## Página do post
+
+`PostDetailedPage` (spec 012) usa o `ReadingPageScaffold` e um `PostDetailStore` próprio por página (fábrica no GetIt), com os estados carregando (`PostPageSkeleton`), sucesso, não encontrado (404) e erro (`StateErrorBox`). O datasource lança `PostNotFoundException` para post inexistente ou não publicado, que vira `PostNotFoundFailure`; categoria ou área inexistente também dão 404. A página só busca o post quando a categoria da URL aparece no `FetchCategoriesStore`, e não busca de novo quando a navbar recarrega as categorias.
+
+O conteúdo sai de um ponto único, `PostTypeContent` (`posts/presentation/components/post/`): artigo usa o layout-base (`ArticleBody`: `ArticleHeader` com migalhas, título, autoria, compartilhar e `PostCover`, mais `ReadingRichText` e `ArticleNote` na coluna); os outros tipos ainda usam o `*_content.dart` antigo. Na Fase 5, cada tipo troca ali para o layout-base com o seu bloco. Abaixo do conteúdo, só no artigo, vem o `RelatedPostsSection` (Leia também: até 3 artigos da mesma categoria, sem o atual, escondido se vazio ou com falha) e, em todos, o `Support` (Acompanhe + logos), colado ao rodapé.
+
+O compartilhar do layout-base é o `PostShare` (spec 013): copiar link, redes e e-mail, e a folha do aparelho no celular (`core/utils/browser/native_share`). Na Fase 5, os outros tipos o usam no cabeçalho; o `SocialIcons` antigo some na Fase 7.
 
 ## Tratamento de erros
 
@@ -126,6 +146,8 @@ Future<Either<Failure, PaginatedPosts>> fetchPosts(...) async {
 
 - Arquivos e pastas em `snake_case`; classes em `PascalCase`; membros em `camelCase`.
 - Sufixos: `*_datasource`, `*_repository`, `*_store`, `*_model`, `*_page`, `*_setup`, `*_failures`.
+- Comentários seguem as regras do [CLAUDE.md](../CLAUDE.md): só o porquê do que não é óbvio, curto e sem citar spec ou protótipo.
+- **Elementos clicáveis acessíveis:** `Semantics(link:/button:, label:, onTap:, excludeSemantics: true)` por fora, `AppFocusRing` e `InkWell` por dentro. O `onTap` do `Semantics` repete o do `InkWell`, porque o `excludeSemantics` esconde o `InkWell` do leitor de tela. Links internos levam `linkUrl`; `preventSemanticLinkNavigation` impede o navegador de seguir o `<a href>` sozinho.
 
 ## Adicionando uma feature
 

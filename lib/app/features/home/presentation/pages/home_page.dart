@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart' deferred as footer;
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart' deferred as partners;
+import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart'
+    deferred as partners;
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
@@ -43,8 +44,8 @@ class _HomePageState extends State<HomePage> {
 
     _setupReactions();
 
-    // A reação só dispara quando as categorias mudam. Se elas já chegaram (volta
-    // de outra página) ou falharam, busca os destaques agora mesmo.
+    // A reação só dispara quando as categorias mudam. Se já chegaram (volta de outra
+    // página) ou falharam, busca os destaques agora.
     final categoriesSettled = switch (_fetchCategoriesStore.state) {
       FetchCategoriesSuccessState() || FetchCategoriesErrorState() => true,
       _ => false,
@@ -69,9 +70,7 @@ class _HomePageState extends State<HomePage> {
       body: CustomScrollView(
         slivers: [
           const NavbarSliver(),
-          // Hero e atalhos (spec 004): sem carregamento adiado, aparece junto com a navbar.
           const SliverToBoxAdapter(child: HomeHero()),
-          // Destaques (spec 005).
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: highlights.loadLibrary(),
@@ -86,13 +85,9 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Quem somos (spec 006): estático, aparece junto com a página.
           const SliverToBoxAdapter(child: WhoWeAreSection()),
-          // Vídeo de apresentação (spec 006): capa com "Assistir"; o vídeo só é baixado depois do clique.
           const SliverToBoxAdapter(child: PresentationVideoSection()),
-          // Nossa história (spec 007): resumo estático, com link para a página completa.
           const SliverToBoxAdapter(child: OurHistorySummarySection()),
-          // Equipe (spec 008): grade com todos os membros; some sem membros.
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: team.loadLibrary(),
@@ -104,7 +99,6 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Realização e apoio (spec 009): mesma seção da Biblioteca e de Colabore.
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: partners.loadLibrary(),
@@ -116,7 +110,6 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Chamada para contato (spec 009).
           SliverToBoxAdapter(
             child: FutureBuilder(
               future: contact_call.loadLibrary(),
@@ -144,8 +137,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Busca os destaques com as categorias que já estiverem carregadas (podem
-  /// faltar, se a busca de categorias falhou).
   void _fetchHighlights() {
     _fetchHighlightsStore.fetchHighlights([
       ...(_fetchCategoriesStore.categories.geography),
@@ -153,15 +144,14 @@ class _HomePageState extends State<HomePage> {
     ]);
   }
 
-  /// Evita buscas repetidas: as categorias são buscadas de novo a cada navbar
-  /// montada (e ao abrir o site, duas vezes). Só busca se ainda não buscou, se a
-  /// busca falhou ou se a última busca foi feita sem categorias e agora elas
-  /// existem. Busca em andamento não é repetida.
+  /// As categorias são buscadas de novo a cada navbar montada. Só refaz a busca se
+  /// ainda não buscou, se falhou ou se buscou sem categorias e agora elas existem.
   bool get _highlightsNeedFetch {
     return switch (_fetchHighlightsStore.state) {
       FetchHighlightsInitialState() || FetchHighlightsErrorState() => true,
       FetchHighlightsLoadingState() => false,
-      FetchHighlightsSuccessState() => _fetchHighlightsStore.fetchedWithoutCategories && _hasCategories,
+      FetchHighlightsSuccessState() =>
+        _fetchHighlightsStore.fetchedWithoutCategories && _hasCategories,
     };
   }
 
@@ -175,9 +165,10 @@ class _HomePageState extends State<HomePage> {
       reaction((_) => _fetchCategoriesStore.categories, (_) {
         if (_highlightsNeedFetch) _fetchHighlights();
       }),
-      // Se as categorias falham, os destaques são buscados mesmo assim (sem categorias).
+      // Se as categorias falham, os destaques são buscados mesmo assim.
       reaction((_) => _fetchCategoriesStore.state, (state) {
-        if (state is FetchCategoriesErrorState && _fetchHighlightsStore.state is FetchHighlightsInitialState) {
+        if (state is FetchCategoriesErrorState &&
+            _fetchHighlightsStore.state is FetchHighlightsInitialState) {
           _fetchHighlights();
         }
       }),

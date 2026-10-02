@@ -53,9 +53,6 @@ class _PostFormDialogState extends State<PostFormDialog> {
             child: Column(
               children: [
                 Expanded(
-                  // height: MediaQuery.of(context).size.height -
-                  //     AppTheme.dimensions.space.gigantic.verticalSpacing -
-                  //     AppTheme.dimensions.space.large.verticalSpacing,
                   child: AppScrollbar(
                     controller: _scrollController,
                     child: SingleChildScrollView(

@@ -10,17 +10,11 @@ import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dar
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Painel de menu para celular e tablet (< 1024 px), aberto sobre a página.
-/// História e Geografia são sanfonas com as categorias da área.
-///
-/// Fecha pelo botão "Fechar menu", por Esc, por toque fora ou ao escolher uma
-/// opção. O foco fica dentro do painel enquanto ele está aberto.
 class NavbarMobileMenu extends StatefulWidget {
   const NavbarMobileMenu({super.key, required this.store, required this.location});
 
   final FetchCategoriesStore store;
 
-  /// Onde a pessoa está, calculado pela navbar (o painel não tem `GoRouterState`).
   final NavbarLocation location;
 
   @override
@@ -44,7 +38,8 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
   }
 
   void _toggle(NavbarSection section) {
-    setState(() => _expanded.contains(section) ? _expanded.remove(section) : _expanded.add(section));
+    setState(
+        () => _expanded.contains(section) ? _expanded.remove(section) : _expanded.add(section));
   }
 
   @override
@@ -62,7 +57,8 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
           width: width < components.mobileMenuMaxWidth ? width : components.mobileMenuMaxWidth,
           height: double.infinity,
           child: DecoratedBox(
-            decoration: BoxDecoration(color: colors.page, boxShadow: AppTheme.dimensions.shadows.elevated),
+            decoration:
+                BoxDecoration(color: colors.page, boxShadow: AppTheme.dimensions.shadows.elevated),
             child: Material(
               type: MaterialType.transparency,
               child: SafeArea(
@@ -75,7 +71,8 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
                         height: components.navbarHeight,
                         child: Row(
                           children: [
-                            Expanded(child: Text('Menu', style: AppTheme.typography.of(context).h3)),
+                            Expanded(
+                                child: Text('Menu', style: AppTheme.typography.of(context).h3)),
                             AppIconButton(
                               tooltip: 'Fechar menu',
                               icon: Icons.close,
@@ -89,7 +86,8 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
                     Divider(height: 1, thickness: 1, color: colors.line),
                     Expanded(
                       child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(horizontal: spacing.s20, vertical: spacing.s8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: spacing.s20, vertical: spacing.s8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -121,7 +119,9 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
 
   Widget _areaSection(PostsAreas area, NavbarSection section) {
     final isExpanded = _expanded.contains(section);
-    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : AppTheme.dimensions.components.menuAnimation;
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : AppTheme.dimensions.components.menuAnimation;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -159,7 +159,6 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
   }
 }
 
-/// Linha principal do painel: link simples ou cabeçalho de sanfona.
 class _PanelRow extends StatelessWidget {
   const _PanelRow({
     required this.label,
@@ -188,7 +187,6 @@ class _PanelRow extends StatelessWidget {
       selected: isActive,
       expanded: isExpandable ? isExpanded : null,
       label: label,
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o item.
       onTap: onTap,
       excludeSemantics: true,
       child: AppFocusRing(

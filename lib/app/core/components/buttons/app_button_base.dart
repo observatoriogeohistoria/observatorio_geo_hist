@@ -4,11 +4,8 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 enum ButtonSize { small, medium, big }
 
-/// Tipo visual do botão: primário, secundário ou discreto.
 enum AppButtonKind { primary, secondary, ghost }
 
-/// Base dos botões do site. `PrimaryButton`, `SecondaryButton` e
-/// `AppTextButton` só escolhem o [kind] e o [size].
 class AppButtonBase extends StatefulWidget {
   const AppButtonBase({
     super.key,
@@ -18,6 +15,8 @@ class AppButtonBase extends StatefulWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
+    this.reserveTexts = const [],
   });
 
   final AppButtonKind kind;
@@ -26,9 +25,12 @@ class AppButtonBase extends StatefulWidget {
   final VoidCallback onPressed;
   final bool isDisabled;
 
-  /// Ícone opcional depois do texto (por exemplo, uma seta). É decorativo:
-  /// o leitor de tela lê só o [text].
   final IconData? trailingIcon;
+
+  final IconData? leadingIcon;
+
+  /// Textos que podem substituir [text]. O botão fica com a largura do maior, para não pular na troca.
+  final List<String> reserveTexts;
 
   @override
   State<AppButtonBase> createState() => _AppButtonBaseState();
@@ -46,17 +48,43 @@ class _AppButtonBaseState extends State<AppButtonBase> {
     final hovered = _hovered && !widget.isDisabled;
 
     final (background, foreground, border) = switch (widget.kind) {
-      AppButtonKind.primary => (hovered ? colors.accentStrong : colors.accent, colors.white, Colors.transparent),
-      AppButtonKind.secondary => (hovered ? colors.ink : Colors.transparent, hovered ? colors.white : colors.ink, colors.ink),
-      // Acento forte também em repouso: o botão pode cair sobre a superfície `#F7F5F2`,
-      // onde o acento normal fica abaixo de 4,5:1.
-      AppButtonKind.ghost => (hovered ? colors.accentSoft : Colors.transparent, colors.accentStrong, Colors.transparent),
+      AppButtonKind.primary => (
+          hovered ? colors.accentStrong : colors.accent,
+          colors.white,
+          Colors.transparent
+        ),
+      AppButtonKind.secondary => (
+          hovered ? colors.ink : Colors.transparent,
+          hovered ? colors.white : colors.ink,
+          colors.ink
+        ),
+      // Laranja forte também em repouso: sobre a superfície clara, o laranja normal fica abaixo de 4,5:1.
+      AppButtonKind.ghost => (
+          hovered ? colors.accentSoft : Colors.transparent,
+          colors.accentStrong,
+          Colors.transparent
+        ),
     };
 
     final (fontSize, minHeight, horizontal, vertical) = switch (widget.size) {
-      ButtonSize.small => (components.buttonTextSmall, components.buttonMinHeightSmall, spacing.s16, spacing.s8),
-      ButtonSize.medium => (components.buttonTextMedium, components.buttonMinHeightRegular, spacing.s20, spacing.s12),
-      ButtonSize.big => (components.buttonTextBig, components.buttonMinHeightRegular, spacing.s24, spacing.s12),
+      ButtonSize.small => (
+          components.buttonTextSmall,
+          components.buttonMinHeightSmall,
+          spacing.s16,
+          spacing.s8
+        ),
+      ButtonSize.medium => (
+          components.buttonTextMedium,
+          components.buttonMinHeightRegular,
+          spacing.s20,
+          spacing.s12
+        ),
+      ButtonSize.big => (
+          components.buttonTextBig,
+          components.buttonMinHeightRegular,
+          spacing.s24,
+          spacing.s12
+        ),
     };
 
     final textStyle = AppTheme.typography.of(context).regular.copyWith(
@@ -66,11 +94,49 @@ class _AppButtonBaseState extends State<AppButtonBase> {
           color: foreground,
         );
 
+    final iconSize = fontSize * components.buttonIconScale;
+
+    Widget content(String text) {
+      final label = Text(text, textAlign: TextAlign.center, style: textStyle);
+      if (widget.trailingIcon == null && widget.leadingIcon == null) return label;
+
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.leadingIcon != null) ...[
+            Icon(widget.leadingIcon, size: iconSize, color: foreground),
+            SizedBox(width: spacing.s8),
+          ],
+          Flexible(child: label),
+          if (widget.trailingIcon != null) ...[
+            SizedBox(width: spacing.s8),
+            Icon(widget.trailingIcon, size: iconSize, color: foreground),
+          ],
+        ],
+      );
+    }
+
+    final child = widget.reserveTexts.isEmpty
+        ? content(widget.text)
+        : Stack(
+            alignment: Alignment.center,
+            children: [
+              for (final reserved in widget.reserveTexts)
+                Visibility(
+                  visible: false,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: content(reserved),
+                ),
+              content(widget.text),
+            ],
+          );
+
     return Semantics(
       button: true,
       enabled: !widget.isDisabled,
       label: widget.text,
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o botão.
       onTap: widget.isDisabled ? null : widget.onPressed,
       excludeSemantics: true,
       child: Opacity(
@@ -89,7 +155,8 @@ class _AppButtonBaseState extends State<AppButtonBase> {
               onHover: (value) => setState(() => _hovered = value),
               hoverColor: Colors.transparent,
               focusColor: Colors.transparent,
-              mouseCursor: widget.isDisabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
+              mouseCursor:
+                  widget.isDisabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: minHeight),
                 child: Padding(
@@ -98,20 +165,7 @@ class _AppButtonBaseState extends State<AppButtonBase> {
                     widthFactor: 1,
                     heightFactor: 1,
                     child: SelectionContainer.disabled(
-                      child: widget.trailingIcon == null
-                          ? Text(widget.text, textAlign: TextAlign.center, style: textStyle)
-                          : Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(child: Text(widget.text, textAlign: TextAlign.center, style: textStyle)),
-                                SizedBox(width: spacing.s8),
-                                Icon(
-                                  widget.trailingIcon,
-                                  size: fontSize * components.buttonIconScale,
-                                  color: foreground,
-                                ),
-                              ],
-                            ),
+                      child: child,
                     ),
                   ),
                 ),

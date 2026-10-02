@@ -2,9 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// Texto que nunca quebra uma palavra ao meio: se a mais longa não cabe na
-/// largura (tela estreita com texto ampliado), a fonte diminui só o
-/// necessário para ela caber. Nos demais casos, é um [Text] comum.
+/// Se a palavra mais longa não cabe, diminui a fonte só o necessário em vez de quebrá-la.
 class WordSafeText extends StatelessWidget {
   const WordSafeText(this.text, {super.key, required this.style});
 

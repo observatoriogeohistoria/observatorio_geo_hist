@@ -8,15 +8,8 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/who_we_are/audience_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Seção "Quem somos" da Home (spec 006): missão do Observatório, link para o
-/// manifesto e os três públicos. Estática, aparece junto com a página.
-///
-/// Desktop: duas colunas (apresentação 1 : públicos 1,15) alinhadas pelo topo.
-/// Tablet e celular (e desktop com texto muito ampliado): uma coluna,
-/// apresentação e depois públicos.
 class WhoWeAreSection extends StatelessWidget {
   const WhoWeAreSection({super.key});
-
 
   static const _audiences = [
     (
@@ -40,9 +33,8 @@ class WhoWeAreSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final components = AppTheme.dimensions.components;
     final breakpoint = ScreenUtils.breakpointOf(context);
-    // Com o texto muito ampliado, a coluna da apresentação fica estreita demais
-    // para o título: a seção passa para uma coluna, como no tablet.
-    final largeText = MediaQuery.textScalerOf(context).scale(1) >= components.whoWeAreStackTextScale;
+    final largeText =
+        MediaQuery.textScalerOf(context).scale(1) >= components.whoWeAreStackTextScale;
     final twoColumns = breakpoint == Breakpoint.desktop && !largeText;
     final gap = components.whoWeAreGap(
       breakpoint == Breakpoint.desktop && !twoColumns ? Breakpoint.tablet : breakpoint,
@@ -93,7 +85,6 @@ class WhoWeAreSection extends StatelessWidget {
   static void _openManifest(BuildContext context) => GoRouter.of(context).go(AppRoutes.manifesto);
 }
 
-/// Rótulo, título, texto de missão e link para o manifesto.
 class _Intro extends StatelessWidget {
   const _Intro({required this.onOpenManifest});
 

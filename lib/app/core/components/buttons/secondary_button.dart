@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart';
 
-export 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart' show ButtonSize;
+export 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart'
+    show ButtonSize;
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton.small({
@@ -9,6 +10,8 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
+    this.reserveTexts = const [],
     super.key,
   }) : size = ButtonSize.small;
 
@@ -17,6 +20,8 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
+    this.reserveTexts = const [],
     super.key,
   }) : size = ButtonSize.medium;
 
@@ -25,6 +30,8 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
+    this.reserveTexts = const [],
     super.key,
   }) : size = ButtonSize.big;
 
@@ -33,8 +40,11 @@ class SecondaryButton extends StatelessWidget {
   final ButtonSize size;
   final bool isDisabled;
 
-  /// Ícone opcional depois do texto (decorativo).
   final IconData? trailingIcon;
+
+  final IconData? leadingIcon;
+
+  final List<String> reserveTexts;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +55,8 @@ class SecondaryButton extends StatelessWidget {
       onPressed: onPressed,
       isDisabled: isDisabled,
       trailingIcon: trailingIcon,
+      leadingIcon: leadingIcon,
+      reserveTexts: reserveTexts,
     );
   }
 }

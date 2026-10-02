@@ -3,14 +3,10 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/partner.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Logo de uma instituição parceira (spec 009, `.logo` do protótipo).
-///
-/// Em repouso fica em cinza e esmaecido. No hover e no foco por teclado ganha
-/// cor, cresce e a área sobe com fundo, borda e sombra. Com site, é um link
-/// que abre em outra aba; sem site, é só imagem, fora da ordem de Tab.
 class PartnerLogo extends StatefulWidget {
   const PartnerLogo({super.key, required this.partner});
 
@@ -28,7 +24,7 @@ class _PartnerLogoState extends State<PartnerLogo> {
     0, 0, 0, 1, 0, //
   ];
 
-  // Luminância (Rec. 709), o mesmo resultado do `filter: grayscale(1)` do CSS.
+  // Luminância Rec. 709, o mesmo cinza do `grayscale(1)` do CSS.
   static const List<double> _grayscale = [
     0.2126, 0.7152, 0.0722, 0, 0, //
     0.2126, 0.7152, 0.0722, 0, 0, //
@@ -42,7 +38,8 @@ class _PartnerLogoState extends State<PartnerLogo> {
   Partner get _partner => widget.partner;
 
   bool get _active =>
-      _hovered || (_focused && FocusManager.instance.highlightMode == FocusHighlightMode.traditional);
+      _hovered ||
+      (_focused && FocusManager.instance.highlightMode == FocusHighlightMode.traditional);
 
   void _open() => openUrl(_partner.url!);
 
@@ -67,7 +64,6 @@ class _PartnerLogoState extends State<PartnerLogo> {
       link: true,
       label: '${_partner.fullName}, abre em outra aba',
       linkUrl: Uri.parse(_partner.url!),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela abrir o site.
       onTap: _open,
       excludeSemantics: true,
       child: AppFocusRing(
@@ -100,8 +96,13 @@ class _PartnerLogoState extends State<PartnerLogo> {
     return AnimatedContainer(
       duration: duration,
       constraints: BoxConstraints(minHeight: components.minTapTarget),
-      padding: EdgeInsets.all(components.partnerPadding),
-      transform: Matrix4.translationValues(0, active && !reduceMotion ? -components.partnerHoverLift : 0, 0),
+      padding: EdgeInsets.all(
+        ScreenUtils.breakpointOf(context) == Breakpoint.mobile
+            ? components.partnerPaddingMobile
+            : components.partnerPadding,
+      ),
+      transform: Matrix4.translationValues(
+          0, active && !reduceMotion ? -components.partnerHoverLift : 0, 0),
       decoration: BoxDecoration(
         color: active ? colors.page : colors.page.withValues(alpha: 0),
         borderRadius: radius,
@@ -136,7 +137,8 @@ class _PartnerLogoState extends State<PartnerLogo> {
                   child: Text(
                     _partner.acronym,
                     textAlign: TextAlign.center,
-                    style: AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary),
+                    style:
+                        AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary),
                   ),
                 ),
               ),
