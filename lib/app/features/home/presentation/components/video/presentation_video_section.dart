@@ -164,15 +164,15 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final duration = reduceMotion ? Duration.zero : AppTheme.dimensions.components.videoAnimation;
 
-    final Widget overlay = switch (_state) {
+    final Widget action = switch (_state) {
       _VideoState.cover || _VideoState.loading => VideoPlayButton(
           isLoading: _state == _VideoState.loading,
           focusNode: _playButtonFocus,
           onPressed: _watch,
         ),
-      _VideoState.error => _ErrorBox(onRetry: _watch),
-      _VideoState.playing => const SizedBox.shrink(),
+      _VideoState.error || _VideoState.playing => const SizedBox.shrink(),
     };
+    final Widget centered = _state == _VideoState.error ? _ErrorBox(onRetry: _watch) : const SizedBox.shrink();
 
     return IgnorePointer(
       ignoring: playing,
@@ -182,7 +182,8 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
           opacity: playing ? 0 : 1,
           duration: duration,
           child: VideoCover(
-            child: AnimatedSwitcher(duration: duration, child: overlay),
+            action: AnimatedSwitcher(duration: duration, child: action),
+            child: AnimatedSwitcher(duration: duration, child: centered),
           ),
         ),
       ),

@@ -269,6 +269,9 @@ class ComponentSizes {
   /// Linhas máximas da legenda antes das reticências (texto ampliado).
   final int videoCaptionMaxLines = 2;
 
+  /// Vão entre a legenda e o botão "Assistir", na mesma linha.
+  final double videoCaptionActionGap = 16.0;
+
   /// Véu escuro atrás da legenda e faixa em que ele esmaece acima dela.
   /// Branco sobre 0,72 de véu com capa branca dá cerca de 7,6:1.
   final double videoCaptionScrimOpacity = 0.72;
@@ -282,6 +285,13 @@ class ComponentSizes {
   final double videoPlayPadding = 10.0;
   final double videoPlayPaddingEnd = 22.0;
   final double videoPlayGap = 14.0;
+
+  /// Versão menor no celular, para não cobrir o título da capa.
+  final double videoPlayCircleMobile = 34.0;
+  final double videoPlayIconMobile = 20.0;
+  final double videoPlayPaddingMobile = 6.0;
+  final double videoPlayPaddingEndMobile = 16.0;
+  final double videoPlayGapMobile = 10.0;
   final double videoPlayHoverScale = 1.03;
   final Duration videoAnimation = const Duration(milliseconds: 150);
 

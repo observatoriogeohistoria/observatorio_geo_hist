@@ -131,7 +131,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 ---
 
 ## 5. Vídeo de apresentação
-O vídeo é um arquivo MP4 no Firebase Storage e não tem capa. Proposta: extrair um quadro do próprio vídeo para servir de capa (`assets/images/video-capa.webp`), escolhido por você. Enquanto isso, o protótipo usa uma capa de exemplo.
+O vídeo é um arquivo MP4 no Firebase Storage. A capa é `assets/images/video-capa.webp`, enviada em 2026-10-01. Como ela já traz o título, o botão "Assistir" fica na faixa de baixo (ao lado da legenda no tablet e no desktop; sozinho e menor no celular), para não cobrir o texto.
 
 ---
 
