@@ -123,7 +123,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 |---|---|---|
 | 2 | Leitura: layout-base do post (artigo primeiro), Manifesto, Nossa história, Pessoa da equipe | Compartilham o mesmo layout de leitura |
 | 3 | Listagem de categoria, todas as publicações (T-11) e cards de post (cards e listagem da categoria → specs/014-listagem-categoria, concluído; T-11 → specs/015-todas-publicacoes, concluído) | Maior volume de navegação |
-| 4 | Biblioteca (índice, lista, detalhe, filtros) | Categorias e filtros já definidos |
+| 4 | Biblioteca (índice, lista, detalhe, filtros) (índice e lista → specs/016-biblioteca-indice-lista) | Categorias e filtros já definidos |
 | 5 | Acabamento: Fale com a gente, Colabore, 404/erros e demais tipos de post | Antes ficava na fase 6 |
 | 6 | Reservada | Sem escopo definido |
 | 7 | Limpeza: remover tokens antigos, `num_extension` e assets sem uso | Só quando nada mais usar |
