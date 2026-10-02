@@ -29,7 +29,7 @@ fvm flutter build web --release
 
 Os arquivos gerados (`*.g.dart`, `*.freezed.dart`) ficam no repositório. Ainda não existe pasta `test/`.
 
-**Formatação:** todo `.dart` alterado passa pelo `dart format` antes do commit (largura 100, a mesma do VS Code). Arquivos gerados ficam de fora: o `build_runner` os recria. Para conferir o projeto inteiro:
+**Formatação:** todo `.dart` alterado passa pelo `dart format` antes do commit (largura 100, a mesma do VS Code). O CI reprova PR com arquivo fora do formato. Arquivos gerados ficam de fora: o `build_runner` os recria. Para conferir o projeto inteiro:
 
 ```sh
 find lib -name '*.dart' ! -name '*.g.dart' ! -name '*.freezed.dart' -print0 | xargs -0 fvm dart format --output=none --set-exit-if-changed
