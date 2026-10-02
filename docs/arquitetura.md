@@ -32,7 +32,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | Widgets compartilhados: buttons, card, dialog, field, footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), error_content (`StateErrorBox`, caixa de erro com "Tentar de novo"), skeleton, video_player, entre outros |
+| `components/` | Widgets compartilhados: buttons, card, chips (`FilterChipButton`, chip de filtro com quantidade), dialog, field (inclui `SearchField`, busca com pausa e "Limpar"), footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), error_content (`StateMessageBox`, caixa de estado com ícone, título, texto e ação; `StateErrorBox`, a de erro com "Tentar de novo"), skeleton, video_player, entre outros |
 | `models/` | `PostModel` e os corpos de post, `category`, `image`, `paginated/`, `states/` (CRUD) e demais modelos comuns |
 | `utils/` | Constantes, datas, enums, formatters, validators, `environment/`, `browser/` e demais utilitários |
 | `infra/` | Datasource/repository de categorias e `services/logger_service` |
@@ -45,7 +45,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 | Feature | Responsabilidade |
 |---|---|
 | `home` | Página inicial: hero, destaques, quem somos, vídeo, nossa história, equipe, realização e apoio e chamada para contato |
-| `posts` | Listagem paginada com filtros e detalhe do post |
+| `posts` | Listagem da categoria (busca, filtro por tipo e paginação) e detalhe do post |
 | `library` | Biblioteca de documentos por área, com busca por `slug` |
 | `admin` | Login, painel de conteúdo e sidebar |
 
@@ -113,18 +113,27 @@ O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o 
 Páginas de texto (Manifesto, Nossa história, Pessoa da equipe e post) se montam com as peças de `core/components/reading/`:
 
 - `ReadingPageScaffold(header:, body:, beforeFooter:)`: navbar, cabeçalho opcional, corpo e rodapé na base da janela; `beforeFooter` fica colado ao rodapé (a seção Apoio do post). No Tab, a navbar vem antes do conteúdo e o item focado é rolado para fora de baixo da navbar fixa.
-- `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último é a página atual e um nível do meio sem `route` é texto comum, sem foco), título e `lead` opcional.
+- `PageHeader`: faixa de superfície com `Breadcrumbs` (lista de `BreadcrumbItem`, de qualquer número de níveis; o último é a página atual e um nível do meio sem `route` é texto comum, sem foco), título, `lead` e `action` (um botão abaixo do lead) opcionais.
 - `ReadingRichText`: texto do editor rico (delta do Quill) com o estilo de leitura, só leitura e fora do Tab. Ignora cores, fundos, fontes, tamanhos, linhas em branco seguidas e conteúdo embutido que não seja imagem; imagens ficam na largura da coluna, sem recorte, com altura máxima e placeholder na falha. Links abrem em outra aba (só pelo mouse: o Quill não dá foco a links).
 - `ReadingColumn`: coluna de 680 px centralizada; funciona sem `PageHeader` (Pessoa e post têm cabeçalho próprio). `paddingTop` opcional troca o respiro de cima (abaixo de uma figura).
 - `ReadingFigure`: imagem em 21:9 até 920 px, mais larga que a coluna, com legenda opcional, recorte por `alignment` e placeholder na falha. Fica entre o cabeçalho e a `ReadingColumn`, que recebe `paddingTop: readingFigureMarginBottom`.
 - Pessoa da equipe (`TeamMemberPage`) usa só o `ReadingPageScaffold`, com corpo próprio de 920 px: `MemberPageLayout` (foto | texto, empilha abaixo de 700 px de largura útil), `MemberPortrait` e `MemberPageSkeleton`. Erro mostra `StateErrorBox`; sem página (`memberHasPage`), a 404. A equipe só é buscada no `initState`, se `needsFetch`.
 - Blocos, que já trazem a própria margem: `ReadingLead`, `ReadingParagraph`, `ReadingSubtitle` (cabeçalho de nível 2), `ReadingNumberedList`, `ReadingBulletList` e `ReadingQuote`. Novos blocos entram no mesmo arquivo.
 
+## Listagem de posts
+
+A página da categoria (`PostsPage`) usa o `ReadingPageScaffold` com o `PageHeader` (migalhas Início › área › categoria e, com `hasCollaborateOption`, o botão "Colabore com esta categoria") e a `PostsListing` (`posts/presentation/components/listing/`). Categorias carregando mostram o `CategoryPageSkeleton`; falha nas categorias, `StateErrorBox`; área ou categoria inexistente, a 404.
+
+- **Store por página:** `PostsListingStore` (fábrica no GetIt) recebe um `PostsListingScope` (categoria opcional e tipos) e guarda um `PostsTypeBlock` por tipo com publicação (itens, cursor, "tem mais", carregando mais, falha no "ver mais"), as contagens por tipo (nulas se falharem), o tipo marcado e a busca. Páginas de 12; respostas de uma busca ou escopo anterior são descartadas por número de requisição.
+- **Dados:** `fetchPosts` aceita categoria nula (todas as categorias), continua do cursor também na busca e pede um item a mais para saber se há próxima página. `countPosts` usa a mesma consulta e ordenação da lista (`count()`), para aproveitar os mesmos índices.
+- **Listagem genérica:** `PostsListing(store:, routeFor:)` não sabe de categoria: busca (`SearchField`), chips (só com dois ou mais tipos), contagem, blocos (`ListingTypeBlock`, com "Ver mais") e os estados de carregando, vazio, busca vazia e erro. A página de todas as publicações monta a mesma listagem com outro escopo.
+- **Card único:** `PostCard(post:, route:, showSummary:)` vale para todos os tipos; rótulo, resumo e detalhes de cada tipo saem de `postCardInfo`, num ponto só (texto do editor rico vira texto simples com `plainTextFromRich`). `PostCardGrid` põe colunas de no mínimo 300 px, até três; `PostCardSkeletonRow` é a linha-esqueleto.
+
 ## Página do post
 
 `PostDetailedPage` (spec 012) usa o `ReadingPageScaffold` e um `PostDetailStore` próprio por página (fábrica no GetIt), com os estados carregando (`PostPageSkeleton`), sucesso, não encontrado (404) e erro (`StateErrorBox`). O datasource lança `PostNotFoundException` para post inexistente ou não publicado, que vira `PostNotFoundFailure`; categoria ou área inexistente também dão 404. A página só busca o post quando a categoria da URL aparece no `FetchCategoriesStore`, e não busca de novo quando a navbar recarrega as categorias.
 
-O conteúdo sai de um ponto único, `PostTypeContent` (`posts/presentation/components/post/`): artigo usa o layout-base (`ArticleBody`: `ArticleHeader` com migalhas, título, autoria, compartilhar e `PostCover`, mais `ReadingRichText` e `ArticleNote` na coluna); os outros tipos ainda usam o `*_content.dart` antigo. Na Fase 5, cada tipo troca ali para o layout-base com o seu bloco. Abaixo do conteúdo, só no artigo, vem o `RelatedPostsSection` (Leia também: até 3 artigos da mesma categoria, sem o atual, escondido se vazio ou com falha) e, em todos, o `Support` (Acompanhe + logos), colado ao rodapé.
+O conteúdo sai de um ponto único, `PostTypeContent` (`posts/presentation/components/post/`): artigo usa o layout-base (`ArticleBody`: `ArticleHeader` com migalhas, título, autoria, compartilhar e `PostCover`, mais `ReadingRichText` e `ArticleNote` na coluna); os outros tipos ainda usam o `*_content.dart` antigo. Na Fase 5, cada tipo troca ali para o layout-base com o seu bloco. Abaixo do conteúdo, só no artigo, vem o `RelatedPostsSection` (Leia também: até 3 artigos da mesma categoria, sem o atual, no `PostCard` sem resumo, escondido se vazio ou com falha) e, em todos, o `Support` (Acompanhe + logos), colado ao rodapé.
 
 O compartilhar do layout-base é o `PostShare` (spec 013): copiar link, redes e e-mail, e a folha do aparelho no celular (`core/utils/browser/native_share`). Na Fase 5, os outros tipos o usam no cabeçalho; o `SocialIcons` antigo some na Fase 7.
 

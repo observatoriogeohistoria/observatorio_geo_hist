@@ -1,6 +1,6 @@
 # 014. Listagem de categoria e card de post
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 3: listagem de categoria e cards de post (T-11 fica na 015)
 - **Protótipo:** aba "Categoria"; aba "Estados" para esqueleto, vazio e erro; aba "Post" para o card do "Leia também" (link no CLAUDE.md)
 - **Criada em:** 2026-10-02
@@ -155,3 +155,5 @@ Não mudam: o desenho é outro (título sobre a imagem, primeiro maior). Ver dec
 ## Histórico de mudanças
 - 2026-10-02: criada e aprovada no modo autônomo (execução da Fase 3).
 - 2026-10-02: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-02: ajustes na implementação, decididos no modo autônomo: chips, blocos e "Ver mais" usam o plural que o projeto já tem para cada tipo (filme aparece como "Filmes e Vídeos", não "Filmes"); a contagem usa a mesma ordenação da lista para caber nos índices atuais; o rodapé ganhou um `Material` nos ícones sociais, que deixavam rastro quando a página carregava (componente compartilhado, mudança só de pintura).
+- 2026-10-02: implementada.
