@@ -112,7 +112,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | 1.3 | Quem somos → specs/006-quem-somos-video, concluído | Missão e três públicos (professores, pesquisadores, estudantes). Substitui o bloco de tela cheia com foto | |
 | 1.4 | Vídeo → specs/006-quem-somos-video, concluído | Capa com botão de reproduzir. Sem autoplay | `AppVideoPlayer` |
 | 1.5 | Nossa história (resumo) → specs/007-resumo-nossa-historia, concluído | Resumo com o marco da FAPEMIG e link para a página completa | T-03 (rota nova) |
-| 1.6 | Equipe → specs/008-equipe, concluído | Grade com todos os membros. Só é clicável quando há descrição | `FetchTeamStore`, T-02 |
+| 1.6 | Equipe → specs/008-equipe, concluído | Grade com todos os membros. Com descrição, abre a página da pessoa; sem descrição e com Lattes, abre o currículo | `FetchTeamStore`, T-02 |
 | 1.7 | Realização e apoio → specs/009-apoio-contato, concluído | Logos reais com efeito de hover (P-03) | P-03 |
 | 1.8 | Chamada para contato → specs/009-apoio-contato, concluído | Bloco de chamada para `/contato` | |
 

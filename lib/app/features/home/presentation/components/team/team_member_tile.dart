@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
+import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/member_avatar.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/sort_team.dart';
@@ -9,8 +10,10 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Membro da equipe na grade da Home (spec 008): foto, nome e função.
 ///
-/// Só quem tem descrição é link para `/membro/:id` (cursor de mão, nome
-/// laranja e foto maior no hover, foco por teclado). Sem descrição, é só texto.
+/// Quem tem descrição é link para `/membro/:id`; sem descrição, mas com
+/// Lattes, é link para o currículo (em outra aba). O link tem cursor de mão,
+/// nome laranja e foto maior no hover e foco por teclado. Sem nenhum dos dois,
+/// é só texto.
 class TeamMemberTile extends StatefulWidget {
   const TeamMemberTile({super.key, required this.member});
 
@@ -25,11 +28,15 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
 
   TeamMemberModel get _member => widget.member;
 
-  bool get _isLink => memberHasPage(_member);
+  bool get _hasPage => memberHasPage(_member);
 
-  String get _path => AppRoutes.member(_member.id!);
+  String get _lattesUrl => _member.lattesUrl?.trim() ?? '';
 
-  void _open() => GoRouter.of(context).go(_path);
+  bool get _isLink => _hasPage || _lattesUrl.isNotEmpty;
+
+  String get _target => _hasPage ? AppRoutes.member(_member.id!) : _lattesUrl;
+
+  void _open() => _hasPage ? GoRouter.of(context).go(_target) : openUrl(_lattesUrl);
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +46,12 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
 
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r8);
 
-    return Semantics(
+    final link = Semantics(
       link: true,
-      label: '${_member.name}, ${_member.role}',
-      linkUrl: Uri.parse(_path),
+      label: _hasPage
+          ? '${_member.name}, ${_member.role}'
+          : '${_member.name}, ${_member.role}, Currículo Lattes, abre em outra aba',
+      linkUrl: Uri.parse(_target),
       // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o membro.
       onTap: _open,
       excludeSemantics: true,
@@ -62,6 +71,9 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
         ),
       ),
     );
+
+    if (_hasPage) return link;
+    return Tooltip(message: 'Abrir Currículo Lattes', excludeFromSemantics: true, child: link);
   }
 
   Widget _content(BuildContext context, {required bool hovered}) {
