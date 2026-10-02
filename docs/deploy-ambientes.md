@@ -52,7 +52,7 @@ Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP
     Header set Cache-Control "no-cache"
   </IfModule>
   ```
-- **Firebase**: os dois ambientes usam o projeto `observatorio-geo-hist`. O painel admin no dev altera dados reais.
+- **Firebase**: o `APP_ENV` escolhe o projeto (`observatorio-geo-hist-dev` no dev, `observatorio-geo-hist` em produção), então Firestore e Auth do dev são separados. A exceção é o Storage da biblioteca e das mídias do painel, que aponta fixo para o bucket de produção nos dois ambientes: subir ou apagar mídia pelo painel do dev mexe em arquivos reais.
 
 ## Índices do Firestore
 
