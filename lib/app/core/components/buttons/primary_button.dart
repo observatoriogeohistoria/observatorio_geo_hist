@@ -33,7 +33,6 @@ class PrimaryButton extends StatelessWidget {
   final ButtonSize size;
   final bool isDisabled;
 
-  /// Ícone opcional depois do texto (decorativo).
   final IconData? trailingIcon;
 
   @override

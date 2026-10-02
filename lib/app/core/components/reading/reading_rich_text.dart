@@ -6,17 +6,12 @@ import 'package:flutter_quill/quill_delta.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Texto do editor rico (delta do Quill em JSON) com o estilo da coluna de
-/// leitura (spec 012): parágrafos com vão, títulos como subtítulos, listas,
-/// citação com barra laranja, links que abrem em outra aba e imagens na
-/// largura da coluna, sem recorte. Cores, fundos, fontes e tamanhos do editor
-/// são ignorados, para não ferir o contraste nem a escala de texto.
+/// Ignora cores, fontes e tamanhos do editor, para não quebrar o contraste nem a escala de texto.
 class ReadingRichText extends StatefulWidget {
   const ReadingRichText(this.content, {super.key});
 
   final String? content;
 
-  /// Delta sem texto nem imagem, ou que não pode ser lido.
   static bool isEmpty(String? content) {
     final ops = _decode(content);
     if (ops == null) return true;
@@ -48,9 +43,7 @@ class ReadingRichText extends StatefulWidget {
 
 const _ignoredAttributes = {'color', 'background', 'font', 'size'};
 
-/// Tira as formatações ignoradas, o conteúdo embutido que não é imagem e as
-/// linhas vazias seguidas: o vão entre parágrafos já vem do estilo, e as
-/// linhas em branco do editor o dobravam.
+/// As linhas em branco do editor dobravam o vão entre parágrafos.
 List<Map<String, dynamic>> _clean(List<Map<String, dynamic>> ops) {
   final result = <Map<String, dynamic>>[];
   var endsWithNewline = true;
@@ -229,8 +222,6 @@ class _ReadingRichTextState extends State<ReadingRichText> {
   }
 }
 
-/// Imagem colada no texto: na largura da coluna, sem recorte, com altura
-/// máxima; na falha, placeholder 16:10.
 class _ImageEmbedBuilder extends EmbedBuilder {
   const _ImageEmbedBuilder();
 

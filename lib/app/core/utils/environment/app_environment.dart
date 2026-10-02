@@ -2,10 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:observatorio_geo_hist/firebase_options_dev.dart' as dev_options;
 import 'package:observatorio_geo_hist/firebase_options_prod.dart' as prod_options;
 
-/// Ambiente do app, definido em tempo de build por `--dart-define=APP_ENV=dev|prod`.
-///
-/// Sem o define (ex.: `flutter run` local), cai em [dev] para nunca escrever
-/// sem querer no Firebase de produção.
+/// Sem o define, cai em [dev] para nunca escrever sem querer em produção.
 enum AppEnvironment {
   dev,
   prod;

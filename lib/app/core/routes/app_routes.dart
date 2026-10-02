@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Endereços do site, sempre em português (inclusive os do painel).
-///
-/// As constantes `*Pattern` são os caminhos com parâmetros usados no
-/// [GoRouter]; as funções de mesmo nome montam o endereço concreto.
 abstract class AppRoutes {
   static const root = '/';
   static const ourHistory = '/nossa-historia';
@@ -35,13 +31,11 @@ abstract class AppRoutes {
   static const panelTabPattern = '$panel/:tab';
   static const panelLibraryAreaPattern = '$panel/$librarySegment/:area';
 
-  /// Parâmetro de consulta com o tipo de post na aba de publicações do painel.
   static const panelPostTypeParam = 'tipo';
   static String panelTab(String tab) => '$panel/$tab';
   static String panelPosts(String postType) => '${panelTab(publicationsSegment)}?$panelPostTypeParam=$postType';
   static String panelLibraryArea(String areaKey) => '${panelTab(librarySegment)}/$areaKey';
 
-  /// Endereços antigos em inglês, que redirecionam para os atuais.
   static const legacyManifest = '/manifest';
   static const legacyCategoryPattern = '/posts/:area/:category';
   static const legacyPostPattern = '$legacyCategoryPattern/:id';

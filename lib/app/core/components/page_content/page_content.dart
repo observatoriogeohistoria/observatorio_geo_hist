@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 
-/// Centraliza o conteúdo, limita a largura a [ScreenUtils.contentMaxWidth]
-/// (margens incluídas, como no protótipo) e aplica a margem lateral da faixa.
 class PageContent extends StatelessWidget {
   const PageContent({super.key, required this.child});
 

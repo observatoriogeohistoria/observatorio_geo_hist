@@ -4,11 +4,8 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 enum ButtonSize { small, medium, big }
 
-/// Tipo visual do botão: primário, secundário ou discreto.
 enum AppButtonKind { primary, secondary, ghost }
 
-/// Base dos botões do site. `PrimaryButton`, `SecondaryButton` e
-/// `AppTextButton` só escolhem o [kind] e o [size].
 class AppButtonBase extends StatefulWidget {
   const AppButtonBase({
     super.key,
@@ -28,15 +25,11 @@ class AppButtonBase extends StatefulWidget {
   final VoidCallback onPressed;
   final bool isDisabled;
 
-  /// Ícone opcional depois do texto (por exemplo, uma seta). É decorativo:
-  /// o leitor de tela lê só o [text].
   final IconData? trailingIcon;
 
-  /// Ícone opcional antes do texto. Também decorativo.
   final IconData? leadingIcon;
 
-  /// Textos que o botão pode mostrar no lugar de [text] (por exemplo, uma
-  /// confirmação). A largura fica a do maior, para a linha não pular na troca.
+  /// Textos que podem substituir [text]. O botão fica com a largura do maior, para não pular na troca.
   final List<String> reserveTexts;
 
   @override
@@ -57,8 +50,7 @@ class _AppButtonBaseState extends State<AppButtonBase> {
     final (background, foreground, border) = switch (widget.kind) {
       AppButtonKind.primary => (hovered ? colors.accentStrong : colors.accent, colors.white, Colors.transparent),
       AppButtonKind.secondary => (hovered ? colors.ink : Colors.transparent, hovered ? colors.white : colors.ink, colors.ink),
-      // Acento forte também em repouso: o botão pode cair sobre a superfície `#F7F5F2`,
-      // onde o acento normal fica abaixo de 4,5:1.
+      // Laranja forte também em repouso: sobre a superfície clara, o laranja normal fica abaixo de 4,5:1.
       AppButtonKind.ghost => (hovered ? colors.accentSoft : Colors.transparent, colors.accentStrong, Colors.transparent),
     };
 
@@ -118,7 +110,6 @@ class _AppButtonBaseState extends State<AppButtonBase> {
       button: true,
       enabled: !widget.isDisabled,
       label: widget.text,
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o botão.
       onTap: widget.isDisabled ? null : widget.onPressed,
       excludeSemantics: true,
       child: Opacity(

@@ -39,13 +39,10 @@ class SecondaryButton extends StatelessWidget {
   final ButtonSize size;
   final bool isDisabled;
 
-  /// Ícone opcional depois do texto (decorativo).
   final IconData? trailingIcon;
 
-  /// Ícone opcional antes do texto (decorativo).
   final IconData? leadingIcon;
 
-  /// Textos alternativos que reservam a largura do maior (ver `AppButtonBase`).
   final List<String> reserveTexts;
 
   @override

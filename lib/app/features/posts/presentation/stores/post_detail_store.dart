@@ -7,8 +7,7 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/sta
 
 part 'post_detail_store.g.dart';
 
-/// Estado da página de um post (spec 012): o post e o Leia também. Um por
-/// página (fábrica), para não mexer na lista que a página da categoria guarda.
+/// Um por página, para não mexer na lista que a página da categoria guarda.
 class PostDetailStore = PostDetailStoreBase with _$PostDetailStore;
 
 abstract class PostDetailStoreBase with Store {

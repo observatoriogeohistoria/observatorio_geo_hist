@@ -10,7 +10,6 @@ class LoginSetup {
   static final GetIt getIt = GetIt.instance;
 
   static void setup() {
-    // Login
     getIt.registerFactory<FirebaseAuthDatasource>(
       () => FirebaseAuthDatasourceImpl(
         getIt<FirebaseAuth>(),

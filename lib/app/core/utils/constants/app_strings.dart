@@ -9,7 +9,6 @@ Uberlândia/MG | CEP 38400-192''';
 
   static const String emailUrl = 'mailto:$email';
 
-  // Rodapé: endereço sem CEP e telefones separados (texto e link `tel:`).
   static const String footerAddress = '''Faculdade de Educação, sala 1G156 · UFU
 Av. João Naves de Ávila, 2121 · Santa Mônica
 Uberlândia/MG''';

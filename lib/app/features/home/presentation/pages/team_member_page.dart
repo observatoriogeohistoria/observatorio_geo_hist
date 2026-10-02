@@ -19,9 +19,6 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/stores/stat
 import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Página da pessoa da equipe (spec 011): migalhas, foto, função, nome,
-/// apresentação e Currículo Lattes. Sem página (id inexistente ou sem
-/// descrição), mostra a 404.
 class TeamMemberPage extends StatefulWidget {
   const TeamMemberPage({
     required this.memberId,

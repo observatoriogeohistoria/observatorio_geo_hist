@@ -20,8 +20,6 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/sta
 import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Página do post (spec 012): conteúdo do tipo, Leia também (artigo), Apoio e
-/// rodapé, com esqueleto, não encontrado (404) e erro com "Tentar de novo".
 class PostDetailedPage extends StatefulWidget {
   const PostDetailedPage({
     required this.area,
@@ -45,8 +43,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
 
   CategoryModel? _category;
 
-  /// Endereço cujo post já foi pedido. A navbar recarrega as categorias a
-  /// cada página, e isso não deve buscar o post de novo.
+  /// A navbar recarrega as categorias a cada página, e isso não deve buscar o post de novo.
   String? _requested;
 
   String get _address => '${widget.area.key}/${widget.categoryKey}/${widget.postId}';
@@ -88,8 +85,8 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
     }
 
     _requested = null;
-    // A 404 monta outra navbar, que recarrega as categorias: só o primeiro
-    // carregamento mostra o esqueleto, senão a página alternaria sem parar.
+    // A 404 monta outra navbar, que recarrega as categorias: só o primeiro carregamento
+    // mostra o esqueleto, senão a página alternaria sem parar.
     final resolved = _store.state is PostDetailNotFoundState;
     switch (_categoriesStore.state) {
       case FetchCategoriesSuccessState():

@@ -10,19 +10,11 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetc
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_team_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Seção "Equipe" da Home (spec 008): todos os membros de uma vez, em grade.
-///
-/// Carregando: título e esqueleto de uma linha. Erro: título, mensagem e
-/// "Tentar de novo". Sem membros: a seção inteira some.
-///
-/// Só tem respiro de seção em cima (spec 009): o espaço até o bloco seguinte
-/// fica em Realização e apoio.
 class TeamSection extends StatelessWidget {
   const TeamSection({super.key, required this.store, required this.onRetry});
 
   final FetchTeamStore store;
 
-  /// Refaz a busca da equipe.
   final VoidCallback onRetry;
 
   @override
@@ -87,7 +79,6 @@ class _Section extends StatelessWidget {
   }
 }
 
-/// Esqueleto de uma linha da grade: círculo e duas barras por coluna. Parado.
 class _Loading extends StatelessWidget {
   const _Loading();
 

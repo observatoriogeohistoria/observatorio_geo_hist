@@ -10,9 +10,6 @@ abstract class LibraryRepository {
   Future<Either<Failure, PaginatedLibraryDocuments>> fetchDocuments(LibraryDocumentsQuery query);
   Future<Either<Failure, LibraryDocumentModel?>> fetchDocumentBySlug(String slug);
 
-  // Future<Either<Failure, LibraryDocumentModel>> fetchGeographyDocumentById(String postId);
-  // Future<Either<Failure, LibraryDocumentModel>> fetchHistoryDocumentById(String postId);
-
   Future<Either<Failure, LibraryDocumentModel>> createOrUpdateDocument(
       LibraryDocumentModel document, FileModel? file);
   Future<Either<Failure, void>> deleteDocument(LibraryDocumentModel document);

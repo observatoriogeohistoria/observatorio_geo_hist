@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Foto redonda do membro da equipe (spec 008). As iniciais ficam sempre por
-/// baixo: aparecem enquanto a foto carrega, quando não há foto ou quando ela
-/// falha, sem mudar o tamanho. Decorativa para o leitor de tela.
 class MemberAvatar extends StatelessWidget {
   const MemberAvatar({super.key, required this.name, this.imageUrl});
 

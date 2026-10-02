@@ -4,8 +4,6 @@ import 'package:observatorio_geo_hist/app/core/components/page_content/page_cont
 import 'package:observatorio_geo_hist/app/core/components/partners/partner_logo_grid.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Seção Apoio do post (`.support`, spec 012): "Acompanhe" com as redes e
-/// "Apoio" com os logos dos parceiros, lado a lado quando há espaço.
 class Support extends StatelessWidget {
   const Support({super.key});
 

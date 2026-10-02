@@ -10,8 +10,7 @@ String encodeUrlComponent(String url) {
   return Uri.encodeComponent(url);
 }
 
-/// Abre [url] em outra aba. Use [sameTab] para `mailto:` e `tel:`, que não
-/// devem deixar uma aba em branco.
+/// `mailto:` e `tel:` usam [sameTab] para não deixar uma aba em branco.
 Future<void> openUrl(String url, {bool sameTab = false}) async {
   final Uri uri = Uri.parse(url);
 
@@ -41,9 +40,7 @@ String? getFileExtension(String? url) {
   String? extension;
 
   if (url != null && url.contains('.')) {
-    // Remove query params/fragments
     final cleanUrl = url.split('?').first.split('#').first;
-    // Pega a última parte após o ponto, se houver
     final parts = cleanUrl.split('.');
     if (parts.length > 1) {
       extension = parts.last;

@@ -7,12 +7,9 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Marca (SVG) com o nome "Observatório" e, quando cabe, o subtítulo.
-/// Clicar leva à Home.
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key, this.onDark = false});
 
-  /// Versão para fundo escuro (rodapé).
   final bool onDark;
 
   @override
@@ -28,7 +25,6 @@ class AppLogo extends StatelessWidget {
       link: true,
       label: 'Observatório do Ensino de História e Geografia, início',
       linkUrl: Uri.parse(AppRoutes.root),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
       onTap: () => context.go(AppRoutes.root),
       excludeSemantics: true,
       child: AppFocusRing(

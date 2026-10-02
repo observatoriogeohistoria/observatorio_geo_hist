@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Foto e texto da página da pessoa (`.member-page`): lado a lado, com a foto
-/// em até 300 px; empilhados quando a largura útil é menor que 700 px.
 class MemberPageLayout extends StatelessWidget {
   const MemberPageLayout({super.key, required this.portrait, required this.content});
 

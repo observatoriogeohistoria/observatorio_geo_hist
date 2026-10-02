@@ -13,8 +13,6 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/related_post_card.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Leia também (spec 012): até três artigos da mesma categoria, com o link
-/// "Mais em [categoria]". Sem artigos, a seção não aparece.
 class RelatedPostsSection extends StatelessWidget {
   const RelatedPostsSection({
     super.key,
@@ -56,7 +54,6 @@ class RelatedPostsSection extends StatelessWidget {
 
     return PageContent(
       child: Padding(
-        // A coluna de leitura acima já deixa o seu respiro embaixo.
         padding: EdgeInsets.only(
           top: math.max(0, sectionPadding - components.readingPaddingBottom(breakpoint)),
           bottom: sectionPadding,

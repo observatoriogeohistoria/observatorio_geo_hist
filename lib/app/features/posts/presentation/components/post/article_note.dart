@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/reading_rich_text.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Nota do artigo (`.note`): quadro em superfície com o rótulo "NOTA" e o
-/// texto da observação. Some com observação vazia.
 class ArticleNote extends StatelessWidget {
   const ArticleNote({super.key, required this.observation});
 
@@ -19,7 +17,6 @@ class ArticleNote extends StatelessWidget {
     final scale = MediaQuery.textScalerOf(context).scale(1);
 
     return Container(
-      // O último parágrafo do texto já traz o vão de parágrafo embaixo.
       padding: EdgeInsets.fromLTRB(
         components.postNotePaddingHorizontal,
         components.postNotePaddingVertical,

@@ -15,15 +15,12 @@ class AppSetup {
   static final GetIt getIt = GetIt.instance;
 
   static void setup() {
-    // Logger
     getIt.registerLazySingleton<LoggerService>(() => LoggerServiceImpl());
 
-    // Firebase
     getIt.registerFactory<FirebaseFirestore>(() => FirebaseFirestore.instance);
     getIt.registerFactory<FirebaseAuth>(() => FirebaseAuth.instance);
     getIt.registerFactory<FirebaseStorage>(() => FirebaseStorage.instance);
 
-    // Fetch Categories
     getIt.registerFactory<FetchCategoriesDatasource>(
       () => FetchCategoriesDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );
@@ -34,16 +31,12 @@ class AppSetup {
       () => FetchCategoriesStore(getIt<FetchCategoriesRepository>()),
     );
 
-    // Home
     HomeSetup.setup();
 
-    // Posts
     PostsSetup.setup();
 
-    // Admin
     AdminSetup.setup();
 
-    // Library
     LibrarySetup.setup();
   }
 }

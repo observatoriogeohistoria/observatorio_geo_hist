@@ -3,19 +3,12 @@ import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.d
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Botão "Assistir" sobre a capa do vídeo (spec 006): pílula branca com um
-/// círculo laranja e o ícone de reproduzir, menor no celular. Cresce um pouco
-/// no hover (sem isso com movimento reduzido).
-///
-/// Com [isLoading], mostra "Carregando vídeo" com um indicador girando (um
-/// ícone parado com movimento reduzido) e ignora novos toques, mantendo o foco.
 class VideoPlayButton extends StatefulWidget {
   const VideoPlayButton({super.key, required this.onPressed, this.isLoading = false, this.focusNode});
 
   final VoidCallback onPressed;
   final bool isLoading;
 
-  /// Nó de foco opcional, para saber se o botão foi ativado pelo teclado.
   final FocusNode? focusNode;
 
   @override
@@ -49,7 +42,6 @@ class _VideoPlayButtonState extends State<VideoPlayButton> {
       button: !widget.isLoading,
       label: widget.isLoading ? text : 'Reproduzir vídeo de apresentação',
       liveRegion: widget.isLoading,
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o botão.
       onTap: widget.isLoading ? null : widget.onPressed,
       excludeSemantics: true,
       child: AnimatedScale(

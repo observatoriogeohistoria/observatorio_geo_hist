@@ -6,11 +6,9 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart'
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Ícones de Instagram, Facebook e YouTube. Abrem em outra aba.
 class SocialButtons extends StatelessWidget {
   const SocialButtons({super.key, this.onDark = false});
 
-  /// Versão para fundo escuro (rodapé).
   final bool onDark;
 
   @override
@@ -64,7 +62,6 @@ class _SocialButtonState extends State<_SocialButton> {
         link: true,
         label: '${widget.label}, abre em outra aba',
         linkUrl: Uri.parse(widget.url),
-        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
         onTap: () => openUrl(widget.url),
         excludeSemantics: true,
         child: AppFocusRing(
@@ -99,8 +96,6 @@ class _SocialButtonState extends State<_SocialButton> {
   }
 }
 
-/// Pílulas de Instagram, Facebook e YouTube com ícone e nome (`.social`, seção
-/// Apoio do post). Abrem em outra aba.
 class SocialPills extends StatelessWidget {
   const SocialPills({super.key});
 
@@ -146,7 +141,6 @@ class _SocialPillState extends State<_SocialPill> {
       link: true,
       label: '${widget.label}, abre em outra aba',
       linkUrl: Uri.parse(widget.url),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
       onTap: () => openUrl(widget.url),
       excludeSemantics: true,
       child: AppFocusRing(

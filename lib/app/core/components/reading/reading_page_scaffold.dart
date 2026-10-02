@@ -3,16 +3,12 @@ import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Esqueleto das páginas de leitura: navbar, cabeçalho opcional, corpo e
-/// rodapé, que fica na base da janela quando a página é curta.
 class ReadingPageScaffold extends StatelessWidget {
   const ReadingPageScaffold({super.key, this.header, required this.body, this.beforeFooter});
 
   final Widget? header;
   final Widget body;
 
-  /// Faixa colada ao rodapé, que desce com ele quando a página é curta (a
-  /// seção Apoio do post).
   final Widget? beforeFooter;
 
   @override
@@ -20,7 +16,7 @@ class ReadingPageScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppTheme.colors.page,
       body: FocusTraversalGroup(
-        // A navbar vem antes no Tab mesmo com a página rolada e as migalhas sob ela.
+        // Mantém a navbar primeiro no Tab, mesmo com a página rolada.
         policy: OrderedTraversalPolicy(
           secondary: ReadingOrderTraversalPolicy(requestFocusCallback: _focusAndReveal),
           requestFocusCallback: _focusAndReveal,
@@ -53,8 +49,8 @@ class ReadingPageScaffold extends StatelessWidget {
   }
 }
 
-// O padrão só rola no sentido do Tab: um link acima da tela ou sob a navbar
-// fixa (as migalhas, com a página rolada) recebia foco sem aparecer.
+// O padrão só rola no sentido do Tab: um link acima da tela ou sob a navbar fixa
+// recebia foco sem aparecer.
 void _focusAndReveal(
   FocusNode node, {
   ScrollPositionAlignmentPolicy? alignmentPolicy,

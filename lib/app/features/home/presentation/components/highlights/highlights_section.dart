@@ -11,17 +11,11 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetc
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_highlights_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Seção "Destaques" da Home (spec 005): até três publicações escolhidas pela
-/// equipe, todas visíveis de uma vez.
-///
-/// Carregando: título e esqueleto. Erro: título, mensagem e "Tentar de novo".
-/// Sem destaques: a seção inteira some.
 class HighlightsSection extends StatelessWidget {
   const HighlightsSection({super.key, required this.store, required this.onRetry});
 
   final FetchHighlightsStore store;
 
-  /// Refaz a busca dos destaques.
   final VoidCallback onRetry;
 
   @override
@@ -88,8 +82,6 @@ class _Section extends StatelessWidget {
   }
 }
 
-/// Esqueleto na disposição de três cartões (no celular, o principal e duas
-/// linhas compactas). Parado (sem animação).
 class _Loading extends StatelessWidget {
   const _Loading();
 

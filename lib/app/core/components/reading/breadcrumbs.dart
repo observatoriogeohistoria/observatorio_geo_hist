@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Um nível das migalhas. O último é a página atual; um nível do meio sem
-/// [route] é texto comum, sem link nem foco.
 class BreadcrumbItem {
   const BreadcrumbItem(this.label, {this.route});
 
@@ -13,8 +11,6 @@ class BreadcrumbItem {
   final String? route;
 }
 
-/// Migalhas do cabeçalho de página (`.crumbs`): níveis com link, separados por
-/// seta, e o último como página atual, sem link.
 class Breadcrumbs extends StatelessWidget {
   const Breadcrumbs({super.key, required this.items});
 
@@ -96,7 +92,6 @@ class _BreadcrumbLinkState extends State<_BreadcrumbLink> {
       link: true,
       label: widget.label,
       linkUrl: Uri.parse(widget.route),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
       onTap: _open,
       excludeSemantics: true,
       child: AppFocusRing(

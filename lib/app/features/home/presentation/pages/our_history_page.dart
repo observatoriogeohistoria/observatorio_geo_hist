@@ -12,8 +12,6 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history/milestone_badge.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Página Nossa história (spec 011), montada sobre a base de leitura. O texto
-/// é o de sempre, só redistribuído em parágrafos, subtítulos e lista.
 class OurHistoryPage extends StatelessWidget {
   const OurHistoryPage({super.key});
 
@@ -39,8 +37,7 @@ class OurHistoryPage extends StatelessWidget {
     'Para tanto, valorizamos e incentivamos a participação de todos e contamos com o poder multiplicador de cada pessoa, seja ela pesquisador, professor ou estudante.',
   ];
 
-  /// Largura de decodificação da foto (3291 px no original), arredondada para
-  /// não recarregar a cada pixel de redimensionamento.
+  /// Arredonda a largura para não decodificar a foto de novo a cada pixel de redimensionamento.
   static int _photoCacheWidth(BuildContext context) {
     const step = 256;
     final maxWidth = AppTheme.dimensions.components.readingFigureMaxWidth;

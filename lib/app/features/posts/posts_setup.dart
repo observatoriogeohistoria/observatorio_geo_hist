@@ -10,7 +10,6 @@ class PostsSetup {
   static final GetIt getIt = GetIt.instance;
 
   static void setup() {
-    // Fetch Posts
     getIt.registerFactory<FetchPostsDatasource>(
       () => FetchPostsDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );

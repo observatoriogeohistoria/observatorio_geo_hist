@@ -3,9 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Selo de marco (`.fact` do protótipo): fundo laranja suave, ícone de relógio
-/// decorativo e texto em laranja forte. Em tela estreita o texto quebra dentro
-/// do selo, que cresce na altura.
 class MilestoneBadge extends StatelessWidget {
   const MilestoneBadge({super.key, required this.text});
 

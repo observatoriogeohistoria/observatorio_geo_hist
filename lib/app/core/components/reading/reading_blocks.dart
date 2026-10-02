@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-// Blocos da coluna de leitura. Cada um traz a própria margem, para a página só
-// empilhar: parágrafos têm vão abaixo; lista e destaque somam acima só o que
-// falta para a margem do protótipo, como as margens colapsadas do CSS.
+// Cada bloco traz a própria margem. Lista e destaque somam acima só o que falta,
+// para não dobrar o vão que o parágrafo anterior já deixou.
 
-/// Parágrafo de abertura, maior que o texto (`.prose .lead`).
 class ReadingLead extends StatelessWidget {
   const ReadingLead(this.text, {super.key});
 
@@ -23,7 +21,6 @@ class ReadingLead extends StatelessWidget {
   }
 }
 
-/// Parágrafo de texto de leitura.
 class ReadingParagraph extends StatelessWidget {
   const ReadingParagraph(this.text, {super.key});
 
@@ -38,8 +35,6 @@ class ReadingParagraph extends StatelessWidget {
   }
 }
 
-/// Subtítulo da coluna de leitura (`.article .prose h2`), anunciado como
-/// cabeçalho de nível 2.
 class ReadingSubtitle extends StatelessWidget {
   const ReadingSubtitle(this.text, {super.key});
 
@@ -63,8 +58,6 @@ class ReadingSubtitle extends StatelessWidget {
   }
 }
 
-/// Lista com marcadores (`.article .prose ul`): marcador redondo à esquerda e
-/// linhas quebradas alinhadas ao texto.
 class ReadingBulletList extends StatelessWidget {
   const ReadingBulletList({super.key, required this.items});
 
@@ -120,7 +113,6 @@ class _BulletItem extends StatelessWidget {
           SizedBox(
             width: components.readingBulletIndent * scale,
             child: Padding(
-              // Centraliza o marcador na primeira linha do texto.
               padding: EdgeInsets.only(top: (lineHeight - dot) / 2),
               child: Align(
                 alignment: Alignment.topLeft,
@@ -139,8 +131,6 @@ class _BulletItem extends StatelessWidget {
   }
 }
 
-/// Lista numerada (`.manifest-list`): número num círculo laranja suave e
-/// texto ao lado, com as linhas quebradas alinhadas ao texto.
 class ReadingNumberedList extends StatelessWidget {
   const ReadingNumberedList({super.key, required this.items});
 
@@ -217,7 +207,6 @@ class _NumberedItem extends StatelessWidget {
   }
 }
 
-/// Frase de destaque com barra laranja à esquerda (`.prose blockquote`).
 class ReadingQuote extends StatelessWidget {
   const ReadingQuote(this.text, {super.key});
 

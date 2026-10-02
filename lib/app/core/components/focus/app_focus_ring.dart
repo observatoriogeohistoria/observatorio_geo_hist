@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Desenha o contorno de foco visível (3 px, afastado 2 px, cor de acento)
-/// ao redor de [child] quando algum widget dentro dele recebe foco pelo
-/// teclado. Não altera o layout e não aparece no clique do mouse. O texto de
-/// [child] fica fora da seleção, como em todo elemento clicável.
 class AppFocusRing extends StatefulWidget {
   const AppFocusRing({
     super.key,
@@ -16,15 +12,11 @@ class AppFocusRing extends StatefulWidget {
 
   final Widget child;
 
-  /// Raio do elemento envolvido. O contorno soma o afastamento e a espessura.
   final BorderRadius borderRadius;
 
-  /// Cor do contorno. Por padrão, a cor de acento; use outra sobre fundo escuro.
   final Color? color;
 
-  /// Como as restrições do pai chegam ao [child]. Use `StackFit.passthrough`
-  /// quando o filho precisa ocupar a altura imposta pelo pai (por exemplo,
-  /// cartões de mesma altura numa `Row` com `IntrinsicHeight`).
+  /// Use `StackFit.passthrough` quando o filho precisa ocupar a altura imposta pelo pai.
   final StackFit fit;
 
   @override
@@ -46,7 +38,6 @@ class _AppFocusRingState extends State<AppFocusRing> {
     super.dispose();
   }
 
-  /// Alternar entre mouse e teclado sem mudar o foco também mostra/esconde o anel.
   void _handleHighlightModeChange(FocusHighlightMode mode) {
     if (_hasFocus && mounted) setState(() {});
   }

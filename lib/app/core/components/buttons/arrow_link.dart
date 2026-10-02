@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Link de texto com seta (`.link-arrow` do protótipo), sem preenchimento.
-///
-/// Texto em laranja forte (acima de 4,5:1 também sobre a superfície `#F7F5F2`)
-/// e seta decorativa, que se afasta um pouco do texto no hover. O leitor de
-/// tela ouve só o [text], como link.
 class ArrowLink extends StatefulWidget {
   const ArrowLink({super.key, required this.text, required this.onTap, this.url});
 
   final String text;
   final VoidCallback onTap;
 
-  /// Endereço de destino, para o leitor de tela anunciar o link.
   final String? url;
 
   @override
@@ -35,7 +29,6 @@ class _ArrowLinkState extends State<ArrowLink> {
       link: true,
       label: widget.text,
       linkUrl: widget.url == null ? null : Uri.parse(widget.url!),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
       onTap: widget.onTap,
       excludeSemantics: true,
       child: AppFocusRing(

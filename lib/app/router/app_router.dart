@@ -198,7 +198,6 @@ class AppRouter {
     ],
   );
 
-  /// Texto das páginas públicas selecionável; o painel administrativo fica de fora.
   static Widget _selectable(Widget page) {
     return DefaultSelectionStyle.merge(
       selectionColor: AppTheme.colors.textSelection,

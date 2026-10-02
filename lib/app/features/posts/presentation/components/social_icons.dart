@@ -6,7 +6,6 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart'
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Compartilhar o post no Facebook, no Twitter, no WhatsApp e por e-mail.
 class SocialIcons extends StatelessWidget {
   const SocialIcons({
     required this.post,
@@ -86,7 +85,6 @@ class _ShareButtonState extends State<_ShareButton> {
       child: Semantics(
         button: true,
         label: widget.label,
-        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela.
         onTap: _share,
         excludeSemantics: true,
         child: AppFocusRing(

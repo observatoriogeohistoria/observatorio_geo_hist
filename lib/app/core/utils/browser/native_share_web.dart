@@ -7,8 +7,6 @@ import 'native_share_stub.dart' show NativeShareResult;
 
 export 'native_share_stub.dart' show NativeShareResult;
 
-/// Diz se o navegador oferece a folha de compartilhamento do aparelho
-/// (`navigator.share`) para um título e um link.
 bool canNativeShare() {
   try {
     final navigator = web.window.navigator;
@@ -21,8 +19,7 @@ bool canNativeShare() {
   }
 }
 
-/// Abre a folha de compartilhamento. Precisa ser chamada direto do toque da
-/// pessoa, sem `await` antes, ou o navegador a recusa.
+/// Precisa ser chamada direto do toque, sem `await` antes, ou o navegador recusa.
 Future<NativeShareResult> nativeShare({required String title, required String url}) async {
   try {
     await web.window.navigator.share(web.ShareData(title: title, url: url)).toDart;

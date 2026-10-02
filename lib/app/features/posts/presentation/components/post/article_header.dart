@@ -12,8 +12,6 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/components
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_share.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Cabeçalho do artigo (`.article-head`): migalhas, título, subtítulo, linha
-/// de autoria com compartilhar e capa.
 class ArticleHeader extends StatelessWidget {
   const ArticleHeader({
     super.key,
@@ -108,8 +106,6 @@ class _Byline extends StatelessWidget {
   }
 }
 
-/// Autoria: com um autor, círculo de iniciais e nome; com vários, os nomes
-/// juntos ("A, B e C"); a data abaixo do nome, como "março de 2026".
 class _Author extends StatelessWidget {
   const _Author({required this.authors, required this.date});
 

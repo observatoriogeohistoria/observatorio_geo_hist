@@ -13,7 +13,6 @@ enum PostsAreas {
     }
   }
 
-  /// Como [fromKey], mas `null` para chave inválida.
   static PostsAreas? tryFromKey(String value) {
     for (final area in PostsAreas.values) {
       if (area.key == value) return area;

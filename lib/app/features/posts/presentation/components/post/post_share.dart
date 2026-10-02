@@ -14,9 +14,6 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Compartilhar do post (`.share`): copiar link, redes, e-mail e, no celular,
-/// a folha de compartilhamento do aparelho. Em tablet e desktop mostra tudo
-/// numa linha; no celular, só ícones, com o aviso da cópia ao lado do rótulo.
 class PostShare extends StatefulWidget {
   const PostShare({super.key, required this.post});
 
@@ -202,8 +199,6 @@ class _PostShareState extends State<PostShare> {
   }
 }
 
-/// Botão de ícone do compartilhar: SVG de [asset] (em `assets/icons/share_*.svg`)
-/// ou [icon] do Material.
 class _ShareIconButton extends StatefulWidget {
   const _ShareIconButton({required this.label, required this.onTap, this.asset, this.icon});
 
@@ -232,7 +227,6 @@ class _ShareIconButtonState extends State<_ShareIconButton> {
       child: Semantics(
         button: true,
         label: widget.label,
-        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela.
         onTap: widget.onTap,
         excludeSemantics: true,
         child: AppFocusRing(

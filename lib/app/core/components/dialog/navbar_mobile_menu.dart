@@ -10,17 +10,11 @@ import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dar
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Painel de menu para celular e tablet (< 1024 px), aberto sobre a página.
-/// História e Geografia são sanfonas com as categorias da área.
-///
-/// Fecha pelo botão "Fechar menu", por Esc, por toque fora ou ao escolher uma
-/// opção. O foco fica dentro do painel enquanto ele está aberto.
 class NavbarMobileMenu extends StatefulWidget {
   const NavbarMobileMenu({super.key, required this.store, required this.location});
 
   final FetchCategoriesStore store;
 
-  /// Onde a pessoa está, calculado pela navbar (o painel não tem `GoRouterState`).
   final NavbarLocation location;
 
   @override
@@ -159,7 +153,6 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
   }
 }
 
-/// Linha principal do painel: link simples ou cabeçalho de sanfona.
 class _PanelRow extends StatelessWidget {
   const _PanelRow({
     required this.label,
@@ -188,7 +181,6 @@ class _PanelRow extends StatelessWidget {
       selected: isActive,
       expanded: isExpandable ? isExpanded : null,
       label: label,
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o item.
       onTap: onTap,
       excludeSemantics: true,
       child: AppFocusRing(

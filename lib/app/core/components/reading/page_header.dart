@@ -4,8 +4,6 @@ import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.da
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Cabeçalho das páginas de texto (`.page-head`): faixa de superfície com
-/// migalhas, título e texto de apoio opcional, alinhados à esquerda.
 class PageHeader extends StatelessWidget {
   const PageHeader({super.key, required this.breadcrumbs, required this.title, this.lead});
 

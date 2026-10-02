@@ -15,7 +15,6 @@ class CustomIconButton extends StatelessWidget {
   final IconData icon;
   final void Function() onTap;
 
-  /// Nome acessível do botão (também aparece ao passar o mouse).
   final String tooltip;
 
   @override
@@ -28,7 +27,6 @@ class CustomIconButton extends StatelessWidget {
       child: Semantics(
         button: true,
         label: tooltip,
-        // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o botão.
         onTap: onTap,
         excludeSemantics: true,
         child: AppFocusRing(

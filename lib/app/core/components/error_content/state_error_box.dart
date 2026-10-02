@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Caixa de erro de carregamento (`.state-box.err-state` do protótipo):
-/// ícone, "Não foi possível carregar", texto de apoio e "Tentar de novo".
 class StateErrorBox extends StatelessWidget {
   const StateErrorBox({super.key, required this.onRetry});
 

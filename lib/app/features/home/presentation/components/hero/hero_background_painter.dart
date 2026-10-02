@@ -3,10 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Desenho decorativo do fundo do hero: círculos concêntricos bem suaves
-/// (acento no canto superior direito, tom escuro no canto inferior esquerdo),
-/// que se apagam em direção à base. Não se move, não recebe foco e não é lido
-/// por leitor de tela.
 class HeroBackground extends StatelessWidget {
   const HeroBackground({super.key});
 
@@ -22,8 +18,6 @@ class HeroBackground extends StatelessWidget {
   }
 }
 
-/// Reproduz os dois `repeating-radial-gradient` e a máscara de `.hero::before`
-/// do protótipo: anéis de 1 px com passo fixo, centrados fora do conteúdo.
 class HeroBackgroundPainter extends CustomPainter {
   const HeroBackgroundPainter();
 
@@ -55,7 +49,6 @@ class HeroBackgroundPainter extends CustomPainter {
       stroke: stroke,
     );
 
-    // Máscara: opaco até [heroRingFadeStart] da altura, transparente na base.
     final fade = Paint()
       ..blendMode = BlendMode.dstIn
       ..shader = LinearGradient(
@@ -69,10 +62,8 @@ class HeroBackgroundPainter extends CustomPainter {
     canvas.restore();
   }
 
-  /// Converte uma posição em fração da largura e da altura para pixels.
   Offset _at(Size size, Offset fraction) => Offset(size.width * fraction.dx, size.height * fraction.dy);
 
-  /// Anéis até o canto mais distante de [center] (só o necessário para cobrir a área).
   void _paintRings(
     Canvas canvas,
     Size size, {

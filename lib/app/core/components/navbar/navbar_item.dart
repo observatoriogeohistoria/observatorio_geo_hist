@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Item da navbar em linha (desktop). Ativo: texto laranja com sublinhado.
-/// Quando abre um menu, informa "expandido" ou "recolhido" ao leitor de tela.
 class NavbarItem extends StatefulWidget {
   const NavbarItem({
     super.key,
@@ -19,7 +17,6 @@ class NavbarItem extends StatefulWidget {
   final VoidCallback onTap;
   final bool isActive;
 
-  /// Mostra a seta e informa o estado de expansão.
   final bool hasMenu;
   final bool isExpanded;
   final FocusNode? focusNode;
@@ -45,7 +42,6 @@ class _NavbarItemState extends State<NavbarItem> {
       selected: widget.isActive,
       expanded: widget.hasMenu ? widget.isExpanded : null,
       label: widget.label,
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o item.
       onTap: widget.onTap,
       excludeSemantics: true,
       child: AppFocusRing(

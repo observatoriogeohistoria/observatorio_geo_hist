@@ -3,16 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
-/// Seções da navbar que podem estar ativas.
 enum NavbarSection { about, history, geography, library }
 
-/// Onde a pessoa está, segundo a rota: define o item ativo da navbar e a
-/// categoria marcada nos menus.
 class NavbarLocation {
   const NavbarLocation({this.section, this.categoryKey});
 
-  /// Localização da rota atual. Na página de erro (404) não há `GoRouterState`,
-  /// então cai para o endereço do roteador.
+  /// Na 404 não há `GoRouterState`, então usa o endereço do roteador.
   factory NavbarLocation.of(BuildContext context) {
     try {
       return NavbarLocation.fromUri(GoRouterState.of(context).uri);
@@ -47,10 +43,8 @@ class NavbarLocation {
 
   final NavbarSection? section;
 
-  /// Chave da categoria aberta (só em rotas de publicações).
   final String? categoryKey;
 
-  /// Chave da categoria marcada no menu de [area], se for a área ativa.
   String? categoryKeyFor(PostsAreas area) {
     final expected = area == PostsAreas.history ? NavbarSection.history : NavbarSection.geography;
     return section == expected ? categoryKey : null;

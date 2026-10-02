@@ -11,7 +11,6 @@ class LibrarySetup {
   static final GetIt getIt = GetIt.instance;
 
   static void setup() {
-    // Fetch Library
     getIt.registerFactory<LibraryDatasource>(
       () => LibraryDatasourceImpl(
         getIt<FirebaseFirestore>(),

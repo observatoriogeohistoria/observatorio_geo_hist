@@ -6,13 +6,9 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/partner.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Grade com todos os logos de [Partner] (spec 009): colunas de mesma largura,
-/// com no mínimo [minColumnWidth], alinhadas à esquerda
-/// (`repeat(auto-fill, minmax(150px, 1fr))`). No celular, três colunas fixas.
 class PartnerLogoGrid extends StatelessWidget {
   const PartnerLogoGrid({super.key, this.minColumnWidth});
 
-  /// Largura mínima de coluna. Por padrão, `partnerColumnMinWidth`.
   final double? minColumnWidth;
 
   static int columnsFor(double width, double minColumnWidth) {

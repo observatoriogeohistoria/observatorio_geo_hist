@@ -12,13 +12,7 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 enum _VideoState { cover, loading, playing, error }
 
-/// Seção do vídeo de apresentação da Home (spec 006).
-///
-/// Nada toca nem é baixado ao abrir a página: aparece a capa com "Assistir".
-/// Ao ativar, o player é montado atrás da capa, no mesmo quadro; quando o
-/// vídeo fica pronto, a capa sai e ele toca com som (ou fica pausado e pronto,
-/// se o navegador não deixar tocar com som). Se falhar, a capa mostra a
-/// mensagem de erro e "Tentar de novo".
+/// Nada é baixado ao abrir a página: o player só é montado depois de "Assistir".
 class PresentationVideoSection extends StatefulWidget {
   const PresentationVideoSection({super.key});
 
@@ -27,7 +21,7 @@ class PresentationVideoSection extends StatefulWidget {
 }
 
 class _PresentationVideoSectionState extends State<PresentationVideoSection> {
-  /// Código do player (pequeno). Começa a baixar já, para "Assistir" não esperar.
+  /// O código do player começa a baixar já, para "Assistir" não esperar.
   late final Future<void> _playerLibrary = video_player.loadLibrary();
 
   _VideoState _state = _VideoState.cover;
@@ -36,14 +30,11 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
   /// Muda a cada tentativa, para "Tentar de novo" criar um player novo.
   int _attempt = 0;
 
-  /// Foco do botão "Assistir". Se ele estava com o foco do teclado ao ser
-  /// ativado, o foco segue para "Pausar vídeo" quando o player aparece; com
-  /// clique do mouse, o foco fica onde está (sem contorno inesperado).
+  /// Se "Assistir" foi ativado pelo teclado, o foco segue para os controles do player.
   final FocusNode _playButtonFocus = FocusNode(debugLabel: 'Assistir');
   bool _focusControls = false;
 
-  /// O navegador recusou tocar sozinho (som bloqueado): o player é montado de
-  /// novo, pausado e pronto, esperando um clique em "Reproduzir vídeo".
+  /// O navegador recusou tocar sozinho: o player volta pausado, esperando um clique.
   bool _autoplayBlocked = false;
 
   @override
@@ -116,7 +107,6 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r18),
                 child: ConstrainedBox(
-                  // Altura mínima, não fixa: com texto ampliado, o quadro cresce.
                   constraints: BoxConstraints(minWidth: width, maxWidth: width, minHeight: height),
                   child: Stack(
                     fit: StackFit.passthrough,
@@ -134,8 +124,6 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
     );
   }
 
-  /// Fundo escuro com o player centralizado: o vídeo aparece inteiro, com
-  /// faixas escuras quando o quadro é mais largo que ele.
   Widget _playerLayer() {
     return ColoredBox(
       color: AppTheme.colors.videoBackdrop,
@@ -157,8 +145,6 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
     );
   }
 
-  /// Capa por cima do player enquanto o vídeo não está tocando. Tocando, ela
-  /// continua no layout (mantém a altura do quadro), invisível e sem toque.
   Widget _coverLayer(BuildContext context) {
     final playing = _state == _VideoState.playing;
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
@@ -191,7 +177,6 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
   }
 }
 
-/// Caixa branca sobre a capa quando o vídeo não carrega.
 class _ErrorBox extends StatelessWidget {
   const _ErrorBox({required this.onRetry});
 

@@ -16,7 +16,7 @@ class FetchTeamDatasourceImpl implements FetchTeamDatasource {
   Future<List<TeamMemberModel>> fetchTeam() async {
     try {
       QuerySnapshot querySnapshot = await _firestore.collection('team').get();
-      // Offline, o Firestore responde do cache local, que pode estar vazio: é falha, não equipe vazia.
+      // Offline, o Firestore responde do cache, que pode estar vazio: é falha, não equipe vazia.
       if (querySnapshot.metadata.isFromCache && querySnapshot.docs.isEmpty) {
         throw StateError('Equipe indisponível: sem conexão e sem dados em cache');
       }

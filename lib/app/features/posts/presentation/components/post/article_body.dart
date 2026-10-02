@@ -11,8 +11,6 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/components
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/article_note.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Layout-base do post para o tipo artigo (spec 012): cabeçalho de até 820 px
-/// e, abaixo, texto e nota na coluna de leitura.
 class ArticleBody extends StatelessWidget {
   const ArticleBody({
     super.key,
@@ -53,8 +51,6 @@ class ArticleBody extends StatelessWidget {
   }
 }
 
-/// Faixa do cabeçalho do post: até 820 px com as margens, centralizada, com o
-/// respiro do topo das páginas de texto.
 class PostHeadFrame extends StatelessWidget {
   const PostHeadFrame({super.key, required this.child});
 

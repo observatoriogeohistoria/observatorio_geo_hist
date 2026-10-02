@@ -8,12 +8,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/sort_team.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Membro da equipe na grade da Home (spec 008): foto, nome e função.
-///
-/// Quem tem descrição é link para `/membro/:id`; sem descrição, mas com
-/// Lattes, é link para o currículo (em outra aba). O link tem cursor de mão,
-/// nome laranja e foto maior no hover e foco por teclado. Sem nenhum dos dois,
-/// é só texto.
+/// Com descrição, leva à página da pessoa; sem descrição e com Lattes, abre o currículo.
 class TeamMemberTile extends StatefulWidget {
   const TeamMemberTile({super.key, required this.member});
 
@@ -52,7 +47,6 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
           ? '${_member.name}, ${_member.role}'
           : '${_member.name}, ${_member.role}, Currículo Lattes, abre em outra aba',
       linkUrl: Uri.parse(_target),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o membro.
       onTap: _open,
       excludeSemantics: true,
       child: AppFocusRing(

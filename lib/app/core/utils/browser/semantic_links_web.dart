@@ -2,10 +2,8 @@ import 'dart:js_interop';
 
 import 'package:web/web.dart' as web;
 
-/// Os links com `linkUrl` viram `<a href>` na árvore de semântica, que o
-/// navegador seguiria sozinho ao ser ativado pelo leitor de tela (recarregando
-/// a página ou trocando a aba). Cancela essa navegação: quem navega é a ação
-/// `onTap` do próprio link, que o Flutter recebe pelo mesmo clique.
+/// O navegador seguiria sozinho os `<a href>` da semântica, recarregando a página.
+/// Quem navega é o `onTap` do próprio link.
 void preventSemanticLinkNavigation() {
   web.document.addEventListener(
     'click',

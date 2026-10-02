@@ -18,7 +18,6 @@ extension DateTimeFormatting on DateTime {
     return months[month - 1];
   }
 
-  /// Data curta, como "12 mar 2026" (mês abreviado em minúsculas).
   String get shortDate {
     const months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
@@ -41,8 +40,6 @@ const _monthNamesLower = [
   'dezembro',
 ];
 
-/// "03/2026" → "março de 2026". Fora do formato "MM/aaaa", devolve o texto
-/// sem os espaços das pontas.
 String formatMonthYear(String value) {
   final text = value.trim();
   final match = RegExp(r'^(\d{1,2})/(\d{4})$').firstMatch(text);

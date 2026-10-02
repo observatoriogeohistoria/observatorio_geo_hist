@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Figura das páginas de leitura (`.banner`): imagem em 21:9, mais larga que a
-/// coluna (até 920 px), com legenda opcional. Vai entre o `PageHeader` e a
-/// `ReadingColumn`, que recebe `paddingTop: readingFigureMarginBottom`.
 class ReadingFigure extends StatelessWidget {
   const ReadingFigure({
     super.key,
@@ -18,7 +15,6 @@ class ReadingFigure extends StatelessWidget {
   final String semanticLabel;
   final String? caption;
 
-  /// Parte da imagem preservada no recorte.
   final Alignment alignment;
 
   @override

@@ -7,8 +7,6 @@ import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_cover.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Cartão do Leia também (`.card`): imagem 16:10, "ARTIGO", título e
-/// "autores · data". O cartão inteiro é um link para o post.
 class RelatedPostCard extends StatefulWidget {
   const RelatedPostCard({super.key, required this.article, required this.route});
 
@@ -45,7 +43,6 @@ class _RelatedPostCardState extends State<RelatedPostCard> {
       link: true,
       label: [title, 'Artigo', if (meta.isNotEmpty) meta].join(', '),
       linkUrl: Uri.parse(widget.route),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
       onTap: _open,
       excludeSemantics: true,
       child: AppFocusRing(

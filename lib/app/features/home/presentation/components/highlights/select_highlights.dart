@@ -2,12 +2,9 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
-/// Quantos destaques aparecem na Home (spec 005).
 const int maxHighlights = 3;
 
-/// Escolhe os destaques mostrados na Home: descarta posts incompletos, ordena
-/// do mais recente para o mais antigo (sem data no fim) e fica com os três
-/// primeiros. O primeiro da lista é o destaque principal.
+/// Descarta posts incompletos e fica com os três mais recentes. O primeiro é o principal.
 List<PostModel> selectHighlights(List<PostModel> posts) {
   final complete = posts.where((post) {
     final id = post.id;
@@ -29,8 +26,7 @@ List<PostModel> selectHighlights(List<PostModel> posts) {
   return indexed.map((entry) => entry.$2).take(maxHighlights).toList();
 }
 
-/// Área usada no rótulo e no endereço do destaque: a da categoria do post ou,
-/// se a categoria não foi encontrada, a primeira área do próprio post.
+/// A área da categoria do post ou, se a categoria não foi encontrada, a primeira do post.
 PostsAreas? highlightArea(PostModel post) {
   final categoryAreas = post.category?.areas ?? const <PostsAreas>[];
   if (categoryAreas.isNotEmpty) return categoryAreas.first;
@@ -38,7 +34,6 @@ PostsAreas? highlightArea(PostModel post) {
   return null;
 }
 
-/// Endereço da página do post (`/publicacoes/:area/:categoria/:id`).
 String highlightPath(PostModel post) {
   return AppRoutes.post(highlightArea(post)!.key, post.categoryId, post.id!);
 }

@@ -13,11 +13,6 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Conteúdo do menu de uma área (História ou Geografia): carregando (esqueleto),
-/// vazio, erro com "Tentar de novo" ou a lista de categorias. Em Geografia,
-/// Expogeo e Geoensine vêm antes, separados por um divisor.
-///
-/// Usado no menu suspenso (desktop) e nas sanfonas do painel de celular.
 class NavbarCategoriesMenu extends StatelessWidget {
   const NavbarCategoriesMenu({
     super.key,
@@ -30,10 +25,8 @@ class NavbarCategoriesMenu extends StatelessWidget {
   final PostsAreas area;
   final FetchCategoriesStore store;
 
-  /// Chave da categoria aberta na rota atual (fica marcada na lista).
   final String? selectedCategoryKey;
 
-  /// Chamado antes de navegar ou abrir um link (o menu se fecha).
   final VoidCallback? onSelected;
 
   void _goToCategory(BuildContext context, CategoryModel category) {
@@ -104,7 +97,6 @@ class NavbarCategoriesMenu extends StatelessWidget {
   }
 }
 
-/// Uma opção de menu: linha inteira clicável, com foco visível.
 class NavbarMenuOption extends StatefulWidget {
   const NavbarMenuOption({
     super.key,
@@ -118,7 +110,6 @@ class NavbarMenuOption extends StatefulWidget {
   final VoidCallback onTap;
   final bool isSelected;
 
-  /// Abre em outra aba: mostra o ícone de link externo e avisa o leitor de tela.
   final bool isExternal;
 
   @override
@@ -141,7 +132,6 @@ class _NavbarMenuOptionState extends State<NavbarMenuOption> {
       selected: widget.isSelected,
       link: widget.isExternal,
       label: widget.isExternal ? '${widget.label}, abre em outra aba' : widget.label,
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar a opção.
       onTap: widget.onTap,
       excludeSemantics: true,
       child: AppFocusRing(

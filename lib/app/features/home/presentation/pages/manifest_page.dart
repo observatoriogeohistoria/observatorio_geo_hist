@@ -8,7 +8,6 @@ import 'package:observatorio_geo_hist/app/core/components/reading/reading_column
 import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 
-/// Página Manifesto (spec 010), montada sobre a base de leitura.
 class ManifestPage extends StatelessWidget {
   const ManifestPage({super.key});
 

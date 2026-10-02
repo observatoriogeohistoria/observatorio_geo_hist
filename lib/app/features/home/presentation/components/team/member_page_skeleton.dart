@@ -3,8 +3,6 @@ import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/member_page_layout.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Esqueleto da página da pessoa: migalhas, quadrado da foto e barras do
-/// rótulo, do nome e de três linhas de texto, no mesmo layout. Parado.
 class MemberPageSkeleton extends StatelessWidget {
   const MemberPageSkeleton({super.key});
 

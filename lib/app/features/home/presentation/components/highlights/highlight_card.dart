@@ -7,19 +7,11 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/select_highlights.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Cartão de destaque da Home (spec 005).
-///
-/// A foto preenche o cartão (recortada, sem distorcer). Só na parte de baixo,
-/// atrás do texto, um degradê escuro garante contraste mesmo sobre foto branca.
-/// O cartão inteiro é um link para a página do post; o leitor de tela ouve
-/// "Título. Tipo, Área. data" e ignora a foto.
 class HighlightCard extends StatefulWidget {
   const HighlightCard({super.key, required this.post, this.isMain = false});
 
-  /// Post completo (com `body`, `id` e área), já filtrado por [selectHighlights].
   final PostModel post;
 
-  /// Cartão principal: título maior e data.
   final bool isMain;
 
   @override
@@ -54,14 +46,12 @@ class _HighlightCardState extends State<HighlightCard> {
       link: true,
       label: _semanticLabel,
       linkUrl: Uri.parse(highlightPath(_post)),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o cartão.
       onTap: _open,
       excludeSemantics: true,
       child: compact ? _buildCompact(context) : _buildOverlay(context),
     );
   }
 
-  /// Secundário no celular: miniatura à esquerda e texto escuro sobre a página.
   Widget _buildCompact(BuildContext context) {
     final colors = AppTheme.colors;
     final components = AppTheme.dimensions.components;
@@ -154,12 +144,10 @@ class _HighlightCardState extends State<HighlightCard> {
                     children: [
                       Flexible(
                         child: Stack(
-                          // Mantém a largura toda do cartão para o bloco de texto.
                           fit: StackFit.passthrough,
                           clipBehavior: Clip.none,
                           children: [
                             _textBlock(context),
-                            // Desenhada acima do texto, sem tirar altura dele.
                             Positioned(
                               left: 0,
                               right: 0,
@@ -226,7 +214,7 @@ class _HighlightCardState extends State<HighlightCard> {
                         ? textScaler.scale(titleStyle.fontSize!) * components.featuredTitleMaxWidthEm
                         : double.infinity,
                   ),
-                  // Com pouco espaço (texto ampliado), corta em menos linhas, com reticências.
+                  // Com texto ampliado, corta em menos linhas em vez de vazar.
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final lineHeight = textScaler.scale(titleStyle.fontSize!) * titleStyle.height!;
@@ -260,8 +248,6 @@ class _HighlightCardState extends State<HighlightCard> {
   }
 }
 
-/// Faixa acima do texto em que o véu escuro esmaece até sumir. A parte de
-/// cima da foto fica limpa.
 class _ScrimFade extends StatelessWidget {
   const _ScrimFade();
 
@@ -285,9 +271,6 @@ class _ScrimFade extends StatelessWidget {
   }
 }
 
-/// Foto do post em `cover`. Sem URL, carregando ou com falha: fica o fundo
-/// escuro do cartão (sem salto de layout); sem URL ou com falha, também o
-/// ícone de imagem no canto. Decorativa para o leitor de tela.
 class _HighlightImage extends StatelessWidget {
   const _HighlightImage({required this.url, this.compact = false});
 
@@ -322,7 +305,6 @@ class _HighlightImage extends StatelessWidget {
 class _NoImage extends StatelessWidget {
   const _NoImage({this.compact = false});
 
-  /// Na miniatura, o ícone fica no centro.
   final bool compact;
 
   @override

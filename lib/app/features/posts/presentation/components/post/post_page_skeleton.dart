@@ -4,8 +4,6 @@ import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/article_body.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Esqueleto do post no formato do artigo: migalhas, título, subtítulo,
-/// autoria, capa 21:9 e linhas de texto na coluna. Parado.
 class PostPageSkeleton extends StatelessWidget {
   const PostPageSkeleton({super.key});
 

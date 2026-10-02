@@ -10,8 +10,6 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Rodapé escuro do site: marca, endereço e redes; links de navegação;
-/// contato. 4 colunas no desktop, 2 no tablet e 1 no celular.
 class Footer extends StatelessWidget {
   const Footer({super.key});
 
@@ -46,8 +44,7 @@ class Footer extends StatelessWidget {
       Breakpoint.desktop => Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Explorar e Institucional ocupam só a largura dos links; marca e
-            // contato dividem o resto, para o endereço e o e-mail não quebrarem.
+            // Marca e contato dividem a sobra, para o endereço e o e-mail não quebrarem.
             Expanded(flex: 4, child: columns[0]),
             SizedBox(width: gap),
             columns[1],
@@ -57,7 +54,7 @@ class Footer extends StatelessWidget {
             Expanded(flex: 3, child: columns[3]),
           ],
         ),
-      // Sem LayoutBuilder: páginas que prendem o rodapé na base medem a altura intrínseca dele.
+      // Sem LayoutBuilder: algumas páginas medem a altura do rodapé para prendê-lo na base.
       Breakpoint.tablet => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -142,7 +139,6 @@ class _FooterLinkData {
 
   final String label;
 
-  /// Rota do site ou endereço `mailto:`/`tel:`.
   final String url;
 }
 
@@ -200,7 +196,6 @@ class _FooterLinkState extends State<_FooterLink> {
       link: true,
       label: widget.label,
       linkUrl: Uri.parse(widget.url),
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o link.
       onTap: _open,
       excludeSemantics: true,
       child: AppFocusRing(

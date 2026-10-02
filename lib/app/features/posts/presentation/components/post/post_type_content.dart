@@ -23,9 +23,7 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/components
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/podcast_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/search_content.dart';
 
-/// Ponto único que escolhe o conteúdo do post pelo tipo. O artigo usa o
-/// layout-base (spec 012); os outros tipos, o bloco antigo, até a Fase 5
-/// trocar cada um pelo layout-base com o bloco do tipo.
+/// Só o artigo usa o layout novo; os demais tipos ainda mostram o conteúdo antigo.
 class PostTypeContent extends StatelessWidget {
   const PostTypeContent({
     super.key,

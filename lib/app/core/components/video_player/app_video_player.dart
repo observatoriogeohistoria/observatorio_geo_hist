@@ -28,34 +28,22 @@ class AppVideoPlayer extends StatefulWidget {
   final bool startPlaying;
   final bool startMuted;
 
-  // Ajustes opcionais (spec 006). Sem eles, o player funciona como sempre.
-
-  /// Chamado quando o vídeo fica pronto para tocar.
   final VoidCallback? onInitialized;
 
-  /// Chamado se o vídeo não carregar ou der erro durante a reprodução. Quando
-  /// informado, o player também acompanha o estado real do vídeo (por
-  /// exemplo, mostra "Reproduzir vídeo" quando ele termina).
+  /// Quando informado, o player também acompanha o estado real do vídeo.
   final VoidCallback? onError;
 
-  /// Mostrado no lugar do indicador de carregamento padrão.
   final Widget? loadingPlaceholder;
 
-  /// Avaliada quando o vídeo fica pronto: se devolver `true`, começa a tocar;
-  /// senão, fica pausado e pronto.
+  /// Avaliada quando o vídeo fica pronto: `true` começa a tocar; senão, fica pausado.
   final bool Function()? shouldStartPlaying;
 
-  /// Chamado, no lugar de [onError], se o navegador recusar o início
-  /// automático pedido por [shouldStartPlaying] (por exemplo, som bloqueado).
-  /// O controller fica inutilizável depois disso: quem usa deve montar um
-  /// player novo, sem início automático.
+  /// Chamado no lugar de [onError] se o navegador recusar tocar sozinho. Depois disso
+  /// o controller fica inutilizável: quem usa deve montar um player novo.
   final VoidCallback? onAutoplayBlocked;
 
-  /// Leva o foco do teclado ao botão de reproduzir/pausar quando o vídeo fica pronto.
   final bool autofocusControls;
 
-  /// Desenha um véu escuro atrás dos controles, para ficarem legíveis sobre
-  /// qualquer imagem.
   final bool showControlsScrim;
 
   @override
@@ -74,11 +62,9 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
 
   final FocusNode _playPauseFocus = FocusNode(debugLabel: 'Reproduzir ou pausar vídeo');
 
-  /// Só acompanha o estado do controller quando quem usa quer saber de erros.
   bool get _followsController => widget.onError != null || widget.onAutoplayBlocked != null;
 
-  /// O início automático foi pedido e o vídeo ainda não avançou: um erro
-  /// nesse intervalo é o navegador recusando a reprodução.
+  /// Um erro antes de o vídeo avançar é o navegador recusando tocar sozinho.
   bool _autoStartPending = false;
 
   @override
@@ -117,7 +103,6 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     widget.onInitialized?.call();
 
     if (widget.autofocusControls) {
-      // Depois do quadro, quando os controles já estão na tela.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _playPauseFocus.requestFocus();
       });
@@ -166,9 +151,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
             child: Stack(
               children: [
                 VideoPlayer(_controller),
-                // Tocar em qualquer ponto do vídeo reproduz ou pausa; teclado e
-                // leitor de tela usam o botão próprio. Fica por cima do vídeo
-                // porque, na web, o elemento do vídeo ficaria com o toque.
+                // Por cima do vídeo porque, na web, o elemento de vídeo ficaria com o toque.
                 Positioned.fill(
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
@@ -183,7 +166,6 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    // Com o véu, afasta os botões da borda: o contorno de foco não é cortado.
                     padding: widget.showControlsScrim
                         ? EdgeInsets.only(
                             left: AppTheme.dimensions.components.videoControlsInset,
@@ -233,8 +215,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   void _togglePlayPause() {
     if (!mounted) return;
     setState(() {
-      // O estado muda antes da chamada: o controller avisa os ouvintes ainda
-      // dentro de `play()`/`pause()`.
+      // Muda antes da chamada: o controller avisa os ouvintes ainda dentro de `play()`/`pause()`.
       _isPlaying = !_isPlaying;
       _isPlaying ? _controller.play() : _controller.pause();
     });
@@ -249,8 +230,6 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   }
 }
 
-/// Véu escuro na base do vídeo, atrás dos controles: transparente no topo e
-/// com opacidade cheia na faixa dos botões.
 class _ControlsScrim extends StatelessWidget {
   const _ControlsScrim();
 

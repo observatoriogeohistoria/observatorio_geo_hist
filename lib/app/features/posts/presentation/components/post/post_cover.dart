@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Capa do post (`.banner` da aba "Post"): 21:9 com recorte centralizado,
-/// legenda opcional abaixo e placeholder na falha.
 class PostCover extends StatelessWidget {
   const PostCover({super.key, required this.imageUrl, this.caption});
 
@@ -44,8 +42,6 @@ class PostCover extends StatelessWidget {
   }
 }
 
-/// Fundo laranja suave com ícone de imagem, decorativo, para imagem ausente
-/// ou com falha. Ocupa o espaço que recebe.
 class PostImagePlaceholder extends StatelessWidget {
   const PostImagePlaceholder({super.key});
 

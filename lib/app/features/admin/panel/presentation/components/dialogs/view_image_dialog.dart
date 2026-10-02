@@ -42,9 +42,6 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
       child: Stack(
         children: [
           _buildMediaContent(isVideo),
-          // SingleChildScrollView(
-          //   child: _buildMediaContent(isVideo),
-          // ),
           Positioned(
             top: 0,
             right: 0,

@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Foto quadrada da página da pessoa (`.portrait`). As iniciais ficam por
-/// baixo: aparecem enquanto a foto carrega, quando não há foto ou quando ela
-/// falha, sem mudar o tamanho.
 class MemberPortrait extends StatelessWidget {
   const MemberPortrait({super.key, required this.name, this.imageUrl});
 

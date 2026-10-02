@@ -8,8 +8,6 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/our_history/milestone_badge.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Resumo de Nossa história na Home (spec 007), com link para a página
-/// completa. Estático, aparece junto com a página.
 class OurHistorySummarySection extends StatelessWidget {
   const OurHistorySummarySection({super.key});
 

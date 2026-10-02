@@ -2,15 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Disposição do cartão de atalho: em linha (ícone, textos, seta) ou com o
-/// ícone acima do título e da descrição (tablet).
 enum HeroShortcutLayout { horizontal, vertical }
 
-/// Cartão de atalho do hero (História, Geografia, Biblioteca).
-///
-/// No hover ganha borda laranja, sobe 2 px e ganha sombra suave; com
-/// movimento reduzido, só muda borda e sombra, sem subida nem transição.
-/// Ícone e seta são decorativos: o leitor de tela lê o [semanticLabel].
 class HeroShortcutCard extends StatefulWidget {
   const HeroShortcutCard({
     super.key,
@@ -28,15 +21,12 @@ class HeroShortcutCard extends StatefulWidget {
   final String title;
   final String description;
 
-  /// Nome acessível completo (título, descrição e o que acontece ao ativar).
   final String semanticLabel;
   final VoidCallback onTap;
 
-  /// Página de destino: com ela, o cartão é lido como link; sem ela, como botão.
   final String? url;
   final HeroShortcutLayout layout;
 
-  /// Para devolver o foco ao cartão depois de fechar uma janela aberta por ele.
   final FocusNode? focusNode;
 
   @override
@@ -61,12 +51,10 @@ class _HeroShortcutCardState extends State<HeroShortcutCard> {
       link: widget.url != null,
       linkUrl: widget.url == null ? null : Uri.parse(widget.url!),
       label: widget.semanticLabel,
-      // Repete a ação do InkWell (excluído da semântica) para o leitor de tela ativar o cartão.
       onTap: widget.onTap,
       excludeSemantics: true,
       child: AppFocusRing(
         borderRadius: radius,
-        // Mantém a altura imposta pela linha de cartões (todos da mesma altura).
         fit: StackFit.passthrough,
         child: AnimatedContainer(
           duration: reduceMotion ? Duration.zero : components.shortcutAnimation,
@@ -143,7 +131,6 @@ class _HeroShortcutCardState extends State<HeroShortcutCard> {
   }
 }
 
-/// Quadro laranja suave com o ícone da área.
 class _IconBox extends StatelessWidget {
   const _IconBox({required this.icon});
 
