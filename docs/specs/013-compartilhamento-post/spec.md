@@ -1,6 +1,6 @@
 # 013. Compartilhamento ampliado do post
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 2: P-06
 - **Protótipo:** aba "Post", linha de autoria (botões "Desktop" e "Celular") (link no CLAUDE.md)
 - **Criada em:** 2026-10-01
@@ -30,7 +30,7 @@ Quem lê um artigo consegue copiar o link ou enviá-lo por WhatsApp, Facebook, X
 | Compartilhar (do aparelho) | Abre a folha de compartilhamento do sistema com título e link (só celular, só quando o navegador oferece) |
 
 - O link compartilhado é o endereço atual do post (como hoje); o título vai codificado.
-- Ícones no traço do protótipo (contorno), na cor secundária; ao passar o mouse, laranja sobre fundo laranja suave. Os PNGs antigos deixam de ser usados no artigo.
+- Ícones no traço do protótipo (contorno), na cor secundária; ao passar o mouse, laranja escuro (`accentStrong`, para manter 4,5:1) sobre fundo laranja suave. Os PNGs antigos deixam de ser usados no artigo.
 
 ### Tablet e desktop (≥ 600 px)
 Na linha de autoria, à direita do autor (abaixo dele se não couber): rótulo "COMPARTILHAR" (pequeno, caixa alta, cor secundária), os seis ícones na ordem WhatsApp, Facebook, X, LinkedIn, Telegram, E-mail, e o botão secundário pequeno "Copiar link" com ícone de corrente. Sem botão nativo.
@@ -111,3 +111,4 @@ Continuam **sem** compartilhar nesta spec. O componente fica pronto para a Fase 
 - 2026-10-01: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-01: ajustes na implementação (modo autônomo). Texto de falha no botão passa a "Erro ao copiar" (o anúncio mantém a frase completa, "Não foi possível copiar o link"), porque a largura reservada para "Não foi possível copiar" deixava o botão com ~200 px e jogava o compartilhar para baixo do autor mesmo com nome curto. No celular, a linha deixa de ser "uma só": com o botão nativo, "Compartilhar" + "Copiar link" já ocupam os 350 px úteis de 390, e WhatsApp e "Mais" quebram para a linha seguinte.
 - 2026-10-01: implementada. Conferência em build `APP_ENV=prod` só leitura.
+- 2026-10-01: verificada com ressalvas ([verificacao.md](verificacao.md)). Hover dos ícones em `accentStrong` (o `accent` sobre `accentSoft` dava 4,4:1); no celular, WhatsApp e "Mais" quebram juntos. Divergências da implementação aceitas no modo autônomo.
