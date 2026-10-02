@@ -385,15 +385,63 @@ class ComponentSizes {
   final double postNoteLabelGap = 6.0;
   final double postNoteIconGap = 8.0;
 
-  final double relatedCardMinWidth = 300.0;
-  final double relatedCardGapH = 28.0;
-  final double relatedCardGapV = 36.0;
-  final double relatedCardInnerGap = 14.0;
-  final double relatedThumbAspect = 16 / 10;
-  final double relatedThumbLift = 4.0;
-  final int relatedTitleMaxLines = 3;
-  final double relatedTitleGap = 4.0;
-  final Duration relatedAnimation = const Duration(milliseconds: 250);
+  final double postCardMinWidth = 300.0;
+  final int postCardMaxColumns = 3;
+  final double postCardGapH = 28.0;
+  final double postCardGapV = 36.0;
+  final double postCardInnerGap = 14.0;
+  final double postCardThumbAspect = 16 / 10;
+  final double postCardThumbLift = 4.0;
+  final int postCardTitleMaxLines = 3;
+  final int postCardSummaryMaxLines = 2;
+  final double postCardTitleGap = 4.0;
+  final Duration postCardAnimation = const Duration(milliseconds: 250);
+
+  final double postCardSkeletonLabelHeight = 14.0;
+  final double postCardSkeletonTitleHeight = 22.0;
+  final double postCardSkeletonLabelWidth = 0.3;
+  final double postCardSkeletonTitleWidth = 0.85;
+  final double postCardSkeletonMetaWidth = 0.55;
+
+  final double searchFieldHeight = 48.0;
+  final double searchFieldMinWidth = 320.0;
+  final double searchFieldMaxWidth = 520.0;
+  final double searchFieldIconInset = 14.0;
+  final double searchFieldPaddingStart = 44.0;
+  final double searchFieldPaddingEnd = 84.0;
+  final double searchFieldClearInset = 8.0;
+  final double searchFieldClearPaddingH = 10.0;
+  final double searchFieldClearPaddingV = 6.0;
+  final double searchFieldBorder = 1.5;
+  final double searchFieldFocusRing = 4.0;
+  final Duration searchDebounce = const Duration(milliseconds: 400);
+
+  final double chipPaddingH = 14.0;
+  final double chipPaddingV = 7.0;
+  final double chipGap = 8.0;
+  final double chipCountGap = 6.0;
+
+  final double listingToolbarPaddingTop = 24.0;
+  final double listingToolbarPaddingBottom = 8.0;
+  final double listingToolbarGap = 16.0;
+  final double listingCountPaddingTop = 4.0;
+  final double listingCountPaddingBottom = 20.0;
+  final double listingBlockPaddingTop = 20.0;
+  final double listingBlockPaddingBottom = 12.0;
+  final double listingBlockTitleGap = 20.0;
+  final double listingBlockCountGap = 10.0;
+  final double listingMorePaddingTop = 28.0;
+  final double listingMorePaddingBottom = 56.0;
+  final double listingMoreErrorGap = 12.0;
+  final double listingStatePaddingTop = 24.0;
+  final double listingStatePaddingBottom = 40.0;
+  final double listingBottomGap = 40.0;
+
+  final double pageHeadActionGap = 22.0;
+
+  final double pageHeadSkeletonCrumbsWidth = 0.3;
+  final double pageHeadSkeletonTitleWidth = 0.55;
+  final double pageHeadSkeletonLastLineWidth = 0.7;
 
   final double postPlaceholderIcon = 34.0;
 
@@ -418,7 +466,12 @@ class ComponentSizes {
   final double socialPillGap = 8.0;
   final double socialPillIcon = 18.0;
 
-  double _byBreakpoint(Breakpoint breakpoint, double mobile, double tablet, double desktop) {
+  double _byBreakpoint(
+    Breakpoint breakpoint,
+    double mobile,
+    double tablet,
+    double desktop,
+  ) {
     return switch (breakpoint) {
       Breakpoint.mobile => mobile,
       Breakpoint.tablet => tablet,
@@ -462,19 +515,11 @@ class ShadowStyle {
   const ShadowStyle._();
 
   List<BoxShadow> get soft => const [
-        BoxShadow(
-          color: Color(0x141F1B18),
-          blurRadius: 26,
-          offset: Offset(0, 10),
-        ),
+        BoxShadow(color: Color(0x141F1B18), blurRadius: 26, offset: Offset(0, 10)),
       ];
 
   List<BoxShadow> get elevated => const [
-        BoxShadow(
-          color: Color(0x241F1B18),
-          blurRadius: 36,
-          offset: Offset(0, 14),
-        ),
+        BoxShadow(color: Color(0x241F1B18), blurRadius: 36, offset: Offset(0, 14)),
       ];
 
   /// Animar até uma lista vazia mostra a sombra nítida por um instante; com cor

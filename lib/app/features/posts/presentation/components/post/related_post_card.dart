@@ -8,7 +8,11 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/components
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class RelatedPostCard extends StatefulWidget {
-  const RelatedPostCard({super.key, required this.article, required this.route});
+  const RelatedPostCard({
+    super.key,
+    required this.article,
+    required this.route,
+  });
 
   final ArticleModel article;
   final String route;
@@ -30,7 +34,7 @@ class _RelatedPostCardState extends State<RelatedPostCard> {
     final styles = AppTheme.typography.of(context);
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r14);
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
-    final duration = reduceMotion ? Duration.zero : components.relatedAnimation;
+    final duration = reduceMotion ? Duration.zero : components.postCardAnimation;
 
     final title = widget.article.title.trim();
     final imageUrl = widget.article.image.url?.trim() ?? '';
@@ -63,7 +67,7 @@ class _RelatedPostCardState extends State<RelatedPostCard> {
                   duration: duration,
                   transform: Matrix4.translationValues(
                     0,
-                    _hovered && !reduceMotion ? -components.relatedThumbLift : 0,
+                    _hovered && !reduceMotion ? -components.postCardThumbLift : 0,
                     0,
                   ),
                   decoration: BoxDecoration(
@@ -73,7 +77,7 @@ class _RelatedPostCardState extends State<RelatedPostCard> {
                   child: ClipRRect(
                     borderRadius: radius,
                     child: AspectRatio(
-                      aspectRatio: components.relatedThumbAspect,
+                      aspectRatio: components.postCardThumbAspect,
                       child: ColoredBox(
                         color: colors.surface,
                         child: imageUrl.isEmpty
@@ -89,19 +93,29 @@ class _RelatedPostCardState extends State<RelatedPostCard> {
                     ),
                   ),
                 ),
-                SizedBox(height: components.relatedCardInnerGap),
-                Text('ARTIGO', style: styles.label.copyWith(color: colors.accentStrong)),
-                SizedBox(height: components.relatedTitleGap),
+                SizedBox(height: components.postCardInnerGap),
+                Text(
+                  'ARTIGO',
+                  style: styles.label.copyWith(color: colors.accentStrong),
+                ),
+                SizedBox(height: components.postCardTitleGap),
                 AnimatedDefaultTextStyle(
                   duration: duration,
-                  style: styles.relatedCardTitle
-                      .copyWith(color: _hovered ? colors.accent : colors.ink),
-                  child: Text(title,
-                      maxLines: components.relatedTitleMaxLines, overflow: TextOverflow.ellipsis),
+                  style: styles.postCardTitle.copyWith(
+                    color: _hovered ? colors.accent : colors.ink,
+                  ),
+                  child: Text(
+                    title,
+                    maxLines: components.postCardTitleMaxLines,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 if (meta.isNotEmpty) ...[
-                  SizedBox(height: components.relatedCardInnerGap),
-                  Text(meta, style: styles.small.copyWith(color: colors.inkSecondary)),
+                  SizedBox(height: components.postCardInnerGap),
+                  Text(
+                    meta,
+                    style: styles.small.copyWith(color: colors.inkSecondary),
+                  ),
                 ],
               ],
             ),

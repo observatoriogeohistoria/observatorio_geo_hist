@@ -1,123 +1,139 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/image/app_network_image.dart';
-import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
+import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/card/post_card_info.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_cover.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostCard extends StatefulWidget {
   const PostCard({
-    required this.category,
-    required this.post,
-    required this.index,
-    required this.backgroundColor,
-    required this.borderColor,
     super.key,
+    required this.post,
+    required this.route,
+    this.showSummary = true,
   });
 
-  final CategoryModel category;
   final PostModel post;
-  final int index;
-
-  final Color backgroundColor;
-  final Color borderColor;
+  final String route;
+  final bool showSummary;
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
-  bool _isHovered = false;
+  bool _hovered = false;
 
-  bool get _isMobile => ScreenUtils.isMobile(context);
+  void _open() => GoRouter.of(context).go(widget.route);
 
   @override
   Widget build(BuildContext context) {
-    BorderSide border = BorderSide(color: widget.borderColor);
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final shadows = AppTheme.dimensions.shadows;
+    final styles = AppTheme.typography.of(context);
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r14);
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final duration = reduceMotion ? Duration.zero : components.postCardAnimation;
 
-    return AppMouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        transform: _isHovered
-            ? (Matrix4.identity()..scaleByDouble(1.02, 1.02, 1.02, 1.0))
-            : Matrix4.identity(),
-        padding: EdgeInsets.all(AppTheme.dimensions.space.medium.horizontalSpacing),
-        decoration: BoxDecoration(
-          color: _isHovered ? widget.backgroundColor : null,
-          borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.large),
-          border: _isHovered
-              ? Border(
-                  top: border,
-                  left: border,
-                  right: border,
-                  bottom: border.copyWith(width: AppTheme.dimensions.stroke.huge),
-                )
-              : null,
-        ),
-        child: GestureDetector(
-          onTap: () {
-            GoRouter.of(context).go(AppRoutes.post(
-                widget.category.areas.first.key, widget.category.key, widget.post.id!));
-          },
-          child: Column(
-            children: [
-              if (widget.post.body?.image.url?.isNotEmpty ?? false)
-                AppNetworkImage(
-                  imageUrl: widget.post.body!.image.url!,
-                  radius: 0,
-                  fit: BoxFit.contain,
-                  noPlaceholder: true,
-                ),
-              SizedBox(height: AppTheme.dimensions.space.large),
-              SizedBox(
-                width: double.maxFinite,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (widget.post.body?.title.isNotEmpty ?? false)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                        child: AppTitle.big(
-                          text: widget.post.body!.title,
-                          textAlign: _isMobile ? TextAlign.center : TextAlign.start,
-                          notSelectable: true,
-                          color: _isHovered ? AppTheme.colors.orange : AppTheme.colors.darkGray,
-                        ),
+    final info = postCardInfo(widget.post);
+    final summary = widget.showSummary ? info.summary : '';
+
+    return Semantics(
+      link: true,
+      label: [
+        info.title,
+        widget.post.type.portuguese,
+        if (info.meta.isNotEmpty) info.meta,
+      ].join(', '),
+      linkUrl: Uri.parse(widget.route),
+      onTap: _open,
+      excludeSemantics: true,
+      child: AppFocusRing(
+        borderRadius: radius,
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: _open,
+            onHover: (value) => setState(() => _hovered = value),
+            borderRadius: radius,
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+            mouseCursor: SystemMouseCursors.click,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AnimatedContainer(
+                  duration: duration,
+                  transform: Matrix4.translationValues(
+                    0,
+                    _hovered && !reduceMotion ? -components.postCardThumbLift : 0,
+                    0,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: radius,
+                    boxShadow: _hovered ? shadows.elevated : shadows.hidden(shadows.elevated),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: radius,
+                    child: AspectRatio(
+                      aspectRatio: components.postCardThumbAspect,
+                      child: ColoredBox(
+                        color: colors.surface,
+                        child: info.imageUrl.isEmpty
+                            ? const PostImagePlaceholder()
+                            : Image.network(
+                                info.imageUrl,
+                                fit: BoxFit.cover,
+                                excludeFromSemantics: true,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const PostImagePlaceholder(),
+                              ),
                       ),
-                    SizedBox(height: AppTheme.dimensions.space.small),
-                    if (_subtitle.isNotEmpty)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
-                        child: AppBody.medium(
-                          text: _subtitle,
-                          textAlign: _isMobile ? TextAlign.center : TextAlign.start,
-                          notSelectable: true,
-                          color: AppTheme.colors.gray,
-                        ),
-                      ),
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(height: components.postCardInnerGap),
+                Text(
+                  info.label,
+                  style: styles.label.copyWith(color: colors.accentStrong),
+                ),
+                SizedBox(height: components.postCardTitleGap),
+                AnimatedDefaultTextStyle(
+                  duration: duration,
+                  style: styles.postCardTitle.copyWith(
+                    color: _hovered ? colors.accent : colors.ink,
+                  ),
+                  child: Text(
+                    info.title,
+                    maxLines: components.postCardTitleMaxLines,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (summary.isNotEmpty) ...[
+                  SizedBox(height: components.postCardInnerGap),
+                  Text(
+                    summary,
+                    maxLines: components.postCardSummaryMaxLines,
+                    overflow: TextOverflow.ellipsis,
+                    style: styles.postCardSummary.copyWith(
+                      color: colors.inkSecondary,
+                    ),
+                  ),
+                ],
+                if (info.meta.isNotEmpty) ...[
+                  SizedBox(height: components.postCardInnerGap),
+                  Text(
+                    info.meta,
+                    style: styles.small.copyWith(color: colors.inkSecondary),
+                  ),
+                ],
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-  String get _subtitle {
-    if (widget.post.type == PostType.article) return (widget.post.body as ArticleModel).subtitle;
-
-    return '';
   }
 }

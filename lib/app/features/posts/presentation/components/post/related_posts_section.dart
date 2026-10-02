@@ -79,13 +79,11 @@ class RelatedPostsSection extends StatelessWidget {
             SizedBox(height: components.sectionHeadGap),
             LayoutBuilder(
               builder: (context, constraints) {
-                final gap = components.relatedCardGapH;
+                final gap = components.postCardGapH;
                 final columns = math.min(
                   maxColumns,
-                  math.max(
-                      1,
-                      ((constraints.maxWidth + gap) / (components.relatedCardMinWidth + gap))
-                          .floor()),
+                  math.max(1,
+                      ((constraints.maxWidth + gap) / (components.postCardMinWidth + gap)).floor()),
                 );
                 final rows = (articles.length / columns).ceil();
 
@@ -93,7 +91,7 @@ class RelatedPostsSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     for (var row = 0; row < rows; row++) ...[
-                      if (row > 0) SizedBox(height: components.relatedCardGapV),
+                      if (row > 0) SizedBox(height: components.postCardGapV),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

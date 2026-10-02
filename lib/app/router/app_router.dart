@@ -61,13 +61,11 @@ class AppRouter {
               final area = state.pathParameters['area'];
               final categoryKey = state.pathParameters['category'];
 
-              final invalidRoute = area == null || categoryKey == null;
+              final postsArea = area == null ? null : PostsAreas.tryFromKey(area);
+              final invalidRoute = postsArea == null || categoryKey == null;
               if (invalidRoute) return const PageNotFound();
 
-              return PostsPage(
-                area: PostsAreas.fromKey(area),
-                categoryKey: categoryKey,
-              );
+              return PostsPage(area: postsArea, categoryKey: categoryKey);
             },
           ),
           GoRoute(
@@ -121,7 +119,9 @@ class AppRouter {
           GoRoute(
             path: AppRoutes.libraryAreaPattern,
             builder: (BuildContext context, GoRouterState state) {
-              final area = DocumentArea.fromRouteKey(state.pathParameters['area']);
+              final area = DocumentArea.fromRouteKey(
+                state.pathParameters['area'],
+              );
 
               final invalidRoute = area == null;
               if (invalidRoute) return const PageNotFound();
@@ -176,8 +176,9 @@ class AppRouter {
         path: AppRoutes.panelTabPattern,
         builder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
-          final postType =
-              PostType.fromString(state.uri.queryParameters[AppRoutes.panelPostTypeParam]);
+          final postType = PostType.fromString(
+            state.uri.queryParameters[AppRoutes.panelPostTypeParam],
+          );
 
           final invalidRoute = tab == null;
           if (invalidRoute) return const PageNotFound();
