@@ -23,10 +23,17 @@ fvm flutter pub get
 fvm flutter run -d chrome
 fvm flutter analyze
 fvm dart run build_runner build --delete-conflicting-outputs   # após mudar stores MobX ou modelos com Freezed
+fvm dart format <arquivos .dart alterados>                     # antes de cada commit; largura 100, em analysis_options.yaml
 fvm flutter build web --release
 ```
 
 Os arquivos gerados (`*.g.dart`, `*.freezed.dart`) ficam no repositório. Ainda não existe pasta `test/`.
+
+**Formatação:** todo `.dart` alterado passa pelo `dart format` antes do commit (largura 100, a mesma do VS Code). Arquivos gerados ficam de fora: o `build_runner` os recria. Para conferir o projeto inteiro:
+
+```sh
+find lib -name '*.dart' ! -name '*.g.dart' ! -name '*.freezed.dart' -print0 | xargs -0 fvm dart format --output=none --set-exit-if-changed
+```
 
 ## Cuidados com o git
 - **Push na `main` publica o site** e push na `develop` publica o dev (GitHub Actions, por FTP). Nunca faça push sem pedido explícito. Detalhes em [docs/deploy-ambientes.md](docs/deploy-ambientes.md).

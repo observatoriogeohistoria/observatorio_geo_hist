@@ -48,7 +48,7 @@ O histórico deve contar a história da fase: cada commit é uma entrega que dá
 | `fix:` | correções da verificação. Agrupe as pequenas num só; separe só a que for relevante por si |
 | `docs: verificação da NNN` | `verificacao.md`, status, planejamento e arquivo de execução |
 
-Mensagens `tipo: descrição` em português, dizendo o que muda para quem usa o site. Corpo curto quando o título não basta. Terminar com a linha de coautoria definida pelo ambiente. Nunca `git add -A` às cegas: adicione os arquivos da entrega.
+Antes de cada commit, `fvm dart format` nos `.dart` alterados (não nos gerados). Mensagens `tipo: descrição` em português, dizendo o que muda para quem usa o site. Corpo curto quando o título não basta. Terminar com a linha de coautoria definida pelo ambiente. Nunca `git add -A` às cegas: adicione os arquivos da entrega.
 
 ## 1. Ciclo por spec (em ordem, uma de cada vez)
 Specs da mesma fase costumam mexer na mesma página: **não rode em paralelo**. Para cada spec, dispare **três sessões novas** com a ferramenta `Agent` (`subagent_type: general-purpose`, `run_in_background: false`), uma por etapa. Cada prompt deve ser autossuficiente: caminho do projeto, número da spec, o bloco "Regras do modo autônomo" abaixo (copiado inteiro) e o que devolver. Não repasse conteúdo de arquivos; passe caminhos.

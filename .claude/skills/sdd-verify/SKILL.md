@@ -14,7 +14,7 @@ Confere o resultado com evidência, critério por critério. **Não corrige** o 
 3. Se restarem tarefas `- [ ]`, avise: a verificação será parcial.
 
 ## O que conferir
-1. **Análise estática:** `fvm flutter analyze` sem avisos novos.
+1. **Análise estática e formatação:** `fvm flutter analyze` sem avisos novos e o projeto formatado (comando de conferência no `CLAUDE.md`, seção Comandos). Se houver arquivo fora do formato, formate-o.
 2. **Compilação:** `fvm flutter build web --release` conclui sem erro (use quando a spec mexe em rotas, assets ou dependências; caso contrário, o `analyze` basta).
 3. **Cada critério de aceite** da spec: marque `passou`, `não passou` ou `não conferido`, com a evidência (arquivo e linha, saída de comando ou o que foi visto na tela). Não escreva "passou" sem ter verificado.
 4. **Telas:** rode o app (skill `run`, ou `fvm flutter run -d chrome`) e olhe em 390, 768 e 1280 px, comparando com a aba do protótipo. Confira estados de carregamento, vazio, erro e sem imagem. Abra ao menos uma vez em modo debug (`flutter run`): o build release esconde asserções de layout. Se não for possível abrir o app, diga isso e marque os critérios visuais como `não conferido`.
