@@ -62,7 +62,7 @@ O enum `SidebarItem` define as abas e a URL `/admin/painel/:tab`:
 
 A listagem de posts usa `collectionGroup('category_posts')`, com filtros por tipo, área e categoria, e paginação por `startAfterDocument`. A busca por título usa um intervalo sobre `body.title_lower`.
 
-**Storage**: bucket `gs://observatorio-geo-hist.firebasestorage.app`, arquivos em `media/{nome}_{id}.{extensão}`. `MediaDatasource.getMedias` lista 20 por vez (`ListOptions`) e devolve `PaginatedMedias` (`medias`, `nextPageToken`). O preview usa a URL, sem baixar os bytes. A imagem é enviada antes de salvar o post que a referencia. O [cors.json](../cors.json) define o CORS do bucket.
+**Storage**: bucket do projeto do ambiente (só produção tem Storage habilitado; ver [deploy-ambientes.md](deploy-ambientes.md)), arquivos em `media/{nome}_{id}.{extensão}`. `MediaDatasource.getMedias` lista 20 por vez (`ListOptions`) e devolve `PaginatedMedias` (`medias`, `nextPageToken`). O preview usa a URL, sem baixar os bytes. A imagem é enviada antes de salvar o post que a referencia. O [cors.json](../cors.json) define o CORS do bucket.
 
 ## 4. CRUD
 

@@ -67,7 +67,7 @@ class _CreateMediaDialogState extends State<CreateMediaDialog> {
             isDisabled: true,
           ),
           SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          if (!AppEnvironment.current.isProd)
+          if (!AppEnvironment.current.hasStorage)
             AppLabel.small(
               text: 'Upload desabilitado no ambiente de testes (sem Storage configurado).',
               color: AppTheme.colors.accentStrong,

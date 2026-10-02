@@ -93,7 +93,7 @@ class _AppDocumentFieldState extends State<AppDocumentField> with SingleTickerPr
                 hintText: 'https://',
                 validator: Validators.isValidUrl,
               ),
-              if (!AppEnvironment.current.isProd)
+              if (!AppEnvironment.current.hasStorage)
                 AppLabel.small(
                   text: 'Upload desabilitado no ambiente de testes (sem Storage configurado). '
                       'Use a aba URL.',

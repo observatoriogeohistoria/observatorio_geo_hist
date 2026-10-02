@@ -93,52 +93,60 @@ class _PartnerLogoState extends State<PartnerLogo> {
     final duration = components.partnerAnimation;
     final shadows = AppTheme.dimensions.shadows;
 
-    return AnimatedContainer(
-      duration: duration,
-      constraints: BoxConstraints(minHeight: components.minTapTarget),
-      padding: EdgeInsets.all(
-        ScreenUtils.breakpointOf(context) == Breakpoint.mobile
-            ? components.partnerPaddingMobile
-            : components.partnerPadding,
-      ),
-      transform: Matrix4.translationValues(
-          0, active && !reduceMotion ? -components.partnerHoverLift : 0, 0),
-      decoration: BoxDecoration(
-        color: active ? colors.page : colors.page.withValues(alpha: 0),
-        borderRadius: radius,
-        border: Border.all(
-          color: active ? colors.line : colors.line.withValues(alpha: 0),
-          width: AppTheme.dimensions.stroke.small,
+    final logo = Image.asset(
+      _partner.assetPath,
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) => Center(
+        child: Text(
+          _partner.acronym,
+          textAlign: TextAlign.center,
+          style: AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary),
         ),
-        boxShadow: active ? shadows.soft : shadows.hidden(shadows.soft),
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: components.partnerLogoMaxWidth),
-          child: AspectRatio(
-            aspectRatio: components.partnerLogoAspectRatio,
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(end: active ? 1 : 0),
-              duration: duration,
-              builder: (context, t, child) => Opacity(
-                opacity: lerpDouble(components.partnerRestOpacity, 1, t)!,
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.matrix(_lerpMatrix(t)),
+    );
+
+    // Tudo sai de um só valor animado para, em repouso, não pintar sombra transparente nem
+    // abrir camadas extras de opacidade: os logos ficam em páginas longas e pesavam no scroll.
+    return RepaintBoundary(
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(end: active ? 1 : 0),
+        duration: duration,
+        child: logo,
+        builder: (context, t, logo) => Transform.translate(
+          offset: Offset(0, reduceMotion ? 0 : -components.partnerHoverLift * t),
+          child: Container(
+            constraints: BoxConstraints(minHeight: components.minTapTarget),
+            padding: EdgeInsets.all(
+              ScreenUtils.breakpointOf(context) == Breakpoint.mobile
+                  ? components.partnerPaddingMobile
+                  : components.partnerPadding,
+            ),
+            decoration: t == 0
+                ? null
+                : BoxDecoration(
+                    color: colors.page.withValues(alpha: t),
+                    borderRadius: radius,
+                    border: Border.all(
+                      color: colors.line.withValues(alpha: colors.line.a * t),
+                      width: AppTheme.dimensions.stroke.small,
+                    ),
+                    boxShadow: shadows.fade(shadows.soft, t),
+                  ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: components.partnerLogoMaxWidth),
+                child: AspectRatio(
+                  aspectRatio: components.partnerLogoAspectRatio,
                   child: Transform.scale(
                     scale: reduceMotion ? 1 : lerpDouble(1, components.partnerHoverScale, t)!,
-                    child: child,
-                  ),
-                ),
-              ),
-              child: Image.asset(
-                _partner.assetPath,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) => Center(
-                  child: Text(
-                    _partner.acronym,
-                    textAlign: TextAlign.center,
-                    style:
-                        AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary),
+                    child: t == 1
+                        ? logo
+                        : ColorFiltered(
+                            colorFilter: ColorFilter.matrix(
+                              _lerpMatrix(t, lerpDouble(components.partnerRestOpacity, 1, t)!),
+                            ),
+                            child: logo,
+                          ),
                   ),
                 ),
               ),
@@ -149,9 +157,11 @@ class _PartnerLogoState extends State<PartnerLogo> {
     );
   }
 
-  List<double> _lerpMatrix(double t) {
+  // A opacidade vai na própria matriz (linha do alfa) para não abrir mais uma camada.
+  List<double> _lerpMatrix(double t, double opacity) {
     return [
-      for (var i = 0; i < _identity.length; i++) lerpDouble(_grayscale[i], _identity[i], t)!,
+      for (var i = 0; i < _identity.length; i++)
+        lerpDouble(_grayscale[i], _identity[i], t)! * (i == 18 ? opacity : 1),
     ];
   }
 }

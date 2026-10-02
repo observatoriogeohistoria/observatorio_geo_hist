@@ -5,6 +5,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+import 'package:observatorio_geo_hist/app/core/components/image/fitted_network_image.dart';
 
 /// Ignora cores, fontes e tamanhos do editor, para não quebrar o contraste nem a escala de texto.
 class ReadingRichText extends StatefulWidget {
@@ -251,7 +252,7 @@ class _ReadingImage extends StatelessWidget {
 
     final Widget image = url.isEmpty
         ? const _ReadingImagePlaceholder()
-        : Image.network(
+        : FittedNetworkImage(
             url,
             width: double.infinity,
             fit: BoxFit.contain,

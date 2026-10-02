@@ -5,11 +5,19 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PageHeader extends StatelessWidget {
-  const PageHeader({super.key, required this.breadcrumbs, required this.title, this.lead});
+  const PageHeader({
+    super.key,
+    required this.breadcrumbs,
+    required this.title,
+    this.lead,
+    this.action,
+  });
 
   final List<BreadcrumbItem> breadcrumbs;
   final String title;
   final String? lead;
+
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +40,29 @@ class PageHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Align(alignment: Alignment.centerLeft, child: Breadcrumbs(items: breadcrumbs)),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Breadcrumbs(items: breadcrumbs),
+              ),
               SizedBox(height: components.pageHeadTitleGap),
               Semantics(
                 header: true,
                 headingLevel: 1,
-                child: Text(title, style: styles.h1.copyWith(color: colors.ink)),
+                child: Text(
+                  title,
+                  style: styles.h1.copyWith(color: colors.ink),
+                ),
               ),
               if (lead != null) ...[
                 SizedBox(height: components.pageHeadLeadGap),
-                Text(lead!, style: styles.lead.copyWith(color: colors.inkSecondary)),
+                Text(
+                  lead!,
+                  style: styles.lead.copyWith(color: colors.inkSecondary),
+                ),
+              ],
+              if (action != null) ...[
+                SizedBox(height: components.pageHeadActionGap),
+                Align(alignment: Alignment.centerLeft, child: action),
               ],
             ],
           ),

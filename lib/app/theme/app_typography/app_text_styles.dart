@@ -14,7 +14,11 @@ class AppTextStyles {
 
   static const List<String> _fallback = ['system-ui', 'Roboto', 'Arial'];
 
-  double _size({required double mobile, required double tablet, required double desktop}) {
+  double _size({
+    required double mobile,
+    required double tablet,
+    required double desktop,
+  }) {
     return switch (breakpoint) {
       Breakpoint.mobile => mobile,
       Breakpoint.tablet => tablet,
@@ -217,11 +221,30 @@ class AppTextStyles {
         letterSpacingEm: 0,
       );
 
-  TextStyle get relatedCardTitle => _display(
+  TextStyle get postCardTitle => _display(
         size: _size(mobile: 20, tablet: 20, desktop: 20),
         weight: FontWeight.w600,
         height: 1.2,
         letterSpacingEm: -0.02,
+      );
+
+  TextStyle get postCardSummary => _body(
+        size: _size(mobile: 15.5, tablet: 15.5, desktop: 15.5),
+        weight: FontWeight.w400,
+        height: 1.55,
+      );
+
+  TextStyle get listingBlockTitle => _display(
+        size: _size(mobile: 24, tablet: 24, desktop: 24),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get chip => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w600,
+        height: 1.2,
       );
 
   TextStyle get lead => _body(

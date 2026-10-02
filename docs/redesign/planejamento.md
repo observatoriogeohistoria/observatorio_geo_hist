@@ -75,7 +75,7 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 | T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos. Só o artigo foi feito; os outros 9 tipos ficam para a Fase 5 → specs/012-post-base (artigo concluído; parcial) |
 | T-09 | Busca | novo | **Ideia futura.** Desenhada no protótipo (aba "Busca (ideia)"), sem implementação planejada. Ver seção 9 |
 | T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento |
-| T-11 | Todas as publicações | `/publicacoes` (novo) | Mesma listagem da categoria (cards, busca, chips de tipo), sem o filtro de categoria, ordenada pela data de publicação e com paginação. Consulta `collectionGroup('category_posts')`; pode pedir índice novo no Firestore. Ao existir, entra o link "Ver todas as publicações" dos Destaques da Home (retirado na spec 005) |
+| T-11 | Todas as publicações | `/publicacoes` (novo) | Mesma listagem da categoria (cards, busca, chips de tipo), sem o filtro de categoria, ordenada pela data de publicação e com paginação. Consulta `collectionGroup('category_posts')`; pode pedir índice novo no Firestore. Ao existir, entra o link "Ver todas as publicações" dos Destaques da Home (retirado na spec 005) → specs/015-todas-publicacoes, concluído |
 
 ---
 
@@ -122,7 +122,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | Fase | Escopo | Motivo da posição |
 |---|---|---|
 | 2 | Leitura: layout-base do post (artigo primeiro), Manifesto, Nossa história, Pessoa da equipe | Compartilham o mesmo layout de leitura |
-| 3 | Listagem de categoria, todas as publicações (T-11) e cards de post | Maior volume de navegação |
+| 3 | Listagem de categoria, todas as publicações (T-11) e cards de post (cards e listagem da categoria → specs/014-listagem-categoria, concluído; T-11 → specs/015-todas-publicacoes, concluído) | Maior volume de navegação |
 | 4 | Biblioteca (índice, lista, detalhe, filtros) | Categorias e filtros já definidos |
 | 5 | Acabamento: Fale com a gente, Colabore, 404/erros e demais tipos de post | Antes ficava na fase 6 |
 | 6 | Reservada | Sem escopo definido |

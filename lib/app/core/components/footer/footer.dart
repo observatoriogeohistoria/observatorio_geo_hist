@@ -25,6 +25,7 @@ class Footer extends StatelessWidget {
       const _BrandColumn(),
       const _LinksColumn(title: 'Explorar', links: [
         _FooterLinkData('Sobre', AppRoutes.root),
+        _FooterLinkData('Publicações', AppRoutes.publications),
         _FooterLinkData('Biblioteca', AppRoutes.library),
       ]),
       const _LinksColumn(title: 'Institucional', links: [

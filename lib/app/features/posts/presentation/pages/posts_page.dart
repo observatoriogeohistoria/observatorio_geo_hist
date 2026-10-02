@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/error_content/empty_content.dart';
-import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
-import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
-import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_box.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/page_header.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/header/actions_header.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/header/category_header.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/posts_section_list.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/fetch_posts_store.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/fetch_posts_states.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/listing/category_page_skeleton.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/listing/posts_listing.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/posts_listing_store.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/posts_listing_states.dart';
+import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
+enum _CategoryState { loading, ready, notFound, error }
+
 class PostsPage extends StatefulWidget {
-  const PostsPage({
-    required this.area,
-    required this.categoryKey,
-    super.key,
-  });
+  const PostsPage({required this.area, required this.categoryKey, super.key});
 
   final PostsAreas area;
   final String categoryKey;
@@ -37,191 +35,146 @@ class PostsPage extends StatefulWidget {
 }
 
 class _PostsPageState extends State<PostsPage> {
-  late final _fetchCategoriesStore = PostsSetup.getIt<FetchCategoriesStore>();
-  late final _fetchPostsStore = PostsSetup.getIt<FetchPostsStore>();
+  late final _categoriesStore = PostsSetup.getIt<FetchCategoriesStore>();
+  late final _store = PostsSetup.getIt<PostsListingStore>();
+  late final ReactionDisposer _disposeReaction;
 
-  List<ReactionDisposer> _reactions = [];
+  bool _initializing = true;
+  _CategoryState _state = _CategoryState.loading;
+  CategoryModel? _category;
 
-  final _screenScrollController = ScrollController();
-  final _postsScrollController = ScrollController();
+  /// A navbar recarrega as categorias a cada página, e isso não deve recarregar a lista.
+  String? _requested;
 
-  final ValueNotifier<CategoryModel?> _categoryNotifier = ValueNotifier(null);
-
-  String? _searchText;
-  bool _error = false;
+  String get _address => '${widget.area.key}/${widget.categoryKey}';
 
   @override
   void initState() {
     super.initState();
-
-    _setupReactions();
-    updateCategory();
+    _disposeReaction = reaction((_) => _categoriesStore.state, (_) => _load());
+    _load();
+    _initializing = false;
   }
 
   @override
   void didUpdateWidget(covariant PostsPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    final isAreaChanged = oldWidget.area != widget.area;
-
-    updateCategory(isAreaChanged: isAreaChanged);
+    if (oldWidget.area != widget.area || oldWidget.categoryKey != widget.categoryKey) {
+      _requested = null;
+      _load();
+    }
   }
 
   @override
   void dispose() {
-    for (final disposer in _reactions) {
-      disposer();
-    }
-
-    _fetchCategoriesStore.setSelectedCategory(null);
-    _categoryNotifier.dispose();
-
+    _disposeReaction();
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.colors.white,
-      body: CustomScrollView(
-        controller: _screenScrollController,
-        slivers: [
-          const NavbarSliver(),
-          ValueListenableBuilder<CategoryModel?>(
-            valueListenable: _categoryNotifier,
-            builder: (context, category, child) {
-              if (_error) return const PageErrorContent(isSliver: true);
-              if (category == null) return const LoadingContent(isSliver: true);
-
-              return SliverToBoxAdapter(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CategoryHeader(category: category),
-                    _buildPostsSection(category),
-                  ],
-                ),
-              );
-            },
-          ),
-          const SliverFillRemaining(hasScrollBody: false, child: SizedBox.shrink()),
-          const SliverToBoxAdapter(child: Footer()),
-        ],
-      ),
+  void _load() {
+    final category = _categoriesStore.getCategoryByAreaAndKey(
+      widget.area,
+      widget.categoryKey,
     );
-  }
 
-  Widget _buildPostsSection(CategoryModel category) {
-    final isMobile = ScreenUtils.isMobile(context);
-
-    return Observer(
-      builder: (context) {
-        final state = _fetchPostsStore.state;
-        final isLoading = state is FetchPostsLoadingState;
-
-        if (isLoading && !state.isRefreshing) {
-          return Column(
-            children: [
-              SizedBox(height: AppTheme.dimensions.space.gigantic.verticalSpacing),
-              const LoadingContent(isSliver: false),
-            ],
-          );
-        }
-
-        final posts = _fetchPostsStore.postsByType;
-        final numberOfPostsTypes = _fetchCategoriesStore.selectedCategory?.postsTypes.length ?? 0;
-
-        return SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: isMobile
-                    ? AppTheme.dimensions.space.huge.verticalSpacing
-                    : AppTheme.dimensions.space.massive.verticalSpacing,
-              ),
-              ActionsHeader(
-                category: category,
-                searchText: _searchText,
-                onTextChanged: (text) {
-                  _searchText = text;
-                  fetchPosts();
-                },
-              ),
-              SizedBox(
-                height: isMobile
-                    ? AppTheme.dimensions.space.huge.verticalSpacing
-                    : AppTheme.dimensions.space.immense.verticalSpacing,
-              ),
-              if (isLoading) ...[
-                const Center(child: CircularLoading()),
-                SizedBox(height: AppTheme.dimensions.space.massive.verticalSpacing),
-              ] else if (posts.isEmpty) ...[
-                const Center(child: EmptyContent(isSliver: false)),
-                SizedBox(height: AppTheme.dimensions.space.massive.verticalSpacing),
-              ],
-              if (posts.isNotEmpty)
-                PostsSectionList(
-                  posts: posts,
-                  numberOfPostsTypes: numberOfPostsTypes,
-                  category: category,
-                  hasMorePosts: (type) => _fetchPostsStore.hasMore[type] ?? false,
-                  loadMorePosts: (type) => fetchPosts(postType: type),
-                  loadMorePostsIsDisabled: state is FetchPostsLoadingState && state.isRefreshing,
-                  scrollController: _postsScrollController,
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _setupReactions() {
-    _reactions = [
-      reaction((_) => _fetchCategoriesStore.selectedCategory, (_) {
-        updateCategory();
-      }),
-      reaction((_) => _fetchCategoriesStore.categories, (_) {
-        updateCategory();
-      }),
-      reaction((_) => _fetchCategoriesStore.state, (_) {
-        setState(() => _error = _fetchCategoriesStore.state is FetchCategoriesErrorState);
-      }),
-      reaction((_) => _fetchPostsStore.state, (_) {
-        setState(() => _error = _fetchPostsStore.state is FetchPostsErrorState);
-      }),
-    ];
-  }
-
-  void updateCategory({bool isAreaChanged = false}) {
-    final category = _fetchCategoriesStore.getCategoryByAreaAndKey(widget.area, widget.categoryKey);
-    if (category == null) return;
-
-    if (_categoryNotifier.value?.key != category.key || isAreaChanged) {
-      _categoryNotifier.value = category;
-
-      _fetchPostsStore.reset();
-      _fetchCategoriesStore.setSelectedCategory(category);
-
-      fetchPosts();
-    }
-  }
-
-  void fetchPosts({PostType? postType}) {
-    if (_categoryNotifier.value == null) return;
-
-    if (postType != null) {
-      _fetchPostsStore.fetchPostsByType(_categoryNotifier.value!, postType,
-          searchText: _searchText);
+    if (category != null) {
+      if (_requested == _address) return;
+      _requested = _address;
+      _categoriesStore.setSelectedCategory(category);
+      _store.load(PostsListingScope.ofCategory(category));
+      _setState(_CategoryState.ready, category);
       return;
     }
 
-    final postTypes = _categoryNotifier.value?.postsTypes ?? [];
-    for (final postType in postTypes) {
-      _fetchPostsStore.fetchPostsByType(_categoryNotifier.value!, postType,
-          searchText: _searchText);
+    _requested = null;
+    // A 404 monta outra navbar, que recarrega as categorias: sem isso, a página
+    // alternaria entre esqueleto e 404 sem parar.
+    if (_state == _CategoryState.notFound) return;
+    switch (_categoriesStore.state) {
+      case FetchCategoriesSuccessState():
+        _setState(_CategoryState.notFound, null);
+      case FetchCategoriesErrorState():
+        _setState(_CategoryState.error, null);
+      case FetchCategoriesInitialState() || FetchCategoriesLoadingState():
+        if (_category == null) _setState(_CategoryState.loading, null);
     }
+  }
+
+  void _setState(_CategoryState state, CategoryModel? category) {
+    if (_state == state && _category == category) return;
+    _state = state;
+    _category = category;
+    if (_initializing || !mounted) return;
+
+    // A navbar busca as categorias no próprio initState, ou seja, durante o build.
+    final scheduler = SchedulerBinding.instance;
+    if (scheduler.schedulerPhase == SchedulerPhase.persistentCallbacks) {
+      scheduler.addPostFrameCallback((_) {
+        if (mounted) setState(() {});
+      });
+    } else {
+      setState(() {});
+    }
+  }
+
+  void _retry() {
+    _setState(_CategoryState.loading, null);
+    _categoriesStore.fetchCategories();
+  }
+
+  String _routeFor(PostModel post) =>
+      AppRoutes.post(widget.area.key, post.categoryId, post.id ?? '');
+
+  @override
+  Widget build(BuildContext context) {
+    final category = _category;
+
+    final Widget body;
+    Widget? header;
+    switch (_state) {
+      case _CategoryState.notFound:
+        return const PageNotFound();
+      case _CategoryState.loading:
+        body = const CategoryPageSkeleton();
+      case _CategoryState.error:
+        body = PageContent(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: AppTheme.dimensions.components.listingStatePaddingBottom,
+            ),
+            child: StateErrorBox(onRetry: _retry),
+          ),
+        );
+      case _CategoryState.ready:
+        final description = category!.description.trim();
+        header = PageHeader(
+          breadcrumbs: [
+            const BreadcrumbItem('Início', route: AppRoutes.root),
+            BreadcrumbItem(widget.area.portuguese),
+            BreadcrumbItem(category.title),
+          ],
+          title: category.title,
+          lead: description.isEmpty ? null : description,
+          action: category.hasCollaborateOption
+              ? SecondaryButton.medium(
+                  text: 'Colabore com esta categoria',
+                  onPressed: () => GoRouter.of(context).go(AppRoutes.collaborate),
+                )
+              : null,
+        );
+        body = PostsListing(
+          store: _store,
+          routeFor: _routeFor,
+          emptyTitle: 'Ainda não há publicações nesta categoria',
+          emptyMessage: 'Volte em breve ou explore outras categorias no menu.',
+        );
+    }
+
+    // A chave por endereço volta ao topo ao trocar de categoria pelo menu.
+    return ReadingPageScaffold(
+      key: ValueKey(_address),
+      header: header,
+      body: body,
+    );
   }
 }

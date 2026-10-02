@@ -52,7 +52,17 @@ Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP
     Header set Cache-Control "no-cache"
   </IfModule>
   ```
-- **Firebase**: os dois ambientes usam o projeto `observatorio-geo-hist`. O painel admin no dev altera dados reais.
+- **Firebase**: o `APP_ENV` escolhe o projeto (`observatorio-geo-hist-dev` no dev, `observatorio-geo-hist` em produção), então Firestore, Auth e Storage do dev são separados de produção. O dev não tem Storage habilitado (`AppEnvironment.hasStorage`): lá o painel não lista mídias e recusa enviar ou apagar arquivos de mídia e da biblioteca. Arquivos já gravados com URL de produção continuam abrindo, só para leitura.
+
+## Índices do Firestore
+
+O projeto não guarda `firestore.indexes.json`: os índices são criados pelo console do Firebase. Um arquivo só com os índices novos faria o `firebase deploy` propor apagar os que já existem.
+
+| Uso | Escopo | Campos | Projetos |
+|---|---|---|---|
+| Busca em `/publicacoes` (todas as categorias) | Grupo de coleções `category_posts` | `isPublished` ↑, `type` ↑, `body.title_lower` ↑ | `observatorio-geo-hist` e `observatorio-geo-hist-dev` |
+
+Sem esse índice, a página abre normalmente, mas a busca mostra "Não foi possível carregar". Para criar: abra `/publicacoes`, faça uma busca e siga o link que o Firestore escreve no console do navegador (erro `failed-precondition`), ou crie à mão em *Firestore › Índices › Composto*, com escopo "Grupo de coleções". Publique nos dois projetos antes de levar à `main`.
 
 ## Operação
 

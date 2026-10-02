@@ -13,17 +13,22 @@ class SocialButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _SocialButton(
-            name: 'instagram', label: 'Instagram', url: AppStrings.instagram, onDark: onDark),
-        SizedBox(width: AppTheme.dimensions.spacing.s8),
-        _SocialButton(
-            name: 'facebook', label: 'Facebook', url: AppStrings.facebook, onDark: onDark),
-        SizedBox(width: AppTheme.dimensions.spacing.s8),
-        _SocialButton(name: 'youtube', label: 'YouTube', url: AppStrings.youtube, onDark: onDark),
-      ],
+    // O Ink pinta no Material mais próximo: sem um aqui, o fundo dos botões ficava no lugar
+    // antigo quando o rodapé descia depois de a página carregar.
+    return Material(
+      type: MaterialType.transparency,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _SocialButton(
+              name: 'instagram', label: 'Instagram', url: AppStrings.instagram, onDark: onDark),
+          SizedBox(width: AppTheme.dimensions.spacing.s8),
+          _SocialButton(
+              name: 'facebook', label: 'Facebook', url: AppStrings.facebook, onDark: onDark),
+          SizedBox(width: AppTheme.dimensions.spacing.s8),
+          _SocialButton(name: 'youtube', label: 'YouTube', url: AppStrings.youtube, onDark: onDark),
+        ],
+      ),
     );
   }
 }
@@ -105,14 +110,17 @@ class SocialPills extends StatelessWidget {
   Widget build(BuildContext context) {
     final gap = AppTheme.dimensions.components.socialPillGap;
 
-    return Wrap(
-      spacing: gap,
-      runSpacing: gap,
-      children: const [
-        _SocialPill(name: 'instagram', label: 'Instagram', url: AppStrings.instagram),
-        _SocialPill(name: 'facebook', label: 'Facebook', url: AppStrings.facebook),
-        _SocialPill(name: 'youtube', label: 'YouTube', url: AppStrings.youtube),
-      ],
+    return Material(
+      type: MaterialType.transparency,
+      child: Wrap(
+        spacing: gap,
+        runSpacing: gap,
+        children: const [
+          _SocialPill(name: 'instagram', label: 'Instagram', url: AppStrings.instagram),
+          _SocialPill(name: 'facebook', label: 'Facebook', url: AppStrings.facebook),
+          _SocialPill(name: 'youtube', label: 'YouTube', url: AppStrings.youtube),
+        ],
+      ),
     );
   }
 }
