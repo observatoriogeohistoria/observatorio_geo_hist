@@ -162,7 +162,12 @@ class _PostsPageState extends State<PostsPage> {
                 )
               : null,
         );
-        body = PostsListing(store: _store, routeFor: _routeFor);
+        body = PostsListing(
+          store: _store,
+          routeFor: _routeFor,
+          emptyTitle: 'Ainda não há publicações nesta categoria',
+          emptyMessage: 'Volte em breve ou explore outras categorias no menu.',
+        );
     }
 
     // A chave por endereço volta ao topo ao trocar de categoria pelo menu.

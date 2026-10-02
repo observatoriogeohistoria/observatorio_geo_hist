@@ -19,7 +19,7 @@ class ListingTypeBlock extends StatelessWidget {
 
   final PostsTypeBlock block;
   final int? count;
-  final String Function(PostModel post) routeFor;
+  final String? Function(PostModel post) routeFor;
   final VoidCallback onLoadMore;
 
   @override
@@ -70,7 +70,8 @@ class ListingTypeBlock extends StatelessWidget {
           SizedBox(height: components.listingBlockTitleGap),
           PostCardGrid(
             children: [
-              for (final post in block.posts) PostCard(post: post, route: routeFor(post)),
+              for (final post in block.posts)
+                if (routeFor(post) case final route?) PostCard(post: post, route: route),
             ],
           ),
           if (block.hasMore || block.loadMoreFailed)

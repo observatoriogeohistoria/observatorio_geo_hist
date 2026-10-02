@@ -3,7 +3,7 @@
 Legenda: `- [ ]` a fazer, `- [x]` feita.
 
 ## Grupo A: listagem
-- [ ] **A1.** `PostsListing` com `emptyTitle`/`emptyMessage` e `routeFor` anulável; `ListingTypeBlock` pula post sem rota; `PostsPage` passa os textos da categoria. Arquivos: `listing/posts_listing.dart`, `listing/listing_type_block.dart`, `pages/posts_page.dart`. Atende: critérios 8, 11. Conferir: analyze limpo; categoria com busca vazia igual a antes.
+- [x] **A1.** `PostsListing` com `emptyTitle`/`emptyMessage` e `routeFor` anulável; `ListingTypeBlock` pula post sem rota; `PostsPage` passa os textos da categoria. Arquivos: `listing/posts_listing.dart`, `listing/listing_type_block.dart`, `pages/posts_page.dart`. Atende: critérios 8, 11. Conferir: analyze limpo; categoria com busca vazia igual a antes. Feito: a categoria passa os textos de antes; o bloco pula post sem rota com `if (routeFor(post) case final route?)`.
 - [ ] **A2.** `PostsListingScope.all()`: sem categoria, todos os tipos em ordem alfabética do plural. Arquivo: `states/posts_listing_states.dart`. Atende: critério 3.
 
 ## Grupo B: página e rota

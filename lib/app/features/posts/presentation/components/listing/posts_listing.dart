@@ -14,12 +14,23 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/sta
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Não sabe de categoria: quem monta a página carrega o [store] com o escopo e diz a rota de
-/// cada post.
+/// cada post e os textos de vazio.
 class PostsListing extends StatefulWidget {
-  const PostsListing({super.key, required this.store, required this.routeFor});
+  const PostsListing({
+    super.key,
+    required this.store,
+    required this.routeFor,
+    required this.emptyTitle,
+    required this.emptyMessage,
+  });
 
   final PostsListingStore store;
-  final String Function(PostModel post) routeFor;
+
+  /// Nulo quando não há como montar o endereço do post; ele fica fora da lista.
+  final String? Function(PostModel post) routeFor;
+
+  final String emptyTitle;
+  final String emptyMessage;
 
   @override
   State<PostsListing> createState() => _PostsListingState();
@@ -118,11 +129,11 @@ class _PostsListingState extends State<PostsListing> {
                       ),
                     ),
                   ),
-                PostsListingStatus.empty => const _StateFrame(
+                PostsListingStatus.empty => _StateFrame(
                     child: StateMessageBox(
                       icon: Icons.article_outlined,
-                      title: 'Ainda não há publicações nesta categoria',
-                      message: 'Volte em breve ou explore outras categorias no menu.',
+                      title: widget.emptyTitle,
+                      message: widget.emptyMessage,
                     ),
                   ),
                 PostsListingStatus.success => Column(
