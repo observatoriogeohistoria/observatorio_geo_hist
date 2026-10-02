@@ -84,6 +84,8 @@ class _LibraryFilterSelectState<T> extends State<LibraryFilterSelect<T>> {
     return MenuAnchor(
       controller: _controller,
       childFocusNode: _buttonFocus,
+      // O clique fora só fecha o menu; sem isso, também abria o documento embaixo.
+      consumeOutsideTap: true,
       onOpen: _handleOpen,
       onClose: () => setState(() {}),
       style: libraryMenuStyle(),
