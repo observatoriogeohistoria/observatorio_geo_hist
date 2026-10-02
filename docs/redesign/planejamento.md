@@ -122,7 +122,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | Fase | Escopo | Motivo da posição |
 |---|---|---|
 | 2 | Leitura: layout-base do post (artigo primeiro), Manifesto, Nossa história, Pessoa da equipe | Compartilham o mesmo layout de leitura |
-| 3 | Listagem de categoria, todas as publicações (T-11) e cards de post (cards e listagem da categoria → specs/014-listagem-categoria) | Maior volume de navegação |
+| 3 | Listagem de categoria, todas as publicações (T-11) e cards de post (cards e listagem da categoria → specs/014-listagem-categoria, concluído; T-11 pendente) | Maior volume de navegação |
 | 4 | Biblioteca (índice, lista, detalhe, filtros) | Categorias e filtros já definidos |
 | 5 | Acabamento: Fale com a gente, Colabore, 404/erros e demais tipos de post | Antes ficava na fase 6 |
 | 6 | Reservada | Sem escopo definido |
