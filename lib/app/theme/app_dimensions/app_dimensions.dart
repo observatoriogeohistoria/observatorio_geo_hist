@@ -522,10 +522,11 @@ class ShadowStyle {
         BoxShadow(color: Color(0x241F1B18), blurRadius: 36, offset: Offset(0, 14)),
       ];
 
-  /// Animar até uma lista vazia mostra a sombra nítida por um instante; com cor
-  /// transparente, ela some junto com o fundo.
-  List<BoxShadow> hidden(List<BoxShadow> shadows) => [
-        for (final shadow in shadows) shadow.copyWith(color: shadow.color.withValues(alpha: 0)),
+  /// Animar até uma lista vazia mostra a sombra nítida por um instante; esmaecer a cor
+  /// faz ela sumir junto com o fundo. Em repouso, use `null`: sombra transparente ainda é pintada.
+  List<BoxShadow> fade(List<BoxShadow> shadows, double opacity) => [
+        for (final shadow in shadows)
+          shadow.copyWith(color: shadow.color.withValues(alpha: shadow.color.a * opacity)),
       ];
 }
 

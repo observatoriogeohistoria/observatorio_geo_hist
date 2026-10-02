@@ -44,7 +44,6 @@ class _HeroShortcutCardState extends State<HeroShortcutCard> {
     final shadows = AppTheme.dimensions.shadows;
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r14);
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
-    final lift = _hovered && !reduceMotion ? components.shortcutHoverLift : 0.0;
 
     return Semantics(
       button: widget.url == null,
@@ -56,18 +55,25 @@ class _HeroShortcutCardState extends State<HeroShortcutCard> {
       child: AppFocusRing(
         borderRadius: radius,
         fit: StackFit.passthrough,
-        child: AnimatedContainer(
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(end: _hovered ? 1 : 0),
           duration: reduceMotion ? Duration.zero : components.shortcutAnimation,
           curve: Curves.easeOut,
-          transform: Matrix4.translationValues(0, -lift, 0),
-          decoration: BoxDecoration(
-            color: colors.page,
-            borderRadius: radius,
-            border: Border.all(
-              color: _hovered ? colors.accent : colors.line,
-              width: AppTheme.dimensions.stroke.small,
+          builder: (context, t, child) => Transform.translate(
+            offset: Offset(0, reduceMotion ? 0 : -components.shortcutHoverLift * t),
+            child: DecoratedBox(
+              // Sem sombra em repouso: mesmo transparente, o desfoque é pintado a cada quadro.
+              decoration: BoxDecoration(
+                color: colors.page,
+                borderRadius: radius,
+                border: Border.all(
+                  color: Color.lerp(colors.line, colors.accent, t)!,
+                  width: AppTheme.dimensions.stroke.small,
+                ),
+                boxShadow: t == 0 ? null : shadows.fade(shadows.soft, t),
+              ),
+              child: child,
             ),
-            boxShadow: _hovered ? shadows.soft : shadows.hidden(shadows.soft),
           ),
           child: Material(
             type: MaterialType.transparency,
