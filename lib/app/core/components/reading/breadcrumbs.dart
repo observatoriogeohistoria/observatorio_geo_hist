@@ -52,10 +52,13 @@ class Breadcrumbs extends StatelessWidget {
                     (true, _) => Semantics(
                         label: '${item.label}, página atual',
                         excludeSemantics: true,
-                        child: Text(item.label, style: style.copyWith(color: colors.ink, fontWeight: FontWeight.w600)),
+                        child: Text(item.label,
+                            style: style.copyWith(color: colors.ink, fontWeight: FontWeight.w600)),
                       ),
-                    (false, null) => Text(item.label, style: style.copyWith(color: colors.inkSecondary)),
-                    (false, final route?) => _BreadcrumbLink(label: item.label, route: route, style: style),
+                    (false, null) =>
+                      Text(item.label, style: style.copyWith(color: colors.inkSecondary)),
+                    (false, final route?) =>
+                      _BreadcrumbLink(label: item.label, route: route, style: style),
                   },
                 ),
               ],

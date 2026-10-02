@@ -39,16 +39,16 @@ class PostTypeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (post.type) {
-      PostType.article =>
-        ArticleBody(post: post, article: post.body! as ArticleModel, area: area, category: category),
+      PostType.article => ArticleBody(
+          post: post, article: post.body! as ArticleModel, area: area, category: category),
       PostType.document => DocumentContent(post: post, document: post.body! as DocumentModel),
       PostType.book => BookContent(post: post, book: post.body! as BookModel),
       PostType.film => FilmContent(post: post, film: post.body! as FilmModel),
       PostType.magazine => MagazineContent(post: post, magazine: post.body! as MagazineModel),
       PostType.podcast => PodcastContent(post: post, podcast: post.body! as PodcastModel),
       PostType.music => MusicContent(post: post, music: post.body! as MusicModel),
-      PostType.academicProduction =>
-        AcademicProductionContent(post: post, academicProduction: post.body! as AcademicProductionModel),
+      PostType.academicProduction => AcademicProductionContent(
+          post: post, academicProduction: post.body! as AcademicProductionModel),
       PostType.event => EventContent(post: post, event: post.body! as EventModel),
       PostType.search => SearchContent(post: post, search: post.body! as SearchModel),
     };

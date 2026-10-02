@@ -49,7 +49,11 @@ class ReadingFigure extends StatelessWidget {
                 ),
                 if (caption != null) ...[
                   SizedBox(height: components.readingFigureCaptionGap),
-                  Text(caption!, style: AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary)),
+                  Text(caption!,
+                      style: AppTheme.typography
+                          .of(context)
+                          .small
+                          .copyWith(color: colors.inkSecondary)),
                 ],
               ],
             ),

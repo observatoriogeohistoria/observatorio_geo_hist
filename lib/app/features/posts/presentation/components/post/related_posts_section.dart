@@ -31,7 +31,8 @@ class RelatedPostsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final articles = [
       for (final post in posts)
-        if (post.id != null && post.body is ArticleModel) (id: post.id!, article: post.body! as ArticleModel),
+        if (post.id != null && post.body is ArticleModel)
+          (id: post.id!, article: post.body! as ArticleModel),
     ];
     if (articles.isEmpty) return const SizedBox.shrink();
 
@@ -44,7 +45,8 @@ class RelatedPostsSection extends StatelessWidget {
     final title = Semantics(
       header: true,
       headingLevel: 2,
-      child: Text('Leia também', style: AppTheme.typography.of(context).h2.copyWith(color: colors.ink)),
+      child: Text('Leia também',
+          style: AppTheme.typography.of(context).h2.copyWith(color: colors.ink)),
     );
     final more = ArrowLink(
       text: 'Mais em ${category.title}',
@@ -80,7 +82,10 @@ class RelatedPostsSection extends StatelessWidget {
                 final gap = components.relatedCardGapH;
                 final columns = math.min(
                   maxColumns,
-                  math.max(1, ((constraints.maxWidth + gap) / (components.relatedCardMinWidth + gap)).floor()),
+                  math.max(
+                      1,
+                      ((constraints.maxWidth + gap) / (components.relatedCardMinWidth + gap))
+                          .floor()),
                 );
                 final rows = (articles.length / columns).ceil();
 
@@ -98,7 +103,8 @@ class RelatedPostsSection extends StatelessWidget {
                               child: row * columns + column < articles.length
                                   ? RelatedPostCard(
                                       article: articles[row * columns + column].article,
-                                      route: AppRoutes.post(area.key, category.key, articles[row * columns + column].id),
+                                      route: AppRoutes.post(area.key, category.key,
+                                          articles[row * columns + column].id),
                                     )
                                   : const SizedBox.shrink(),
                             ),

@@ -16,7 +16,8 @@ String _sortKey(String name) {
 /// Ordem alfabética sem diferenciar maiúsculas nem acentos. Nomes iguais mantêm a ordem recebida.
 List<TeamMemberModel> sortTeamByName(List<TeamMemberModel> team) {
   final indexed = [
-    for (final (index, member) in team.indexed) (index: index, key: _sortKey(member.name), member: member),
+    for (final (index, member) in team.indexed)
+      (index: index, key: _sortKey(member.name), member: member),
   ];
   indexed.sort((a, b) {
     final byName = a.key.compareTo(b.key);

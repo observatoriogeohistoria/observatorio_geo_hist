@@ -48,16 +48,43 @@ class _AppButtonBaseState extends State<AppButtonBase> {
     final hovered = _hovered && !widget.isDisabled;
 
     final (background, foreground, border) = switch (widget.kind) {
-      AppButtonKind.primary => (hovered ? colors.accentStrong : colors.accent, colors.white, Colors.transparent),
-      AppButtonKind.secondary => (hovered ? colors.ink : Colors.transparent, hovered ? colors.white : colors.ink, colors.ink),
+      AppButtonKind.primary => (
+          hovered ? colors.accentStrong : colors.accent,
+          colors.white,
+          Colors.transparent
+        ),
+      AppButtonKind.secondary => (
+          hovered ? colors.ink : Colors.transparent,
+          hovered ? colors.white : colors.ink,
+          colors.ink
+        ),
       // Laranja forte também em repouso: sobre a superfície clara, o laranja normal fica abaixo de 4,5:1.
-      AppButtonKind.ghost => (hovered ? colors.accentSoft : Colors.transparent, colors.accentStrong, Colors.transparent),
+      AppButtonKind.ghost => (
+          hovered ? colors.accentSoft : Colors.transparent,
+          colors.accentStrong,
+          Colors.transparent
+        ),
     };
 
     final (fontSize, minHeight, horizontal, vertical) = switch (widget.size) {
-      ButtonSize.small => (components.buttonTextSmall, components.buttonMinHeightSmall, spacing.s16, spacing.s8),
-      ButtonSize.medium => (components.buttonTextMedium, components.buttonMinHeightRegular, spacing.s20, spacing.s12),
-      ButtonSize.big => (components.buttonTextBig, components.buttonMinHeightRegular, spacing.s24, spacing.s12),
+      ButtonSize.small => (
+          components.buttonTextSmall,
+          components.buttonMinHeightSmall,
+          spacing.s16,
+          spacing.s8
+        ),
+      ButtonSize.medium => (
+          components.buttonTextMedium,
+          components.buttonMinHeightRegular,
+          spacing.s20,
+          spacing.s12
+        ),
+      ButtonSize.big => (
+          components.buttonTextBig,
+          components.buttonMinHeightRegular,
+          spacing.s24,
+          spacing.s12
+        ),
     };
 
     final textStyle = AppTheme.typography.of(context).regular.copyWith(
@@ -128,7 +155,8 @@ class _AppButtonBaseState extends State<AppButtonBase> {
               onHover: (value) => setState(() => _hovered = value),
               hoverColor: Colors.transparent,
               focusColor: Colors.transparent,
-              mouseCursor: widget.isDisabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
+              mouseCursor:
+                  widget.isDisabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: minHeight),
                 child: Padding(

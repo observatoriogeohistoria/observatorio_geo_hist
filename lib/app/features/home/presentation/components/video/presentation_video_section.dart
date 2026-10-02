@@ -102,7 +102,8 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final width = constraints.maxWidth;
-              final height = (width / components.videoAspectRatio(breakpoint)).clamp(0.0, components.videoMaxHeight);
+              final height = (width / components.videoAspectRatio(breakpoint))
+                  .clamp(0.0, components.videoMaxHeight);
 
               return ClipRRect(
                 borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r18),
@@ -158,7 +159,8 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
         ),
       _VideoState.error || _VideoState.playing => const SizedBox.shrink(),
     };
-    final Widget centered = _state == _VideoState.error ? _ErrorBox(onRetry: _watch) : const SizedBox.shrink();
+    final Widget centered =
+        _state == _VideoState.error ? _ErrorBox(onRetry: _watch) : const SizedBox.shrink();
 
     return IgnorePointer(
       ignoring: playing,

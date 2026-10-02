@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart';
 
-export 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart' show ButtonSize;
+export 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart'
+    show ButtonSize;
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton.small({

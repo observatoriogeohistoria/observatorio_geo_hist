@@ -161,9 +161,11 @@ class _ReadingRichTextState extends State<ReadingRichText> {
     final paragraph = block(reading, VerticalSpacing(0, paragraphGap));
     final heading = block(
       styles.readingSubtitle.copyWith(color: colors.ink),
-      VerticalSpacing(components.readingSubtitleMarginTop - paragraphGap, components.readingSubtitleMarginBottom),
+      VerticalSpacing(components.readingSubtitleMarginTop - paragraphGap,
+          components.readingSubtitleMarginBottom),
     );
-    final minorHeading = block(reading.copyWith(fontWeight: FontWeight.w700), VerticalSpacing(0, paragraphGap));
+    final minorHeading =
+        block(reading.copyWith(fontWeight: FontWeight.w700), VerticalSpacing(0, paragraphGap));
 
     return DefaultStyles(
       h1: heading,
@@ -198,7 +200,8 @@ class _ReadingRichTextState extends State<ReadingRichText> {
           components.readingQuoteMarginVertical - paragraphGap,
           components.readingQuoteMarginVertical,
         ),
-        VerticalSpacing(components.readingQuotePaddingVertical, components.readingQuotePaddingVertical),
+        VerticalSpacing(
+            components.readingQuotePaddingVertical, components.readingQuotePaddingVertical),
         BoxDecoration(
           border: Border(left: BorderSide(color: colors.accent, width: components.readingQuoteBar)),
         ),
@@ -280,7 +283,8 @@ class _ReadingImagePlaceholder extends StatelessWidget {
         child: ColoredBox(
           color: colors.accentSoft,
           child: Center(
-            child: Icon(Icons.image_outlined, size: components.postPlaceholderIcon, color: colors.accent),
+            child: Icon(Icons.image_outlined,
+                size: components.postPlaceholderIcon, color: colors.accent),
           ),
         ),
       ),

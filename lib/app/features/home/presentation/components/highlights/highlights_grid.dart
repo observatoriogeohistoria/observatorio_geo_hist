@@ -23,7 +23,8 @@ class HighlightsGrid extends StatelessWidget {
           for (var index = 0; index < itemCount; index++) ...[
             if (index > 0) SizedBox(height: gap),
             if (index == 0)
-              SizedBox(height: components.featuredMainHeightMobile, child: itemBuilder(context, index))
+              SizedBox(
+                  height: components.featuredMainHeightMobile, child: itemBuilder(context, index))
             else
               itemBuilder(context, index),
           ],

@@ -62,7 +62,8 @@ class HeroBackgroundPainter extends CustomPainter {
     canvas.restore();
   }
 
-  Offset _at(Size size, Offset fraction) => Offset(size.width * fraction.dx, size.height * fraction.dy);
+  Offset _at(Size size, Offset fraction) =>
+      Offset(size.width * fraction.dx, size.height * fraction.dy);
 
   void _paintRings(
     Canvas canvas,

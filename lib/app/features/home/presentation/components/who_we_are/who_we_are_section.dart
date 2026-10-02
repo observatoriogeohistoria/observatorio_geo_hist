@@ -33,7 +33,8 @@ class WhoWeAreSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final components = AppTheme.dimensions.components;
     final breakpoint = ScreenUtils.breakpointOf(context);
-    final largeText = MediaQuery.textScalerOf(context).scale(1) >= components.whoWeAreStackTextScale;
+    final largeText =
+        MediaQuery.textScalerOf(context).scale(1) >= components.whoWeAreStackTextScale;
     final twoColumns = breakpoint == Breakpoint.desktop && !largeText;
     final gap = components.whoWeAreGap(
       breakpoint == Breakpoint.desktop && !twoColumns ? Breakpoint.tablet : breakpoint,

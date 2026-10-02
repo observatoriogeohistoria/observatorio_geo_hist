@@ -19,7 +19,20 @@ extension DateTimeFormatting on DateTime {
   }
 
   String get shortDate {
-    const months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    const months = [
+      'jan',
+      'fev',
+      'mar',
+      'abr',
+      'mai',
+      'jun',
+      'jul',
+      'ago',
+      'set',
+      'out',
+      'nov',
+      'dez'
+    ];
 
     return '$day ${months[month - 1]} $year';
   }

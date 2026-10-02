@@ -82,7 +82,8 @@ class _RelatedPostCardState extends State<RelatedPostCard> {
                                 imageUrl,
                                 fit: BoxFit.cover,
                                 excludeFromSemantics: true,
-                                errorBuilder: (context, error, stackTrace) => const PostImagePlaceholder(),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const PostImagePlaceholder(),
                               ),
                       ),
                     ),
@@ -93,8 +94,10 @@ class _RelatedPostCardState extends State<RelatedPostCard> {
                 SizedBox(height: components.relatedTitleGap),
                 AnimatedDefaultTextStyle(
                   duration: duration,
-                  style: styles.relatedCardTitle.copyWith(color: _hovered ? colors.accent : colors.ink),
-                  child: Text(title, maxLines: components.relatedTitleMaxLines, overflow: TextOverflow.ellipsis),
+                  style: styles.relatedCardTitle
+                      .copyWith(color: _hovered ? colors.accent : colors.ink),
+                  child: Text(title,
+                      maxLines: components.relatedTitleMaxLines, overflow: TextOverflow.ellipsis),
                 ),
                 if (meta.isNotEmpty) ...[
                   SizedBox(height: components.relatedCardInnerGap),

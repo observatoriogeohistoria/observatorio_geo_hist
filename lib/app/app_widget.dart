@@ -61,8 +61,9 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         supportedLocales: const [Locale('pt', 'BR')],
         routerConfig: AppRouter.router,
         builder: (context, child) {
-          final bannerHeight =
-              AppEnvironment.current.isProd ? 0.0 : AppTheme.dimensions.components.environmentBannerHeight;
+          final bannerHeight = AppEnvironment.current.isProd
+              ? 0.0
+              : AppTheme.dimensions.components.environmentBannerHeight;
           final mediaQuery = MediaQuery.of(context);
 
           return MediaQuery(

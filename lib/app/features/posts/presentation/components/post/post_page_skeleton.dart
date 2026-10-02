@@ -42,7 +42,8 @@ class PostPageSkeleton extends StatelessWidget {
                 bar(components.postSkeletonTitleLastWidth, components.postSkeletonTitleHeight),
                 SizedBox(height: components.postSubtitleGap),
                 bar(components.postSkeletonSubtitleWidth, barHeight),
-                SizedBox(height: components.postBylineMarginTop + components.postBylinePaddingVertical),
+                SizedBox(
+                    height: components.postBylineMarginTop + components.postBylinePaddingVertical),
                 Row(
                   children: [
                     ClipOval(child: Skeleton(width: avatar, height: avatar)),
@@ -59,7 +60,8 @@ class PostPageSkeleton extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: components.postBylinePaddingVertical + components.postCoverMarginTop),
+                SizedBox(
+                    height: components.postBylinePaddingVertical + components.postCoverMarginTop),
                 AspectRatio(
                   aspectRatio: components.postCoverAspect,
                   child: ClipRRect(
@@ -75,7 +77,11 @@ class PostPageSkeleton extends StatelessWidget {
             children: [
               for (var line = 0; line < components.postSkeletonLines; line++) ...[
                 if (line > 0) SizedBox(height: components.postSubtitleGap),
-                bar(line == components.postSkeletonLines - 1 ? components.postSkeletonLastLineWidth : 1, barHeight),
+                bar(
+                    line == components.postSkeletonLines - 1
+                        ? components.postSkeletonLastLineWidth
+                        : 1,
+                    barHeight),
               ],
             ],
           ),

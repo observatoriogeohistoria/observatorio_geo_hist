@@ -29,7 +29,10 @@ class MemberAvatar extends StatelessWidget {
                     maxLines: 1,
                     // O círculo tem tamanho fixo; ampliar as iniciais as faria vazar.
                     textScaler: TextScaler.noScaling,
-                    style: AppTheme.typography.of(context).memberInitials.copyWith(color: colors.accentStrong),
+                    style: AppTheme.typography
+                        .of(context)
+                        .memberInitials
+                        .copyWith(color: colors.accentStrong),
                   ),
                 ),
               ),

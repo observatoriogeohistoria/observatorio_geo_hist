@@ -26,7 +26,8 @@ class PostShare extends StatefulWidget {
 enum _CopyStatus { idle, copied, failed }
 
 class _ShareOption {
-  const _ShareOption({required this.icon, required this.label, required this.link, this.sameTab = false});
+  const _ShareOption(
+      {required this.icon, required this.label, required this.link, this.sameTab = false});
 
   final String icon;
   final String label;
@@ -35,12 +36,20 @@ class _ShareOption {
 }
 
 const _networks = [
-  _ShareOption(icon: 'whatsapp', label: 'Compartilhar no WhatsApp', link: AppStrings.shareOnWhatsapp),
-  _ShareOption(icon: 'facebook', label: 'Compartilhar no Facebook', link: AppStrings.shareOnFacebook),
+  _ShareOption(
+      icon: 'whatsapp', label: 'Compartilhar no WhatsApp', link: AppStrings.shareOnWhatsapp),
+  _ShareOption(
+      icon: 'facebook', label: 'Compartilhar no Facebook', link: AppStrings.shareOnFacebook),
   _ShareOption(icon: 'x', label: 'Compartilhar no X', link: AppStrings.shareOnX),
-  _ShareOption(icon: 'linkedin', label: 'Compartilhar no LinkedIn', link: AppStrings.shareOnLinkedin),
-  _ShareOption(icon: 'telegram', label: 'Compartilhar no Telegram', link: AppStrings.shareOnTelegram),
-  _ShareOption(icon: 'email', label: 'Compartilhar por e-mail', link: AppStrings.shareOnEmail, sameTab: true),
+  _ShareOption(
+      icon: 'linkedin', label: 'Compartilhar no LinkedIn', link: AppStrings.shareOnLinkedin),
+  _ShareOption(
+      icon: 'telegram', label: 'Compartilhar no Telegram', link: AppStrings.shareOnTelegram),
+  _ShareOption(
+      icon: 'email',
+      label: 'Compartilhar por e-mail',
+      link: AppStrings.shareOnEmail,
+      sameTab: true),
 ];
 
 const _copyText = 'Copiar link';
@@ -124,7 +133,8 @@ class _PostShareState extends State<PostShare> {
         ExcludeSemantics(
           child: Padding(
             padding: EdgeInsets.only(right: components.shareLabelGap),
-            child: Text(_nativeText.toUpperCase(), style: styles.label.copyWith(color: colors.inkSecondary)),
+            child: Text(_nativeText.toUpperCase(),
+                style: styles.label.copyWith(color: colors.inkSecondary)),
           ),
         ),
         for (final option in _networks)

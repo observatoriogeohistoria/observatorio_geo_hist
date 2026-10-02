@@ -107,7 +107,8 @@ class _Loading extends StatelessWidget {
           itemBuilder: (context, index) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipOval(child: Skeleton(width: components.memberAvatar, height: components.memberAvatar)),
+              ClipOval(
+                  child: Skeleton(width: components.memberAvatar, height: components.memberAvatar)),
               SizedBox(height: components.memberAvatarGap),
               bar(components.memberSkeletonNameWidth),
               SizedBox(height: components.memberAvatarGap),

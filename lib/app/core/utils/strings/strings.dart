@@ -5,7 +5,10 @@ String convertToSnakeCase(String input) {
 }
 
 String joinNames(List<String> names) {
-  final list = [for (final name in names) if (name.trim().isNotEmpty) name.trim()];
+  final list = [
+    for (final name in names)
+      if (name.trim().isNotEmpty) name.trim()
+  ];
   if (list.length < 2) return list.join();
   return '${list.sublist(0, list.length - 1).join(', ')} e ${list.last}';
 }

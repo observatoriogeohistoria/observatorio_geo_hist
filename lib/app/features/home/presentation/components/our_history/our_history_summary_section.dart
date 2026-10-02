@@ -40,7 +40,8 @@ class OurHistorySummarySection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Nossa história'.toUpperCase(), style: styles.label.copyWith(color: colors.accentStrong)),
+                  Text('Nossa história'.toUpperCase(),
+                      style: styles.label.copyWith(color: colors.accentStrong)),
                   SizedBox(height: components.ourHistoryTitleGap),
                   Semantics(
                     header: true,
@@ -51,7 +52,8 @@ class OurHistorySummarySection extends StatelessWidget {
                   ),
                   SizedBox(height: components.ourHistoryBadgeGap),
                   // Espaço rígido e \u2060 mantêm "· 2016–2018" inteiro na mesma linha.
-                  const MilestoneBadge(text: 'Projeto financiado pela FAPEMIG ·\u00a02016\u2060–\u20602018'),
+                  const MilestoneBadge(
+                      text: 'Projeto financiado pela FAPEMIG ·\u00a02016\u2060–\u20602018'),
                   SizedBox(height: components.ourHistoryTextGap),
                   for (final (index, paragraph) in _paragraphs.indexed) ...[
                     if (index > 0) SizedBox(height: components.readingParagraphGap),

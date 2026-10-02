@@ -99,8 +99,10 @@ class _HighlightsCarouselState extends State<HighlightsCarousel> {
 
                       return GestureDetector(
                         onTap: () {
-                          GoRouter.of(context).go(
-                              AppRoutes.post(highlight.category!.areas.first.key, highlight.categoryId, highlight.id!));
+                          GoRouter.of(context).go(AppRoutes.post(
+                              highlight.category!.areas.first.key,
+                              highlight.categoryId,
+                              highlight.id!));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

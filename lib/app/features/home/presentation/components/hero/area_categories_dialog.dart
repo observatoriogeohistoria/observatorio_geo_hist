@@ -14,7 +14,8 @@ Future<void> showAreaCategoriesDialog(
   required FetchCategoriesStore store,
 }) {
   final components = AppTheme.dimensions.components;
-  final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
+  final duration =
+      MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
 
   return showGeneralDialog(
     context: context,
@@ -78,7 +79,8 @@ class AreaCategoriesDialog extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(spacing.s20, spacing.s12, spacing.s8, spacing.s12),
+                          padding: EdgeInsets.fromLTRB(
+                              spacing.s20, spacing.s12, spacing.s8, spacing.s12),
                           child: Row(
                             children: [
                               Expanded(
@@ -106,7 +108,8 @@ class AreaCategoriesDialog extends StatelessWidget {
                         Flexible(
                           child: SingleChildScrollView(
                             padding: EdgeInsets.all(spacing.s8),
-                            child: NavbarCategoriesMenu(area: area, store: store, onSelected: close),
+                            child:
+                                NavbarCategoriesMenu(area: area, store: store, onSelected: close),
                           ),
                         ),
                       ],

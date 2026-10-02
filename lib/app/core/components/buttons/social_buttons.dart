@@ -16,9 +16,11 @@ class SocialButtons extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _SocialButton(name: 'instagram', label: 'Instagram', url: AppStrings.instagram, onDark: onDark),
+        _SocialButton(
+            name: 'instagram', label: 'Instagram', url: AppStrings.instagram, onDark: onDark),
         SizedBox(width: AppTheme.dimensions.spacing.s8),
-        _SocialButton(name: 'facebook', label: 'Facebook', url: AppStrings.facebook, onDark: onDark),
+        _SocialButton(
+            name: 'facebook', label: 'Facebook', url: AppStrings.facebook, onDark: onDark),
         SizedBox(width: AppTheme.dimensions.spacing.s8),
         _SocialButton(name: 'youtube', label: 'YouTube', url: AppStrings.youtube, onDark: onDark),
       ],
@@ -173,7 +175,8 @@ class _SocialPillState extends State<_SocialPill> {
                     colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
                   ),
                   SizedBox(width: components.socialPillGap),
-                  Text(widget.label, style: AppTheme.typography.of(context).badge.copyWith(color: color)),
+                  Text(widget.label,
+                      style: AppTheme.typography.of(context).badge.copyWith(color: color)),
                 ],
               ),
             ),

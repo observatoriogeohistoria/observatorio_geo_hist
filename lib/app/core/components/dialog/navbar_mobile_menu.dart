@@ -38,7 +38,8 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
   }
 
   void _toggle(NavbarSection section) {
-    setState(() => _expanded.contains(section) ? _expanded.remove(section) : _expanded.add(section));
+    setState(
+        () => _expanded.contains(section) ? _expanded.remove(section) : _expanded.add(section));
   }
 
   @override
@@ -56,7 +57,8 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
           width: width < components.mobileMenuMaxWidth ? width : components.mobileMenuMaxWidth,
           height: double.infinity,
           child: DecoratedBox(
-            decoration: BoxDecoration(color: colors.page, boxShadow: AppTheme.dimensions.shadows.elevated),
+            decoration:
+                BoxDecoration(color: colors.page, boxShadow: AppTheme.dimensions.shadows.elevated),
             child: Material(
               type: MaterialType.transparency,
               child: SafeArea(
@@ -69,7 +71,8 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
                         height: components.navbarHeight,
                         child: Row(
                           children: [
-                            Expanded(child: Text('Menu', style: AppTheme.typography.of(context).h3)),
+                            Expanded(
+                                child: Text('Menu', style: AppTheme.typography.of(context).h3)),
                             AppIconButton(
                               tooltip: 'Fechar menu',
                               icon: Icons.close,
@@ -83,7 +86,8 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
                     Divider(height: 1, thickness: 1, color: colors.line),
                     Expanded(
                       child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(horizontal: spacing.s20, vertical: spacing.s8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: spacing.s20, vertical: spacing.s8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -115,7 +119,9 @@ class _NavbarMobileMenuState extends State<NavbarMobileMenu> {
 
   Widget _areaSection(PostsAreas area, NavbarSection section) {
     final isExpanded = _expanded.contains(section);
-    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : AppTheme.dimensions.components.menuAnimation;
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : AppTheme.dimensions.components.menuAnimation;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

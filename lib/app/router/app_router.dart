@@ -176,7 +176,8 @@ class AppRouter {
         path: AppRoutes.panelTabPattern,
         builder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
-          final postType = PostType.fromString(state.uri.queryParameters[AppRoutes.panelPostTypeParam]);
+          final postType =
+              PostType.fromString(state.uri.queryParameters[AppRoutes.panelPostTypeParam]);
 
           final invalidRoute = tab == null;
           if (invalidRoute) return const PageNotFound();

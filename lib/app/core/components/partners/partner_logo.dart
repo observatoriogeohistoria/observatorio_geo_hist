@@ -38,7 +38,8 @@ class _PartnerLogoState extends State<PartnerLogo> {
   Partner get _partner => widget.partner;
 
   bool get _active =>
-      _hovered || (_focused && FocusManager.instance.highlightMode == FocusHighlightMode.traditional);
+      _hovered ||
+      (_focused && FocusManager.instance.highlightMode == FocusHighlightMode.traditional);
 
   void _open() => openUrl(_partner.url!);
 
@@ -100,7 +101,8 @@ class _PartnerLogoState extends State<PartnerLogo> {
             ? components.partnerPaddingMobile
             : components.partnerPadding,
       ),
-      transform: Matrix4.translationValues(0, active && !reduceMotion ? -components.partnerHoverLift : 0, 0),
+      transform: Matrix4.translationValues(
+          0, active && !reduceMotion ? -components.partnerHoverLift : 0, 0),
       decoration: BoxDecoration(
         color: active ? colors.page : colors.page.withValues(alpha: 0),
         borderRadius: radius,
@@ -135,7 +137,8 @@ class _PartnerLogoState extends State<PartnerLogo> {
                   child: Text(
                     _partner.acronym,
                     textAlign: TextAlign.center,
-                    style: AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary),
+                    style:
+                        AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary),
                   ),
                 ),
               ),

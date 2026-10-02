@@ -34,7 +34,8 @@ class PostCover extends StatelessWidget {
         if (caption.isNotEmpty) ...[
           SizedBox(height: components.postCoverCaptionGap),
           ExcludeSemantics(
-            child: Text(caption, style: AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary)),
+            child: Text(caption,
+                style: AppTheme.typography.of(context).small.copyWith(color: colors.inkSecondary)),
           ),
         ],
       ],

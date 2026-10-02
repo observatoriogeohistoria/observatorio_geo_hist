@@ -44,7 +44,8 @@ class MemberPageSkeleton extends StatelessWidget {
               children: [
                 bar(components.memberPageSkeletonLabelWidth, barHeight),
                 SizedBox(height: components.memberNameTopGap),
-                bar(components.memberPageSkeletonNameWidth, components.memberPageSkeletonNameHeight),
+                bar(components.memberPageSkeletonNameWidth,
+                    components.memberPageSkeletonNameHeight),
                 SizedBox(height: components.memberNameBottomGap),
                 bar(1, barHeight),
                 SizedBox(height: components.memberNameTopGap),

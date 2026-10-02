@@ -48,7 +48,9 @@ class _PostCardState extends State<PostCard> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        transform: _isHovered ? (Matrix4.identity()..scaleByDouble(1.02, 1.02, 1.02, 1.0)) : Matrix4.identity(),
+        transform: _isHovered
+            ? (Matrix4.identity()..scaleByDouble(1.02, 1.02, 1.02, 1.0))
+            : Matrix4.identity(),
         padding: EdgeInsets.all(AppTheme.dimensions.space.medium.horizontalSpacing),
         decoration: BoxDecoration(
           color: _isHovered ? widget.backgroundColor : null,
@@ -64,8 +66,8 @@ class _PostCardState extends State<PostCard> {
         ),
         child: GestureDetector(
           onTap: () {
-            GoRouter.of(context).go(
-                AppRoutes.post(widget.category.areas.first.key, widget.category.key, widget.post.id!));
+            GoRouter.of(context).go(AppRoutes.post(
+                widget.category.areas.first.key, widget.category.key, widget.post.id!));
           },
           child: Column(
             children: [

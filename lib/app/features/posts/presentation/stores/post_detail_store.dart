@@ -56,7 +56,8 @@ abstract class PostDetailStoreBase with Store {
     if (request != _request) return;
 
     result.fold(
-      (failure) => state = failure is PostNotFoundFailure ? PostDetailNotFoundState() : PostDetailErrorState(),
+      (failure) => state =
+          failure is PostNotFoundFailure ? PostDetailNotFoundState() : PostDetailErrorState(),
       (post) {
         if (post.body == null) {
           state = PostDetailNotFoundState();

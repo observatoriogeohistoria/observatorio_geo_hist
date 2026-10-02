@@ -15,7 +15,8 @@ abstract class AppRoutes {
   static const publications = '/$publicationsSegment';
   static const categoryPattern = '$publications/:area/:category';
   static const postPattern = '$categoryPattern/:id';
-  static String category(String areaKey, String categoryKey) => '$publications/$areaKey/$categoryKey';
+  static String category(String areaKey, String categoryKey) =>
+      '$publications/$areaKey/$categoryKey';
   static String post(String areaKey, String categoryKey, String postId) =>
       '${category(areaKey, categoryKey)}/$postId';
 
@@ -24,7 +25,8 @@ abstract class AppRoutes {
   static const libraryAreaPattern = '$library/:area';
   static const libraryDocumentPattern = '$libraryAreaPattern/documento/:slug';
   static String libraryArea(String areaKey) => '$library/$areaKey';
-  static String libraryDocument(String areaKey, String slug) => '${libraryArea(areaKey)}/documento/$slug';
+  static String libraryDocument(String areaKey, String slug) =>
+      '${libraryArea(areaKey)}/documento/$slug';
 
   static const admin = '/admin';
   static const panel = '$admin/painel';
@@ -33,7 +35,8 @@ abstract class AppRoutes {
 
   static const panelPostTypeParam = 'tipo';
   static String panelTab(String tab) => '$panel/$tab';
-  static String panelPosts(String postType) => '${panelTab(publicationsSegment)}?$panelPostTypeParam=$postType';
+  static String panelPosts(String postType) =>
+      '${panelTab(publicationsSegment)}?$panelPostTypeParam=$postType';
   static String panelLibraryArea(String areaKey) => '${panelTab(librarySegment)}/$areaKey';
 
   static const legacyManifest = '/manifest';

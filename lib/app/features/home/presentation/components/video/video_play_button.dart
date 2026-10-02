@@ -4,7 +4,8 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class VideoPlayButton extends StatefulWidget {
-  const VideoPlayButton({super.key, required this.onPressed, this.isLoading = false, this.focusNode});
+  const VideoPlayButton(
+      {super.key, required this.onPressed, this.isLoading = false, this.focusNode});
 
   final VoidCallback onPressed;
   final bool isLoading;
@@ -50,7 +51,8 @@ class _VideoPlayButtonState extends State<VideoPlayButton> {
         child: AppFocusRing(
           borderRadius: radius,
           child: DecoratedBox(
-            decoration: BoxDecoration(borderRadius: radius, boxShadow: AppTheme.dimensions.shadows.elevated),
+            decoration: BoxDecoration(
+                borderRadius: radius, boxShadow: AppTheme.dimensions.shadows.elevated),
             child: Material(
               color: colors.white,
               borderRadius: radius,
@@ -61,7 +63,8 @@ class _VideoPlayButtonState extends State<VideoPlayButton> {
                 borderRadius: radius,
                 splashFactory: NoSplash.splashFactory,
                 overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-                mouseCursor: widget.isLoading ? SystemMouseCursors.progress : SystemMouseCursors.click,
+                mouseCursor:
+                    widget.isLoading ? SystemMouseCursors.progress : SystemMouseCursors.click,
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(
                     padding,
@@ -77,9 +80,13 @@ class _VideoPlayButtonState extends State<VideoPlayButton> {
                         height: circle,
                         decoration: BoxDecoration(color: colors.accent, shape: BoxShape.circle),
                         alignment: Alignment.center,
-                        child: _CircleContent(isLoading: widget.isLoading, reduceMotion: reduceMotion, mobile: mobile),
+                        child: _CircleContent(
+                            isLoading: widget.isLoading,
+                            reduceMotion: reduceMotion,
+                            mobile: mobile),
                       ),
-                      SizedBox(width: mobile ? components.videoPlayGapMobile : components.videoPlayGap),
+                      SizedBox(
+                          width: mobile ? components.videoPlayGapMobile : components.videoPlayGap),
                       Flexible(child: Text(text, style: textStyle)),
                     ],
                   ),

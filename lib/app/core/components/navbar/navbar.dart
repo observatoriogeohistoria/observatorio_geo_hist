@@ -51,7 +51,8 @@ class _NavbarState extends State<Navbar> {
 
   Future<void> _openMenu(NavbarLocation location) async {
     final components = AppTheme.dimensions.components;
-    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
+    final duration =
+        MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
 
     setState(() => _isMenuOpen = true);
 

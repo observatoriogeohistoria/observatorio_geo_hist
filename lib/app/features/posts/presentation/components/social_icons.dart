@@ -26,9 +26,21 @@ class SocialIcons extends StatelessWidget {
         spacing: gap,
         runSpacing: gap,
         children: [
-          _ShareButton(post: post, icon: 'facebook', label: 'Compartilhar no Facebook', link: AppStrings.shareOnFacebook),
-          _ShareButton(post: post, icon: 'twitter', label: 'Compartilhar no Twitter', link: AppStrings.shareOnX),
-          _ShareButton(post: post, icon: 'whatsapp', label: 'Compartilhar no WhatsApp', link: AppStrings.shareOnWhatsapp),
+          _ShareButton(
+              post: post,
+              icon: 'facebook',
+              label: 'Compartilhar no Facebook',
+              link: AppStrings.shareOnFacebook),
+          _ShareButton(
+              post: post,
+              icon: 'twitter',
+              label: 'Compartilhar no Twitter',
+              link: AppStrings.shareOnX),
+          _ShareButton(
+              post: post,
+              icon: 'whatsapp',
+              label: 'Compartilhar no WhatsApp',
+              link: AppStrings.shareOnWhatsapp),
           _ShareButton(
             post: post,
             icon: 'email',

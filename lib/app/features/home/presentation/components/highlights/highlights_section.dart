@@ -36,7 +36,8 @@ class HighlightsSection extends StatelessWidget {
           case FetchHighlightsSuccessState():
             content = HighlightsGrid(
               itemCount: highlights.length,
-              itemBuilder: (context, index) => HighlightCard(post: highlights[index], isMain: index == 0),
+              itemBuilder: (context, index) =>
+                  HighlightCard(post: highlights[index], isMain: index == 0),
             );
         }
 
@@ -127,7 +128,8 @@ class _CompactSkeleton extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r10),
-          child: Skeleton(width: thumbWidth, height: thumbWidth / components.featuredCompactThumbAspectRatio),
+          child: Skeleton(
+              width: thumbWidth, height: thumbWidth / components.featuredCompactThumbAspectRatio),
         ),
         SizedBox(width: components.featuredCompactGap),
         Expanded(

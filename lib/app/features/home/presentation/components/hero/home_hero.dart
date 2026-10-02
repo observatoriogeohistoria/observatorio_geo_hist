@@ -52,7 +52,8 @@ class _HomeHeroState extends State<HomeHero> {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surface,
-        border: Border(bottom: BorderSide(color: colors.line, width: AppTheme.dimensions.stroke.small)),
+        border:
+            Border(bottom: BorderSide(color: colors.line, width: AppTheme.dimensions.stroke.small)),
       ),
       child: Stack(
         children: [
@@ -69,7 +70,8 @@ class _HomeHeroState extends State<HomeHero> {
                   Semantics(
                     label: label,
                     excludeSemantics: true,
-                    child: Text(label.toUpperCase(), style: styles.label.copyWith(color: colors.accentStrong)),
+                    child: Text(label.toUpperCase(),
+                        style: styles.label.copyWith(color: colors.accentStrong)),
                   ),
                   SizedBox(height: components.heroTitleGap),
                   Semantics(
@@ -84,7 +86,8 @@ class _HomeHeroState extends State<HomeHero> {
                         TextSpan(
                           text: 'Ensino de História e Geografia, ',
                           children: [
-                            TextSpan(text: 'em um só lugar.', style: TextStyle(color: colors.accent)),
+                            TextSpan(
+                                text: 'em um só lugar.', style: TextStyle(color: colors.accent)),
                           ],
                         ),
                         style: styles.display.copyWith(color: colors.ink),

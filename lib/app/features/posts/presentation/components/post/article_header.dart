@@ -117,7 +117,10 @@ class _Author extends StatelessWidget {
     final colors = AppTheme.colors;
     final components = AppTheme.dimensions.components;
     final styles = AppTheme.typography.of(context);
-    final names = [for (final name in authors) if (name.trim().isNotEmpty) name.trim()];
+    final names = [
+      for (final name in authors)
+        if (name.trim().isNotEmpty) name.trim()
+    ];
     final formattedDate = formatMonthYear(date);
 
     final text = Column(
@@ -125,8 +128,10 @@ class _Author extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (names.isNotEmpty)
-          Text(joinNames(names), style: styles.regular.copyWith(color: colors.ink, fontWeight: FontWeight.w700)),
-        if (formattedDate.isNotEmpty) Text(formattedDate, style: styles.small.copyWith(color: colors.inkSecondary)),
+          Text(joinNames(names),
+              style: styles.regular.copyWith(color: colors.ink, fontWeight: FontWeight.w700)),
+        if (formattedDate.isNotEmpty)
+          Text(formattedDate, style: styles.small.copyWith(color: colors.inkSecondary)),
       ],
     );
 
@@ -143,7 +148,8 @@ class _Author extends StatelessWidget {
             height: diameter,
             alignment: Alignment.center,
             decoration: BoxDecoration(color: colors.accentSoft, shape: BoxShape.circle),
-            child: Text(initialsOf(names.first), style: styles.postAuthorInitials.copyWith(color: colors.accentStrong)),
+            child: Text(initialsOf(names.first),
+                style: styles.postAuthorInitials.copyWith(color: colors.accentStrong)),
           ),
         ),
         SizedBox(width: components.postAuthorGap),

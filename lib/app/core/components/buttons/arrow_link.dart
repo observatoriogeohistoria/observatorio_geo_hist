@@ -21,7 +21,8 @@ class _ArrowLinkState extends State<ArrowLink> {
   Widget build(BuildContext context) {
     final components = AppTheme.dimensions.components;
     final color = AppTheme.colors.accentStrong;
-    final style = AppTheme.typography.of(context).regular.copyWith(fontWeight: FontWeight.w600, color: color);
+    final style =
+        AppTheme.typography.of(context).regular.copyWith(fontWeight: FontWeight.w600, color: color);
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r6);
 

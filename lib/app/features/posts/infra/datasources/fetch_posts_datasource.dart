@@ -50,7 +50,6 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
         query = query
             .orderBy('body.title_lower')
             .startAt([normalizedSearch]).endAt(['$normalizedSearch\uf8ff']);
-
       } else {
         query = query.orderBy('createdAt', descending: true);
 

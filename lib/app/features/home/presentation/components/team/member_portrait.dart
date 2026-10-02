@@ -28,7 +28,10 @@ class MemberPortrait extends StatelessWidget {
                   maxLines: 1,
                   // O quadrado tem tamanho fixo; ampliar as iniciais as faria vazar.
                   textScaler: TextScaler.noScaling,
-                  style: AppTheme.typography.of(context).memberPageInitials.copyWith(color: colors.accentStrong),
+                  style: AppTheme.typography
+                      .of(context)
+                      .memberPageInitials
+                      .copyWith(color: colors.accentStrong),
                 ),
               ),
             ),

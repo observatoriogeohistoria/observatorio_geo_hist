@@ -181,7 +181,8 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: AppTheme.typography.of(context).h3.copyWith(color: AppTheme.colors.ink));
+    return Text(text,
+        style: AppTheme.typography.of(context).h3.copyWith(color: AppTheme.colors.ink));
   }
 }
 
@@ -192,7 +193,8 @@ class _Description extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: AppTheme.typography.of(context).small.copyWith(color: AppTheme.colors.inkSecondary));
+    return Text(text,
+        style: AppTheme.typography.of(context).small.copyWith(color: AppTheme.colors.inkSecondary));
   }
 }
 

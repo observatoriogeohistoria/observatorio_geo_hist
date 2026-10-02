@@ -29,7 +29,8 @@ class ReadingPageScaffold extends StatelessWidget {
             // SliverFillRemaining mediria a altura intrínseca, que o LayoutBuilder do Apoio não suporta.
             SliverLayoutBuilder(
               builder: (context, constraints) {
-                final remaining = constraints.viewportMainAxisExtent - constraints.precedingScrollExtent;
+                final remaining =
+                    constraints.viewportMainAxisExtent - constraints.precedingScrollExtent;
                 return SliverToBoxAdapter(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(minHeight: remaining > 0 ? remaining : 0),
@@ -67,5 +68,6 @@ void _focusAndReveal(
   );
   final context = node.context;
   if (context == null || !context.mounted) return;
-  Scrollable.ensureVisible(context, alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart);
+  Scrollable.ensureVisible(context,
+      alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart);
 }

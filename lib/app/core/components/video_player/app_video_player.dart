@@ -162,7 +162,8 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
                     ),
                   ),
                 ),
-                if (widget.showControlsScrim) const Positioned(left: 0, right: 0, bottom: 0, child: _ControlsScrim()),
+                if (widget.showControlsScrim)
+                  const Positioned(left: 0, right: 0, bottom: 0, child: _ControlsScrim()),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(

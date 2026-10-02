@@ -77,7 +77,8 @@ class _MemberFrame extends StatelessWidget {
 
     return PageContent(
       child: Padding(
-        padding: EdgeInsets.only(top: components.pageHeadPaddingTop, bottom: components.memberPageBottomGap),
+        padding: EdgeInsets.only(
+            top: components.pageHeadPaddingTop, bottom: components.memberPageBottomGap),
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: components.memberPageMaxWidth),
@@ -124,7 +125,8 @@ class _MemberContent extends StatelessWidget {
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(member.role.toUpperCase(), style: styles.label.copyWith(color: colors.accentStrong)),
+              Text(member.role.toUpperCase(),
+                  style: styles.label.copyWith(color: colors.accentStrong)),
               SizedBox(height: components.memberNameTopGap),
               Semantics(
                 header: true,

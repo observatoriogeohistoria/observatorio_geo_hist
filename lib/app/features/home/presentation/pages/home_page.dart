@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart' deferred as footer;
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart' deferred as partners;
+import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart'
+    deferred as partners;
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
@@ -149,7 +150,8 @@ class _HomePageState extends State<HomePage> {
     return switch (_fetchHighlightsStore.state) {
       FetchHighlightsInitialState() || FetchHighlightsErrorState() => true,
       FetchHighlightsLoadingState() => false,
-      FetchHighlightsSuccessState() => _fetchHighlightsStore.fetchedWithoutCategories && _hasCategories,
+      FetchHighlightsSuccessState() =>
+        _fetchHighlightsStore.fetchedWithoutCategories && _hasCategories,
     };
   }
 
@@ -165,7 +167,8 @@ class _HomePageState extends State<HomePage> {
       }),
       // Se as categorias falham, os destaques são buscados mesmo assim.
       reaction((_) => _fetchCategoriesStore.state, (state) {
-        if (state is FetchCategoriesErrorState && _fetchHighlightsStore.state is FetchHighlightsInitialState) {
+        if (state is FetchCategoriesErrorState &&
+            _fetchHighlightsStore.state is FetchHighlightsInitialState) {
           _fetchHighlights();
         }
       }),

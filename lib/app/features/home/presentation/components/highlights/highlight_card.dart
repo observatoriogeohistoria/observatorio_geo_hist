@@ -211,13 +211,15 @@ class _HighlightCardState extends State<HighlightCard> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     maxWidth: widget.isMain
-                        ? textScaler.scale(titleStyle.fontSize!) * components.featuredTitleMaxWidthEm
+                        ? textScaler.scale(titleStyle.fontSize!) *
+                            components.featuredTitleMaxWidthEm
                         : double.infinity,
                   ),
                   // Com texto ampliado, corta em menos linhas em vez de vazar.
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final lineHeight = textScaler.scale(titleStyle.fontSize!) * titleStyle.height!;
+                      final lineHeight =
+                          textScaler.scale(titleStyle.fontSize!) * titleStyle.height!;
                       final fitting = (constraints.maxHeight / lineHeight).floor();
                       final maxLines = fitting.clamp(1, components.featuredTitleMaxLines);
 
@@ -292,7 +294,8 @@ class _HighlightImage extends StatelessWidget {
           if (wasSynchronouslyLoaded) return child;
           return AnimatedOpacity(
             opacity: frame == null ? 0 : 1,
-            duration: reduceMotion ? Duration.zero : AppTheme.dimensions.components.featuredImageFade,
+            duration:
+                reduceMotion ? Duration.zero : AppTheme.dimensions.components.featuredImageFade,
             child: child,
           );
         },

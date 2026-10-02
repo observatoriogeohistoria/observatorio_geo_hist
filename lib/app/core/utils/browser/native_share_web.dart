@@ -13,7 +13,8 @@ bool canNativeShare() {
     final object = navigator as JSObject;
     if (!object.has('share')) return false;
     if (!object.has('canShare')) return true;
-    return navigator.canShare(web.ShareData(title: web.document.title, url: web.window.location.href));
+    return navigator
+        .canShare(web.ShareData(title: web.document.title, url: web.window.location.href));
   } catch (_) {
     return false;
   }

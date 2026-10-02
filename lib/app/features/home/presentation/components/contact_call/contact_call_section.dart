@@ -16,7 +16,8 @@ class ContactCallSection extends StatelessWidget {
     final styles = AppTheme.typography.of(context);
     final breakpoint = ScreenUtils.breakpointOf(context);
     final textScaler = MediaQuery.textScalerOf(context);
-    final stacked = breakpoint != Breakpoint.desktop || textScaler.scale(1) >= components.ctaStackTextScale;
+    final stacked =
+        breakpoint != Breakpoint.desktop || textScaler.scale(1) >= components.ctaStackTextScale;
 
     final titleStyle = styles.ctaTitle.copyWith(color: colors.ink);
 
@@ -30,7 +31,8 @@ class ContactCallSection extends StatelessWidget {
           ),
           child: Semantics(
             header: true,
-            child: Text('Feito por e para professores, pesquisadores e estudantes.', style: titleStyle),
+            child: Text('Feito por e para professores, pesquisadores e estudantes.',
+                style: titleStyle),
           ),
         ),
         SizedBox(height: components.ctaTextGap),

@@ -68,7 +68,8 @@ class _Caption extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Semantics(header: true, label: VideoCover.caption, child: const SizedBox.shrink()),
+              child: Semantics(
+                  header: true, label: VideoCover.caption, child: const SizedBox.shrink()),
             ),
             action!,
           ],
@@ -99,7 +100,10 @@ class _Caption extends StatelessWidget {
                       VideoCover.caption,
                       maxLines: components.videoCaptionMaxLines,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTheme.typography.of(context).videoCaption.copyWith(color: colors.white),
+                      style: AppTheme.typography
+                          .of(context)
+                          .videoCaption
+                          .copyWith(color: colors.white),
                     ),
                   ),
                 ),
@@ -191,7 +195,12 @@ class VideoCoverPainter extends CustomPainter {
       size.width * components.videoRingCenter.dx,
       size.height * components.videoRingCenter.dy,
     );
-    final corners = [Offset.zero, Offset(size.width, 0), Offset(0, size.height), Offset(size.width, size.height)];
+    final corners = [
+      Offset.zero,
+      Offset(size.width, 0),
+      Offset(0, size.height),
+      Offset(size.width, size.height)
+    ];
     final farthest = corners.map((corner) => (corner - ringCenter).distance).reduce(math.max);
     final ring = Paint()
       ..style = PaintingStyle.stroke

@@ -181,7 +181,8 @@ class ComponentSizes {
 
   final double videoMaxHeight = 460.0;
 
-  double videoCaptionPaddingHorizontal(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 24);
+  double videoCaptionPaddingHorizontal(Breakpoint breakpoint) =>
+      _byBreakpoint(breakpoint, 20, 24, 24);
   double videoCaptionPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 20, 20);
 
   final int videoCaptionMaxLines = 2;

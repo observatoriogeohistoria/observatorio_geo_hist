@@ -129,13 +129,15 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
               children: [
                 PostTypeContent(post: post, area: widget.area, category: category),
                 if (post.isArticle)
-                  RelatedPostsSection(posts: _store.related.toList(), area: widget.area, category: category),
+                  RelatedPostsSection(
+                      posts: _store.related.toList(), area: widget.area, category: category),
               ],
             );
         }
 
         // A chave por endereço volta ao topo ao abrir outro post pelo Leia também.
-        return ReadingPageScaffold(key: ValueKey(_address), body: body, beforeFooter: const Support());
+        return ReadingPageScaffold(
+            key: ValueKey(_address), body: body, beforeFooter: const Support());
       },
     );
   }
@@ -152,7 +154,8 @@ class _ErrorFrame extends StatelessWidget {
 
     return PostHeadFrame(
       child: Padding(
-        padding: EdgeInsets.only(bottom: AppTheme.dimensions.components.readingPaddingBottom(breakpoint)),
+        padding: EdgeInsets.only(
+            bottom: AppTheme.dimensions.components.readingPaddingBottom(breakpoint)),
         child: StateErrorBox(onRetry: onRetry),
       ),
     );

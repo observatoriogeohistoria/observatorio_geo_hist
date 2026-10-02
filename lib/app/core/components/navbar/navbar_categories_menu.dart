@@ -72,7 +72,9 @@ class NavbarCategoriesMenu extends StatelessWidget {
               ),
             ],
             switch (state) {
-              FetchCategoriesInitialState() || FetchCategoriesLoadingState() => const _LoadingRows(),
+              FetchCategoriesInitialState() ||
+              FetchCategoriesLoadingState() =>
+                const _LoadingRows(),
               FetchCategoriesErrorState() => _ErrorRow(onRetry: store.fetchCategories),
               FetchCategoriesSuccessState() when categories.isEmpty => const _MessageRow(
                   'Nenhuma categoria por enquanto',

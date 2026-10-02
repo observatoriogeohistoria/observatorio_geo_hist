@@ -191,8 +191,10 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
     final maxWidth = components.dropdownMaxWidth.clamp(0.0, screen.width - spacing.s32).toDouble();
     // Deixa o menu 8 px abaixo da linha da navbar.
     final gapAboveMenu = spacing.s20;
-    final maxHeight = (screen.height - components.navbarHeight - spacing.s20 - spacing.s16).clamp(0.0, double.infinity);
-    final duration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
+    final maxHeight = (screen.height - components.navbarHeight - spacing.s20 - spacing.s16)
+        .clamp(0.0, double.infinity);
+    final duration =
+        MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation;
 
     return Stack(
       children: [
@@ -270,7 +272,8 @@ class _Panel extends StatelessWidget {
         child: Material(
           type: MaterialType.transparency,
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight),
+            constraints:
+                BoxConstraints(minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight),
             child: IntrinsicWidth(
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(AppTheme.dimensions.spacing.s8),

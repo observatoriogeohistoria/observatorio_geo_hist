@@ -50,7 +50,8 @@ class _AppFocusRingState extends State<AppFocusRing> {
   Widget build(BuildContext context) {
     final focus = AppTheme.dimensions.focus;
     final outset = focus.width + focus.offset;
-    final showRing = _hasFocus && FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
+    final showRing =
+        _hasFocus && FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
 
     return Focus(
       canRequestFocus: false,
@@ -86,5 +87,6 @@ class _AppFocusRingState extends State<AppFocusRing> {
     );
   }
 
-  Radius _grow(Radius radius, double by) => radius == Radius.zero ? Radius.zero : Radius.circular(radius.x + by);
+  Radius _grow(Radius radius, double by) =>
+      radius == Radius.zero ? Radius.zero : Radius.circular(radius.x + by);
 }

@@ -16,7 +16,8 @@ class ReadingLead extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppTheme.dimensions.components.readingParagraphGap),
-      child: Text(text, style: AppTheme.typography.of(context).lead.copyWith(color: AppTheme.colors.ink)),
+      child: Text(text,
+          style: AppTheme.typography.of(context).lead.copyWith(color: AppTheme.colors.ink)),
     );
   }
 }
@@ -30,7 +31,8 @@ class ReadingParagraph extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppTheme.dimensions.components.readingParagraphGap),
-      child: Text(text, style: AppTheme.typography.of(context).reading.copyWith(color: AppTheme.colors.ink)),
+      child: Text(text,
+          style: AppTheme.typography.of(context).reading.copyWith(color: AppTheme.colors.ink)),
     );
   }
 }
@@ -52,7 +54,11 @@ class ReadingSubtitle extends StatelessWidget {
       child: Semantics(
         header: true,
         headingLevel: 2,
-        child: Text(text, style: AppTheme.typography.of(context).readingSubtitle.copyWith(color: AppTheme.colors.ink)),
+        child: Text(text,
+            style: AppTheme.typography
+                .of(context)
+                .readingSubtitle
+                .copyWith(color: AppTheme.colors.ink)),
       ),
     );
   }
@@ -69,7 +75,8 @@ class ReadingBulletList extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-        top: math.max(0, components.readingBulletListMarginVertical - components.readingParagraphGap),
+        top: math.max(
+            0, components.readingBulletListMarginVertical - components.readingParagraphGap),
         bottom: components.readingBulletListMarginVertical,
       ),
       child: Semantics(
@@ -194,7 +201,8 @@ class _NumberedItem extends StatelessWidget {
                   height: diameter,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(color: colors.accentSoft, shape: BoxShape.circle),
-                  child: Text('$number', style: styles.readingListNumber.copyWith(color: colors.accentStrong)),
+                  child: Text('$number',
+                      style: styles.readingListNumber.copyWith(color: colors.accentStrong)),
                 ),
               ),
             ),
@@ -231,7 +239,8 @@ class ReadingQuote extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(left: BorderSide(color: colors.accent, width: components.readingQuoteBar)),
         ),
-        child: Text(text, style: AppTheme.typography.of(context).readingQuote.copyWith(color: colors.ink)),
+        child: Text(text,
+            style: AppTheme.typography.of(context).readingQuote.copyWith(color: colors.ink)),
       ),
     );
   }

@@ -56,7 +56,8 @@ class _NavbarItemState extends State<NavbarItem> {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: spacing.s12 + 2, vertical: spacing.s8 + 2),
+                padding:
+                    EdgeInsets.symmetric(horizontal: spacing.s12 + 2, vertical: spacing.s8 + 2),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

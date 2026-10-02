@@ -40,7 +40,9 @@ class ArticleNote extends StatelessWidget {
                 ),
               ),
               SizedBox(width: components.postNoteIconGap),
-              Semantics(header: true, child: Text('NOTA', style: label.copyWith(color: colors.accentStrong))),
+              Semantics(
+                  header: true,
+                  child: Text('NOTA', style: label.copyWith(color: colors.accentStrong))),
             ],
           ),
           SizedBox(height: components.postNoteLabelGap),

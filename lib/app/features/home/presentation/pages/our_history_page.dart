@@ -41,7 +41,8 @@ class OurHistoryPage extends StatelessWidget {
   static int _photoCacheWidth(BuildContext context) {
     const step = 256;
     final maxWidth = AppTheme.dimensions.components.readingFigureMaxWidth;
-    final width = math.min(MediaQuery.sizeOf(context).width, maxWidth) * MediaQuery.devicePixelRatioOf(context);
+    final width = math.min(MediaQuery.sizeOf(context).width, maxWidth) *
+        MediaQuery.devicePixelRatioOf(context);
     return (width / step).ceil() * step;
   }
 
