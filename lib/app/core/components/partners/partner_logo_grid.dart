@@ -3,11 +3,12 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/partners/partner_logo.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/partner.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Grade com todos os logos de [Partner] (spec 009): colunas de mesma largura,
 /// com no mínimo [minColumnWidth], alinhadas à esquerda
-/// (`repeat(auto-fill, minmax(150px, 1fr))`).
+/// (`repeat(auto-fill, minmax(150px, 1fr))`). No celular, três colunas fixas.
 class PartnerLogoGrid extends StatelessWidget {
   const PartnerLogoGrid({super.key, this.minColumnWidth});
 
@@ -26,7 +27,9 @@ class PartnerLogoGrid extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final columns = columnsFor(constraints.maxWidth, minColumnWidth ?? components.partnerColumnMinWidth);
+        final columns = ScreenUtils.breakpointOf(context) == Breakpoint.mobile
+            ? components.partnerColumnsMobile
+            : columnsFor(constraints.maxWidth, minColumnWidth ?? components.partnerColumnMinWidth);
         final rows = (partners.length / columns).ceil();
 
         return Column(

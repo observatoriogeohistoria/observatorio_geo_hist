@@ -5,7 +5,8 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 /// Disposição dos destaques conforme a quantidade (1 a 3) e a faixa de largura
 /// (spec 005). O item 0 é o principal.
 ///
-/// - Celular: uma coluna, principal primeiro, com alturas fixas.
+/// - Celular: uma coluna; o principal com altura fixa e os demais em linhas
+///   compactas, com a altura do próprio conteúdo.
 /// - Tablet e desktop: 1 item na largura toda; 2 itens em duas colunas
 ///   (1,6 : 1); 3 itens com o principal à esquerda e dois empilhados à direita.
 ///
@@ -30,10 +31,10 @@ class HighlightsGrid extends StatelessWidget {
         children: [
           for (var index = 0; index < itemCount; index++) ...[
             if (index > 0) SizedBox(height: gap),
-            SizedBox(
-              height: index == 0 ? components.featuredMainHeightMobile : components.featuredSmallHeightMobile,
-              child: itemBuilder(context, index),
-            ),
+            if (index == 0)
+              SizedBox(height: components.featuredMainHeightMobile, child: itemBuilder(context, index))
+            else
+              itemBuilder(context, index),
           ],
         ],
       );

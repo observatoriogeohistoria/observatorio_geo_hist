@@ -3,6 +3,7 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/partner.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -100,7 +101,11 @@ class _PartnerLogoState extends State<PartnerLogo> {
     return AnimatedContainer(
       duration: duration,
       constraints: BoxConstraints(minHeight: components.minTapTarget),
-      padding: EdgeInsets.all(components.partnerPadding),
+      padding: EdgeInsets.all(
+        ScreenUtils.breakpointOf(context) == Breakpoint.mobile
+            ? components.partnerPaddingMobile
+            : components.partnerPadding,
+      ),
       transform: Matrix4.translationValues(0, active && !reduceMotion ? -components.partnerHoverLift : 0, 0),
       decoration: BoxDecoration(
         color: active ? colors.page : colors.page.withValues(alpha: 0),

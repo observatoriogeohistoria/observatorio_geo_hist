@@ -171,9 +171,15 @@ class ComponentSizes {
   /// coluna, com as alturas abaixo, e este valor não é usado.
   double featuredGridHeight(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 0, 400, 440);
 
-  /// Alturas dos cartões no celular, em coluna (`.feat.big` 340 px; menores 220 px).
-  final double featuredMainHeightMobile = 340.0;
-  final double featuredSmallHeightMobile = 220.0;
+  /// Altura do cartão principal no celular.
+  final double featuredMainHeightMobile = 260.0;
+
+  /// Destaques secundários no celular, em linha: largura da miniatura (4:3),
+  /// vão miniatura → texto e vão tipo → título.
+  final double featuredCompactThumbWidth = 112.0;
+  final double featuredCompactThumbAspectRatio = 4 / 3;
+  final double featuredCompactGap = 14.0;
+  final double featuredCompactTextGap = 4.0;
 
   /// Vão entre os cartões (`.featured` `gap`).
   final double featuredGap = 16.0;
@@ -341,6 +347,11 @@ class ComponentSizes {
   final double teamColumnGap = 20.0;
   final double teamRowGap = 28.0;
 
+  /// Colunas fixas da equipe no celular, que a largura mínima deixaria em uma.
+  /// A partir da ampliação [teamStackTextScale], volta a uma coluna.
+  final int teamColumnsMobile = 2;
+  final double teamStackTextScale = 1.3;
+
   /// Diâmetro da foto do membro e vãos foto → nome e nome → função.
   final double memberAvatar = 76.0;
   final double memberAvatarGap = 10.0;
@@ -365,6 +376,10 @@ class ComponentSizes {
   /// Vão entre logos (`gap`) e respiro da área de cada logo (`.logo` `padding`).
   final double partnerGap = 12.0;
   final double partnerPadding = 12.0;
+
+  /// No celular: três colunas fixas (9 logos em 3 linhas) e respiro menor.
+  final int partnerColumnsMobile = 3;
+  final double partnerPaddingMobile = 6.0;
 
   /// Largura máxima do logo e proporção dos arquivos (280 × 186 px).
   final double partnerLogoMaxWidth = 150.0;

@@ -1,10 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Grade da equipe (spec 008): colunas de mesma largura, com no mínimo
 /// `teamColumnMinWidth` × ampliação do texto, alinhadas à esquerda e pelo topo.
+/// No celular, duas colunas fixas.
 ///
 /// Recebe um construtor de item para servir também ao esqueleto.
 class TeamGrid extends StatelessWidget {
@@ -16,7 +18,11 @@ class TeamGrid extends StatelessWidget {
   /// Quantas colunas cabem em [width] (`repeat(auto-fill, minmax(190px, 1fr))`).
   static int columnsFor(BuildContext context, double width) {
     final components = AppTheme.dimensions.components;
-    final minWidth = MediaQuery.textScalerOf(context).scale(components.teamColumnMinWidth);
+    final textScaler = MediaQuery.textScalerOf(context);
+    if (ScreenUtils.breakpointOf(context) == Breakpoint.mobile) {
+      return textScaler.scale(1) < components.teamStackTextScale ? components.teamColumnsMobile : 1;
+    }
+    final minWidth = textScaler.scale(components.teamColumnMinWidth);
     final gap = components.teamColumnGap;
     return math.max(1, ((width + gap) / (minWidth + gap)).floor());
   }
