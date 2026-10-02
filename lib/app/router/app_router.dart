@@ -16,6 +16,7 @@ import 'package:observatorio_geo_hist/app/features/library/infra/models/library_
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_document_detailed_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_list_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_page.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/all_posts_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/collaborate_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/post_detailed_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/posts_page.dart';
@@ -53,6 +54,12 @@ class AppRouter {
               if (invalidRoute) return const PageNotFound();
 
               return TeamMemberPage(memberId: id);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.publications,
+            builder: (BuildContext context, GoRouterState state) {
+              return const AllPostsPage();
             },
           ),
           GoRoute(

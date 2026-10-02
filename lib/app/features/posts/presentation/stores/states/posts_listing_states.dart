@@ -12,6 +12,12 @@ class PostsListingScope extends Equatable {
   factory PostsListingScope.ofCategory(CategoryModel category) =>
       PostsListingScope(category: category, types: category.postsTypes);
 
+  /// Sem categoria não há ordem cadastrada: os tipos seguem a ordem alfabética do nome.
+  factory PostsListingScope.all() => PostsListingScope(
+        types: [...PostType.values]
+          ..sort((a, b) => a.portuguesePlural.compareTo(b.portuguesePlural)),
+      );
+
   final CategoryModel? category;
   final List<PostType> types;
 
