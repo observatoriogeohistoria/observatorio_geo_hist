@@ -6,7 +6,7 @@
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |
 |---|---|---|---|---|---|
 | 016-biblioteca-indice-lista | índice (P-09), lista por área com filtros, resultados e paginação (T-06, P-10 a P-12) | feita (18 critérios, 15 tarefas) | feita | feita | verificada com ressalvas: 1 correção (clique fora dos menus); índices da busca com filtro a publicar |
-| 017-biblioteca-documento | detalhe do documento (T-07) | pendente | pendente | pendente | |
+| 017-biblioteca-documento | detalhe do documento (T-07) | feita (14 critérios, 14 tarefas) | pendente | pendente | |
 
 ## Divisão
 - 016 redesenha a entrada da biblioteca (áreas com contagem) e a lista por área: filtros de tipo e categoria com contagem, busca, resultados, paginação e estados. Índice e lista compartilham cabeçalho e cards.
@@ -16,6 +16,7 @@
 - 016: rota pública ganha página nova e o painel fica na `LibraryListPage`; busca num campo com "Buscar em" Título/Autor/Instituição e inicial maiúscula automática; ano como campo numérico, sem seletor de instituição; quantidades do tipo e das categorias da área inteira; categorias zeradas escondidas, em ordem alfabética; filtros na hora com chips removíveis; linhas de 20 em 20 com "Ver mais documentos"; sem ações de edição e sem parceiros no site público. Detalhes em [016/spec.md](016-biblioteca-indice-lista/spec.md).
 - 016 (implementação): com busca, a ordem continua por data (a alfabética pedia índice novo até para a busca sozinha); na instituição, termo todo em minúsculas vira caixa alta (552 de 602 gravadas assim), em título e autor ganha inicial maiúscula; o título do cartão de área fica só visual, sem `h2` para leitores de tela, porque o cartão é lido como um link só.
 - 016 (verificação): menus de filtro consomem o clique de fora, para fechar sem abrir o documento embaixo.
+- 017: sem "← Área" nem "Voltar" (migalhas com "Início" levam à área); só "Abrir documento", sem "Baixar"; visualizador com página e anterior/próxima, sem zoom nem tela cheia; coluna de 920 px sem faixa de cabeçalho; sai a data de cadastro; documento inexistente ou área inválida dão a 404 atual, área válida trocada mostra o documento; slug codificado no endereço e, quando não serve (espaço, `/` ou mais de 200 caracteres), a lista usa o id no mesmo parâmetro e o detalhe busca por slug e depois por id; store próprio do detalhe, sem tocar no `LibraryStore`; sem compartilhar. Detalhes em [017/spec.md](017-biblioteca-documento/spec.md).
 
 ## Ressalvas
 - 016: busca junto com tipo, ano ou categoria cai no erro tratado até a pessoa publicar os índices compostos de `docs/deploy-ambientes.md` nos dois projetos.
