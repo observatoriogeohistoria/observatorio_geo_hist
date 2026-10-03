@@ -1,6 +1,6 @@
 # 017. Biblioteca: detalhe do documento
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 4: detalhe do documento (T-07), metadados e visualizador
 - **Protótipo:** aba "Documento"; aba "Estados" para esqueleto e erro (link no CLAUDE.md)
 - **Criada em:** 2026-10-02
@@ -120,3 +120,5 @@ Sem mudar a rota nem os dados:
 - 2026-10-02: criada e aprovada no modo autônomo (execução da Fase 4).
 - 2026-10-02: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-02: diagnóstico em prod (só leitura): são 12 documentos com o resumo no slug (Geografia e História), todos terminando em espaço; a lista aparava o slug e a busca não achava, além do `/` em 5 deles. A regra do identificador vale para o slug como está gravado (espaço em qualquer posição, inclusive no fim). Sem mudança de comportamento.
+- 2026-10-02: implementação: o visualizador desenha as páginas direto com o `pdfx`, sem o `PdfView` (que traz zoom e animação); o botão principal ganhou a opção de ocupar a largura toda. Sem mudança de comportamento.
+- 2026-10-02: implementada (modo autônomo). Sem arquivo, o aviso ocupa o lugar do visualizador, sem a moldura.

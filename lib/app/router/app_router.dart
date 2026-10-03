@@ -140,12 +140,13 @@ class AppRouter {
           GoRoute(
             path: AppRoutes.libraryDocumentPattern,
             builder: (BuildContext context, GoRouterState state) {
-              final slug = state.pathParameters['slug'];
+              final area = DocumentArea.fromRouteKey(state.pathParameters['area']);
+              final documentKey = state.pathParameters['slug'];
 
-              final invalidRoute = slug == null;
+              final invalidRoute = area == null || documentKey == null || documentKey.isEmpty;
               if (invalidRoute) return const PageNotFound();
 
-              return LibraryDocumentDetailedPage(slug: slug);
+              return LibraryDocumentDetailedPage(area: area, documentKey: documentKey);
             },
           ),
         ],

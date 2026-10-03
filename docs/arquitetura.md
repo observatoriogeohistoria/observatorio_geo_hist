@@ -46,7 +46,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 |---|---|
 | `home` | Página inicial: hero, destaques, quem somos, vídeo, nossa história, equipe, realização e apoio e chamada para contato |
 | `posts` | Listagem da categoria (busca, filtro por tipo e paginação) e detalhe do post |
-| `library` | Biblioteca de documentos por área, com busca por `slug` |
+| `library` | Biblioteca de documentos por área, com busca por `slug` ou identificador |
 | `admin` | Login, painel de conteúdo e sidebar |
 
 ## Rotas
@@ -132,12 +132,14 @@ A página da categoria (`PostsPage`) usa o `ReadingPageScaffold` com o `PageHead
 
 ## Biblioteca
 
-A página pública e a do painel são separadas: `/biblioteca/:area` monta a `LibraryAreaPage` e `/painel/biblioteca/:area` continua com a `LibraryListPage` (criar, editar, excluir), com `Filters`, `LibraryDocumentCard` e `FilterDocumentsStore`, que o site não usa mais. O `LibraryStore` segue no painel e no detalhe do documento.
+A página pública e a do painel são separadas: `/biblioteca/:area` monta a `LibraryAreaPage` e `/painel/biblioteca/:area` continua com a `LibraryListPage` (criar, editar, excluir), com `Filters`, `LibraryDocumentCard` e `FilterDocumentsStore`, que o site não usa mais. O `LibraryStore` fica só no painel.
 
 - **Entrada** (`LibraryPage`): `ReadingPageScaffold` + `PageHeader` e um `LibraryAreaTile` por área, com as contagens do `LibraryIndexStore` (`countByType` por área; sem contagem, a linha de números some).
 - **Lista** (`LibraryAreaPage` + `LibraryListing`, em `library/presentation/components/listing/`): busca com "Buscar em" (`LibrarySearchField`), tipo, ano e categorias (`LibraryFilterSelect`, `LibraryYearField`, `LibraryCategoryFilter`, menus do Material), chips de filtros ativos, contagem, `LibraryDocumentRow` e "Ver mais documentos". Filtros valem na hora e não vão para a URL.
 - **Store por página:** `LibraryListingStore` (fábrica) guarda filtros, itens, cursor, total do filtro e contagens da área por tipo e categoria (nulas se falharem), com descarte de respostas velhas. Páginas de 20. Vazio sem filtros é "área sem documentos"; com filtros ou busca, "nenhum resultado". O termo todo em minúsculas ganha inicial maiúscula (título, autor) ou vira caixa alta (instituição), porque o banco diferencia maiúsculas.
 - **Dados:** `fetchListing` e `countListing` (mesma consulta, `count()`) filtram por área, tipo, ano, categorias (`arrayContainsAny`) e intervalo de prefixo no campo buscado, sempre em ordem de `createdAt`, e pedem um item a mais para saber se há próxima página. O painel segue com `_fetchDocuments`. Busca combinada com outro filtro depende de índices próprios (ver [deploy-ambientes.md](deploy-ambientes.md#índices-do-firestore)).
+- **Detalhe** (`LibraryDocumentDetailedPage`, em `components/document/`): `ReadingPageScaffold`, coluna de 920 px com migalhas (área do documento, não a da URL), `LibraryDocumentHeader` (selo, título, ficha e "Abrir documento") e `LibraryDocumentPdfViewer`, que baixa o PDF e desenha uma página por vez com o `pdfx`, sem `PdfView`. Store próprio, `LibraryDocumentStore` (fábrica), com carregando (`LibraryDocumentSkeleton`), sucesso, não encontrado (404) e erro. Selo e etiqueta são os mesmos da lista (`library_labels.dart`).
+- **Endereço do documento:** o trecho final é o slug codificado ou, quando o slug não serve como endereço (espaço, `/` ou mais de 200 caracteres; há resumos gravados no slug), o identificador do documento (`addressKey`). O detalhe procura pelo slug e, sem resultado, pelo identificador (`fetchDocumentByAddress`). O card do painel ainda monta o endereço com o slug cru.
 
 ## Página do post
 

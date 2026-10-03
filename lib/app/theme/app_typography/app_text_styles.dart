@@ -255,6 +255,19 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
+  TextStyle get libraryDetailTitle => _display(
+        size: _size(mobile: 28.8, tablet: 36, desktop: 44.8),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get libraryFactValue => _body(
+        size: _size(mobile: 16, tablet: 16, desktop: 16),
+        weight: FontWeight.w400,
+        height: 1.55,
+      );
+
   TextStyle get libraryFilter => _body(
         size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
         weight: FontWeight.w600,

@@ -537,6 +537,46 @@ class ComponentSizes {
   final double librarySkeletonTagWidth = 72.0;
   final double librarySkeletonTagHeight = 18.0;
 
+  final double libraryDetailMaxWidth = 920.0;
+  final double libraryDetailBadgeTop = 22.0;
+  final double libraryDetailTitleTop = 12.0;
+  final double libraryDetailActionTop = 22.0;
+
+  final double libraryFactsTop = 24.0;
+  final double libraryFactsPaddingV = 20.0;
+  final double libraryFactsGapV = 14.0;
+  final double libraryFactsGapH = 28.0;
+  final double libraryFactsMinColumn = 170.0;
+  final int libraryFactsMaxColumns = 4;
+  final double libraryFactLabelGap = 2.0;
+
+  final double libraryViewerMarginTop = 32.0;
+  double libraryViewerMarginBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 56, 64);
+  final double libraryViewerBarPaddingV = 8.0;
+  final double libraryViewerBarPaddingH = 14.0;
+  final double libraryViewerButton = 32.0;
+  final double libraryViewerButtonIcon = 20.0;
+  final double libraryViewerButtonGap = 6.0;
+  final double libraryViewerPageMaxWidth = 560.0;
+  final double libraryViewerPageWidthFactor = 0.86;
+  final double libraryViewerPageMargin = 24.0;
+  final double libraryViewerStatePadding = 20.0;
+
+  /// Largura sobre altura de uma folha A4, usada antes de saber a proporção do PDF.
+  final double libraryViewerA4Aspect = 1 / 1.414;
+
+  final double libraryDetailSkeletonBadgeWidth = 96.0;
+  final double libraryDetailSkeletonBadgeHeight = 26.0;
+  final double libraryDetailSkeletonTitleHeight = 34.0;
+  final double libraryDetailSkeletonTitleGap = 10.0;
+  final double libraryDetailSkeletonTitleLastWidth = 0.6;
+  final double libraryDetailSkeletonLabelWidth = 64.0;
+  final double libraryDetailSkeletonLabelHeight = 12.0;
+  final double libraryDetailSkeletonValueWidth = 120.0;
+  final double libraryDetailSkeletonValueHeight = 18.0;
+  final double libraryDetailSkeletonButtonWidth = 200.0;
+  final double libraryDetailSkeletonViewerHeight = 320.0;
+
   double _byBreakpoint(
     Breakpoint breakpoint,
     double mobile,
