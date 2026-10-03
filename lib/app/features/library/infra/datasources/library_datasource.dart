@@ -13,6 +13,7 @@ abstract class LibraryDatasource {
   Future<PaginatedLibraryDocuments> fetchGeographyDocuments(LibraryDocumentsQuery query);
   Future<PaginatedLibraryDocuments> fetchHistoryDocuments(LibraryDocumentsQuery query);
   Future<LibraryDocumentModel?> fetchDocumentBySlug(String slug);
+  Future<LibraryDocumentModel?> fetchDocumentById(String id);
 
   Future<PaginatedLibraryDocuments> fetchListing(LibraryListingQuery query);
   Future<int> countListing(LibraryListingQuery query);
@@ -134,6 +135,18 @@ class LibraryDatasourceImpl implements LibraryDatasource {
 
     final data = snapshot.docs.first.data();
     return LibraryDocumentModel.fromJson(data);
+  }
+
+  @override
+  Future<LibraryDocumentModel?> fetchDocumentById(String id) async {
+    // Com `/` o Firestore leria o texto como caminho de outra coleção.
+    if (id.isEmpty || id.contains('/')) return null;
+
+    final snapshot = await _firestore.collection('library').doc(id).get();
+    final data = snapshot.data();
+    if (data == null) return null;
+
+    return LibraryDocumentModel.fromJson(data).copyWith(id: snapshot.id);
   }
 
   // A contagem usa a mesma ordenação da lista para aproveitar os mesmos índices.

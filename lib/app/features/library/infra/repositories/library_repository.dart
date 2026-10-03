@@ -9,6 +9,7 @@ import 'package:observatorio_geo_hist/app/features/library/infra/models/paginate
 abstract class LibraryRepository {
   Future<Either<Failure, PaginatedLibraryDocuments>> fetchDocuments(LibraryDocumentsQuery query);
   Future<Either<Failure, LibraryDocumentModel?>> fetchDocumentBySlug(String slug);
+  Future<Either<Failure, LibraryDocumentModel>> fetchDocumentByAddress(String key);
 
   Future<Either<Failure, PaginatedLibraryDocuments>> fetchListing(LibraryListingQuery query);
   Future<Either<Failure, int>> countListing(LibraryListingQuery query);
@@ -44,6 +45,20 @@ class LibraryRepositoryImpl implements LibraryRepository {
     try {
       final response = await _datasource.fetchDocumentBySlug(slug);
       return Right(response);
+    } catch (_) {
+      return const Left(FetchLibraryFailure());
+    }
+  }
+
+  // O endereço leva o slug ou, quando o slug não serve como endereço, o identificador.
+  @override
+  Future<Either<Failure, LibraryDocumentModel>> fetchDocumentByAddress(String key) async {
+    try {
+      final document =
+          await _datasource.fetchDocumentBySlug(key) ?? await _datasource.fetchDocumentById(key);
+      if (document == null) return const Left(LibraryDocumentNotFoundFailure());
+
+      return Right(document);
     } catch (_) {
       return const Left(FetchLibraryFailure());
     }

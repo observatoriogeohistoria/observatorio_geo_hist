@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
+import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_address.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/library_labels.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class LibraryDocumentRow extends StatefulWidget {
@@ -19,10 +21,10 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
 
   LibraryDocumentModel get _document => widget.document;
 
-  // Sem slug não há endereço: a linha aparece, mas sem link.
+  // Sem slug nem identificador não há endereço: a linha aparece, mas sem link.
   String? get _route {
-    final slug = _document.slug?.trim() ?? '';
-    return slug.isEmpty ? null : AppRoutes.libraryDocument(_document.area.routeKey, slug);
+    final key = _document.addressKey;
+    return key == null ? null : AppRoutes.libraryDocument(_document.area.routeKey, key);
   }
 
   String get _details => [
@@ -140,9 +142,9 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
             runSpacing: components.libraryTagGap,
             children: [
               for (final category in categories.take(components.libraryDocMaxCategories))
-                _Tag(category.value),
+                LibraryCategoryTag(category.value),
               if (categories.length > components.libraryDocMaxCategories)
-                _Tag('+${categories.length - components.libraryDocMaxCategories}'),
+                LibraryCategoryTag('+${categories.length - components.libraryDocMaxCategories}'),
             ],
           ),
         ],
@@ -152,7 +154,7 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
     final side = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (type != null) _Badge(type.value),
+        if (type != null) LibraryTypeBadge(type.value),
         if (type != null && showArrow) SizedBox(width: components.libraryDocSideGap),
         if (showArrow)
           Icon(Icons.arrow_forward, size: components.libraryDocArrow, color: colors.inkSecondary),
@@ -178,65 +180,6 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
         Expanded(child: main),
         if (hasSide) ...[SizedBox(width: components.libraryDocGapH), side],
       ],
-    );
-  }
-}
-
-class _Tag extends StatelessWidget {
-  const _Tag(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppTheme.colors;
-    final components = AppTheme.dimensions.components;
-
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: components.libraryTagPaddingH,
-        vertical: components.libraryTagPaddingV,
-      ),
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r6),
-      ),
-      child: Text(
-        text,
-        style: AppTheme.typography.of(context).libraryTag.copyWith(color: colors.inkSecondary),
-      ),
-    );
-  }
-}
-
-class _Badge extends StatelessWidget {
-  const _Badge(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppTheme.colors;
-    final components = AppTheme.dimensions.components;
-
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: components.libraryBadgePaddingH,
-        vertical: components.libraryBadgePaddingV,
-      ),
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.pill),
-        border: Border.all(color: colors.line, width: AppTheme.dimensions.stroke.small),
-      ),
-      child: Text(
-        text,
-        softWrap: false,
-        style: AppTheme.typography
-            .of(context)
-            .libraryTag
-            .copyWith(color: colors.inkSecondary, fontWeight: FontWeight.w700),
-      ),
     );
   }
 }

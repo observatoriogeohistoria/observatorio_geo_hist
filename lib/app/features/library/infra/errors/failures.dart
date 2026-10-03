@@ -18,6 +18,13 @@ class FetchLibraryDocumentBySlugFailure extends Failure {
   List<Object> get props => [message];
 }
 
+class LibraryDocumentNotFoundFailure extends Failure {
+  const LibraryDocumentNotFoundFailure() : super('Documento não encontrado');
+
+  @override
+  List<Object> get props => [message];
+}
+
 class CreateOrUpdateLibraryDocumentFailure extends Failure {
   const CreateOrUpdateLibraryDocumentFailure({
     String? message,

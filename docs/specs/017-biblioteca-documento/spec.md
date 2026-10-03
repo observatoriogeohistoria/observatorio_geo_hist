@@ -49,7 +49,7 @@ Abaixo da ação, na largura da coluna:
 
 ## Endereço do documento
 Sem mudar a rota nem os dados:
-- **Na lista pública (016):** a linha passa a codificar o slug no endereço, para que qualquer caractere chegue inteiro ao detalhe. Quando o slug não serve como endereço (tem espaço ou quebra de linha, tem `/`, ou passa de 200 caracteres), a linha usa o identificador do documento no lugar do slug, no mesmo formato de rota (`/biblioteca/:area/documento/:id`).
+- **Na lista pública (016):** a linha passa a codificar o slug no endereço, para que qualquer caractere chegue inteiro ao detalhe. Quando o slug não serve como endereço (tem espaço ou quebra de linha em qualquer posição, inclusive no fim, tem `/`, ou passa de 200 caracteres), a linha usa o identificador do documento no lugar do slug, no mesmo formato de rota (`/biblioteca/:area/documento/:id`).
 - **No detalhe:** procura primeiro pelo slug igual ao trecho do endereço; se não achar, procura um documento com esse identificador. Nenhum dos dois: 404.
 - Endereços já compartilhados com slug continuam abrindo como hoje.
 - O card do painel não muda (continua montando o endereço com o slug cru).
@@ -119,3 +119,4 @@ Sem mudar a rota nem os dados:
 ## Histórico de mudanças
 - 2026-10-02: criada e aprovada no modo autônomo (execução da Fase 4).
 - 2026-10-02: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-02: diagnóstico em prod (só leitura): são 12 documentos com o resumo no slug (Geografia e História), todos terminando em espaço; a lista aparava o slug e a busca não achava, além do `/` em 5 deles. A regra do identificador vale para o slug como está gravado (espaço em qualquer posição, inclusive no fim). Sem mudança de comportamento.
