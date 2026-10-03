@@ -1,11 +1,12 @@
 # Execução da Fase 4
 
 - **Início:** 2026-10-02
+- **Término:** 2026-10-02
 - **Branch:** refactor/redesign-fase-4 → PR para develop
 
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |
 |---|---|---|---|---|---|
-| 016-biblioteca-indice-lista | índice (P-09), lista por área com filtros, resultados e paginação (T-06, P-10 a P-12) | feita (18 critérios, 15 tarefas) | feita | feita | verificada com ressalvas: 1 correção (clique fora dos menus); índices da busca com filtro a publicar |
+| 016-biblioteca-indice-lista | índice (P-09), lista por área com filtros, resultados e paginação (T-06, P-10 a P-12) | feita (18 critérios, 15 tarefas) | feita (4 commits) | feita (1 `fix:`) | verificada com ressalvas: 1 correção (clique fora dos menus); índices da busca com filtro a publicar |
 | 017-biblioteca-documento | detalhe do documento (T-07) | feita (14 critérios, 14 tarefas) | feita (3 commits) | feita | verificada com ressalvas: 2 correções (borda dos cantos do visualizador, nome da página do PDF); painel não conferido no app |
 
 ## Divisão
