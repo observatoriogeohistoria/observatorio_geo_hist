@@ -179,8 +179,9 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
       explicitChildNodes: true,
       label: 'Visualizador do documento',
       child: Container(
-        decoration: BoxDecoration(
-          color: colors.surface,
+        decoration: BoxDecoration(color: colors.surface, borderRadius: radius),
+        // A borda vai por cima: por baixo, o fundo branco da barra apagava a curva dos cantos.
+        foregroundDecoration: BoxDecoration(
           borderRadius: radius,
           border: Border.all(color: colors.line, width: AppTheme.dimensions.stroke.small),
         ),
@@ -256,12 +257,13 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
 
           final Widget page;
           if (rendered != null) {
-            page = Semantics(
-              image: true,
-              label: count == null
+            page = Image.memory(
+              rendered.bytes,
+              fit: BoxFit.contain,
+              gaplessPlayback: true,
+              semanticLabel: count == null
                   ? 'Página $_page do documento'
                   : 'Página $_page de $count do documento',
-              child: Image.memory(rendered.bytes, fit: BoxFit.contain, gaplessPlayback: true),
             );
           } else if (_status == _ViewerStatus.loading) {
             page = Center(
