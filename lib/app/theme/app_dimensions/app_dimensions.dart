@@ -466,6 +466,117 @@ class ComponentSizes {
   final double socialPillGap = 8.0;
   final double socialPillIcon = 18.0;
 
+  double areaTilePadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 30, 36);
+  final double areaTileGap = 14.0;
+  final double areaTileIconBox = 52.0;
+  final double areaTileIcon = 26.0;
+  final double areaTileStatsPaddingTop = 14.0;
+  final double areaTileStatsGap = 20.0;
+  final double areaTileLift = 3.0;
+  final double areaTileGridGap = 20.0;
+  final double areaTilesPaddingTop = 40.0;
+  final double areaTilesPaddingBottom = 72.0;
+  final double areaTileSkeletonWidth = 110.0;
+  final double areaTileSkeletonHeight = 16.0;
+  final Duration areaTileAnimation = const Duration(milliseconds: 200);
+
+  final double libraryFiltersTop = 16.0;
+  final double libraryFilterGap = 10.0;
+  final double libraryFilterHeight = 42.0;
+  final double libraryFilterBorder = 1.5;
+  final double libraryFilterPaddingStart = 14.0;
+  final double libraryFilterPaddingEnd = 12.0;
+  final double libraryFilterIconGap = 8.0;
+  final double libraryFilterIcon = 18.0;
+  final double libraryFilterBadgePaddingH = 8.0;
+  final double libraryFilterBadgePaddingV = 1.0;
+  final double libraryYearFieldWidth = 96.0;
+  final int libraryYearDigits = 4;
+
+  final double libraryPanelMaxWidth = 360.0;
+  final double libraryPanelMaxHeight = 400.0;
+  final double libraryPanelOffset = 6.0;
+  final double libraryPanelElevation = 8.0;
+  final double libraryPanelPadding = 10.0;
+  final double libraryPanelItemPadding = 8.0;
+  final double libraryPanelFooterPaddingTop = 8.0;
+
+  final double libraryActiveRowTop = 14.0;
+  final double libraryActiveRowGap = 8.0;
+  final double libraryActiveChipPaddingStart = 14.0;
+  final double libraryActiveChipPaddingEnd = 6.0;
+  final double libraryActiveChipPaddingV = 5.0;
+  final double libraryActiveChipRemove = 24.0;
+  final double libraryActiveChipRemoveIcon = 15.0;
+  final double libraryActiveChipRemoveGap = 4.0;
+
+  final double libraryCountPaddingTop = 20.0;
+  final double libraryCountPaddingBottom = 8.0;
+
+  final double libraryDocPaddingV = 22.0;
+  final double libraryDocPaddingH = 16.0;
+  final double libraryDocGapV = 8.0;
+  final double libraryDocGapH = 24.0;
+  final double libraryDocSideGap = 14.0;
+  final double libraryDocArrow = 20.0;
+  final double libraryDocStackBreak = 560.0;
+  final int libraryDocTitleMaxLines = 3;
+  final int libraryDocMaxCategories = 2;
+  final double libraryTagGap = 6.0;
+  final double libraryTagPaddingH = 8.0;
+  final double libraryTagPaddingV = 2.0;
+  final double libraryBadgePaddingH = 10.0;
+  final double libraryBadgePaddingV = 4.0;
+  final Duration libraryDocAnimation = const Duration(milliseconds: 150);
+
+  final int librarySkeletonRows = 5;
+  final double librarySkeletonTitleHeight = 20.0;
+  final double librarySkeletonTitleWidth = 0.7;
+  final double librarySkeletonMetaHeight = 14.0;
+  final double librarySkeletonMetaWidth = 0.45;
+  final double librarySkeletonTagWidth = 72.0;
+  final double librarySkeletonTagHeight = 18.0;
+
+  final double libraryDetailMaxWidth = 920.0;
+  final double libraryDetailBadgeTop = 22.0;
+  final double libraryDetailTitleTop = 12.0;
+  final double libraryDetailActionTop = 22.0;
+
+  final double libraryFactsTop = 24.0;
+  final double libraryFactsPaddingV = 20.0;
+  final double libraryFactsGapV = 14.0;
+  final double libraryFactsGapH = 28.0;
+  final double libraryFactsMinColumn = 170.0;
+  final int libraryFactsMaxColumns = 4;
+  final double libraryFactLabelGap = 2.0;
+
+  final double libraryViewerMarginTop = 32.0;
+  double libraryViewerMarginBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 56, 64);
+  final double libraryViewerBarPaddingV = 8.0;
+  final double libraryViewerBarPaddingH = 14.0;
+  final double libraryViewerButton = 32.0;
+  final double libraryViewerButtonIcon = 20.0;
+  final double libraryViewerButtonGap = 6.0;
+  final double libraryViewerPageMaxWidth = 560.0;
+  final double libraryViewerPageWidthFactor = 0.86;
+  final double libraryViewerPageMargin = 24.0;
+  final double libraryViewerStatePadding = 20.0;
+
+  /// Largura sobre altura de uma folha A4, usada antes de saber a proporção do PDF.
+  final double libraryViewerA4Aspect = 1 / 1.414;
+
+  final double libraryDetailSkeletonBadgeWidth = 96.0;
+  final double libraryDetailSkeletonBadgeHeight = 26.0;
+  final double libraryDetailSkeletonTitleHeight = 34.0;
+  final double libraryDetailSkeletonTitleGap = 10.0;
+  final double libraryDetailSkeletonTitleLastWidth = 0.6;
+  final double libraryDetailSkeletonLabelWidth = 64.0;
+  final double libraryDetailSkeletonLabelHeight = 12.0;
+  final double libraryDetailSkeletonValueWidth = 120.0;
+  final double libraryDetailSkeletonValueHeight = 18.0;
+  final double libraryDetailSkeletonButtonWidth = 200.0;
+  final double libraryDetailSkeletonViewerHeight = 320.0;
+
   double _byBreakpoint(
     Breakpoint breakpoint,
     double mobile,
@@ -516,6 +627,10 @@ class ShadowStyle {
 
   List<BoxShadow> get soft => const [
         BoxShadow(color: Color(0x141F1B18), blurRadius: 26, offset: Offset(0, 10)),
+      ];
+
+  List<BoxShadow> get lifted => const [
+        BoxShadow(color: Color(0x1A1F1B18), blurRadius: 34, offset: Offset(0, 14)),
       ];
 
   List<BoxShadow> get elevated => const [

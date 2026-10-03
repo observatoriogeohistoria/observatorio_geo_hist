@@ -17,6 +17,7 @@ class AppButtonBase extends StatefulWidget {
     this.trailingIcon,
     this.leadingIcon,
     this.reserveTexts = const [],
+    this.expand = false,
   });
 
   final AppButtonKind kind;
@@ -31,6 +32,9 @@ class AppButtonBase extends StatefulWidget {
 
   /// Textos que podem substituir [text]. O botão fica com a largura do maior, para não pular na troca.
   final List<String> reserveTexts;
+
+  /// Ocupa a largura disponível, como no botão principal em tela estreita.
+  final bool expand;
 
   @override
   State<AppButtonBase> createState() => _AppButtonBaseState();
@@ -143,6 +147,7 @@ class _AppButtonBaseState extends State<AppButtonBase> {
         opacity: widget.isDisabled ? 0.5 : 1,
         child: AppFocusRing(
           borderRadius: radius,
+          fit: widget.expand ? StackFit.passthrough : StackFit.loose,
           child: Material(
             color: background,
             shape: RoundedRectangleBorder(
@@ -162,7 +167,7 @@ class _AppButtonBaseState extends State<AppButtonBase> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),
                   child: Center(
-                    widthFactor: 1,
+                    widthFactor: widget.expand ? null : 1,
                     heightFactor: 1,
                     child: SelectionContainer.disabled(
                       child: child,

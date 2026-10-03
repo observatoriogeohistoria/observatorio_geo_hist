@@ -61,8 +61,11 @@ O projeto não guarda `firestore.indexes.json`: os índices são criados pelo co
 | Uso | Escopo | Campos | Projetos |
 |---|---|---|---|
 | Busca em `/publicacoes` (todas as categorias) | Grupo de coleções `category_posts` | `isPublished` ↑, `type` ↑, `body.title_lower` ↑ | `observatorio-geo-hist` e `observatorio-geo-hist-dev` |
+| Busca na biblioteca com tipo, ano ou categoria marcados | Coleção `library` | `area` ↑, o filtro (`type` ↑, `year` ↑ ou `category` em matriz), `createdAt` ↓ e o campo buscado (`title`, `author` ou `institution`) ↑. Um índice por combinação usada | `observatorio-geo-hist` e `observatorio-geo-hist-dev` |
 
 Sem esse índice, a página abre normalmente, mas a busca mostra "Não foi possível carregar". Para criar: abra `/publicacoes`, faça uma busca e siga o link que o Firestore escreve no console do navegador (erro `failed-precondition`), ou crie à mão em *Firestore › Índices › Composto*, com escopo "Grupo de coleções". Publique nos dois projetos antes de levar à `main`.
+
+Na biblioteca, busca sozinha e filtros sozinhos (ou combinados entre si) já funcionam com os índices de hoje. Busca junto com tipo, ano ou categoria mostra "Não foi possível carregar" até o índice daquela combinação existir. As mais prováveis são título com tipo e título com categoria; o caminho mais curto é fazer a busca na tela e seguir o link do erro no console.
 
 ## Operação
 

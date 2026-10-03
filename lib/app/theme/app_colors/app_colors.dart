@@ -24,10 +24,12 @@ class AppColors {
   Color ink = const Color(0xFF1F1B18);
   Color inkSecondary = const Color(0xFF5E5852);
   Color line = const Color(0xFFE6E1DA);
+  Color lineStrong = const Color(0xFFCFC8BE);
 
   Color accent = const Color(0xFFC94400);
   Color accentStrong = const Color(0xFFA33600);
   Color accentSoft = const Color(0xFFFFF0E6);
+  Color accentSoftBorder = const Color(0xFFFFD2B8);
 
   /// Acento a 25 %, que mantém [accentStrong] acima de 4,5:1.
   Color textSelection = const Color(0x40C94400);

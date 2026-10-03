@@ -5,6 +5,9 @@ import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/log
 import 'package:observatorio_geo_hist/app/features/library/infra/datasources/library_datasource.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/repositories/library_repository.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/stores/filter_documents_store.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_document_store.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_index_store.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_listing_store.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_store.dart';
 
 class LibrarySetup {
@@ -26,6 +29,15 @@ class LibrarySetup {
     );
     getIt.registerLazySingleton<FilterDocumentsStore>(
       () => FilterDocumentsStore(),
+    );
+    getIt.registerFactory<LibraryIndexStore>(
+      () => LibraryIndexStore(getIt<LibraryRepository>()),
+    );
+    getIt.registerFactory<LibraryListingStore>(
+      () => LibraryListingStore(getIt<LibraryRepository>()),
+    );
+    getIt.registerFactory<LibraryDocumentStore>(
+      () => LibraryDocumentStore(getIt<LibraryRepository>()),
     );
   }
 }
