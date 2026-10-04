@@ -1,1 +1,23 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options_prod.dart":{"projectId":"observatorio-geo-hist","configurations":{"web":"1:415910016951:web:44597f77be6534a14e9a32"}},"lib/firebase_options_dev.dart":{"projectId":"observatorio-geo-hist-dev","configurations":{"web":"1:642673012519:web:f56a239756ea010bac0302"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options_prod.dart": {
+          "projectId": "observatorio-geo-hist",
+          "configurations": {
+            "web": "1:415910016951:web:44597f77be6534a14e9a32"
+          }
+        },
+        "lib/firebase_options_dev.dart": {
+          "projectId": "observatorio-geo-hist-dev",
+          "configurations": {
+            "web": "1:642673012519:web:f56a239756ea010bac0302"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "indexes": "firestore.indexes.json"
+  }
+}

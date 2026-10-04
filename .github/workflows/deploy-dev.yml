@@ -19,6 +19,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # Antes do site, para a busca nova não chegar sem os índices. Só cria e atualiza:
+    # sem --force, índices que existam só no projeto não são apagados.
+    - name: Publicar índices do Firestore
+      env:
+        FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      run: |
+        printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-sa.json"
+        GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json" \
+          npx --yes firebase-tools@15 deploy --only firestore:indexes \
+          --project observatorio-geo-hist-dev --non-interactive
+
     - name: Ler versão do Flutter do .fvmrc
       id: fvm
       run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
