@@ -72,7 +72,13 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
     try {
       final response = await http.get(Uri.parse(_url));
       if (response.statusCode != 200) throw http.ClientException('${response.statusCode}');
-      final document = await PdfDocument.openData(response.bodyBytes);
+      final bytes = response.bodyBytes;
+      if (_isImage(bytes)) {
+        await _showImage(bytes, load);
+        return;
+      }
+
+      final document = await PdfDocument.openData(bytes);
       if (load != _load || !mounted) {
         document.close();
         return;
@@ -83,6 +89,37 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
     } catch (_) {
       if (load == _load && mounted) setState(() => _status = _ViewerStatus.error);
     }
+  }
+
+  // Alguns autores enviaram imagem no lugar do PDF, sem extensão no nome e servida como
+  // octet-stream: só os primeiros bytes dizem o formato (JPEG, PNG, GIF, WebP).
+  static bool _isImage(Uint8List bytes) {
+    bool startsWith(List<int> signature, [int offset = 0]) {
+      if (bytes.length < offset + signature.length) return false;
+      for (var i = 0; i < signature.length; i++) {
+        if (bytes[offset + i] != signature[i]) return false;
+      }
+      return true;
+    }
+
+    return startsWith([0xFF, 0xD8, 0xFF]) ||
+        startsWith([0x89, 0x50, 0x4E, 0x47]) ||
+        startsWith([0x47, 0x49, 0x46, 0x38]) ||
+        (startsWith([0x52, 0x49, 0x46, 0x46]) && startsWith([0x57, 0x45, 0x42, 0x50], 8));
+  }
+
+  Future<void> _showImage(Uint8List bytes, int load) async {
+    final image = await decodeImageFromList(bytes);
+    final aspect = image.width / image.height;
+    image.dispose();
+    if (load != _load || !mounted) return;
+
+    setState(() {
+      _pagesCount = 1;
+      _rendered[1] = (bytes: bytes, aspect: aspect);
+      _aspect = aspect;
+      _status = _ViewerStatus.ready;
+    });
   }
 
   // Uma renderização por vez: cliques seguidos levam direto à última página pedida.
