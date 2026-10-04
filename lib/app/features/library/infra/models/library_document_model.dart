@@ -10,7 +10,6 @@ class LibraryDocumentModel extends Equatable {
   final List<DocumentCategory> categories;
   final String? documentUrl;
   final String? institution;
-  final String? slug;
   final int? year;
   final String? status;
   final DateTime? createdAt;
@@ -24,7 +23,6 @@ class LibraryDocumentModel extends Equatable {
     this.categories = const [],
     this.documentUrl,
     this.institution,
-    this.slug,
     this.year,
     this.status,
     this.createdAt,
@@ -40,7 +38,6 @@ class LibraryDocumentModel extends Equatable {
         categories,
         documentUrl,
         institution,
-        slug,
         year,
         status,
         createdAt,
@@ -60,7 +57,6 @@ class LibraryDocumentModel extends Equatable {
           [],
       documentUrl: json['documentUrl'],
       institution: json['institution'],
-      slug: json['slug'],
       year: json['year'] != null ? int.tryParse(json['year'].toString()) : null,
       status: json['status'],
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
@@ -71,13 +67,15 @@ class LibraryDocumentModel extends Equatable {
     return {
       'area': area.value,
       'title': title,
+      'title_lower': title.toLowerCase(),
       'author': author,
+      'author_lower': author.toLowerCase(),
       'id': id,
       'type': type?.value,
       'category': categories.map((e) => e.value).toList(),
       'documentUrl': documentUrl,
       'institution': institution,
-      'slug': slug,
+      'institution_lower': institution?.toLowerCase(),
       'year': year,
       'status': status,
       'createdAt': createdAt?.toIso8601String(),
@@ -93,7 +91,6 @@ class LibraryDocumentModel extends Equatable {
     List<DocumentCategory>? categories,
     String? documentUrl,
     String? institution,
-    String? slug,
     int? year,
     String? status,
     DateTime? createdAt,
@@ -107,7 +104,6 @@ class LibraryDocumentModel extends Equatable {
       categories: categories ?? this.categories,
       documentUrl: documentUrl ?? this.documentUrl,
       institution: institution ?? this.institution,
-      slug: slug ?? this.slug,
       year: year ?? this.year,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,

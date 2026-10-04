@@ -8,7 +8,12 @@ import 'package:observatorio_geo_hist/app/features/library/infra/models/paginate
 
 abstract class LibraryRepository {
   Future<Either<Failure, PaginatedLibraryDocuments>> fetchDocuments(LibraryDocumentsQuery query);
-  Future<Either<Failure, LibraryDocumentModel?>> fetchDocumentBySlug(String slug);
+  Future<Either<Failure, LibraryDocumentModel>> fetchDocumentByAddress(String key);
+
+  Future<Either<Failure, PaginatedLibraryDocuments>> fetchListing(LibraryListingQuery query);
+  Future<Either<Failure, int>> countListing(LibraryListingQuery query);
+  Future<Either<Failure, Map<DocumentType, int>>> countByType(DocumentArea area);
+  Future<Either<Failure, Map<DocumentCategory, int>>> countByCategory(DocumentArea area);
 
   Future<Either<Failure, LibraryDocumentModel>> createOrUpdateDocument(
       LibraryDocumentModel document, FileModel? file);
@@ -34,13 +39,55 @@ class LibraryRepositoryImpl implements LibraryRepository {
     }
   }
 
+  // Links compartilhados antes da troca para o identificador ainda levam o slug.
   @override
-  Future<Either<Failure, LibraryDocumentModel?>> fetchDocumentBySlug(String slug) async {
+  Future<Either<Failure, LibraryDocumentModel>> fetchDocumentByAddress(String key) async {
     try {
-      final response = await _datasource.fetchDocumentBySlug(slug);
-      return Right(response);
+      final document =
+          await _datasource.fetchDocumentById(key) ?? await _datasource.fetchDocumentBySlug(key);
+      if (document == null) return const Left(LibraryDocumentNotFoundFailure());
+
+      return Right(document);
     } catch (_) {
       return const Left(FetchLibraryFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, PaginatedLibraryDocuments>> fetchListing(
+    LibraryListingQuery query,
+  ) async {
+    try {
+      return Right(await _datasource.fetchListing(query));
+    } catch (_) {
+      return const Left(FetchLibraryFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> countListing(LibraryListingQuery query) async {
+    try {
+      return Right(await _datasource.countListing(query));
+    } catch (_) {
+      return const Left(CountLibraryFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<DocumentType, int>>> countByType(DocumentArea area) async {
+    try {
+      return Right(await _datasource.countByType(area.value));
+    } catch (_) {
+      return const Left(CountLibraryFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<DocumentCategory, int>>> countByCategory(DocumentArea area) async {
+    try {
+      return Right(await _datasource.countByCategory(area.value));
+    } catch (_) {
+      return const Left(CountLibraryFailure());
     }
   }
 

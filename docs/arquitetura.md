@@ -46,7 +46,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 |---|---|
 | `home` | Página inicial: hero, destaques, quem somos, vídeo, nossa história, equipe, realização e apoio e chamada para contato |
 | `posts` | Listagem da categoria (busca, filtro por tipo e paginação) e detalhe do post |
-| `library` | Biblioteca de documentos por área, com busca por `slug` |
+| `library` | Biblioteca de documentos por área, aberta pelo identificador |
 | `admin` | Login, painel de conteúdo e sidebar |
 
 ## Rotas
@@ -64,7 +64,7 @@ Definidas em [app_router.dart](../lib/app/router/app_router.dart):
 /nossa-historia                       Nossa história (provisória, redesenho na Fase 2)
 /biblioteca                           Biblioteca
 /biblioteca/:area                     Documentos da área
-/biblioteca/:area/documento/:slug     Detalhe de documento
+/biblioteca/:area/documento/:id       Detalhe de documento
 /admin                                Login
 /admin/painel                         Redireciona para /admin/painel/categorias
 /admin/painel/:tab                    Painel (?tipo=... na aba de publicações)
@@ -81,7 +81,7 @@ Rotas sempre em português, sem acento (os caminhos ficam em `AppRoutes`). Os en
 | `posts/{categoryKey}/category_posts/{postId}` | Posts da categoria, lidos com `collectionGroup('category_posts')` |
 | `team` | Equipe |
 | `users` | Usuários do painel, com `role` |
-| `library` | Documentos (campos `area`, `slug`) |
+| `library` | Documentos (campos `area`, `title_lower`, `author_lower`, `institution_lower`) |
 
 Storage: mídias em `media/{nome}_{id}.{extensão}`, listadas com paginação no painel.
 
@@ -103,7 +103,7 @@ A `HomePage` é um `CustomScrollView` com um bloco por sliver, abaixo da navbar.
 - **Vídeo de apresentação** (`components/video/`): capa (`assets/images/video-capa.webp` se existir, senão `VideoCoverPainter`) e `VideoPlayButton` na faixa de baixo, para não cobrir o título da capa (no celular, só o botão, menor). Nada é baixado antes de "Assistir": o `AppVideoPlayer` (import `deferred`) só é montado após o clique. Estados: capa → carregando → tocando ou erro. O vídeo toca com som só se a ativação do usuário ainda vale quando fica pronto (`hasUserActivation`); senão fica pausado e pronto. Se o navegador recusar o início automático (`onAutoplayBlocked`), o player é remontado pausado, sem mostrar erro.
 - **Nossa história** (`components/our_history/`): resumo estático com `MilestoneBadge` (marco da FAPEMIG) e `ArrowLink` para `/nossa-historia` (`OurHistoryPage`, com o texto completo).
 - **Equipe** (`components/team/`): observa o `FetchTeamStore`, que tem estado (inicial, carregando, sucesso, erro) e guarda a lista em ordem alfabética (`sortTeamByName`, sem acentos nem caixa). `TeamGrid` põe quantas colunas de 190 px (× ampliação do texto) couberem; no celular, duas fixas. Membro com página (`memberHasPage`: id e descrição não vazia) é link para `/membro/:id`; sem descrição e com Lattes, abre o currículo em outra aba; sem foto, `MemberAvatar` mostra as iniciais. Carregando mostra esqueleto, erro mostra "Tentar de novo" e, sem membros, a seção some. A `HomePage` só busca se ainda não buscou ou se falhou (`needsFetch`). Só tem respiro de seção em cima; o de baixo fica em Realização e apoio, para o espaço não sumir quando a equipe está escondida.
-- **Realização e apoio** (`core/components/partners/`): `PartnersSection` com a `PartnerLogoGrid` (colunas de no mínimo 150 px; três fixas no celular) e um `PartnerLogo` por instituição do enum `Partner` (sigla, nome completo, site e logo; a ordem do enum é a de exibição). O logo é link para o site em outra aba, com nome acessível completo; `url` nula deixa o logo sem link. A mesma seção aparece na Biblioteca e em Colabore; o `Support` do post usa a mesma grade, com colunas de 130 px.
+- **Realização e apoio** (`core/components/partners/`): `PartnersSection` com a `PartnerLogoGrid` (colunas de no mínimo 150 px; três fixas no celular) e um `PartnerLogo` por instituição do enum `Partner` (sigla, nome completo, site e logo; a ordem do enum é a de exibição). O logo é link para o site em outra aba, com nome acessível completo; `url` nula deixa o logo sem link. A mesma seção aparece em Colabore; o `Support` do post usa a mesma grade, com colunas de 130 px.
 - **Chamada para contato** (`components/contact_call/`): quadro com "Fale com a gente" para `/contato` (`AppRoutes.contact`). Botão à direita só no desktop.
 
 O `AppVideoPlayer` tem parâmetros opcionais desligados por padrão (o painel o usa sem eles): `onInitialized`, `onError`, `loadingPlaceholder`, `shouldStartPlaying`, `onAutoplayBlocked`, `autofocusControls` e `showControlsScrim`.
@@ -129,6 +129,17 @@ A página da categoria (`PostsPage`) usa o `ReadingPageScaffold` com o `PageHead
 - **Listagem genérica:** `PostsListing(store:, routeFor:, emptyTitle:, emptyMessage:)` não sabe de categoria: busca (`SearchField`), chips (só com dois ou mais tipos), contagem, blocos (`ListingTypeBlock`, com "Ver mais") e os estados de carregando, vazio, busca vazia e erro. Os textos de vazio vêm da página; `routeFor` devolve nulo para post sem endereço, que fica fora do bloco.
 - **Todas as publicações:** `AllPostsPage` (`/publicacoes`) monta a mesma listagem com `PostsListingScope.all()` (sem categoria, tipos em ordem alfabética do plural). O cabeçalho é fixo e não espera as categorias; o endereço de cada post sai dele mesmo (`areas.first`, `categoryId`). A busca sem categoria depende de um índice próprio (ver [deploy-ambientes.md](deploy-ambientes.md#índices-do-firestore)).
 - **Card único:** `PostCard(post:, route:, showSummary:)` vale para todos os tipos; rótulo, resumo e detalhes de cada tipo saem de `postCardInfo`, num ponto só (texto do editor rico vira texto simples com `plainTextFromRich`). `PostCardGrid` põe colunas de no mínimo 300 px, até três; `PostCardSkeletonRow` é a linha-esqueleto.
+
+## Biblioteca
+
+A página pública e a do painel são separadas: `/biblioteca/:area` monta a `LibraryAreaPage` e `/painel/biblioteca/:area` continua com a `LibraryListPage` (criar, editar, excluir), com `Filters`, `LibraryDocumentCard` e `FilterDocumentsStore`, que o site não usa mais. O `LibraryStore` fica só no painel.
+
+- **Entrada** (`LibraryPage`): `ReadingPageScaffold` + `PageHeader` e um `LibraryAreaTile` por área, com as contagens do `LibraryIndexStore` (`countByType` por área; sem contagem, a linha de números some).
+- **Lista** (`LibraryAreaPage` + `LibraryListing`, em `library/presentation/components/listing/`): busca com "Buscar em" (`LibrarySearchField`), tipo, ano e categorias (`LibraryFilterSelect`, `LibraryYearField`, `LibraryCategoryFilter`, menus do Material), chips de filtros ativos, contagem, `LibraryDocumentRow` e "Ver mais documentos". Filtros valem na hora e não vão para a URL.
+- **Store por página:** `LibraryListingStore` (fábrica) guarda filtros, itens, cursor, total do filtro e contagens da área por tipo e categoria (nulas se falharem), com descarte de respostas velhas. Páginas de 20. Vazio sem filtros é "área sem documentos"; com filtros ou busca, "nenhum resultado". A busca compara o termo em minúsculas com `title_lower`, `author_lower` e `institution_lower`, gravados pelo painel (e preenchidos nos antigos por `tool/library_search_fields`).
+- **Dados:** `fetchListing` e `countListing` (mesma consulta, `count()`) filtram por área, tipo, ano, categorias (`arrayContainsAny`) e intervalo de prefixo no campo buscado, sempre em ordem de `createdAt`, e pedem um item a mais para saber se há próxima página. O painel segue com `_fetchDocuments`. Busca combinada com outro filtro depende de índices próprios (ver [deploy-ambientes.md](deploy-ambientes.md#índices-do-firestore)).
+- **Detalhe** (`LibraryDocumentDetailedPage`, em `components/document/`): `ReadingPageScaffold`, coluna de 920 px com migalhas (área do documento, não a da URL), `LibraryDocumentHeader` (selo, título, ficha e "Abrir documento") e `LibraryDocumentPdfViewer`, que baixa o PDF e desenha uma página por vez com o `pdfx`, sem `PdfView`. Store próprio, `LibraryDocumentStore` (fábrica), com carregando (`LibraryDocumentSkeleton`), sucesso, não encontrado (404) e erro. Selo e etiqueta são os mesmos da lista (`library_labels.dart`).
+- **Endereço do documento:** o trecho final é o identificador, como nos posts. O painel não pede mais slug; o campo continua gravado nos documentos antigos só para links já compartilhados: o detalhe procura pelo identificador e, sem resultado, pelo slug (`fetchDocumentByAddress`). O arquivo enviado se chama `<identificador>.<extensão>` e é apagado pelo endereço salvo.
 
 ## Página do post
 

@@ -22,9 +22,6 @@ abstract class LibraryStoreBase with Store {
   CrudState manageState = CrudInitialState();
 
   @observable
-  Observable<LibraryDocumentModel?> selectedDocument = Observable<LibraryDocumentModel?>(null);
-
-  @observable
   ObservableMap<DocumentArea, List<LibraryDocumentModel>> documentsByArea =
       ObservableMap<DocumentArea, List<LibraryDocumentModel>>();
 
@@ -50,7 +47,6 @@ abstract class LibraryStoreBase with Store {
 
     documentsByArea.clear();
     hasMore = {for (DocumentArea area in DocumentArea.values) area: true}.asObservable();
-    selectedDocument.value = null;
 
     _lastDocument = {for (DocumentArea area in DocumentArea.values) area: null};
     _lastType = null;
@@ -121,24 +117,6 @@ abstract class LibraryStoreBase with Store {
         _lastYear = year;
         _lastDocument[area] = paginatedDocuments.lastDocument;
 
-        fetchState = CrudSuccessState();
-      },
-    );
-  }
-
-  @action
-  Future<void> fetchDocumentBySlug(String slug) async {
-    fetchState = CrudLoadingState();
-
-    final result = await _repository.fetchDocumentBySlug(slug);
-
-    result.fold(
-      (failure) {
-        fetchState = CrudErrorState(failure);
-        selectedDocument.value = null;
-      },
-      (document) {
-        selectedDocument.value = document;
         fetchState = CrudSuccessState();
       },
     );

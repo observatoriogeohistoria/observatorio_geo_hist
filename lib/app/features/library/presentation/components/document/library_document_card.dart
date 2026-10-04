@@ -35,7 +35,7 @@ class LibraryDocumentCard extends StatelessWidget {
     return AppMouseRegion(
       child: GestureDetector(
         onTap: () {
-          final path = AppRoutes.libraryDocument(document.area.routeKey, document.slug ?? '');
+          final path = AppRoutes.libraryDocument(document.area.routeKey, document.id ?? '');
           GoRouter.of(context).go(path);
         },
         child: Row(

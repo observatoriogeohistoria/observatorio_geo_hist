@@ -74,8 +74,6 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
       TextEditingController(text: widget.document?.institution);
   late final TextEditingController _yearController =
       TextEditingController(text: widget.document?.year.toString());
-  late final TextEditingController _slugController =
-      TextEditingController(text: widget.document?.slug);
   late final TextEditingController _documentUrlController =
       TextEditingController(text: widget.document?.documentUrl);
 
@@ -161,14 +159,6 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
                             documentController: _documentController,
                           ),
                           space,
-                          _buildTitle('Slug'),
-                          space,
-                          AppTextField(
-                            controller: _slugController,
-                            hintText: 'Slug',
-                            validator: Validators.isNotEmpty,
-                          ),
-                          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
                           _buildTitle('Tipo de Produção'),
                           space,
                           AppMultiSelectField<DocumentType>(
@@ -264,7 +254,6 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
       categories: _selectedCategories,
       institution: _institutionController.text,
       year: int.tryParse(_yearController.text) ?? 0,
-      slug: _slugController.text,
       documentUrl: _documentUrlController.text,
       createdAt: widget.document?.createdAt ?? DateTime.now(),
     );

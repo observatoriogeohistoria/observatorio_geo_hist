@@ -56,13 +56,26 @@ Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP
 
 ## Índices do Firestore
 
-O projeto não guarda `firestore.indexes.json`: os índices são criados pelo console do Firebase. Um arquivo só com os índices novos faria o `firebase deploy` propor apagar os que já existem.
+Os índices compostos ficam em `firestore.indexes.json`, ligado no `firebase.json`, e são publicados pelos workflows de deploy (dev e produção) antes do site. O arquivo tem **todos** os índices do projeto: o deploy não apaga os que estiverem só no console, mas eles ficariam fora do controle do repositório. Ao criar um índice pelo console, exporte de novo (`firebase firestore:indexes --project observatorio-geo-hist > firestore.indexes.json`).
 
-| Uso | Escopo | Campos | Projetos |
-|---|---|---|---|
-| Busca em `/publicacoes` (todas as categorias) | Grupo de coleções `category_posts` | `isPublished` ↑, `type` ↑, `body.title_lower` ↑ | `observatorio-geo-hist` e `observatorio-geo-hist-dev` |
+**Segredo `FIREBASE_SERVICE_ACCOUNT`** (nos ambientes `DEV` e `PROD` do GitHub): JSON de uma conta de serviço do projeto correspondente com os papéis *Cloud Datastore Index Admin* e *Service Usage Consumer*. Sem ele, o deploy para no passo dos índices e o site não é publicado.
 
-Sem esse índice, a página abre normalmente, mas a busca mostra "Não foi possível carregar". Para criar: abra `/publicacoes`, faça uma busca e siga o link que o Firestore escreve no console do navegador (erro `failed-precondition`), ou crie à mão em *Firestore › Índices › Composto*, com escopo "Grupo de coleções". Publique nos dois projetos antes de levar à `main`.
+Para publicar à mão:
+
+```sh
+firebase deploy --only firestore:indexes --project observatorio-geo-hist-dev
+```
+
+Índices que o site novo exige:
+
+| Uso | Escopo | Campos |
+|---|---|---|
+| Busca em `/publicacoes` | Grupo de coleções `category_posts` | `isPublished` ↑, `type` ↑, `body.title_lower` ↑ |
+| Busca na biblioteca | Coleção `library` | `category` (matriz, se marcada), `area` ↑, `type` ↑ e `year` ↑ (os marcados), `createdAt` ↓, campo buscado (`title_lower`, `author_lower` ou `institution_lower`) ↓. Um índice por combinação: 24 ao todo |
+
+Sem eles, a página abre, mas a busca mostra "Não foi possível carregar". O índice fica pronto alguns minutos depois do deploy (status em *Firestore › Índices*).
+
+**Campos de busca da biblioteca:** a busca compara o termo em minúsculas com `title_lower`, `author_lower` e `institution_lower`. O painel grava esses campos ao salvar; os documentos antigos são preenchidos pelo script em [`tool/library_search_fields`](../tool/library_search_fields/README.md), que precisa rodar em produção antes de o site ir para a `main`.
 
 ## Operação
 

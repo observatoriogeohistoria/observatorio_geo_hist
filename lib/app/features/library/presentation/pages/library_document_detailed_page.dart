@@ -1,88 +1,137 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/error_content/page_error_content.dart';
-import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
-import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_box.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
+import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/components/document/library_document_content.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_store.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/document/library_document_header.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/document/library_document_pdf_viewer.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/document/library_document_skeleton.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_document_store.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/stores/states/library_document_states.dart';
+import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class LibraryDocumentDetailedPage extends StatefulWidget {
   const LibraryDocumentDetailedPage({
-    required this.slug,
+    required this.area,
+    required this.documentKey,
     super.key,
   });
 
-  final String slug;
+  final DocumentArea area;
+
+  /// Identificador do documento ou, em links antigos, o slug.
+  final String documentKey;
 
   @override
   State<LibraryDocumentDetailedPage> createState() => _LibraryDocumentDetailedPageState();
 }
 
 class _LibraryDocumentDetailedPageState extends State<LibraryDocumentDetailedPage> {
-  late final _store = LibrarySetup.getIt<LibraryStore>();
+  late final _store = LibrarySetup.getIt<LibraryDocumentStore>();
 
   @override
   void initState() {
     super.initState();
-    _store.fetchDocumentBySlug(widget.slug);
+    _store.fetch(widget.documentKey);
+  }
+
+  @override
+  void didUpdateWidget(covariant LibraryDocumentDetailedPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.documentKey != widget.documentKey) _store.fetch(widget.documentKey);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.colors.white,
-      body: CustomScrollView(
-        slivers: [
-          const NavbarSliver(),
-          SliverToBoxAdapter(
+    return Observer(
+      builder: (context) {
+        final state = _store.state;
+
+        final breakpoint = ScreenUtils.breakpointOf(context);
+        final components = AppTheme.dimensions.components;
+
+        // Links antigos podem trazer a área errada: as migalhas seguem a do documento.
+        final area = state is LibraryDocumentSuccessState ? state.document.area : widget.area;
+
+        final Widget content;
+        final double bottom;
+        switch (state) {
+          case LibraryDocumentInitialState() || LibraryDocumentLoadingState():
+            content = const LibraryDocumentSkeleton();
+            bottom = components.libraryViewerMarginBottom(breakpoint);
+          case LibraryDocumentErrorState():
+            content = Padding(
+              padding: EdgeInsets.only(top: components.libraryDetailBadgeTop),
+              child: StateErrorBox(onRetry: _store.retry),
+            );
+            bottom = components.readingPaddingBottom(breakpoint);
+          case LibraryDocumentSuccessState(:final document):
+            content = Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                LibraryDocumentHeader(document: document),
+                SizedBox(height: components.libraryViewerMarginTop),
+                LibraryDocumentPdfViewer(url: document.documentUrl),
+              ],
+            );
+            bottom = components.libraryViewerMarginBottom(breakpoint);
+          case LibraryDocumentNotFoundState():
+            return const PageNotFound();
+        }
+
+        // A chave por endereço volta ao topo ao abrir outro documento.
+        return ReadingPageScaffold(
+          key: ValueKey(widget.documentKey),
+          body: _DocumentFrame(
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtils.getPageHorizontalPadding(context),
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  onPressed: () {
-                    final router = GoRouter.of(context);
-                    router.canPop() ? router.pop() : router.go(AppRoutes.library);
-                  },
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('Voltar'),
-                  style: TextButton.styleFrom(foregroundColor: AppTheme.colors.orange),
-                ),
+              padding: EdgeInsets.only(bottom: bottom),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Breadcrumbs(
+                    items: [
+                      const BreadcrumbItem('Início', route: AppRoutes.root),
+                      const BreadcrumbItem('Biblioteca', route: AppRoutes.library),
+                      BreadcrumbItem(area.value, route: AppRoutes.libraryArea(area.routeKey)),
+                      const BreadcrumbItem('Documento'),
+                    ],
+                  ),
+                  content,
+                ],
               ),
             ),
           ),
-          Observer(
-            builder: (_) {
-              final state = _store.fetchState;
+        );
+      },
+    );
+  }
+}
 
-              if (state is CrudLoadingState) {
-                return const LoadingContent(isSliver: true);
-              }
+class _DocumentFrame extends StatelessWidget {
+  const _DocumentFrame({required this.child});
 
-              if (state is CrudErrorState) {
-                return const PageErrorContent(isSliver: true);
-              }
+  final Widget child;
 
-              final document = _store.selectedDocument.value;
-              if (document == null) {
-                return const PageErrorContent(isSliver: true);
-              }
+  @override
+  Widget build(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+    final margin = ScreenUtils.contentMargin(ScreenUtils.breakpointOf(context));
 
-              return SliverToBoxAdapter(child: LibraryDocumentContent(document: document));
-            },
+    return PageContent(
+      child: Padding(
+        padding: EdgeInsets.only(top: components.pageHeadPaddingTop),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: components.libraryDetailMaxWidth - 2 * margin),
+            child: child,
           ),
-          const SliverFillRemaining(hasScrollBody: false, child: SizedBox.shrink()),
-          const SliverToBoxAdapter(child: Footer()),
-        ],
+        ),
       ),
     );
   }

@@ -241,6 +241,51 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
+  TextStyle get areaTileTitle => _display(
+        size: _size(mobile: 25.6, tablet: 32, desktop: 33.6),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get libraryDocTitle => _display(
+        size: _size(mobile: 19.2, tablet: 19.2, desktop: 19.2),
+        weight: FontWeight.w600,
+        height: 1.3,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get libraryDetailTitle => _display(
+        size: _size(mobile: 28.8, tablet: 36, desktop: 44.8),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get libraryFactValue => _body(
+        size: _size(mobile: 16, tablet: 16, desktop: 16),
+        weight: FontWeight.w400,
+        height: 1.55,
+      );
+
+  TextStyle get libraryFilter => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w600,
+        height: 1.2,
+      );
+
+  TextStyle get libraryTag => _body(
+        size: _size(mobile: 12.5, tablet: 12.5, desktop: 12.5),
+        weight: FontWeight.w500,
+        height: 1.4,
+      );
+
+  TextStyle get meta => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w400,
+        height: 1.5,
+      );
+
   TextStyle get chip => _body(
         size: _size(mobile: 14, tablet: 14, desktop: 14),
         weight: FontWeight.w600,
