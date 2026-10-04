@@ -166,7 +166,7 @@ class LibraryDatasourceImpl implements LibraryDatasource {
       query = query.where('year', isEqualTo: listing.year);
     }
 
-    final search = listing.searchText.trim();
+    final search = listing.searchText.trim().toLowerCase();
     if (search.isNotEmpty) {
       final field = listing.searchField.field;
       query = query
@@ -174,7 +174,7 @@ class LibraryDatasourceImpl implements LibraryDatasource {
           .where(field, isLessThanOrEqualTo: '$search\uf8ff');
     }
 
-    // Com busca, a ordem continua por data: é o formato que os índices do painel já cobrem.
+    // Com busca, a ordem continua por data: os índices da busca em firestore.indexes.json seguem isso.
     return query.orderBy('createdAt', descending: true);
   }
 
@@ -341,9 +341,9 @@ class LibraryDocumentsQuery {
 }
 
 enum LibrarySearchField {
-  title('title', 'título'),
-  author('author', 'autor'),
-  institution('institution', 'instituição');
+  title('title_lower', 'título'),
+  author('author_lower', 'autor'),
+  institution('institution_lower', 'instituição');
 
   final String field;
   final String label;

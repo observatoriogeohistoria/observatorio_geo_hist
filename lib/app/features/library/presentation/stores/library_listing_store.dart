@@ -163,18 +163,10 @@ abstract class LibraryListingStoreBase with Store {
         categories: categories,
         year: year,
         searchField: searchField,
-        searchText: _adjustCase(searchText, searchField),
+        searchText: searchText,
         startAfterDocument: startAfter,
         limit: pageSize,
       );
-
-  // O banco diferencia maiúsculas: títulos e autores estão gravados com inicial maiúscula e
-  // instituições quase sempre em caixa alta. Só mexe no termo digitado todo em minúsculas.
-  static String _adjustCase(String text, LibrarySearchField field) {
-    if (text.isEmpty || text != text.toLowerCase() || text == text.toUpperCase()) return text;
-    if (field == LibrarySearchField.institution) return text.toUpperCase();
-    return text[0].toUpperCase() + text.substring(1);
-  }
 
   @action
   Future<void> _fetch() async {
