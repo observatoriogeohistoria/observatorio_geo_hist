@@ -41,22 +41,6 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
     });
   }
 
-  late final _$selectedDocumentAtom =
-      Atom(name: 'LibraryStoreBase.selectedDocument', context: context);
-
-  @override
-  Observable<LibraryDocumentModel?> get selectedDocument {
-    _$selectedDocumentAtom.reportRead();
-    return super.selectedDocument;
-  }
-
-  @override
-  set selectedDocument(Observable<LibraryDocumentModel?> value) {
-    _$selectedDocumentAtom.reportWrite(value, super.selectedDocument, () {
-      super.selectedDocument = value;
-    });
-  }
-
   late final _$documentsByAreaAtom =
       Atom(name: 'LibraryStoreBase.documentsByArea', context: context);
 
@@ -111,15 +95,6 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
             year: year));
   }
 
-  late final _$fetchDocumentBySlugAsyncAction =
-      AsyncAction('LibraryStoreBase.fetchDocumentBySlug', context: context);
-
-  @override
-  Future<void> fetchDocumentBySlug(String slug) {
-    return _$fetchDocumentBySlugAsyncAction
-        .run(() => super.fetchDocumentBySlug(slug));
-  }
-
   late final _$createOrUpdateDocumentAsyncAction =
       AsyncAction('LibraryStoreBase.createOrUpdateDocument', context: context);
 
@@ -158,7 +133,6 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
     return '''
 fetchState: ${fetchState},
 manageState: ${manageState},
-selectedDocument: ${selectedDocument},
 documentsByArea: ${documentsByArea},
 hasMore: ${hasMore}
     ''';

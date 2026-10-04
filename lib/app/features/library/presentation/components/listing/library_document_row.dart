@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_address.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/library_labels.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -21,10 +20,9 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
 
   LibraryDocumentModel get _document => widget.document;
 
-  // Sem slug nem identificador não há endereço: a linha aparece, mas sem link.
   String? get _route {
-    final key = _document.addressKey;
-    return key == null ? null : AppRoutes.libraryDocument(_document.area.routeKey, key);
+    final id = _document.id;
+    return id == null || id.isEmpty ? null : AppRoutes.libraryDocument(_document.area.routeKey, id);
   }
 
   String get _details => [

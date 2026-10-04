@@ -23,10 +23,10 @@ abstract class AppRoutes {
   static const librarySegment = 'biblioteca';
   static const library = '/$librarySegment';
   static const libraryAreaPattern = '$library/:area';
-  static const libraryDocumentPattern = '$libraryAreaPattern/documento/:slug';
+  static const libraryDocumentPattern = '$libraryAreaPattern/documento/:id';
   static String libraryArea(String areaKey) => '$library/$areaKey';
-  static String libraryDocument(String areaKey, String slug) =>
-      '${libraryArea(areaKey)}/documento/$slug';
+  static String libraryDocument(String areaKey, String id) =>
+      '${libraryArea(areaKey)}/documento/$id';
 
   static const admin = '/admin';
   static const panel = '$admin/painel';

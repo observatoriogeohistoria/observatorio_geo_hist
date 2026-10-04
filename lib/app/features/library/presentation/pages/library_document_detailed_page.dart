@@ -25,7 +25,7 @@ class LibraryDocumentDetailedPage extends StatefulWidget {
 
   final DocumentArea area;
 
-  /// Slug do documento ou, quando o slug não serve como endereço, o identificador.
+  /// Identificador do documento ou, em links antigos, o slug.
   final String documentKey;
 
   @override

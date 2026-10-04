@@ -228,7 +228,7 @@ class _Results extends StatelessWidget {
                 children: [
                   for (final document in store.documents)
                     LibraryDocumentRow(
-                      key: ValueKey(document.id ?? document.slug ?? document.title),
+                      key: ValueKey(document.id ?? document.title),
                       document: document,
                     ),
                 ],

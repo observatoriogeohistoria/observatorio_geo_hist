@@ -5,7 +5,6 @@ import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/log
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
-import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/paginated_library_document_model.dart';
 
@@ -267,11 +266,10 @@ class LibraryDatasourceImpl implements LibraryDatasource {
           throw UnsupportedError('Storage desabilitado no ambiente de dev');
         }
 
-        final name = '${document.slug ?? document.title}_&&&_$documentId';
         final extension = file.extension ?? '';
-
-        final ref = _storage.ref('library/${document.area.bucketKey}/$name.$extension');
-        await ref.putData(file.bytes!);
+        final ref = _storage.ref('library/${document.area.bucketKey}/$documentId.$extension');
+        // Sem o tipo, o Storage entrega o arquivo como download em vez de abri-lo na aba.
+        await ref.putData(file.bytes!, SettableMetadata(contentType: _contentType(extension)));
 
         url = await ref.getDownloadURL();
       }
@@ -299,13 +297,12 @@ class LibraryDatasourceImpl implements LibraryDatasource {
 
       if (!AppEnvironment.current.hasStorage) return;
 
+      final url = document.documentUrl;
+      if (url == null || url.isEmpty) return;
+
       try {
-        final name = '${document.slug ?? document.title}_&&&_$id';
-        final extension = getFileExtension(document.documentUrl);
-
-        final fileRef = _storage.ref('library/${document.area.bucketKey}/$name.$extension');
-
-        await fileRef.delete();
+        // Arquivos antigos levam o slug no nome; pelo endereço salvo dá para achar todos.
+        await _storage.refFromURL(url).delete();
       } catch (exception, stackTrace) {
         _loggerService.error('Error deleting document file: $exception', stackTrace: stackTrace);
       }
@@ -315,6 +312,13 @@ class LibraryDatasourceImpl implements LibraryDatasource {
     }
   }
 }
+
+String? _contentType(String extension) => switch (extension.toLowerCase()) {
+      'pdf' => 'application/pdf',
+      'jpg' || 'jpeg' => 'image/jpeg',
+      'png' => 'image/png',
+      _ => null,
+    };
 
 class LibraryDocumentsQuery {
   final DocumentArea area;

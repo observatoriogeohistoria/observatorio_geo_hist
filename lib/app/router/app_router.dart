@@ -141,7 +141,7 @@ class AppRouter {
             path: AppRoutes.libraryDocumentPattern,
             builder: (BuildContext context, GoRouterState state) {
               final area = DocumentArea.fromRouteKey(state.pathParameters['area']);
-              final documentKey = state.pathParameters['slug'];
+              final documentKey = state.pathParameters['id'];
 
               final invalidRoute = area == null || documentKey == null || documentKey.isEmpty;
               if (invalidRoute) return const PageNotFound();

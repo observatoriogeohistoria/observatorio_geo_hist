@@ -9,15 +9,6 @@ class FetchLibraryFailure extends Failure {
   List<Object> get props => [message];
 }
 
-class FetchLibraryDocumentBySlugFailure extends Failure {
-  const FetchLibraryDocumentBySlugFailure({
-    String? message,
-  }) : super("Erro ao buscar documento por slug${message != null ? ": $message" : ""}");
-
-  @override
-  List<Object> get props => [message];
-}
-
 class LibraryDocumentNotFoundFailure extends Failure {
   const LibraryDocumentNotFoundFailure() : super('Documento não encontrado');
 
