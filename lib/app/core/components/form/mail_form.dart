@@ -54,6 +54,7 @@ class _MailFormState extends State<MailForm> {
   final _formKey = GlobalKey<FormState>();
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
+  late final List<GlobalKey> _fieldKeys;
 
   bool _attempted = false;
   MailDraft? _draft;
@@ -63,6 +64,7 @@ class _MailFormState extends State<MailForm> {
     super.initState();
     _controllers = [for (final _ in widget.fields) TextEditingController()];
     _focusNodes = [for (final _ in widget.fields) FocusNode()];
+    _fieldKeys = [for (final _ in widget.fields) GlobalKey()];
   }
 
   @override
@@ -81,7 +83,7 @@ class _MailFormState extends State<MailForm> {
     if (!_formKey.currentState!.validate()) {
       for (final (index, field) in widget.fields.indexed) {
         if (field.validator?.call(_controllers[index].text) != null) {
-          _focusNodes[index].requestFocus();
+          _focusField(index);
           break;
         }
       }
@@ -99,8 +101,20 @@ class _MailFormState extends State<MailForm> {
       _attempted = false;
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _focusNodes.first.requestFocus();
+      if (mounted) _focusField(0);
     });
+  }
+
+  // O foco direto não rola a página: o campo ficaria acima da tela ou sob a navbar fixa.
+  void _focusField(int index) {
+    _focusNodes[index].requestFocus();
+    final fieldContext = _fieldKeys[index].currentContext;
+    if (fieldContext != null) {
+      Scrollable.ensureVisible(
+        fieldContext,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+      );
+    }
   }
 
   @override
@@ -127,6 +141,7 @@ class _MailFormState extends State<MailForm> {
           children: [
             for (final (index, field) in fields.indexed) ...[
               FormTextField(
+                key: _fieldKeys[index],
                 label: field.label,
                 controller: _controllers[index],
                 focusNode: _focusNodes[index],

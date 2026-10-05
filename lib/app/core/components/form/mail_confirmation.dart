@@ -60,8 +60,14 @@ class _MailConfirmationState extends State<MailConfirmation> {
   void initState() {
     super.initState();
     // O botão que abriu a confirmação sumiu; sem isso o foco do teclado ficaria perdido.
+    // A caixa é mais curta que o formulário, então o topo dela pode ficar sob a navbar.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _titleFocus.requestFocus();
+      if (!mounted) return;
+      _titleFocus.requestFocus();
+      Scrollable.ensureVisible(
+        context,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+      );
     });
   }
 
