@@ -6,18 +6,24 @@ enum StateMessageTone { neutral, error }
 class StateMessageBox extends StatelessWidget {
   const StateMessageBox({
     super.key,
-    required this.icon,
+    this.icon,
+    this.leading,
     required this.title,
     required this.message,
     this.action,
     this.tone = StateMessageTone.neutral,
-  });
+    this.titleHeadingLevel,
+  }) : assert(icon != null || leading != null);
 
-  final IconData icon;
+  final IconData? icon;
+  final Widget? leading;
   final String title;
   final String message;
   final Widget? action;
   final StateMessageTone tone;
+
+  /// Só quando a caixa é o conteúdo principal da página; nas listagens ela fica abaixo do h1.
+  final int? titleHeadingLevel;
 
   @override
   Widget build(BuildContext context) {
@@ -44,24 +50,27 @@ class StateMessageBox extends StatelessWidget {
       ),
       child: Column(
         children: [
-          ExcludeSemantics(
-            child: Container(
-              width: components.stateBoxIcon,
-              height: components.stateBoxIcon,
-              decoration: BoxDecoration(
-                color: iconBackground,
-                shape: BoxShape.circle,
+          leading ??
+              ExcludeSemantics(
+                child: Container(
+                  width: components.stateBoxIcon,
+                  height: components.stateBoxIcon,
+                  decoration: BoxDecoration(
+                    color: iconBackground,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    icon,
+                    size: components.stateBoxIconGlyph,
+                    color: iconColor,
+                  ),
+                ),
               ),
-              child: Icon(
-                icon,
-                size: components.stateBoxIconGlyph,
-                color: iconColor,
-              ),
-            ),
-          ),
           SizedBox(height: components.stateBoxGap),
           Semantics(
             liveRegion: true,
+            header: titleHeadingLevel != null,
+            headingLevel: titleHeadingLevel,
             child: Text(
               title,
               textAlign: TextAlign.center,

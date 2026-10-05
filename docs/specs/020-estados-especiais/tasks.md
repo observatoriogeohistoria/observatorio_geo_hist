@@ -10,7 +10,7 @@ Legenda: `- [ ]` a fazer, `- [x]` feita.
   - Nota: pintado por `CustomPainter` com `repaint` no controlador, sem reconstruir o widget; o `Container` filho mantém o tamanho de antes.
 
 ## Grupo C: caixas de estado
-- [ ] **C1.** `StateMessageBox`: `leading` opcional no lugar do ícone (`icon` opcional, assert de um dos dois) e `titleHeadingLevel` opcional (título com `header` e `headingLevel`); padrão igual ao de hoje. Arquivo: `core/components/error_content/state_message_box.dart`. Atende: critérios 5, 9.
+- [x] **C1.** `StateMessageBox`: `leading` opcional no lugar do ícone (`icon` opcional, assert de um dos dois) e `titleHeadingLevel` opcional (título com `header` e `headingLevel`); padrão igual ao de hoje. Arquivo: `core/components/error_content/state_message_box.dart`. Atende: critérios 5, 9.
 - [x] **C2.** `StateErrorInline(message:, onRetry:)` com o desenho atual da faixa de erro da Home; Destaques e Equipe passam a usá-la e perdem o `_Error` local, sem mudança de texto. Arquivos: `core/components/error_content/state_error_inline.dart`, `features/home/presentation/components/highlights/highlights_section.dart`, `features/home/presentation/components/team/team_section.dart`. Atende: critério 8.
 - [x] **C3.** Remover `EmptyContent` e `PageErrorContent` depois de conferir com `grep` que não há uso (painel inclusive). Arquivos: `core/components/error_content/empty_content.dart`, `core/components/error_content/page_error_content.dart`. Atende: critério 10.
 
