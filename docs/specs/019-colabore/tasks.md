@@ -3,7 +3,8 @@
 Legenda: `- [ ]` a fazer, `- [x]` feita.
 
 ## Grupo A: caixa lateral compartilhada
-- [ ] **A1.** Extrair `MailAsideCard(title, children)` e `MailAsideItem(label, children)` do `ContactInfoCard` (moldura em superfície, raio 18, padding por faixa, título `h2` semântico em `stateTitle`, rótulo em `label` caixa alta `inkSecondary`) e passar o `ContactInfoCard` a usá-los, sem mudar o que mostra. Arquivos: `core/components/form/mail_aside_card.dart`, `features/home/presentation/components/contact/contact_info_card.dart`. Atende: critérios 6, 11, 12.
+- [x] **A1.** Extrair `MailAsideCard(title, children)` e `MailAsideItem(label, children)` do `ContactInfoCard` (moldura em superfície, raio 18, padding por faixa, título `h2` semântico em `stateTitle`, rótulo em `label` caixa alta `inkSecondary`) e passar o `ContactInfoCard` a usá-los, sem mudar o que mostra. Arquivos: `core/components/form/mail_aside_card.dart`, `features/home/presentation/components/contact/contact_info_card.dart`. Atende: critérios 6, 11, 12.
+  - Nota: o `MailAsideCard` põe o espaço entre os itens; o `ContactInfoCard` só lista os `MailAsideItem`.
 
 ## Grupo B: página
 - [ ] **B1.** `CollaborateGuideCard` ("Antes de enviar"): seis itens com os textos da spec em `regular`/`ink`; "Licença" com `InlineLink` "Conheça as licenças Creative Commons" para `AppStrings.creativeCommonsUrl`, nome acessível dizendo que abre em outra aba; "E-mail" com `InlineLink` para `AppStrings.emailUrl`. Arquivo: `features/posts/presentation/components/collaborate/collaborate_guide_card.dart`. Atende: critérios 6, 7, 8.
