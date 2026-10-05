@@ -13,7 +13,7 @@ lib/
 └── app/
     ├── app_setup.dart        # DI: serviços compartilhados + setup de cada feature
     ├── app_widget.dart       # Widget raiz
-    ├── router/               # GoRouter (app_router.dart) e PageNotFound
+    ├── router/               # GoRouter (app_router.dart) e PageNotFound (404 sobre o ReadingPageScaffold e a StateMessageBox)
     ├── theme/                # app_colors, app_typography, app_dimensions, app_theme
     ├── core/                 # Código compartilhado
     └── features/             # admin, home, library, posts
@@ -32,7 +32,7 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | Widgets compartilhados: buttons (inclui `InlineLink`, link sublinhado para `mailto:`, `tel:` e externos), card, chips (`FilterChipButton`, chip de filtro com quantidade), dialog, field (inclui `SearchField`, busca com pausa e "Limpar"), form (formulário que abre o e-mail, ver [Formulários por e-mail](#formulários-por-e-mail)), footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), error_content (`StateMessageBox`, caixa de estado com ícone, título, texto e ação; `StateErrorBox`, a de erro com "Tentar de novo"), skeleton, video_player, entre outros |
+| `components/` | Widgets compartilhados: buttons (inclui `InlineLink`, link sublinhado para `mailto:`, `tel:` e externos), card, chips (`FilterChipButton`, chip de filtro com quantidade), dialog, field (inclui `SearchField`, busca com pausa e "Limpar"), form (formulário que abre o e-mail, ver [Formulários por e-mail](#formulários-por-e-mail)), footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), error_content (`StateMessageBox`, caixa de estado com ícone ou `leading` próprio, título, texto e ação, com `titleHeadingLevel` quando a caixa é o conteúdo principal da página; `StateErrorBox`, a de erro com "Tentar de novo"; `StateErrorInline`, a faixa de erro discreta das seções da Home), skeleton (`Skeleton`, bloco com brilho animado nas cores do tema, parado com movimento reduzido), video_player, entre outros |
 | `models/` | `PostModel` e os corpos de post, `category`, `image`, `paginated/`, `states/` (CRUD) e demais modelos comuns |
 | `utils/` | Constantes, datas, enums, formatters, validators (`Validators` do painel e do login; `FormValidators` do site), `url/` (`openUrl`, `MailDraft`), `environment/`, `browser/` e demais utilitários |
 | `infra/` | Datasource/repository de categorias e `services/logger_service` |

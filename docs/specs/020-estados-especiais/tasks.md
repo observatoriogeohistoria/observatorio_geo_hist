@@ -20,17 +20,19 @@ Legenda: `- [ ]` a fazer, `- [x]` feita.
   - Nota: respiro de topo `readingPaddingTop` (40), porque a 404 não tem cabeçalho acima e 24 px colava na navbar. Os botões ficam num `FocusTraversalGroup` em ordem de widget: a ordem de leitura da página pulava de "Ir para o início" para o rodapé.
 
 ## Grupo E: documentação e verificação do código
-- [ ] **E1.** `docs/arquitetura.md`: `error_content` com `StateErrorInline` e as opções novas da `StateMessageBox`; `skeleton` com brilho e movimento reduzido; 404 no desenho de estado em `router/`. Atende: critério 10.
-- [ ] **E2.** `fvm dart format` nos `.dart` alterados; `fvm flutter analyze` numa cópia em caminho ASCII sem problemas novos; `fvm flutter build web --release` sem erro; busca por cor, fonte e espaço soltos, `num_extension`, `GestureDetector` e rota solta nos arquivos novos e alterados; `grep` sem `CircularProgressIndicator`/`CircularLoading`/`LoadingContent` como estado de dados fora do painel; `git diff` sem mudança em `app_router.dart`, `app_routes.dart`, modelos, `pubspec.yaml`, painel e Geoensine. Atende: critérios 10, 11, 12.
+- [x] **E1.** `docs/arquitetura.md`: `error_content` com `StateErrorInline` e as opções novas da `StateMessageBox`; `skeleton` com brilho e movimento reduzido; 404 no desenho de estado em `router/`. Atende: critério 10.
+- [x] **E2.** `fvm dart format` nos `.dart` alterados; `fvm flutter analyze` numa cópia em caminho ASCII sem problemas novos; `fvm flutter build web --release` sem erro; busca por cor, fonte e espaço soltos, `num_extension`, `GestureDetector` e rota solta nos arquivos novos e alterados; `grep` sem `CircularProgressIndicator`/`CircularLoading`/`LoadingContent` como estado de dados fora do painel; `git diff` sem mudança em `app_router.dart`, `app_routes.dart`, modelos, `pubspec.yaml`, painel e Geoensine. Atende: critérios 10, 11, 12.
+  - Nota: sobram círculos girando só no vídeo da Home (fora do escopo) e na lista da biblioteca do painel.
 
 ## Grupo F: conferência no app
-- [ ] **F1.** Rodar o app: `fvm flutter build web --release`, servir `build/web` com fallback de SPA num servidor Python próprio e abrir no navegador embutido (ou Chrome headless por CDP) em **390, 768 e 1280 px**:
+- [x] **F1.** Rodar o app: `fvm flutter build web --release`, servir `build/web` com fallback de SPA num servidor Python próprio e abrir no navegador embutido (ou Chrome headless por CDP) em **390, 768 e 1280 px**:
   - 404 em `/nao-existe` (estrutura, textos, "404" em acento, nenhum item da navbar marcado, rodapé na base, botões empilhados só no celular), "Ir para o início" e "Explorar a biblioteca" por clique e por Tab/Enter, árvore semântica (`h1`, "404" lido antes), foco visível; mesma 404 em `/publicacoes/xyz/abc`, categoria inexistente, post inexistente, documento inexistente, `/membro/<id inexistente>` e membro sem descrição (se o ambiente tiver); endereço muito longo.
   - Esqueletos com rede lenta (limitação do CDP): Home (destaques, equipe), menu de categorias, categoria, `/publicacoes`, post, pessoa, biblioteca (índice e lista) e documento com o brilho correndo e as mesmas formas; com `prefers-reduced-motion: reduce` emulado, parados.
   - Erro com `firestore.googleapis.com` bloqueado: Destaques e Equipe com a faixa discreta e "Tentar de novo" (e sucesso depois de desbloquear); caixa de erro numa listagem e no post. Vazio e sem resultados de busca na categoria e na lista da biblioteca com os textos de hoje.
   - Sem rolagem horizontal em nenhuma.
 
   Depois, `fvm flutter run -d web-server --web-port <porta>` na cópia ASCII (**modo debug**) em 390, 768 e 1280 com a 404, os esqueletos e uma caixa de estado, sem `overflow` nem asserção no console. Painel: só com credenciais de teste; sem elas, "não conferido no app". Voltar o navegador ao preset desktop e parar os servidores. Atende: critérios 1 a 11.
+  - Nota: esqueletos vistos segurando as requisições do Firestore pelo CDP (`Fetch.enable`), porque a limitação de rede não pega o canal já aberto. Destaques com o Firestore bloqueado somem (o cache offline devolve lista vazia), como antes; a faixa de erro foi vista na Equipe. Não conferidos: membro sem descrição (sem caso conhecido no ambiente), menu de categorias carregando, "Tentar de novo" seguido de sucesso e painel (sem credenciais).
 
 ## Critérios × tarefas
 | Critério | Tarefas |
