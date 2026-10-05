@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/date/date.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_breadcrumbs.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_cover.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_share.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -37,17 +36,7 @@ class ArticleHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Breadcrumbs(
-            items: [
-              const BreadcrumbItem('Início', route: AppRoutes.root),
-              BreadcrumbItem(area.portuguese),
-              BreadcrumbItem(category.title, route: AppRoutes.category(area.key, category.key)),
-              const BreadcrumbItem('Artigo'),
-            ],
-          ),
-        ),
+        PostBreadcrumbs(area: area, category: category, typeLabel: 'Artigo'),
         SizedBox(height: components.postTitleGap),
         Semantics(
           header: true,

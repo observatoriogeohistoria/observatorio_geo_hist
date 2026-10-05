@@ -60,7 +60,7 @@ class _RowSkeleton extends StatelessWidget {
           SizedBox(height: components.libraryDocGapV),
           bar(components.librarySkeletonMetaWidth, components.librarySkeletonMetaHeight),
           SizedBox(height: components.libraryDocGapV),
-          Row(children: [tag(), SizedBox(width: components.libraryTagGap), tag()]),
+          Row(children: [tag(), SizedBox(width: components.tagGap), tag()]),
         ],
       ),
     );

@@ -59,15 +59,13 @@ class LibraryDocumentSkeleton extends StatelessWidget {
           bar(components.libraryDetailSkeletonTitleLastWidth,
               components.libraryDetailSkeletonTitleHeight),
           Container(
-            margin: EdgeInsets.only(top: components.libraryFactsTop),
-            padding: EdgeInsets.symmetric(vertical: components.libraryFactsPaddingV),
+            margin: EdgeInsets.only(top: components.factsTop),
+            padding: EdgeInsets.symmetric(vertical: components.factsPaddingV),
             decoration: BoxDecoration(border: Border(top: line, bottom: line)),
             child: Wrap(
-              spacing: components.libraryFactsGapH,
-              runSpacing: components.libraryFactsGapV,
-              children: [
-                for (var index = 0; index < components.libraryFactsMaxColumns; index++) fact()
-              ],
+              spacing: components.factsGapH,
+              runSpacing: components.factsGapV,
+              children: [for (var index = 0; index < components.factsMaxColumns; index++) fact()],
             ),
           ),
           SizedBox(height: components.libraryDetailActionTop),

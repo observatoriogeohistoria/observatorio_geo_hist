@@ -262,14 +262,14 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
-  TextStyle get libraryDetailTitle => _display(
+  TextStyle get detailTitle => _display(
         size: _size(mobile: 28.8, tablet: 36, desktop: 44.8),
         weight: FontWeight.w800,
         height: 1.12,
         letterSpacingEm: -0.02,
       );
 
-  TextStyle get libraryFactValue => _body(
+  TextStyle get factValue => _body(
         size: _size(mobile: 16, tablet: 16, desktop: 16),
         weight: FontWeight.w400,
         height: 1.55,
@@ -281,7 +281,7 @@ class AppTextStyles {
         height: 1.2,
       );
 
-  TextStyle get libraryTag => _body(
+  TextStyle get tag => _body(
         size: _size(mobile: 12.5, tablet: 12.5, desktop: 12.5),
         weight: FontWeight.w500,
         height: 1.4,

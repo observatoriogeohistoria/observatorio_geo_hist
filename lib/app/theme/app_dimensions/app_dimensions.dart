@@ -484,6 +484,20 @@ class ComponentSizes {
   final double areaTileSkeletonHeight = 16.0;
   final Duration areaTileAnimation = const Duration(milliseconds: 200);
 
+  final double tagGap = 6.0;
+  final double tagPaddingH = 8.0;
+  final double tagPaddingV = 2.0;
+  final double badgePaddingH = 10.0;
+  final double badgePaddingV = 4.0;
+
+  final double factsTop = 24.0;
+  final double factsPaddingV = 20.0;
+  final double factsGapV = 14.0;
+  final double factsGapH = 28.0;
+  final double factsMinColumn = 170.0;
+  final int factsMaxColumns = 4;
+  final double factLabelGap = 2.0;
+
   final double libraryFiltersTop = 16.0;
   final double libraryFilterGap = 10.0;
   final double libraryFilterHeight = 42.0;
@@ -526,11 +540,6 @@ class ComponentSizes {
   final double libraryDocStackBreak = 560.0;
   final int libraryDocTitleMaxLines = 3;
   final int libraryDocMaxCategories = 2;
-  final double libraryTagGap = 6.0;
-  final double libraryTagPaddingH = 8.0;
-  final double libraryTagPaddingV = 2.0;
-  final double libraryBadgePaddingH = 10.0;
-  final double libraryBadgePaddingV = 4.0;
   final Duration libraryDocAnimation = const Duration(milliseconds: 150);
 
   final int librarySkeletonRows = 5;
@@ -545,14 +554,6 @@ class ComponentSizes {
   final double libraryDetailBadgeTop = 22.0;
   final double libraryDetailTitleTop = 12.0;
   final double libraryDetailActionTop = 22.0;
-
-  final double libraryFactsTop = 24.0;
-  final double libraryFactsPaddingV = 20.0;
-  final double libraryFactsGapV = 14.0;
-  final double libraryFactsGapH = 28.0;
-  final double libraryFactsMinColumn = 170.0;
-  final int libraryFactsMaxColumns = 4;
-  final double libraryFactLabelGap = 2.0;
 
   final double libraryViewerMarginTop = 32.0;
   double libraryViewerMarginBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 56, 64);

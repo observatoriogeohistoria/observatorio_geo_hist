@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/chips/labels.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/components/library_labels.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class LibraryDocumentRow extends StatefulWidget {
@@ -136,13 +136,13 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
         if (categories.isNotEmpty) ...[
           SizedBox(height: components.libraryDocGapV),
           Wrap(
-            spacing: components.libraryTagGap,
-            runSpacing: components.libraryTagGap,
+            spacing: components.tagGap,
+            runSpacing: components.tagGap,
             children: [
               for (final category in categories.take(components.libraryDocMaxCategories))
-                LibraryCategoryTag(category.value),
+                CategoryTag(category.value),
               if (categories.length > components.libraryDocMaxCategories)
-                LibraryCategoryTag('+${categories.length - components.libraryDocMaxCategories}'),
+                CategoryTag('+${categories.length - components.libraryDocMaxCategories}'),
             ],
           ),
         ],
@@ -152,7 +152,7 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
     final side = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (type != null) LibraryTypeBadge(type.value),
+        if (type != null) TypeBadge(type.value),
         if (type != null && showArrow) SizedBox(width: components.libraryDocSideGap),
         if (showArrow)
           Icon(Icons.arrow_forward, size: components.libraryDocArrow, color: colors.inkSecondary),

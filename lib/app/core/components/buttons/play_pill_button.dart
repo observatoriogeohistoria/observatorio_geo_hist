@@ -3,20 +3,26 @@ import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.d
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class VideoPlayButton extends StatefulWidget {
-  const VideoPlayButton(
-      {super.key, required this.onPressed, this.isLoading = false, this.focusNode});
+class PlayPillButton extends StatefulWidget {
+  const PlayPillButton({
+    super.key,
+    required this.onPressed,
+    required this.semanticLabel,
+    this.isLoading = false,
+    this.focusNode,
+  });
 
   final VoidCallback onPressed;
+  final String semanticLabel;
   final bool isLoading;
 
   final FocusNode? focusNode;
 
   @override
-  State<VideoPlayButton> createState() => _VideoPlayButtonState();
+  State<PlayPillButton> createState() => _PlayPillButtonState();
 }
 
-class _VideoPlayButtonState extends State<VideoPlayButton> {
+class _PlayPillButtonState extends State<PlayPillButton> {
   bool _hovered = false;
 
   void _handleTap() {
@@ -41,7 +47,7 @@ class _VideoPlayButtonState extends State<VideoPlayButton> {
 
     return Semantics(
       button: !widget.isLoading,
-      label: widget.isLoading ? text : 'Reproduzir vídeo de apresentação',
+      label: widget.isLoading ? text : widget.semanticLabel,
       liveRegion: widget.isLoading,
       onTap: widget.isLoading ? null : widget.onPressed,
       excludeSemantics: true,

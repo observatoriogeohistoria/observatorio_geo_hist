@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class LibraryCategoryTag extends StatelessWidget {
-  const LibraryCategoryTag(this.text, {super.key});
+class CategoryTag extends StatelessWidget {
+  const CategoryTag(this.text, {super.key});
 
   final String text;
 
@@ -13,8 +13,8 @@ class LibraryCategoryTag extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: components.libraryTagPaddingH,
-        vertical: components.libraryTagPaddingV,
+        horizontal: components.tagPaddingH,
+        vertical: components.tagPaddingV,
       ),
       decoration: BoxDecoration(
         color: colors.surface,
@@ -22,16 +22,18 @@ class LibraryCategoryTag extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: AppTheme.typography.of(context).libraryTag.copyWith(color: colors.inkSecondary),
+        style: AppTheme.typography.of(context).tag.copyWith(color: colors.inkSecondary),
       ),
     );
   }
 }
 
-class LibraryTypeBadge extends StatelessWidget {
-  const LibraryTypeBadge(this.text, {super.key});
+class TypeBadge extends StatelessWidget {
+  const TypeBadge(this.text, {super.key, this.wrap = false});
 
   final String text;
+
+  final bool wrap;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +42,8 @@ class LibraryTypeBadge extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: components.libraryBadgePaddingH,
-        vertical: components.libraryBadgePaddingV,
+        horizontal: components.badgePaddingH,
+        vertical: components.badgePaddingV,
       ),
       decoration: BoxDecoration(
         color: colors.surface,
@@ -50,10 +52,10 @@ class LibraryTypeBadge extends StatelessWidget {
       ),
       child: Text(
         text,
-        softWrap: false,
+        softWrap: wrap,
         style: AppTheme.typography
             .of(context)
-            .libraryTag
+            .tag
             .copyWith(color: colors.inkSecondary, fontWeight: FontWeight.w700),
       ),
     );
