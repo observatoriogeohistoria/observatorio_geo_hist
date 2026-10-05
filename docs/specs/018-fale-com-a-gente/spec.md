@@ -1,6 +1,6 @@
 # 018. Fale com a gente
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 5, tela T-04 (`/contato`); decisão "Fale com a gente" (seção 1) e Q-04
 - **Protótipo:** aba "Contato" (link no CLAUDE.md)
 - **Criada em:** 2026-10-05
@@ -87,7 +87,7 @@ Ao lado do formulário (abaixo no celular e no tablet), caixa em fundo de superf
 - **Telefones:** "34 3239-4163" e "34 3239-4212", um por linha, como links `tel:` (os mesmos do rodapé);
 - **Endereço:** o endereço em três linhas do rodapé.
 
-Rótulos pequenos em caixa alta na cor secundária; valores no tamanho do texto; links na cor de acento, sublinhados. Saem daqui Instagram, Facebook e YouTube (continuam no rodapé).
+Rótulos pequenos em caixa alta na cor secundária; valores no tamanho do texto; links na cor de acento forte, sublinhados. Saem daqui Instagram, Facebook e YouTube (continuam no rodapé).
 
 ## Estados
 - **Carregando / vazio / erro de dados:** não se aplicam; a página não busca dados.
@@ -156,3 +156,5 @@ Rótulos pequenos em caixa alta na cor secundária; valores no tamanho do texto;
 ## Histórico de mudanças
 - 2026-10-05: criada e aprovada no modo autônomo (execução da Fase 5).
 - 2026-10-05: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-05 (implementação, modo autônomo): links de "Outros meios" e da confirmação em **acento forte**, não no acento: o acento sobre a superfície dá 4,48:1, abaixo do mínimo de 4,5:1 (mesma regra do `ArrowLink`). Campos de uma linha (Nome, E-mail, Assunto) rolam o texto longo por dentro, como um campo comum do navegador; só a mensagem quebra linha.
+- 2026-10-05: implementada; status `implementada`.

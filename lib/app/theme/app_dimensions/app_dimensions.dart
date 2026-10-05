@@ -599,6 +599,16 @@ class ComponentSizes {
   final double mailConfirmationButtonsTop = 8.0;
   final double mailConfirmationButtonsGap = 10.0;
 
+  final double contactPaddingTop = 40.0;
+  final double contactPaddingBottom = 72.0;
+  double contactColumnsGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 48, 72);
+  final int contactFormFlex = 3;
+  final int contactInfoFlex = 2;
+  double contactInfoPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 28);
+  final double contactInfoListTop = 18.0;
+  final double contactInfoLabelGap = 2.0;
+  final double contactInfoItemGap = 14.0;
+
   double _byBreakpoint(
     Breakpoint breakpoint,
     double mobile,

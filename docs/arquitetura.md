@@ -32,9 +32,9 @@ Fluxo: `Widget → Store → Repository → Datasource → Firebase`. O resultad
 
 | Pasta | Conteúdo |
 |---|---|
-| `components/` | Widgets compartilhados: buttons, card, chips (`FilterChipButton`, chip de filtro com quantidade), dialog, field (inclui `SearchField`, busca com pausa e "Limpar"), footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), error_content (`StateMessageBox`, caixa de estado com ícone, título, texto e ação; `StateErrorBox`, a de erro com "Tentar de novo"), skeleton, video_player, entre outros |
+| `components/` | Widgets compartilhados: buttons (inclui `InlineLink`, link sublinhado para `mailto:`, `tel:` e externos), card, chips (`FilterChipButton`, chip de filtro com quantidade), dialog, field (inclui `SearchField`, busca com pausa e "Limpar"), form (formulário que abre o e-mail, ver [Formulários por e-mail](#formulários-por-e-mail)), footer, navbar, focus (`AppFocusRing`), logo, partners (Realização e apoio), reading (base das páginas de texto), error_content (`StateMessageBox`, caixa de estado com ícone, título, texto e ação; `StateErrorBox`, a de erro com "Tentar de novo"), skeleton, video_player, entre outros |
 | `models/` | `PostModel` e os corpos de post, `category`, `image`, `paginated/`, `states/` (CRUD) e demais modelos comuns |
-| `utils/` | Constantes, datas, enums, formatters, validators, `environment/`, `browser/` e demais utilitários |
+| `utils/` | Constantes, datas, enums, formatters, validators (`Validators` do painel e do login; `FormValidators` do site), `url/` (`openUrl`, `MailDraft`), `environment/`, `browser/` e demais utilitários |
 | `infra/` | Datasource/repository de categorias e `services/logger_service` |
 | `stores/` | `fetch_categories_store` |
 | `errors/` | `Failure` base e falhas de categorias |
@@ -119,6 +119,15 @@ Páginas de texto (Manifesto, Nossa história, Pessoa da equipe e post) se monta
 - `ReadingFigure`: imagem em 21:9 até 920 px, mais larga que a coluna, com legenda opcional, recorte por `alignment` e placeholder na falha. Fica entre o cabeçalho e a `ReadingColumn`, que recebe `paddingTop: readingFigureMarginBottom`.
 - Pessoa da equipe (`TeamMemberPage`) usa só o `ReadingPageScaffold`, com corpo próprio de 920 px: `MemberPageLayout` (foto | texto, empilha abaixo de 700 px de largura útil), `MemberPortrait` e `MemberPageSkeleton`. Erro mostra `StateErrorBox`; sem página (`memberHasPage`), a 404. A equipe só é buscada no `initState`, se `needsFetch`.
 - Blocos, que já trazem a própria margem: `ReadingLead`, `ReadingParagraph`, `ReadingSubtitle` (cabeçalho de nível 2), `ReadingNumberedList`, `ReadingBulletList` e `ReadingQuote`. Novos blocos entram no mesmo arquivo.
+
+## Formulários por e-mail
+
+Fale com a gente (`ContactUsPage`) e Colabore montam o formulário com as peças de `core/components/form/`; nada vai a servidor, o envio é um `mailto:`.
+
+- `MailForm(fields:, submitText:, hint:, buildDraft:, confirmationTexts:)`: um `FormTextField` por `MailFormFieldSpec` (rótulo, validador, várias linhas, teclado, sugestão do navegador), botão principal com envelope e texto de apoio (`**negrito**` via `MarkedText`). Valida ao enviar e, depois da primeira tentativa, a cada digitação; foco no primeiro inválido. Com tudo válido, `buildDraft` recebe os valores aparados e devolve o `MailDraft` (destinatário, assunto, corpo), que abre na mesma aba; a `MailConfirmation` toma o lugar do formulário e "Voltar ao formulário" mantém os valores.
+- `MailConfirmation`: título focado e anunciado, link do destinatário, "Copiar mensagem" (`MailDraft.copyText`, com retorno como o do "Copiar link" do post) e "Voltar ao formulário". Textos em `MailConfirmationTexts`.
+- `FormTextField`: rótulo acima, borda `fieldBorder` (acento no foco, erro com erro), erro abaixo e marcado como inválido na semântica. O `AppTextField` continua só no painel.
+- `FormValidators.required`, `.email` e `.minLength` recebem a mensagem e ignoram espaços nas pontas.
 
 ## Listagem de posts
 
