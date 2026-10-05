@@ -10,6 +10,7 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
     this.expand = false,
     super.key,
   }) : size = ButtonSize.small;
@@ -19,6 +20,7 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
     this.expand = false,
     super.key,
   }) : size = ButtonSize.medium;
@@ -28,6 +30,7 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.trailingIcon,
+    this.leadingIcon,
     this.expand = false,
     super.key,
   }) : size = ButtonSize.big;
@@ -38,6 +41,8 @@ class PrimaryButton extends StatelessWidget {
   final bool isDisabled;
 
   final IconData? trailingIcon;
+
+  final IconData? leadingIcon;
 
   final bool expand;
 
@@ -50,6 +55,7 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       isDisabled: isDisabled,
       trailingIcon: trailingIcon,
+      leadingIcon: leadingIcon,
       expand: expand,
     );
   }
