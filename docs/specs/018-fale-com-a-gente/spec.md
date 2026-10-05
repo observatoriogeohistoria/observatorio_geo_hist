@@ -1,6 +1,6 @@
 # 018. Fale com a gente
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 5, tela T-04 (`/contato`); decisão "Fale com a gente" (seção 1) e Q-04
 - **Protótipo:** aba "Contato" (link no CLAUDE.md)
 - **Criada em:** 2026-10-05
@@ -158,3 +158,4 @@ Rótulos pequenos em caixa alta na cor secundária; valores no tamanho do texto;
 - 2026-10-05: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-05 (implementação, modo autônomo): links de "Outros meios" e da confirmação em **acento forte**, não no acento: o acento sobre a superfície dá 4,48:1, abaixo do mínimo de 4,5:1 (mesma regra do `ArrowLink`). Campos de uma linha (Nome, E-mail, Assunto) rolam o texto longo por dentro, como um campo comum do navegador; só a mensagem quebra linha.
 - 2026-10-05: implementada; status `implementada`.
+- 2026-10-05 (verificação, modo autônomo): o formulário e a confirmação rolam até o campo ou a caixa que recebe o foco, que antes podia ficar fora da tela ou sob a navbar. Status `verificada com ressalvas` (ver [verificacao.md](verificacao.md)).
