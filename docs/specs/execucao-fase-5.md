@@ -6,7 +6,7 @@
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |
 |---|---|---|---|---|---|
 | 018-fale-com-a-gente | Fale com a gente (T-04) | feita (12 critérios, 11 tarefas) | feita (3 commits) | feita | verificada com ressalvas: 1 correção (rolar até o campo focado); leitor de tela e autopreenchimento não conferidos no app |
-| 019-colabore | Colabore (T-05) | pendente | pendente | pendente | |
+| 019-colabore | Colabore (T-05) | feita (12 critérios, 6 tarefas) | pendente | pendente | |
 | 020-estados-especiais | 404, erro, vazio e esqueletos (T-10) | pendente | pendente | pendente | |
 | 021-tipos-post-obras | tipos de post livro, filme, revista, documento e produção acadêmica (T-08, P-08) | pendente | pendente | pendente | |
 | 022-tipos-post-midia-eventos | tipos de post podcast, música, evento e pesquisa (T-08, P-08) | pendente | pendente | pendente | |
@@ -20,6 +20,7 @@
 - 018: "Voltar ao formulário" mantém os campos; Enter passa ao campo seguinte; corpo do e-mail como no protótipo (mensagem, nome e e-mail); contatos de `AppStrings`, iguais ao rodapé; redes sociais só no rodapé; mensagem com mínimo de 10 caracteres; confirmação sempre aparece (o navegador não diz se o e-mail abriu); cor nova de borda dos campos (#8A8178), mais escura que a do protótipo, por contraste. Formulário e confirmação recebem campos e textos de fora, para a 019. Detalhes em [018/spec.md](018-fale-com-a-gente/spec.md).
 - 018 (implementação): links de "Outros meios" e da confirmação em `accentStrong` (o acento normal dá 4,48:1); Nome, E-mail e Assunto rolam o texto por dentro, só a Mensagem quebra linha.
 - 018 (verificação): foco no campo inválido, a volta ao Nome e a confirmação rolam a página até o elemento, abaixo da navbar fixa.
+- 019: desenho da aba "Contato" (sem aba própria no protótipo), caixa "Antes de enviar" no lugar de "Outros meios"; campos Nome completo, E-mail, Instituição (opcional), Título da contribuição e Sobre a contribuição; assunto "Colaboração: [título]"; texto de apoio e confirmação pedem para anexar no programa de e-mail; sem foto de fundo; "Realização e apoio" mantida; categoria de origem fora (a rota não a leva); moldura da caixa lateral extraída do `ContactInfoCard` para `core/components/form/`. Detalhes em [019/spec.md](019-colabore/spec.md).
 
 ## Ressalvas
 - 018: não conferidos no app o anúncio por leitor de tela, a sugestão de autopreenchimento do navegador e o botão principal no detalhe da biblioteca (sem documentos no ambiente de testes; mudança só aditiva); painel sem diff e não conferido.
