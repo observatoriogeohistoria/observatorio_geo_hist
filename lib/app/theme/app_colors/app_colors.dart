@@ -44,6 +44,9 @@ class AppColors {
 
   Color imageScrim = const Color(0xFF14100E);
 
+  Color skeletonBase = const Color(0xFFEEEAE4);
+  Color skeletonHighlight = const Color(0xFFF8F6F3);
+
   Color onImageAccent = const Color(0xFFFFC9A6);
 
   Color onImageMuted = const Color(0xFFD8D2CA);

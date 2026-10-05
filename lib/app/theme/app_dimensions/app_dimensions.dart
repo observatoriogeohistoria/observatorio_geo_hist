@@ -349,6 +349,8 @@ class ComponentSizes {
   final double stateBoxButtonGap = 6.0;
   final double stateBoxTextMaxWidth = 380.0;
 
+  final Duration skeletonShimmer = const Duration(milliseconds: 1400);
+
   final double postHeadMaxWidth = 820.0;
 
   final double postTitleGap = 22.0;

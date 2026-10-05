@@ -6,7 +6,8 @@ Legenda: `- [ ]` a fazer, `- [x]` feita.
 - [ ] **A1.** Tokens `skeletonBase` e `skeletonHighlight` (cores), `skeletonShimmer` (1,4 s), `notFoundActionsGap` e `notFoundCodeGap` (dimensões) e estilo `notFoundCode` (64/92/112 px, Bricolage 800). Arquivos: `theme/app_colors/app_colors.dart`, `theme/app_dimensions/app_dimensions.dart`, `theme/app_typography/app_text_styles.dart`. Atende: critério 12.
 
 ## Grupo B: esqueleto com brilho
-- [ ] **B1.** `Skeleton` com `AnimationController` em repetição (`skeletonShimmer`), gradiente base/claro/base deslizando por `GradientTransform`, `RepaintBoundary`, controlador parado e cor base única com `MediaQuery.disableAnimationsOf`; cores do tema; mesma assinatura. Arquivo: `core/components/skeleton/skeleton.dart`. Atende: critérios 6, 7, 12.
+- [x] **B1.** `Skeleton` com `AnimationController` em repetição (`skeletonShimmer`), gradiente base/claro/base deslizando por `GradientTransform`, `RepaintBoundary`, controlador parado e cor base única com `MediaQuery.disableAnimationsOf`; cores do tema; mesma assinatura. Arquivo: `core/components/skeleton/skeleton.dart`. Atende: critérios 6, 7, 12.
+  - Nota: pintado por `CustomPainter` com `repaint` no controlador, sem reconstruir o widget; o `Container` filho mantém o tamanho de antes.
 
 ## Grupo C: caixas de estado
 - [ ] **C1.** `StateMessageBox`: `leading` opcional no lugar do ícone (`icon` opcional, assert de um dos dois) e `titleHeadingLevel` opcional (título com `header` e `headingLevel`); padrão igual ao de hoje. Arquivo: `core/components/error_content/state_message_box.dart`. Atende: critérios 5, 9.

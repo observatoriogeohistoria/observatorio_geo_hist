@@ -41,7 +41,7 @@ Sem mudança de texto: caixa de estado com ícone neutro.
 - Seções da Home sem itens continuam sumindo (decisão da 005 e da 008).
 
 ### Esqueletos de carregamento
-Todos os esqueletos do site público ganham o brilho do protótipo: uma faixa clara que corre da direita para a esquerda, em ciclo de cerca de 1,4 s, nas cores quentes do protótipo. Formas e disposição de cada esqueleto não mudam. Com movimento reduzido, o bloco fica parado, em cor única.
+Todos os esqueletos do site público ganham o brilho do protótipo: uma faixa clara que corre da esquerda para a direita, em ciclo de cerca de 1,4 s, nas cores quentes do protótipo. Formas e disposição de cada esqueleto não mudam. Com movimento reduzido, o bloco fica parado, em cor única.
 
 ### Limpeza
 Saem os componentes antigos de vazio e de erro de página que não são usados.
@@ -105,3 +105,4 @@ Saem os componentes antigos de vazio e de erro de página que não são usados.
 ## Histórico de mudanças
 - 2026-10-05: criada e aprovada no modo autônomo (execução da Fase 5).
 - 2026-10-05: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-05: direção do brilho corrigida para "da esquerda para a direita", que é o que o protótipo faz (decidido no modo autônomo, na implementação).
