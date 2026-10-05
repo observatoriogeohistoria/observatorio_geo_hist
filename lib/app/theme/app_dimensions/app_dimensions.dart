@@ -577,6 +577,28 @@ class ComponentSizes {
   final double libraryDetailSkeletonButtonWidth = 200.0;
   final double libraryDetailSkeletonViewerHeight = 320.0;
 
+  final double formFieldHeight = 48.0;
+  final double formFieldBorder = 1.5;
+  final double formFieldFocusRing = 4.0;
+  final double formFieldPaddingH = 14.0;
+  final double formFieldPaddingV = 12.0;
+  final double formFieldGap = 18.0;
+  final double formFieldLabelGap = 6.0;
+  final int formMessageMinLines = 6;
+  final int formMessageMaxLines = 12;
+  final int formErrorMaxLines = 4;
+  final double formHintTop = 12.0;
+  final double formHintMaxWidth = 480.0;
+
+  final double mailConfirmationPaddingV = 48.0;
+  final double mailConfirmationPaddingH = 24.0;
+  final double mailConfirmationGap = 10.0;
+  final double mailConfirmationIcon = 56.0;
+  final double mailConfirmationIconGlyph = 26.0;
+  final double mailConfirmationTextMaxWidth = 440.0;
+  final double mailConfirmationButtonsTop = 8.0;
+  final double mailConfirmationButtonsGap = 10.0;
+
   double _byBreakpoint(
     Breakpoint breakpoint,
     double mobile,

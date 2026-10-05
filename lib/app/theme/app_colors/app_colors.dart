@@ -26,6 +26,9 @@ class AppColors {
   Color line = const Color(0xFFE6E1DA);
   Color lineStrong = const Color(0xFFCFC8BE);
 
+  /// Borda de campo de formulário: único contorno do campo, precisa de 3:1 no branco (a [line] tem 1,3:1).
+  Color fieldBorder = const Color(0xFF8A8178);
+
   Color accent = const Color(0xFFC94400);
   Color accentStrong = const Color(0xFFA33600);
   Color accentSoft = const Color(0xFFFFF0E6);
