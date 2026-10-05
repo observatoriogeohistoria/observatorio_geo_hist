@@ -1,6 +1,6 @@
 # 019. Colabore
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 5, tela T-05 (`/colaborar`); decisão "Rodapé: Colabore" (seção 1) e Q-04
 - **Protótipo:** sem aba própria. A aba "Categoria" mostra o botão "Colabore com esta categoria"; o formulário segue a aba "Contato" (link no CLAUDE.md)
 - **Criada em:** 2026-10-05
@@ -130,3 +130,4 @@ Igual à 018:
 - 2026-10-05: criada e aprovada no modo autônomo (execução da Fase 5).
 - 2026-10-05: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-05: implementada (tarefas A1 a D1), sem divergência da spec.
+- 2026-10-05: verificada com ressalvas (sem correções); ver `verificacao.md`.
