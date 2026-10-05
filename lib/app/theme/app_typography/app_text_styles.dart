@@ -201,6 +201,13 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
+  TextStyle get notFoundCode => _display(
+        size: _size(mobile: 64, tablet: 92, desktop: 112),
+        weight: FontWeight.w800,
+        height: 1,
+        letterSpacingEm: -0.04,
+      );
+
   TextStyle get postTitle => _display(
         size: _size(mobile: 32, tablet: 42, desktop: 53),
         weight: FontWeight.w800,

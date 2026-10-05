@@ -3,7 +3,8 @@
 Legenda: `- [ ]` a fazer, `- [x]` feita.
 
 ## Grupo A: tokens
-- [ ] **A1.** Tokens `skeletonBase` e `skeletonHighlight` (cores), `skeletonShimmer` (1,4 s), `notFoundActionsGap` e `notFoundCodeGap` (dimensões) e estilo `notFoundCode` (64/92/112 px, Bricolage 800). Arquivos: `theme/app_colors/app_colors.dart`, `theme/app_dimensions/app_dimensions.dart`, `theme/app_typography/app_text_styles.dart`. Atende: critério 12.
+- [x] **A1.** Tokens `skeletonBase` e `skeletonHighlight` (cores), `skeletonShimmer` (1,4 s), `notFoundActionsGap` e `notFoundCodeGap` (dimensões) e estilo `notFoundCode` (64/92/112 px, Bricolage 800). Arquivos: `theme/app_colors/app_colors.dart`, `theme/app_dimensions/app_dimensions.dart`, `theme/app_typography/app_text_styles.dart`. Atende: critério 12.
+  - Nota: `notFoundCodeGap` não foi criado; a caixa de estado já põe `stateBoxGap` (10 px, o mesmo do protótipo) entre o "404" e o título. Tokens do brilho entraram com o esqueleto e os da 404 com a página.
 
 ## Grupo B: esqueleto com brilho
 - [x] **B1.** `Skeleton` com `AnimationController` em repetição (`skeletonShimmer`), gradiente base/claro/base deslizando por `GradientTransform`, `RepaintBoundary`, controlador parado e cor base única com `MediaQuery.disableAnimationsOf`; cores do tema; mesma assinatura. Arquivo: `core/components/skeleton/skeleton.dart`. Atende: critérios 6, 7, 12.
@@ -15,7 +16,8 @@ Legenda: `- [ ]` a fazer, `- [x]` feita.
 - [x] **C3.** Remover `EmptyContent` e `PageErrorContent` depois de conferir com `grep` que não há uso (painel inclusive). Arquivos: `core/components/error_content/empty_content.dart`, `core/components/error_content/page_error_content.dart`. Atende: critério 10.
 
 ## Grupo D: página 404
-- [ ] **D1.** Reescrever `PageNotFound`: `ReadingPageScaffold` com corpo em `PageContent`, respiro `listingStatePaddingTop` em cima e `readingPaddingBottom` embaixo; `StateMessageBox` com `leading` "404" (`notFoundCode`, `accent`), título "Não encontramos esta página" como `h1`, texto "O endereço pode ter mudado ou o conteúdo foi removido." e `Wrap` centralizado com `PrimaryButton.medium` "Ir para o início" (`AppRoutes.root`) e `SecondaryButton.medium` "Explorar a biblioteca" (`AppRoutes.library`). Sem `num_extension`. Arquivo: `router/page_not_found.dart`. Atende: critérios 1, 2, 3, 5, 12.
+- [x] **D1.** Reescrever `PageNotFound`: `ReadingPageScaffold` com corpo em `PageContent`, respiro `listingStatePaddingTop` em cima e `readingPaddingBottom` embaixo; `StateMessageBox` com `leading` "404" (`notFoundCode`, `accent`), título "Não encontramos esta página" como `h1`, texto "O endereço pode ter mudado ou o conteúdo foi removido." e `Wrap` centralizado com `PrimaryButton.medium` "Ir para o início" (`AppRoutes.root`) e `SecondaryButton.medium` "Explorar a biblioteca" (`AppRoutes.library`). Sem `num_extension`. Arquivo: `router/page_not_found.dart`. Atende: critérios 1, 2, 3, 5, 12.
+  - Nota: respiro de topo `readingPaddingTop` (40), porque a 404 não tem cabeçalho acima e 24 px colava na navbar. Os botões ficam num `FocusTraversalGroup` em ordem de widget: a ordem de leitura da página pulava de "Ir para o início" para o rodapé.
 
 ## Grupo E: documentação e verificação do código
 - [ ] **E1.** `docs/arquitetura.md`: `error_content` com `StateErrorInline` e as opções novas da `StateMessageBox`; `skeleton` com brilho e movimento reduzido; 404 no desenho de estado em `router/`. Atende: critério 10.

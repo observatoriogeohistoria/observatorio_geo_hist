@@ -351,6 +351,8 @@ class ComponentSizes {
 
   final Duration skeletonShimmer = const Duration(milliseconds: 1400);
 
+  final double notFoundActionsGap = 12.0;
+
   final double postHeadMaxWidth = 820.0;
 
   final double postTitleGap = 22.0;

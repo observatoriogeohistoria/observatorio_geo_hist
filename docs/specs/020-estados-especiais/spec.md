@@ -106,3 +106,4 @@ Saem os componentes antigos de vazio e de erro de página que não são usados.
 - 2026-10-05: criada e aprovada no modo autônomo (execução da Fase 5).
 - 2026-10-05: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-05: direção do brilho corrigida para "da esquerda para a direita", que é o que o protótipo faz (decidido no modo autônomo, na implementação).
+- 2026-10-05: na implementação, a 404 usa o respiro de topo das páginas de leitura (40 px) em vez do das listagens, e sem token próprio entre "404" e título (a caixa já dá 10 px). Decidido no modo autônomo.
