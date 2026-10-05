@@ -74,7 +74,7 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 | T-07 | Biblioteca: detalhe do documento | `/biblioteca/:area/documento/:slug` | Metadados e visualizador do documento → specs/017-biblioteca-documento, concluído com ressalvas: painel não conferido no app |
 | T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos. Só o artigo foi feito; os outros 9 tipos ficam para a Fase 5 → specs/012-post-base (artigo concluído; parcial) |
 | T-09 | Busca | novo | **Ideia futura.** Desenhada no protótipo (aba "Busca (ideia)"), sem implementação planejada. Ver seção 9 |
-| T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento |
+| T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento → specs/020-estados-especiais, concluído com ressalvas: erro dos Destaques, "Nenhum documento encontrado" e leitor de tela não conferidos no app |
 | T-11 | Todas as publicações | `/publicacoes` (novo) | Mesma listagem da categoria (cards, busca, chips de tipo), sem o filtro de categoria, ordenada pela data de publicação e com paginação. Consulta `collectionGroup('category_posts')`; pode pedir índice novo no Firestore. Ao existir, entra o link "Ver todas as publicações" dos Destaques da Home (retirado na spec 005) → specs/015-todas-publicacoes, concluído |
 
 ---

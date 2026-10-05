@@ -1,6 +1,6 @@
 # 020. Estados especiais
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 5, tela T-10 (`PageNotFound`, erro e vazio)
 - **Protótipo:** aba "Estados" (link no CLAUDE.md)
 - **Criada em:** 2026-10-05
@@ -108,3 +108,4 @@ Saem os componentes antigos de vazio e de erro de página que não são usados.
 - 2026-10-05: direção do brilho corrigida para "da esquerda para a direita", que é o que o protótipo faz (decidido no modo autônomo, na implementação).
 - 2026-10-05: na implementação, a 404 usa o respiro de topo das páginas de leitura (40 px) em vez do das listagens, e sem token próprio entre "404" e título (a caixa já dá 10 px). Decidido no modo autônomo.
 - 2026-10-05: implementada.
+- 2026-10-05: verificada com ressalvas, sem correções ([verificacao.md](verificacao.md)). Não conferidos no app: erro dos Destaques (o cache offline devolve lista vazia), "Nenhum documento encontrado" (sem documentos no ambiente), leitor de tela e painel. Decidido no modo autônomo.
