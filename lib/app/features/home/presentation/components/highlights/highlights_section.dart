@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/arrow_link.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_inline.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
@@ -33,7 +33,8 @@ class HighlightsSection extends StatelessWidget {
           case FetchHighlightsInitialState() || FetchHighlightsLoadingState():
             content = const _Loading();
           case FetchHighlightsErrorState():
-            content = _Error(onRetry: onRetry);
+            content = StateErrorInline(
+                message: 'Não foi possível carregar os destaques.', onRetry: onRetry);
           case FetchHighlightsSuccessState() when highlights.isEmpty:
             return const SizedBox.shrink();
           case FetchHighlightsSuccessState():
@@ -171,41 +172,6 @@ class _CompactSkeleton extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _Error extends StatelessWidget {
-  const _Error({required this.onRetry});
-
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppTheme.colors;
-    final spacing = AppTheme.dimensions.spacing;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r16),
-        border: Border.all(color: colors.line, width: AppTheme.dimensions.stroke.small),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(spacing.s24),
-        child: Wrap(
-          spacing: spacing.s16,
-          runSpacing: spacing.s12,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            Text(
-              'Não foi possível carregar os destaques.',
-              style: AppTheme.typography.of(context).regular.copyWith(color: colors.inkSecondary),
-            ),
-            SecondaryButton.small(text: 'Tentar de novo', onPressed: onRetry),
-          ],
-        ),
-      ),
     );
   }
 }
