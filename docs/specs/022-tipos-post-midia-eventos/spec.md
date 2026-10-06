@@ -1,6 +1,6 @@
 # 022. Tipos de post: podcast, música, evento e pesquisa
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 5: T-08 e P-08 (últimos quatro tipos de post)
 - **Protótipo:** aba "Tipos de post" (Podcast e música, Evento, Pesquisa); aba "Post" para cabeçalho, compartilhar e imagem com legenda (link no CLAUDE.md)
 - **Criada em:** 2026-10-06
@@ -127,3 +127,4 @@ Valem as regras da 021: título `h1` como cadastrado, em cor de tinta e sem caix
 - 2026-10-06: criada e aprovada no modo autônomo (execução da Fase 5).
 - 2026-10-06: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-06: na implementação, três dos sete eventos do prod escrevem a data como dias que dividem o mês ("06 a 10 de julho de 2026", "15, 16 e 17 de julho de 2026.", "20 e 22 de setembro de 2026") e ficariam sem caixa. Decidido no modo autônomo: aceitar uma lista ou intervalo de dias antes de "de mês" (separados por vírgula, hífen, travessão, "e", "a" ou "até") e usar o primeiro dia com esse mês. Comportamento e critério 6 atualizados.
+- 2026-10-06: implementada (`94f63c5`, `193f07f`, `668408b`, `7772b4d`). Conferida num Chrome sem janela por CDP, com build `APP_ENV=prod` só leitura (podcast, música com e sem letra, evento e pesquisa em andamento e concluída reais em 390, 768 e 1280; artigo, livro, filme, revista, documento, produção acadêmica, detalhe e lista da biblioteca e Home sem mudança) e um build temporário com dados injetados fora do repositório (sem imagem e imagem quebrada, link sem esquema ou malformado, sem link, letra vazia e não-delta, artista vazio, datas "14/11/2026", intervalo, "32/13/2020" e "A definir", evento sem horário e detalhes, pesquisa sem ficha, integrantes em várias linhas, título longo com a pílula, esqueleto, erro e 404). Tab e Enter na faixa "Ouvir" e em "Mais informações" abrem o link certo em outra aba, com foco visível; árvore semântica com `h1`, nível 2, pares da ficha, pílula depois do título, "em outra aba" e caixa de data fora. Contraste: branco no laranja 4,87:1, pílula verde 5,71:1, texto secundário na faixa 6,45:1. Debug sem `overflow` nem asserção. O único `*_content.dart` restante em `posts/` é o `post_type_content.dart`, o despachante, que não é conteúdo antigo. A letra da música segue o texto rico do artigo, com um parágrafo por linha (versos espaçados como parágrafos). Sem conferir: painel (sem diff e sem credenciais de teste) e leitor de tela real (só a árvore semântica).
