@@ -3,9 +3,16 @@ import 'package:observatorio_geo_hist/app/core/components/chips/labels.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class FactSheet extends StatelessWidget {
-  const FactSheet({super.key, required this.facts, this.tagsLabel = '', this.tags = const []});
+  const FactSheet({
+    super.key,
+    required this.facts,
+    this.wideFacts = const [],
+    this.tagsLabel = '',
+    this.tags = const [],
+  });
 
   final List<(String label, String value)> facts;
+  final List<(String label, String value)> wideFacts;
   final String tagsLabel;
   final List<String> tags;
 
@@ -18,12 +25,17 @@ class FactSheet extends StatelessWidget {
       for (final (label, value) in this.facts)
         if (value.trim().isNotEmpty) (label, value.trim()),
     ];
+    final wideFacts = [
+      for (final (label, value) in this.wideFacts)
+        if (value.trim().isNotEmpty) (label, value.trim()),
+    ];
     final tags = [
       for (final tag in this.tags)
         if (tag.trim().isNotEmpty) tag.trim(),
     ];
+    final valueStyle = AppTheme.typography.of(context).factValue.copyWith(color: colors.ink);
 
-    if (facts.isEmpty && tags.isEmpty) return const SizedBox.shrink();
+    if (facts.isEmpty && wideFacts.isEmpty && tags.isEmpty) return const SizedBox.shrink();
 
     return Container(
       margin: EdgeInsets.only(top: components.factsTop),
@@ -38,42 +50,44 @@ class FactSheet extends StatelessWidget {
               .clamp(1, components.factsMaxColumns);
           final columnWidth = (width - gap * (columns - 1)) / columns;
 
+          final groups = [
+            if (facts.isNotEmpty)
+              Wrap(
+                spacing: gap,
+                runSpacing: components.factsGapV,
+                children: [
+                  for (final (label, value) in facts)
+                    SizedBox(
+                      width: columnWidth,
+                      child: _Fact(
+                        label: label,
+                        spokenValue: value,
+                        child: Text(value, style: valueStyle),
+                      ),
+                    ),
+                ],
+              ),
+            for (final (label, value) in wideFacts)
+              _Fact(label: label, spokenValue: value, child: Text(value, style: valueStyle)),
+            if (tags.isNotEmpty)
+              _Fact(
+                label: tagsLabel,
+                spokenValue: tags.join(', '),
+                child: Wrap(
+                  spacing: components.tagGap,
+                  runSpacing: components.tagGap,
+                  children: [for (final tag in tags) CategoryTag(tag)],
+                ),
+              ),
+          ];
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (facts.isNotEmpty)
-                Wrap(
-                  spacing: gap,
-                  runSpacing: components.factsGapV,
-                  children: [
-                    for (final (label, value) in facts)
-                      SizedBox(
-                        width: columnWidth,
-                        child: _Fact(
-                          label: label,
-                          spokenValue: value,
-                          child: Text(
-                            value,
-                            style: AppTheme.typography
-                                .of(context)
-                                .factValue
-                                .copyWith(color: colors.ink),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              if (facts.isNotEmpty && tags.isNotEmpty) SizedBox(height: components.factsGapV),
-              if (tags.isNotEmpty)
-                _Fact(
-                  label: tagsLabel,
-                  spokenValue: tags.join(', '),
-                  child: Wrap(
-                    spacing: components.tagGap,
-                    runSpacing: components.tagGap,
-                    children: [for (final tag in tags) CategoryTag(tag)],
-                  ),
-                ),
+              for (final (index, group) in groups.indexed) ...[
+                if (index > 0) SizedBox(height: components.factsGapV),
+                group,
+              ],
             ],
           );
         },

@@ -3,10 +3,18 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 import 'package:observatorio_geo_hist/app/core/components/image/fitted_network_image.dart';
 
 class PostCover extends StatelessWidget {
-  const PostCover({super.key, required this.imageUrl, this.caption});
+  const PostCover({
+    super.key,
+    required this.imageUrl,
+    this.caption,
+    this.semanticLabel = 'Imagem de capa do artigo',
+  });
 
   final String imageUrl;
   final String? caption;
+
+  /// Nome da imagem quando não há legenda.
+  final String semanticLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +34,7 @@ class PostCover extends StatelessWidget {
               child: FittedNetworkImage(
                 imageUrl,
                 fit: BoxFit.cover,
-                semanticLabel: caption.isEmpty ? 'Imagem de capa do artigo' : caption,
+                semanticLabel: caption.isEmpty ? semanticLabel : caption,
                 errorBuilder: (context, error, stackTrace) => const PostImagePlaceholder(),
               ),
             ),

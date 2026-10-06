@@ -52,7 +52,7 @@ class WorkBody extends StatelessWidget {
             ],
           ),
         ),
-        _WorkText(text: info.text),
+        _WorkTexts(texts: info.texts),
       ],
     );
   }
@@ -204,19 +204,20 @@ class _ShareRow extends StatelessWidget {
   }
 }
 
-class _WorkText extends StatelessWidget {
-  const _WorkText({required this.text});
+class _WorkTexts extends StatelessWidget {
+  const _WorkTexts({required this.texts});
 
-  final WorkText text;
+  final List<WorkText> texts;
 
   @override
   Widget build(BuildContext context) {
     final components = AppTheme.dimensions.components;
-    final content = text.content;
-    final rich = text.isRich && ReadingRichText.isDelta(content);
-    final empty = rich ? ReadingRichText.isEmpty(content) : ReadingPlainText.isEmpty(content);
+    final blocks = [
+      for (final text in texts)
+        if (_contentOf(text) case final content?) (text.title, content),
+    ];
 
-    if (empty) {
+    if (blocks.isEmpty) {
       return SizedBox(
         height: components.readingPaddingBottom(ScreenUtils.breakpointOf(context)),
       );
@@ -227,9 +228,17 @@ class _WorkText extends StatelessWidget {
       paddingTop: components.postBodyPaddingTop -
           (components.readingSubtitleMarginTop - components.readingParagraphGap),
       children: [
-        ReadingSubtitle(text.title),
-        if (rich) ReadingRichText(content) else ReadingPlainText(content),
+        for (final (title, content) in blocks) ...[ReadingSubtitle(title), content],
       ],
     );
+  }
+
+  static Widget? _contentOf(WorkText text) {
+    final content = text.content;
+    final rich = text.isRich && ReadingRichText.isDelta(content);
+    final empty = rich ? ReadingRichText.isEmpty(content) : ReadingPlainText.isEmpty(content);
+
+    if (empty) return null;
+    return rich ? ReadingRichText(content) : ReadingPlainText(content);
   }
 }

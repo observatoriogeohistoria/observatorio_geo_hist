@@ -4,6 +4,7 @@ import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/film_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/magazine_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/event_day.dart';
 
 enum WorkImageKind { cover, poster }
 
@@ -32,18 +33,45 @@ class WorkText {
   final bool isRich;
 }
 
+class WorkListen {
+  const WorkListen({required this.label, required this.url, required this.host});
+
+  final String label;
+  final String url;
+  final String host;
+}
+
+class WorkStatus {
+  const WorkStatus({required this.label, required this.positive});
+
+  final String label;
+  final bool positive;
+}
+
+class WorkFigure {
+  const WorkFigure({required this.url, required this.caption});
+
+  final String url;
+  final String caption;
+}
+
 class WorkInfo {
   const WorkInfo({
     required this.typeLabel,
     required this.badge,
     required this.title,
-    required this.text,
+    required this.texts,
     this.teaser = '',
     this.facts = const [],
+    this.wideFacts = const [],
     this.tagsLabel = '',
     this.tags = const [],
     this.image,
+    this.date,
     this.action,
+    this.listen,
+    this.status,
+    this.figure,
   });
 
   final String typeLabel;
@@ -51,14 +79,24 @@ class WorkInfo {
   final String title;
   final String teaser;
   final List<(String, String)> facts;
+  final List<(String, String)> wideFacts;
   final String tagsLabel;
   final List<String> tags;
   final WorkImage? image;
+
+  /// Ocupa o lugar da imagem: o evento não mostra o cartaz.
+  final EventDay? date;
   final WorkAction? action;
-  final WorkText text;
+  final WorkListen? listen;
+  final WorkStatus? status;
+
+  /// Imagem com legenda abaixo do compartilhar, como a do artigo.
+  final WorkFigure? figure;
+  final List<WorkText> texts;
 
   bool get hasSheet =>
-      facts.any((fact) => fact.$2.trim().isNotEmpty) || tags.any((tag) => tag.trim().isNotEmpty);
+      [...facts, ...wideFacts].any((fact) => fact.$2.trim().isNotEmpty) ||
+      tags.any((tag) => tag.trim().isNotEmpty);
 }
 
 WorkInfo workInfoOf(PostModel post) {
@@ -72,7 +110,7 @@ WorkInfo workInfoOf(PostModel post) {
         facts: [('Autoria', body.author), ('Ano', _year(body.year)), ('Editora', body.publisher)],
         image: WorkImage(kind: WorkImageKind.cover, url: _url(body.image.url), link: ''),
         action: _action('Acessar livro', body.link),
-        text: WorkText(title: 'Sinopse', content: body.synopsis, isRich: false),
+        texts: [WorkText(title: 'Sinopse', content: body.synopsis, isRich: false)],
       ),
     FilmModel() => WorkInfo(
         typeLabel: 'Filme',
@@ -85,7 +123,7 @@ WorkInfo workInfoOf(PostModel post) {
           ('Duração', body.duration),
         ],
         image: WorkImage(kind: WorkImageKind.poster, url: _url(body.image.url), link: body.link),
-        text: WorkText(title: 'Sinopse', content: body.synopsis, isRich: true),
+        texts: [WorkText(title: 'Sinopse', content: body.synopsis, isRich: true)],
       ),
     MagazineModel() => WorkInfo(
         typeLabel: 'Revista',
@@ -94,14 +132,14 @@ WorkInfo workInfoOf(PostModel post) {
         teaser: body.teaser ?? '',
         image: WorkImage(kind: WorkImageKind.cover, url: _url(body.image.url), link: ''),
         action: _action('Acessar revista', body.link),
-        text: WorkText(title: 'Descrição', content: body.description, isRich: false),
+        texts: [WorkText(title: 'Descrição', content: body.description, isRich: false)],
       ),
     DocumentModel() => WorkInfo(
         typeLabel: 'Documento',
         badge: body.category.portuguese,
         title: body.title,
         action: _action('Acessar documento', body.link),
-        text: WorkText(title: 'Descrição', content: body.description, isRich: true),
+        texts: [WorkText(title: 'Descrição', content: body.description, isRich: true)],
       ),
     AcademicProductionModel() => WorkInfo(
         typeLabel: 'Produção acadêmica',
@@ -116,7 +154,7 @@ WorkInfo workInfoOf(PostModel post) {
         tagsLabel: 'Palavras-chave',
         tags: _keywords(body.keywords),
         action: _action('Acessar produção', body.link),
-        text: WorkText(title: 'Resumo', content: body.summary, isRich: false),
+        texts: [WorkText(title: 'Resumo', content: body.summary, isRich: false)],
       ),
     _ => throw ArgumentError.value(post.type, 'post.type', 'não é uma obra'),
   };

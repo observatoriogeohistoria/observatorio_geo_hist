@@ -6,10 +6,13 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/components
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class WorkCover extends StatelessWidget {
-  const WorkCover({super.key, required this.url, required this.title});
+  const WorkCover({super.key, required this.url, required this.title, this.aspectRatio});
 
   final String url;
   final String title;
+
+  /// Sem valor, a proporção de livro.
+  final double? aspectRatio;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class WorkCover extends StatelessWidget {
         ),
         child: _WorkPicture(
           url: url,
-          aspectRatio: components.workCoverAspect,
+          aspectRatio: aspectRatio ?? components.workCoverAspect,
           borderRadius: components.workCoverRadius,
           semanticLabel: 'Capa de $title',
         ),
