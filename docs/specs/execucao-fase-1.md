@@ -79,6 +79,10 @@
   - Texto selecionável nas páginas públicas (`SelectionArea` num `ShellRoute`, realce `textSelection`). O que é clicável fica fora da seleção (`AppFocusRing` e `notSelectable`). Painel administrativo sem mudança.
 - Nova, não corrigida: a 390 px e 200%, o botão "Assistir" do vídeo encosta na legenda "Conheça o Observatório".
 
+### Revisão (2026-10-06)
+- 006: "Assistir" encostando na legenda a 390 px e 200% não vale mais: o bloco do vídeo mudou com a nova capa.
+- 009: faixa lilás em `/colaborar` resolvida com a página refeita na 019.
+
 ## Ocorrências
 - Branch criada a partir de origin/develop sem upstream configurado, para que nenhum `git push` sem argumentos vá para a develop.
 - 2026-09-26: limite de uso atingido após fechar a 006. Retomar com `/sdd-fase Fase 1` a partir da 007 (spec+plano pendente).

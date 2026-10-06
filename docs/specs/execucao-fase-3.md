@@ -22,6 +22,9 @@
 - 015: a busca em `/publicacoes` precisa de índice novo (grupo de coleções `category_posts`: `isPublished`, `type`, `body.title_lower`, crescentes) em prod e dev; sem ele, mostra erro tratado. A pessoa publica.
 - 015 (verificação): erro de rede conferido com falha injetada no datasource (não com rede cortada); leitor de tela real não conferido.
 
+### Revisão (2026-10-06)
+- 015: índices em `firestore.indexes.json`, publicados pelo deploy.
+
 ## Ocorrências
 - 014: na implementação, o `count()` sem `orderBy` falhava em prod (`failed-precondition`); a contagem passou a usar a mesma consulta da lista, sem índice novo. Corrigido de passagem um rastro dos ícones sociais do rodapé ao carregar (`fix:` próprio, fora do escopo).
 - 014 (verificação): offline, o Firestore devolvia cache vazio e a categoria e o post caíam na 404; consulta vazia do cache virou erro (`fix:` próprio). Esqueletos passaram a anunciar "Carregando".

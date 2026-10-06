@@ -30,6 +30,12 @@
 - 012: links dentro do texto e da nota do artigo abrem pelo mouse, mas não recebem foco por teclado (limite do Quill só leitura; a alternativa reescreve o `ReadingRichText`). Erro com rede bloqueada e post não publicado conferidos só com falha injetada e pelo código.
 - 013: em 768 o compartilhar desce para baixo do autor mesmo com nome curto (não cabe na largura útil; a spec permite). Folha nativa real e estado `expanded` por leitor de tela em 390 conferidos só por simulação e pelo código.
 
+### Revisão (2026-10-06)
+- 010: segue em aberto. Só aparece com o texto do navegador ou do sistema ampliado a 200%.
+- 011: corrigida ainda na Fase 2 (`e5aeb0b`): offline com cache vazio mostra a caixa de erro.
+- 012: segue em aberto (foco por teclado nos links do texto).
+- 013: não se aplica mais.
+
 ## Ocorrências
 - 010: na verificação, as migalhas saíam como grupo; passaram a `navigation` "Você está em" (`fix:` próprio). Texto a 200% conferido ampliando a fonte raiz do documento, que o Flutter web respeita.
 - 011: na verificação, com a página rolada as migalhas recebiam foco escondidas sob a navbar fixa (e vinham antes da navbar no Tab). Corrigido no `ReadingPageScaffold` (`fix:` próprio): navbar primeiro na ordem e item focado rolado para aparecer. Vale também para o Manifesto.

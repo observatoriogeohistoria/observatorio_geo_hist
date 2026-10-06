@@ -36,6 +36,10 @@
 - 021: não conferido no app o anúncio por leitor de tela (árvore semântica conferida); painel sem diff e não conferido.
 - 022: não conferido no app o anúncio por leitor de tela (árvore semântica conferida); painel sem diff e não conferido.
 
+### Revisão (2026-10-06)
+- 020: erro dos Destaques corrigido no datasource: offline com cache vazio vira erro, e a seção mostra "Não foi possível carregar os destaques." em vez de sumir. Não conferido no app.
+- Seguem em aberto os demais itens acima (leitor de tela, autopreenchimento, casos sem dados no ambiente e painel).
+
 ## Ocorrências
 - 019 (verificação): o navegador embutido não repassava a digitação aos campos do Flutter; a conferência foi feita num Chrome headless por CDP.
 - 020 (verificação): conferida num Chrome headless por CDP, comparando os esqueletos com um build do código anterior à spec.
