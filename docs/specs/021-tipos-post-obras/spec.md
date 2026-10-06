@@ -1,6 +1,6 @@
 # 021. Tipos de post: livro, filme, revista, documento e produção acadêmica
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 5: T-08 e P-08 (tipos de obra com ficha)
 - **Protótipo:** aba "Tipos de post" (Livro, Filme e a tabela dos demais); aba "Documento" para a ficha; aba "Post" para cabeçalho e compartilhar (link no CLAUDE.md)
 - **Criada em:** 2026-10-05
@@ -138,3 +138,4 @@ O desenho antigo desses cinco tipos sai da página: os cinco `*_content.dart` co
 - 2026-10-05: plano e tarefas criados (`plan.md`, `tasks.md`).
 - 2026-10-05 (implementação, modo autônomo): o prod já tem produções acadêmicas, e a real separa as palavras-chave com ponto e vírgula e termina com ponto ("Educação online; Curadoria digital; Tecnologias educacionais."). Divididas só nas vírgulas, viravam uma etiqueta única. Decidido: dividir também em `;` e tirar o ponto final de cada termo.
 - 2026-10-05 (implementação, modo autônomo): quando a ficha é o último item do bloco (filme, ou livro sem link) e o bloco está empilhado (celular, ou tipo sem imagem), a linha de compartilhar não repete a linha de cima: a de baixo da ficha já a separa, e duas linhas seguidas pareciam uma faixa vazia.
+- 2026-10-06: implementada (`fd293ca`, `18aa574`). Conferida num Chrome sem janela por CDP, com build `APP_ENV=prod` só leitura (livro, filme, revista, documento e produção acadêmica reais; artigo, podcast, música, evento e pesquisa sem mudança; detalhe e lista da biblioteca; vídeo da Home) e um build temporário com dados injetados fora do repositório (imagem vazia e quebrada, link vazio, ano 0, sinopse não-delta, texto em várias linhas, palavras-chave irregulares, título longo, erro de rede). Debug sem `overflow`. Sem conferir: painel (sem diff e sem credenciais de teste), leitor de tela real (só a árvore semântica) e contraste medido (usa tokens já conferidos). Dado observado: a descrição de um documento do prod tem quebras de linha no meio das frases (texto colado de PDF); aparece como foi gravada.
