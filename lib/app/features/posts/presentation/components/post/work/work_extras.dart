@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/event_day.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_info.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -95,6 +96,78 @@ class _WorkListenButtonState extends State<WorkListenButton> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Decorativa: a "Data" da ficha lê a data inteira, com ano e intervalo.
+class WorkDateBox extends StatelessWidget {
+  const WorkDateBox({super.key, required this.date});
+
+  final EventDay date;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final styles = AppTheme.typography.of(context);
+
+    return ExcludeSemantics(
+      child: Container(
+        width: components.workDateBox,
+        height: components.workDateBox,
+        decoration: BoxDecoration(
+          color: colors.accent,
+          borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r18),
+        ),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('${date.day}', style: styles.workDateDay.copyWith(color: colors.white)),
+            SizedBox(height: components.workDateMonthGap),
+            Text(
+              date.month.toUpperCase(),
+              style: styles.workDateMonth.copyWith(color: colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class WorkStatusPill extends StatelessWidget {
+  const WorkStatusPill({super.key, required this.status});
+
+  final WorkStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final positive = status.positive;
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: components.workStatusPaddingH,
+        vertical: components.workStatusPaddingV,
+      ),
+      decoration: BoxDecoration(
+        color: positive ? colors.successSurface : colors.surface,
+        borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.pill),
+        border: Border.all(
+          color: positive ? colors.successSurface : colors.line,
+          width: AppTheme.dimensions.stroke.small,
+        ),
+      ),
+      child: Text(
+        status.label,
+        style: AppTheme.typography
+            .of(context)
+            .workStatus
+            .copyWith(color: positive ? colors.success : colors.inkSecondary),
       ),
     );
   }

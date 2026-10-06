@@ -43,7 +43,7 @@ Valem as regras da 021: título `h1` como cadastrado, em cor de tinta e sem caix
 
 ### Evento
 - **Caixa de data** (protótipo): quadrado laranja de 100 px com o dia em número grande e o mês abreviado em caixa alta ("14" / "NOV"), à esquerda dos dados no tablet e no desktop e acima deles no celular.
-- A caixa só aparece quando o dia e o mês do **início** do evento podem ser lidos do texto da data: formatos "14/11/2026" (ou "14/11") e "14 de novembro de 2026" (com "1º", maiúsculas ou sem acento). Em intervalos ("1º de janeiro de 2020 a 10 de janeiro de 2020"), vale a primeira data. Fora disso, não há caixa e o bloco fica só com os dados, como no documento da 021.
+- A caixa só aparece quando o dia e o mês do **início** do evento podem ser lidos do texto da data: formatos "14/11/2026" (ou "14/11") e "14 de novembro de 2026" (com "1º", maiúsculas ou sem acento). Em intervalos ("1º de janeiro de 2020 a 10 de janeiro de 2020"), vale a primeira data; dias que dividem o mês ("06 a 10 de julho", "15, 16 e 17 de julho", "20 e 22 de setembro") usam o primeiro dia com esse mês. Fora disso, não há caixa e o bloco fica só com os dados, como no documento da 021.
 - A **ficha sempre traz "Data"** com o texto como foi cadastrado, porque a caixa não mostra ano nem intervalo.
 - **Ação:** botão primário "Mais informações" com ícone de link externo, como o "Acessar …" das obras.
 - A imagem do evento (geralmente um cartaz com proporção livre) não aparece na página, como no protótipo; continua nos cards da listagem.
@@ -90,7 +90,7 @@ Valem as regras da 021: título `h1` como cadastrado, em cor de tinta e sem caix
 3. [ ] Podcast e música: capa 1:1 de 180 px sem distorcer, ao lado dos dados (tablet e desktop) ou acima (celular), com placeholder sem imagem e na falha.
 4. [ ] Faixa "Ouvir episódio"/"Ouvir música" com botão redondo, endereço do site sem "www." e ícone externo; abre o link em outra aba por clique e Enter; some sem link; com endereço ilegível, só o texto.
 5. [ ] Música: "Descrição" e depois "Letra" com a letra no estilo de texto rico e quebras de linha; letra vazia sem subtítulo; letra não-delta como texto simples.
-6. [ ] Evento: caixa de data com dia e mês abreviado quando a data começa em "DD/MM[/AAAA]" ou "D[º] de mês [de AAAA]" (primeira data de um intervalo); sem caixa em formato não reconhecido ou data impossível; "Data" sempre na ficha como cadastrada.
+6. [ ] Evento: caixa de data com dia e mês abreviado quando a data começa em "DD/MM[/AAAA]" ou "D[º] de mês [de AAAA]" (primeira data de um intervalo), inclusive com dias que dividem o mês ("06 a 10 de julho"); sem caixa em formato não reconhecido ou data impossível; "Data" sempre na ficha como cadastrada.
 7. [ ] Evento: "Mais informações" abre o link em outra aba por clique e Enter e some sem link; "Detalhes" com parágrafos nas quebras de linha e sem subtítulo quando vazio.
 8. [ ] Pesquisa: pílula "Em andamento" (verde) ou "Concluída" (neutra) junto do título, quebrando para a linha de baixo quando não cabe; imagem 21:9 com legenda abaixo do compartilhar, sem figura quando não há imagem e com placeholder na falha; sem botão.
 9. [ ] Compartilhar é o mesmo do artigo (013), com foco visível e nome acessível.
@@ -126,3 +126,4 @@ Valem as regras da 021: título `h1` como cadastrado, em cor de tinta e sem caix
 ## Histórico de mudanças
 - 2026-10-06: criada e aprovada no modo autônomo (execução da Fase 5).
 - 2026-10-06: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-06: na implementação, três dos sete eventos do prod escrevem a data como dias que dividem o mês ("06 a 10 de julho de 2026", "15, 16 e 17 de julho de 2026.", "20 e 22 de setembro de 2026") e ficariam sem caixa. Decidido no modo autônomo: aceitar uma lista ou intervalo de dias antes de "de mês" (separados por vírgula, hífen, travessão, "e", "a" ou "até") e usar o primeiro dia com esse mês. Comportamento e critério 6 atualizados.

@@ -12,6 +12,7 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/article_body.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_breadcrumbs.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_cover.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_share.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_extras.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_image.dart';
@@ -35,7 +36,9 @@ class WorkBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final components = AppTheme.dimensions.components;
-    final stacked = info.image == null || ScreenUtils.breakpointOf(context) == Breakpoint.mobile;
+    final figure = info.figure;
+    final stacked = (info.image == null && info.date == null) ||
+        ScreenUtils.breakpointOf(context) == Breakpoint.mobile;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -53,6 +56,14 @@ class WorkBody extends StatelessWidget {
                 post: post,
                 joined: stacked && info.action == null && info.listen == null && info.hasSheet,
               ),
+              if (figure != null) ...[
+                SizedBox(height: components.postCoverMarginTop),
+                PostCover(
+                  imageUrl: figure.url,
+                  caption: figure.caption,
+                  semanticLabel: 'Imagem da pesquisa',
+                ),
+              ],
             ],
           ),
         ),
@@ -74,48 +85,58 @@ class _WorkBlock extends StatelessWidget {
     final gap = components.workBlockGap(breakpoint);
     final data = _WorkData(info: info);
     final image = info.image;
-
-    if (image == null) return data;
-
+    final date = info.date;
     final title = info.title.trim();
-    final picture = switch (image.kind) {
-      WorkImageKind.cover => WorkCover(url: image.url, title: title),
+    final poster = image?.kind == WorkImageKind.poster;
+
+    final Widget? aside = switch (image?.kind) {
+      WorkImageKind.cover => WorkCover(url: image!.url, title: title),
       WorkImageKind.square => WorkCover(
-          url: image.url,
+          url: image!.url,
           title: title,
           aspectRatio: components.workSquareAspect,
         ),
-      WorkImageKind.poster => WorkPoster(url: image.url, title: title, link: image.link),
+      WorkImageKind.poster => WorkPoster(url: image!.url, title: title, link: image.link),
+      null => date == null ? null : WorkDateBox(date: date),
     };
+
+    if (aside == null) return data;
 
     if (breakpoint == Breakpoint.mobile) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (image.kind == WorkImageKind.poster)
-            picture
-          else
-            Align(alignment: Alignment.centerLeft, child: picture),
+          if (poster) aside else Align(alignment: Alignment.centerLeft, child: aside),
           SizedBox(height: gap),
           data,
         ],
       );
     }
 
+    if (poster) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(flex: components.workPosterFlex, child: aside),
+          SizedBox(width: gap),
+          Expanded(flex: components.workDataFlex, child: data),
+        ],
+      );
+    }
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: switch (image.kind) {
-        WorkImageKind.cover || WorkImageKind.square => [
-            picture,
-            SizedBox(width: gap),
-            Expanded(child: data)
-          ],
-        WorkImageKind.poster => [
-            Expanded(flex: components.workPosterFlex, child: picture),
-            SizedBox(width: gap),
-            Expanded(flex: components.workDataFlex, child: data),
-          ],
-      },
+      children: [
+        if (image == null)
+          SizedBox(
+            width: components.workDateColumn,
+            child: Align(alignment: Alignment.topLeft, child: aside),
+          )
+        else
+          aside,
+        SizedBox(width: gap),
+        Expanded(child: data),
+      ],
     );
   }
 }
@@ -134,6 +155,12 @@ class _WorkData extends StatelessWidget {
     final teaser = info.teaser.trim();
     final action = info.action;
     final listen = info.listen;
+    final status = info.status;
+    final title = Semantics(
+      header: true,
+      headingLevel: 1,
+      child: Text(info.title.trim(), style: styles.detailTitle.copyWith(color: colors.ink)),
+    );
 
     // Ao lado da capa, o Flutter ordena a leitura pela posição na tela e anunciava o botão
     // antes da chamada da revista; o contêiner mantém a ordem da coluna.
@@ -147,16 +174,25 @@ class _WorkData extends StatelessWidget {
             Align(alignment: Alignment.centerLeft, child: TypeBadge(badge, wrap: true)),
             SizedBox(height: components.workTitleGap),
           ],
-          Semantics(
-            header: true,
-            headingLevel: 1,
-            child: Text(info.title.trim(), style: styles.detailTitle.copyWith(color: colors.ink)),
-          ),
+          if (status == null)
+            title
+          else
+            Wrap(
+              spacing: components.workStatusGap,
+              runSpacing: components.workTitleGap,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [title, WorkStatusPill(status: status)],
+            ),
           if (teaser.isNotEmpty) ...[
             SizedBox(height: components.postSubtitleGap),
             Text(teaser, style: styles.postSubtitle.copyWith(color: colors.inkSecondary)),
           ],
-          FactSheet(facts: info.facts, tagsLabel: info.tagsLabel, tags: info.tags),
+          FactSheet(
+            facts: info.facts,
+            wideFacts: info.wideFacts,
+            tagsLabel: info.tagsLabel,
+            tags: info.tags,
+          ),
           if (listen != null) ...[
             SizedBox(height: components.workActionTop),
             WorkListenButton(listen: listen, title: info.title.trim()),

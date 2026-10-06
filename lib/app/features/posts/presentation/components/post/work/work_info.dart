@@ -1,11 +1,13 @@
 import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/book_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/event_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/film_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/magazine_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/event_day.dart';
 
 enum WorkImageKind { cover, square, poster }
@@ -178,6 +180,40 @@ WorkInfo workInfoOf(PostModel post) {
           WorkText(title: 'Letra', content: body.lyrics ?? '', isRich: true),
         ],
       ),
+    EventModel() => WorkInfo(
+        typeLabel: 'Evento',
+        badge: '',
+        title: body.title,
+        date: eventDayOf(body.date),
+        facts: [
+          ('Data', body.date),
+          ('Horário', body.time ?? ''),
+          ('Local', body.location),
+          ('Cidade', body.city),
+          ('Abrangência', body.scope.portuguese),
+        ],
+        action: _action('Mais informações', body.link),
+        texts: [WorkText(title: 'Detalhes', content: body.details ?? '', isRich: false)],
+      ),
+    SearchModel() => WorkInfo(
+        typeLabel: 'Pesquisa',
+        badge: '',
+        title: body.title,
+        status: WorkStatus(
+          label: body.state.portuguese,
+          positive: body.state == SearchState.inProgress,
+        ),
+        facts: [
+          ('Coordenação', body.coordinator ?? ''),
+          ('Pesquisador(a)', body.researcher ?? ''),
+          ('Orientação', body.advisor ?? ''),
+          ('Coorientação', body.coAdvisor ?? ''),
+          ('Financiamento', body.financier ?? ''),
+        ],
+        wideFacts: [('Integrantes', body.members ?? '')],
+        figure: _figure(body.image.url, body.imageCaption),
+        texts: [WorkText(title: 'Descrição', content: body.description, isRich: false)],
+      ),
     _ => throw ArgumentError.value(post.type, 'post.type', 'não é uma obra'),
   };
 }
@@ -190,6 +226,11 @@ List<String> _keywords(String keywords) => [
 String _year(int year) => year > 0 ? '$year' : '';
 
 String _url(String? url) => url?.trim() ?? '';
+
+WorkFigure? _figure(String? url, String caption) {
+  final image = _url(url);
+  return image.isEmpty ? null : WorkFigure(url: image, caption: caption);
+}
 
 WorkListen? _listen(String label, String url) {
   final link = url.trim();

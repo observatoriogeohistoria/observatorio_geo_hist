@@ -25,10 +25,12 @@ const _months = [
 const _daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 final _numeric = RegExp(r'^(\d{1,2})\s*[º°ªo]?\s*/\s*(\d{1,2})(?!\d)');
-final _written = RegExp(r'^(\d{1,2})\s*[º°ªo]?\s+de\s+([a-z]+)');
+final _written = RegExp(
+  r'^(\d{1,2})\s*[º°ªo]?(?:(?:\s*[,–-]\s*|\s+(?:e|a|até)\s+)\d{1,2}\s*[º°ªo]?)*\s+de\s+([a-z]+)',
+);
 
-/// A data do evento é texto livre no painel; só o começo é lido, e o que não for
-/// "14/11[/2026]" ou "14 de novembro [de 2026]" fica sem caixa.
+/// A data do evento é texto livre no painel; só o começo é lido ("14/11[/2026]",
+/// "14 de novembro", "06 a 10 de julho" pelo primeiro dia), e o resto fica sem caixa.
 EventDay? eventDayOf(String date) {
   final text = date.trim().toLowerCase().replaceAll('ç', 'c');
 

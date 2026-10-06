@@ -395,6 +395,14 @@ class ComponentSizes {
   final double workListenPlayIcon = 24.0;
   final double workListenIcon = 20.0;
 
+  final double workDateBox = 100.0;
+  final double workDateColumn = 110.0;
+  final double workDateMonthGap = 6.0;
+
+  final double workStatusGap = 12.0;
+  final double workStatusPaddingH = 12.0;
+  final double workStatusPaddingV = 4.0;
+
   final double shareIconButton = 38.0;
   final double shareIcon = 22.0;
   final double shareGap = 4.0;

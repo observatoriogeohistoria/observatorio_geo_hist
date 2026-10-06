@@ -287,6 +287,26 @@ class AppTextStyles {
         height: 1.4,
       );
 
+  TextStyle get workDateDay => _display(
+        size: _size(mobile: 41.6, tablet: 41.6, desktop: 41.6),
+        weight: FontWeight.w800,
+        height: 1,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get workDateMonth => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w600,
+        height: 1,
+        letterSpacingEm: 0.1,
+      );
+
+  TextStyle get workStatus => _body(
+        size: _size(mobile: 13, tablet: 13, desktop: 13),
+        weight: FontWeight.w700,
+        height: 1.35,
+      );
+
   TextStyle get libraryFilter => _body(
         size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
         weight: FontWeight.w600,
