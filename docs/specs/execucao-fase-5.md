@@ -1,6 +1,7 @@
 # Execução da Fase 5
 
 - **Início:** 2026-10-05
+- **Término:** 2026-10-06
 - **Branch:** refactor/redesign-fase-5 → PR para develop
 
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |
@@ -22,10 +23,8 @@
 - 018 (verificação): foco no campo inválido, a volta ao Nome e a confirmação rolam a página até o elemento, abaixo da navbar fixa.
 - 019: desenho da aba "Contato" (sem aba própria no protótipo), caixa "Antes de enviar" no lugar de "Outros meios"; campos Nome completo, E-mail, Instituição (opcional), Título da contribuição e Sobre a contribuição; assunto "Colaboração: [título]"; texto de apoio e confirmação pedem para anexar no programa de e-mail; sem foto de fundo; "Realização e apoio" mantida; categoria de origem fora (a rota não a leva); moldura da caixa lateral extraída do `ContactInfoCard` para `core/components/form/`. Detalhes em [019/spec.md](019-colabore/spec.md).
 - 020: 404 na mesma caixa dos outros estados (`StateMessageBox` ganha `leading` e `titleHeadingLevel`), com "404" em laranja, título `h1` e botões "Ir para o início" e "Explorar a biblioteca"; esqueleto com brilho do protótipo, parado com movimento reduzido; erro discreto das seções da Home vira `StateErrorInline`; `EmptyContent` e `PageErrorContent`, sem uso, saem; erro de imagem antigo fica para a 021 e a 022. Detalhes em [020/spec.md](020-estados-especiais/spec.md).
-
 - 021: divisão com a 022 mantida; layout único das obras alimentado por uma descrição por tipo; selo da categoria acima do título; ficha, selo e etiquetas da biblioteca e o "Assistir" da Home vão para `core`; documento e produção acadêmica sem imagem na página; filme com "Assistir" sobre o cartaz, sem player; texto abaixo do bloco com subtítulo "Sinopse"/"Descrição"/"Resumo"; texto não-delta como texto simples; cinco `*_content.dart` antigos apagados, erro de imagem antigo fica. Detalhes em [021/spec.md](021-tipos-post-obras/spec.md).
 - 021 (implementação): palavras-chave separadas em "," e ";", sem ponto final (formato real das produções acadêmicas de prod); sem linha dupla acima do compartilhar quando a ficha fecha o bloco; `TypeBadge` com opção `wrap` para categorias longas nas obras.
-
 - 022: faixa "Ouvir" com o site do link no lugar do player (sem player embutido); capa quadrada no podcast e na música; caixa de data só quando dia e mês do início são legíveis, "Data" sempre na ficha; evento sem imagem na página; abrangência na ficha; pesquisa com pílula verde/neutra junto do título e imagem com legenda como no artigo; `article_content.dart`, `SocialIcons` e `ViewQuill` apagados por ficarem sem uso; erro de imagem antigo fica (Home, `core`, painel). Detalhes em [022/spec.md](022-tipos-post-midia-eventos/spec.md).
 - 022 (implementação): a caixa de data do evento aceita lista ou intervalo de dias antes de "de mês" e usa o primeiro dia (3 dos 7 eventos de prod escrevem assim).
 - 022 (verificação): `openUrl` passa a tratar link que o `Uri.parse` recusa, em vez de lançar exceção no clique.
