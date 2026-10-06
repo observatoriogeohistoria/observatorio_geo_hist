@@ -205,7 +205,7 @@ class _LibraryCategoryFilterState extends State<LibraryCategoryFilter> {
                   ),
                   child: Text(
                     '$selectedCount',
-                    style: styles.libraryTag.copyWith(
+                    style: styles.tag.copyWith(
                       color: colors.white,
                       fontWeight: FontWeight.w700,
                       fontFeatures: const [FontFeature.tabularFigures()],

@@ -1,106 +1,129 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
-import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/mail_confirmation.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/mail_form.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/common_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/page_header.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
-import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
+import 'package:observatorio_geo_hist/app/core/utils/url/mail_draft.dart';
+import 'package:observatorio_geo_hist/app/core/utils/validators/form_validators.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/collaborate/collaborate_guide_card.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class CollaboratePage extends StatelessWidget {
+class CollaboratePage extends StatefulWidget {
   const CollaboratePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    const firstText =
-        'O Observatório do Ensino de História e Geografia é uma plataforma digital colaborativa. Valorizamos e incentivamos a participação de professores, pesquisadores e estudantes na construção deste espaço coletivo. Gostaria de publicar artigos de opinião, compartilhar relatos de experiência, divulgar produções acadêmicas ou sugerir a inclusão de materiais? Envie um e-mail para:';
+  State<CollaboratePage> createState() => _CollaboratePageState();
+}
 
-    const secondText = '''
-Aceitamos qualquer tipo de arquivo, como texto, áudio e vídeo. Utilize extensões de uso consagrado, como .pdf, .doc, .odt, .mp3, .mp4 e .jpg. Caso inclua criações de terceiros no seu conteúdo, lembre-se de verificar se os termos de uso e compartilhamento permitem a redistribuição. Por fim, não se esqueça de se identificar (nome completo do autor, e-mail e, se for o caso, Instituição de Ensino Superior). Após avaliação, o material será publicado no Observatório.
+class _CollaboratePageState extends State<CollaboratePage> {
+  // A troca entre coluna e linha remontaria o formulário e apagaria o que foi digitado.
+  final _formKey = GlobalKey();
 
-Exceto quando expressamente indicado, todo o conteúdo publicado no Observatório do Ensino de História e Geografia é licenciado sob os termos da Creative Commons - Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional, o que significa que os materiais podem ser compartilhados e remixados, desde que a distribuição ocorra sob termos idênticos, com atribuição de autoria e para fins não comerciais. Para conhecer mais sobre as licenças Creative Commons,''';
+  static const _lead =
+      'O Observatório é uma plataforma colaborativa. Professores, pesquisadores e estudantes podem publicar artigos de opinião, relatos de experiência e produções acadêmicas, ou sugerir materiais.';
 
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          const NavbarSliver(),
-          SliverToBoxAdapter(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: const AssetImage('${AppAssets.images}/collaborate.webp'),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withValues(alpha: 0.35),
-                    BlendMode.darken,
-                  ),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtils.getPageHorizontalPadding(context),
-                  vertical: AppTheme.dimensions.space.large.verticalSpacing,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CommonTitle(title: 'COLABORE'),
-                    SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                    AppBody.big(
-                      text: firstText,
-                      textAlign: TextAlign.center,
-                      color: AppTheme.colors.white,
-                    ),
-                    SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                    PrimaryButton.medium(
-                      text: AppStrings.email,
-                      onPressed: () => openUrl('mailto:${AppStrings.email}'),
-                    ),
-                    SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: secondText,
-                            style: AppTheme.typography.body.big.copyWith(
-                              color: AppTheme.colors.white,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' clique aqui',
-                            style: AppTheme.typography.body.big.copyWith(
-                              color: AppTheme.colors.orange,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => openUrl(AppStrings.creativeCommonsUrl),
-                          ),
-                          TextSpan(
-                            text: '.',
-                            style: AppTheme.typography.body.big.copyWith(
-                              color: AppTheme.colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(child: PartnersSection()),
-          const SliverFillRemaining(hasScrollBody: false, child: SizedBox.shrink()),
-          const SliverToBoxAdapter(child: Footer()),
-        ],
+  static const _hint =
+      'Vamos abrir o seu programa de e-mail com a mensagem já preenchida. Anexe seus arquivos por lá e aperte **Enviar**.';
+
+  static const _confirmationTexts = MailConfirmationTexts(
+    message:
+        'Abrimos o seu programa de e-mail com a mensagem preenchida. Anexe seus arquivos e aperte **Enviar** por lá para concluir.',
+  );
+
+  static final _fields = [
+    MailFormFieldSpec(
+      label: 'Nome completo',
+      validator: FormValidators.required('Informe seu nome completo.'),
+      autofillHints: const [AutofillHints.name],
+      keyboardType: TextInputType.name,
+    ),
+    MailFormFieldSpec(
+      label: 'E-mail',
+      validator: FormValidators.email('Informe um e-mail válido, como nome@exemplo.com.'),
+      autofillHints: const [AutofillHints.email],
+      keyboardType: TextInputType.emailAddress,
+    ),
+    const MailFormFieldSpec(
+      label: 'Instituição (opcional)',
+      autofillHints: [AutofillHints.organizationName],
+    ),
+    MailFormFieldSpec(
+      label: 'Título da contribuição',
+      validator: FormValidators.required('Informe o título da contribuição.'),
+    ),
+    MailFormFieldSpec(
+      label: 'Sobre a contribuição',
+      validator: FormValidators.minLength(
+        10,
+        'Conte um pouco sobre a contribuição, com pelo menos 10 caracteres.',
       ),
+      multiline: true,
+    ),
+  ];
+
+  static MailDraft _buildDraft(List<String> values) {
+    final [name, email, institution, title, about] = values;
+    final signature = [name, if (institution.isNotEmpty) institution, email].join('\n');
+    return MailDraft(
+      to: AppStrings.email,
+      subject: 'Colaboração: $title',
+      body: '$about\n\n$signature',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+    final breakpoint = ScreenUtils.breakpointOf(context);
+    final gap = components.contactColumnsGap(breakpoint);
+
+    final form = MailForm(
+      key: _formKey,
+      fields: _fields,
+      submitText: 'Abrir no meu e-mail',
+      hint: _hint,
+      buildDraft: _buildDraft,
+      confirmationTexts: _confirmationTexts,
+    );
+    const guide = CollaborateGuideCard();
+
+    return ReadingPageScaffold(
+      header: const PageHeader(
+        breadcrumbs: [
+          BreadcrumbItem('Início', route: AppRoutes.root),
+          BreadcrumbItem('Colabore'),
+        ],
+        title: 'Colabore',
+        lead: _lead,
+      ),
+      body: PageContent(
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: components.contactPaddingTop,
+            bottom: components.contactPaddingBottom,
+          ),
+          child: breakpoint == Breakpoint.desktop
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: components.contactFormFlex, child: form),
+                    SizedBox(width: gap),
+                    Expanded(flex: components.contactInfoFlex, child: guide),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [form, SizedBox(height: gap), guide],
+                ),
+        ),
+      ),
+      beforeFooter: const PartnersSection(),
     );
   }
 }

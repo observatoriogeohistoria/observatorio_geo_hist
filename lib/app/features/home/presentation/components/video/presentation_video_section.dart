@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/play_pill_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart'
@@ -7,7 +8,6 @@ import 'package:observatorio_geo_hist/app/core/utils/browser/user_activation.dar
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/video/video_cover.dart';
-import 'package:observatorio_geo_hist/app/features/home/presentation/components/video/video_play_button.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 enum _VideoState { cover, loading, playing, error }
@@ -152,7 +152,8 @@ class _PresentationVideoSectionState extends State<PresentationVideoSection> {
     final duration = reduceMotion ? Duration.zero : AppTheme.dimensions.components.videoAnimation;
 
     final Widget action = switch (_state) {
-      _VideoState.cover || _VideoState.loading => VideoPlayButton(
+      _VideoState.cover || _VideoState.loading => PlayPillButton(
+          semanticLabel: 'Reproduzir vídeo de apresentação',
           isLoading: _state == _VideoState.loading,
           focusNode: _playButtonFocus,
           onPressed: _watch,

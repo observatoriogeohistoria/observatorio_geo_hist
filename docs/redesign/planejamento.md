@@ -46,7 +46,7 @@ Itens vindos da revisão do protótipo. Todos já estão refletidos no protótip
 - **P-05** Remover o "tempo de leitura". → specs/012-post-base, concluído
 - **P-06** Ampliar o compartilhamento. Proposta: Copiar link, WhatsApp, Facebook, X, LinkedIn, Telegram e E-mail. No celular, oferecer também o compartilhamento nativo do sistema. No celular, todas as opções viram uma fileira só de ícones (sem "Mais"). → specs/013-compartilhamento-post, concluído
 - **P-07** Reincluir a seção **Apoio** (redes sociais e os 9 apoiadores), que existe hoje no `Support` (com 4 apoiadores) e foi omitida no protótipo. Posição: depois do conteúdo e do "Leia também", antes do rodapé. → specs/012-post-base, concluído
-- **P-08** Layout-base do post com variações por tipo (ver seção 3, item "Tipos de post"). → specs/012-post-base, concluído (layout-base com ponto único por tipo; blocos dos demais tipos na Fase 5)
+- **P-08** Layout-base do post com variações por tipo (ver seção 3, item "Tipos de post"). → specs/012-post-base, specs/021-tipos-post-obras, specs/022-tipos-post-midia-eventos, concluído (layout-base com ponto único por tipo e blocos de todos os tipos)
 
 ### Biblioteca
 - **P-09** A entrada da biblioteca lista as **áreas** (Geografia e História), como no site atual, e não tipos de documento. Remover os cartões inventados ("Artigos científicos", "Livros e capítulos"). Mostrar a contagem por área.
@@ -68,13 +68,13 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 | T-01 | Manifesto | `/manifesto` | Leitura longa. Os cinco compromissos viram lista numerada (a ordem é do texto original). Layout de leitura compartilhado da Fase 2 → specs/010-leitura-manifesto, concluído |
 | T-02 | Pessoa da equipe | `/membro/:id` | Foto, nome, função e descrição. Só é acessível quando o membro tem descrição (id inexistente ou sem descrição já mostra o 404, sem busca em laço) → specs/011-nossa-historia-pessoa, concluído |
 | T-03 | Nossa história (completa) | `/nossa-historia` | Criada na spec 007 como página provisória, com o texto completo que estava na Home. A Home mostra só o resumo. Redesenho na Fase 2 → specs/011-nossa-historia-pessoa, concluído |
-| T-04 | Fale com a gente | `/contato` | Continua abrindo o programa de e-mail (`mailto:`). Novidades: validação dos campos e tela de confirmação com "Copiar mensagem" |
-| T-05 | Colabore | `/colaborar` | Continua existindo, acessada pelo cabeçalho da categoria |
+| T-04 | Fale com a gente | `/contato` | Continua abrindo o programa de e-mail (`mailto:`). Novidades: validação dos campos e tela de confirmação com "Copiar mensagem" → specs/018-fale-com-a-gente, concluído com ressalvas: não conferidos no app o leitor de tela e a sugestão de autopreenchimento |
+| T-05 | Colabore | `/colaborar` | Continua existindo, acessada pelo cabeçalho da categoria → specs/019-colabore, concluído com ressalvas: categoria sem a opção, leitor de tela e autopreenchimento não conferidos no app |
 | T-06 | Biblioteca: lista por área | `/biblioteca/:area` | Filtros, resultados e paginação |
 | T-07 | Biblioteca: detalhe do documento | `/biblioteca/:area/documento/:slug` | Metadados e visualizador do documento → specs/017-biblioteca-documento, concluído com ressalvas: painel não conferido no app |
-| T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos. Só o artigo foi feito; os outros 9 tipos ficam para a Fase 5 → specs/012-post-base (artigo concluído; parcial) |
+| T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos. Todos os tipos de post concluídos → specs/012-post-base, specs/021-tipos-post-obras, specs/022-tipos-post-midia-eventos, concluído com ressalvas: leitor de tela e painel não conferidos no app |
 | T-09 | Busca | novo | **Ideia futura.** Desenhada no protótipo (aba "Busca (ideia)"), sem implementação planejada. Ver seção 9 |
-| T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento |
+| T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento → specs/020-estados-especiais, concluído com ressalvas: erro dos Destaques, "Nenhum documento encontrado" e leitor de tela não conferidos no app |
 | T-11 | Todas as publicações | `/publicacoes` (novo) | Mesma listagem da categoria (cards, busca, chips de tipo), sem o filtro de categoria, ordenada pela data de publicação e com paginação. Consulta `collectionGroup('category_posts')`; pode pedir índice novo no Firestore. Ao existir, entra o link "Ver todas as publicações" dos Destaques da Home (retirado na spec 005) → specs/015-todas-publicacoes, concluído |
 
 ---
@@ -124,7 +124,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | 2 | Leitura: layout-base do post (artigo primeiro), Manifesto, Nossa história, Pessoa da equipe | Compartilham o mesmo layout de leitura |
 | 3 | Listagem de categoria, todas as publicações (T-11) e cards de post (cards e listagem da categoria → specs/014-listagem-categoria, concluído; T-11 → specs/015-todas-publicacoes, concluído) | Maior volume de navegação |
 | 4 | Biblioteca (índice, lista, detalhe, filtros) (índice e lista → specs/016-biblioteca-indice-lista, concluído com ressalvas: índices da busca com filtro a publicar; detalhe → specs/017-biblioteca-documento, concluído com ressalvas; Fase 4 concluída) | Categorias e filtros já definidos |
-| 5 | Acabamento: Fale com a gente, Colabore, 404/erros e demais tipos de post | Antes ficava na fase 6 |
+| 5 | Acabamento: Fale com a gente, Colabore, 404/erros e demais tipos de post (Fale com a gente → specs/018-fale-com-a-gente, Colabore → specs/019-colabore, 404/erros → specs/020-estados-especiais, tipos de post → specs/021-tipos-post-obras e specs/022-tipos-post-midia-eventos, todas concluídas com ressalvas; Fase 5 concluída) | Antes ficava na fase 6 |
 | 6 | Reservada | Sem escopo definido |
 | 7 | Limpeza: remover tokens antigos, `num_extension` e assets sem uso | Só quando nada mais usar |
 

@@ -201,6 +201,13 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
+  TextStyle get notFoundCode => _display(
+        size: _size(mobile: 64, tablet: 92, desktop: 112),
+        weight: FontWeight.w800,
+        height: 1,
+        letterSpacingEm: -0.04,
+      );
+
   TextStyle get postTitle => _display(
         size: _size(mobile: 32, tablet: 42, desktop: 53),
         weight: FontWeight.w800,
@@ -255,17 +262,49 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
-  TextStyle get libraryDetailTitle => _display(
+  TextStyle get detailTitle => _display(
         size: _size(mobile: 28.8, tablet: 36, desktop: 44.8),
         weight: FontWeight.w800,
         height: 1.12,
         letterSpacingEm: -0.02,
       );
 
-  TextStyle get libraryFactValue => _body(
+  TextStyle get factValue => _body(
         size: _size(mobile: 16, tablet: 16, desktop: 16),
         weight: FontWeight.w400,
         height: 1.55,
+      );
+
+  TextStyle get workListenTitle => _body(
+        size: _size(mobile: 15.5, tablet: 15.5, desktop: 15.5),
+        weight: FontWeight.w600,
+        height: 1.3,
+      );
+
+  TextStyle get workListenHost => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w400,
+        height: 1.4,
+      );
+
+  TextStyle get workDateDay => _display(
+        size: _size(mobile: 41.6, tablet: 41.6, desktop: 41.6),
+        weight: FontWeight.w800,
+        height: 1,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get workDateMonth => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w600,
+        height: 1,
+        letterSpacingEm: 0.1,
+      );
+
+  TextStyle get workStatus => _body(
+        size: _size(mobile: 13, tablet: 13, desktop: 13),
+        weight: FontWeight.w700,
+        height: 1.35,
       );
 
   TextStyle get libraryFilter => _body(
@@ -274,10 +313,29 @@ class AppTextStyles {
         height: 1.2,
       );
 
-  TextStyle get libraryTag => _body(
+  TextStyle get tag => _body(
         size: _size(mobile: 12.5, tablet: 12.5, desktop: 12.5),
         weight: FontWeight.w500,
         height: 1.4,
+      );
+
+  TextStyle get formLabel => _body(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w600,
+        height: 1.4,
+      );
+
+  TextStyle get formError => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w500,
+        height: 1.45,
+      );
+
+  TextStyle get confirmationTitle => _display(
+        size: _size(mobile: 22.4, tablet: 25.6, desktop: 25.6),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
       );
 
   TextStyle get meta => _body(

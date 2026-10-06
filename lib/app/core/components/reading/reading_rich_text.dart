@@ -24,6 +24,8 @@ class ReadingRichText extends StatefulWidget {
     return true;
   }
 
+  static bool isDelta(String? content) => _decode(content) != null;
+
   static List<Map<String, dynamic>>? _decode(String? content) {
     if (content == null || content.trim().isEmpty) return null;
     try {

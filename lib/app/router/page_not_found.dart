@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart';
-import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/state_message_box.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PageNotFound extends StatelessWidget {
@@ -14,41 +14,50 @@ class PageNotFound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.colors.white,
-      body: CustomScrollView(
-        slivers: [
-          const NavbarSliver(),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AppHeadline.big(
-                        text: '404',
-                        color: AppTheme.colors.darkGray,
-                      ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                      AppTitle.big(
-                        text: 'Página não encontrada',
-                        color: AppTheme.colors.gray,
-                      ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                      PrimaryButton.big(
-                        text: 'HOME',
-                        onPressed: () => GoRouter.of(context).go(AppRoutes.root),
-                      ),
-                    ],
+    final components = AppTheme.dimensions.components;
+    final breakpoint = ScreenUtils.breakpointOf(context);
+    final gap = components.notFoundActionsGap;
+
+    return ReadingPageScaffold(
+      body: PageContent(
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: components.readingPaddingTop,
+            bottom: components.readingPaddingBottom(breakpoint),
+          ),
+          child: StateMessageBox(
+            leading: Text(
+              '404',
+              textAlign: TextAlign.center,
+              style: AppTheme.typography
+                  .of(context)
+                  .notFoundCode
+                  .copyWith(color: AppTheme.colors.accent),
+            ),
+            title: 'Não encontramos esta página',
+            titleHeadingLevel: 1,
+            message: 'O endereço pode ter mudado ou o conteúdo foi removido.',
+            // A ordem de leitura da página pulava do primeiro botão para o rodapé.
+            action: FocusTraversalGroup(
+              policy: WidgetOrderTraversalPolicy(),
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: gap,
+                runSpacing: gap,
+                children: [
+                  PrimaryButton.medium(
+                    text: 'Ir para o início',
+                    onPressed: () => GoRouter.of(context).go(AppRoutes.root),
                   ),
-                ),
-                const Footer(),
-              ],
+                  SecondaryButton.medium(
+                    text: 'Explorar a biblioteca',
+                    onPressed: () => GoRouter.of(context).go(AppRoutes.library),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

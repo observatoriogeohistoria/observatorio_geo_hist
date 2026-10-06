@@ -12,9 +12,8 @@ String encodeUrlComponent(String url) {
 
 /// `mailto:` e `tel:` usam [sameTab] para não deixar uma aba em branco.
 Future<void> openUrl(String url, {bool sameTab = false}) async {
-  final Uri uri = Uri.parse(url);
-
   try {
+    final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, webOnlyWindowName: sameTab ? '_self' : null);
     } else {

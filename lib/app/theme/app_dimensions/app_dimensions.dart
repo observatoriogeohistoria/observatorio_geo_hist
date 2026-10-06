@@ -349,6 +349,10 @@ class ComponentSizes {
   final double stateBoxButtonGap = 6.0;
   final double stateBoxTextMaxWidth = 380.0;
 
+  final Duration skeletonShimmer = const Duration(milliseconds: 1400);
+
+  final double notFoundActionsGap = 12.0;
+
   final double postHeadMaxWidth = 820.0;
 
   final double postTitleGap = 22.0;
@@ -365,6 +369,39 @@ class ComponentSizes {
   final double postCoverCaptionGap = 10.0;
 
   final double postBodyPaddingTop = 40.0;
+
+  final double workCoverWidth = 180.0;
+  final double workCoverAspect = 2 / 3;
+  final double workSquareAspect = 1.0;
+
+  /// Canto menor à esquerda, como a lombada de um livro.
+  BorderRadius get workCoverRadius => const BorderRadius.horizontal(
+        left: Radius.circular(6),
+        right: Radius.circular(12),
+      );
+  final double workPosterAspect = 16 / 9;
+  double workBlockGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 28, 36);
+  final int workPosterFlex = 11;
+  final int workDataFlex = 10;
+  final double workTitleGap = 12.0;
+  final double workActionTop = 22.0;
+  final double workShareMarginTop = 26.0;
+  final double workSharePaddingVertical = 18.0;
+
+  final double workListenPaddingV = 12.0;
+  final double workListenPaddingH = 16.0;
+  final double workListenGap = 14.0;
+  final double workListenPlay = 42.0;
+  final double workListenPlayIcon = 24.0;
+  final double workListenIcon = 20.0;
+
+  final double workDateBox = 100.0;
+  final double workDateColumn = 110.0;
+  final double workDateMonthGap = 6.0;
+
+  final double workStatusGap = 12.0;
+  final double workStatusPaddingH = 12.0;
+  final double workStatusPaddingV = 4.0;
 
   final double shareIconButton = 38.0;
   final double shareIcon = 22.0;
@@ -480,6 +517,20 @@ class ComponentSizes {
   final double areaTileSkeletonHeight = 16.0;
   final Duration areaTileAnimation = const Duration(milliseconds: 200);
 
+  final double tagGap = 6.0;
+  final double tagPaddingH = 8.0;
+  final double tagPaddingV = 2.0;
+  final double badgePaddingH = 10.0;
+  final double badgePaddingV = 4.0;
+
+  final double factsTop = 24.0;
+  final double factsPaddingV = 20.0;
+  final double factsGapV = 14.0;
+  final double factsGapH = 28.0;
+  final double factsMinColumn = 170.0;
+  final int factsMaxColumns = 4;
+  final double factLabelGap = 2.0;
+
   final double libraryFiltersTop = 16.0;
   final double libraryFilterGap = 10.0;
   final double libraryFilterHeight = 42.0;
@@ -522,11 +573,6 @@ class ComponentSizes {
   final double libraryDocStackBreak = 560.0;
   final int libraryDocTitleMaxLines = 3;
   final int libraryDocMaxCategories = 2;
-  final double libraryTagGap = 6.0;
-  final double libraryTagPaddingH = 8.0;
-  final double libraryTagPaddingV = 2.0;
-  final double libraryBadgePaddingH = 10.0;
-  final double libraryBadgePaddingV = 4.0;
   final Duration libraryDocAnimation = const Duration(milliseconds: 150);
 
   final int librarySkeletonRows = 5;
@@ -541,14 +587,6 @@ class ComponentSizes {
   final double libraryDetailBadgeTop = 22.0;
   final double libraryDetailTitleTop = 12.0;
   final double libraryDetailActionTop = 22.0;
-
-  final double libraryFactsTop = 24.0;
-  final double libraryFactsPaddingV = 20.0;
-  final double libraryFactsGapV = 14.0;
-  final double libraryFactsGapH = 28.0;
-  final double libraryFactsMinColumn = 170.0;
-  final int libraryFactsMaxColumns = 4;
-  final double libraryFactLabelGap = 2.0;
 
   final double libraryViewerMarginTop = 32.0;
   double libraryViewerMarginBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 56, 64);
@@ -576,6 +614,38 @@ class ComponentSizes {
   final double libraryDetailSkeletonValueHeight = 18.0;
   final double libraryDetailSkeletonButtonWidth = 200.0;
   final double libraryDetailSkeletonViewerHeight = 320.0;
+
+  final double formFieldHeight = 48.0;
+  final double formFieldBorder = 1.5;
+  final double formFieldFocusRing = 4.0;
+  final double formFieldPaddingH = 14.0;
+  final double formFieldPaddingV = 12.0;
+  final double formFieldGap = 18.0;
+  final double formFieldLabelGap = 6.0;
+  final int formMessageMinLines = 6;
+  final int formMessageMaxLines = 12;
+  final int formErrorMaxLines = 4;
+  final double formHintTop = 12.0;
+  final double formHintMaxWidth = 480.0;
+
+  final double mailConfirmationPaddingV = 48.0;
+  final double mailConfirmationPaddingH = 24.0;
+  final double mailConfirmationGap = 10.0;
+  final double mailConfirmationIcon = 56.0;
+  final double mailConfirmationIconGlyph = 26.0;
+  final double mailConfirmationTextMaxWidth = 440.0;
+  final double mailConfirmationButtonsTop = 8.0;
+  final double mailConfirmationButtonsGap = 10.0;
+
+  final double contactPaddingTop = 40.0;
+  final double contactPaddingBottom = 72.0;
+  double contactColumnsGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 48, 72);
+  final int contactFormFlex = 3;
+  final int contactInfoFlex = 2;
+  double contactInfoPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 28);
+  final double contactInfoListTop = 18.0;
+  final double contactInfoLabelGap = 2.0;
+  final double contactInfoItemGap = 14.0;
 
   double _byBreakpoint(
     Breakpoint breakpoint,
