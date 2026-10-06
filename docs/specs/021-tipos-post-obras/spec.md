@@ -47,7 +47,7 @@ De cima para baixo:
 | Produção acadêmica | Sem imagem | Autoria, Orientação, Instituição, Cidade e ano; Palavras-chave na largura toda | "Acessar produção" | Resumo |
 
 - **Ano** do livro e do filme: aparece só se for maior que zero.
-- **Palavras-chave:** o texto é dividido nas vírgulas; cada termo (sem espaços nas pontas, vazios descartados) vira uma etiqueta no desenho das categorias da biblioteca.
+- **Palavras-chave:** o texto é dividido nas vírgulas e nos pontos e vírgulas; cada termo (sem espaços nem ponto final nas pontas, vazios descartados) vira uma etiqueta no desenho das categorias da biblioteca.
 - **Filme:** o cartaz traz, centralizado, o botão em pílula "Assistir" com ícone de reproduzir (o do protótipo), que abre o link em outra aba. Sem link, o cartaz fica sem botão. Não há player embutido.
 - **Documento e produção acadêmica** não mostram imagem na página (como a ficha da biblioteca, no protótipo); a imagem continua nos cards da listagem.
 
@@ -97,7 +97,7 @@ O desenho antigo desses cinco tipos sai da página: os cinco `*_content.dart` co
 1. [ ] Livro, filme, revista, documento e produção acadêmica mostram, nesta ordem: navbar, migalhas "Início › [Área] › [Categoria] › [Tipo]", bloco da obra, linha de compartilhar, texto na coluna de 680 px, Apoio e rodapé; sem Leia também.
 2. [ ] Bloco da obra com selo da categoria, título `h1` em cor de tinta (sem caixa alta forçada) e, na revista com chamada, a chamada abaixo do título.
 3. [ ] Ficha de cada tipo com os rótulos da tabela "Por tipo", no desenho da ficha da biblioteca; campos vazios (e ano 0) omitidos; sem campos, sem ficha.
-4. [ ] Produção acadêmica: palavras-chave separadas nas vírgulas, como etiquetas na largura toda, sem etiqueta vazia.
+4. [ ] Produção acadêmica: palavras-chave separadas nas vírgulas e nos pontos e vírgulas, como etiquetas na largura toda, sem etiqueta vazia.
 5. [ ] Botão principal com o texto da tabela abre o link em outra aba por clique e Enter; com link vazio, some. No filme, "Assistir" sobre o cartaz faz o mesmo e some sem link.
 6. [ ] Capa 2:3 (livro, revista) e cartaz 16:9 (filme) preenchidos sem distorcer, com cantos arredondados; documento e produção acadêmica sem imagem.
 7. [ ] Sem imagem e com falha forçada, placeholder na mesma proporção; o filme mantém "Assistir" sobre ele.
@@ -136,3 +136,5 @@ O desenho antigo desses cinco tipos sai da página: os cinco `*_content.dart` co
 ## Histórico de mudanças
 - 2026-10-05: criada e aprovada no modo autônomo (execução da Fase 5).
 - 2026-10-05: plano e tarefas criados (`plan.md`, `tasks.md`).
+- 2026-10-05 (implementação, modo autônomo): o prod já tem produções acadêmicas, e a real separa as palavras-chave com ponto e vírgula e termina com ponto ("Educação online; Curadoria digital; Tecnologias educacionais."). Divididas só nas vírgulas, viravam uma etiqueta única. Decidido: dividir também em `;` e tirar o ponto final de cada termo.
+- 2026-10-05 (implementação, modo autônomo): quando a ficha é o último item do bloco (filme, ou livro sem link) e o bloco está empilhado (celular, ou tipo sem imagem), a linha de compartilhar não repete a linha de cima: a de baixo da ficha já a separa, e duas linhas seguidas pareciam uma faixa vazia.

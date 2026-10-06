@@ -370,6 +370,23 @@ class ComponentSizes {
 
   final double postBodyPaddingTop = 40.0;
 
+  final double workCoverWidth = 180.0;
+  final double workCoverAspect = 2 / 3;
+
+  /// Canto menor à esquerda, como a lombada de um livro.
+  BorderRadius get workCoverRadius => const BorderRadius.horizontal(
+        left: Radius.circular(6),
+        right: Radius.circular(12),
+      );
+  final double workPosterAspect = 16 / 9;
+  double workBlockGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 28, 36);
+  final int workPosterFlex = 11;
+  final int workDataFlex = 10;
+  final double workTitleGap = 12.0;
+  final double workActionTop = 22.0;
+  final double workShareMarginTop = 26.0;
+  final double workSharePaddingVertical = 18.0;
+
   final double shareIconButton = 38.0;
   final double shareIcon = 22.0;
   final double shareGap = 4.0;

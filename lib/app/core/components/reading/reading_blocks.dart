@@ -37,6 +37,27 @@ class ReadingParagraph extends StatelessWidget {
   }
 }
 
+class ReadingPlainText extends StatelessWidget {
+  const ReadingPlainText(this.text, {super.key});
+
+  final String text;
+
+  static bool isEmpty(String text) => text.trim().isEmpty;
+
+  @override
+  Widget build(BuildContext context) {
+    final paragraphs = [
+      for (final line in text.split(RegExp(r'\r?\n')))
+        if (line.trim().isNotEmpty) line.trim(),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [for (final paragraph in paragraphs) ReadingParagraph(paragraph)],
+    );
+  }
+}
+
 class ReadingSubtitle extends StatelessWidget {
   const ReadingSubtitle(this.text, {super.key});
 
