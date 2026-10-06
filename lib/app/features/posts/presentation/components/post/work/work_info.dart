@@ -3,10 +3,12 @@ import 'package:observatorio_geo_hist/app/core/models/book_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/document_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/film_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/magazine_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
+import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/event_day.dart';
 
-enum WorkImageKind { cover, poster }
+enum WorkImageKind { cover, square, poster }
 
 class WorkImage {
   const WorkImage({required this.kind, required this.url, required this.link});
@@ -156,6 +158,26 @@ WorkInfo workInfoOf(PostModel post) {
         action: _action('Acessar produção', body.link),
         texts: [WorkText(title: 'Resumo', content: body.summary, isRich: false)],
       ),
+    PodcastModel() => WorkInfo(
+        typeLabel: 'Podcast',
+        badge: '',
+        title: body.title,
+        image: WorkImage(kind: WorkImageKind.square, url: _url(body.image.url), link: ''),
+        listen: _listen('Ouvir episódio', body.link),
+        texts: [WorkText(title: 'Descrição', content: body.description, isRich: false)],
+      ),
+    MusicModel() => WorkInfo(
+        typeLabel: 'Música',
+        badge: '',
+        title: body.title,
+        facts: [('Artista', body.artistName)],
+        image: WorkImage(kind: WorkImageKind.square, url: _url(body.image.url), link: ''),
+        listen: _listen('Ouvir música', body.link),
+        texts: [
+          WorkText(title: 'Descrição', content: body.description, isRich: false),
+          WorkText(title: 'Letra', content: body.lyrics ?? '', isRich: true),
+        ],
+      ),
     _ => throw ArgumentError.value(post.type, 'post.type', 'não é uma obra'),
   };
 }
@@ -168,6 +190,14 @@ List<String> _keywords(String keywords) => [
 String _year(int year) => year > 0 ? '$year' : '';
 
 String _url(String? url) => url?.trim() ?? '';
+
+WorkListen? _listen(String label, String url) {
+  final link = url.trim();
+  if (link.isEmpty) return null;
+
+  final host = Uri.tryParse(link)?.host ?? '';
+  return WorkListen(label: label, url: link, host: host.replaceFirst(RegExp('^www\\.'), ''));
+}
 
 WorkAction? _action(String label, String url) {
   final link = url.trim();

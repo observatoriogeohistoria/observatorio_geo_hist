@@ -275,6 +275,18 @@ class AppTextStyles {
         height: 1.55,
       );
 
+  TextStyle get workListenTitle => _body(
+        size: _size(mobile: 15.5, tablet: 15.5, desktop: 15.5),
+        weight: FontWeight.w600,
+        height: 1.3,
+      );
+
+  TextStyle get workListenHost => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w400,
+        height: 1.4,
+      );
+
   TextStyle get libraryFilter => _body(
         size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
         weight: FontWeight.w600,

@@ -372,6 +372,7 @@ class ComponentSizes {
 
   final double workCoverWidth = 180.0;
   final double workCoverAspect = 2 / 3;
+  final double workSquareAspect = 1.0;
 
   /// Canto menor à esquerda, como a lombada de um livro.
   BorderRadius get workCoverRadius => const BorderRadius.horizontal(
@@ -386,6 +387,13 @@ class ComponentSizes {
   final double workActionTop = 22.0;
   final double workShareMarginTop = 26.0;
   final double workSharePaddingVertical = 18.0;
+
+  final double workListenPaddingV = 12.0;
+  final double workListenPaddingH = 16.0;
+  final double workListenGap = 14.0;
+  final double workListenPlay = 42.0;
+  final double workListenPlayIcon = 24.0;
+  final double workListenIcon = 20.0;
 
   final double shareIconButton = 38.0;
   final double shareIcon = 22.0;

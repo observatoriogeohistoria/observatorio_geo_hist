@@ -13,6 +13,7 @@ import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/article_body.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_breadcrumbs.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_share.dart';
+import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_extras.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_image.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_info.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -48,7 +49,10 @@ class WorkBody extends StatelessWidget {
               _WorkBlock(info: info),
               // A linha de baixo da ficha já separa o compartilhar; duas seguidas
               // pareciam uma faixa vazia.
-              _ShareRow(post: post, joined: stacked && info.action == null && info.hasSheet),
+              _ShareRow(
+                post: post,
+                joined: stacked && info.action == null && info.listen == null && info.hasSheet,
+              ),
             ],
           ),
         ),
@@ -76,6 +80,11 @@ class _WorkBlock extends StatelessWidget {
     final title = info.title.trim();
     final picture = switch (image.kind) {
       WorkImageKind.cover => WorkCover(url: image.url, title: title),
+      WorkImageKind.square => WorkCover(
+          url: image.url,
+          title: title,
+          aspectRatio: components.workSquareAspect,
+        ),
       WorkImageKind.poster => WorkPoster(url: image.url, title: title, link: image.link),
     };
 
@@ -83,10 +92,10 @@ class _WorkBlock extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (image.kind == WorkImageKind.cover)
-            Align(alignment: Alignment.centerLeft, child: picture)
+          if (image.kind == WorkImageKind.poster)
+            picture
           else
-            picture,
+            Align(alignment: Alignment.centerLeft, child: picture),
           SizedBox(height: gap),
           data,
         ],
@@ -96,7 +105,11 @@ class _WorkBlock extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: switch (image.kind) {
-        WorkImageKind.cover => [picture, SizedBox(width: gap), Expanded(child: data)],
+        WorkImageKind.cover || WorkImageKind.square => [
+            picture,
+            SizedBox(width: gap),
+            Expanded(child: data)
+          ],
         WorkImageKind.poster => [
             Expanded(flex: components.workPosterFlex, child: picture),
             SizedBox(width: gap),
@@ -120,6 +133,7 @@ class _WorkData extends StatelessWidget {
     final badge = info.badge.trim();
     final teaser = info.teaser.trim();
     final action = info.action;
+    final listen = info.listen;
 
     // Ao lado da capa, o Flutter ordena a leitura pela posição na tela e anunciava o botão
     // antes da chamada da revista; o contêiner mantém a ordem da coluna.
@@ -143,6 +157,10 @@ class _WorkData extends StatelessWidget {
             Text(teaser, style: styles.postSubtitle.copyWith(color: colors.inkSecondary)),
           ],
           FactSheet(facts: info.facts, tagsLabel: info.tagsLabel, tags: info.tags),
+          if (listen != null) ...[
+            SizedBox(height: components.workActionTop),
+            WorkListenButton(listen: listen, title: info.title.trim()),
+          ],
           if (action != null) ...[
             SizedBox(height: components.workActionTop),
             _ActionButton(action: action),

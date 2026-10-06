@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/event_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
@@ -11,11 +9,9 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/components
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_body.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_info.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/event_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/music_content.dart';
-import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/podcast_content.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post_content/search_content.dart';
 
-/// Podcast, música, evento e pesquisa ainda mostram o conteúdo antigo.
+/// Evento e pesquisa ainda mostram o conteúdo antigo.
 class PostTypeContent extends StatelessWidget {
   const PostTypeContent({
     super.key,
@@ -37,10 +33,10 @@ class PostTypeContent extends StatelessWidget {
       PostType.film ||
       PostType.magazine ||
       PostType.document ||
-      PostType.academicProduction =>
+      PostType.academicProduction ||
+      PostType.podcast ||
+      PostType.music =>
         WorkBody(post: post, info: workInfoOf(post), area: area, category: category),
-      PostType.podcast => PodcastContent(post: post, podcast: post.body! as PodcastModel),
-      PostType.music => MusicContent(post: post, music: post.body! as MusicModel),
       PostType.event => EventContent(post: post, event: post.body! as EventModel),
       PostType.search => SearchContent(post: post, search: post.body! as SearchModel),
     };
