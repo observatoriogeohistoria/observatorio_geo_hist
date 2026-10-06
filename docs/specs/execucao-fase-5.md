@@ -9,7 +9,7 @@
 | 019-colabore | Colabore (T-05) | feita (12 critérios, 6 tarefas) | feita (2 commits) | feita | verificada com ressalvas: sem correções; categoria sem a opção (não há no ambiente), leitor de tela e autopreenchimento não conferidos no app |
 | 020-estados-especiais | 404, erro, vazio e esqueletos (T-10) | feita (12 critérios, 9 tarefas) | feita (5 commits) | feita | verificada com ressalvas: sem correções; erro dos Destaques, "Nenhum documento encontrado", leitor de tela e painel não conferidos no app |
 | 021-tipos-post-obras | tipos de post livro, filme, revista, documento e produção acadêmica (T-08, P-08) | feita (15 critérios, 14 tarefas) | feita (3 commits) | feita | verificada com ressalvas: 1 correção (ordem de leitura dos dados ao lado da capa); leitor de tela e painel não conferidos no app |
-| 022-tipos-post-midia-eventos | tipos de post podcast, música, evento e pesquisa (T-08, P-08) | pendente | pendente | pendente | |
+| 022-tipos-post-midia-eventos | tipos de post podcast, música, evento e pesquisa (T-08, P-08) | feita (14 critérios, 14 tarefas) | pendente | pendente | |
 
 ## Divisão
 - 018 e 019 são formulários separados; a 019 reaproveita o que a 018 criar (campos, validação, confirmação).
@@ -25,6 +25,8 @@
 
 - 021: divisão com a 022 mantida; layout único das obras alimentado por uma descrição por tipo; selo da categoria acima do título; ficha, selo e etiquetas da biblioteca e o "Assistir" da Home vão para `core`; documento e produção acadêmica sem imagem na página; filme com "Assistir" sobre o cartaz, sem player; texto abaixo do bloco com subtítulo "Sinopse"/"Descrição"/"Resumo"; texto não-delta como texto simples; cinco `*_content.dart` antigos apagados, erro de imagem antigo fica. Detalhes em [021/spec.md](021-tipos-post-obras/spec.md).
 - 021 (implementação): palavras-chave separadas em "," e ";", sem ponto final (formato real das produções acadêmicas de prod); sem linha dupla acima do compartilhar quando a ficha fecha o bloco; `TypeBadge` com opção `wrap` para categorias longas nas obras.
+
+- 022: faixa "Ouvir" com o site do link no lugar do player (sem player embutido); capa quadrada no podcast e na música; caixa de data só quando dia e mês do início são legíveis, "Data" sempre na ficha; evento sem imagem na página; abrangência na ficha; pesquisa com pílula verde/neutra junto do título e imagem com legenda como no artigo; `article_content.dart`, `SocialIcons` e `ViewQuill` apagados por ficarem sem uso; erro de imagem antigo fica (Home, `core`, painel). Detalhes em [022/spec.md](022-tipos-post-midia-eventos/spec.md).
 
 ## Ressalvas
 - 018: não conferidos no app o anúncio por leitor de tela, a sugestão de autopreenchimento do navegador e o botão principal no detalhe da biblioteca (sem documentos no ambiente de testes; mudança só aditiva); painel sem diff e não conferido.
