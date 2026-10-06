@@ -121,28 +121,34 @@ class _WorkData extends StatelessWidget {
     final teaser = info.teaser.trim();
     final action = info.action;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (badge.isNotEmpty) ...[
-          Align(alignment: Alignment.centerLeft, child: TypeBadge(badge, wrap: true)),
-          SizedBox(height: components.workTitleGap),
+    // Ao lado da capa, o Flutter ordena a leitura pela posição na tela e anunciava o botão
+    // antes da chamada da revista; o contêiner mantém a ordem da coluna.
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (badge.isNotEmpty) ...[
+            Align(alignment: Alignment.centerLeft, child: TypeBadge(badge, wrap: true)),
+            SizedBox(height: components.workTitleGap),
+          ],
+          Semantics(
+            header: true,
+            headingLevel: 1,
+            child: Text(info.title.trim(), style: styles.detailTitle.copyWith(color: colors.ink)),
+          ),
+          if (teaser.isNotEmpty) ...[
+            SizedBox(height: components.postSubtitleGap),
+            Text(teaser, style: styles.postSubtitle.copyWith(color: colors.inkSecondary)),
+          ],
+          FactSheet(facts: info.facts, tagsLabel: info.tagsLabel, tags: info.tags),
+          if (action != null) ...[
+            SizedBox(height: components.workActionTop),
+            _ActionButton(action: action),
+          ],
         ],
-        Semantics(
-          header: true,
-          headingLevel: 1,
-          child: Text(info.title.trim(), style: styles.detailTitle.copyWith(color: colors.ink)),
-        ),
-        if (teaser.isNotEmpty) ...[
-          SizedBox(height: components.postSubtitleGap),
-          Text(teaser, style: styles.postSubtitle.copyWith(color: colors.inkSecondary)),
-        ],
-        FactSheet(facts: info.facts, tagsLabel: info.tagsLabel, tags: info.tags),
-        if (action != null) ...[
-          SizedBox(height: components.workActionTop),
-          _ActionButton(action: action),
-        ],
-      ],
+      ),
     );
   }
 }
