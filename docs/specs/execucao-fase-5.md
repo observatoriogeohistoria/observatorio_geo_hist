@@ -9,7 +9,7 @@
 | 019-colabore | Colabore (T-05) | feita (12 critérios, 6 tarefas) | feita (2 commits) | feita | verificada com ressalvas: sem correções; categoria sem a opção (não há no ambiente), leitor de tela e autopreenchimento não conferidos no app |
 | 020-estados-especiais | 404, erro, vazio e esqueletos (T-10) | feita (12 critérios, 9 tarefas) | feita (5 commits) | feita | verificada com ressalvas: sem correções; erro dos Destaques, "Nenhum documento encontrado", leitor de tela e painel não conferidos no app |
 | 021-tipos-post-obras | tipos de post livro, filme, revista, documento e produção acadêmica (T-08, P-08) | feita (15 critérios, 14 tarefas) | feita (3 commits) | feita | verificada com ressalvas: 1 correção (ordem de leitura dos dados ao lado da capa); leitor de tela e painel não conferidos no app |
-| 022-tipos-post-midia-eventos | tipos de post podcast, música, evento e pesquisa (T-08, P-08) | feita (14 critérios, 14 tarefas) | pendente | pendente | |
+| 022-tipos-post-midia-eventos | tipos de post podcast, música, evento e pesquisa (T-08, P-08) | feita (14 critérios, 14 tarefas) | feita (5 commits) | feita | verificada com ressalvas: 1 correção (link malformado lançava exceção no clique); leitor de tela e painel não conferidos no app |
 
 ## Divisão
 - 018 e 019 são formulários separados; a 019 reaproveita o que a 018 criar (campos, validação, confirmação).
@@ -27,15 +27,20 @@
 - 021 (implementação): palavras-chave separadas em "," e ";", sem ponto final (formato real das produções acadêmicas de prod); sem linha dupla acima do compartilhar quando a ficha fecha o bloco; `TypeBadge` com opção `wrap` para categorias longas nas obras.
 
 - 022: faixa "Ouvir" com o site do link no lugar do player (sem player embutido); capa quadrada no podcast e na música; caixa de data só quando dia e mês do início são legíveis, "Data" sempre na ficha; evento sem imagem na página; abrangência na ficha; pesquisa com pílula verde/neutra junto do título e imagem com legenda como no artigo; `article_content.dart`, `SocialIcons` e `ViewQuill` apagados por ficarem sem uso; erro de imagem antigo fica (Home, `core`, painel). Detalhes em [022/spec.md](022-tipos-post-midia-eventos/spec.md).
+- 022 (implementação): a caixa de data do evento aceita lista ou intervalo de dias antes de "de mês" e usa o primeiro dia (3 dos 7 eventos de prod escrevem assim).
+- 022 (verificação): `openUrl` passa a tratar link que o `Uri.parse` recusa, em vez de lançar exceção no clique.
 
 ## Ressalvas
 - 018: não conferidos no app o anúncio por leitor de tela, a sugestão de autopreenchimento do navegador e o botão principal no detalhe da biblioteca (sem documentos no ambiente de testes; mudança só aditiva); painel sem diff e não conferido.
 - 019: não conferidos no app a categoria sem "Colabore com esta categoria" (o ambiente não tem), o anúncio por leitor de tela e a sugestão de autopreenchimento; painel sem diff e não conferido.
 - 020: não conferidos no app o erro dos Destaques (com o Firestore bloqueado o cache devolve lista vazia e a seção some, como antes), "Nenhum documento encontrado" e "Limpar filtros" da biblioteca (sem documentos no ambiente) e o anúncio por leitor de tela; painel sem diff e não conferido.
 - 021: não conferido no app o anúncio por leitor de tela (árvore semântica conferida); painel sem diff e não conferido.
+- 022: não conferido no app o anúncio por leitor de tela (árvore semântica conferida); painel sem diff e não conferido.
 
 ## Ocorrências
 - 019 (verificação): o navegador embutido não repassava a digitação aos campos do Flutter; a conferência foi feita num Chrome headless por CDP.
 - 020 (verificação): conferida num Chrome headless por CDP, comparando os esqueletos com um build do código anterior à spec.
 - 021 (implementação): interrompida pelo limite de uso depois do primeiro commit e retomada na mesma sessão.
 - 021 (verificação): leitura direta do Firestore de prod pela API REST negada pelo classificador; os posts foram achados pelo próprio site (build `APP_ENV=prod` só leitura) num Chrome headless por CDP.
+- 022 (implementação): interrompida por erro do servidor (529) antes da conferência e retomada na mesma sessão.
+- 022 (verificação): conferida num Chrome headless por CDP; Tab no navegador sem janela só avança sem a semântica ligada, então o foco foi conferido com Tabs contados e captura de tela.
