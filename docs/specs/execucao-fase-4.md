@@ -28,6 +28,13 @@
 - 017: painel não conferido no app (sem credenciais; código sem diff).
 - 017: 4 documentos de prod têm um JPEG no lugar do PDF e o visualizador mostra o erro (ajuste de dados, fora do escopo).
 
+### Revisão (2026-10-06)
+- Índices da busca: em `firestore.indexes.json`, publicados pelo deploy.
+- Maiúsculas na busca: resolvida; a busca compara em minúsculas com `title_lower`, `author_lower` e `institution_lower`.
+- Documento com o resumo como slug: resolvida; o endereço usa o id, e o slug só serve para links antigos.
+- JPEG no lugar do PDF: resolvida; o visualizador reconhece imagem e a mostra.
+- Seguem em aberto: área sem documentos e painel não conferidos no app.
+
 ## Ocorrências
 - 016 (spec): a leitura direta do Firestore por REST (contagens e índices) foi bloqueada pelo classificador de permissões; dados e índices ficam para a conferência no app (G2).
 - 016 (verificação): o navegador embutido, com o painel escondido, não pintava e perdia cliques; a conferência foi feita num Chrome sem janela via CDP.
