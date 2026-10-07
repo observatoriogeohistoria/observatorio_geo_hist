@@ -1,6 +1,6 @@
 # Redesign do site: planejamento
 
-Este documento registra as decisões de design tomadas, o que ainda falta no protótipo e a ordem de implementação no Flutter. O portal administrativo e a seção Geoensine ficam fora deste escopo.
+Este documento registra as decisões de design tomadas, o que ainda falta no protótipo e a ordem de implementação no Flutter. A seção Geoensine fica fora deste escopo. O painel administrativo entra só na Fase 6, como migração técnica, sem redesenho de layout.
 
 - **Protótipo (v5, com todas as telas):** https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH
 - **Situação:** protótipo aprovado na direção geral. Implementação ainda não iniciada.
@@ -125,8 +125,22 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | 3 | Listagem de categoria, todas as publicações (T-11) e cards de post (cards e listagem da categoria → specs/014-listagem-categoria, concluído; T-11 → specs/015-todas-publicacoes, concluído) | Maior volume de navegação |
 | 4 | Biblioteca (índice, lista, detalhe, filtros) (índice e lista → specs/016-biblioteca-indice-lista, concluído com ressalvas: índices da busca com filtro a publicar; detalhe → specs/017-biblioteca-documento, concluído com ressalvas; Fase 4 concluída) | Categorias e filtros já definidos |
 | 5 | Acabamento: Fale com a gente, Colabore, 404/erros e demais tipos de post (Fale com a gente → specs/018-fale-com-a-gente, Colabore → specs/019-colabore, 404/erros → specs/020-estados-especiais, tipos de post → specs/021-tipos-post-obras e specs/022-tipos-post-midia-eventos, todas concluídas com ressalvas; Fase 5 concluída) | Antes ficava na fase 6 |
-| 6 | Reservada | Sem escopo definido |
-| 7 | Limpeza: remover tokens antigos, `num_extension` e assets sem uso | Só quando nada mais usar |
+| 6 | Painel administrativo e login: migração técnica para os tokens (detalhe abaixo) | Sem isso a Fase 7 não pode remover nada |
+| 7 | Limpeza: remover tokens antigos, `num_extension` e assets sem uso | Depois da Fase 6 nada mais usa |
+
+### Fase 6: Painel administrativo e login (migração técnica)
+O painel e o login mantêm o layout e o comportamento atuais. Trocam `num_extension`, a fonte Dosis, as cores antigas e os tamanhos soltos pelos tokens novos de `AppTheme`, com tamanhos fixos por faixa de largura. Fontes e cores ficam iguais às do site novo; não há protótipo para o painel e o layout não é redesenhado. Ao final, nenhum arquivo do projeto usa `num_extension` nem tokens antigos, e a Fase 7 pode removê-los sem restrição.
+
+| # | Entrega | Principais arquivos |
+|---|---|---|
+| 6.1 | Login e estrutura do painel: página de login, barra lateral, página do painel, cabeçalhos e seções → specs/023-painel-login-estrutura | `admin/login/*`, `admin/sidebar/*`, `panel_page.dart`, `section_header_*`, `form_label.dart`, `sections/*`; em `core/`: `app_card`, `app_scrollbar`, `app_icon_button`, `circular_loading`, `linear_loading` |
+| 6.2 | Cards do painel: publicações (os 10 tipos), categoria, mídia, membro da equipe e usuário → specs/024-painel-cards | `panel/.../cards/*`; em `core/`: `divider`, `app_network_image`, `image_error_content` |
+| 6.3 | Diálogos e formulários do painel (inclusive os 10 de publicação) e o campo do login → specs/025-painel-dialogos-campos | `panel/.../dialogs/*`; em `core/`: `right_aligned_dialog`, `field/*`, `switch_button`, `editor_quill`, `app_video_player`, `loading_content` |
+| 6.4 | Biblioteca do painel (lista da área, filtros, card e diálogo de documento) e faixa "Ambiente de Testes" → specs/026-painel-biblioteca | `library_list_page.dart`, `filters.dart`, `library_document_card.dart`, `create_or_update_document_dialog.dart`, `environment_banner.dart` |
+
+Arquivos sem uso (`avatar`, `highlights_dialog_carousel`, `common_title`, `pages_circles`, `custom_icon_button`, `app_rounded_image` e `getPageHorizontalPadding` em `screen_utils`) não são migrados: saem na Fase 7.
+
+**Aceite:** login e painel funcionam como antes (entrar, listar, criar, editar e excluir cada tipo de conteúdo) em 390, 768 e 1280 px, sem `overflow`. Nenhum arquivo fora de `theme/` e de `num_extension.dart` importa `num_extension` nem usa a tipografia Dosis ou as cores antigas.
 
 ---
 
@@ -154,7 +168,7 @@ Nenhuma no momento.
 ---
 
 ## 7. Fora do escopo
-- Portal administrativo (login e painel).
+- Redesign visual do portal administrativo (login e painel). A Fase 6 só migra o código para os tokens novos.
 - Seção Geoensine.
 - Modo escuro.
 - Alteração de conteúdo ou de modelos de dados.
