@@ -1,6 +1,7 @@
 # Execução da Fase 6
 
 - **Início:** 2026-10-06
+- **Término:** 2026-10-06
 - **Branch:** refactor/redesign-fase-6 → PR para develop
 
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |

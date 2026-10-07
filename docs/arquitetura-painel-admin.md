@@ -108,6 +108,8 @@ Toda a autorização é no cliente. O repositório não tem `firestore.rules` ne
 
 **Novo tipo de post**: criar o model do corpo em `core/models/`, o card em `cards/posts_cards/`, o dialog em `dialogs/create_or_update_posts_dialogs/` e incluí-lo no `PostType`.
 
+**Visual**: o painel usa os mesmos tokens do site (`AppTheme`), sem `num_extension`. Campos novos partem de `PanelFieldDecoration` (`core/components/field/`), diálogos de `PanelDialogTitle`, listas vazias de `EmptyListMessage` e situação do item de `StatusBadge` (`core/components/chips/labels.dart`; texto e fundo, nunca só cor).
+
 **Nova permissão**: adicionar o campo em `UserPermissions`, definir a regra no construtor de `UserModel` e usá-la na seção.
 
 ## 8. Pontos de atenção
