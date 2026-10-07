@@ -29,7 +29,7 @@ Executa o plano **uma tarefa por vez**, com a spec como referência.
 - Só siga depois de a pessoa aprovar, e registre a mudança no "Histórico de mudanças" da spec. Não implemente uma divergência em silêncio.
 
 ## Regras
-- Siga as regras de design do `CLAUDE.md`: tokens do tema, sem `num_extension` em código novo, contraste, foco visível, estados de carregamento/vazio/erro, imagens sem proporção garantida.
+- Siga as regras de design do `CLAUDE.md`: tokens do tema, contraste, foco visível, estados de carregamento/vazio/erro, imagens sem proporção garantida.
 - **Não faça commit nem push**, a menos que a pessoa peça. Lembre: push na `main` publica o site.
 - Não crie testes nem dependências que o plano não previu. Se precisar de um pacote novo, pergunte.
 - Ao concluir todas as tarefas, mude o status da spec para `implementada` e sugira rodar `/sdd-verify`.

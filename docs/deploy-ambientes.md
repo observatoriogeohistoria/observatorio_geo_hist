@@ -75,7 +75,7 @@ firebase deploy --only firestore:indexes --project observatorio-geo-hist-dev
 
 Sem eles, a página abre, mas a busca mostra "Não foi possível carregar". O índice fica pronto alguns minutos depois do deploy (status em *Firestore › Índices*).
 
-**Campos de busca da biblioteca:** a busca compara o termo em minúsculas com `title_lower`, `author_lower` e `institution_lower`. O painel grava esses campos ao salvar; os documentos antigos são preenchidos pelo script em [`tool/library_search_fields`](../tool/library_search_fields/README.md), que precisa rodar em produção antes de o site ir para a `main`.
+**Campos de busca da biblioteca:** a busca compara o termo em minúsculas com `title_lower`, `author_lower` e `institution_lower`. O painel grava esses campos ao salvar; os documentos antigos já foram preenchidos em produção por um script avulso, removido depois do uso (está no git, em `tool/library_search_fields`).
 
 ## Operação
 
