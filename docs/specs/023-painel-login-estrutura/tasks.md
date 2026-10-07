@@ -16,9 +16,9 @@ Os critérios citados são os da seção "Critérios de aceite" da spec, na orde
 - [ ] **B6.** Conferir no site público, em 390, 768 e 1280 px: menu do celular, vídeo da Home, diálogo de categorias do hero e biblioteca (lista e filtros). Atende: 11.
 
 ## Grupo C: login
-- [ ] **C1.** Migrar a página de login: fundo `surface`; cartão com largura máxima `signinCardMaxWidth` e margem lateral no celular; título "LOGIN" em `h2`/`ink`; espaçamentos `spacing`; regra da senha em `small`/`inkSecondary`. Arquivo: `signin_page.dart`. Atende: 1, 3, 9, 10.
-- [ ] **C2.** Trocar o `GestureDetector` do olho por `AppIconButton` com tooltip "Mostrar senha" / "Ocultar senha". Arquivo: `signin_page.dart`. Atende: 5.
-- [ ] **C3.** Conferir: validação de e-mail e senha, aviso com credencial errada, login certo abre o painel, Tab percorre e-mail → senha → olho → "ENTRAR" com foco visível. Atende: 4, 5.
+- [x] **C1.** Migrar a página de login: fundo `surface`; cartão com largura máxima `signinCardMaxWidth` e margem lateral no celular; título "LOGIN" em `h2`/`ink`; espaçamentos `spacing`; regra da senha em `small`/`inkSecondary`. Arquivo: `signin_page.dart`. Atende: 1, 3, 9, 10.
+- [x] **C2.** Trocar o `GestureDetector` do olho por `AppIconButton` com tooltip "Mostrar senha" / "Ocultar senha". Arquivo: `signin_page.dart`. Atende: 5.
+- [x] **C3.** Conferir: validação de e-mail e senha, aviso com credencial errada, login certo abre o painel, Tab percorre e-mail → senha → olho → "ENTRAR" com foco visível. Atende: 4, 5. Validação, olho por teclado (Enter) e foco conferidos. Credencial errada e login certo não conferidos (sem credenciais de teste).
 
 ## Grupo D: barra lateral
 - [ ] **D1.** `SidebarHeader` com espaçamento de token. Arquivo: `sidebar_header.dart`. Atende: 1, 3.

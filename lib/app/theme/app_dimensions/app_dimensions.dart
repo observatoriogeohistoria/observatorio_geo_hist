@@ -654,6 +654,9 @@ class ComponentSizes {
 
   final double cardHoverIcon = 56.0;
 
+  final double signinCardMaxWidth = 440.0;
+  double signinCardPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 32, 32);
+
   double _byBreakpoint(
     Breakpoint breakpoint,
     double mobile,

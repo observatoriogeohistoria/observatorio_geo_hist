@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
@@ -71,83 +69,82 @@ class _SigninPageState extends State<SigninPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    bool isMobile = ScreenUtils.isMobile(context);
-    bool isTablet = ScreenUtils.isTablet(context);
+    final colors = AppTheme.colors;
+    final spacing = AppTheme.dimensions.spacing;
+    final components = AppTheme.dimensions.components;
+    final typography = AppTheme.typography.of(context);
+    final breakpoint = ScreenUtils.breakpointOf(context);
 
     return Scaffold(
-      backgroundColor: AppTheme.colors.lighterGray,
-      body: SizedBox(
-        width: size.width,
-        child: Observer(builder: (context) {
-          final loginState = _authStore.state.loginState;
+      backgroundColor: colors.surface,
+      body: Observer(builder: (context) {
+        final loginState = _authStore.state.loginState;
+        final passwordVisible = _authStore.passwordVisible;
 
-          return Center(
-            child: AppCard(
-              width: size.width * (isMobile ? 1 : (isTablet ? 0.5 : 0.3)),
-              padding: EdgeInsets.all(AppTheme.dimensions.space.large.scale),
-              margin: isMobile
-                  ? EdgeInsets.symmetric(
-                      horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
-                    )
-                  : EdgeInsets.zero,
-              borderColor: AppTheme.colors.gray,
-              child: Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppTitle.big(
-                      text: 'LOGIN',
-                      color: AppTheme.colors.darkGray,
-                    ),
-                    SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                    AppTextField(
-                      controller: _emailController,
-                      labelText: 'E-MAIL',
-                      hintText: 'exemplo@dominio.com',
-                      validator: Validators.isValidEmail,
-                    ),
-                    SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                    AppTextField(
-                      controller: _passwordController,
-                      labelText: 'SENHA',
-                      obscureText: !_authStore.passwordVisible,
-                      validator: Validators.isValidPassword,
-                      suffixIcon: GestureDetector(
-                        onTap: _authStore.togglePasswordVisibility,
-                        child: _authStore.passwordVisible
-                            ? const Icon(Icons.visibility_off)
-                            : const Icon(Icons.visibility),
+        return Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(ScreenUtils.contentMargin(breakpoint)),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: components.signinCardMaxWidth),
+              child: AppCard(
+                padding: EdgeInsets.all(components.signinCardPadding(breakpoint)),
+                borderColor: colors.lineStrong,
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('LOGIN', style: typography.h2.copyWith(color: colors.ink)),
+                      SizedBox(height: spacing.s24),
+                      AppTextField(
+                        controller: _emailController,
+                        labelText: 'E-MAIL',
+                        hintText: 'exemplo@dominio.com',
+                        validator: Validators.isValidEmail,
                       ),
-                    ),
-                    SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                    AppLabel.small(
-                      text:
-                          'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
-                      color: AppTheme.colors.gray,
-                    ),
-                    SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                    loginState is LoginStateLoading
-                        ? const CircularLoading()
-                        : PrimaryButton.medium(
-                            text: "ENTRAR",
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _authStore.login(_emailController.text, _passwordController.text);
-                              }
-                            },
-                          ),
-                  ],
+                      SizedBox(height: spacing.s24),
+                      AppTextField(
+                        controller: _passwordController,
+                        labelText: 'SENHA',
+                        obscureText: !passwordVisible,
+                        validator: Validators.isValidPassword,
+                        suffixIcon: AppIconButton(
+                          tooltip: passwordVisible ? 'Ocultar senha' : 'Mostrar senha',
+                          icon: passwordVisible ? Icons.visibility_off : Icons.visibility,
+                          color: colors.inkSecondary,
+                          size: components.menuIconSize,
+                          onPressed: _authStore.togglePasswordVisibility,
+                        ),
+                      ),
+                      SizedBox(height: spacing.s8),
+                      Text(
+                        'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
+                        style: typography.small.copyWith(color: colors.inkSecondary),
+                      ),
+                      SizedBox(height: spacing.s32),
+                      loginState is LoginStateLoading
+                          ? const CircularLoading()
+                          : PrimaryButton.medium(
+                              text: "ENTRAR",
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _authStore.login(
+                                    _emailController.text,
+                                    _passwordController.text,
+                                  );
+                                }
+                              },
+                            ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 }
