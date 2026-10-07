@@ -22,6 +22,7 @@ class ImageErrorContent extends StatelessWidget {
       return Center(
         child: Tooltip(
           message: _message,
+          excludeFromSemantics: true,
           child: Semantics(label: _message, child: icon),
         ),
       );
