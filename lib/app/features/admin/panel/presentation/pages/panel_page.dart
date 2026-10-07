@@ -3,10 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
@@ -89,37 +87,31 @@ class _PanelPageState extends State<PanelPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isMobile = ScreenUtils.isMobile(context);
-    bool isDesktop = ScreenUtils.isDesktop(context);
+    final colors = AppTheme.colors;
+    final spacing = AppTheme.dimensions.spacing;
+    final components = AppTheme.dimensions.components;
+    final isDesktop = ScreenUtils.isDesktop(context);
+    final contentPadding = components.panelContentPadding(ScreenUtils.breakpointOf(context));
 
     return Scaffold(
+      backgroundColor: colors.page,
       drawer: isDesktop ? null : const Sidebar(),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: AppTheme.colors.white),
-        backgroundColor: AppTheme.colors.orange,
-        title: isMobile
-            ? Text(
-                'PAINEL ADMINISTRATIVO',
-                style: AppTheme.typography.body.big.copyWith(
-                  color: AppTheme.colors.white,
-                  fontWeight: FontWeight.w900,
-                ),
-              )
-            : AppHeadline.small(
-                text: 'PAINEL ADMINISTRATIVO',
-                color: AppTheme.colors.white,
-                notSelectable: true,
-              ),
+        iconTheme: IconThemeData(color: colors.white),
+        backgroundColor: colors.accent,
+        title: Text(
+          'PAINEL ADMINISTRATIVO',
+          style: AppTheme.typography.of(context).h3.copyWith(color: colors.white),
+        ),
         actions: [
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: spacing.s8),
             child: AppIconButton(
               tooltip: 'Sair',
               icon: Icons.exit_to_app,
-              color: AppTheme.colors.white,
-              size: 32,
+              color: colors.white,
+              focusRingColor: colors.white,
+              size: components.panelTopBarIcon,
               onPressed: _authStore.logout,
             ),
           ),
@@ -130,9 +122,9 @@ class _PanelPageState extends State<PanelPage> {
         builder: (context) {
           Widget body = Padding(
             padding: EdgeInsets.only(
-              top: AppTheme.dimensions.space.large.verticalSpacing,
-              right: AppTheme.dimensions.space.small.horizontalSpacing,
-              left: AppTheme.dimensions.space.large.horizontalSpacing,
+              top: contentPadding,
+              right: spacing.s8,
+              left: contentPadding,
             ),
             child: _buildBody(_sidebarStore.selectedItem),
           );

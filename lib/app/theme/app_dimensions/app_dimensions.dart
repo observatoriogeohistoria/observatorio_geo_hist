@@ -654,6 +654,13 @@ class ComponentSizes {
 
   final double cardHoverIcon = 56.0;
 
+  final double panelSidebarWidth = 304.0;
+  final double panelSidebarIcon = 28.0;
+  final double panelSidebarItemPadding = 16.0;
+  final double panelTopBarIcon = 28.0;
+  double panelContentPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 32);
+  final double panelSectionGap = 24.0;
+
   final double signinCardMaxWidth = 440.0;
   double signinCardPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 32, 32);
 

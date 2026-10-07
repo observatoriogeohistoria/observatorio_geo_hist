@@ -10,6 +10,7 @@ class AppIconButton extends StatelessWidget {
     required this.tooltip,
     this.size = 24,
     this.focusNode,
+    this.focusRingColor,
     super.key,
   });
 
@@ -22,12 +23,16 @@ class AppIconButton extends StatelessWidget {
 
   final FocusNode? focusNode;
 
+  /// Sobre fundo de acento, o anel padrão some; use uma cor que contraste com o fundo.
+  final Color? focusRingColor;
+
   @override
   Widget build(BuildContext context) {
     final minTarget = AppTheme.dimensions.components.minTapTarget;
 
     return AppFocusRing(
       borderRadius: BorderRadius.circular(minTarget),
+      color: focusRingColor,
       child: IconButton(
         tooltip: tooltip,
         focusNode: focusNode,

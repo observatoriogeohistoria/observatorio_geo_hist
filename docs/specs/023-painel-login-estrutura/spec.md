@@ -1,6 +1,6 @@
 # 023. Login e estrutura do painel nos tokens novos
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 6, item 6.1
 - **Protótipo:** não há telas do painel. A referência são os tokens e componentes já usados no site público.
 - **Criada em:** 2026-10-06
@@ -70,3 +70,4 @@ Sem mudança em stores, rotas (`/admin`, `/admin/painel/:tab`, `?tipo=`), permis
 
 ## Histórico de mudanças
 - 2026-10-06: criada e aprovada. Decidido com a pessoa que o painel adota fontes e cores novas (não só tamanhos), para a Fase 7 remover todos os tokens antigos.
+- 2026-10-06: ajustes na implementação. O botão de recolher continua só fechando o menu no celular; no tablet ele segue recolhendo a barra, como antes (sem mudança de comportamento). `AppIconButton` ganhou `focusRingColor` opcional, porque o anel de acento some sobre a barra do topo laranja ("Sair" usa anel branco). A mensagem de vazio virou um componente pequeno (`empty_list_message.dart`) usado por `CrudSection` e `PostsSection`, e só aparece depois de uma busca com sucesso (não em erro). O fundo do painel passou a `page` (antes era o padrão do Material, levemente lilás).

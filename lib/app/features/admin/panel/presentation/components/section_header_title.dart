@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class SectionHeaderTitle extends StatelessWidget {
@@ -24,18 +22,20 @@ class SectionHeaderTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        right: AppTheme.dimensions.space.medium.horizontalSpacing,
+        right: AppTheme.dimensions.spacing.s16,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          AppHeadline.big(
-            text: title,
-            color: AppTheme.colors.orange,
+          Flexible(
+            child: Text(
+              title,
+              style: AppTheme.typography.of(context).h2.copyWith(color: AppTheme.colors.accent),
+            ),
           ),
           if (canEdit) ...[
-            SizedBox(width: AppTheme.dimensions.space.small.verticalSpacing),
+            SizedBox(width: AppTheme.dimensions.spacing.s8),
             SecondaryButton.medium(
               text: 'Criar',
               onPressed: onCreate,
