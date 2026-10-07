@@ -8,11 +8,11 @@ Os critérios citados são os da seção "Critérios de aceite" da spec, na orde
 - [ ] **A1.** Criar a cor `info` (`#1E5AA8`) e os tokens do painel em `ComponentSizes`: `panelSidebarWidth` (304), `panelSidebarIcon` (28), `panelSidebarItemPadding` (16), `panelContentPadding(breakpoint)` (16/24/32), `panelSectionGap` (24), `signinCardMaxWidth` (440), `signinCardPadding(breakpoint)`, `loadingIndicatorSize` (32), `scrollbarThickness` e `scrollbarInset`. Arquivos: `app_colors.dart`, `app_dimensions.dart`. Atende: 3, 12.
 
 ## Grupo B: componentes de `core/`
-- [ ] **B1.** `CircularLoading` e `LinearLoading` com tamanho e espaçamento de token, na cor `accent`. Arquivos: `loading/circular_loading.dart`, `loading/linear_loading.dart`. Atende: 2, 3.
-- [ ] **B2.** `AppScrollbar` com espessura, raio, recuo e cor novos (`accentSoftBorder`). Arquivo: `scroll/app_scrollbar.dart`. Atende: 2, 3.
-- [ ] **B3.** `AppIconButton` sem `.scale`: ícone no tamanho pedido e preenchimento `spacing.s8`. Arquivo: `buttons/app_icon_button.dart`. Atende: 2, 3.
-- [ ] **B4.** `AppCard` com fundo `page`, borda `line`, raio `radii` e espaçamento padrão `spacing`; ícone de hover em `accent` com tamanho de token. Arquivo: `card/app_card.dart`. Atende: 2, 3.
-- [ ] **B5.** `Messenger` com fundos `error`, `success` e `info` e texto branco no estilo `small` da tipografia nova. Arquivo: `utils/messenger/messenger.dart`. Atende: 2, 9.
+- [x] **B1.** `CircularLoading` e `LinearLoading` com tamanho e espaçamento de token, na cor `accent`. Arquivos: `loading/circular_loading.dart`, `loading/linear_loading.dart`. Atende: 2, 3.
+- [x] **B2.** `AppScrollbar` com espessura, raio, recuo e cor novos (`accentSoftBorder`). Arquivo: `scroll/app_scrollbar.dart`. Atende: 2, 3. Raio `radii.pill`; cor sólida, sem a transparência antiga.
+- [x] **B3.** `AppIconButton` sem `.scale`: ícone no tamanho pedido e preenchimento `spacing.s8`. Arquivo: `buttons/app_icon_button.dart`. Atende: 2, 3.
+- [x] **B4.** `AppCard` com fundo `page`, borda `line`, raio `radii` e espaçamento padrão `spacing`; ícone de hover em `accent` com tamanho de token. Arquivo: `card/app_card.dart`. Atende: 2, 3. Token novo `cardHoverIcon` (56).
+- [x] **B5.** `Messenger` com fundos `error`, `success` e `info` e texto branco no estilo `small` da tipografia nova. Arquivo: `utils/messenger/messenger.dart`. Atende: 2, 9.
 - [ ] **B6.** Conferir no site público, em 390, 768 e 1280 px: menu do celular, vídeo da Home, diálogo de categorias do hero e biblioteca (lista e filtros). Atende: 11.
 
 ## Grupo C: login

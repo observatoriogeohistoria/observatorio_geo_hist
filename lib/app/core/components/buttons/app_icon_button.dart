@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppIconButton extends StatelessWidget {
@@ -32,10 +31,10 @@ class AppIconButton extends StatelessWidget {
       child: IconButton(
         tooltip: tooltip,
         focusNode: focusNode,
-        padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
+        padding: EdgeInsets.all(AppTheme.dimensions.spacing.s8),
         constraints: BoxConstraints(minWidth: minTarget, minHeight: minTarget),
-        iconSize: size.scale,
-        icon: Icon(icon, color: color, size: size.scale),
+        iconSize: size,
+        icon: Icon(icon, color: color, size: size),
         onPressed: onPressed,
       ),
     );

@@ -647,6 +647,13 @@ class ComponentSizes {
   final double contactInfoLabelGap = 2.0;
   final double contactInfoItemGap = 14.0;
 
+  final double loadingIndicatorSize = 32.0;
+
+  final double scrollbarThickness = 8.0;
+  final double scrollbarInset = 16.0;
+
+  final double cardHoverIcon = 56.0;
+
   double _byBreakpoint(
     Breakpoint breakpoint,
     double mobile,

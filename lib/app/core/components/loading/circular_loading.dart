@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class CircularLoading extends StatelessWidget {
@@ -7,13 +6,13 @@ class CircularLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = AppTheme.dimensions.components.loadingIndicatorSize;
+
     return Center(
       child: SizedBox(
-        height: 32.scale,
-        width: 32.scale,
-        child: CircularProgressIndicator(
-          color: AppTheme.colors.orange,
-        ),
+        height: size,
+        width: size,
+        child: CircularProgressIndicator(color: AppTheme.colors.accent),
       ),
     );
   }

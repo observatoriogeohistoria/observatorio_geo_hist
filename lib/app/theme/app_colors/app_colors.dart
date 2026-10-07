@@ -63,4 +63,5 @@ class AppColors {
   Color errorSurface = const Color(0xFFFBE9E7);
   Color success = const Color(0xFF1C6B34);
   Color successSurface = const Color(0xFFE4F3E8);
+  Color info = const Color(0xFF1E5AA8);
 }
