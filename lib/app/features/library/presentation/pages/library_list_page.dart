@@ -103,6 +103,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
     final components = AppTheme.dimensions.components;
     final isDesktop = ScreenUtils.isDesktop(context);
     final contentPadding = components.panelContentPadding(ScreenUtils.breakpointOf(context));
+    final focusRingOutset = AppTheme.dimensions.focus.width + AppTheme.dimensions.focus.offset;
 
     return Scaffold(
       backgroundColor: colors.page,
@@ -134,113 +135,120 @@ class _LibraryListPageState extends State<LibraryListPage> {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Em grupos, o Tab percorre os filtros inteiros e depois a lista de cima para baixo;
+          // sem eles, a ordem de leitura saltava do fim dos filtros para o meio da lista.
           if (isDesktop)
-            Filters(
-              onApplyFilters: _fetchDocuments,
-              onClearFilters: _fetchDocuments,
+            FocusTraversalGroup(
+              child: Filters(
+                onApplyFilters: _fetchDocuments,
+                onClearFilters: _fetchDocuments,
+              ),
             ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(contentPadding),
-              child: Observer(
-                builder: (_) {
-                  final fetchState = _libraryStore.fetchState;
-                  final manageState = _libraryStore.manageState;
+              child: FocusTraversalGroup(
+                child: Observer(
+                  builder: (_) {
+                    final fetchState = _libraryStore.fetchState;
+                    final manageState = _libraryStore.manageState;
 
-                  final canEdit = _authStore.user?.permissions.canEditLibrarySection == true;
+                    final canEdit = _authStore.user?.permissions.canEditLibrarySection == true;
 
-                  if (fetchState is CrudLoadingState) {
-                    if (!fetchState.isRefreshing) return const Center(child: CircularLoading());
-                  }
+                    if (fetchState is CrudLoadingState) {
+                      if (!fetchState.isRefreshing) return const Center(child: CircularLoading());
+                    }
 
-                  if (fetchState is CrudErrorState) {
-                    return Center(
-                      child: StateErrorInline(
-                        message: fetchState.failure.message,
-                        onRetry: _fetchDocuments,
-                      ),
-                    );
-                  }
+                    if (fetchState is CrudErrorState) {
+                      return Center(
+                        child: StateErrorInline(
+                          message: fetchState.failure.message,
+                          onRetry: _fetchDocuments,
+                        ),
+                      );
+                    }
 
-                  final docs = _libraryStore.documentsByArea[widget.area] ?? [];
+                    final docs = _libraryStore.documentsByArea[widget.area] ?? [];
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (canEdit) ...[
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: PrimaryButton.medium(
-                            text: 'Criar documento',
-                            onPressed: () => showCreateOrUpdateLibraryDocumentDialog(
-                              context,
-                              area: widget.area,
-                              onCreateOrUpdate: (document, file) =>
-                                  _libraryStore.createOrUpdateDocument(document, file),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (canEdit) ...[
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: PrimaryButton.medium(
+                              text: 'Criar documento',
+                              onPressed: () => showCreateOrUpdateLibraryDocumentDialog(
+                                context,
+                                area: widget.area,
+                                onCreateOrUpdate: (document, file) =>
+                                    _libraryStore.createOrUpdateDocument(document, file),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: spacing.s24),
-                      ],
-                      if (manageState is CrudLoadingState) ...[
-                        const LinearLoading(),
-                        SizedBox(height: spacing.s8),
-                      ],
-                      Expanded(
-                        child: docs.isEmpty
-                            ? const EmptyListMessage(text: 'Nenhum documento encontrado.')
-                            : AppScrollbar(
-                                controller: _scrollController,
-                                child: ListView.separated(
-                                  padding: EdgeInsets.zero,
+                          SizedBox(height: spacing.s24),
+                        ],
+                        if (manageState is CrudLoadingState) ...[
+                          const LinearLoading(),
+                          SizedBox(height: spacing.s8),
+                        ],
+                        Expanded(
+                          child: docs.isEmpty
+                              ? const EmptyListMessage(text: 'Nenhum documento encontrado.')
+                              : AppScrollbar(
                                   controller: _scrollController,
-                                  itemCount: docs.length,
-                                  separatorBuilder: (_, __) => const AppDivider(),
-                                  itemBuilder: (context, index) {
-                                    final doc = docs[index];
+                                  child: ListView.separated(
+                                    // Folga para o anel de foco do card, que a lista cortaria nas bordas.
+                                    padding: EdgeInsets.all(focusRingOutset),
+                                    controller: _scrollController,
+                                    itemCount: docs.length,
+                                    separatorBuilder: (_, __) => const AppDivider(),
+                                    itemBuilder: (context, index) {
+                                      final doc = docs[index];
 
-                                    return LibraryDocumentCard(
-                                      document: doc,
-                                      onEdit: () => showCreateOrUpdateLibraryDocumentDialog(
-                                        context,
-                                        area: widget.area,
-                                        onCreateOrUpdate: (document, file) =>
-                                            _libraryStore.createOrUpdateDocument(document, file),
+                                      return LibraryDocumentCard(
                                         document: doc,
-                                      ),
-                                      onDelete: () => _libraryStore.deleteDocument(doc),
-                                      canEdit: canEdit,
-                                      canDelete: canEdit,
-                                    );
-                                  },
+                                        onEdit: () => showCreateOrUpdateLibraryDocumentDialog(
+                                          context,
+                                          area: widget.area,
+                                          onCreateOrUpdate: (document, file) =>
+                                              _libraryStore.createOrUpdateDocument(document, file),
+                                          document: doc,
+                                        ),
+                                        onDelete: () => _libraryStore.deleteDocument(doc),
+                                        canEdit: canEdit,
+                                        canDelete: canEdit,
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: spacing.s16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (!isDesktop)
-                              PrimaryButton.medium(
-                                text: 'Filtros',
-                                onPressed: () => _showMobileMenu(context),
-                              ),
-                            SizedBox(width: spacing.s16),
-                            if (_libraryStore.hasMore[widget.area] == true)
-                              SecondaryButton.medium(
-                                text: fetchState is CrudLoadingState
-                                    ? 'Carregando...'
-                                    : 'Carregar mais',
-                                onPressed: _fetchDocuments,
-                                isDisabled: fetchState is CrudLoadingState,
-                              ),
-                          ],
                         ),
-                      ),
-                    ],
-                  );
-                },
+                        Padding(
+                          padding: EdgeInsets.only(top: spacing.s16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (!isDesktop)
+                                PrimaryButton.medium(
+                                  text: 'Filtros',
+                                  onPressed: () => _showMobileMenu(context),
+                                ),
+                              SizedBox(width: spacing.s16),
+                              if (_libraryStore.hasMore[widget.area] == true)
+                                SecondaryButton.medium(
+                                  text: fetchState is CrudLoadingState
+                                      ? 'Carregando...'
+                                      : 'Carregar mais',
+                                  onPressed: _fetchDocuments,
+                                  isDisabled: fetchState is CrudLoadingState,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
