@@ -29,6 +29,8 @@ Nada vai para a `main` sem passar pela `develop`.
 | `deploy-dev.yml` | push na `develop` ou manual | Build, `robots.txt` bloqueando indexação e FTP para o dev. |
 | `deploy-prod.yml` | push na `main` ou manual | Build e FTP para produção. |
 
+Push que só mexe em arquivos fora do site (`docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `ci.yml`, `analysis_options.yaml`) não dispara deploy (`paths-ignore`). Para publicar mesmo assim, use o deploy manual. O CI segue a mesma ideia: PR só com `docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/` ou `deploy-*.yml` não roda validação.
+
 Comum aos três:
 
 - Versão do Flutter lida do `.fvmrc` com `jq`.

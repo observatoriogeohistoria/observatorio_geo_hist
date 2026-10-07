@@ -4,6 +4,16 @@ on:
   push:
     branches:
       - main
+    # Só o que entra no build ou nos índices do Firestore justifica publicar.
+    # O deploy manual (workflow_dispatch) ignora esse filtro.
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.claude/**'
+      - '.vscode/**'
+      - 'tool/**'
+      - '.github/workflows/ci.yml'
+      - 'analysis_options.yaml'
   workflow_dispatch:
 
 concurrency:

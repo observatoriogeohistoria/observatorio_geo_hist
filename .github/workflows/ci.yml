@@ -5,6 +5,13 @@ on:
     branches:
       - develop
       - main
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.claude/**'
+      - '.vscode/**'
+      - 'tool/**'
+      - '.github/workflows/deploy-*.yml'
 
 concurrency:
   group: ci-${{ github.ref }}
