@@ -681,6 +681,9 @@ class ComponentSizes {
   final double panelEditorFactor = 0.4;
   final double panelEditorShortFactor = 0.3;
 
+  final double panelFiltersWidth = 300.0;
+  final double panelLibraryDocIcon = 32.0;
+
   final double networkImageSkeletonHeight = 253.0;
   final double imageErrorIcon = 24.0;
 

@@ -1,6 +1,6 @@
 # 026. Biblioteca do painel e faixa de ambiente nos tokens novos
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 6, item 6.4
 - **Protótipo:** não há telas do painel. A referência são os tokens e componentes do site público.
 - **Criada em:** 2026-10-06

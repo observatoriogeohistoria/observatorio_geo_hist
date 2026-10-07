@@ -11,13 +11,13 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_document_fie
 import 'package:observatorio_geo_hist/app/core/components/field/app_multiselect_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_store.dart';
@@ -98,7 +98,8 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
   @override
   Widget build(BuildContext context) {
     final isMobile = ScreenUtils.isMobile(context);
-    final space = SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing);
+    final spacing = AppTheme.dimensions.spacing;
+    final space = SizedBox(height: spacing.s16);
 
     return Observer(
       builder: (context) {
@@ -118,32 +119,32 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildTitle('Título'),
-                          space,
+                          PanelDialogTitle(
+                            text: _isUpdate ? 'Atualizar documento' : 'Criar documento',
+                          ),
+                          SizedBox(height: spacing.s32),
+                          const FormLabel(text: 'Título'),
                           AppTextField(
                             controller: _titleController,
                             hintText: 'Título',
                             validator: Validators.isNotEmpty,
                           ),
                           space,
-                          _buildTitle('Autor'),
-                          space,
+                          const FormLabel(text: 'Autor'),
                           AppTextField(
                             controller: _authorController,
                             hintText: 'Autor',
                             validator: Validators.isNotEmpty,
                           ),
                           space,
-                          _buildTitle('Instituição'),
-                          space,
+                          const FormLabel(text: 'Instituição'),
                           AppTextField(
                             controller: _institutionController,
                             hintText: 'Instituição',
                             validator: Validators.isNotEmpty,
                           ),
                           space,
-                          _buildTitle('Ano'),
-                          space,
+                          const FormLabel(text: 'Ano'),
                           AppTextField(
                             controller: _yearController,
                             hintText: 'Ano',
@@ -152,15 +153,13 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
                             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                           ),
                           space,
-                          _buildTitle('Documento'),
-                          space,
+                          const FormLabel(text: 'Documento'),
                           AppDocumentField(
                             documentUrlController: _documentUrlController,
                             documentController: _documentController,
                           ),
                           space,
-                          _buildTitle('Tipo de Produção'),
-                          space,
+                          const FormLabel(text: 'Tipo de Produção'),
                           AppMultiSelectField<DocumentType>(
                             items: DocumentType.values,
                             itemToString: (item) => item.value,
@@ -171,8 +170,7 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
                             isSingleSelect: true,
                           ),
                           space,
-                          _buildTitle('Categorias'),
-                          space,
+                          const FormLabel(text: 'Categorias'),
                           AppMultiSelectField<DocumentCategory>(
                             items: DocumentCategory.values,
                             itemToString: (item) => item.value,
@@ -190,7 +188,7 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding: EdgeInsets.only(top: AppTheme.dimensions.space.large),
+                  padding: EdgeInsets.only(top: spacing.s24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -199,7 +197,7 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
                           text: 'Cancelar',
                           onPressed: () => GoRouter.of(context).pop(),
                         ),
-                        SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+                        SizedBox(width: spacing.s16),
                       ],
                       PrimaryButton.medium(
                         text: isLoading ? 'Aguarde...' : (_isUpdate ? 'Atualizar' : 'Criar'),
@@ -217,13 +215,6 @@ class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibr
           ),
         );
       },
-    );
-  }
-
-  Widget _buildTitle(String title) {
-    return AppTitle.medium(
-      text: title,
-      color: AppTheme.colors.orange,
     );
   }
 

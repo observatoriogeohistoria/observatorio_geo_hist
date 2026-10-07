@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_inline.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
@@ -19,6 +19,7 @@ import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/empty_list_message.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/create_or_update_document_dialog.dart';
@@ -97,13 +98,21 @@ class _LibraryListPageState extends State<LibraryListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final spacing = AppTheme.dimensions.spacing;
+    final components = AppTheme.dimensions.components;
     final isDesktop = ScreenUtils.isDesktop(context);
+    final contentPadding = components.panelContentPadding(ScreenUtils.breakpointOf(context));
 
     return Scaffold(
+      backgroundColor: colors.page,
       appBar: AppBar(
-        leading: IconButton(
+        leading: AppIconButton(
           tooltip: 'Voltar',
-          icon: const Icon(Icons.arrow_back),
+          icon: Icons.arrow_back,
+          color: colors.white,
+          focusRingColor: colors.white,
+          size: components.panelTopBarIcon,
           onPressed: () {
             final router = GoRouter.of(context);
             final isAdminRoute = GoRouterState.of(context).uri.path.startsWith(AppRoutes.admin);
@@ -114,12 +123,12 @@ class _LibraryListPageState extends State<LibraryListPage> {
                     : AppRoutes.library);
           },
         ),
-        title: AppHeadline.big(
-          text: widget.area.value,
-          color: AppTheme.colors.white,
+        title: Text(
+          widget.area.value,
+          style: AppTheme.typography.of(context).h3.copyWith(color: colors.white),
         ),
-        backgroundColor: AppTheme.colors.orange,
-        foregroundColor: AppTheme.colors.white,
+        backgroundColor: colors.accent,
+        foregroundColor: colors.white,
         elevation: 0,
       ),
       body: Row(
@@ -132,10 +141,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
             ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
-                vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-              ),
+              padding: EdgeInsets.all(contentPadding),
               child: Observer(
                 builder: (_) {
                   final fetchState = _libraryStore.fetchState;
@@ -149,22 +155,14 @@ class _LibraryListPageState extends State<LibraryListPage> {
 
                   if (fetchState is CrudErrorState) {
                     return Center(
-                      child: AppTitle.big(
-                        text: fetchState.failure.message,
-                        color: AppTheme.colors.darkGray,
+                      child: StateErrorInline(
+                        message: fetchState.failure.message,
+                        onRetry: _fetchDocuments,
                       ),
                     );
                   }
 
                   final docs = _libraryStore.documentsByArea[widget.area] ?? [];
-                  if (docs.isEmpty) {
-                    return Center(
-                      child: AppTitle.big(
-                        text: 'Nenhum documento encontrado.',
-                        color: AppTheme.colors.darkGray,
-                      ),
-                    );
-                  }
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,44 +180,44 @@ class _LibraryListPageState extends State<LibraryListPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+                        SizedBox(height: spacing.s24),
                       ],
                       if (manageState is CrudLoadingState) ...[
                         const LinearLoading(),
-                        SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                        SizedBox(height: spacing.s8),
                       ],
                       Expanded(
-                        child: AppScrollbar(
-                          controller: _scrollController,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            controller: _scrollController,
-                            itemCount: docs.length,
-                            separatorBuilder: (_, __) => const Divider(),
-                            itemBuilder: (context, index) {
-                              final doc = docs[index];
+                        child: docs.isEmpty
+                            ? const EmptyListMessage(text: 'Nenhum documento encontrado.')
+                            : AppScrollbar(
+                                controller: _scrollController,
+                                child: ListView.separated(
+                                  padding: EdgeInsets.zero,
+                                  controller: _scrollController,
+                                  itemCount: docs.length,
+                                  separatorBuilder: (_, __) => const AppDivider(),
+                                  itemBuilder: (context, index) {
+                                    final doc = docs[index];
 
-                              return LibraryDocumentCard(
-                                document: doc,
-                                onEdit: () => showCreateOrUpdateLibraryDocumentDialog(
-                                  context,
-                                  area: widget.area,
-                                  onCreateOrUpdate: (document, file) =>
-                                      _libraryStore.createOrUpdateDocument(document, file),
-                                  document: doc,
+                                    return LibraryDocumentCard(
+                                      document: doc,
+                                      onEdit: () => showCreateOrUpdateLibraryDocumentDialog(
+                                        context,
+                                        area: widget.area,
+                                        onCreateOrUpdate: (document, file) =>
+                                            _libraryStore.createOrUpdateDocument(document, file),
+                                        document: doc,
+                                      ),
+                                      onDelete: () => _libraryStore.deleteDocument(doc),
+                                      canEdit: canEdit,
+                                      canDelete: canEdit,
+                                    );
+                                  },
                                 ),
-                                onDelete: () => _libraryStore.deleteDocument(doc),
-                                canEdit: canEdit,
-                                canDelete: canEdit,
-                              );
-                            },
-                          ),
-                        ),
+                              ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                          top: AppTheme.dimensions.space.medium.verticalSpacing,
-                        ),
+                        padding: EdgeInsets.only(top: spacing.s16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -228,7 +226,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
                                 text: 'Filtros',
                                 onPressed: () => _showMobileMenu(context),
                               ),
-                            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+                            SizedBox(width: spacing.s16),
                             if (_libraryStore.hasMore[widget.area] == true)
                               SecondaryButton.medium(
                                 text: fetchState is CrudLoadingState
@@ -267,14 +265,24 @@ class _LibraryListPageState extends State<LibraryListPage> {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel: 'Mobile Filters',
+      barrierLabel: 'Fechar filtros',
       transitionDuration: const Duration(milliseconds: 300),
       transitionBuilder: TransitionsBuilder.slide,
       pageBuilder: (context, animation, secondaryAnimation) {
-        return Material(
-          child: Filters(
-            onApplyFilters: _fetchDocuments,
-            onClearFilters: _fetchDocuments,
+        final width = MediaQuery.sizeOf(context).width;
+        final maxWidth = AppTheme.dimensions.components.mobileMenuMaxWidth;
+
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: SizedBox(
+            width: width < maxWidth ? width : maxWidth,
+            height: double.infinity,
+            child: Material(
+              child: Filters(
+                onApplyFilters: _fetchDocuments,
+                onClearFilters: _fetchDocuments,
+              ),
+            ),
           ),
         );
       },
