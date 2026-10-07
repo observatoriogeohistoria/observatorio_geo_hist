@@ -51,7 +51,7 @@ Convenções: arquivos em `snake_case`; sufixos `*_datasource`, `*_repository`, 
 ## Redesign do site público (em andamento)
 - **Fonte de verdade:** [docs/redesign/planejamento.md](docs/redesign/planejamento.md) (decisões, fases, telas, ideias futuras).
 - **Protótipo navegável:** https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH. É a referência visual. Confira cada tela nele antes de implementar.
-- **Escopo:** o site público. O painel administrativo e o login entram só na Fase 6, como migração técnica para os tokens novos (fontes e cores do site novo), sem redesenho de layout. Geoensine e modo escuro estão fora.
+- **Escopo:** o site público e, na Fase 8, o redesenho do login e do painel administrativo (abas Login, Painel e Editor do protótipo), sem mudar dados nem permissões. Geoensine e modo escuro estão fora.
 
 ### Regras de design ao implementar
 - Use os tokens de `lib/app/theme/` (`AppTheme.colors`, `.dimensions`, `.typography`). **Não escreva cores, tamanhos de fonte ou espaçamentos soltos no código.** Se faltar um token, crie-o no tema.
