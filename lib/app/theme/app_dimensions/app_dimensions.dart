@@ -661,6 +661,12 @@ class ComponentSizes {
   double panelContentPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 32);
   final double panelSectionGap = 24.0;
 
+  final double networkImageSkeletonHeight = 253.0;
+  final double imageErrorIcon = 24.0;
+
+  // Mais estreito que isso, "Erro ao carregar a imagem" quebra em linhas demais e não cabe.
+  final double imageErrorMessageMinWidth = 160.0;
+
   final double signinCardMaxWidth = 440.0;
   double signinCardPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 32, 32);
 

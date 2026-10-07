@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class ImageErrorContent extends StatelessWidget {
-  const ImageErrorContent({super.key});
+  const ImageErrorContent({this.compact = false, super.key});
+
+  /// Em espaço pequeno a frase não cabe; fica só o ícone, com a frase no tooltip.
+  final bool compact;
+
+  static const _message = 'Erro ao carregar a imagem';
 
   @override
   Widget build(BuildContext context) {
+    final color = AppTheme.colors.inkSecondary;
+    final icon = Icon(
+      Icons.error,
+      size: AppTheme.dimensions.components.imageErrorIcon,
+      color: color,
+    );
+
+    if (compact) {
+      return Center(
+        child: Tooltip(
+          message: _message,
+          child: Semantics(label: _message, child: icon),
+        ),
+      );
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          Icons.error,
-          size: 24.scale,
-          color: AppTheme.colors.gray,
-        ),
-        SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+        icon,
+        SizedBox(width: AppTheme.dimensions.spacing.s8),
         Flexible(
-          child: AppTitle.medium(
-            text: 'Erro ao carregar a imagem',
+          child: Text(
+            _message,
             textAlign: TextAlign.center,
-            color: AppTheme.colors.gray,
+            style: AppTheme.typography.of(context).small.copyWith(color: color),
           ),
         ),
       ],
