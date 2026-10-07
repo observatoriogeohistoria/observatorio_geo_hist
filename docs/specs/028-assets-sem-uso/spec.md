@@ -1,6 +1,6 @@
 # 028. Assets, fontes e pacotes sem uso
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 7 (Limpeza), parte 2: assets, fontes e pacotes. Continua a [027](../027-remocao-codigo-legado/spec.md), que deixou para cá a família Dosis, `google_fonts` e `carousel_slider`.
 - **Protótipo:** não se aplica (limpeza sem mudança visual).
 - **Criada em:** 2026-10-07
@@ -47,14 +47,14 @@ Sem mudança.
 Não mudam modelos, coleções e regras do Firebase, rotas, o painel nem os ícones e metadados de `web/`. Remover `flutter_quill_extensions` não muda a leitura de posts: nenhum construtor de embeds dele está registrado hoje.
 
 ## Critérios de aceite
-- [ ] 1. Os 19 arquivos da tabela não existem mais no repositório, e a pasta `packages/` saiu.
-- [ ] 2. Busca vazia em `lib/`, `web/`, `tool/`, `pubspec.yaml` e `.github/` por `[Dd]osis` e por `\.png['"]` em `lib/`; o `pubspec.yaml` declara só as famílias `BricolageGrotesque` e `Figtree`.
-- [ ] 3. Busca vazia em `lib/` e `tool/` por `carousel_slider|google_fonts|GoogleFonts|cached_network_image|CachedNetworkImage|flutter_staggered_grid_view|file_saver|FileSaver|flutter_quill_extensions|FlutterQuillEmbeds|cupertino_icons|CupertinoIcons`, e nenhum desses 7 pacotes aparece no `pubspec.yaml`.
-- [ ] 4. Depois de `fvm flutter pub get`, o `pubspec.lock` não lista nenhum dos 7 pacotes e só perde entradas: nenhum pacote que fica muda de versão nem entra pacote novo.
-- [ ] 5. Todo asset que fica tem referência no código, em `web/` ou em `tool/` (conferido com a lista de "O que fica"), e as licenças OFL da Bricolage Grotesque e da Figtree continuam em `assets/fonts/licenses/`.
-- [ ] 6. `fvm flutter analyze` sem erros nem avisos e `fvm dart run build_runner build --delete-conflicting-outputs` sem diferença nos arquivos gerados.
-- [ ] 7. `fvm flutter build web --release` termina sem erro, e `build/web/assets/` não tem `Dosis`, os PNG nem as 5 imagens removidas, nem a fonte `CupertinoIcons`.
-- [ ] 8. Home (logo, capa do vídeo, parceiros, redes no rodapé), um post (ícones de compartilhamento), nossa história (imagem), biblioteca, fale com a gente, colabore, 404 e login sem mudança visual em 390, 768 e 1280 px, com títulos em Bricolage Grotesque e texto em Figtree, comparando com capturas tiradas antes; sem `overflow` nem asserção de layout no modo debug e sem erro de asset no console.
+- [x] 1. Os 19 arquivos da tabela não existem mais no repositório, e a pasta `packages/` saiu.
+- [x] 2. Busca vazia em `lib/`, `web/`, `tool/`, `pubspec.yaml` e `.github/` por `[Dd]osis` e por `\.png['"]` em `lib/`; o `pubspec.yaml` declara só as famílias `BricolageGrotesque` e `Figtree`.
+- [x] 3. Busca vazia em `lib/` e `tool/` por `carousel_slider|google_fonts|GoogleFonts|cached_network_image|CachedNetworkImage|flutter_staggered_grid_view|file_saver|FileSaver|flutter_quill_extensions|FlutterQuillEmbeds|cupertino_icons|CupertinoIcons`, e nenhum desses 7 pacotes aparece no `pubspec.yaml`.
+- [x] 4. Depois de `fvm flutter pub get`, o `pubspec.lock` não lista nenhum dos 7 pacotes e só perde entradas: nenhum pacote que fica muda de versão nem entra pacote novo.
+- [x] 5. Todo asset que fica tem referência no código, em `web/` ou em `tool/` (conferido com a lista de "O que fica"), e as licenças OFL da Bricolage Grotesque e da Figtree continuam em `assets/fonts/licenses/`.
+- [x] 6. `fvm flutter analyze` sem erros nem avisos e `fvm dart run build_runner build --delete-conflicting-outputs` sem diferença de conteúdo nos arquivos gerados (diferença só de formatação, que já existia, é aceita).
+- [x] 7. `fvm flutter build web --release` termina sem erro, e `build/web/assets/` não tem `Dosis`, os PNG nem as 5 imagens removidas, nem a fonte `CupertinoIcons`.
+- [x] 8. Home (logo, capa do vídeo, parceiros, redes no rodapé), um post (ícones de compartilhamento), nossa história (imagem), biblioteca, fale com a gente, colabore, 404 e login sem mudança visual em 390, 768 e 1280 px, com títulos em Bricolage Grotesque e texto em Figtree, comparando com capturas tiradas antes; sem `overflow` nem asserção de layout no modo debug e sem erro de asset no console.
 
 ## Fora do escopo
 - Mover `freezed` para `dev_dependencies` ou atualizar versões de pacotes: mexe no `pubspec.lock` além da remoção e não é limpeza de algo sem uso.
@@ -74,3 +74,4 @@ Não mudam modelos, coleções e regras do Firebase, rotas, o painel nem os íco
 
 ## Histórico de mudanças
 - 2026-10-07: criada e aprovada (modo autônomo).
+- 2026-10-07: critério 6 ajustado. O `build_runner` regera `library_document_store.g.dart` com quebras de linha diferentes das versionadas (o arquivo foi formatado com largura 100). Acontece igual antes da remoção dos pacotes, então não vem desta spec; o arquivo versionado fica como está e o critério passa a aceitar diferença só de formatação.
