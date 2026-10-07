@@ -149,6 +149,7 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
               children: [
                 AppTextField(
                   controller: _authorsControllers[i],
+                  labelText: 'Autor ${i + 1}',
                   validator: Validators.isNotEmpty,
                 ),
                 SizedBox(
