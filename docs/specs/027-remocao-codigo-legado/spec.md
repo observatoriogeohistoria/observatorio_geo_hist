@@ -1,6 +1,6 @@
 # 027. Remoção do código legado
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 7 (Limpeza), parte 1: código. Lista de arquivos sem uso na Fase 6.
 - **Protótipo:** não se aplica (limpeza sem mudança visual).
 - **Criada em:** 2026-10-07
@@ -59,17 +59,17 @@ Sem mudança. Nenhum componente com foco ou nome acessível em uso é removido.
 Não mudam modelos de dados, coleções e regras do Firebase, rotas nem a injeção de dependências em uso (`admin_setup.dart` segue registrando o login).
 
 ## Critérios de aceite
-- [ ] 1. Os 14 arquivos da tabela não existem mais, e as pastas `pages_circles/`, `carousel_options/` e `home/presentation/components/dialog/` ficaram vazias e saíram.
-- [ ] 2. Busca vazia em `lib/` por `num_extension|NumExtension|horizontalSpacing|verticalSpacing` e por `[0-9)]\.fontSize\(` e `\.scale\b[^(]` (o `scale(...)` do `TextScaler` do Flutter não conta).
-- [ ] 3. Busca vazia em `lib/` por `[Dd]osis|GoogleFonts|google_fonts`.
-- [ ] 4. Busca vazia em `lib/` por `colors\.(lightOrange|orange|amber|lighterGray|lightGray|gray|darkGray|red|green|blue)\b` e nenhuma dessas 10 cores declarada em `app_colors.dart`.
-- [ ] 5. Busca vazia em `lib/` por `dimensions\.(space|radius)\b|DimensionStyle|TypographyStyle|TypographySize` e por `AppTheme\.typography\.(headline|title|body|label)\b|typography\.(headline|title|body)\b` (o `label` dos cards do painel vem de `typography.of(context)` e é o estilo novo).
-- [ ] 6. Busca vazia em `lib/` pelos símbolos removidos: `getPageHorizontalPadding|isSmallMobile|isTablet|isLaptop|isSmallDesktop|GeneralState|LoginSetup|carouselOptions|monthName|CommonTitle|AppHeadline|AppTitle\b|AppLabel\b|AppBody\b|PagesCircles|CustomIconButton|AppRoundedImage|HighlightsCarousel|\bAvatar\b`.
-- [ ] 7. As bordas continuam com as mesmas espessuras (1, 2, 3 e 4) sem mudar nenhuma chamada fora do tema; `white` continua disponível.
-- [ ] 8. `fvm flutter analyze` sem erros nem avisos novos e `dart format` sem diferenças nos arquivos alterados.
-- [ ] 9. `fvm flutter build web --release` termina sem erro.
-- [ ] 10. Home, todas as publicações, listagem de categoria, um post, biblioteca (índice, lista e documento), nossa história, equipe, fale com a gente, colabore, 404 e login sem mudança visual em 390, 768 e 1280 px, comparando com capturas tiradas antes da remoção, e sem `overflow` nem asserção de layout no modo debug.
-- [ ] 11. `pubspec.yaml`, `assets/`, `web/` e os arquivos gerados (`*.g.dart`, `*.freezed.dart`) sem alteração.
+- [x] 1. Os 14 arquivos da tabela não existem mais, e as pastas `pages_circles/`, `carousel_options/` e `home/presentation/components/dialog/` ficaram vazias e saíram.
+- [x] 2. Busca vazia em `lib/` por `num_extension|NumExtension|horizontalSpacing|verticalSpacing` e por `[0-9)]\.fontSize\(` e `\.scale\b[^(]` (o `scale(...)` do `TextScaler` do Flutter não conta).
+- [x] 3. Busca vazia em `lib/` por `[Dd]osis|GoogleFonts|google_fonts`.
+- [x] 4. Busca vazia em `lib/` por `colors\.(lightOrange|orange|amber|lighterGray|lightGray|gray|darkGray|red|green|blue)\b` e nenhuma dessas 10 cores declarada em `app_colors.dart`.
+- [x] 5. Busca vazia em `lib/` por `dimensions\.(space|radius)\b|DimensionStyle|TypographyStyle|TypographySize` e por `AppTheme\.typography\.(headline|title|body|label)\b|typography\.(headline|title|body)\b` (o `label` dos cards do painel vem de `typography.of(context)` e é o estilo novo).
+- [x] 6. Busca vazia em `lib/` pelos símbolos removidos: `getPageHorizontalPadding|isSmallMobile|isTablet|isLaptop|isSmallDesktop|GeneralState|LoginSetup|carouselOptions|monthName|CommonTitle|AppHeadline|AppTitle\b|AppLabel\b|AppBody\b|PagesCircles|CustomIconButton|AppRoundedImage|HighlightsCarousel|\bAvatar\b`.
+- [x] 7. As bordas continuam com as mesmas espessuras (1, 2, 3 e 4) sem mudar nenhuma chamada fora do tema; `white` continua disponível.
+- [x] 8. `fvm flutter analyze` sem erros nem avisos novos e `dart format` sem diferenças nos arquivos alterados.
+- [x] 9. `fvm flutter build web --release` termina sem erro.
+- [x] 10. Home, todas as publicações, listagem de categoria, um post, biblioteca (índice, lista e documento), nossa história, equipe, fale com a gente, colabore, 404 e login sem mudança visual em 390, 768 e 1280 px, comparando com capturas tiradas antes da remoção, e sem `overflow` nem asserção de layout no modo debug.
+- [x] 11. `pubspec.yaml`, `assets/`, `web/` e os arquivos gerados (`*.g.dart`, `*.freezed.dart`) sem alteração.
 
 ## Fora do escopo
 - Assets sem uso (imagens, ícones PNG antigos), os arquivos de fonte Dosis em `assets/fonts/` e a **declaração da família Dosis no `pubspec.yaml`**: vão para a spec 028-assets-sem-uso.
@@ -88,3 +88,4 @@ Não mudam modelos de dados, coleções e regras do Firebase, rotas nem a injeç
   - Entram como código morto achado na busca: `general_state.dart`, `login_setup.dart` (duplicado, nunca chamado), `carousel_options.dart`, `monthName` e os quatro testes de largura sem uso em `ScreenUtils`.
   - `ServerFailure` e `spacing.s96` ficam (contrato de erros e escala nova).
   - Dosis no `pubspec.yaml`, arquivos de fonte e pacotes sem uso ficam para a 028.
+- 2026-10-07 (implementação): sem divergência. Ficou de fora, por não estar na spec, os campos `highlightsDialog*` e as ações `showHighlights`/`hideHighlights` de `fetch_highlights_store.dart`, sem uso desde a remoção do carrossel (exige `build_runner`).
