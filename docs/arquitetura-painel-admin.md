@@ -8,7 +8,6 @@ CMS do Observatório, em `lib/app/features/admin/`. Segue as camadas e o fluxo `
 lib/app/features/admin/
 ├── admin_setup.dart                  # DI: auth + PanelSetup e SidebarSetup
 ├── login/
-│   ├── login_setup.dart
 │   ├── infra/                        # firebase_auth_datasource, auth_repository, auth_failure
 │   └── presentation/                 # signin_page, stores/ (auth_store, auth_state)
 ├── panel/

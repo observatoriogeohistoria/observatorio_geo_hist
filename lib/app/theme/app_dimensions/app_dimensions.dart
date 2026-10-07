@@ -4,39 +4,7 @@ class AppDimensions {
   AppDimensions._();
   static AppDimensions get instance => AppDimensions._();
 
-  DimensionStyle space = const DimensionStyle._(
-    mini: 4.0,
-    small: 8.0,
-    medium: 16.0,
-    large: 24.0,
-    huge: 32.0,
-    massive: 48.0,
-    immense: 64.0,
-    gigantic: 96.0,
-  );
-
-  DimensionStyle radius = const DimensionStyle._(
-    mini: 2.0,
-    small: 4.0,
-    medium: 8.0,
-    large: 12.0,
-    huge: 24.0,
-    massive: 48.0,
-    immense: 64.0,
-    gigantic: 100.0,
-  );
-
-  DimensionStyle stroke = const DimensionStyle._(
-    mini: 0.5,
-    small: 1.0,
-    medium: 2.0,
-    large: 3.0,
-    huge: 4.0,
-    massive: 5.0,
-    immense: 6.0,
-    gigantic: 7.0,
-  );
-
+  StrokeScale stroke = const StrokeScale._();
   SpacingScale spacing = const SpacingScale._();
   RadiiScale radii = const RadiiScale._();
   ShadowStyle shadows = const ShadowStyle._();
@@ -723,6 +691,15 @@ class SpacingScale {
   final double s96 = 96.0;
 }
 
+class StrokeScale {
+  const StrokeScale._();
+
+  final double small = 1.0;
+  final double medium = 2.0;
+  final double large = 3.0;
+  final double huge = 4.0;
+}
+
 class RadiiScale {
   const RadiiScale._();
 
@@ -768,26 +745,4 @@ class FocusStyle {
   final double offset = 2.0;
 
   Color get color => AppColors.instance.accent;
-}
-
-class DimensionStyle {
-  const DimensionStyle._({
-    required this.mini,
-    required this.small,
-    required this.medium,
-    required this.large,
-    required this.huge,
-    required this.massive,
-    required this.immense,
-    required this.gigantic,
-  });
-
-  final double mini;
-  final double small;
-  final double medium;
-  final double large;
-  final double huge;
-  final double massive;
-  final double immense;
-  final double gigantic;
 }
