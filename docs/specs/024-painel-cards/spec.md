@@ -1,6 +1,6 @@
 # 024. Cards do painel nos tokens novos
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 6, item 6.2
 - **Protótipo:** não há telas do painel. A referência são os tokens e componentes do site público.
 - **Criada em:** 2026-10-06
@@ -67,3 +67,4 @@ Sem mudança em dados, ações ou permissões: só quem pode editar vê os botõ
 - 2026-10-06: situação do usuário como selo, vinda do plano.
 - 2026-10-06: na implementação, a foto do membro (64 a 96 px) não comporta "Erro ao carregar a imagem" sem estourar. Em espaço menor que 160 px de largura, a falha mostra só o ícone, com a frase no tooltip e no nome acessível; em espaço maior, ícone e frase como antes.
 - 2026-10-06: "Destaque" passa de `accent` para `accentStrong` sobre `accentSoft`: `accent` nesse fundo dá 4,38:1, abaixo do mínimo de 4,5:1.
+- 2026-10-06: verificada com ressalvas (ações e listas que dependem de login não conferidas; ver `verificacao.md`).

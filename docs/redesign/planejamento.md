@@ -134,7 +134,7 @@ O painel e o login mantêm o layout e o comportamento atuais. Trocam `num_extens
 | # | Entrega | Principais arquivos |
 |---|---|---|
 | 6.1 | Login e estrutura do painel: página de login, barra lateral, página do painel, cabeçalhos e seções → specs/023-painel-login-estrutura, concluído com ressalvas | `admin/login/*`, `admin/sidebar/*`, `panel_page.dart`, `section_header_*`, `form_label.dart`, `sections/*`; em `core/`: `app_card`, `app_scrollbar`, `app_icon_button`, `circular_loading`, `linear_loading` |
-| 6.2 | Cards do painel: publicações (os 10 tipos), categoria, mídia, membro da equipe e usuário → specs/024-painel-cards | `panel/.../cards/*`; em `core/`: `divider`, `app_network_image`, `image_error_content` |
+| 6.2 | Cards do painel: publicações (os 10 tipos), categoria, mídia, membro da equipe e usuário → specs/024-painel-cards, concluído com ressalvas | `panel/.../cards/*`; em `core/`: `divider`, `app_network_image`, `image_error_content` |
 | 6.3 | Diálogos e formulários do painel (inclusive os 10 de publicação) e o campo do login → specs/025-painel-dialogos-campos | `panel/.../dialogs/*`; em `core/`: `right_aligned_dialog`, `field/*`, `switch_button`, `editor_quill`, `app_video_player`, `loading_content` |
 | 6.4 | Biblioteca do painel (lista da área, filtros, card e diálogo de documento) e faixa "Ambiente de Testes" → specs/026-painel-biblioteca | `library_list_page.dart`, `filters.dart`, `library_document_card.dart`, `create_or_update_document_dialog.dart`, `environment_banner.dart` |
 
