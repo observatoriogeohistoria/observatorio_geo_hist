@@ -58,6 +58,7 @@ class SidebarMenuItem extends StatelessWidget {
             selected: itemIsSelected,
             expanded: subItems.isNotEmpty ? showSubItems : null,
             label: item.title,
+            onTap: onItemClicked,
             excludeSemantics: true,
             child: AppFocusRing(
               borderRadius: radius,
@@ -116,9 +117,12 @@ class SidebarMenuItem extends StatelessWidget {
                   overlayColor: WidgetStatePropertyAll(colors.surface),
                   foregroundColor: WidgetStateProperty.resolveWith(
                     (states) {
-                      return states.contains(WidgetState.hovered) || subItemIsSelected(subItem)
-                          ? colors.accent
-                          : colors.inkSecondary;
+                      // Sobre o fundo de hover e foco o acento fica abaixo de 4,5:1; o tom forte não.
+                      final highlighted = states.contains(WidgetState.hovered) ||
+                          states.contains(WidgetState.focused) ||
+                          states.contains(WidgetState.pressed);
+                      if (highlighted) return colors.accentStrong;
+                      return subItemIsSelected(subItem) ? colors.accent : colors.inkSecondary;
                     },
                   ),
                   textStyle: WidgetStatePropertyAll(typography.regular),

@@ -13,7 +13,7 @@ class ToggleCollpaseButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool isCollapsed;
 
-  /// No celular e no tablet a barra abre como menu, e o botão só a fecha.
+  /// No celular a barra ocupa a tela como menu e o botão só a fecha; no tablet ele recolhe.
   final bool isMenu;
 
   @override
