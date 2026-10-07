@@ -677,6 +677,10 @@ class ComponentSizes {
   final double panelImagePreviewHeight = 88.0;
   final double panelImagePreviewAspect = 4 / 3;
 
+  final double panelEditorTallFactor = 0.7;
+  final double panelEditorFactor = 0.4;
+  final double panelEditorShortFactor = 0.3;
+
   final double networkImageSkeletonHeight = 253.0;
   final double imageErrorIcon = 24.0;
 

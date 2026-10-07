@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/editor_quill.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/formatters/mont_year_input_formatter.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -105,34 +105,31 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTitle.medium(
-            text: _isUpdate ? 'Atualizar post' : 'Criar post',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          PanelDialogTitle(text: _isUpdate ? 'Atualizar post' : 'Criar post'),
+          SizedBox(height: AppTheme.dimensions.spacing.s32),
           AppTextField(
             controller: _titleController,
             labelText: 'Título',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _subtitleController,
             labelText: 'Subtítulo',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppImageField(
             imageUrlController: _imageUrlController,
             imageController: _imageController,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _imageCaptionController,
             labelText: 'Legenda da imagem',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _dateController,
             labelText: 'Data',
@@ -145,7 +142,7 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
             ],
             validator: Validators.isValidMonthAndYear,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           const FormLabel(text: 'Autores'),
           for (var i = 0; i < _authorsControllers.length; i++)
             Column(
@@ -155,40 +152,46 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
                   validator: Validators.isNotEmpty,
                 ),
                 SizedBox(
-                  height: AppTheme.dimensions.space.mini.verticalSpacing,
+                  height: AppTheme.dimensions.spacing.s4,
                 ),
               ],
             ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              IconButton(
+              AppIconButton(
+                tooltip: 'Adicionar autor',
+                icon: Icons.add,
+                color: AppTheme.colors.accent,
                 onPressed: () => setState(() => _authorsControllers.add(TextEditingController())),
-                icon: Icon(Icons.add, color: AppTheme.colors.orange),
               ),
-              IconButton(
+              AppIconButton(
+                tooltip: 'Remover autor',
+                icon: Icons.remove,
+                color: AppTheme.colors.accent,
                 onPressed: () {
                   if (_authorsControllers.length == 1) return;
                   setState(() => _authorsControllers.removeLast());
                 },
-                icon: Icon(Icons.remove, color: AppTheme.colors.orange),
               ),
             ],
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           const FormLabel(text: 'Conteúdo'),
           EditorQuill(
             saveController: _contentController,
             initialContent: _initialContent,
-            height: MediaQuery.of(context).size.height * 0.7,
+            height: MediaQuery.sizeOf(context).height *
+                AppTheme.dimensions.components.panelEditorTallFactor,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           const FormLabel(text: 'Observação'),
           EditorQuill(
             saveController: _observationController,
             initialContent: _initialObservation,
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.sizeOf(context).height *
+                AppTheme.dimensions.components.panelEditorFactor,
           ),
         ],
       ),

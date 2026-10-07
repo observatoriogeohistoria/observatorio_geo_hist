@@ -6,7 +6,6 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_butt
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
@@ -61,7 +60,7 @@ class _PostFormDialogState extends State<PostFormDialog> {
                     ),
                   ),
                 ),
-                SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+                SizedBox(height: AppTheme.dimensions.spacing.s24),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Row(
@@ -73,7 +72,7 @@ class _PostFormDialogState extends State<PostFormDialog> {
                           onPressed: () => GoRouter.of(context).pop(),
                           isDisabled: postsStore.state is CrudLoadingState,
                         ),
-                        SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+                        SizedBox(width: AppTheme.dimensions.spacing.s16),
                       ],
                       PrimaryButton.medium(
                         text: isLoading ? 'Aguarde...' : (widget.isUpdate ? 'Atualizar' : 'Criar'),
