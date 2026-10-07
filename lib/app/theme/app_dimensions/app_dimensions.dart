@@ -660,6 +660,11 @@ class ComponentSizes {
   final double panelTopBarIcon = 28.0;
   double panelContentPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 32);
   final double panelSectionGap = 24.0;
+  final double panelCardPaddingH = 20.0;
+  final double panelCardPaddingV = 16.0;
+  final double panelCardActionsGap = 8.0;
+  final double panelCardTextGap = 4.0;
+  double panelMemberPhoto(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 64, 80, 96);
 
   final double networkImageSkeletonHeight = 253.0;
   final double imageErrorIcon = 24.0;

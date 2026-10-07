@@ -1,6 +1,6 @@
 # 024. Cards do painel nos tokens novos
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 6, item 6.2
 - **Protótipo:** não há telas do painel. A referência são os tokens e componentes do site público.
 - **Criada em:** 2026-10-06
@@ -18,7 +18,7 @@ Os cards das listas do painel (publicações, categorias, mídias, equipe e usu�
 Layout, textos e ações continuam os mesmos. Muda a aparência:
 - Número do item em `inkSecondary`; título em fonte de título (Bricolage) e `ink`; dados secundários em Figtree e `inkSecondary` (hoje em cinza claro, sem contraste).
 - Rótulos "Área(s):" e "Categoria:" em `accent`; o valor em `ink`.
-- Situação vira selo com texto e fundo: "Publicado" em `success` sobre `successSurface`, "Não publicado" em `error` sobre `errorSurface`, "Destaque" em `accent` sobre `accentSoft`. A informação deixa de depender só da cor e do sublinhado. O texto "Não Publicado" passa a "Não publicado" e "DESTAQUE" a "Destaque".
+- Situação vira selo com texto e fundo: "Publicado" em `success` sobre `successSurface`, "Não publicado" em `error` sobre `errorSurface`, "Destaque" em `accentStrong` sobre `accentSoft`. A informação deixa de depender só da cor e do sublinhado. O texto "Não Publicado" passa a "Não publicado" e "DESTAQUE" a "Destaque".
 - Botões de ação: publicar, destacar e editar em `accent`; excluir em `error`; copiar link em `inkSecondary`. Todos com o mesmo tamanho fixo.
 - Situação do usuário também vira selo: "Usuário ativo" em `success` sobre `successSurface`, "Usuário inativo" em `error` sobre `errorSurface`.
 - Link do Lattes no card de membro em `accent` (hoje laranja claro, sem contraste).
@@ -28,7 +28,7 @@ Layout, textos e ações continuam os mesmos. Muda a aparência:
 ## Estados
 - **Carregando, vazio e erro da lista:** da spec 023.
 - **Imagem carregando:** esqueleto com as cores novas.
-- **Imagem com falha:** ícone e "Erro ao carregar a imagem" em `inkSecondary` e Figtree, dentro do espaço da foto.
+- **Imagem com falha:** ícone e "Erro ao carregar a imagem" em `inkSecondary` e Figtree, dentro do espaço da foto. Na foto do membro, que é pequena, só o ícone, com a frase no tooltip e no nome acessível.
 - **Casos de borda:** título longo quebra em várias linhas sem empurrar os botões para fora; URL de mídia longa quebra sem rolagem horizontal; card sem categoria não mostra a linha "Categoria".
 
 ## Responsivo
@@ -65,3 +65,5 @@ Sem mudança em dados, ações ou permissões: só quem pode editar vê os botõ
 ## Histórico de mudanças
 - 2026-10-06: criada e aprovada.
 - 2026-10-06: situação do usuário como selo, vinda do plano.
+- 2026-10-06: na implementação, a foto do membro (64 a 96 px) não comporta "Erro ao carregar a imagem" sem estourar. Em espaço menor que 160 px de largura, a falha mostra só o ícone, com a frase no tooltip e no nome acessível; em espaço maior, ícone e frase como antes.
+- 2026-10-06: "Destaque" passa de `accent` para `accentStrong` sobre `accentSoft`: `accent` nesse fundo dá 4,38:1, abaixo do mínimo de 4,5:1.
