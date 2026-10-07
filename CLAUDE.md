@@ -55,7 +55,7 @@ Convenções: arquivos em `snake_case`; sufixos `*_datasource`, `*_repository`, 
 
 ### Regras de design ao implementar
 - Use os tokens de `lib/app/theme/` (`AppTheme.colors`, `.dimensions`, `.typography`). **Não escreva cores, tamanhos de fonte ou espaçamentos soltos no código.** Se faltar um token, crie-o no tema.
-- Componentes novos usam tamanhos fixos por faixa de largura (celular < 600, tablet 600–1023, desktop ≥ 1024) e largura máxima de conteúdo. **Não use** `num_extension` (`.scale`, `.fontSize`, `.verticalSpacing`) em código novo. Ele só é removido quando todas as telas migrarem.
+- Componentes novos usam tamanhos fixos por faixa de largura (celular < 600, tablet 600–1023, desktop ≥ 1024) e largura máxima de conteúdo. Nada escala pelo tamanho da tela.
 - Texto secundário nunca em cinza claro: contraste mínimo de 4,5:1 (a regra vale para texto e para ícones informativos).
 - Toda área clicável tem foco visível por teclado e nome acessível (`Semantics`/tooltip). Preferir `InkWell`/botões do Material a `GestureDetector` solto.
 - Imagens vêm dos autores, sem proporção garantida: use proporção fixa com `cover`, placeholder quando não houver imagem e trate falha de carregamento.

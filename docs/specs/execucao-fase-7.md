@@ -1,6 +1,7 @@
 # Execução da Fase 7
 
 - **Início:** 2026-10-07
+- **Término:** 2026-10-07
 - **Branch:** refactor/redesign-fase-7 → PR para develop
 
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |
@@ -10,12 +11,15 @@
 
 ## Decisões tomadas sem a pessoa
 - (geral) Fase 7 dividida em duas specs: código legado primeiro, porque só depois dele sair dá para saber quais assets, fontes e pacotes ficaram sem uso.
-
 - 027: `white` e `stroke` ficam (30 e 31 usos em telas novas); `stroke` vira escala própria com 1 a 4. `ServerFailure` e `spacing.s96` ficam, sem uso, por fazerem parte do contrato e da escala. Família Dosis no pubspec, `google_fonts` e `carousel_slider` passam para a 028.
 - 027 (verificação): campos e ações sem uso do diálogo de destaques em `fetch_highlights_store.dart` removidos nesta spec, com o `.g.dart` regerado; critério 11 ajustado.
 - 028: além de `google_fonts` e `carousel_slider`, saem outros 5 pacotes sem import (`cached_network_image`, `flutter_staggered_grid_view`, `file_saver`, `flutter_quill_extensions`, `cupertino_icons`) e um arquivo vazio versionado por engano em `packages/`. Pacotes de geração, análise e teste ficam.
 - 028 (verificação): nenhuma correção. Depois do merge, builds locais antigos precisam de `flutter clean` (registro de plugins com `file_saver`).
 
 ## Ressalvas
+- 027 e 028: painel admin não conferido na tela (sem credenciais de teste); coberto por `analyze` e build. Comparação por captura cobre os primeiros 1600 px de cada tela.
 
 ## Ocorrências
+- 028: o `build_runner` regera `library_document_store.g.dart` com quebras de linha diferentes das versionadas (já acontecia antes da fase); arquivo mantido como está.
+- Pasta `macos/` não versionada apareceu na raiz durante a execução; não pertence à fase e ficou de fora dos commits.
+- `CLAUDE.md`: regra sobre `num_extension` trocada, já que o arquivo não existe mais.
