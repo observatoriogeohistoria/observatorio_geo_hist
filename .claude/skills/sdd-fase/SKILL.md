@@ -103,7 +103,7 @@ Se a pessoa tiver informado credenciais de teste na conversa, a orquestradora as
 ## 2. Encerramento (orquestradora)
 1. Conferir `git status` limpo e `git log` com os commits da fase.
 2. Atualizar a memória do projeto (estado do redesign) e, se preciso, `docs/arquitetura.md` com o que a fase introduziu de padrão novo, de forma breve.
-3. Fechar `execucao-<fase>.md` com a data de término, fazer commit (`docs: encerramento da <fase>`) e push.
+3. Levar a fase para `docs/specs/historico-redesign.md` (linha na tabela, ressalvas que seguem em aberto e lições novas, de forma breve) e apagar `execucao-<fase>.md`, que fica no git. Fazer commit (`docs: encerramento da <fase>`) e push. Use o conteúdo do `execucao` lido antes de apagar para montar o PR.
 4. **Abrir PR para `develop`** com `gh pr create --base develop --head refactor/redesign-<fase>`. Siga o formato do PR da Fase 0 (#19): título `feat: redesign <fase> — <resumo>`; corpo com "Resumo" (links para planejamento e protótipo), uma seção por spec com links para spec e verificação e os pontos principais, "Decisões tomadas no modo autônomo", "Ressalvas", "Como testar" e a linha de atribuição definida pelo ambiente. Se já existir PR aberto da branch, só atualize a descrição.
    - Depois de abrir, acompanhe o CI (`ci.yml` roda em PR para `develop`) com as ferramentas `ccd_pr` (ou `gh pr checks`). Se falhar por causa da fase, corrija com a mesma regra de 2 tentativas, commit `fix:` e push. **Não faça merge** nem ative auto-merge: o merge em `develop` publica no ambiente de dev e fica com a pessoa.
 5. Responder à pessoa com o **resumo final**:

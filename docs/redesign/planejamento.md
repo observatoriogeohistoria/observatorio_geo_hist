@@ -3,8 +3,7 @@
 Este documento registra as decisões de design tomadas, o que ainda falta no protótipo e a ordem de implementação no Flutter. A seção Geoensine fica fora deste escopo. O painel administrativo entra só na Fase 6, como migração técnica, sem redesenho de layout.
 
 - **Protótipo (v5, com todas as telas):** https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH
-- **Situação:** protótipo aprovado na direção geral. Implementação ainda não iniciada.
-- **Primeira entrega:** Home (e o "casco" compartilhado por todas as páginas: navbar, rodapé, botões e tokens).
+- **Situação:** Fases 0 a 7 concluídas em 2026-10-07. Resumo e ressalvas em aberto em [historico-redesign.md](../specs/historico-redesign.md).
 
 ---
 
@@ -37,10 +36,10 @@ Itens vindos da revisão do protótipo. Todos já estão refletidos no protótip
 **Status:** o protótipo v5 aplica P-01 a P-12. O P-11 foi fechado como seleção livre de categorias (sem "Todas" e sem agrupamento). A busca (P-13) ficou como ideia futura (seção 9).
 
 ### Geral e rodapé
-- **P-01** Remover "Colabore" do rodapé.
-- **P-02** Incluir redes sociais no rodapé (Instagram, Facebook e YouTube, como no componente `Support` atual).
-- **P-03** "Realização e apoio": usar os logos reais (`assets/images/partners`) e adicionar efeito ao passar o mouse. Proposta: logos em escala de cinza e opacidade reduzida que ganham cor, sobem 2px e crescem levemente no hover. Se o parceiro tiver link, o logo é clicável e mostra foco visível.
-- **P-04** Menu: dentro de História e Geografia continuam listadas as **categorias reais** (vindas do banco de dados), sem agrupamento. No desktop abrem ao passar o mouse ou clicar. No celular, cada área é uma sanfona com suas categorias, como no site atual (`NavbarMobileMenu`). Em Geografia, Expogeo e Geoensine ficam antes, separados por um divisor. Os nomes no protótipo são exemplos.
+- **P-01** Remover "Colabore" do rodapé. → specs/002-botoes-navbar-rodape, concluído
+- **P-02** Incluir redes sociais no rodapé (Instagram, Facebook e YouTube, como no componente `Support` atual). → specs/002-botoes-navbar-rodape, concluído
+- **P-03** "Realização e apoio": usar os logos reais (`assets/images/partners`) e adicionar efeito ao passar o mouse. Proposta: logos em escala de cinza e opacidade reduzida que ganham cor, sobem 2px e crescem levemente no hover. Se o parceiro tiver link, o logo é clicável e mostra foco visível. → specs/009-apoio-contato, concluído
+- **P-04** Menu: dentro de História e Geografia continuam listadas as **categorias reais** (vindas do banco de dados), sem agrupamento. No desktop abrem ao passar o mouse ou clicar. No celular, cada área é uma sanfona com suas categorias, como no site atual (`NavbarMobileMenu`). Em Geografia, Expogeo e Geoensine ficam antes, separados por um divisor. Os nomes no protótipo são exemplos. → specs/002-botoes-navbar-rodape, concluído
 
 ### Post
 - **P-05** Remover o "tempo de leitura". → specs/012-post-base, concluído
@@ -49,10 +48,10 @@ Itens vindos da revisão do protótipo. Todos já estão refletidos no protótip
 - **P-08** Layout-base do post com variações por tipo (ver seção 3, item "Tipos de post"). → specs/012-post-base, specs/021-tipos-post-obras, specs/022-tipos-post-midia-eventos, concluído (layout-base com ponto único por tipo e blocos de todos os tipos)
 
 ### Biblioteca
-- **P-09** A entrada da biblioteca lista as **áreas** (Geografia e História), como no site atual, e não tipos de documento. Remover os cartões inventados ("Artigos científicos", "Livros e capítulos"). Mostrar a contagem por área.
-- **P-10** Tipos de documento: apenas **Tese** e **Dissertação**. Remover "Artigo" do filtro.
-- **P-11** Filtro **Categoria** (16 valores fixos em `DocumentCategory`): seleção livre de quantas categorias o usuário quiser (o documento aparece se tiver qualquer uma delas). Sem "Todas" e sem agrupamento.
-- **P-12** Mostrar contagem por tipo e por categoria nos filtros (o datasource já tem `countByType` e `countByCategory`).
+- **P-09** A entrada da biblioteca lista as **áreas** (Geografia e História), como no site atual, e não tipos de documento. Remover os cartões inventados ("Artigos científicos", "Livros e capítulos"). Mostrar a contagem por área. → specs/016-biblioteca-indice-lista, concluído
+- **P-10** Tipos de documento: apenas **Tese** e **Dissertação**. Remover "Artigo" do filtro. → specs/016-biblioteca-indice-lista, concluído
+- **P-11** Filtro **Categoria** (16 valores fixos em `DocumentCategory`): seleção livre de quantas categorias o usuário quiser (o documento aparece se tiver qualquer uma delas). Sem "Todas" e sem agrupamento. → specs/016-biblioteca-indice-lista, concluído
+- **P-12** Mostrar contagem por tipo e por categoria nos filtros (o datasource já tem `countByType` e `countByCategory`). → specs/016-biblioteca-indice-lista, concluído
 
 ### Busca geral
 - **P-13** Busca geral do site: desenhada no protótipo, mas **fora das fases atuais** (ver seção 9).
@@ -70,7 +69,7 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 | T-03 | Nossa história (completa) | `/nossa-historia` | Criada na spec 007 como página provisória, com o texto completo que estava na Home. A Home mostra só o resumo. Redesenho na Fase 2 → specs/011-nossa-historia-pessoa, concluído |
 | T-04 | Fale com a gente | `/contato` | Continua abrindo o programa de e-mail (`mailto:`). Novidades: validação dos campos e tela de confirmação com "Copiar mensagem" → specs/018-fale-com-a-gente, concluído com ressalvas: não conferidos no app o leitor de tela e a sugestão de autopreenchimento |
 | T-05 | Colabore | `/colaborar` | Continua existindo, acessada pelo cabeçalho da categoria → specs/019-colabore, concluído com ressalvas: categoria sem a opção, leitor de tela e autopreenchimento não conferidos no app |
-| T-06 | Biblioteca: lista por área | `/biblioteca/:area` | Filtros, resultados e paginação |
+| T-06 | Biblioteca: lista por área | `/biblioteca/:area` | Filtros, resultados e paginação → specs/016-biblioteca-indice-lista, concluído |
 | T-07 | Biblioteca: detalhe do documento | `/biblioteca/:area/documento/:slug` | Metadados e visualizador do documento → specs/017-biblioteca-documento, concluído com ressalvas: painel não conferido no app |
 | T-08 | Tipos de post | `/publicacoes/:area/:category/:id` | Hoje são 10 layouts (artigo, documento, livro, filme, revista, podcast, música, produção acadêmica, evento, pesquisa). Proposta: um layout-base único com blocos específicos por tipo. O protótipo mostra Livro, Filme, Podcast/Música, Evento e Pesquisa; os demais reaproveitam esses blocos. Todos os tipos de post concluídos → specs/012-post-base, specs/021-tipos-post-obras, specs/022-tipos-post-midia-eventos, concluído com ressalvas: leitor de tela e painel não conferidos no app |
 | T-09 | Busca | novo | **Ideia futura.** Desenhada no protótipo (aba "Busca (ideia)"), sem implementação planejada. Ver seção 9 |
@@ -138,7 +137,7 @@ O painel e o login mantêm o layout e o comportamento atuais. Trocam `num_extens
 | 6.3 | Diálogos e formulários do painel (inclusive os 10 de publicação) e o campo do login → specs/025-painel-dialogos-campos, concluído com ressalvas | `panel/.../dialogs/*`; em `core/`: `right_aligned_dialog`, `field/*`, `switch_button`, `editor_quill`, `app_video_player`, `loading_content` |
 | 6.4 | Biblioteca do painel (lista da área, filtros, card e diálogo de documento) e faixa "Ambiente de Testes" → specs/026-painel-biblioteca, concluído com ressalvas | `library_list_page.dart`, `filters.dart`, `library_document_card.dart`, `create_or_update_document_dialog.dart`, `environment_banner.dart` |
 
-Arquivos sem uso (`avatar`, `highlights_dialog_carousel`, `common_title`, `pages_circles`, `custom_icon_button`, `app_rounded_image`, `getPageHorizontalPadding` em `screen_utils` e os componentes de texto Dosis `AppHeadline`, `AppTitle`, `AppLabel` e `AppBody`, em `core/components/text/`, usados só por `common_title` e `highlights_dialog_carousel`) não são migrados: saem na Fase 7.
+Arquivos sem uso não foram migrados: saíram na Fase 7 (specs/027-remocao-codigo-legado).
 
 **Aceite:** login e painel funcionam como antes (entrar, listar, criar, editar e excluir cada tipo de conteúdo) em 390, 768 e 1280 px, sem `overflow`. Nenhum arquivo fora de `theme/` e de `num_extension.dart` importa `num_extension` nem usa a tipografia Dosis ou as cores antigas.
 
@@ -176,10 +175,7 @@ Nenhuma no momento.
 ---
 
 ## 8. Riscos e cuidados
-- **Fonte em tempo de execução:** a fonte baixada do Google pode causar troca visível de estilo no carregamento. Por isso a decisão D-01 (embutir). Detalhe técnico: o Google Fonts entrega a Bricolage como fonte variável. No Flutter, o mais seguro é gerar arquivos estáticos dos pesos usados (600, 700 e 800) e declará-los em `pubspec.yaml`.
-- **Remoção de `num_extension`:** ela afeta o tamanho de textos e espaçamentos de praticamente todas as telas. Só sai na Fase 7, depois de todas migradas.
 - **Imagens sem padrão:** qualquer componente com imagem precisa ser testado com imagens muito altas, muito largas, ausentes e com falha de carregamento.
-- **Regressões visuais:** como as telas migram gradualmente, conferir a navegação entre uma tela nova e uma antiga a cada fase.
 
 ---
 

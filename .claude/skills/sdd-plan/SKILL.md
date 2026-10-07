@@ -70,6 +70,6 @@ Legenda: `- [ ]` a fazer, `- [x]` feita.
 ```
 
 ## Regras
-- Respeite as convenções do `CLAUDE.md` (tokens do tema, sem `num_extension` em código novo, estados obrigatórios).
+- Respeite as convenções do `CLAUDE.md` (tokens do tema, estados obrigatórios).
 - Componentes compartilhados (navbar, rodapé, botões etc.) mudam várias telas: inclua uma tarefa de conferir as outras telas que os usam.
 - Nada de tarefas vagas ("melhorar", "ajustar"). Cada uma deve ter um resultado verificável.

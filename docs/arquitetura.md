@@ -56,12 +56,13 @@ Definidas em [app_router.dart](../lib/app/router/app_router.dart):
 ```
 /                                     Home
 /membro/:id                           Membro da equipe
+/publicacoes                          Todas as publicações
 /publicacoes/:area/:category          Lista de posts da categoria
 /publicacoes/:area/:category/:id      Detalhe do post
 /contato                              Contato
 /colaborar                            Colaboração
 /manifesto                            Manifesto
-/nossa-historia                       Nossa história (provisória, redesenho na Fase 2)
+/nossa-historia                       Nossa história
 /biblioteca                           Biblioteca
 /biblioteca/:area                     Documentos da área
 /biblioteca/:area/documento/:id       Detalhe de documento
@@ -148,7 +149,7 @@ A página pública e a do painel são separadas: `/biblioteca/:area` monta a `Li
 
 - **Entrada** (`LibraryPage`): `ReadingPageScaffold` + `PageHeader` e um `LibraryAreaTile` por área, com as contagens do `LibraryIndexStore` (`countByType` por área; sem contagem, a linha de números some).
 - **Lista** (`LibraryAreaPage` + `LibraryListing`, em `library/presentation/components/listing/`): busca com "Buscar em" (`LibrarySearchField`), tipo, ano e categorias (`LibraryFilterSelect`, `LibraryYearField`, `LibraryCategoryFilter`, menus do Material), chips de filtros ativos, contagem, `LibraryDocumentRow` e "Ver mais documentos". Filtros valem na hora e não vão para a URL.
-- **Store por página:** `LibraryListingStore` (fábrica) guarda filtros, itens, cursor, total do filtro e contagens da área por tipo e categoria (nulas se falharem), com descarte de respostas velhas. Páginas de 20. Vazio sem filtros é "área sem documentos"; com filtros ou busca, "nenhum resultado". A busca compara o termo em minúsculas com `title_lower`, `author_lower` e `institution_lower`, gravados pelo painel (e preenchidos nos antigos por `tool/library_search_fields`).
+- **Store por página:** `LibraryListingStore` (fábrica) guarda filtros, itens, cursor, total do filtro e contagens da área por tipo e categoria (nulas se falharem), com descarte de respostas velhas. Páginas de 20. Vazio sem filtros é "área sem documentos"; com filtros ou busca, "nenhum resultado". A busca compara o termo em minúsculas com `title_lower`, `author_lower` e `institution_lower`, gravados pelo painel (e preenchidos nos antigos por um script avulso, já removido).
 - **Dados:** `fetchListing` e `countListing` (mesma consulta, `count()`) filtram por área, tipo, ano, categorias (`arrayContainsAny`) e intervalo de prefixo no campo buscado, sempre em ordem de `createdAt`, e pedem um item a mais para saber se há próxima página. O painel segue com `_fetchDocuments`. Busca combinada com outro filtro depende de índices próprios (ver [deploy-ambientes.md](deploy-ambientes.md#índices-do-firestore)).
 - **Detalhe** (`LibraryDocumentDetailedPage`, em `components/document/`): `ReadingPageScaffold`, coluna de 920 px com migalhas (área do documento, não a da URL), `LibraryDocumentHeader` (selo, título, ficha e "Abrir documento") e `LibraryDocumentPdfViewer`, que baixa o PDF e desenha uma página por vez com o `pdfx`, sem `PdfView`. Store próprio, `LibraryDocumentStore` (fábrica), com carregando (`LibraryDocumentSkeleton`), sucesso, não encontrado (404) e erro. Selo (`TypeBadge`) e etiqueta (`CategoryTag`) vêm de `core/components/chips/labels.dart`, os mesmos da lista; a ficha é o `FactSheet` de `core/components/reading/`.
 - **Endereço do documento:** o trecho final é o identificador, como nos posts. O painel não pede mais slug; o campo continua gravado nos documentos antigos só para links já compartilhados: o detalhe procura pelo identificador e, sem resultado, pelo slug (`fetchDocumentByAddress`). O arquivo enviado se chama `<identificador>.<extensão>` e é apagado pelo endereço salvo.

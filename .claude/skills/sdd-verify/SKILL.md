@@ -18,7 +18,7 @@ Confere o resultado com evidência, critério por critério. **Não corrige** o 
 2. **Compilação:** `fvm flutter build web --release` conclui sem erro (use quando a spec mexe em rotas, assets ou dependências; caso contrário, o `analyze` basta).
 3. **Cada critério de aceite** da spec: marque `passou`, `não passou` ou `não conferido`, com a evidência (arquivo e linha, saída de comando ou o que foi visto na tela). Não escreva "passou" sem ter verificado.
 4. **Telas:** rode o app (skill `run`, ou `fvm flutter run -d chrome`) e olhe em 390, 768 e 1280 px, comparando com a aba do protótipo. Confira estados de carregamento, vazio, erro e sem imagem. Abra ao menos uma vez em modo debug (`flutter run`): o build release esconde asserções de layout. Se não for possível abrir o app, diga isso e marque os critérios visuais como `não conferido`.
-5. **Regras do `CLAUDE.md`:** procure no código alterado cores, tamanhos de fonte e espaçamentos soltos, uso novo de `num_extension`, `GestureDetector` sem foco/semântica, textos secundários com pouco contraste e comentários fora das regras (que dizem o quê, repetem o nome, citam spec, fase ou protótipo, ou código desativado). Remova os que sobrarem.
+5. **Regras do `CLAUDE.md`:** procure no código alterado cores, tamanhos de fonte e espaçamentos soltos, `GestureDetector` sem foco/semântica, textos secundários com pouco contraste e comentários fora das regras (que dizem o quê, repetem o nome, citam spec, fase ou protótipo, ou código desativado). Remova os que sobrarem.
 6. **Regressões:** para componentes compartilhados (navbar, rodapé, botões etc.), abra ao menos uma outra tela que os use e confirme que continua funcionando.
 7. **Fora do escopo:** confirme que nada da lista "Fora do escopo" foi alterado.
 
