@@ -1,6 +1,6 @@
 # 027. Remoção do código legado
 
-- **Status:** implementada
+- **Status:** verificada
 - **Item do planejamento:** Fase 7 (Limpeza), parte 1: código. Lista de arquivos sem uso na Fase 6.
 - **Protótipo:** não se aplica (limpeza sem mudança visual).
 - **Criada em:** 2026-10-07
@@ -36,6 +36,7 @@ Levantamento por busca em `lib/` (2026-10-07). Nenhuma tela em uso depende do qu
 - `theme/app_typography`: os quatro estilos Dosis (`headline`, `title`, `body`, `label` com tamanhos `small/medium/big`), seu tipo de apoio e o enum de tamanho, usados só pelos componentes de texto que saem. É o único uso do pacote `google_fonts`.
 - `theme/app_dimensions`: as escalas antigas `space` e `radius` (com `mini`…`gigantic`), usadas só por `getPageHorizontalPadding` e pelos arquivos que saem.
 - `core/utils/date/date.dart`: o getter `monthName`, sem uso (achado na busca). `shortDate` e `formatMonthYear` seguem em uso.
+- `features/home/presentation/stores/fetch_highlights_store.dart`: os observáveis `highlightsDialogWasShown` e `highlightsDialogIsOpen` e as ações `showHighlights` e `hideHighlights`, usados só pelo carrossel que sai (achado na verificação). O `.g.dart` é regerado pelo `build_runner`.
 
 **O que parecia legado mas segue em uso (fica):**
 - Cor `white`: 30 usos em telas novas (texto sobre acento e sobre imagem). Fica como token.
@@ -69,7 +70,7 @@ Não mudam modelos de dados, coleções e regras do Firebase, rotas nem a injeç
 - [x] 8. `fvm flutter analyze` sem erros nem avisos novos e `dart format` sem diferenças nos arquivos alterados.
 - [x] 9. `fvm flutter build web --release` termina sem erro.
 - [x] 10. Home, todas as publicações, listagem de categoria, um post, biblioteca (índice, lista e documento), nossa história, equipe, fale com a gente, colabore, 404 e login sem mudança visual em 390, 768 e 1280 px, comparando com capturas tiradas antes da remoção, e sem `overflow` nem asserção de layout no modo debug.
-- [x] 11. `pubspec.yaml`, `assets/`, `web/` e os arquivos gerados (`*.g.dart`, `*.freezed.dart`) sem alteração.
+- [x] 11. `pubspec.yaml`, `assets/`, `web/` e os arquivos gerados (`*.g.dart`, `*.freezed.dart`) sem alteração, exceto `fetch_highlights_store.g.dart`, regerado pelo `build_runner`.
 
 ## Fora do escopo
 - Assets sem uso (imagens, ícones PNG antigos), os arquivos de fonte Dosis em `assets/fonts/` e a **declaração da família Dosis no `pubspec.yaml`**: vão para a spec 028-assets-sem-uso.
@@ -89,3 +90,4 @@ Não mudam modelos de dados, coleções e regras do Firebase, rotas nem a injeç
   - `ServerFailure` e `spacing.s96` ficam (contrato de erros e escala nova).
   - Dosis no `pubspec.yaml`, arquivos de fonte e pacotes sem uso ficam para a 028.
 - 2026-10-07 (implementação): sem divergência. Ficou de fora, por não estar na spec, os campos `highlightsDialog*` e as ações `showHighlights`/`hideHighlights` de `fetch_highlights_store.dart`, sem uso desde a remoção do carrossel (exige `build_runner`).
+- 2026-10-07 (verificação): os campos e ações sem uso de `fetch_highlights_store.dart` entram na spec, porque são código morto do carrossel removido (a 005 já previa limpá-los na Fase 7). O critério 11 passa a admitir o `.g.dart` regerado desse store. Verificada sem ressalvas (ver `verificacao.md`).
