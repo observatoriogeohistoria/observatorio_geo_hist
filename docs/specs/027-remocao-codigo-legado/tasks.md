@@ -5,12 +5,12 @@ Legenda: `- [ ]` a fazer, `- [x]` feita.
 Critérios da spec, na ordem: 1 arquivos apagados; 2 sem `num_extension`; 3 sem Dosis; 4 sem cores antigas; 5 sem `space`/`radius` e tipografia antiga; 6 sem símbolos removidos; 7 bordas e `white` iguais; 8 `analyze` e formato; 9 build; 10 telas sem mudança visual; 11 `pubspec`, assets, `web/` e gerados intocados.
 
 ## Grupo A: estado de antes
-- [ ] **A1.** Antes de qualquer remoção: build release na cópia ASCII, servir com fallback de SPA e capturar Home, todas as publicações, uma listagem de categoria, um post, biblioteca (índice, lista e um documento), nossa história, uma página de membro da equipe, fale com a gente, colabore, 404 e login em 390, 768 e 1280 px. Guardar no scratchpad. Arquivos: nenhum. Atende: 10.
+- [x] **A1.** Antes de qualquer remoção: build release na cópia ASCII, servir com fallback de SPA e capturar Home, todas as publicações, uma listagem de categoria, um post, biblioteca (índice, lista e um documento), nossa história, uma página de membro da equipe, fale com a gente, colabore, 404 e login em 390, 768 e 1280 px. Guardar no scratchpad. Arquivos: nenhum. Atende: 10.
 
 ## Grupo B: componentes e código sem uso (commit 1)
-- [ ] **B1.** Apagar `app_rounded_image.dart`, `common_title.dart`, `app_headline.dart`, `app_title.dart`, `app_label.dart`, `app_body.dart`, a pasta `pages_circles/`, `custom_icon_button.dart`, `home/.../components/avatar.dart`, a pasta `home/.../components/dialog/` e a pasta `core/utils/carousel_options/`. Atende: 1, 6.
-- [ ] **B2.** Apagar `core/models/general_state.dart` e `features/admin/login/login_setup.dart`; tirar `monthName` de `core/utils/date/date.dart`; tirar `login_setup.dart` da árvore em `docs/arquitetura-painel-admin.md`. Atende: 1, 6.
-- [ ] **B3.** `fvm flutter analyze` (cópia ASCII) limpo e `dart format` em `date.dart`. Commit `refactor: remove componentes e código sem uso`. Atende: 8.
+- [x] **B1.** Apagar `app_rounded_image.dart`, `common_title.dart`, `app_headline.dart`, `app_title.dart`, `app_label.dart`, `app_body.dart`, a pasta `pages_circles/`, `custom_icon_button.dart`, `home/.../components/avatar.dart`, a pasta `home/.../components/dialog/` e a pasta `core/utils/carousel_options/`. Atende: 1, 6.
+- [x] **B2.** Apagar `core/models/general_state.dart` e `features/admin/login/login_setup.dart`; tirar `monthName` de `core/utils/date/date.dart`; tirar `login_setup.dart` da árvore em `docs/arquitetura-painel-admin.md`. Atende: 1, 6.
+- [x] **B3.** `fvm flutter analyze` (cópia ASCII) limpo e `dart format` em `date.dart`. Commit `refactor: remove componentes e código sem uso`. Atende: 8.
 
 ## Grupo C: `num_extension` e tokens antigos (commit 2)
 - [ ] **C1.** `screen_utils.dart`: tirar `getPageHorizontalPadding`, `isSmallMobile`, `isTablet`, `isLaptop`, `isSmallDesktop` e o import de `num_extension`. Atende: 2, 6.
