@@ -6,7 +6,7 @@ Critérios da spec, na ordem: 1 arquivos sem tokens antigos; 2 sem valores solto
 
 ## Grupo A: tema e faixa
 - [ ] **A1.** Token `panelFiltersWidth` (300) em `ComponentSizes`. Arquivo: `app_dimensions.dart`. Atende: 2.
-- [ ] **A2.** Faixa de ambiente com estilo `label` da tipografia nova. Arquivo: `environment_banner.dart`. Atende: 1, 9, 11.
+- [x] **A2.** Faixa de ambiente com estilo `label` da tipografia nova. Arquivo: `environment_banner.dart`. Atende: 1, 9, 11. Dentro de um `Material` para não herdar o sublinhado de erro.
 
 ## Grupo B: filtros e card
 - [ ] **B1.** `Filters`: largura `panelFiltersWidth` no desktop e cheia no painel do celular e do tablet; fundo `surface` e borda `line`; "Filtros" em `h3`; grupos com `FormLabel`; espaçamentos `spacing`. Arquivo: `filters.dart`. Atende: 1, 2, 10.
