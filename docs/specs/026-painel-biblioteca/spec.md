@@ -26,7 +26,7 @@ Layout, textos e fluxos continuam os mesmos, com os ajustes abaixo:
 - **Diálogo de documento:** mesmo visual dos diálogos da spec 025.
 - **Divisórias da lista** em `line`.
 - **Vazio:** "Nenhum documento encontrado." em texto `inkSecondary`. "Criar documento" e "Filtros" continuam visíveis, para que dê para criar o primeiro documento ou mudar um filtro que não trouxe resultado.
-- **Erro:** mensagem do erro com o botão "Tentar novamente", no padrão de erro das telas públicas.
+- **Erro:** mensagem do erro com o botão "Tentar de novo", no padrão de erro das telas públicas.
 - **Faixa de ambiente:** texto em Figtree, no estilo de rótulo do site, mantendo cor e altura.
 
 ## Estados
@@ -42,6 +42,7 @@ Layout, textos e fluxos continuam os mesmos, com os ajustes abaixo:
 
 ## Acessibilidade
 - Foco visível e nome em "Voltar", "Fechar filtros", editar, excluir, "Aplicar Filtros", "Limpar Filtros", "Criar documento", "Filtros" e "Carregar mais".
+- O card do documento, que abre o documento ao ser clicado, tem foco visível e o nome "Abrir documento: <título>".
 - Texto e ícones informativos com contraste mínimo de 4,5:1; o texto da faixa de ambiente sobre `accent` também.
 
 ## Dados e regras de negócio
@@ -53,7 +54,8 @@ Sem mudança em consultas, filtros (seleção livre de categorias, tipos Tese e 
 - [ ] Busca no projeto: fora de `theme/`, de `num_extension.dart` e dos arquivos sem uso listados na Fase 7, nenhum arquivo usa `num_extension`, Dosis ou cores antigas.
 - [ ] Filtrar, limpar filtros, carregar mais, criar, editar e excluir documento funcionam como antes.
 - [ ] Com filtro sem resultado, aparecem "Nenhum documento encontrado.", "Filtros" e (para quem edita) "Criar documento".
-- [ ] Com erro de carregamento, aparece a mensagem e "Tentar novamente" recarrega.
+- [ ] Com erro de carregamento, aparece a mensagem e "Tentar de novo" recarrega.
+- [ ] O card do documento é alcançável por Tab, com foco visível, e Enter abre o documento.
 - [ ] Todos os botões citados em Acessibilidade alcançáveis por Tab, com foco visível e nome acessível.
 - [ ] Contraste ≥ 4,5:1 nos textos e ícones informativos e na faixa de ambiente.
 - [ ] Sem `overflow` nem rolagem horizontal em 390, 768 e 1280 px, com e sem o painel de filtros aberto.
@@ -70,3 +72,4 @@ Sem mudança em consultas, filtros (seleção livre de categorias, tipos Tese e 
 
 ## Histórico de mudanças
 - 2026-10-06: criada e aprovada.
+- 2026-10-06: botão de erro "Tentar de novo" (componente das telas públicas) e foco no card do documento, vindos do plano.

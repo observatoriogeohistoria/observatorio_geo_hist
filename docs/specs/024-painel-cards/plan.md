@@ -25,7 +25,7 @@ Os 10 cards de tipo de publicação são quase iguais (número + título; o de a
 
 ## Decisões técnicas
 - **Selo novo `StatusBadge`** ao lado de `TypeBadge` e `CategoryTag`, com o mesmo preenchimento (`badgePaddingH/V`), raio `pill` e estilo `tag` em negrito. Os tons usam pares que já existem: `success`/`successSurface`, `error`/`errorSurface`, `accent`/`accentSoft`.
-- **Situação do usuário** ("Usuário ativo"/"Usuário inativo") também vira selo, pelo mesmo motivo dos selos de publicação. A spec fala só das publicações; ver "Riscos".
+- **Situação do usuário** ("Usuário ativo"/"Usuário inativo") também vira selo, pelo mesmo motivo dos selos de publicação.
 - **Estilos de texto:** número em `label` + `inkSecondary`; título em `h3` + `ink`; linhas secundárias em `regular` + `inkSecondary`; "Área(s):"/"Categoria:" em `formLabel` + `accent`, com o valor em `regular` + `ink`. "N Posts" da categoria em `formLabel` + `accent`.
 - **Tokens novos em `ComponentSizes`:** `panelCardPaddingH` (20), `panelCardPaddingV` (16), `panelCardActionsGap` (8), `panelCardTextGap` (4), `panelMemberPhoto(breakpoint)` (64/80/96), `panelMemberPhotoRadius` = `radii.r12`. O preenchimento do card passa ao `AppCard` pelos cards (o padrão do `AppCard` continua o da 023).
 - **Altura do esqueleto em `AppNetworkImage`:** sem altura, usa `height ?? width` quando a largura é finita e um token `networkImageSkeletonHeight` (253, o valor atual a 1440 px) quando não é. Assim some o `.verticalSpacing`.
@@ -36,7 +36,6 @@ Os 10 cards de tipo de publicação são quase iguais (número + título; o de a
 Nenhum pacote, rota ou `build_runner`. Depende da 023 implementada.
 
 ## Riscos e cuidados
-- **Spec:** a situação do usuário como selo não está escrita na spec. Proposta: acrescentar à seção "Comportamento" da 024 e registrar no histórico.
 - **`AppNetworkImage`** também é usado pelo carrossel antigo e pelo `avatar` (ambos sem uso, saem na Fase 7). Nenhuma tela em uso além do card de membro.
 - **`AppDivider`** só aparece no card de publicação.
 - **`IntrinsicHeight`** com texto longo pode custar desempenho em listas grandes; o número de itens por página do painel é pequeno (mídias pagina de 20 em 20).

@@ -20,6 +20,7 @@ Layout, textos e ações continuam os mesmos. Muda a aparência:
 - Rótulos "Área(s):" e "Categoria:" em `accent`; o valor em `ink`.
 - Situação vira selo com texto e fundo: "Publicado" em `success` sobre `successSurface`, "Não publicado" em `error` sobre `errorSurface`, "Destaque" em `accent` sobre `accentSoft`. A informação deixa de depender só da cor e do sublinhado. O texto "Não Publicado" passa a "Não publicado" e "DESTAQUE" a "Destaque".
 - Botões de ação: publicar, destacar e editar em `accent`; excluir em `error`; copiar link em `inkSecondary`. Todos com o mesmo tamanho fixo.
+- Situação do usuário também vira selo: "Usuário ativo" em `success` sobre `successSurface`, "Usuário inativo" em `error` sobre `errorSurface`.
 - Link do Lattes no card de membro em `accent` (hoje laranja claro, sem contraste).
 - Foto do membro com tamanho fixo por faixa de largura e cantos arredondados. Sem foto, o card fica como hoje (sem o espaço da foto).
 - Divisória em `line`.
@@ -63,3 +64,4 @@ Sem mudança em dados, ações ou permissões: só quem pode editar vê os botõ
 
 ## Histórico de mudanças
 - 2026-10-06: criada e aprovada.
+- 2026-10-06: situação do usuário como selo, vinda do plano.

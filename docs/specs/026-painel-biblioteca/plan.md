@@ -24,7 +24,7 @@ No fim, uma busca no projeto inteiro confirma que só restam tokens antigos em `
 - **Barra do topo:** mesma aparência da barra do painel (023): `accent`, título em `h3` branco, "Voltar" com `AppIconButton` (nome e foco já embutidos).
 - **Largura dos filtros:** hoje é 20 % da tela, o que dá cerca de 80 px no painel do celular. Passa a `panelFiltersWidth` (300) no desktop e à largura toda dentro do painel aberto por "Filtros" (celular e tablet). O painel do tablet fica com no máximo `mobileMenuMaxWidth` (420, já usado pelo menu do site).
 - **Fundo dos filtros** `surface` com borda direita `line` no desktop; título "Filtros" em `h3`/`ink`; "Tipo de Produção" e "Categorias" com o `FormLabel` da 023. "Fechar filtros" passa a `accent`.
-- **Erro com `StateErrorInline`:** o botão das telas públicas diz "Tentar de novo", e a spec escreveu "Tentar novamente". Ver "Riscos".
+- **Erro com `StateErrorInline`**, com o botão "Tentar de novo" das telas públicas.
 - **Vazio:** `Text` em `regular`/`inkSecondary`, como na `CrudSection` (023).
 - **Card do documento:** hoje a linha inteira abre o documento público com `GestureDetector`, sem foco por teclado. Passa a `InkWell` + `AppFocusRing`, com `Semantics` "Abrir documento: <título>". Ícone do livro em `inkSecondary` com tamanho de token; título em `h3`/`ink`; dados em `regular`/`inkSecondary`; editar em `accent` e excluir em `error` (padrão da 024).
 - **Divisórias da lista** com `AppDivider` (já em `line` desde a 024) no lugar do `Divider` padrão.
@@ -35,7 +35,6 @@ No fim, uma busca no projeto inteiro confirma que só restam tokens antigos em `
 Nenhum pacote, rota ou `build_runner`. Depende da 023, 024 e 025 implementadas.
 
 ## Riscos e cuidados
-- **Spec:** proponho trocar "Tentar novamente" por "Tentar de novo" na 026, para usar o componente e o texto das telas públicas. Também falta na spec o card do documento como área clicável com foco; proponho acrescentá-lo em "Acessibilidade" (é regra do CLAUDE.md).
 - **`environment_banner`** aparece em todas as telas do ambiente dev; só a fonte muda.
 - **Painel de filtros no celular:** hoje é estreito demais; com a largura nova, conferir que "Aplicar Filtros" e "Limpar Filtros" ficam visíveis sem rolagem horizontal.
 - **Biblioteca pública** não usa nenhum destes arquivos; nada muda lá.
