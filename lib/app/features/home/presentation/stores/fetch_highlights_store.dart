@@ -22,12 +22,6 @@ abstract class FetchHighlightsStoreBase with Store {
   /// Busca feita sem categorias: vale buscar de novo quando elas chegarem.
   bool fetchedWithoutCategories = false;
 
-  @observable
-  bool highlightsDialogWasShown = false;
-
-  @observable
-  bool highlightsDialogIsOpen = false;
-
   @action
   Future<void> fetchHighlights(List<CategoryModel> categories) async {
     state = FetchHighlightsLoadingState();
@@ -44,16 +38,5 @@ abstract class FetchHighlightsStoreBase with Store {
         state = FetchHighlightsSuccessState();
       },
     );
-  }
-
-  @action
-  void showHighlights() {
-    highlightsDialogWasShown = true;
-    highlightsDialogIsOpen = true;
-  }
-
-  @action
-  void hideHighlights() {
-    highlightsDialogIsOpen = false;
   }
 }
