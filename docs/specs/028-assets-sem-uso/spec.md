@@ -1,6 +1,6 @@
 # 028. Assets, fontes e pacotes sem uso
 
-- **Status:** implementada
+- **Status:** verificada
 - **Item do planejamento:** Fase 7 (Limpeza), parte 2: assets, fontes e pacotes. Continua a [027](../027-remocao-codigo-legado/spec.md), que deixou para cá a família Dosis, `google_fonts` e `carousel_slider`.
 - **Protótipo:** não se aplica (limpeza sem mudança visual).
 - **Criada em:** 2026-10-07
@@ -75,3 +75,4 @@ Não mudam modelos, coleções e regras do Firebase, rotas, o painel nem os íco
 ## Histórico de mudanças
 - 2026-10-07: criada e aprovada (modo autônomo).
 - 2026-10-07: critério 6 ajustado. O `build_runner` regera `library_document_store.g.dart` com quebras de linha diferentes das versionadas (o arquivo foi formatado com largura 100). Acontece igual antes da remoção dos pacotes, então não vem desta spec; o arquivo versionado fica como está e o critério passa a aceitar diferença só de formatação.
+- 2026-10-07: verificada (modo autônomo), sem correções.
