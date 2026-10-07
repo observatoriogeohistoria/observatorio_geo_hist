@@ -5,11 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/panel_field_decoration.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -66,24 +64,34 @@ class _AppDocumentFieldState extends State<AppDocumentField> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final styles = AppTheme.typography.of(context);
+    final secondary = styles.small.copyWith(color: colors.inkSecondary);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TabBar(
-          labelColor: AppTheme.colors.darkGray,
-          unselectedLabelColor: AppTheme.colors.gray,
-          indicatorColor: AppTheme.colors.orange,
-          overlayColor: WidgetStateProperty.all(AppTheme.colors.lightOrange.withValues(alpha: 0.2)),
-          labelStyle: AppTheme.typography.label.big,
+          labelColor: colors.ink,
+          unselectedLabelColor: colors.inkSecondary,
+          indicatorColor: colors.accent,
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.focused)) return colors.accentSoftBorder;
+            if (states.contains(WidgetState.hovered)) return colors.accentSoft;
+            return null;
+          }),
+          labelStyle: styles.formLabel,
+          unselectedLabelStyle: styles.formLabel,
           controller: _tabController,
           tabs: const [
             Tab(text: 'URL'),
             Tab(text: 'Upload'),
           ],
         ),
-        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+        SizedBox(height: AppTheme.dimensions.spacing.s16),
         SizedBox(
-          height: 72,
+          height: components.panelTabViewHeight,
           child: TabBarView(
             controller: _tabController,
             children: [
@@ -94,10 +102,10 @@ class _AppDocumentFieldState extends State<AppDocumentField> with SingleTickerPr
                 validator: Validators.isValidUrl,
               ),
               if (!AppEnvironment.current.hasStorage)
-                AppLabel.small(
-                  text: 'Upload desabilitado no ambiente de testes (sem Storage configurado). '
-                      'Use a aba URL.',
-                  color: AppTheme.colors.accentStrong,
+                Text(
+                  'Upload desabilitado no ambiente de testes (sem Storage configurado). '
+                  'Use a aba URL.',
+                  style: styles.small.copyWith(color: colors.accentStrong),
                 )
               else
                 Row(
@@ -110,19 +118,20 @@ class _AppDocumentFieldState extends State<AppDocumentField> with SingleTickerPr
                           text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
                           onPressed: _pickDocumentWeb,
                         ),
-                        SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                        SizedBox(height: AppTheme.dimensions.spacing.s4),
                         if (_uploadedDocumentBytes == null)
-                          AppLabel.small(
-                            text: 'Nenhum arquivo selecionado',
-                            color: AppTheme.colors.gray,
-                          ),
+                          Text('Nenhum arquivo selecionado', style: secondary),
                       ],
                     ),
                     if (_uploadedDocumentName != null) ...[
-                      SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-                      AppTitle.small(
-                        text: _uploadedDocumentName!,
-                        color: AppTheme.colors.darkGray,
+                      SizedBox(width: AppTheme.dimensions.spacing.s8),
+                      Flexible(
+                        child: Text(
+                          _uploadedDocumentName!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: PanelFieldDecoration.textStyle(context),
+                        ),
                       ),
                     ],
                   ],

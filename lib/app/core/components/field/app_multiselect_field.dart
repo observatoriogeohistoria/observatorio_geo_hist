@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/panel_field_decoration.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppMultiSelectField<T> extends StatelessWidget {
@@ -21,9 +20,13 @@ class AppMultiSelectField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final gap = AppTheme.dimensions.spacing.s8;
+    final borderWidth = AppTheme.dimensions.components.formFieldBorder;
+
     return Wrap(
-      spacing: AppTheme.dimensions.space.small.horizontalSpacing,
-      runSpacing: AppTheme.dimensions.space.small.verticalSpacing,
+      spacing: gap,
+      runSpacing: gap,
       children: [
         ...items.map(
           (item) {
@@ -35,8 +38,16 @@ class AppMultiSelectField<T> extends StatelessWidget {
                 children: [
                   Checkbox(
                     value: isSelected,
-                    activeColor: AppTheme.colors.orange,
-                    checkColor: AppTheme.colors.white,
+                    activeColor: colors.accent,
+                    checkColor: colors.page,
+                    side: WidgetStateBorderSide.resolveWith(
+                      (states) => BorderSide(
+                        color: states.contains(WidgetState.selected)
+                            ? colors.accent
+                            : colors.fieldBorder,
+                        width: borderWidth,
+                      ),
+                    ),
                     onChanged: (checked) {
                       final newSelected = List<T>.from(selectedItems);
 
@@ -51,10 +62,9 @@ class AppMultiSelectField<T> extends StatelessWidget {
                     },
                   ),
                   Flexible(
-                    child: AppLabel.big(
-                      text: itemToString(item),
-                      color: AppTheme.colors.darkGray,
-                      notSelectable: true,
+                    child: Text(
+                      itemToString(item),
+                      style: PanelFieldDecoration.textStyle(context),
                     ),
                   ),
                 ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/panel_field_decoration.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class SwitchButton extends StatefulWidget {
@@ -34,20 +34,23 @@ class _SwitchStateButton extends State<SwitchButton> {
     return Row(
       children: [
         Expanded(
-          child: AppTitle.small(
-            text: widget.title,
-            color: AppTheme.colors.darkGray,
+          child: ExcludeSemantics(
+            child: Text(widget.title, style: PanelFieldDecoration.textStyle(context)),
           ),
         ),
-        Switch(
-          value: _value,
-          onChanged: (value) {
-            if (widget.isDisabled) return;
+        Semantics(
+          label: widget.title,
+          child: Switch(
+            value: _value,
+            onChanged: (value) {
+              if (widget.isDisabled) return;
 
-            setState(() => _value = value);
-            widget.onChanged(value);
-          },
-          activeThumbColor: AppTheme.colors.orange,
+              setState(() => _value = value);
+              widget.onChanged(value);
+            },
+            activeThumbColor: AppTheme.colors.page,
+            activeTrackColor: AppTheme.colors.accent,
+          ),
         ),
       ],
     );
