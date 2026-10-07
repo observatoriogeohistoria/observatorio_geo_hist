@@ -4,11 +4,10 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/image_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -59,24 +58,34 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final styles = AppTheme.typography.of(context);
+    final secondary = styles.small.copyWith(color: colors.inkSecondary);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TabBar(
-          labelColor: AppTheme.colors.darkGray,
-          unselectedLabelColor: AppTheme.colors.gray,
-          indicatorColor: AppTheme.colors.orange,
-          overlayColor: WidgetStateProperty.all(AppTheme.colors.lightOrange.withValues(alpha: 0.2)),
-          labelStyle: AppTheme.typography.label.big,
+          labelColor: colors.ink,
+          unselectedLabelColor: colors.inkSecondary,
+          indicatorColor: colors.accent,
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.focused)) return colors.accentSoftBorder;
+            if (states.contains(WidgetState.hovered)) return colors.accentSoft;
+            return null;
+          }),
+          labelStyle: styles.formLabel,
+          unselectedLabelStyle: styles.formLabel,
           controller: _tabController,
           tabs: const [
             Tab(text: 'URL'),
             Tab(text: 'Upload'),
           ],
         ),
-        SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+        SizedBox(height: AppTheme.dimensions.spacing.s16),
         SizedBox(
-          height: 72,
+          height: components.panelTabViewHeight,
           child: TabBarView(
             controller: _tabController,
             children: [
@@ -87,10 +96,10 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
                 validator: Validators.isValidUrl,
               ),
               if (!AppEnvironment.current.hasStorage)
-                AppLabel.small(
-                  text: 'Upload desabilitado no ambiente de testes (sem Storage configurado). '
-                      'Use a aba URL.',
-                  color: AppTheme.colors.accentStrong,
+                Text(
+                  'Upload desabilitado no ambiente de testes (sem Storage configurado). '
+                  'Use a aba URL.',
+                  style: styles.small.copyWith(color: colors.accentStrong),
                 )
               else
                 Row(
@@ -102,20 +111,27 @@ class _AppImageFieldState extends State<AppImageField> with SingleTickerProvider
                           text: _isLoading ? 'Carregando...' : 'Selecionar arquivo',
                           onPressed: _pickImageWeb,
                         ),
-                        SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                        SizedBox(height: AppTheme.dimensions.spacing.s4),
                         if (_uploadedImageBytes == null)
-                          AppLabel.small(
-                            text: 'Nenhuma imagem selecionada',
-                            color: AppTheme.colors.gray,
-                          ),
+                          Text('Nenhuma imagem selecionada', style: secondary),
                       ],
                     ),
                     if (_uploadedImageBytes != null) ...[
-                      SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
-                      Image.memory(
-                        _uploadedImageBytes!,
-                        height: 120.verticalSpacing,
-                        fit: BoxFit.cover,
+                      SizedBox(width: AppTheme.dimensions.spacing.s8),
+                      SizedBox(
+                        height: components.panelImagePreviewHeight,
+                        child: AspectRatio(
+                          aspectRatio: components.panelImagePreviewAspect,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r8),
+                            child: Image.memory(
+                              _uploadedImageBytes!,
+                              fit: BoxFit.cover,
+                              semanticLabel: _uploadedImageName,
+                              errorBuilder: (_, __, ___) => const ImageErrorContent(compact: true),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ],

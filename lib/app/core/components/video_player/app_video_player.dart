@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading_content/loading_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 import 'package:video_player/video_player.dart';
 
@@ -178,19 +177,19 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
                         AppIconButton(
                           tooltip: _isPlaying ? 'Pausar vídeo' : 'Reproduzir vídeo',
                           icon: _isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: Colors.white,
-                          size: 32,
+                          color: AppTheme.colors.page,
+                          size: AppTheme.dimensions.components.videoControlIcon,
                           focusNode: widget.autofocusControls ? _playPauseFocus : null,
                           onPressed: _togglePlayPause,
                         ),
                         AppIconButton(
                           tooltip: _isMuted ? 'Ativar som' : 'Silenciar',
                           icon: _isMuted ? Icons.volume_off : Icons.volume_up,
-                          color: Colors.white,
-                          size: 32,
+                          color: AppTheme.colors.page,
+                          size: AppTheme.dimensions.components.videoControlIcon,
                           onPressed: _toggleMute,
                         ),
-                        SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+                        SizedBox(width: AppTheme.dimensions.spacing.s8),
                         Expanded(
                           child: AppMouseRegion(
                             child: VideoProgressIndicator(
@@ -200,7 +199,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
                             ),
                           ),
                         ),
-                        SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+                        SizedBox(width: AppTheme.dimensions.spacing.s8),
                       ],
                     ),
                   ),

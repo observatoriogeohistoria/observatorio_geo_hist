@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/no_scroll_configuration.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppScrollbar extends StatelessWidget {
@@ -15,16 +14,18 @@ class AppScrollbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+
     return RawScrollbar(
       controller: controller,
       thumbVisibility: true,
       trackVisibility: false,
-      thickness: AppTheme.dimensions.space.small.horizontalSpacing,
-      radius: Radius.circular(AppTheme.dimensions.radius.small),
-      thumbColor: AppTheme.colors.lightOrange.withValues(alpha: 0.35),
+      thickness: components.scrollbarThickness,
+      radius: Radius.circular(AppTheme.dimensions.radii.pill),
+      thumbColor: AppTheme.colors.accentSoftBorder,
       child: NoScrollConfiguration(
         child: Padding(
-          padding: EdgeInsets.only(right: AppTheme.dimensions.space.medium.horizontalSpacing),
+          padding: EdgeInsets.only(right: components.scrollbarInset),
           child: child,
         ),
       ),

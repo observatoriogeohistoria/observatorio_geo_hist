@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/editor_quill.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -89,42 +88,40 @@ class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTitle.medium(
-            text: _isUpdate ? 'Atualizar música' : 'Criar música',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          PanelDialogTitle(text: _isUpdate ? 'Atualizar música' : 'Criar música'),
+          SizedBox(height: AppTheme.dimensions.spacing.s32),
           AppTextField(
             controller: _titleController,
             labelText: 'Nome da música',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _artistController,
             labelText: 'Nome do artista',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppImageField(
             imageUrlController: _imageUrlController,
             imageController: _imageController,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _descriptionController,
             labelText: 'Descrição',
             validator: Validators.isNotEmpty,
             maxLines: 3,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           const FormLabel(text: 'Letra'),
           EditorQuill(
             saveController: _lyricsController,
             initialContent: _initialLyrics,
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.sizeOf(context).height *
+                AppTheme.dimensions.components.panelEditorShortFactor,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _linkController,
             labelText: 'Link',

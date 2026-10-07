@@ -1,6 +1,6 @@
 # 025. Diálogos e campos do painel nos tokens novos
 
-- **Status:** aprovada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 6, item 6.3
 - **Protótipo:** não há telas do painel. A referência são os tokens e componentes do site público.
 - **Criada em:** 2026-10-06
@@ -68,3 +68,5 @@ Sem mudança em validações, campos obrigatórios, upload, envio da imagem ante
 
 ## Histórico de mudanças
 - 2026-10-06: criada e aprovada.
+- 2026-10-06 (implementação): botões de adicionar e remover autor só existem no diálogo de artigo; filme, documento e música têm campo único e só mudam título e espaçamentos. A área das abas "URL"/"Upload" passa de 72 para 96 px para caber a mensagem de erro da URL, e a prévia da imagem enviada fica com 88 px de altura em proporção 4:3 (os 120 px do plano eram cortados para a altura da área). O formulário de contato do site não usa os campos de `core/components/field/`; a conferência pública fica no vídeo da Home.
+- 2026-10-06 (verificação): campos de autor do artigo ganham o rótulo "Autor N" para ter nome acessível. Ressalvas aceitas sem a pessoa (modo autônomo): o Tab dentro do editor de texto rico continua fazendo recuo, e o que depende de login fica não conferido.

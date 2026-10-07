@@ -10,7 +10,6 @@ import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
@@ -19,6 +18,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_post_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_actions.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_title.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/empty_list_message.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
@@ -100,8 +100,17 @@ class _PostsSectionState extends State<PostsSection> {
     super.dispose();
   }
 
+  bool get _hasFilter =>
+      (_searchText?.isNotEmpty ?? false) ||
+      _searchArea != null ||
+      _searchCategory != null ||
+      _isPublished != null ||
+      _isHighlighted != null;
+
   @override
   Widget build(BuildContext context) {
+    final spacing = AppTheme.dimensions.spacing;
+
     return Observer(
       builder: (context) {
         bool canEdit = authStore.user?.permissions.canEditPostsSection ?? false;
@@ -125,7 +134,7 @@ class _PostsSectionState extends State<PostsSection> {
               canEdit: canEdit,
               isLoading: categoriesLoading,
             ),
-            SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+            SizedBox(height: spacing.s32),
             SectionHeaderActions(
               onTextChange: (text) => _onSearch(1, text: text),
               onAreaChange: (area) => _onSearch(2, area: area),
@@ -146,9 +155,7 @@ class _PostsSectionState extends State<PostsSection> {
 
                 if (state is CrudLoadingState && state.isRefreshing) {
                   return Padding(
-                    padding: EdgeInsets.only(
-                      right: AppTheme.dimensions.space.medium.horizontalSpacing,
-                    ),
+                    padding: EdgeInsets.only(right: spacing.s16),
                     child: const LinearLoading(),
                   );
                 }
@@ -156,7 +163,7 @@ class _PostsSectionState extends State<PostsSection> {
                 return const SizedBox.shrink();
               },
             ),
-            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+            SizedBox(height: AppTheme.dimensions.components.panelSectionGap),
             Expanded(
               child: Observer(
                 builder: (context) {
@@ -173,20 +180,23 @@ class _PostsSectionState extends State<PostsSection> {
 
                   final posts = postsStore.posts[selectedPostType] ?? [];
 
+                  if (postsState is CrudSuccessState && posts.isEmpty) {
+                    return EmptyListMessage(
+                      text:
+                          _hasFilter ? 'Nenhuma publicação encontrada.' : 'Nenhum item cadastrado.',
+                    );
+                  }
+
                   return AppScrollbar(
                     controller: _scrollController,
                     child: ListView.separated(
                       controller: _scrollController,
                       physics: const ClampingScrollPhysics(),
-                      padding: EdgeInsets.only(
-                        bottom: AppTheme.dimensions.space.large.verticalSpacing,
-                      ),
+                      padding: EdgeInsets.only(bottom: spacing.s24),
                       separatorBuilder: (context, index) {
                         final isLast = index == posts.length - 1;
 
-                        return isLast
-                            ? const SizedBox()
-                            : SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing);
+                        return isLast ? const SizedBox() : SizedBox(height: spacing.s16);
                       },
                       itemCount: posts.length,
                       itemBuilder: (context, index) {

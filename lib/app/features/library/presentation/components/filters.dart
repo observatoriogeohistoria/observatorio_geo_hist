@@ -7,10 +7,8 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button
 import 'package:observatorio_geo_hist/app/core/components/field/app_multiselect_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/stores/filter_documents_store.dart';
@@ -43,18 +41,24 @@ class _FiltersState extends State<Filters> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = ScreenUtils.isDesktop(context);
+    final colors = AppTheme.colors;
+    final spacing = AppTheme.dimensions.spacing;
+    final components = AppTheme.dimensions.components;
+    final fieldGap = SizedBox(height: spacing.s16);
 
     return Observer(
       builder: (context) {
         return Container(
-          width: MediaQuery.of(context).size.width * 0.2,
-          color: AppTheme.colors.lighterGray,
-          padding: EdgeInsets.only(
-            left: AppTheme.dimensions.space.medium.horizontalSpacing,
-            right: AppTheme.dimensions.space.medium.horizontalSpacing,
-            top: AppTheme.dimensions.space.medium.verticalSpacing,
-            bottom: AppTheme.dimensions.space.small.verticalSpacing,
+          width: isDesktop ? components.panelFiltersWidth : double.infinity,
+          decoration: BoxDecoration(
+            color: colors.surface,
+            border: isDesktop
+                ? Border(
+                    right: BorderSide(color: colors.line, width: AppTheme.dimensions.stroke.small),
+                  )
+                : null,
           ),
+          padding: EdgeInsets.fromLTRB(spacing.s24, spacing.s24, spacing.s24, spacing.s16),
           child: Column(
             children: [
               Expanded(
@@ -69,34 +73,38 @@ class _FiltersState extends State<Filters> {
                           child: AppIconButton(
                             tooltip: 'Fechar filtros',
                             icon: Icons.close,
-                            color: AppTheme.colors.orange,
-                            size: 32,
+                            // O acento comum fica abaixo de 4,5:1 sobre o fundo do painel.
+                            color: colors.accentStrong,
+                            size: components.panelTopBarIcon,
                             onPressed: () => Navigator.pop(context),
                           ),
                         ),
-                      AppHeadline.medium(
-                        text: 'Filtros',
-                        color: AppTheme.colors.darkGray,
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          'Filtros',
+                          style: AppTheme.typography.of(context).h3.copyWith(color: colors.ink),
+                        ),
                       ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+                      fieldGap,
                       AppTextField(
                         controller: _titleController,
                         labelText: 'Título',
                         onChanged: (value) => _filterStore.setTitle(value),
                       ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+                      fieldGap,
                       AppTextField(
                         controller: _authorController,
                         labelText: 'Autor',
                         onChanged: (value) => _filterStore.setAuthor(value),
                       ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+                      fieldGap,
                       AppTextField(
                         controller: _institutionController,
                         labelText: 'Instituição',
                         onChanged: (value) => _filterStore.setInstitution(value),
                       ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+                      fieldGap,
                       AppTextField(
                         controller: _yearController,
                         labelText: 'Ano',
@@ -104,12 +112,8 @@ class _FiltersState extends State<Filters> {
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         onChanged: (value) => _filterStore.setYear(int.tryParse(value)),
                       ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                      AppTitle.medium(
-                        text: "Tipo de Produção",
-                        color: AppTheme.colors.orange,
-                      ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+                      fieldGap,
+                      const FormLabel(text: 'Tipo de Produção'),
                       AppMultiSelectField<DocumentType>(
                         items: DocumentType.values,
                         itemToString: (item) => item.value,
@@ -118,12 +122,8 @@ class _FiltersState extends State<Filters> {
                             _filterStore.setType(types.isEmpty ? null : types.first),
                         isSingleSelect: true,
                       ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                      AppTitle.medium(
-                        text: "Categorias",
-                        color: AppTheme.colors.orange,
-                      ),
-                      SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+                      fieldGap,
+                      const FormLabel(text: 'Categorias'),
                       AppMultiSelectField<DocumentCategory>(
                         items: DocumentCategory.values,
                         itemToString: (item) => item.value,
@@ -134,7 +134,7 @@ class _FiltersState extends State<Filters> {
                   ),
                 ),
               ),
-              SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+              SizedBox(height: spacing.s16),
               Align(
                 alignment: Alignment.centerRight,
                 child: Column(
@@ -144,7 +144,7 @@ class _FiltersState extends State<Filters> {
                       text: 'Aplicar Filtros',
                       onPressed: widget.onApplyFilters,
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                    SizedBox(height: spacing.s8),
                     AppTextButton.small(
                       text: 'Limpar Filtros',
                       onPressed: () {

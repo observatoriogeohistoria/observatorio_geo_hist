@@ -221,6 +221,7 @@ class ComponentSizes {
   final double videoControlsScrimSolidFrom = 0.4;
 
   final double videoControlsInset = 8.0;
+  final double videoControlIcon = 32.0;
 
   final double videoErrorMaxWidth = 360.0;
 
@@ -646,6 +647,51 @@ class ComponentSizes {
   final double contactInfoListTop = 18.0;
   final double contactInfoLabelGap = 2.0;
   final double contactInfoItemGap = 14.0;
+
+  final double loadingIndicatorSize = 32.0;
+
+  final double scrollbarThickness = 8.0;
+  final double scrollbarInset = 16.0;
+
+  final double cardHoverIcon = 56.0;
+
+  final double panelSidebarWidth = 304.0;
+  final double panelSidebarIcon = 28.0;
+  final double panelSidebarItemPadding = 16.0;
+  final double panelTopBarIcon = 28.0;
+  double panelContentPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 32);
+  final double panelSectionGap = 24.0;
+  final double panelCardPaddingH = 20.0;
+  final double panelCardPaddingV = 16.0;
+  final double panelCardActionsGap = 8.0;
+  final double panelCardTextGap = 4.0;
+  double panelMemberPhoto(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 64, 80, 96);
+
+  double panelDialogWidthFactor(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 1.0, 0.7, 0.5);
+  double panelDialogPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 24);
+  final double panelFieldGap = 8.0;
+  final double panelFieldFocusedBorder = 2.0;
+
+  /// Altura fixa porque o TabBarView exige; cabe o campo de URL com a mensagem de erro.
+  final double panelTabViewHeight = 96.0;
+  final double panelImagePreviewHeight = 88.0;
+  final double panelImagePreviewAspect = 4 / 3;
+
+  final double panelEditorTallFactor = 0.7;
+  final double panelEditorFactor = 0.4;
+  final double panelEditorShortFactor = 0.3;
+
+  final double panelFiltersWidth = 300.0;
+  final double panelLibraryDocIcon = 32.0;
+
+  final double networkImageSkeletonHeight = 253.0;
+  final double imageErrorIcon = 24.0;
+
+  // Mais estreito que isso, "Erro ao carregar a imagem" quebra em linhas demais e não cabe.
+  final double imageErrorMessageMinWidth = 160.0;
+
+  final double signinCardMaxWidth = 440.0;
+  double signinCardPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 32, 32);
 
   double _byBreakpoint(
     Breakpoint breakpoint,

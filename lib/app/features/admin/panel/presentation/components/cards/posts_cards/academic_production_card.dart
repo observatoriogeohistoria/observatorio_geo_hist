@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AcademicProductionCard extends StatelessWidget {
@@ -17,18 +14,16 @@ class AcademicProductionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final typography = AppTheme.typography.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppLabel.small(
-          text: '$index',
-          color: AppTheme.colors.gray,
-        ),
-        SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-        AppTitle.big(
-          text: body.title,
-          color: AppTheme.colors.darkGray,
-        ),
+        Text('$index', style: typography.label.copyWith(color: colors.inkSecondary)),
+        SizedBox(height: components.panelCardTextGap),
+        Text(body.title, style: typography.h3.copyWith(color: colors.ink)),
       ],
     );
   }

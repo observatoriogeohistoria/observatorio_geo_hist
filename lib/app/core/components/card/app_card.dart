@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppCard extends StatefulWidget {
@@ -33,7 +32,7 @@ class AppCard extends StatefulWidget {
 class _AppCardState extends State<AppCard> {
   bool isHovered = false;
 
-  BorderSide get border => BorderSide(color: widget.borderColor ?? AppTheme.colors.lighterGray);
+  BorderSide get border => BorderSide(color: widget.borderColor ?? AppTheme.colors.line);
 
   @override
   Widget build(BuildContext context) {
@@ -56,14 +55,14 @@ class _AppCardState extends State<AppCard> {
           width: widget.width,
           padding: widget.padding ??
               EdgeInsets.symmetric(
-                horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
-                vertical: AppTheme.dimensions.space.small.verticalSpacing,
+                horizontal: AppTheme.dimensions.spacing.s16,
+                vertical: AppTheme.dimensions.spacing.s8,
               ),
           margin: widget.margin,
           decoration: BoxDecoration(
-            color: AppTheme.colors.white,
+            color: AppTheme.colors.page,
             borderRadius:
-                BorderRadius.circular(widget.borderRadius ?? AppTheme.dimensions.radius.large),
+                BorderRadius.circular(widget.borderRadius ?? AppTheme.dimensions.radii.r12),
             border: Border(
               top: border,
               left: border,
@@ -76,8 +75,8 @@ class _AppCardState extends State<AppCard> {
         if (isHovered)
           Icon(
             Icons.touch_app,
-            color: AppTheme.colors.orange,
-            size: 56.scale,
+            color: AppTheme.colors.accent,
+            size: AppTheme.dimensions.components.cardHoverIcon,
           ),
       ],
     );

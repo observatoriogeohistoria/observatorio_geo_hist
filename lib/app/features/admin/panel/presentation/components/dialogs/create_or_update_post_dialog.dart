@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/switch_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_academic_production_dialog.dart';
@@ -21,6 +19,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_podcast_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_posts_dialogs/create_or_update_search_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdatePostDialog(
@@ -104,10 +103,7 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTitle.big(
-            text: 'Área',
-            color: AppTheme.colors.orange,
-          ),
+          const FormLabel(text: 'Área'),
           SwitchButton(
             title: 'História',
             onChanged: (value) => setState(() => isHistory = value),
@@ -118,12 +114,9 @@ class _CreateOrUpdatePostDialogState extends State<CreateOrUpdatePostDialog> {
             onChanged: (value) => setState(() => isGeography = value),
             initialValue: isGeography,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTitle.big(
-            text: 'Categoria',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
+          const FormLabel(text: 'Categoria'),
+          SizedBox(height: AppTheme.dimensions.spacing.s8),
           AppDropdownField<CategoryModel>(
             hintText: 'Selecione',
             items: _categoryOptions,

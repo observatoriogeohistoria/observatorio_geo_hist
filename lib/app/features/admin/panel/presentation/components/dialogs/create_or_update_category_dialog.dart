@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/switch_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/generator/id_generator.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -82,24 +81,21 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTitle.medium(
-            text: _isUpdate ? 'Atualizar categoria' : 'Criar categoria',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          PanelDialogTitle(text: _isUpdate ? 'Atualizar categoria' : 'Criar categoria'),
+          SizedBox(height: AppTheme.dimensions.spacing.s32),
           AppTextField(
             controller: _keyController,
             labelText: 'Chave',
             validator: Validators.isNotEmpty,
             isDisabled: true,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _titleController,
             labelText: 'Título',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _descriptionController,
             labelText: 'Descrição',
@@ -108,24 +104,24 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
             minLines: 5,
             maxLines: 5,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppImageField(
             imageUrlController: _imageUrlController,
             imageController: _imageController,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           SwitchButton(
             title: 'História',
             onChanged: (value) => setState(() => isHistory = value),
             initialValue: isHistory,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           SwitchButton(
             title: 'Geografia',
             onChanged: (value) => setState(() => isGeography = value),
             initialValue: isGeography,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           SwitchButton(
             title: 'Colaborar',
             onChanged: (value) => setState(() => isCollaborate = value),

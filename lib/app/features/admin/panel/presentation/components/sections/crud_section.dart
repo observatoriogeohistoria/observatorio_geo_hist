@@ -6,12 +6,11 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_butt
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_headline.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/empty_list_message.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -91,9 +90,8 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final rightPadding = EdgeInsets.only(
-      right: AppTheme.dimensions.space.medium.horizontalSpacing,
-    );
+    final spacing = AppTheme.dimensions.spacing;
+    final rightPadding = EdgeInsets.only(right: spacing.s16);
 
     return Observer(
       builder: (_) {
@@ -101,13 +99,17 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
 
         bool isRefreshing = state is CrudLoadingState && state.isRefreshing;
         bool isLoading = state is CrudLoadingState && !state.isRefreshing;
+        bool isEmpty = state is CrudSuccessState && widget.store.items.isEmpty;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppHeadline.big(text: widget.title, color: AppTheme.colors.orange),
+            Text(
+              widget.title,
+              style: AppTheme.typography.of(context).h2.copyWith(color: AppTheme.colors.accent),
+            ),
             if (widget.canEdit) ...[
-              SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+              SizedBox(height: spacing.s32),
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
@@ -124,24 +126,23 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
                 padding: rightPadding,
                 child: const LinearLoading(),
               ),
-            SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
+            SizedBox(height: AppTheme.dimensions.components.panelSectionGap),
             Expanded(
               child: isLoading
                   ? const Center(child: CircularLoading())
-                  : AppScrollbar(
-                      controller: _scrollController,
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.only(
-                          bottom: AppTheme.dimensions.space.large.verticalSpacing,
+                  : isEmpty
+                      ? const EmptyListMessage(text: 'Nenhum item cadastrado.')
+                      : AppScrollbar(
+                          controller: _scrollController,
+                          child: ListView.separated(
+                            controller: _scrollController,
+                            physics: const ClampingScrollPhysics(),
+                            padding: EdgeInsets.only(bottom: spacing.s24),
+                            itemCount: widget.store.items.length,
+                            separatorBuilder: (_, i) => SizedBox(height: spacing.s16),
+                            itemBuilder: (_, i) => widget.itemBuilder(widget.store.items[i], i),
+                          ),
                         ),
-                        itemCount: widget.store.items.length,
-                        separatorBuilder: (_, i) =>
-                            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                        itemBuilder: (_, i) => widget.itemBuilder(widget.store.items[i], i),
-                      ),
-                    ),
             )
           ],
         );

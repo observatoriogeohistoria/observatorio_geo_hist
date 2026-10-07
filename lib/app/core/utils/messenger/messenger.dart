@@ -6,34 +6,31 @@ class Messenger {
     BuildContext context,
     String message,
   ) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppTheme.colors.red,
-      ),
-    );
+    _show(context, message, AppTheme.colors.error);
   }
 
   static showSuccess(
     BuildContext context,
     String message,
   ) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppTheme.colors.green,
-      ),
-    );
+    _show(context, message, AppTheme.colors.success);
   }
 
   static showInfo(
     BuildContext context,
     String message,
   ) {
+    _show(context, message, AppTheme.colors.info);
+  }
+
+  static void _show(BuildContext context, String message, Color background) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: AppTheme.colors.blue,
+        content: Text(
+          message,
+          style: AppTheme.typography.of(context).small.copyWith(color: AppTheme.colors.white),
+        ),
+        backgroundColor: background,
       ),
     );
   }

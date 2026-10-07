@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class FormLabel extends StatelessWidget {
@@ -14,12 +12,13 @@ class FormLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppLabel.medium(
-          text: text,
-          color: AppTheme.colors.darkGray,
+        Text(
+          text,
+          style: AppTheme.typography.of(context).formLabel.copyWith(color: AppTheme.colors.ink),
         ),
-        SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+        SizedBox(height: AppTheme.dimensions.spacing.s4),
       ],
     );
   }

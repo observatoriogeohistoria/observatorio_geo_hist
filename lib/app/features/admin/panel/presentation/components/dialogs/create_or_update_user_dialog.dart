@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_role.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -61,32 +60,29 @@ class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTitle.medium(
-            text: _isUpdate ? 'Atualizar usuário' : 'Criar usuário',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          PanelDialogTitle(text: _isUpdate ? 'Atualizar usuário' : 'Criar usuário'),
+          SizedBox(height: AppTheme.dimensions.spacing.s32),
           AppTextField(
             controller: _nameController,
             labelText: 'Nome',
             validator: Validators.isNotEmpty,
             isDisabled: _isUpdate,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _emailController,
             labelText: 'E-mail',
             validator: Validators.isValidEmail,
             isDisabled: _isUpdate,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           if (!_isUpdate) ...[
             AppTextField(
               controller: _passwordController,
               labelText: 'Senha',
               validator: Validators.isValidPassword,
             ),
-            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+            SizedBox(height: AppTheme.dimensions.spacing.s16),
           ],
           AppDropdownField<UserRole>(
             hintText: 'Selecione um papel',

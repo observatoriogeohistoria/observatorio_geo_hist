@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -85,17 +84,15 @@ class _CreateOrUpdateAcademicProductionDialogState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTitle.medium(
-            text: _isUpdate ? 'Atualizar produção acadêmica' : 'Criar produção acadêmica',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          PanelDialogTitle(
+              text: _isUpdate ? 'Atualizar produção acadêmica' : 'Criar produção acadêmica'),
+          SizedBox(height: AppTheme.dimensions.spacing.s32),
           AppTextField(
             controller: _titleController,
             labelText: 'Título',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppDropdownField<AcademicProductionCategory>(
             hintText: 'Categoria',
             items: AcademicProductionCategory.values,
@@ -110,37 +107,37 @@ class _CreateOrUpdateAcademicProductionDialogState
             },
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _authorController,
             labelText: 'Autor',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _advisorController,
             labelText: 'Orientador',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppImageField(
             imageUrlController: _imageUrlController,
             imageController: _imageController,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _institutionController,
             labelText: 'Instituição',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _yearAndCityController,
             labelText: 'Cidade e ano de publicação',
             hintText: 'Ex: São Paulo, 2021',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _summaryController,
             labelText: 'Resumo',
@@ -148,14 +145,14 @@ class _CreateOrUpdateAcademicProductionDialogState
             minLines: 6,
             maxLines: 6,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _keywordsController,
             labelText: 'Palavras-chave',
             hintText: 'Separe com vírgulas',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _linkController,
             labelText: 'Link da pesquisa',

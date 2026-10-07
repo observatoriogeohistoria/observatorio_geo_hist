@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -32,13 +31,19 @@ class SidebarMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double iconSize = 32.scale;
-    double widthWhenCollapsed = iconSize + 2 * AppTheme.dimensions.space.medium.scale;
+    final colors = AppTheme.colors;
+    final spacing = AppTheme.dimensions.spacing;
+    final components = AppTheme.dimensions.components;
+    final typography = AppTheme.typography.of(context);
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r8);
 
-    Widget icon = Icon(item.icon, color: AppTheme.colors.orange, size: iconSize);
+    final iconSize = components.panelSidebarIcon;
+    final widthWhenCollapsed = iconSize + 2 * components.panelSidebarItemPadding;
 
-    bool itemIsSelected = item == selectedItem;
-    bool showSubItems = subItems.isNotEmpty && showPostsSubItems && itemIsSelected;
+    final itemIsSelected = item == selectedItem;
+    final showSubItems = subItems.isNotEmpty && showPostsSubItems && itemIsSelected;
+
+    final icon = Icon(item.icon, color: colors.accent, size: iconSize);
 
     bool subItemIsSelected(PostType subItem) => subItem == selectedSubItem;
 
@@ -48,72 +53,85 @@ class SidebarMenuItem extends StatelessWidget {
           message: isCollapsed ? item.title : '',
           verticalOffset: -(iconSize / 2),
           margin: EdgeInsets.only(left: widthWhenCollapsed),
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              onTap: onItemClicked,
-              mouseCursor: SystemMouseCursors.click,
-              hoverColor: isCollapsed ? Colors.transparent : AppTheme.colors.lighterGray,
-              borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-              child: isCollapsed
-                  ? icon
-                  : Container(
-                      padding: EdgeInsets.all(AppTheme.dimensions.space.medium.scale),
-                      decoration: BoxDecoration(
-                        color: itemIsSelected ? AppTheme.colors.lighterGray : Colors.transparent,
-                        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-                      ),
-                      child: Row(
-                        children: [
-                          icon,
-                          SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                          Expanded(
-                            child: AppTitle.medium(
-                              text: item.title,
-                              color: AppTheme.colors.darkGray,
-                              notSelectable: true,
-                            ),
+          child: Semantics(
+            button: true,
+            selected: itemIsSelected,
+            expanded: subItems.isNotEmpty ? showSubItems : null,
+            label: item.title,
+            onTap: onItemClicked,
+            excludeSemantics: true,
+            child: AppFocusRing(
+              borderRadius: radius,
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  onTap: onItemClicked,
+                  mouseCursor: SystemMouseCursors.click,
+                  hoverColor: isCollapsed ? Colors.transparent : colors.surface,
+                  borderRadius: radius,
+                  child: isCollapsed
+                      ? icon
+                      : Container(
+                          padding: EdgeInsets.all(components.panelSidebarItemPadding),
+                          decoration: BoxDecoration(
+                            color: itemIsSelected ? colors.accentSoft : Colors.transparent,
+                            borderRadius: radius,
                           ),
-                          if (subItems.isNotEmpty)
-                            Icon(
-                              showSubItems
-                                  ? Icons.keyboard_arrow_up_outlined
-                                  : Icons.keyboard_arrow_down_outlined,
-                              color: AppTheme.colors.gray,
-                              size: iconSize,
-                            ),
-                        ],
-                      ),
-                    ),
+                          child: Row(
+                            children: [
+                              icon,
+                              SizedBox(width: spacing.s16),
+                              Expanded(
+                                child: Text(
+                                  item.title,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: typography.h3.copyWith(color: colors.ink),
+                                ),
+                              ),
+                              if (subItems.isNotEmpty)
+                                Icon(
+                                  showSubItems
+                                      ? Icons.keyboard_arrow_up_outlined
+                                      : Icons.keyboard_arrow_down_outlined,
+                                  color: colors.inkSecondary,
+                                  size: iconSize,
+                                ),
+                            ],
+                          ),
+                        ),
+                ),
+              ),
             ),
           ),
         ),
-        SizedBox(
-          height: isCollapsed
-              ? AppTheme.dimensions.space.large.verticalSpacing
-              : AppTheme.dimensions.space.small.verticalSpacing,
-        ),
+        SizedBox(height: isCollapsed ? spacing.s24 : spacing.s8),
         if (showSubItems) ...[
-          SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+          SizedBox(height: spacing.s4),
           for (var subItem in subItems)
-            TextButton(
-              onPressed: () => onSubItemClicked(subItem),
-              style: ButtonStyle(
-                foregroundColor: WidgetStateProperty.resolveWith(
-                  (states) {
-                    return states.contains(WidgetState.hovered)
-                        ? AppTheme.colors.orange
-                        : AppTheme.colors.gray;
-                  },
+            AppFocusRing(
+              borderRadius: radius,
+              child: TextButton(
+                onPressed: () => onSubItemClicked(subItem),
+                style: ButtonStyle(
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: radius)),
+                  overlayColor: WidgetStatePropertyAll(colors.surface),
+                  foregroundColor: WidgetStateProperty.resolveWith(
+                    (states) {
+                      // Sobre o fundo de hover e foco o acento fica abaixo de 4,5:1; o tom forte não.
+                      final highlighted = states.contains(WidgetState.hovered) ||
+                          states.contains(WidgetState.focused) ||
+                          states.contains(WidgetState.pressed);
+                      if (highlighted) return colors.accentStrong;
+                      return subItemIsSelected(subItem) ? colors.accent : colors.inkSecondary;
+                    },
+                  ),
+                  textStyle: WidgetStatePropertyAll(typography.regular),
                 ),
-              ),
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: AppTheme.dimensions.space.small.scale),
-                child: Text(
-                  subItem.portuguesePlural,
-                  style: AppTheme.typography.title.small.copyWith(
-                    color:
-                        subItemIsSelected(subItem) ? AppTheme.colors.orange : AppTheme.colors.gray,
+                child: Semantics(
+                  selected: subItemIsSelected(subItem),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: spacing.s8),
+                    child: Text(subItem.portuguesePlural),
                   ),
                 ),
               ),

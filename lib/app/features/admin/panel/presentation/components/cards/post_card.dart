@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
+import 'package:observatorio_geo_hist/app/core/components/chips/labels.dart';
 import 'package:observatorio_geo_hist/app/core/components/divider/divider.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
 import 'package:observatorio_geo_hist/app/core/models/academic_production_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/book_model.dart';
@@ -14,7 +14,6 @@ import 'package:observatorio_geo_hist/app/core/models/music_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/podcast_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/posts_cards/academic_production_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/posts_cards/article_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/posts_cards/book_card.dart';
@@ -49,7 +48,15 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final dimensions = AppTheme.dimensions;
+    final components = dimensions.components;
+
     return AppCard(
+      padding: EdgeInsets.symmetric(
+        horizontal: components.panelCardPaddingH,
+        vertical: components.panelCardPaddingV,
+      ),
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,30 +68,32 @@ class PostCard extends StatelessWidget {
                 children: [
                   _buildBody(post),
                   const AppDivider(),
-                  SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-                  _buildInfo('Área(s)', post.areas.map((area) => area.portuguese).join(' e ')),
-                  if (post.category != null) ...[
-                    SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-                    _buildInfo('Categoria', post.category!.title),
-                  ],
-                  SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                  AppLabel.medium(
-                    text: post.isPublished ? 'Publicado' : 'Não Publicado',
-                    color: post.isPublished ? AppTheme.colors.green : AppTheme.colors.red,
+                  _buildInfo(
+                    context,
+                    'Área(s)',
+                    post.areas.map((area) => area.portuguese).join(' e '),
                   ),
-                  if (post.isHighlighted) ...[
-                    SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-                    AppLabel.medium(
-                      text: 'DESTAQUE',
-                      color: AppTheme.colors.gray,
-                      decoration: TextDecoration.underline,
-                    ),
+                  if (post.category != null) ...[
+                    SizedBox(height: components.panelCardTextGap),
+                    _buildInfo(context, 'Categoria', post.category!.title),
                   ],
+                  SizedBox(height: dimensions.spacing.s12),
+                  Wrap(
+                    spacing: dimensions.spacing.s8,
+                    runSpacing: dimensions.spacing.s8,
+                    children: [
+                      post.isPublished
+                          ? const StatusBadge('Publicado', tone: StatusTone.success)
+                          : const StatusBadge('Não publicado', tone: StatusTone.error),
+                      if (post.isHighlighted)
+                        const StatusBadge('Destaque', tone: StatusTone.accent),
+                    ],
+                  ),
                 ],
               ),
             ),
             if (canEdit) ...[
-              SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+              SizedBox(width: dimensions.spacing.s16),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -92,30 +101,30 @@ class PostCard extends StatelessWidget {
                   AppIconButton(
                     tooltip: post.isPublished ? 'Despublicar post' : 'Publicar post',
                     icon: post.isPublished ? Icons.public_off : Icons.public,
-                    color: AppTheme.colors.orange,
+                    color: colors.accent,
                     onPressed: onPublish,
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
                     tooltip: post.isHighlighted ? 'Remover dos destaques' : 'Destacar post',
                     icon: post.isHighlighted
                         ? Icons.bookmark_remove_outlined
                         : Icons.bookmark_add_outlined,
-                    color: AppTheme.colors.orange,
+                    color: colors.accent,
                     onPressed: onHighlight,
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
                     tooltip: 'Editar post',
                     icon: Icons.edit,
-                    color: AppTheme.colors.gray,
+                    color: colors.accent,
                     onPressed: onEdit,
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
                     tooltip: 'Excluir post',
                     icon: Icons.delete,
-                    color: AppTheme.colors.red,
+                    color: colors.error,
                     onPressed: onDelete,
                   ),
                 ],
@@ -127,18 +136,18 @@ class PostCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfo(
-    String title,
-    String text,
-  ) {
-    return RichText(
-      text: TextSpan(
+  Widget _buildInfo(BuildContext context, String title, String text) {
+    final colors = AppTheme.colors;
+    final typography = AppTheme.typography.of(context);
+
+    return Text.rich(
+      TextSpan(
         text: '$title: ',
-        style: AppTheme.typography.title.small.copyWith(color: AppTheme.colors.orange),
+        style: typography.formLabel.copyWith(color: colors.accent),
         children: [
           TextSpan(
             text: text,
-            style: AppTheme.typography.body.medium.copyWith(color: AppTheme.colors.darkGray),
+            style: typography.regular.copyWith(color: colors.ink),
           ),
         ],
       ),

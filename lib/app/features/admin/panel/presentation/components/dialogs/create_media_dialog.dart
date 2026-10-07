@@ -4,12 +4,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -55,22 +53,21 @@ class _CreateMediaDialogState extends State<CreateMediaDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTitle.medium(
-            text: 'Criar mídia',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          const PanelDialogTitle(text: 'Criar mídia'),
+          SizedBox(height: AppTheme.dimensions.spacing.s32),
           AppTextField(
             controller: _nameController,
             labelText: 'Arquivo',
             validator: Validators.isNotEmpty,
             isDisabled: true,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           if (!AppEnvironment.current.hasStorage)
-            AppLabel.small(
-              text: 'Upload desabilitado no ambiente de testes (sem Storage configurado).',
-              color: AppTheme.colors.accentStrong,
+            Text(
+              'Upload desabilitado no ambiente de testes (sem Storage configurado).',
+              style: AppTheme.typography.of(context).small.copyWith(
+                    color: AppTheme.colors.accentStrong,
+                  ),
             )
           else
             SecondaryButton.small(

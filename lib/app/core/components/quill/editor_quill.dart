@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class EditorQuill extends StatefulWidget {
@@ -25,6 +24,8 @@ class EditorQuill extends StatefulWidget {
 
 class _EditorQuillState extends State<EditorQuill> {
   late QuillController _controller;
+  final _focusNode = FocusNode();
+  bool _focused = false;
 
   @override
   void initState() {
@@ -41,12 +42,28 @@ class _EditorQuillState extends State<EditorQuill> {
       final content = _saveContent();
       event.complete(content);
     });
+
+    _focusNode.addListener(_handleFocus);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_handleFocus);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _handleFocus() {
+    if (_focused != _focusNode.hasFocus) setState(() => _focused = _focusNode.hasFocus);
   }
 
   String _saveContent() => jsonEncode(_controller.document.toDelta().toJson());
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+
     return Column(
       children: [
         QuillSimpleToolbar(
@@ -63,16 +80,18 @@ class _EditorQuillState extends State<EditorQuill> {
         ),
         Container(
           height: widget.height,
-          padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
+          padding: EdgeInsets.all(components.formFieldPaddingH),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
+            color: colors.page,
+            borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r10),
             border: Border.all(
-              width: AppTheme.dimensions.stroke.small.scale,
-              color: AppTheme.colors.gray,
+              width: _focused ? components.panelFieldFocusedBorder : components.formFieldBorder,
+              color: _focused ? colors.accent : colors.fieldBorder,
             ),
           ),
           child: QuillEditor.basic(
             controller: _controller,
+            focusNode: _focusNode,
           ),
         ),
       ],

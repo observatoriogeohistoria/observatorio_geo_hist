@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/panel_field_decoration.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppTextField extends StatefulWidget {
@@ -68,8 +68,10 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: AppTheme.dimensions.space.small.verticalSpacing),
+    final minTapTarget = AppTheme.dimensions.components.minTapTarget;
+
+    return Padding(
+      padding: EdgeInsets.only(top: AppTheme.dimensions.components.panelFieldGap),
       child: TextFormField(
         onChanged: widget.useDebounce ? _onChangedDebounced : widget.onChanged,
         controller: widget.controller,
@@ -85,50 +87,22 @@ class _AppTextFieldState extends State<AppTextField> {
         onTapOutside: (_) => _focusNode.unfocus(),
         obscureText: widget.obscureText,
         validator: widget.validator,
-        cursorColor: AppTheme.colors.darkGray,
+        style: PanelFieldDecoration.textStyle(context),
+        cursorColor: AppTheme.colors.accent,
         textAlignVertical: TextAlignVertical.top,
-        decoration: InputDecoration(
+        decoration: PanelFieldDecoration.build(
+          context,
           alignLabelWithHint: true,
+          labelText: widget.labelText,
+          hintText: widget.hintText,
           suffixIcon: widget.suffixIcon == null
               ? null
               : Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppTheme.dimensions.space.small),
+                  padding: EdgeInsetsDirectional.only(end: AppTheme.dimensions.spacing.s4),
                   child: widget.suffixIcon,
                 ),
-          suffixIconConstraints: const BoxConstraints(
-            minHeight: 32,
-            minWidth: 32,
-          ),
-          labelText: widget.labelText,
-          labelStyle: AppTheme.typography.body.medium.copyWith(
-            color: AppTheme.colors.gray,
-          ),
-          hintText: widget.hintText,
-          hintStyle: AppTheme.typography.body.medium.copyWith(
-            color: AppTheme.colors.gray,
-          ),
-          filled: true,
-          fillColor: AppTheme.colors.white,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: AppTheme.dimensions.space.small,
-            vertical: AppTheme.dimensions.space.medium,
-          ),
-          enabledBorder: _buildBorder(AppTheme.colors.gray),
-          focusedBorder: _buildBorder(AppTheme.colors.orange),
-          focusedErrorBorder: _buildBorder(AppTheme.colors.red),
-          disabledBorder: _buildBorder(AppTheme.colors.gray),
-          errorBorder: _buildBorder(AppTheme.colors.red),
+          suffixIconConstraints: BoxConstraints(minHeight: minTapTarget, minWidth: minTapTarget),
         ),
-      ),
-    );
-  }
-
-  OutlineInputBorder _buildBorder(Color color) {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-      borderSide: BorderSide(
-        width: AppTheme.dimensions.stroke.small,
-        color: color,
       ),
     );
   }

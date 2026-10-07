@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/view_image_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -26,8 +22,18 @@ class MediaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final dimensions = AppTheme.dimensions;
+    final components = dimensions.components;
+    final typography = AppTheme.typography.of(context);
+    final hasUrl = media.url?.isNotEmpty ?? false;
+
     return AppCard(
       width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: components.panelCardPaddingH,
+        vertical: components.panelCardPaddingV,
+      ),
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,30 +43,24 @@ class MediaCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppLabel.small(
-                    text: '$index',
-                    color: AppTheme.colors.gray,
+                  Text('$index', style: typography.label.copyWith(color: colors.inkSecondary)),
+                  SizedBox(height: components.panelCardTextGap),
+                  Text(media.name, style: typography.h3.copyWith(color: colors.ink)),
+                  Text(
+                    '.${media.extension}',
+                    style: typography.regular.copyWith(color: colors.inkSecondary),
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-                  AppTitle.big(
-                    text: media.name,
-                    color: AppTheme.colors.darkGray,
-                  ),
-                  AppBody.medium(
-                    text: '.${media.extension}',
-                    color: AppTheme.colors.darkGray,
-                  ),
-                  if (media.url?.isNotEmpty ?? false) ...[
-                    SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                    AppLabel.big(
-                      text: media.url!,
-                      color: AppTheme.colors.gray,
+                  if (hasUrl) ...[
+                    SizedBox(height: dimensions.spacing.s12),
+                    Text(
+                      media.url!,
+                      style: typography.small.copyWith(color: colors.inkSecondary),
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),
-            SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
+            SizedBox(width: dimensions.spacing.s16),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -68,26 +68,26 @@ class MediaCard extends StatelessWidget {
                 AppIconButton(
                   tooltip: 'Ver imagem',
                   icon: Icons.visibility,
-                  color: AppTheme.colors.orange,
+                  color: colors.accent,
                   onPressed: () => showViewImageDialog(context, media),
                 ),
-                if (media.url?.isNotEmpty ?? false) ...[
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                if (hasUrl) ...[
+                  SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
                     tooltip: 'Copiar link',
                     icon: Icons.copy,
-                    color: AppTheme.colors.gray,
+                    color: colors.inkSecondary,
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: media.url!));
                     },
                   ),
                 ],
                 if (canEdit) ...[
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                  SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
                     tooltip: 'Excluir imagem',
                     icon: Icons.delete,
-                    color: AppTheme.colors.red,
+                    color: colors.error,
                     onPressed: onDelete,
                   ),
                 ],

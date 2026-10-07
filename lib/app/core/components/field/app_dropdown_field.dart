@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/components/field/panel_field_decoration.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppDropdownField<T> extends StatefulWidget {
@@ -63,33 +61,33 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = PanelFieldDecoration.textStyle(context);
+    final placeholder = Text(
+      widget.hintText,
+      overflow: TextOverflow.ellipsis,
+      style: PanelFieldDecoration.secondaryStyle(context),
+    );
+
     return DropdownButtonFormField<String>(
       isDense: true,
       isExpanded: true,
-      hint: AppBody.medium(
-        text: widget.hintText,
-        color: AppTheme.colors.gray,
-        notSelectable: true,
-      ),
+      hint: placeholder,
+      style: textStyle,
+      iconEnabledColor: AppTheme.colors.inkSecondary,
+      dropdownColor: AppTheme.colors.page,
+      focusColor: AppTheme.colors.accentSoft,
       items: _items.map(
         (item) {
           if (item == null) {
-            return DropdownMenuItem<String>(
-              value: null,
-              child: AppBody.medium(
-                text: widget.hintText,
-                color: AppTheme.colors.gray,
-                notSelectable: true,
-              ),
-            );
+            return DropdownMenuItem<String>(value: null, child: placeholder);
           }
 
           return DropdownMenuItem<String>(
             value: widget.itemToString(item),
-            child: AppLabel.big(
-              text: widget.itemToString(item),
-              color: AppTheme.colors.darkGray,
-              notSelectable: true,
+            child: Text(
+              widget.itemToString(item),
+              overflow: TextOverflow.ellipsis,
+              style: textStyle,
             ),
           );
         },
@@ -102,28 +100,8 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
               widget.onChanged?.call(value);
             },
       validator: widget.validator,
-      borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: AppTheme.colors.white,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: AppTheme.dimensions.space.small.horizontalSpacing,
-          vertical: AppTheme.dimensions.space.medium.verticalSpacing,
-        ),
-        enabledBorder: _buildBorder(AppTheme.colors.gray),
-        focusedBorder: _buildBorder(AppTheme.colors.orange),
-        focusedErrorBorder: _buildBorder(AppTheme.colors.red),
-        disabledBorder: _buildBorder(AppTheme.colors.gray),
-        errorBorder: _buildBorder(AppTheme.colors.red),
-      ),
+      borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r10),
+      decoration: PanelFieldDecoration.build(context),
     );
   }
-
-  OutlineInputBorder _buildBorder(Color color) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppTheme.dimensions.radius.medium),
-        borderSide: BorderSide(
-          width: AppTheme.dimensions.stroke.small,
-          color: color,
-        ),
-      );
 }

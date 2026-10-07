@@ -5,13 +5,12 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_fie
 import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/components/quill/editor_quill.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
 import 'package:observatorio_geo_hist/app/core/models/film_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -94,11 +93,8 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTitle.medium(
-            text: _isUpdate ? 'Atualizar filme' : 'Criar filme',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
+          PanelDialogTitle(text: _isUpdate ? 'Atualizar filme' : 'Criar filme'),
+          SizedBox(height: AppTheme.dimensions.spacing.s32),
           AppDropdownField<FilmCategory>(
             hintText: 'Categoria',
             items: FilmCategory.values,
@@ -112,50 +108,51 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
             },
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _titleController,
             labelText: 'Título',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppImageField(
             imageUrlController: _imageUrlController,
             imageController: _imageController,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _yearController,
             labelText: 'Ano de lançamento',
             keyboardType: TextInputType.number,
             validator: Validators.isValidYear,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _durationController,
             labelText: 'Duração',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _directorController,
             labelText: 'Direção',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _countryController,
             labelText: 'País',
             validator: Validators.isNotEmpty,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           const FormLabel(text: 'Sinopse'),
           EditorQuill(
             saveController: _synopsisController,
             initialContent: _initialSynopsis,
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.sizeOf(context).height *
+                AppTheme.dimensions.components.panelEditorFactor,
           ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
+          SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
             controller: _linkController,
             labelText: 'Link',

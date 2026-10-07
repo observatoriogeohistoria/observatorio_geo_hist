@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_body.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
+import 'package:observatorio_geo_hist/app/core/components/chips/labels.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -24,8 +21,17 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final dimensions = AppTheme.dimensions;
+    final components = dimensions.components;
+    final typography = AppTheme.typography.of(context);
+
     return AppCard(
       width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: components.panelCardPaddingH,
+        vertical: components.panelCardPaddingV,
+      ),
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,43 +41,36 @@ class UserCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppLabel.small(
-                    text: '$index',
-                    color: AppTheme.colors.gray,
+                  Text('$index', style: typography.label.copyWith(color: colors.inkSecondary)),
+                  SizedBox(height: components.panelCardTextGap),
+                  Text(user.name, style: typography.h3.copyWith(color: colors.ink)),
+                  SizedBox(height: components.panelCardTextGap),
+                  Text(
+                    user.email,
+                    style: typography.regular.copyWith(color: colors.inkSecondary),
                   ),
-                  SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
-                  AppTitle.big(
-                    text: user.name,
-                    color: AppTheme.colors.darkGray,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                  AppBody.big(
-                    text: user.email,
-                    color: AppTheme.colors.gray,
-                  ),
-                  SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                  AppLabel.medium(
-                    text: user.isDeleted ? 'Usuário inativo' : 'Usuário ativo',
-                    color: user.isDeleted ? AppTheme.colors.red : AppTheme.colors.green,
-                  ),
+                  SizedBox(height: dimensions.spacing.s12),
+                  user.isDeleted
+                      ? const StatusBadge('Usuário inativo', tone: StatusTone.error)
+                      : const StatusBadge('Usuário ativo', tone: StatusTone.success),
                 ],
               ),
             ),
-            SizedBox(width: AppTheme.dimensions.space.small.horizontalSpacing),
+            SizedBox(width: dimensions.spacing.s16),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 AppIconButton(
                   tooltip: 'Editar usuário',
-                  color: AppTheme.colors.orange,
+                  color: colors.accent,
                   icon: Icons.edit,
                   onPressed: onEdit,
                 ),
-                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                SizedBox(height: components.panelCardActionsGap),
                 AppIconButton(
                   tooltip: 'Excluir usuário',
-                  color: AppTheme.colors.red,
+                  color: colors.error,
                   icon: Icons.delete,
                   onPressed: onDelete,
                 ),

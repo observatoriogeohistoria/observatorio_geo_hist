@@ -5,7 +5,6 @@ import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_fie
 import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -47,7 +46,7 @@ class SectionHeaderActions extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-        right: AppTheme.dimensions.space.medium.horizontalSpacing,
+        right: AppTheme.dimensions.spacing.s16,
       ),
       child: Builder(
         builder: (context) {
@@ -57,23 +56,23 @@ class SectionHeaderActions extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 _textField,
-                SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                SizedBox(height: AppTheme.dimensions.spacing.s4),
                 Row(
                   children: [
                     Flexible(child: _areaField),
-                    SizedBox(width: AppTheme.dimensions.space.mini.horizontalSpacing),
+                    SizedBox(width: AppTheme.dimensions.spacing.s4),
                     Flexible(child: _categoryField),
                   ],
                 ),
-                SizedBox(height: AppTheme.dimensions.space.mini.verticalSpacing),
+                SizedBox(height: AppTheme.dimensions.spacing.s4),
                 Row(
                   children: [
                     Flexible(child: _publishedField),
-                    SizedBox(width: AppTheme.dimensions.space.mini.horizontalSpacing),
+                    SizedBox(width: AppTheme.dimensions.spacing.s4),
                     Flexible(child: _highlightedField),
                   ],
                 ),
-                SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+                SizedBox(height: AppTheme.dimensions.spacing.s8),
                 AppTextButton.small(
                   text: 'Limpar filtros',
                   onPressed: onClear,
@@ -94,19 +93,19 @@ class SectionHeaderActions extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+              SizedBox(height: AppTheme.dimensions.spacing.s8),
               Row(
                 children: [
                   Flexible(child: _areaField),
-                  SizedBox(width: AppTheme.dimensions.space.mini.horizontalSpacing),
+                  SizedBox(width: AppTheme.dimensions.spacing.s4),
                   Flexible(child: _categoryField),
-                  SizedBox(width: AppTheme.dimensions.space.mini.horizontalSpacing),
+                  SizedBox(width: AppTheme.dimensions.spacing.s4),
                   Flexible(child: _publishedField),
-                  SizedBox(width: AppTheme.dimensions.space.mini.horizontalSpacing),
+                  SizedBox(width: AppTheme.dimensions.spacing.s4),
                   Flexible(child: _highlightedField),
                 ],
               ),
-              SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
+              SizedBox(height: AppTheme.dimensions.spacing.s8),
               AppTextButton.small(
                 text: 'Limpar filtros',
                 onPressed: onClear,

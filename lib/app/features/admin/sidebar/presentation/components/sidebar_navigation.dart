@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
@@ -68,8 +67,10 @@ class _SidebarState extends State<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    double widthWhenCollapsed = 32.0.scale + 2 * AppTheme.dimensions.space.medium.scale;
-    bool isMobile = ScreenUtils.isMobile(context);
+    final spacing = AppTheme.dimensions.spacing;
+    final components = AppTheme.dimensions.components;
+    final widthWhenCollapsed = components.panelSidebarIcon + 2 * components.panelSidebarItemPadding;
+    final isMobile = ScreenUtils.isMobile(context);
 
     return Observer(
       builder: (context) {
@@ -80,19 +81,18 @@ class _SidebarState extends State<Sidebar> {
               ? MediaQuery.of(context).size.width
               : isCollapsed
                   ? widthWhenCollapsed
-                  : null,
+                  : components.panelSidebarWidth,
           child: Container(
-            color: AppTheme.colors.white,
+            color: AppTheme.colors.page,
             child: Stack(
               children: [
                 CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(child: SidebarHeader(isCollapsed: isCollapsed)),
-                    SliverToBoxAdapter(
-                        child: SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing)),
+                    SliverToBoxAdapter(child: SizedBox(height: spacing.s24)),
                     SliverPadding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
+                        horizontal: components.panelSidebarItemPadding,
                       ),
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
@@ -151,7 +151,7 @@ class _SidebarState extends State<Sidebar> {
                         ),
                       ),
                     ),
-                    SliverToBoxAdapter(child: SizedBox(height: 64.verticalSpacing)),
+                    SliverToBoxAdapter(child: SizedBox(height: spacing.s64)),
                   ],
                 ),
                 Align(
@@ -168,6 +168,7 @@ class _SidebarState extends State<Sidebar> {
                           sidebarStore.toggleCollapse();
                         },
                         isCollapsed: isCollapsed,
+                        isMenu: isMobile,
                       ),
                     ],
                   ),
