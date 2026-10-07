@@ -80,22 +80,6 @@ flutter:
     - assets/images/partners/
 
   fonts:
-    - family: Dosis
-      fonts:
-        - asset: assets/fonts/Dosis-ExtraLight.ttf
-          weight: 200
-        - asset: assets/fonts/Dosis-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Dosis-Medium.ttf
-          weight: 400
-        - asset: assets/fonts/Dosis-Regular.ttf
-          weight: 500
-        - asset: assets/fonts/Dosis-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Dosis-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Dosis-ExtraBold.ttf
-          weight: 800
     - family: BricolageGrotesque
       fonts:
         - asset: assets/fonts/BricolageGrotesque-SemiBold.ttf

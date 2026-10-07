@@ -5,12 +5,14 @@ Legenda: `- [ ]` a fazer, `- [x]` feita.
 Critérios da spec, na ordem: 1 arquivos apagados; 2 sem Dosis e sem `.png` em `lib/`; 3 sem os 7 pacotes; 4 `pubspec.lock` só com remoções; 5 assets que ficam referenciados e licenças; 6 `analyze` e gerados; 7 build e conteúdo de `build/web/assets/`; 8 telas sem mudança visual.
 
 ## Grupo A: estado de antes
-- [ ] **A1.** Antes de qualquer remoção: sincronizar a cópia ASCII, `fvm flutter pub get`, build release, servir com fallback de SPA e capturar Home, um post, nossa história, biblioteca (índice, lista e um documento), fale com a gente, colabore, 404 e login em 390, 768 e 1280 px. Guardar no scratchpad e anotar o tamanho de `build/web/assets/`. Arquivos: nenhum. Atende: 8.
+- [x] **A1.** Antes de qualquer remoção: sincronizar a cópia ASCII, `fvm flutter pub get`, build release, servir com fallback de SPA e capturar Home, um post, nossa história, biblioteca (índice, lista e um documento), fale com a gente, colabore, 404 e login em 390, 768 e 1280 px. Guardar no scratchpad e anotar o tamanho de `build/web/assets/`. Arquivos: nenhum. Atende: 8.
+  - Capturas no navegador embutido; `build/web/assets/` com 3,4 MB.
 
 ## Grupo B: fontes e imagens (commit 1)
-- [ ] **B1.** `git rm` dos 7 `Dosis-*.ttf`, dos 6 `.png` de `assets/icons/`, das 5 imagens (`collaborate`, `library`, `logo-white`, `orange`, `who-we-are`) e do arquivo vazio em `packages/`. Atende: 1.
-- [ ] **B2.** Junto com B1, para o build não procurar fonte apagada: `pubspec.yaml` sem o bloco `family: Dosis`, mantendo `BricolageGrotesque`, `Figtree` e as três linhas de `assets:`. Atende: 2.
-- [ ] **B3.** Na cópia ASCII: `fvm flutter pub get` (o lock não deve mudar), `fvm flutter analyze` limpo e `fvm flutter build web --release` sem erro. Commit `chore: remove fontes e imagens sem uso`. Atende: 6, 7.
+- [x] **B1.** `git rm` dos 7 `Dosis-*.ttf`, dos 6 `.png` de `assets/icons/`, das 5 imagens (`collaborate`, `library`, `logo-white`, `orange`, `who-we-are`) e do arquivo vazio em `packages/`. Atende: 1.
+- [x] **B2.** Junto com B1, para o build não procurar fonte apagada: `pubspec.yaml` sem o bloco `family: Dosis`, mantendo `BricolageGrotesque`, `Figtree` e as três linhas de `assets:`. Atende: 2.
+- [x] **B3.** Na cópia ASCII: `fvm flutter pub get` (o lock não deve mudar), `fvm flutter analyze` limpo e `fvm flutter build web --release` sem erro. Commit `chore: remove fontes e imagens sem uso`. Atende: 6, 7.
+  - Lock igual, `analyze` limpo; `build/web/assets/` caiu para 2,6 MB.
 
 ## Grupo C: pacotes (commit 2)
 - [ ] **C1.** `pubspec.yaml`: tirar `carousel_slider`, `google_fonts`, `cached_network_image`, `flutter_staggered_grid_view`, `file_saver`, `flutter_quill_extensions` e `cupertino_icons` de `dependencies`. Atende: 3.
