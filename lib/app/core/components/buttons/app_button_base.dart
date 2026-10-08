@@ -37,7 +37,7 @@ class AppButtonBase extends StatefulWidget {
   /// Ocupa a largura disponível, como no botão principal em tela estreita.
   final bool expand;
 
-  /// Mostra o indicador antes do texto e ignora cliques, mas com opacidade cheia, para manter o contraste.
+  /// Diferente do desabilitado, não baixa a opacidade: o texto precisa manter o contraste.
   final bool isLoading;
 
   @override
