@@ -153,7 +153,7 @@ Redesenho de layout do login e do painel a partir das abas "Login", "Painel" e "
 
 | # | Entrega | Principais arquivos |
 |---|---|---|
-| 8.1 | Login (T-12) → specs/029-login-redesenho | `admin/login/presentation/signin_page.dart`, `environment_banner.dart` |
+| 8.1 | Login (T-12) → specs/029-login-redesenho, concluído com ressalvas: login real com o Firebase e leitor de tela não conferidos | `admin/login/presentation/signin_page.dart`, `environment_banner.dart` |
 | 8.2 | Estrutura do painel: barra superior, menu lateral em grupos com contagens e submenu de tipos, gaveta no celular, cabeçalho de seção, aviso curto após ações, confirmação de exclusão e dicas nos botões de ícone (P-14) → specs/030-painel-estrutura | `panel_page.dart`, `admin/sidebar/*`, `section_header_*`, `app_icon_button` |
 | 8.3 | Listas do painel em linhas (publicações, categorias, equipe, usuários, biblioteca) e mídias em grade, com filtros em linha e estados de carregando, vazio e erro → specs/031-painel-listas | `panel/.../sections/*`, `panel/.../cards/*`, `library_list_page.dart`, `filters.dart`, `library_document_card.dart` |
 | 8.4 | Painel lateral para formulários curtos: categoria, documento, membro e usuário → specs/032-painel-lateral-formularios | `create_or_update_category_dialog.dart`, `create_or_update_team_member_dialog.dart`, `create_or_update_user_dialog.dart`, `create_or_update_document_dialog.dart`, `right_aligned_dialog` |
