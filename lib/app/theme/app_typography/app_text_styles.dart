@@ -338,6 +338,26 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
+  TextStyle get loginBrandTitle => _display(
+        size: _size(mobile: 26, tablet: 36, desktop: 44),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.03,
+      );
+
+  TextStyle get loginCardTitle => _display(
+        size: _size(mobile: 28, tablet: 28, desktop: 28),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get loginLead => _body(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w400,
+        height: 1.55,
+      );
+
   TextStyle get meta => _body(
         size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
         weight: FontWeight.w400,

@@ -1,6 +1,6 @@
 # 029. Login redesenhado
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 8, item 8.1 (T-12)
 - **Protótipo:** aba "Login" (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
@@ -83,3 +83,4 @@ Sem mudança em autenticação, `AuthStore`, mensagens das falhas (só o login e
 - 2026-10-07: criada. Fase 8 dividida em cinco specs (029 a 033), uma por item, decidido com a pessoa.
 - 2026-10-07: aprovada.
 - 2026-10-08: plano criado (plan.md e tasks.md), sem mudança de comportamento. A spec foi conferida com o código e a aba "Login" do protótipo e bate com os dois. Como a pessoa estava ausente, a aprovação do plano foi dada pelo fluxo autônomo. Decisões em plan.md: o formulário reaproveita o `FormTextField` do site, o carregamento entra como opção do `AppButtonBase` e `passwordVisible` fica no `AuthStore`.
+- 2026-10-08: implementada, sem mudança de comportamento. Dois ajustes de layout decididos no fluxo autônomo: perto de 600 px a coluna da marca é mais estreita que o logo e que a palavra "Observatório.", então o logo encolhe para caber e o título reduz a fonte só o necessário para não quebrar a palavra (mesma regra do `WordSafeText`). O aviso de erro é controlado pela página, porque o `AuthStore` não tem como limpar o erro e não podia mudar.
