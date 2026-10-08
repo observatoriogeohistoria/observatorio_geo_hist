@@ -1,9 +1,9 @@
 # Redesign do site: planejamento
 
-Este documento registra as decisões de design tomadas, o que ainda falta no protótipo e a ordem de implementação no Flutter. A seção Geoensine fica fora deste escopo. O painel administrativo entra só na Fase 6, como migração técnica, sem redesenho de layout.
+Este documento registra as decisões de design tomadas, o que ainda falta no protótipo e a ordem de implementação no Flutter. A seção Geoensine fica fora deste escopo. O painel administrativo e o login passaram pela migração técnica na Fase 6 e ganham redesenho de layout na Fase 8.
 
-- **Protótipo (v5, com todas as telas):** https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH
-- **Situação:** Fases 0 a 7 concluídas em 2026-10-07. Resumo e ressalvas em aberto em [historico-redesign.md](../specs/historico-redesign.md).
+- **Protótipo (v7, com todas as telas, inclusive login, painel e editor):** https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH
+- **Situação:** Fases 0 a 7 concluídas em 2026-10-07. Resumo e ressalvas em aberto em [historico-redesign.md](../specs/historico-redesign.md). Fase 8 (redesenho do login e do painel) especificada em 2026-10-07 nas specs 029 a 033.
 
 ---
 
@@ -56,11 +56,14 @@ Itens vindos da revisão do protótipo. Todos já estão refletidos no protótip
 ### Busca geral
 - **P-13** Busca geral do site: desenhada no protótipo, mas **fora das fases atuais** (ver seção 9).
 
+### Login e painel
+- **P-14** Todo botão só de ícone no painel e no login tem dica (`Tooltip`) ao passar o mouse e ao receber foco por teclado, dizendo o que acontece ao clicar. Ex.: "Despublicar: sai do site e continua salva no painel", "Excluir: pede confirmação antes de apagar". Botão indisponível explica o motivo ("Só dá para excluir categoria sem publicações. Esta tem 3."). → specs/030-painel-estrutura
+
 ---
 
 ## 3. Telas do protótipo
 
-Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" registra o que precisa ser considerado na implementação.
+Todas as telas abaixo já existem no protótipo (T-12 a T-14 a partir da v6). A coluna "Observações" registra o que precisa ser considerado na implementação.
 
 | ID | Tela | Rota atual | Observações |
 |---|---|---|---|
@@ -75,6 +78,9 @@ Todas as telas abaixo já existem no protótipo v5. A coluna "Observações" reg
 | T-09 | Busca | novo | **Ideia futura.** Desenhada no protótipo (aba "Busca (ideia)"), sem implementação planejada. Ver seção 9 |
 | T-10 | Estados especiais | `PageNotFound`, erro e vazio | Página 404, erro de carregamento, lista vazia e esqueletos de carregamento → specs/020-estados-especiais, concluído com ressalvas: erro dos Destaques, "Nenhum documento encontrado" e leitor de tela não conferidos no app |
 | T-11 | Todas as publicações | `/publicacoes` (novo) | Mesma listagem da categoria (cards, busca, chips de tipo), sem o filtro de categoria, ordenada pela data de publicação e com paginação. Consulta `collectionGroup('category_posts')`; pode pedir índice novo no Firestore. Ao existir, entra o link "Ver todas as publicações" dos Destaques da Home (retirado na spec 005) → specs/015-todas-publicacoes, concluído |
+| T-12 | Login | `/admin` | Duas colunas (marca sobre fundo escuro e formulário); no celular, a marca vira faixa no topo. Sai a regra de senha de baixo do campo (vale para criar usuário, não para entrar). Erro de credenciais em aviso único, botão com estado "Entrando…", "Voltar ao site" e faixa "Ambiente de testes" só no dev. Aba "Login" do protótipo → specs/029-login-redesenho |
+| T-13 | Painel | `/admin/painel/:tab` | Barra superior (marca, "Ver site", pessoa logada e papel), menu lateral em grupos com contagens e os 10 tipos de post como submenu; gaveta no celular. Listas em linhas com miniatura, selo de situação e ações com dica (P-14); filtros em linha; confirmação antes de excluir e aviso curto após cada ação. Formulários curtos (categoria, documento, membro, usuário) em painel lateral. Aba "Painel" do protótipo → specs/030-painel-estrutura a 032-painel-lateral-formularios |
+| T-14 | Editor de publicação | `/admin/painel/publicacoes/nova?tipo=` e `/admin/painel/publicacoes/:categoria/:id/editar` | Página própria no lugar do diálogo em duas etapas, com os mesmos campos de hoje. Texto à esquerda; situação, área e categoria, imagem e autoria à direita. Ações conforme a situação ("Publicar"/"Salvar rascunho" ou "Salvar alterações"/"Despublicar") e resumo dos campos que faltam. Os outros 9 tipos trocam só a coluna principal. Aba "Editor" do protótipo → specs/033-editor-publicacao |
 
 ---
 
@@ -126,6 +132,7 @@ Ordem sugerida das seções. Cada uma é entregue e revisada isoladamente.
 | 5 | Acabamento: Fale com a gente, Colabore, 404/erros e demais tipos de post (Fale com a gente → specs/018-fale-com-a-gente, Colabore → specs/019-colabore, 404/erros → specs/020-estados-especiais, tipos de post → specs/021-tipos-post-obras e specs/022-tipos-post-midia-eventos, todas concluídas com ressalvas; Fase 5 concluída) | Antes ficava na fase 6 |
 | 6 | Painel administrativo e login: migração técnica para os tokens (detalhe abaixo) (login e estrutura → specs/023-painel-login-estrutura, cards → specs/024-painel-cards, diálogos e campos → specs/025-painel-dialogos-campos, biblioteca e faixa de ambiente → specs/026-painel-biblioteca, todas concluídas com ressalvas: o que exige login não foi conferido na tela; Fase 6 concluída) | Sem isso a Fase 7 não pode remover nada |
 | 7 | Limpeza: remover tokens antigos, `num_extension` e assets sem uso (código legado, parte 1 → specs/027-remocao-codigo-legado, concluído; assets, fontes e pacotes → specs/028-assets-sem-uso, concluído; Fase 7 concluída) | Depois da Fase 6 nada mais usa |
+| 8 | Redesenho do login e do painel administrativo (detalhe abaixo) | Parte dos tokens e componentes já migrados nas Fases 6 e 7 |
 
 ### Fase 6: Painel administrativo e login (migração técnica)
 O painel e o login mantêm o layout e o comportamento atuais. Trocam `num_extension`, a fonte Dosis, as cores antigas e os tamanhos soltos pelos tokens novos de `AppTheme`, com tamanhos fixos por faixa de largura. Fontes e cores ficam iguais às do site novo; não há protótipo para o painel e o layout não é redesenhado. Ao final, nenhum arquivo do projeto usa `num_extension` nem tokens antigos, e a Fase 7 pode removê-los sem restrição.
@@ -140,6 +147,19 @@ O painel e o login mantêm o layout e o comportamento atuais. Trocam `num_extens
 Arquivos sem uso não foram migrados: saíram na Fase 7 (specs/027-remocao-codigo-legado).
 
 **Aceite:** login e painel funcionam como antes (entrar, listar, criar, editar e excluir cada tipo de conteúdo) em 390, 768 e 1280 px, sem `overflow`. Nenhum arquivo fora de `theme/` e de `num_extension.dart` importa `num_extension` nem usa a tipografia Dosis ou as cores antigas.
+
+### Fase 8: Login e painel administrativo (redesenho)
+Redesenho de layout do login e do painel a partir das abas "Login", "Painel" e "Editor" do protótipo (T-12 a T-14). Usa os tokens e componentes do site; não muda dados, permissões nem regras: os campos de cada formulário, os papéis (`ADMIN`, `EDITOR`, `VIEWER`) e as regras atuais (ex.: categoria só é excluída sem publicações) continuam iguais.
+
+| # | Entrega | Principais arquivos |
+|---|---|---|
+| 8.1 | Login (T-12) → specs/029-login-redesenho | `admin/login/presentation/signin_page.dart`, `environment_banner.dart` |
+| 8.2 | Estrutura do painel: barra superior, menu lateral em grupos com contagens e submenu de tipos, gaveta no celular, cabeçalho de seção, aviso curto após ações, confirmação de exclusão e dicas nos botões de ícone (P-14) → specs/030-painel-estrutura | `panel_page.dart`, `admin/sidebar/*`, `section_header_*`, `app_icon_button` |
+| 8.3 | Listas do painel em linhas (publicações, categorias, equipe, usuários, biblioteca) e mídias em grade, com filtros em linha e estados de carregando, vazio e erro → specs/031-painel-listas | `panel/.../sections/*`, `panel/.../cards/*`, `library_list_page.dart`, `filters.dart`, `library_document_card.dart` |
+| 8.4 | Painel lateral para formulários curtos: categoria, documento, membro e usuário → specs/032-painel-lateral-formularios | `create_or_update_category_dialog.dart`, `create_or_update_team_member_dialog.dart`, `create_or_update_user_dialog.dart`, `create_or_update_document_dialog.dart`, `right_aligned_dialog` |
+| 8.5 | Editor de publicação em página própria (T-14): artigo primeiro, depois os outros 9 tipos → specs/033-editor-publicacao | `create_or_update_post_dialog.dart`, `create_or_update_posts_dialogs/*`, `post_form_dialog.dart`, `editor_quill`, rotas em `AppRoutes` |
+
+**Aceite:** as telas reproduzem o protótipo em 390, 768 e 1280 px, sem rolagem horizontal nem `overflow`. Entrar, listar, filtrar, criar, editar, publicar, destacar e excluir cada tipo de conteúdo funcionam como antes. Todo botão só de ícone tem dica e nome acessível; navegação completa por teclado no menu, nas listas, no painel lateral e no editor.
 
 ---
 
@@ -167,7 +187,7 @@ Nenhuma no momento.
 ---
 
 ## 7. Fora do escopo
-- Redesign visual do portal administrativo (login e painel). A Fase 6 só migra o código para os tokens novos.
+- Mudanças de dados, permissões ou regras do painel. A Fase 8 redesenha só a interface.
 - Seção Geoensine.
 - Modo escuro.
 - Alteração de conteúdo ou de modelos de dados.
@@ -176,6 +196,9 @@ Nenhuma no momento.
 
 ## 8. Riscos e cuidados
 - **Imagens sem padrão:** qualquer componente com imagem precisa ser testado com imagens muito altas, muito largas, ausentes e com falha de carregamento.
+- **Contagens no menu do painel (Fase 8):** contar itens por tipo e por seção pede consultas de contagem no Firestore. O Storage não informa o total de mídias sem listar tudo, então Mídias pode ficar sem número.
+- **Rota do editor (Fase 8):** o post fica em `posts/{categoria}/category_posts/{id}`, então o endereço de edição precisa identificar a categoria ou buscar por `collectionGroup`. Decidido na spec 033: `/admin/painel/publicacoes/:categoria/:id/editar`.
+- **Conferência do painel:** as Fases 6 e 7 não conferiram na tela o que exige login. A Fase 8 precisa de credenciais de teste no dev.
 
 ---
 
