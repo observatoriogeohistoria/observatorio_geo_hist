@@ -18,6 +18,7 @@ class AppButtonBase extends StatefulWidget {
     this.leadingIcon,
     this.reserveTexts = const [],
     this.expand = false,
+    this.isLoading = false,
   });
 
   final AppButtonKind kind;
@@ -36,6 +37,9 @@ class AppButtonBase extends StatefulWidget {
   /// Ocupa a largura disponível, como no botão principal em tela estreita.
   final bool expand;
 
+  /// Mostra o indicador antes do texto e ignora cliques, mas com opacidade cheia, para manter o contraste.
+  final bool isLoading;
+
   @override
   State<AppButtonBase> createState() => _AppButtonBaseState();
 }
@@ -49,7 +53,8 @@ class _AppButtonBaseState extends State<AppButtonBase> {
     final spacing = AppTheme.dimensions.spacing;
     final components = AppTheme.dimensions.components;
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r10);
-    final hovered = _hovered && !widget.isDisabled;
+    final inactive = widget.isDisabled || widget.isLoading;
+    final hovered = _hovered && !inactive;
 
     final (background, foreground, border) = switch (widget.kind) {
       AppButtonKind.primary => (
@@ -100,15 +105,31 @@ class _AppButtonBaseState extends State<AppButtonBase> {
 
     final iconSize = fontSize * components.buttonIconScale;
 
+    final Widget? leading = widget.isLoading
+        ? SizedBox.square(
+            dimension: components.buttonSpinnerSize,
+            child: CircularProgressIndicator(
+              value: MediaQuery.disableAnimationsOf(context)
+                  ? components.buttonSpinnerStaticValue
+                  : null,
+              strokeWidth: components.buttonSpinnerStroke,
+              color: foreground,
+              backgroundColor: foreground.withValues(alpha: components.buttonSpinnerTrackOpacity),
+            ),
+          )
+        : widget.leadingIcon == null
+            ? null
+            : Icon(widget.leadingIcon, size: iconSize, color: foreground);
+
     Widget content(String text) {
       final label = Text(text, textAlign: TextAlign.center, style: textStyle);
-      if (widget.trailingIcon == null && widget.leadingIcon == null) return label;
+      if (widget.trailingIcon == null && leading == null) return label;
 
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (widget.leadingIcon != null) ...[
-            Icon(widget.leadingIcon, size: iconSize, color: foreground),
+          if (leading != null) ...[
+            leading,
             SizedBox(width: spacing.s8),
           ],
           Flexible(child: label),
@@ -139,9 +160,9 @@ class _AppButtonBaseState extends State<AppButtonBase> {
 
     return Semantics(
       button: true,
-      enabled: !widget.isDisabled,
+      enabled: !inactive,
       label: widget.text,
-      onTap: widget.isDisabled ? null : widget.onPressed,
+      onTap: inactive ? null : widget.onPressed,
       excludeSemantics: true,
       child: Opacity(
         opacity: widget.isDisabled ? 0.5 : 1,
@@ -156,12 +177,15 @@ class _AppButtonBaseState extends State<AppButtonBase> {
             ),
             child: InkWell(
               customBorder: RoundedRectangleBorder(borderRadius: radius),
-              onTap: widget.isDisabled ? null : widget.onPressed,
+              onTap: inactive ? null : widget.onPressed,
               onHover: (value) => setState(() => _hovered = value),
               hoverColor: Colors.transparent,
               focusColor: Colors.transparent,
-              mouseCursor:
-                  widget.isDisabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
+              mouseCursor: widget.isDisabled
+                  ? SystemMouseCursors.forbidden
+                  : widget.isLoading
+                      ? SystemMouseCursors.wait
+                      : SystemMouseCursors.click,
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: minHeight),
                 child: Padding(

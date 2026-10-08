@@ -28,6 +28,12 @@ class ComponentSizes {
 
   final double buttonIconScale = 1.15;
 
+  final double buttonSpinnerSize = 16.0;
+  final double buttonSpinnerStroke = 2.0;
+  final double buttonSpinnerTrackOpacity = 0.4;
+  // Com movimento reduzido o indicador fica parado; um quarto do círculo ainda lê como espera.
+  final double buttonSpinnerStaticValue = 0.25;
+
   final double logoMark = 34.0;
   final double logoName = 19.0;
   final double logoSubtitle = 11.5;

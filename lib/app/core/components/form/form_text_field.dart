@@ -15,6 +15,9 @@ class FormTextField extends StatefulWidget {
     this.autofillHints,
     this.textInputAction,
     this.onSubmitted,
+    this.hintText,
+    this.obscureText = false,
+    this.suffix,
   });
 
   final String label;
@@ -28,6 +31,12 @@ class FormTextField extends StatefulWidget {
   final Iterable<String>? autofillHints;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onSubmitted;
+
+  final String? hintText;
+  final bool obscureText;
+
+  /// Fica dentro do campo, à direita, como o botão de mostrar a senha.
+  final Widget? suffix;
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -82,6 +91,39 @@ class _FormTextFieldState extends State<FormTextField> {
                 ? colors.accent
                 : colors.fieldBorder;
         final ringColor = hasError ? colors.errorSurface : colors.accentSoft;
+        final suffix = widget.suffix;
+        final singleLine = widget.obscureText || !widget.multiline;
+
+        final input = Semantics(
+          label: widget.label,
+          hint: error,
+          validationResult:
+              hasError ? SemanticsValidationResult.invalid : SemanticsValidationResult.none,
+          child: TextField(
+            controller: widget.controller,
+            focusNode: widget.focusNode,
+            onChanged: field.didChange,
+            onSubmitted: widget.onSubmitted,
+            keyboardType: singleLine ? widget.keyboardType : TextInputType.multiline,
+            textInputAction: singleLine ? widget.textInputAction : TextInputAction.newline,
+            autofillHints: widget.autofillHints,
+            obscureText: widget.obscureText,
+            minLines: singleLine ? 1 : components.formMessageMinLines,
+            maxLines: singleLine ? 1 : components.formMessageMaxLines,
+            style: styles.regular.copyWith(color: colors.ink),
+            cursorColor: colors.accent,
+            decoration: InputDecoration(
+              isCollapsed: true,
+              border: InputBorder.none,
+              hintText: widget.hintText,
+              hintStyle: styles.regular.copyWith(color: colors.inkSecondary),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: components.formFieldPaddingH - components.formFieldBorder,
+                vertical: components.formFieldPaddingV - components.formFieldBorder,
+              ),
+            ),
+          ),
+        );
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -109,34 +151,7 @@ class _FormTextFieldState extends State<FormTextField> {
                   ),
                 ],
               ),
-              child: Semantics(
-                label: widget.label,
-                hint: error,
-                validationResult:
-                    hasError ? SemanticsValidationResult.invalid : SemanticsValidationResult.none,
-                child: TextField(
-                  controller: widget.controller,
-                  focusNode: widget.focusNode,
-                  onChanged: field.didChange,
-                  onSubmitted: widget.onSubmitted,
-                  keyboardType: widget.multiline ? TextInputType.multiline : widget.keyboardType,
-                  textInputAction:
-                      widget.multiline ? TextInputAction.newline : widget.textInputAction,
-                  autofillHints: widget.autofillHints,
-                  minLines: widget.multiline ? components.formMessageMinLines : 1,
-                  maxLines: widget.multiline ? components.formMessageMaxLines : 1,
-                  style: styles.regular.copyWith(color: colors.ink),
-                  cursorColor: colors.accent,
-                  decoration: InputDecoration(
-                    isCollapsed: true,
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: components.formFieldPaddingH - components.formFieldBorder,
-                      vertical: components.formFieldPaddingV - components.formFieldBorder,
-                    ),
-                  ),
-                ),
-              ),
+              child: suffix == null ? input : Row(children: [Expanded(child: input), suffix]),
             ),
             if (hasError) ...[
               SizedBox(height: components.formFieldLabelGap),

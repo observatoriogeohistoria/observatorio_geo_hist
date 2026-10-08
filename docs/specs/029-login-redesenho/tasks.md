@@ -6,11 +6,11 @@ Critérios de aceite da spec, na ordem: 1 telas do protótipo sem overflow · 2 
 
 ## Grupo A: tema e peças compartilhadas
 - [ ] **A1.** Tokens do login: colunas (5:6), paddings por faixa da marca (40/24) e da área do formulário (48×32 / 28×16), cartão (largura máxima 400, padding 32 e 24×20, raio `r18`, sombra), anéis (passo, 15 %, centro no canto inferior direito), espaços (sobretítulo→título, título→texto, voltar ao site) e aviso. Renomear `signinCard*` para `login*`. Estilos `loginBrandTitle` (26/36/44), `loginCardTitle` (28) e `loginLead`. Arquivos: `app_dimensions.dart`, `app_text_styles.dart`. Atende: 12.
-- [ ] **A2.** `FormTextField` com `hintText`, `obscureText` (força uma linha) e `suffix` opcionais. Arquivo: `core/components/form/form_text_field.dart`. Atende: 2, 9. Conferir: Contato e Colabore iguais (A6).
-- [ ] **A3.** `isLoading` no `AppButtonBase` e no `PrimaryButton`: indicador branco antes do texto, opacidade cheia, sem `onTap`, semântica desabilitada e indicador parado com `MediaQuery.disableAnimations`. Arquivos: `app_button_base.dart`, `primary_button.dart`. Atende: 6.
-- [ ] **A4.** `AppLogo(semanticLabel:)` opcional, mantendo o padrão atual. Arquivo: `core/components/logo/app_logo.dart`. Atende: 8.
-- [ ] **A5.** Faixa com "Ambiente de testes". Arquivo: `environment_banner.dart`. Atende: 10.
-- [ ] **A6.** Conferir as telas que usam as peças de A2 a A5: Contato e Colabore (campos e erro), Home (botões, logo na navbar e no rodapé) e uma página com a faixa, em 390 e 1280. Sem regressão visual.
+- [x] **A2.** `FormTextField` com `hintText`, `obscureText` (força uma linha) e `suffix` opcionais. Arquivo: `core/components/form/form_text_field.dart`. Atende: 2, 9. Conferir: Contato e Colabore iguais (A6). Feito. Sem `suffix`, a árvore do campo fica igual à de antes.
+- [x] **A3.** `isLoading` no `AppButtonBase` e no `PrimaryButton`: indicador branco antes do texto, opacidade cheia, sem `onTap`, semântica desabilitada e indicador parado com `MediaQuery.disableAnimations`. Arquivos: `app_button_base.dart`, `primary_button.dart`. Atende: 6. Feito. O `PrimaryButton` repassa só `isLoading`: o botão do login ocupa a largura do cartão, então `reserveTexts` não fez falta.
+- [x] **A4.** `AppLogo(semanticLabel:)` opcional, mantendo o padrão atual. Arquivo: `core/components/logo/app_logo.dart`. Atende: 8. Feito.
+- [x] **A5.** Faixa com "Ambiente de testes". Arquivo: `environment_banner.dart`. Atende: 10. Feito.
+- [x] **A6.** Conferir as telas que usam as peças de A2 a A5: Contato e Colabore (campos e erro), Home (botões, logo na navbar e no rodapé) e uma página com a faixa, em 390 e 1280. Sem regressão visual. Conferido no build de release: Home (botões, logo, faixa), Contato e Colabore em 390 e 1280, sem diferença visível.
 
 ## Grupo B: componentes do login
 - [ ] **B1.** `LoginRingsPainter` e `LoginBrandPanel` (`compact` no celular: só logo, sobretítulo e título menor). Os anéis ficam em `ExcludeSemantics` + `IgnorePointer`. O logo usa `onDark` e `semanticLabel: 'Observatório, voltar ao site'`. Arquivos: `login/presentation/components/login_rings_painter.dart`, `login_brand_panel.dart`. Atende: 1, 8, 11.

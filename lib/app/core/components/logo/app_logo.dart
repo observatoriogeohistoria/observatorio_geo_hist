@@ -8,9 +8,11 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppLogo extends StatelessWidget {
-  const AppLogo({super.key, this.onDark = false});
+  const AppLogo({super.key, this.onDark = false, this.semanticLabel});
 
   final bool onDark;
+
+  final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class AppLogo extends StatelessWidget {
 
     return Semantics(
       link: true,
-      label: 'Observatório do Ensino de História e Geografia, início',
+      label: semanticLabel ?? 'Observatório do Ensino de História e Geografia, início',
       linkUrl: Uri.parse(AppRoutes.root),
       onTap: () => context.go(AppRoutes.root),
       excludeSemantics: true,
