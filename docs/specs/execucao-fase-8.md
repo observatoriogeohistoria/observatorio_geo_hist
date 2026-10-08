@@ -8,7 +8,7 @@ As specs 029 a 033 já estavam aprovadas (#35). A etapa "Spec+plano" só cria o 
 | Spec | Itens | Spec+plano | Implementação | Verificação | Resultado |
 |---|---|---|---|---|---|
 | 029-login-redesenho | 8.1 | feito (13 critérios, 18 tarefas) | feito (2 commits) | feito (1 fix) | verificada com ressalvas |
-| 030-painel-estrutura | 8.2 | pendente | pendente | pendente | |
+| 030-painel-estrutura | 8.2 | feito (15 critérios, 28 tarefas) | pendente | pendente | |
 | 031-painel-listas | 8.3 | pendente | pendente | pendente | |
 | 032-painel-lateral-formularios | 8.4 | pendente | pendente | pendente | |
 | 033-editor-publicacao | 8.5 | pendente | pendente | pendente | |
@@ -17,6 +17,9 @@ As specs 029 a 033 já estavam aprovadas (#35). A etapa "Spec+plano" só cria o 
 - (geral) Sem credenciais de teste na conversa: telas que exigem login são conferidas num app de teste fora do repositório (scratchpad) que monta os widgets com dados falsos; o fluxo real com o Firebase fica sem conferir.
 - (029) Login reaproveita o `FormTextField` do site com dica, senha e ícone opcionais; `isLoading` novo no `AppButtonBase`; mensagem de credencial unificada na página, sem mudar `AuthStore`.
 - (029) Em 600 px o logo encolhe (`FittedBox`) e o título reduz a fonte para não quebrar "Observatório." (registrado na spec).
+
+- (030) Ordem dos tipos no menu é a do protótipo; logo do painel leva a Publicações → Artigos; contagem de usuários ignora removidos; até a 031 a Biblioteca resume "N documentos" e o "Novo documento" fica na página da área (registrado na spec).
+- (030) Aviso curto pelo `Messenger` (SnackBar), confirmação genérica `showConfirmDialog` e dica no foco como padrão do `AppIconButton`; texto do aviso escolhido pela seção (ação pendente), sem mexer nos stores.
 
 ## Ressalvas
 - (029) Login real com o Firebase e leitor de tela de verdade não conferidos (sem credenciais; nomes acessíveis só no código).
