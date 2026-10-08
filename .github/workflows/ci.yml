@@ -5,20 +5,35 @@ on:
     branches:
       - develop
       - main
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - '.claude/**'
-      - '.vscode/**'
-      - 'tool/**'
-      - '.github/workflows/deploy-*.yml'
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # O validar é check obrigatório: com paths-ignore no gatilho ele nunca reportava e PR só de
+  # docs ficava travado. Por isso o filtro fica aqui; job pulado por `if` conta como aprovado.
+  mudancas:
+    runs-on: ubuntu-latest
+    outputs:
+      site: ${{ steps.filtro.outputs.site }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Ver se algo do site mudou
+      id: filtro
+      run: |
+        alterados=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
+          | grep -Ev '^(docs/|\.claude/|\.vscode/|tool/|\.github/workflows/deploy-[^/]*\.yml$)|\.md$' || true)
+        echo "site=$([ -n "$alterados" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
   validar:
+    needs: mudancas
+    if: needs.mudancas.outputs.site == 'true'
     runs-on: ubuntu-latest
 
     steps:
