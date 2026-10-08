@@ -82,3 +82,4 @@ Sem mudança em autenticação, `AuthStore`, mensagens das falhas (só o login e
 ## Histórico de mudanças
 - 2026-10-07: criada. Fase 8 dividida em cinco specs (029 a 033), uma por item, decidido com a pessoa.
 - 2026-10-07: aprovada.
+- 2026-10-08: plano criado (plan.md e tasks.md), sem mudança de comportamento. A spec foi conferida com o código e a aba "Login" do protótipo e bate com os dois. Como a pessoa estava ausente, a aprovação do plano foi dada pelo fluxo autônomo. Decisões em plan.md: o formulário reaproveita o `FormTextField` do site, o carregamento entra como opção do `AppButtonBase` e `passwordVisible` fica no `AuthStore`.
