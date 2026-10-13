@@ -749,6 +749,7 @@ class ComponentSizes {
   final double panelFilterGap = 10.0;
   final double panelFilterSearchMinWidth = 220.0;
   final double panelFilterMarginBottom = 16.0;
+  final double panelFilterSelectMaxWidth = 260.0;
   final double panelControlHeight = 42.0;
   final double panelSegmentPadding = 3.0;
   final double panelSegmentButtonPaddingV = 8.0;

@@ -48,13 +48,15 @@ mixin _$PostsStore on PostsStoreBase, Store {
       PostsAreas? searchArea,
       CategoryModel? searchCategory,
       bool? isPublished,
-      bool? isHighlighted}) {
+      bool? isHighlighted,
+      bool reset = false}) {
     return _$getPostsAsyncAction.run(() => super.getPosts(type,
         searchText: searchText,
         searchArea: searchArea,
         searchCategory: searchCategory,
         isPublished: isPublished,
-        isHighlighted: isHighlighted));
+        isHighlighted: isHighlighted,
+        reset: reset));
   }
 
   late final _$createOrUpdatePostAsyncAction =

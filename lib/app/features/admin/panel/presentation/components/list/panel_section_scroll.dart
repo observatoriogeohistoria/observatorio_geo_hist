@@ -65,19 +65,23 @@ class _PanelSectionScrollState extends State<PanelSectionScroll> {
   Widget build(BuildContext context) {
     final filterBar = widget.filterBar;
 
-    return AppScrollbar(
-      controller: _controller,
-      child: CustomScrollView(
+    // Em grupo, o Tab percorre a seção inteira antes de voltar ao menu, em vez de alternar
+    // entre os dois pela altura de cada item.
+    return FocusTraversalGroup(
+      child: AppScrollbar(
         controller: _controller,
-        physics: const ClampingScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(child: widget.header),
-          if (filterBar != null) SliverToBoxAdapter(child: filterBar),
-          widget.body,
-          SliverToBoxAdapter(
-            child: SizedBox(height: AppTheme.dimensions.components.panelMainPaddingBottom),
-          ),
-        ],
+        child: CustomScrollView(
+          controller: _controller,
+          physics: const ClampingScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(child: widget.header),
+            if (filterBar != null) SliverToBoxAdapter(child: filterBar),
+            widget.body,
+            SliverToBoxAdapter(
+              child: SizedBox(height: AppTheme.dimensions.components.panelMainPaddingBottom),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -154,12 +154,14 @@ class _PanelListRowState extends State<PanelListRow> {
       container: true,
       explicitChildNodes: true,
       label: widget.title,
-      child: MouseRegion(
-        onEnter: (_) => setState(() => _hovered = true),
-        onExit: (_) => setState(() => _hovered = false),
-        child: ColoredBox(
-          color: _hovered ? colors.rowHover : Colors.transparent,
-          child: content,
+      child: FocusTraversalGroup(
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _hovered = true),
+          onExit: (_) => setState(() => _hovered = false),
+          child: ColoredBox(
+            color: _hovered ? colors.rowHover : Colors.transparent,
+            child: content,
+          ),
         ),
       ),
     );

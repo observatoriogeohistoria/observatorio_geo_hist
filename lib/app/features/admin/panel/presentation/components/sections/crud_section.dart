@@ -57,6 +57,10 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
   List<ReactionDisposer> _reactions = [];
   bool _loadingFirstPage = false;
   bool _firstPageFailed = false;
+  bool _loadingMore = false;
+
+  // Depois de uma falha ao carregar mais, a próxima tentativa é pelo botão, não a cada rolada.
+  bool _loadMoreFailed = false;
 
   @override
   void initState() {
@@ -71,6 +75,18 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
 
   void _load() => widget.store.getItems();
 
+  void _loadMore() {
+    if (_loadMoreFailed) return;
+    final before = widget.store.state;
+    widget.store.loadMore();
+    if (!identical(before, widget.store.state)) _loadingMore = true;
+  }
+
+  void _retryLoadMore() {
+    setState(() => _loadMoreFailed = false);
+    _loadMore();
+  }
+
   void _retry() {
     setState(() => _firstPageFailed = false);
     _load();
@@ -81,6 +97,8 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
 
     final isFirstPageError = state is CrudErrorState && _loadingFirstPage;
     if (isFirstPageError) setState(() => _firstPageFailed = true);
+    if (state is CrudErrorState && _loadingMore) setState(() => _loadMoreFailed = true);
+    if (state is! CrudLoadingState) _loadingMore = false;
 
     showPanelActionResult(
       context,
@@ -92,7 +110,7 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
     );
 
     if (state is CrudSuccessState && widget.paginated) {
-      loadMoreIfNotScrollable(_scrollController, widget.store.loadMore);
+      loadMoreIfNotScrollable(_scrollController, _loadMore);
     }
   }
 
@@ -133,11 +151,18 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
           if (visible.isEmpty && clear != null) {
             body = SliverToBoxAdapter(child: PanelNoResultsState(onClearFilters: clear));
           } else {
-            final showProgress = isLoadingMore;
-            final footer =
-                PanelListFooter.isNeeded(onClearFilters: clear, isLoadingMore: showProgress)
-                    ? PanelListFooter(onClearFilters: clear, isLoadingMore: showProgress)
-                    : null;
+            final loadMore = _loadMoreFailed ? _retryLoadMore : null;
+            final footer = PanelListFooter.isNeeded(
+              onClearFilters: clear,
+              onLoadMore: loadMore,
+              isLoadingMore: isLoadingMore,
+            )
+                ? PanelListFooter(
+                    onClearFilters: clear,
+                    onLoadMore: loadMore,
+                    isLoadingMore: isLoadingMore,
+                  )
+                : null;
             body = widget.bodyBuilder(visible, footer);
           }
         }
@@ -146,7 +171,7 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
           controller: _scrollController,
           header: widget.header,
           filterBar: widget.filterBar,
-          onNearEnd: widget.paginated ? store.loadMore : null,
+          onNearEnd: widget.paginated ? _loadMore : null,
           body: body,
         );
       },

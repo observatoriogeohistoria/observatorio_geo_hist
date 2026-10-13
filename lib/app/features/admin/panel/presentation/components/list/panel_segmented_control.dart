@@ -94,6 +94,7 @@ class _SegmentButton extends StatelessWidget {
               onTap: onPressed,
               borderRadius: radius,
               splashFactory: NoSplash.splashFactory,
+              focusColor: Colors.transparent,
               hoverColor: isSelected ? Colors.transparent : colors.page,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: components.panelSegmentButtonPaddingH),

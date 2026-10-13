@@ -193,7 +193,7 @@ class _PanelPageState extends State<PanelPage> {
                               ),
                             ),
                           ),
-                          child: const Sidebar(),
+                          child: FocusTraversalGroup(child: const Sidebar()),
                         ),
                         Expanded(child: content),
                       ],
