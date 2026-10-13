@@ -1,6 +1,6 @@
 # 030. Estrutura do painel: barra superior, menu, avisos e confirmações
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 8, item 8.2 (T-13, P-14)
 - **Protótipo:** aba "Painel" (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
