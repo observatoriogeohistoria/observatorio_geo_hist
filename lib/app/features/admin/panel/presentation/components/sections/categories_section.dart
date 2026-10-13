@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/panel_section_header.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
@@ -18,6 +21,7 @@ class CategoriesSection extends StatefulWidget {
 class _CategoriesSectionState extends State<CategoriesSection> {
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
   late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
+  late final PanelCountsStore countsStore = PanelSetup.getIt<PanelCountsStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +30,21 @@ class _CategoriesSectionState extends State<CategoriesSection> {
         bool canEdit = authStore.user?.permissions.canEditCategoriesSection ?? false;
 
         return CrudSection<CategoryModel>(
-          title: 'Categorias',
-          canEdit: canEdit,
+          header: PanelSectionHeader(
+            eyebrow: SidebarItem.categories.eyebrow,
+            title: SidebarItem.categories.title,
+            summary: countSummary(
+              countsStore.counts.categories,
+              'categoria',
+              'categorias',
+              note: 'aparecem no menu de História e Geografia',
+            ),
+            actionLabel: canEdit ? 'Nova categoria' : null,
+            onAction: () => showCreateOrUpdateCategoryDialog(
+              context,
+              onCreateOrUpdate: (item) => categoriesStore.createOrUpdateItem(item),
+            ),
+          ),
           store: categoriesStore,
           itemBuilder: (item, index) {
             return CategoryCard(
@@ -40,12 +57,6 @@ class _CategoriesSectionState extends State<CategoriesSection> {
                 onCreateOrUpdate: (i) => categoriesStore.createOrUpdateItem(i),
               ),
               canEdit: canEdit,
-            );
-          },
-          onCreatePressed: () {
-            showCreateOrUpdateCategoryDialog(
-              context,
-              onCreateOrUpdate: (item) => categoriesStore.createOrUpdateItem(item),
             );
           },
         );

@@ -17,10 +17,13 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart'
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/post_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_post_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_actions.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_title.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/panel_section_header.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/empty_list_message.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/labels/post_type_panel_labels.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -36,6 +39,7 @@ class _PostsSectionState extends State<PostsSection> {
   late final PostsStore postsStore = PanelSetup.getIt<PostsStore>();
   late final CategoriesStore categoriesStore = PanelSetup.getIt<CategoriesStore>();
   late final SidebarStore sidebarStore = PanelSetup.getIt<SidebarStore>();
+  late final PanelCountsStore countsStore = PanelSetup.getIt<PanelCountsStore>();
 
   final _scrollController = ScrollController();
 
@@ -100,6 +104,11 @@ class _PostsSectionState extends State<PostsSection> {
     super.dispose();
   }
 
+  String? _summary(int? count) {
+    if (count == null) return null;
+    return count == 0 ? 'Nenhuma ainda' : '$count no total';
+  }
+
   bool get _hasFilter =>
       (_searchText?.isNotEmpty ?? false) ||
       _searchArea != null ||
@@ -119,9 +128,13 @@ class _PostsSectionState extends State<PostsSection> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SectionHeaderTitle(
-              title: selectedPostType.portuguesePlural,
-              onCreate: () {
+            PanelSectionHeader(
+              eyebrow: SidebarItem.posts.eyebrow,
+              title: selectedPostType.panelPlural,
+              summary: _summary(countsStore.counts.posts(selectedPostType)),
+              actionLabel: canEdit ? selectedPostType.panelCreateLabel : null,
+              isActionDisabled: categoriesLoading,
+              onAction: () {
                 showCreateOrUpdatePostDialog(
                   context,
                   categories: categoriesStore.items,
@@ -131,10 +144,7 @@ class _PostsSectionState extends State<PostsSection> {
                   isLoading: postsStore.state is CrudLoadingState,
                 );
               },
-              canEdit: canEdit,
-              isLoading: categoriesLoading,
             ),
-            SizedBox(height: spacing.s32),
             SectionHeaderActions(
               onTextChange: (text) => _onSearch(1, text: text),
               onAreaChange: (area) => _onSearch(2, area: area),

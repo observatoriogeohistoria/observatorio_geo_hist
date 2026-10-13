@@ -629,10 +629,51 @@ class ComponentSizes {
 
   final double cardHoverIcon = 56.0;
 
-  final double panelSidebarWidth = 304.0;
-  final double panelSidebarIcon = 28.0;
-  final double panelSidebarItemPadding = 16.0;
+  final double panelTopBarHeight = 64.0;
+  double panelTopBarPaddingStart(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 8, 20, 20);
+  double panelTopBarPaddingEnd(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 12, 20, 20);
+  double panelTopBarGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 6, 12, 12);
+  final double panelTopBarActionsGap = 10.0;
   final double panelTopBarIcon = 28.0;
+
+  final double panelUserGap = 10.0;
+  final double panelUserDividerGap = 14.0;
+  final double panelAvatar = 36.0;
+
+  final double panelSidebarWidth = 248.0;
+  final double panelSidebarPaddingV = 16.0;
+  final double panelSidebarPaddingH = 12.0;
+  final double panelNavItemPaddingV = 9.0;
+  final double panelNavItemPaddingH = 12.0;
+  final double panelNavSubItemPaddingV = 6.0;
+  final double panelNavSubItemPaddingH = 10.0;
+  final double panelNavItemGap = 10.0;
+  final double panelNavItemSpacing = 2.0;
+  final double panelNavSubItemSpacing = 1.0;
+  final double panelNavIcon = 18.0;
+  final double panelNavCountGap = 8.0;
+
+  /// O recuo alinha a linha dos tipos com o centro do ícone de Publicações.
+  final double panelNavSubIndent = 21.0;
+  final double panelNavSubPaddingStart = 10.0;
+  final double panelNavSubPaddingTop = 2.0;
+  final double panelNavSubPaddingBottom = 6.0;
+
+  final double panelGroupLabelPaddingTop = 18.0;
+  final double panelGroupLabelPaddingTopFirst = 4.0;
+  final double panelGroupLabelPaddingBottom = 6.0;
+
+  final double panelDrawerMaxWidth = 300.0;
+  final double panelDrawerWidthFactor = 0.86;
+  final double panelDrawerScrimOpacity = 0.45;
+
+  double panelMainPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 32);
+  double panelMainPaddingTop(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 20, 28);
+
+  final double panelHeadTitleGap = 4.0;
+  final double panelHeadSummaryGap = 4.0;
+  final double panelHeadMarginBottom = 20.0;
+  final double panelHeadActionGap = 16.0;
 
   final double tooltipMaxWidth = 260.0;
   final double tooltipPaddingV = 7.0;

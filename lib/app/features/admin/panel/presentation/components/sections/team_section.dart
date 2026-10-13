@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/panel_section_header.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/team_member_card.dart';
@@ -18,6 +21,7 @@ class TeamSection extends StatefulWidget {
 class _TeamSectionState extends State<TeamSection> {
   late final TeamStore teamStore = PanelSetup.getIt<TeamStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
+  late final PanelCountsStore countsStore = PanelSetup.getIt<PanelCountsStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +30,21 @@ class _TeamSectionState extends State<TeamSection> {
         bool canEdit = authStore.user?.permissions.canEditTeamSection ?? false;
 
         return CrudSection<TeamMemberModel>(
-          title: 'Equipe',
-          canEdit: canEdit,
+          header: PanelSectionHeader(
+            eyebrow: SidebarItem.team.eyebrow,
+            title: SidebarItem.team.title,
+            summary: countSummary(
+              countsStore.counts.team,
+              'pessoa',
+              'pessoas',
+              note: 'quem tem descrição ganha página no site',
+            ),
+            actionLabel: canEdit ? 'Novo membro' : null,
+            onAction: () => showCreateOrUpdateTeamMemberDialog(
+              context,
+              onCreateOrUpdate: (item) => teamStore.createOrUpdateItem(item),
+            ),
+          ),
           store: teamStore,
           itemBuilder: (item, index) {
             return TeamMemberCard(
@@ -42,12 +59,6 @@ class _TeamSectionState extends State<TeamSection> {
                 );
               },
               canEdit: canEdit,
-            );
-          },
-          onCreatePressed: () {
-            showCreateOrUpdateTeamMemberDialog(
-              context,
-              onCreateOrUpdate: (item) => teamStore.createOrUpdateItem(item),
             );
           },
         );

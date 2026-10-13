@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/panel_section_header.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
@@ -26,8 +28,17 @@ class _MediaSectionState extends State<MediaSection> {
         bool canEdit = authStore.user?.permissions.canEditMediaSection ?? false;
 
         return CrudSection<MediaModel>(
-          title: 'Mídias',
-          canEdit: canEdit,
+          header: PanelSectionHeader(
+            eyebrow: SidebarItem.media.eyebrow,
+            title: SidebarItem.media.title,
+            summary: 'Imagens usadas nas publicações. Copie o link para usar no editor.',
+            actionLabel: canEdit ? 'Enviar imagens' : null,
+            actionIcon: Icons.file_upload_outlined,
+            onAction: () => showCreateMediaDialog(
+              context,
+              onCreate: (item) => mediaStore.createOrUpdateItem(item),
+            ),
+          ),
           store: mediaStore,
           paginated: true,
           itemBuilder: (item, index) {
@@ -36,12 +47,6 @@ class _MediaSectionState extends State<MediaSection> {
               index: index + 1,
               onDelete: () => mediaStore.deleteItem(item),
               canEdit: canEdit,
-            );
-          },
-          onCreatePressed: () {
-            showCreateMediaDialog(
-              context,
-              onCreate: (item) => mediaStore.createOrUpdateItem(item),
             );
           },
         );

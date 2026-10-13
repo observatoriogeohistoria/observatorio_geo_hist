@@ -177,7 +177,8 @@ class _LibraryListPageState extends State<LibraryListPage> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: PrimaryButton.medium(
-                              text: 'Criar documento',
+                              text: 'Novo documento',
+                              leadingIcon: Icons.add,
                               onPressed: () => showCreateOrUpdateLibraryDocumentDialog(
                                 context,
                                 area: widget.area,

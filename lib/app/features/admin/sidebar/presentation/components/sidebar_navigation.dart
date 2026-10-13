@@ -1,183 +1,187 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/panel_counts.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_header.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_group_label.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_menu_item.dart';
-import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/toggle_collpase_button.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/labels/post_type_panel_labels.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class Sidebar extends StatefulWidget {
-  const Sidebar({super.key});
+class Sidebar extends StatelessWidget {
+  const Sidebar({this.isDrawer = false, this.onNavigate, super.key});
 
-  @override
-  State<Sidebar> createState() => _SidebarState();
-}
+  /// Na gaveta o foco vai para o item atual ao abrir.
+  final bool isDrawer;
 
-class _SidebarState extends State<Sidebar> {
-  late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
-  late final SidebarStore sidebarStore = PanelSetup.getIt<SidebarStore>();
-
-  List<SidebarItem> sidebarItems = [];
-  List<ReactionDisposer> _reactions = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (authStore.user != null) {
-      _setSidebarItems(authStore.user);
-    }
-
-    _reactions = [
-      reaction((_) => authStore.user, (UserModel? user) {
-        _setSidebarItems(user);
-      }),
-    ];
-  }
-
-  void _setSidebarItems(UserModel? user) {
-    setState(() {
-      sidebarItems = [
-        if (user?.permissions.canAccessUsersSection ?? false) SidebarItem.users,
-        SidebarItem.media,
-        SidebarItem.categories,
-        SidebarItem.posts,
-        SidebarItem.team,
-        SidebarItem.library,
-      ];
-    });
-  }
-
-  @override
-  void dispose() {
-    for (var reaction in _reactions) {
-      reaction.reaction.dispose();
-    }
-    super.dispose();
-  }
+  /// Chamado depois de escolher um item, para a página fechar a gaveta.
+  final VoidCallback? onNavigate;
 
   @override
   Widget build(BuildContext context) {
-    final spacing = AppTheme.dimensions.spacing;
+    final authStore = PanelSetup.getIt<AuthStore>();
+    final sidebarStore = PanelSetup.getIt<SidebarStore>();
+    final countsStore = PanelSetup.getIt<PanelCountsStore>();
+    final colors = AppTheme.colors;
     final components = AppTheme.dimensions.components;
-    final widthWhenCollapsed = components.panelSidebarIcon + 2 * components.panelSidebarItemPadding;
-    final isMobile = ScreenUtils.isMobile(context);
 
-    return Observer(
-      builder: (context) {
-        bool isCollapsed = sidebarStore.isCollapsed;
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: 'Seções do painel',
+      child: Material(
+        color: colors.page,
+        child: Observer(
+          builder: (context) {
+            final canSeeUsers = authStore.user?.permissions.canAccessUsersSection ?? false;
+            final selectedItem = sidebarStore.selectedItem;
+            final selectedType = sidebarStore.selectedPostType ?? PostType.article;
+            final counts = countsStore.counts;
 
-        return Drawer(
-          width: isMobile
-              ? MediaQuery.of(context).size.width
-              : isCollapsed
-                  ? widthWhenCollapsed
-                  : components.panelSidebarWidth,
-          child: Container(
-            color: AppTheme.colors.page,
-            child: Stack(
-              children: [
-                CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(child: SidebarHeader(isCollapsed: isCollapsed)),
-                    SliverToBoxAdapter(child: SizedBox(height: spacing.s24)),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: components.panelSidebarItemPadding,
-                      ),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final item = sidebarItems[index];
-                            final isPosts = item == SidebarItem.posts;
+            void open(SidebarItem item, {PostType? type}) {
+              sidebarStore.selectItem(item);
+              if (item == SidebarItem.posts) {
+                final postType = type ?? PostType.article;
+                sidebarStore.selectPostType(postType);
+                GoRouter.of(context).go(AppRoutes.panelPosts(postType.value));
+              } else {
+                GoRouter.of(context).go(AppRoutes.panelTab(item.value));
+              }
+              onNavigate?.call();
+            }
 
-                            return Observer(
-                              builder: (context) {
-                                final selectedItem = sidebarStore.selectedItem;
-                                final selectedPostType = sidebarStore.selectedPostType;
-                                final showPostsSubItems = sidebarStore.showPostsSubItems;
+            Widget itemFor(SidebarItem item) {
+              final isCurrent = selectedItem == item && item != SidebarItem.posts;
+              return SidebarMenuItem(
+                title: item.title,
+                icon: item.icon,
+                count: _countOf(item, counts),
+                isCurrent: isCurrent,
+                isParentOfCurrent: item == SidebarItem.posts && selectedItem == item,
+                autofocus: isDrawer && isCurrent,
+                onTap: () => open(item),
+              );
+            }
 
-                                return SidebarMenuItem(
-                                  item: item,
-                                  subItems: item.subItems,
-                                  onItemClicked: () {
-                                    if (isPosts) {
-                                      if (isCollapsed) sidebarStore.toggleCollapse();
-                                      if (sidebarStore.selectedPostType == null) {
-                                        sidebarStore.selectPostType(PostType.article);
-                                      }
-
-                                      sidebarStore.toggleShowPostsSubItems();
-                                      sidebarStore.selectItem(item);
-
-                                      final postType =
-                                          (sidebarStore.selectedPostType ?? PostType.article).value;
-                                      GoRouter.of(context).go(AppRoutes.panelPosts(postType));
-
-                                      return;
-                                    }
-
-                                    sidebarStore.selectItem(item);
-                                    GoRouter.of(context).go(AppRoutes.panelTab(item.value));
-
-                                    if (isMobile) GoRouter.of(context).pop();
-                                  },
-                                  onSubItemClicked: (subItem) {
-                                    if (!isPosts) return;
-
-                                    sidebarStore.selectPostType(subItem);
-                                    GoRouter.of(context).go(AppRoutes.panelPosts(subItem.value));
-
-                                    if (isMobile) GoRouter.of(context).pop();
-                                  },
-                                  selectedItem: selectedItem,
-                                  selectedSubItem: selectedPostType,
-                                  showPostsSubItems: showPostsSubItems,
-                                  isCollapsed: isCollapsed,
-                                );
-                              },
+            Widget postTypes() {
+              return Container(
+                margin: EdgeInsets.only(left: components.panelNavSubIndent),
+                padding: EdgeInsets.only(
+                  left: components.panelNavSubPaddingStart,
+                  top: components.panelNavSubPaddingTop,
+                  bottom: components.panelNavSubPaddingBottom,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(color: colors.line, width: AppTheme.dimensions.stroke.small),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final type in SidebarItem.posts.subItems)
+                      Padding(
+                        padding: EdgeInsets.only(bottom: components.panelNavSubItemSpacing),
+                        child: Builder(
+                          builder: (context) {
+                            final isCurrent =
+                                selectedItem == SidebarItem.posts && selectedType == type;
+                            return SidebarMenuItem(
+                              title: type.panelPlural,
+                              count: counts.posts(type),
+                              isSubItem: true,
+                              isCurrent: isCurrent,
+                              autofocus: isDrawer && isCurrent,
+                              onTap: () => open(SidebarItem.posts, type: type),
                             );
                           },
-                          childCount: sidebarItems.length,
                         ),
                       ),
-                    ),
-                    SliverToBoxAdapter(child: SizedBox(height: spacing.s64)),
                   ],
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+              );
+            }
+
+            List<Widget> group(SidebarGroup group, List<SidebarItem> items, {bool first = false}) {
+              return [
+                SidebarGroupLabel(title: group.title, isFirst: first),
+                for (final item in items) ...[
+                  Padding(
+                    padding: EdgeInsets.only(bottom: components.panelNavItemSpacing),
+                    child: itemFor(item),
+                  ),
+                  if (item == SidebarItem.posts) postTypes(),
+                ],
+              ];
+            }
+
+            return CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    components.panelSidebarPaddingH,
+                    components.panelSidebarPaddingV,
+                    components.panelSidebarPaddingH,
+                    0,
+                  ),
+                  sliver: SliverList.list(
                     children: [
-                      ToggleCollpaseButton(
-                        onTap: () {
-                          if (isMobile) {
-                            GoRouter.of(context).pop();
-                            return;
-                          }
-                          sidebarStore.toggleCollapse();
-                        },
-                        isCollapsed: isCollapsed,
-                        isMenu: isMobile,
+                      ...group(
+                        SidebarGroup.content,
+                        [SidebarItem.posts, SidebarItem.categories, SidebarItem.library],
+                        first: true,
                       ),
+                      ...group(
+                        SidebarGroup.filesAndPeople,
+                        [SidebarItem.media, SidebarItem.team],
+                      ),
+                      if (canSeeUsers) ...group(SidebarGroup.administration, [SidebarItem.users]),
                     ],
                   ),
                 ),
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      components.panelSidebarPaddingH,
+                      components.panelSidebarPaddingV,
+                      components.panelSidebarPaddingH,
+                      components.panelSidebarPaddingV,
+                    ),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SidebarMenuItem(
+                        title: 'Sair',
+                        icon: Icons.logout,
+                        isMuted: true,
+                        onTap: authStore.logout,
+                      ),
+                    ),
+                  ),
+                ),
               ],
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
+  }
+
+  int? _countOf(SidebarItem item, PanelCounts counts) {
+    return switch (item) {
+      SidebarItem.posts => counts.postsTotal,
+      SidebarItem.categories => counts.categories,
+      SidebarItem.library => counts.libraryTotal,
+      SidebarItem.team => counts.team,
+      SidebarItem.users => counts.users,
+      // O Storage não informa o total sem listar todos os arquivos.
+      SidebarItem.media => null,
+    };
   }
 }

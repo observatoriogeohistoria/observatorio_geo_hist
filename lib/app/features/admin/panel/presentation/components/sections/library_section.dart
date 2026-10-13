@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_title.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/panel_section_header.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -23,13 +27,17 @@ class _LibrarySectionState extends State<LibrarySection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeaderTitle(
-          title: 'Biblioteca',
-          onCreate: () {},
-          canEdit: false,
-          isLoading: false,
+        Observer(
+          builder: (_) => PanelSectionHeader(
+            eyebrow: SidebarItem.library.eyebrow,
+            title: SidebarItem.library.title,
+            summary: countSummary(
+              PanelSetup.getIt<PanelCountsStore>().counts.libraryTotal,
+              'documento',
+              'documentos',
+            ),
+          ),
         ),
-        SizedBox(height: spacing.s32),
         Wrap(
           spacing: spacing.s24,
           runSpacing: spacing.s24,

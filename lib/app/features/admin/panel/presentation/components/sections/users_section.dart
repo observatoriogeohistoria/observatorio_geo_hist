@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/panel_section_header.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
@@ -18,6 +21,7 @@ class UsersSection extends StatefulWidget {
 class _UsersSectionState extends State<UsersSection> {
   late final UsersStore usersStore = PanelSetup.getIt<UsersStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
+  late final PanelCountsStore countsStore = PanelSetup.getIt<PanelCountsStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +30,22 @@ class _UsersSectionState extends State<UsersSection> {
         bool canEdit = authStore.user?.permissions.canEditTeamSection ?? false;
 
         return CrudSection<UserModel>(
-          title: 'Usuários',
-          canEdit: canEdit,
+          header: PanelSectionHeader(
+            eyebrow: SidebarItem.users.eyebrow,
+            title: SidebarItem.users.title,
+            summary: countSummary(
+              countsStore.counts.users,
+              'usuário',
+              'usuários',
+              note: 'só a administração vê esta seção',
+            ),
+            actionLabel: canEdit ? 'Novo usuário' : null,
+            onAction: () => showCreateOrUpdateUserDialog(
+              context,
+              onCreate: (item, extra) => usersStore.createOrUpdateItem(item, extra: extra),
+              onUpdate: (item) => usersStore.createOrUpdateItem(item),
+            ),
+          ),
           store: usersStore,
           itemBuilder: (item, index) {
             return UserCard(
@@ -42,13 +60,6 @@ class _UsersSectionState extends State<UsersSection> {
                   user: item,
                 );
               },
-            );
-          },
-          onCreatePressed: () {
-            showCreateOrUpdateUserDialog(
-              context,
-              onCreate: (item, extra) => usersStore.createOrUpdateItem(item, extra: extra),
-              onUpdate: (item) => usersStore.createOrUpdateItem(item),
             );
           },
         );

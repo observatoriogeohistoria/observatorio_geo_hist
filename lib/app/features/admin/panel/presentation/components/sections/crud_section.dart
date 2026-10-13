@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
@@ -16,19 +15,15 @@ import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class CrudSection<T> extends StatefulWidget {
-  final String title;
-  final bool canEdit;
+  final Widget header;
   final CrudStore<T> store;
   final Widget Function(T item, int index) itemBuilder;
-  final VoidCallback onCreatePressed;
   final bool paginated;
 
   const CrudSection({
-    required this.title,
-    required this.canEdit,
+    required this.header,
     required this.store,
     required this.itemBuilder,
-    required this.onCreatePressed,
     this.paginated = false,
     super.key,
   });
@@ -104,29 +99,12 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.title,
-              style: AppTheme.typography.of(context).h2.copyWith(color: AppTheme.colors.accent),
-            ),
-            if (widget.canEdit) ...[
-              SizedBox(height: spacing.s32),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: rightPadding,
-                  child: SecondaryButton.medium(
-                    text: 'Criar',
-                    onPressed: widget.onCreatePressed,
-                  ),
-                ),
-              ),
-            ],
+            widget.header,
             if (isRefreshing)
               Padding(
                 padding: rightPadding,
                 child: const LinearLoading(),
               ),
-            SizedBox(height: AppTheme.dimensions.components.panelSectionGap),
             Expanded(
               child: isLoading
                   ? const Center(child: CircularLoading())
