@@ -102,3 +102,9 @@ A seção Biblioteca passa a mostrar direto a lista de Geografia, sem os dois bl
 ## Histórico de mudanças
 - 2026-10-07: criada. Decidido com a pessoa: filtros da biblioteca em linha com "Mais filtros" para autor, instituição e ano.
 - 2026-10-07: aprovada.
+- 2026-10-13: ajustes do plano, decididos sem a pessoa (modo autônomo):
+  - Biblioteca: com a lista dentro da seção, o "Novo documento" vai para o cabeçalho (só para quem pode editar) e o resumo vira "N documentos em Geografia" (área aberta), como a 030 deixou combinado. `/admin/painel/biblioteca` mostra Geografia sem mudar o endereço.
+  - Usuários: o dado de removido existe (`isDeleted`) e o cartão de hoje já o mostra. Sai o selo "Usuário ativo"; fica só o selo "Removido" (vermelho) quando `isDeleted` é verdadeiro. Não é o ativo/inativo do protótipo, que segue fora do escopo.
+  - Trocar de tipo de publicação limpa os filtros, como no protótipo; trocar a área da biblioteca mantém os filtros; sair da Biblioteca os zera, como hoje.
+  - Erro ao abrir a lista mostra só a caixa de erro, sem o aviso flutuante. Erro ao carregar mais ou numa ação continua no aviso, com a lista à vista.
+  - Ações da linha têm nome curto ("Excluir"); o item vem da linha, que é lida como grupo com o título.

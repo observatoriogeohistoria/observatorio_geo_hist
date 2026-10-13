@@ -1,0 +1,51 @@
+# Tarefas da 031. Listas do painel em linhas, mídias em grade e filtros em linha
+
+Legenda: `- [ ]` a fazer, `- [x]` feita.
+
+Critérios de aceite (numerados na ordem da spec): 1 protótipo nas três larguras · 2 publicações em linhas · 3 filtros de publicações · 4 categorias · 5 biblioteca · 6 mídias · 7 selos de equipe e usuários · 8 estados · 9 `VIEWER` · 10 ações como antes · 11 teclado · 12 contraste · 13 sem valores soltos · 14 `analyze`.
+
+Cada grupo deixa o app compilando e pode virar um commit. A conferência visual de cada grupo usa o app de teste (A9).
+
+## Grupo A: peças comuns (commit 1)
+- [ ] **A1.** Tokens: linha (padding 14/16, gap 16, 8/12 no celular), miniatura (88 e 72, 16:10), avatar e ícone à esquerda (44), raio da lista (14), barra de filtros (padding 12, gap 10), controles (42), segmentado (padding 3, botão 8/12), rodapé (altura mínima 52, padding 10/16), grade (bloco mínimo 170, gap 16, 4:3), traço da faixa de ações; cor `rowHover`; estilos `panelRowTitle`, `panelRowMeta`, `panelTileName`, `panelListFoot`, `panelSegment`. Arquivos: `app_dimensions.dart`, `app_colors.dart`, `app_text_styles.dart`. Atende: 13.
+- [ ] **A2.** `StatusBadge` com `StatusTone.neutral` (fundo `surface`, borda `line`, texto `inkSecondary`) e `icon` opcional. Arquivo: `core/components/chips/labels.dart`. Atende: 7, 12.
+- [ ] **A3.** `AppIconButton.isToggled` (`Semantics(toggled:)`) e `SearchField.height` opcional (padrão igual ao de hoje). Arquivos: `app_icon_button.dart`, `search_field.dart`. Conferir: busca da listagem de categoria e da Biblioteca pública sem mudança. Atende: 11.
+- [ ] **A4.** `PanelThumbnail` (16:10, `cover`, "Sem imagem" sem URL ou com falha), `PanelAvatar` (iniciais por baixo da foto) e `PanelLeadIcon`. Arquivo: `components/list/panel_row_leading.dart`. Atende: 2, 7, 12.
+- [ ] **A5.** `PanelList`, `PanelListRow` (quatro partes; cartão com faixa tracejada abaixo de 600; grupo semântico com o título; ações só quando informadas) e `PanelListFooter`. Arquivos: `components/list/panel_list.dart`, `panel_list_row.dart`, `panel_list_footer.dart`. Atende: 1, 9, 11.
+- [ ] **A6.** `PanelFilterBar` (`Wrap`, busca na linha toda abaixo de 600), `PanelSegmentedControl` e `PanelToggleChip`, ambos com estado de pressionado e foco visível. Arquivos: `components/list/panel_filter_bar.dart`, `panel_segmented_control.dart`, `panel_toggle_chip.dart`. Atende: 3, 5, 11.
+- [ ] **A7.** `PanelListSkeleton` (4 linhas ou blocos de grade, parado com movimento reduzido) e `panel_list_states.dart` (vazio com botão de criar opcional, "Nada encontrado com esses filtros" com "Limpar filtros", erro com "Tentar de novo"). Atende: 8.
+- [ ] **A8.** `showPanelActionResult` não mostra aviso para erro sem ação pendente quando a seção indica que foi a primeira página. Arquivo: `sections/panel_action.dart`. Atende: 8.
+- [ ] **A9.** App de teste (fora do git): dados e parâmetros listados em "Como conferir" do plano (imagens válida/ausente/quebrada, textos longos, 1 item, 60+ itens, vazio, `falha=carregar`, `falha=mais`, `papel=viewer`, removido, duas áreas da biblioteca) e rota da biblioteca igual à real. Arquivo: `scratchpad/obs/lib/main_harness.dart`.
+
+## Grupo B: Categorias, Equipe e Usuários (commit 2)
+- [ ] **B1.** `CrudSection` com esqueleto, vazio (título, texto e botão de criar por parâmetro), erro ao abrir com "Tentar de novo", barra de filtros e filtro na tela opcionais, "Nada encontrado" e rodapé; corpo por `bodyBuilder` (lista ou grade); indicador ao carregar mais. Apagar `empty_list_message.dart`. Arquivo: `sections/crud_section.dart`. Atende: 8.
+- [ ] **B2.** Categorias em linhas: ícone por área, meta "áreas · N publicações · descrição" numa linha com reticências, selo "Aceita colaboração", Editar e Excluir indisponível com dica; busca "Buscar categoria" (sem acento e maiúscula) e área, na tela. Vazio "Nenhuma categoria ainda". Apagar `cards/category_card.dart`. Arquivos: `sections/category_row.dart`, `categories_section.dart`. Atende: 4, 10.
+- [ ] **B3.** Equipe em linhas: `PanelAvatar`, meta "função · Currículo Lattes", selo "Com página"/"Sem página". Vazio "Ninguém na equipe ainda". Apagar `cards/team_member_card.dart`. Arquivos: `sections/team_member_row.dart`, `team_section.dart`. Atende: 7, 10.
+- [ ] **B4.** Usuários em linhas: iniciais, e-mail com reticências, selo do papel (`user_role_label.dart`; Administração em `accent`) e "Removido" quando `isDeleted`. Vazio "Nenhum usuário ainda". Apagar `cards/user_card.dart`. Arquivos: `sections/user_row.dart`, `users_section.dart`. Atende: 7, 10.
+- [ ] **B5.** Conferir no app de teste B2 a B4 em 390, 768 e 1280: esqueleto, vazio, erro, `viewer` sem ações e sem botão de criar, confirmação de exclusão e aviso. Atende: 1, 8, 9.
+
+## Grupo C: Mídias em grade (commit 3)
+- [ ] **C1.** `MediaStore.hasMore` público (`build_runner`). Arquivo: `stores/media_store.dart`. Atende: 6.
+- [ ] **C2.** `MediaTile` (imagem 4:3 com placeholder, nome numa linha com dica do nome completo, Ver imagem, Copiar link, Excluir) e grade por largura mínima (2 colunas abaixo de 600). Busca "Buscar pelo nome do arquivo" na tela; nota "N imagens carregadas · as próximas carregam ao rolar" enquanto `hasMore`; carrega a próxima página quando a grade não rola. Vazio "Nenhuma imagem ainda" com "Enviar imagens". Apagar `cards/media_card.dart`. Arquivos: `sections/media_tile.dart`, `media_section.dart`. Atende: 6, 8, 10.
+- [ ] **C3.** Conferir colunas em 390 (2), 768 (3–4) e 1280 (5–6), rolagem com `falha=mais` e blocos-esqueleto. Atende: 1, 6.
+
+## Grupo D: Publicações (commit 4)
+- [ ] **D1.** `PostsStore`: número de pedido para descartar resposta antiga quando o filtro muda durante o carregamento; `hasMore(type)`. Arquivo: `stores/posts_store.dart` (+ `.g.dart`). Atende: 3.
+- [ ] **D2.** `post_row_meta.dart` (meta e URL da imagem por tipo, como no plano) e `PostRow` (miniatura, título em duas linhas, selos Publicado/Não publicado e Destaque com estrela, quatro ações com `isToggled` no destacar). Apagar `cards/post_card.dart` e `cards/posts_cards/`. Arquivos: `sections/post_row.dart`, `post_row_meta.dart`. Atende: 2, 12.
+- [ ] **D3.** `PostsFilterBar`: busca, área, categoria dependente da área (trocar a área limpa a categoria), segmentado Todas/Publicadas/Não publicadas, "Destaques". Trocar de tipo limpa os filtros. Apagar `section_header_actions.dart`. Arquivos: `sections/posts_filter_bar.dart`, `posts_section.dart`. Atende: 3, 11.
+- [ ] **D4.** `PostsSection`: esqueleto, vazio "Nada em {tipo} ainda" com concordância (pelo "Novo/Nova" do tipo) e botão de criar, "Nada encontrado", erro com "Tentar de novo" (também se as categorias falharem), rodapé com "Limpar filtros", indicador ao carregar mais, linhas com chave `post.id`. Editar abre o diálogo atual. Arquivo: `sections/posts_section.dart`. Atende: 2, 8, 9, 10.
+- [ ] **D5.** Conferir: filtros combinados e "Limpar filtros" zerando todos; publicar, despublicar e destacar mantendo o foco no mesmo botão; editar e excluir; miniatura ausente e quebrada; título longo. Atende: 2, 3, 10, 11.
+
+## Grupo E: Biblioteca no painel (commit 5)
+- [ ] **E1.** `LibraryStore`: número de pedido para descartar resposta antiga; salvar não chama `reset()` nem recarrega sem filtros (a seção recarrega com os filtros atuais). Arquivo: `library/presentation/stores/library_store.dart` (+ `.g.dart`). Atende: 5, 10.
+- [ ] **E2.** Rotas do painel com `pageBuilder` e a mesma chave de página; `/admin/painel/biblioteca/:area` monta `PanelPage(tab: library, libraryArea:)`; `PanelPage` repassa a área à `LibrarySection` (Geografia quando ausente). Arquivos: `router/app_router.dart`, `pages/panel_page.dart`. Conferir troca de seção, de tipo, voltar do navegador e gaveta. Atende: 5.
+- [ ] **E3.** `LibraryFilterBar`: segmentado Geografia/História (muda o endereço, foco fica no botão), busca "Buscar por título", tipo, categorias (`LibraryCategoryFilter`, sem contagens), "Mais filtros" com autor, instituição e ano na linha de baixo; tudo no `FilterDocumentsStore`, aplicando ao mudar. Arquivo: `sections/library_filter_bar.dart`. Atende: 5, 11.
+- [ ] **E4.** `LibrarySection`: cabeçalho com "Novo documento" (quem pode editar) e resumo "N documentos em {área}"; linhas (ícone de documento, meta "Autor · Instituição · Ano · N categorias", selo do tipo, Editar e Excluir com confirmação e avisos vindos da `LibraryListPage`); esqueleto, vazio "Nenhum documento em {área} ainda", "Nada encontrado", erro; rodapé com "Limpar filtros" e "Carregar mais"; sair da seção zera os filtros. Arquivos: `sections/library_row.dart`, `library_section.dart`. Atende: 5, 8, 9, 10.
+- [ ] **E5.** Apagar `library_list_page.dart`, `filters.dart`, `library_document_card.dart` e tokens sem uso (`panelFiltersWidth`, `panelLibraryDocIcon`, `panelCard*`, `panelMemberPhoto` se sobrarem). Atualizar `docs/arquitetura-painel-admin.md` (peças de lista, estados, biblioteca no painel, chave de página). Atende: 13.
+
+## Grupo F: conferência (commit 6, só docs se houver correção)
+- [ ] **F1.** `build_runner`, `dart format` no projeto, `fvm flutter analyze` sem problemas; varrer o diff atrás de cor, tamanho de fonte ou espaçamento soltos. Atende: 13, 14.
+- [ ] **F2.** App de teste em Chrome headless, 390, 768 e 1280: as seis seções lado a lado com a aba "Painel" do protótipo, `scrollWidth` igual à largura, esqueleto, vazio, filtro sem resultado, erro e `papel=viewer`. Atende: 1, 2, 4, 5, 6, 7, 8, 9.
+- [ ] **F3.** Teclado e semântica: Tab filtros → linhas → rodapé com foco visível; segmentado e "Destaques" anunciam pressionado; linhas lidas como grupo com título; contraste calculado de meta, selos e ícones das ações (≥ 4,5:1). Atende: 11, 12.
+- [ ] **F4.** Site público no build de release: Biblioteca (filtros e busca), listagem de categoria e Home, sem mudança visual. Atende: 1.
+- [ ] **F5.** Uma vez em `fvm flutter run -d web-server` (debug) com o app de teste: percorrer as seis seções, trocar área e tipo, publicar, excluir e carregar mais, sem `overflow` nem asserção. Atende: 1, 10.
