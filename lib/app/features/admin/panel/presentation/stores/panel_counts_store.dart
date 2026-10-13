@@ -16,10 +16,10 @@ abstract class PanelCountsStoreBase with Store {
 
   bool? _includeUsers;
 
-  /// Sem [force], não repete a consulta a cada troca de seção.
+  /// Não repete a consulta quando o usuário volta igual; depois de criar ou excluir, use [refresh].
   @action
-  Future<void> load({required bool includeUsers, bool force = false}) async {
-    if (!force && _includeUsers == includeUsers) return;
+  Future<void> load({required bool includeUsers}) async {
+    if (_includeUsers == includeUsers) return;
     _includeUsers = includeUsers;
     counts = await _repository.getCounts(includeUsers: includeUsers);
   }

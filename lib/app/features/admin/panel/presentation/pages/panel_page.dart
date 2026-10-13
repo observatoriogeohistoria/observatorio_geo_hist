@@ -78,9 +78,9 @@ class _PanelPageState extends State<PanelPage> {
             GoRouter.of(context).go(AppRoutes.admin);
           }
 
-          if (state.logoutState is LogoutStateError) {
-            final loginState = state.loginState as LoginStateError;
-            Messenger.showError(context, loginState.failure.message);
+          final logoutState = state.logoutState;
+          if (logoutState is LogoutStateError) {
+            Messenger.showError(context, logoutState.failure.message);
           }
         },
       ),

@@ -27,8 +27,8 @@ mixin _$PanelCountsStore on PanelCountsStoreBase, Store {
   late final _$loadAsyncAction = AsyncAction('PanelCountsStoreBase.load', context: context);
 
   @override
-  Future<void> load({required bool includeUsers, bool force = false}) {
-    return _$loadAsyncAction.run(() => super.load(includeUsers: includeUsers, force: force));
+  Future<void> load({required bool includeUsers}) {
+    return _$loadAsyncAction.run(() => super.load(includeUsers: includeUsers));
   }
 
   late final _$refreshAsyncAction = AsyncAction('PanelCountsStoreBase.refresh', context: context);
