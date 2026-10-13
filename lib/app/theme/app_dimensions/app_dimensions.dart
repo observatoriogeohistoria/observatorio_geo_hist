@@ -636,7 +636,6 @@ class ComponentSizes {
   double panelTopBarPaddingEnd(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 12, 20, 20);
   double panelTopBarGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 6, 12, 12);
   final double panelTopBarActionsGap = 10.0;
-  final double panelTopBarIcon = 28.0;
 
   final double panelUserGap = 10.0;
   final double panelUserDividerGap = 14.0;
@@ -699,13 +698,6 @@ class ComponentSizes {
   final double tooltipPaddingH = 10.0;
   final double tooltipOffset = 8.0;
   final double disabledOpacity = 0.35;
-  double panelContentPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 32);
-  final double panelSectionGap = 24.0;
-  final double panelCardPaddingH = 20.0;
-  final double panelCardPaddingV = 16.0;
-  final double panelCardActionsGap = 8.0;
-  final double panelCardTextGap = 4.0;
-  double panelMemberPhoto(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 64, 80, 96);
 
   double panelDialogWidthFactor(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 1.0, 0.7, 0.5);
   double panelDialogPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 24);
@@ -720,9 +712,6 @@ class ComponentSizes {
   final double panelEditorTallFactor = 0.7;
   final double panelEditorFactor = 0.4;
   final double panelEditorShortFactor = 0.3;
-
-  final double panelFiltersWidth = 300.0;
-  final double panelLibraryDocIcon = 32.0;
 
   final double panelMainPaddingBottom = 48.0;
   final double panelRowPaddingV = 14.0;
@@ -750,9 +739,9 @@ class ComponentSizes {
   final double panelFilterSearchMinWidth = 220.0;
   final double panelFilterMarginBottom = 16.0;
   final double panelFilterSelectMaxWidth = 260.0;
+  final double panelFilterFieldWidth = 240.0;
   final double panelControlHeight = 42.0;
   final double panelSegmentPadding = 3.0;
-  final double panelSegmentButtonPaddingV = 8.0;
   final double panelSegmentButtonPaddingH = 12.0;
   final double panelToggleIcon = 16.0;
   final double panelToggleGap = 6.0;

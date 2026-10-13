@@ -145,7 +145,7 @@ A página da categoria (`PostsPage`) usa o `ReadingPageScaffold` com o `PageHead
 
 ## Biblioteca
 
-A página pública e a do painel são separadas: `/biblioteca/:area` monta a `LibraryAreaPage` e `/painel/biblioteca/:area` continua com a `LibraryListPage` (criar, editar, excluir), com `Filters`, `LibraryDocumentCard` e `FilterDocumentsStore`, que o site não usa mais. O `LibraryStore` fica só no painel.
+A página pública e a do painel são separadas: `/biblioteca/:area` monta a `LibraryAreaPage` e `/admin/painel/biblioteca/:area` abre a seção Biblioteca do painel (criar, editar, excluir), com o `FilterDocumentsStore`, que o site não usa. O `LibraryStore` fica só no painel; o painel reaproveita do site os filtros `LibraryFilterSelect`, `LibraryCategoryFilter` e `LibraryYearField`.
 
 - **Entrada** (`LibraryPage`): `ReadingPageScaffold` + `PageHeader` e um `LibraryAreaTile` por área, com as contagens do `LibraryIndexStore` (`countByType` por área; sem contagem, a linha de números some).
 - **Lista** (`LibraryAreaPage` + `LibraryListing`, em `library/presentation/components/listing/`): busca com "Buscar em" (`LibrarySearchField`), tipo, ano e categorias (`LibraryFilterSelect`, `LibraryYearField`, `LibraryCategoryFilter`, menus do Material), chips de filtros ativos, contagem, `LibraryDocumentRow` e "Ver mais documentos". Filtros valem na hora e não vão para a URL.

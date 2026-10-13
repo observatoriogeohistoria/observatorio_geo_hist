@@ -21,16 +21,16 @@ lib/app/features/admin/
 │       ├── pages/panel_page.dart
 │       ├── stores/                   # um por módulo + crud_store (base) + panel_counts_store
 │       └── components/
-│           ├── sections/             # posts, categories, media, users, team, library, crud, panel_action
-│           ├── cards/                # um por módulo + posts_cards/ (um por tipo de post)
+│           ├── sections/             # uma seção por módulo + a linha de cada um (*_row), crud_section, panel_action
+│           ├── list/                 # peças comuns das listas: caixa, linha, grade, filtros, esqueleto e estados
 │           ├── dialogs/              # create_or_update_*, confirm_dialog + create_or_update_posts_dialogs/
-│           └── form_label, panel_top_bar, panel_user_badge, panel_section_header, section_header_actions
+│           └── form_label, panel_top_bar, panel_user_badge, panel_section_header
 └── sidebar/
     ├── sidebar_setup.dart
     └── presentation/                 # components/, stores/sidebar_store.dart, enums/sidebar_item.dart, labels/
 ```
 
-A `library_section.dart` gerencia a biblioteca, mas dados e stores vêm da feature `library`.
+A `library_section.dart` mostra a lista da biblioteca dentro do painel, mas dados e stores (`LibraryStore`, `FilterDocumentsStore`) vêm da feature `library`.
 
 ## 2. Abas
 
@@ -43,7 +43,9 @@ O enum `SidebarItem` define as abas e a URL `/admin/painel/:tab`:
 | `categories` | `categorias` |
 | `posts` | `publicacoes` (aceita `?tipo=`) |
 | `team` | `equipe` |
-| `library` | `biblioteca` |
+| `library` | `biblioteca` (e `biblioteca/:area`) |
+
+`/admin/painel/biblioteca` abre Geografia; `/admin/painel/biblioteca/:area` abre a área pedida, e o controle segmentado da seção troca o endereço. As rotas do painel usam a mesma chave de página (`_panelPage` em `app_router.dart`): trocar de seção, de tipo ou de área atualiza a `PanelPage` no lugar, sem recriar a moldura.
 
 ## 3. Moldura
 
@@ -73,7 +75,13 @@ A listagem de posts usa `collectionGroup('category_posts')`, com filtros por tip
 
 ## 5. CRUD
 
-Os stores de mídia, categorias, usuários e equipe estendem `CrudStore<T>` (`getItems`, `loadMore`, `createOrUpdateItem`, `deleteItem`). Só o `MediaStore` implementa `loadMore` (guarda o `nextPageToken` e anexa a página, ignorando ids repetidos); na `CrudSection`, `paginated: true` o aciona a 200 px do fim da lista. O `PostsStore` tem métodos próprios (`getPosts`, `createOrUpdatePost`, `deletePost`), pois pagina e filtra por tipo. Os estados (`CrudLoadingState`, `CrudSuccessState`, `CrudErrorState`) ficam em `core/models/states/crud_states.dart`.
+Os stores de mídia, categorias, usuários e equipe estendem `CrudStore<T>` (`getItems`, `loadMore`, `createOrUpdateItem`, `deleteItem`). Só o `MediaStore` implementa `loadMore` (guarda o `nextPageToken`, anexa a página ignorando ids repetidos e expõe `hasMore`). O `PostsStore` tem métodos próprios (`getPosts`, `createOrUpdatePost`, `deletePost`), pois pagina e filtra por tipo; a biblioteca usa o `LibraryStore`. Os dois guardam um número de pedido: filtro novo (ou `reset: true`) recomeça da primeira página e descarta a resposta antiga que ainda estava a caminho. Os estados (`CrudLoadingState`, `CrudSuccessState`, `CrudErrorState`) ficam em `core/models/states/crud_states.dart`.
+
+**Listas**: cabeçalho, filtros e itens rolam juntos no `PanelSectionScroll` (`components/list/`), que também é um grupo de foco, para o Tab percorrer a seção antes de voltar ao menu. Cada item é uma `PanelListRow` (imagem ou ícone, título, meta, selos e ações; cartão abaixo de 600 px) dentro da `PanelList`, que fecha com o `PanelListFooter` ("Limpar filtros", "Carregar mais" ou o indicador de mais itens). Mídias usam a `PanelGrid`. A barra de filtros (`PanelFilterBar`) estica a busca para ocupar a sobra da linha.
+
+A `CrudSection` monta categorias, equipe, usuários e mídias: chama `getItems`, carrega mais ao rolar com `paginated: true`, filtra na tela (`filter`) e escolhe o estado. Publicações e Biblioteca montam as mesmas peças por conta própria, porque paginam e filtram no Firestore.
+
+**Estados**: esqueleto (`PanelListSkeleton`) ao abrir ou trocar de filtro; `PanelEmptyState` com o botão de criar para quem pode; `PanelNoResultsState` quando o filtro não acha nada; `PanelErrorState` com "Tentar de novo" quando a primeira página falha (sem aviso flutuante). Falha ao carregar mais vira aviso e deixa um "Carregar mais" no rodapé, em vez de tentar a cada rolada.
 
 **Avisos e confirmação**: o store só informa sucesso ou erro. Quem dispara a ação registra qual foi num `PendingPanelAction` (salvar, excluir, publicar, despublicar, destacar, tirar do destaque), e o `showPanelActionResult` escolhe o texto do aviso, fecha o diálogo só quando a ação foi salvar e recarrega as contagens depois de salvar ou excluir. Erros vão para `Messenger.showError`; `Forbidden` encerra a sessão. Toda exclusão passa antes por `showConfirmDialog`, que devolve `true` só quando a pessoa confirma.
 
@@ -113,13 +121,13 @@ Toda a autorização é no cliente. O repositório não tem `firestore.rules` ne
 
 1. Criar datasource, repository, model e failures em `panel/infra/`.
 2. Criar o store em `panel/presentation/stores/`, estendendo `CrudStore<T>`.
-3. Criar section, card e dialog em `panel/presentation/components/`.
+3. Criar a seção (sobre a `CrudSection`), a linha (`*_row.dart`, sobre a `PanelListRow`) e o dialog em `panel/presentation/components/`.
 4. Registrar em `PanelSetup`.
 5. Adicionar o valor em `SidebarItem` (`value` e `title`) e na navegação da sidebar.
 
-**Novo tipo de post**: criar o model do corpo em `core/models/`, o card em `cards/posts_cards/`, o dialog em `dialogs/create_or_update_posts_dialogs/` e incluí-lo no `PostType`.
+**Novo tipo de post**: criar o model do corpo em `core/models/`, o dialog em `dialogs/create_or_update_posts_dialogs/`, incluí-lo no `PostType` e dizer em `post_row_meta.dart` o que entra na meta da linha.
 
-**Visual**: o painel usa os mesmos tokens do site (`AppTheme`), sem `num_extension`. Campos novos partem de `PanelFieldDecoration` (`core/components/field/`), diálogos de `PanelDialogTitle`, listas vazias de `EmptyListMessage` e situação do item de `StatusBadge` (`core/components/chips/labels.dart`; texto e fundo, nunca só cor).
+**Visual**: o painel usa os mesmos tokens do site (`AppTheme`), sem `num_extension`. Campos novos partem de `PanelFieldDecoration` (`core/components/field/`), diálogos de `PanelDialogTitle` e situação do item de `StatusBadge` (`core/components/chips/labels.dart`; texto e fundo, nunca só cor; tom `neutral` para o que não é destaque).
 
 **Nova permissão**: adicionar o campo em `UserPermissions`, definir a regra no construtor de `UserModel` e usá-la na seção.
 

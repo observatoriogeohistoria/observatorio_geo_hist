@@ -95,7 +95,9 @@ class _SegmentButton extends StatelessWidget {
               borderRadius: radius,
               splashFactory: NoSplash.splashFactory,
               focusColor: Colors.transparent,
-              hoverColor: isSelected ? Colors.transparent : colors.page,
+              // A mesma cor nos dois estados: trocar de cor com o mouse em cima pintava o
+              // realce de preto (o Flutter reaproveita a opacidade da cor anterior).
+              hoverColor: colors.page,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: components.panelSegmentButtonPaddingH),
                 child: Center(

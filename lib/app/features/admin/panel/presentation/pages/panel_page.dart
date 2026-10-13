@@ -24,17 +24,20 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stor
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/components/sidebar_navigation.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
+import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PanelPage extends StatefulWidget {
   const PanelPage({
     required this.tab,
     this.postType,
+    this.libraryArea,
     super.key,
   });
 
   final SidebarItem tab;
   final PostType? postType;
+  final DocumentArea? libraryArea;
 
   @override
   State<PanelPage> createState() => _PanelPageState();
@@ -219,7 +222,7 @@ class _PanelPageState extends State<PanelPage> {
       case SidebarItem.team:
         return const TeamSection();
       case SidebarItem.library:
-        return const LibrarySection();
+        return LibrarySection(area: widget.libraryArea ?? DocumentArea.geografia);
     }
   }
 }

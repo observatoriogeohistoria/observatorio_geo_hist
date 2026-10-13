@@ -9,12 +9,15 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 /// fica sozinha na primeira linha.
 class PanelFilterBar extends StatelessWidget {
   const PanelFilterBar({
+    this.leading = const [],
     this.search,
     this.filters = const [],
     this.below,
     super.key,
   });
 
+  /// Antes da busca, como a troca de área da biblioteca.
+  final List<Widget> leading;
   final Widget? search;
   final List<Widget> filters;
 
@@ -43,11 +46,11 @@ class PanelFilterBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _FilterWrap(
-                  hasSearch: search != null,
+                  searchIndex: search == null ? null : leading.length,
                   searchOwnLine: ScreenUtils.isMobile(context),
                   spacing: components.panelFilterGap,
                   searchMinWidth: components.panelFilterSearchMinWidth,
-                  children: [if (search != null) search, ...filters],
+                  children: [...leading, if (search != null) search, ...filters],
                 ),
                 if (below != null) ...[
                   SizedBox(height: components.panelFilterGap),
@@ -64,21 +67,21 @@ class PanelFilterBar extends StatelessWidget {
 
 class _FilterWrap extends MultiChildRenderObjectWidget {
   const _FilterWrap({
-    required this.hasSearch,
+    required this.searchIndex,
     required this.searchOwnLine,
     required this.spacing,
     required this.searchMinWidth,
     required super.children,
   });
 
-  final bool hasSearch;
+  final int? searchIndex;
   final bool searchOwnLine;
   final double spacing;
   final double searchMinWidth;
 
   @override
   _RenderFilterWrap createRenderObject(BuildContext context) => _RenderFilterWrap(
-        hasSearch: hasSearch,
+        searchIndex: searchIndex,
         searchOwnLine: searchOwnLine,
         spacing: spacing,
         searchMinWidth: searchMinWidth,
@@ -87,7 +90,7 @@ class _FilterWrap extends MultiChildRenderObjectWidget {
   @override
   void updateRenderObject(BuildContext context, _RenderFilterWrap renderObject) {
     renderObject
-      ..hasSearch = hasSearch
+      ..searchIndex = searchIndex
       ..searchOwnLine = searchOwnLine
       ..spacing = spacing
       ..searchMinWidth = searchMinWidth;
@@ -102,19 +105,19 @@ class _RenderFilterWrap extends RenderBox
         ContainerRenderObjectMixin<RenderBox, _FilterWrapParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _FilterWrapParentData> {
   _RenderFilterWrap({
-    required bool hasSearch,
+    required int? searchIndex,
     required bool searchOwnLine,
     required double spacing,
     required double searchMinWidth,
-  })  : _hasSearch = hasSearch,
+  })  : _searchIndex = searchIndex,
         _searchOwnLine = searchOwnLine,
         _spacing = spacing,
         _searchMinWidth = searchMinWidth;
 
-  bool _hasSearch;
-  set hasSearch(bool value) {
-    if (value == _hasSearch) return;
-    _hasSearch = value;
+  int? _searchIndex;
+  set searchIndex(int? value) {
+    if (value == _searchIndex) return;
+    _searchIndex = value;
     markNeedsLayout();
   }
 
@@ -148,7 +151,8 @@ class _RenderFilterWrap extends RenderBox
   void performLayout() {
     final maxWidth = constraints.maxWidth;
     final children = getChildrenAsList();
-    final search = _hasSearch && children.isNotEmpty ? children.first : null;
+    final searchAt = _searchIndex;
+    final search = searchAt != null && searchAt < children.length ? children[searchAt] : null;
 
     final widths = <RenderBox, double>{};
     for (final child in children) {
@@ -166,7 +170,8 @@ class _RenderFilterWrap extends RenderBox
     for (final child in children) {
       final width = widths[child]!;
       final needed = line.isEmpty ? width : used + _spacing + width;
-      if (line.isNotEmpty && needed > maxWidth) {
+      final ownLine = child == search && _searchOwnLine;
+      if (line.isNotEmpty && (needed > maxWidth || ownLine)) {
         lines.add(line);
         line = [child];
         used = width;
