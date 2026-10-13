@@ -497,6 +497,8 @@ class ComponentSizes {
   final double tagPaddingV = 2.0;
   final double badgePaddingH = 10.0;
   final double badgePaddingV = 4.0;
+  final double badgeIcon = 13.0;
+  final double badgeIconGap = 5.0;
 
   final double factsTop = 24.0;
   final double factsPaddingV = 20.0;

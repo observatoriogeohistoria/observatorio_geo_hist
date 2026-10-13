@@ -62,13 +62,14 @@ class TypeBadge extends StatelessWidget {
   }
 }
 
-enum StatusTone { success, error, accent }
+enum StatusTone { success, error, accent, neutral }
 
 class StatusBadge extends StatelessWidget {
-  const StatusBadge(this.text, {required this.tone, super.key});
+  const StatusBadge(this.text, {required this.tone, this.icon, super.key});
 
   final String text;
   final StatusTone tone;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +80,14 @@ class StatusBadge extends StatelessWidget {
       StatusTone.success => (colors.success, colors.successSurface),
       StatusTone.error => (colors.error, colors.errorSurface),
       StatusTone.accent => (colors.accentStrong, colors.accentSoft),
+      StatusTone.neutral => (colors.inkSecondary, colors.surface),
     };
+    final style = AppTheme.typography
+        .of(context)
+        .tag
+        .copyWith(color: foreground, fontWeight: FontWeight.w700);
 
+    // Borda transparente nos tons coloridos, para todos os selos terem a mesma altura.
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: components.badgePaddingH,
@@ -89,14 +96,21 @@ class StatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.pill),
+        border: Border.all(
+          color: tone == StatusTone.neutral ? colors.line : Colors.transparent,
+          width: AppTheme.dimensions.stroke.small,
+        ),
       ),
-      child: Text(
-        text,
-        style: AppTheme.typography
-            .of(context)
-            .tag
-            .copyWith(color: foreground, fontWeight: FontWeight.w700),
-      ),
+      child: icon == null
+          ? Text(text, style: style)
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: components.badgeIcon, color: foreground),
+                SizedBox(width: components.badgeIconGap),
+                Text(text, style: style),
+              ],
+            ),
     );
   }
 }

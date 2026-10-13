@@ -14,6 +14,7 @@ class AppIconButton extends StatefulWidget {
     this.focusNode,
     this.focusRingColor,
     this.isDisabled = false,
+    this.isToggled,
     super.key,
   });
 
@@ -36,6 +37,9 @@ class AppIconButton extends StatefulWidget {
 
   /// Continua focável para a pessoa chegar por Tab e ler na dica por que não dá.
   final bool isDisabled;
+
+  /// Para botões que ligam e desligam (destacar): o leitor anuncia se está ligado.
+  final bool? isToggled;
 
   @override
   State<AppIconButton> createState() => _AppIconButtonState();
@@ -76,6 +80,7 @@ class _AppIconButtonState extends State<AppIconButton> {
     return Semantics(
       button: true,
       enabled: !disabled,
+      toggled: widget.isToggled,
       label: label,
       tooltip: label == widget.tooltip ? null : widget.tooltip,
       onTap: disabled ? null : widget.onPressed,
