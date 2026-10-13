@@ -4,7 +4,7 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 enum ButtonSize { small, medium, big }
 
-enum AppButtonKind { primary, secondary, ghost }
+enum AppButtonKind { primary, secondary, ghost, danger }
 
 class AppButtonBase extends StatefulWidget {
   const AppButtonBase({
@@ -19,6 +19,7 @@ class AppButtonBase extends StatefulWidget {
     this.reserveTexts = const [],
     this.expand = false,
     this.isLoading = false,
+    this.autofocus = false,
   });
 
   final AppButtonKind kind;
@@ -39,6 +40,8 @@ class AppButtonBase extends StatefulWidget {
 
   /// Diferente do desabilitado, não baixa a opacidade: o texto precisa manter o contraste.
   final bool isLoading;
+
+  final bool autofocus;
 
   @override
   State<AppButtonBase> createState() => _AppButtonBaseState();
@@ -71,6 +74,11 @@ class _AppButtonBaseState extends State<AppButtonBase> {
       AppButtonKind.ghost => (
           hovered ? colors.accentSoft : Colors.transparent,
           colors.accentStrong,
+          Colors.transparent
+        ),
+      AppButtonKind.danger => (
+          hovered ? colors.errorStrong : colors.error,
+          colors.white,
           Colors.transparent
         ),
     };
@@ -176,6 +184,7 @@ class _AppButtonBaseState extends State<AppButtonBase> {
               side: BorderSide(color: border, width: AppTheme.dimensions.stroke.medium),
             ),
             child: InkWell(
+              autofocus: widget.autofocus,
               customBorder: RoundedRectangleBorder(borderRadius: radius),
               onTap: inactive ? null : widget.onPressed,
               onHover: (value) => setState(() => _hovered = value),

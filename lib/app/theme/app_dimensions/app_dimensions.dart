@@ -633,6 +633,12 @@ class ComponentSizes {
   final double panelSidebarIcon = 28.0;
   final double panelSidebarItemPadding = 16.0;
   final double panelTopBarIcon = 28.0;
+
+  final double tooltipMaxWidth = 260.0;
+  final double tooltipPaddingV = 7.0;
+  final double tooltipPaddingH = 10.0;
+  final double tooltipOffset = 8.0;
+  final double disabledOpacity = 0.35;
   double panelContentPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 32);
   final double panelSectionGap = 24.0;
   final double panelCardPaddingH = 20.0;

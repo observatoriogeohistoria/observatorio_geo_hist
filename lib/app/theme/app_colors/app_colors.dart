@@ -45,6 +45,7 @@ class AppColors {
   Color videoBackdrop = const Color(0xFF1C1917);
 
   Color error = const Color(0xFFB3261E);
+  Color errorStrong = const Color(0xFF8F1D17);
 
   Color errorSurface = const Color(0xFFFBE9E7);
   Color success = const Color(0xFF1C6B34);

@@ -358,6 +358,12 @@ class AppTextStyles {
         height: 1.55,
       );
 
+  TextStyle get tooltip => _body(
+        size: _size(mobile: 13, tablet: 13, desktop: 13),
+        weight: FontWeight.w600,
+        height: 1.35,
+      );
+
   TextStyle get meta => _body(
         size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
         weight: FontWeight.w400,

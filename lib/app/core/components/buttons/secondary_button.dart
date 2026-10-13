@@ -12,6 +12,7 @@ class SecondaryButton extends StatelessWidget {
     this.trailingIcon,
     this.leadingIcon,
     this.reserveTexts = const [],
+    this.autofocus = false,
     super.key,
   }) : size = ButtonSize.small;
 
@@ -22,6 +23,7 @@ class SecondaryButton extends StatelessWidget {
     this.trailingIcon,
     this.leadingIcon,
     this.reserveTexts = const [],
+    this.autofocus = false,
     super.key,
   }) : size = ButtonSize.medium;
 
@@ -32,6 +34,7 @@ class SecondaryButton extends StatelessWidget {
     this.trailingIcon,
     this.leadingIcon,
     this.reserveTexts = const [],
+    this.autofocus = false,
     super.key,
   }) : size = ButtonSize.big;
 
@@ -46,6 +49,8 @@ class SecondaryButton extends StatelessWidget {
 
   final List<String> reserveTexts;
 
+  final bool autofocus;
+
   @override
   Widget build(BuildContext context) {
     return AppButtonBase(
@@ -57,6 +62,7 @@ class SecondaryButton extends StatelessWidget {
       trailingIcon: trailingIcon,
       leadingIcon: leadingIcon,
       reserveTexts: reserveTexts,
+      autofocus: autofocus,
     );
   }
 }
