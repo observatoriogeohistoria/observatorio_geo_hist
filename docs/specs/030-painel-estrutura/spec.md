@@ -1,6 +1,6 @@
 # 030. Estrutura do painel: barra superior, menu, avisos e confirmações
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 8, item 8.2 (T-13, P-14)
 - **Protótipo:** aba "Painel" (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
@@ -132,3 +132,4 @@ O nome acessível do botão é a ação curta ("Excluir"); a dica é a descriç�
 - 2026-10-07: aprovada.
 - 2026-10-08: ajustes do plano, decididos sem a pessoa (modo autônomo): ordem dos tipos é a do protótipo (a de hoje é alfabética, então "na ordem de hoje" estava errado); logo leva a Publicações → Artigos; contagem de usuários ignora os removidos (`isDeleted`); até a 031, a Biblioteca resume "N documentos" (as duas áreas) e o "Novo documento" fica na página da área, que recebe confirmação, avisos e dicas.
 - 2026-10-13: ajustes da implementação, decididos sem a pessoa (modo autônomo): salvar publicação também mostra aviso curto ("Publicação salva."), que faltava na lista; a confirmação de remover membro usa o botão "Remover", combinando com o título; dicas dos botões de ícone fora da lista da spec ganharam texto no mesmo modelo ("Fechar: volta à lista de mídias", "Voltar: retorna à Biblioteca do painel", "Adicionar autor"/"Remover autor", "Fechar filtros"); o aviso de erro fica 8 s e tem botão de fechar.
+- 2026-10-13: verificada com ressalvas ([verificacao.md](verificacao.md)). Todos os critérios passaram no build e no app de teste; painel real com o Firebase, player de vídeo e leitor de tela de verdade ficaram sem conferir. Corrigido o erro de logout que lia o estado errado. Status decidido no fluxo autônomo.

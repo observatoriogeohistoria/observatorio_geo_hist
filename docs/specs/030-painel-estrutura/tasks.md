@@ -48,4 +48,4 @@ Critérios de aceite da spec, na ordem: 1 protótipo em 390/768/1280 sem overflo
 - [x] **H6.** Uma vez em modo debug (`fvm flutter run -d web-server`) com o app de teste: sem asserção nem `overflow` ao abrir e redimensionar entre 1280, 1024, 768 e 390, ao abrir a gaveta, confirmar exclusão, publicar pela lista e salvar por diálogo. Parar todos os servidores no fim. Atende: 1, 7, 11. Nota: sem asserção nem `overflow` no console; salvar categoria pelo diálogo fecha só o diálogo e mostra "Categoria salva."; publicar pela lista não fecha a página.
 
 ## Verificação
-- [ ] **V1.** `/sdd-verify 030`.
+- [x] **V1.** `/sdd-verify 030`. Nota: verificada com ressalvas ([verificacao.md](verificacao.md)).
