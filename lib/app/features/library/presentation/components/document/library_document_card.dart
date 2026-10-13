@@ -92,7 +92,8 @@ class LibraryDocumentCard extends StatelessWidget {
             children: [
               if (enabledEdit)
                 AppIconButton(
-                  tooltip: 'Editar documento',
+                  label: 'Editar',
+                  tooltip: 'Editar: abre o formulário ao lado',
                   icon: Icons.edit,
                   color: colors.accent,
                   onPressed: () => onEdit?.call(),
@@ -100,7 +101,8 @@ class LibraryDocumentCard extends StatelessWidget {
               if (enabledEdit && enabledDelete) SizedBox(height: components.panelCardActionsGap),
               if (enabledDelete)
                 AppIconButton(
-                  tooltip: 'Excluir documento',
+                  label: 'Excluir',
+                  tooltip: 'Excluir: pede confirmação antes de apagar',
                   icon: Icons.delete,
                   color: colors.error,
                   onPressed: () => onDelete?.call(),

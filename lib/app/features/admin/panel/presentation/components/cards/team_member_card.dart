@@ -81,14 +81,16 @@ class TeamMemberCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   AppIconButton(
-                    tooltip: 'Editar membro',
+                    label: 'Editar',
+                    tooltip: 'Editar: abre o formulário ao lado',
                     icon: Icons.edit,
                     color: colors.accent,
                     onPressed: onEdit,
                   ),
                   SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
-                    tooltip: 'Excluir membro',
+                    label: 'Excluir',
+                    tooltip: 'Excluir: pede confirmação antes de apagar',
                     icon: Icons.delete,
                     color: colors.error,
                     onPressed: onDelete,

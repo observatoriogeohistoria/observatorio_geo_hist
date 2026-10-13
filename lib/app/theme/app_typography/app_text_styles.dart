@@ -415,6 +415,19 @@ class AppTextStyles {
         letterSpacingEm: 0,
       );
 
+  TextStyle get panelDialogTitle => _display(
+        size: _size(mobile: 20.8, tablet: 20.8, desktop: 20.8),
+        weight: FontWeight.w700,
+        height: 1.2,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get toast => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w600,
+        height: 1.4,
+      );
+
   TextStyle get tooltip => _body(
         size: _size(mobile: 13, tablet: 13, desktop: 13),
         weight: FontWeight.w600,

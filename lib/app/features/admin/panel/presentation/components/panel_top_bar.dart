@@ -63,18 +63,25 @@ class PanelTopBar extends StatelessWidget {
             showName: !isMobile,
             semanticLabel: 'Painel do Observatório',
           ),
-          const Spacer(),
-          if (!isMobile) ...[
-            AppButtonBase(
-              kind: AppButtonKind.ghost,
-              size: ButtonSize.small,
-              text: 'Ver site',
-              trailingIcon: Icons.open_in_new,
-              onPressed: () => openUrl(Uri.base.resolve(AppRoutes.root).toString()),
+          SizedBox(width: gap),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (!isMobile) ...[
+                  AppButtonBase(
+                    kind: AppButtonKind.ghost,
+                    size: ButtonSize.small,
+                    text: 'Ver site',
+                    trailingIcon: Icons.open_in_new,
+                    onPressed: () => openUrl(Uri.base.resolve(AppRoutes.root).toString()),
+                  ),
+                  SizedBox(width: components.panelTopBarActionsGap),
+                ],
+                if (user != null) Flexible(child: PanelUserBadge(user: user)),
+              ],
             ),
-            SizedBox(width: components.panelTopBarActionsGap),
-          ],
-          if (user != null) Flexible(child: PanelUserBadge(user: user)),
+          ),
         ],
       ),
     );

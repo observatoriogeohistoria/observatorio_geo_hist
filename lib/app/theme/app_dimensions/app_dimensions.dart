@@ -675,6 +675,23 @@ class ComponentSizes {
   final double panelHeadMarginBottom = 20.0;
   final double panelHeadActionGap = 16.0;
 
+  final double toastMaxWidth = 560.0;
+  final double toastMargin = 16.0;
+  final double toastPaddingV = 12.0;
+  final double toastPaddingH = 18.0;
+  final double toastIcon = 18.0;
+  final double toastIconGap = 10.0;
+  final Duration toastDuration = const Duration(seconds: 3);
+
+  /// Erro fica mais tempo porque a mensagem é mais longa e precisa ser lida até o fim.
+  final Duration toastErrorDuration = const Duration(seconds: 8);
+
+  final double confirmDialogWidth = 420.0;
+  final double confirmDialogPadding = 24.0;
+  final double confirmDialogTextGap = 8.0;
+  final double confirmDialogActionsTop = 20.0;
+  final double confirmDialogActionsGap = 10.0;
+
   final double tooltipMaxWidth = 260.0;
   final double tooltipPaddingV = 7.0;
   final double tooltipPaddingH = 10.0;

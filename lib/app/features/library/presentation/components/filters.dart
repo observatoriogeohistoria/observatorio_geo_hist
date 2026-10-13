@@ -71,7 +71,8 @@ class _FiltersState extends State<Filters> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: AppIconButton(
-                            tooltip: 'Fechar filtros',
+                            label: 'Fechar filtros',
+                            tooltip: 'Fechar filtros: volta à lista de documentos',
                             icon: Icons.close,
                             // O acento comum fica abaixo de 4,5:1 sobre o fundo do painel.
                             color: colors.accentStrong,

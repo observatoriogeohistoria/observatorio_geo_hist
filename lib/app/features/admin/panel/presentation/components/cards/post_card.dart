@@ -99,30 +99,36 @@ class PostCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   AppIconButton(
-                    tooltip: post.isPublished ? 'Despublicar post' : 'Publicar post',
+                    label: post.isPublished ? 'Despublicar' : 'Publicar',
+                    tooltip: post.isPublished
+                        ? 'Despublicar: sai do site e continua salva no painel'
+                        : 'Publicar: passa a aparecer no site',
                     icon: post.isPublished ? Icons.public_off : Icons.public,
                     color: colors.accent,
                     onPressed: onPublish,
                   ),
                   SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
-                    tooltip: post.isHighlighted ? 'Remover dos destaques' : 'Destacar post',
-                    icon: post.isHighlighted
-                        ? Icons.bookmark_remove_outlined
-                        : Icons.bookmark_add_outlined,
+                    label: post.isHighlighted ? 'Tirar dos destaques' : 'Destacar',
+                    tooltip: post.isHighlighted
+                        ? 'Tirar dos destaques: deixa de aparecer no topo da Home'
+                        : 'Destacar: entra nos destaques da Home',
+                    icon: post.isHighlighted ? Icons.star : Icons.star_border,
                     color: colors.accent,
                     onPressed: onHighlight,
                   ),
                   SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
-                    tooltip: 'Editar post',
+                    label: 'Editar',
+                    tooltip: 'Editar: abre a publicação no editor',
                     icon: Icons.edit,
                     color: colors.accent,
                     onPressed: onEdit,
                   ),
                   SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
-                    tooltip: 'Excluir post',
+                    label: 'Excluir',
+                    tooltip: 'Excluir: pede confirmação antes de apagar',
                     icon: Icons.delete,
                     color: colors.error,
                     onPressed: onDelete,

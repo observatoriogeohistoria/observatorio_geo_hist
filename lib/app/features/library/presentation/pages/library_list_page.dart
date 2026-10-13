@@ -10,16 +10,17 @@ import 'package:observatorio_geo_hist/app/core/components/error_content/state_er
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
+import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
-import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/core/utils/transitions/transitions_builder.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/confirm_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/empty_list_message.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/panel_action.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/create_or_update_document_dialog.dart';
@@ -44,6 +45,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
   late final _authStore = AdminSetup.getIt<AuthStore>();
 
   final _scrollController = ScrollController();
+  final _pending = PendingPanelAction();
 
   List<ReactionDisposer> _reactions = [];
 
@@ -65,21 +67,16 @@ class _LibraryListPageState extends State<LibraryListPage> {
       ),
       reaction(
         (_) => _libraryStore.manageState,
-        (state) {
-          if (state is CrudErrorState) {
-            final error = state.failure;
-            Messenger.showError(context, error.message);
-
-            if (error is Forbidden) _authStore.logout();
-          }
-
-          if (state is CrudSuccessState) {
-            if (state.message.isNotEmpty) {
-              GoRouter.of(context).pop();
-              Messenger.showSuccess(context, state.message);
-            }
-          }
-        },
+        (state) => showPanelActionResult(
+          context,
+          state: state,
+          pending: _pending,
+          messages: const {
+            PanelAction.save: 'Documento salvo.',
+            PanelAction.delete: 'Documento excluído.',
+          },
+          onForbidden: _authStore.logout,
+        ),
       ),
     ];
   }
@@ -109,7 +106,8 @@ class _LibraryListPageState extends State<LibraryListPage> {
       backgroundColor: colors.page,
       appBar: AppBar(
         leading: AppIconButton(
-          tooltip: 'Voltar',
+          tooltip: 'Voltar: retorna à Biblioteca do painel',
+          label: 'Voltar',
           icon: Icons.arrow_back,
           color: colors.white,
           focusRingColor: colors.white,
@@ -182,8 +180,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
                               onPressed: () => showCreateOrUpdateLibraryDocumentDialog(
                                 context,
                                 area: widget.area,
-                                onCreateOrUpdate: (document, file) =>
-                                    _libraryStore.createOrUpdateDocument(document, file),
+                                onCreateOrUpdate: _save,
                               ),
                             ),
                           ),
@@ -212,11 +209,10 @@ class _LibraryListPageState extends State<LibraryListPage> {
                                         onEdit: () => showCreateOrUpdateLibraryDocumentDialog(
                                           context,
                                           area: widget.area,
-                                          onCreateOrUpdate: (document, file) =>
-                                              _libraryStore.createOrUpdateDocument(document, file),
+                                          onCreateOrUpdate: _save,
                                           document: doc,
                                         ),
-                                        onDelete: () => _libraryStore.deleteDocument(doc),
+                                        onDelete: () => _delete(doc),
                                         canEdit: canEdit,
                                         canDelete: canEdit,
                                       );
@@ -256,6 +252,22 @@ class _LibraryListPageState extends State<LibraryListPage> {
         ],
       ),
     );
+  }
+
+  void _save(LibraryDocumentModel document, FileModel? file) {
+    _pending.start(PanelAction.save);
+    _libraryStore.createOrUpdateDocument(document, file);
+  }
+
+  Future<void> _delete(LibraryDocumentModel document) async {
+    final confirmed = await showConfirmDialog(
+      context,
+      title: 'Excluir este documento?',
+      message: '“${document.title}” sai do site e do painel. Não dá para desfazer.',
+    );
+    if (!confirmed) return;
+    _pending.start(PanelAction.delete);
+    _libraryStore.deleteDocument(document);
   }
 
   void _fetchDocuments() {

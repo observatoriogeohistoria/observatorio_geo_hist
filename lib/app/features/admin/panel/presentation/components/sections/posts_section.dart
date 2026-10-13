@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
@@ -10,15 +9,15 @@ import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
-import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
-import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/post_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_post_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/section_header_actions.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/panel_section_header.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/confirm_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/empty_list_message.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/panel_action.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
@@ -42,6 +41,7 @@ class _PostsSectionState extends State<PostsSection> {
   late final PanelCountsStore countsStore = PanelSetup.getIt<PanelCountsStore>();
 
   final _scrollController = ScrollController();
+  final _pending = PendingPanelAction();
 
   PostType selectedPostType = PostType.article;
   List<ReactionDisposer> _reactions = [];
@@ -73,21 +73,20 @@ class _PostsSectionState extends State<PostsSection> {
       ),
       reaction(
         (_) => postsStore.state,
-        (state) {
-          if (state is CrudErrorState) {
-            final error = state.failure;
-            Messenger.showError(context, error.message);
-
-            if (error is Forbidden) authStore.logout();
-          }
-
-          if (state is CrudSuccessState) {
-            if (state.message.isNotEmpty) {
-              GoRouter.of(context).pop();
-              Messenger.showSuccess(context, state.message);
-            }
-          }
-        },
+        (state) => showPanelActionResult(
+          context,
+          state: state,
+          pending: _pending,
+          messages: const {
+            PanelAction.save: 'Publicação salva.',
+            PanelAction.delete: 'Publicação excluída.',
+            PanelAction.publish: 'Publicado. Já aparece no site.',
+            PanelAction.unpublish: 'Despublicado. Saiu do site.',
+            PanelAction.highlight: 'Destacado na Home.',
+            PanelAction.unhighlight: 'Saiu dos destaques da Home.',
+          },
+          onForbidden: authStore.logout,
+        ),
       ),
     ];
   }
@@ -102,6 +101,47 @@ class _PostsSectionState extends State<PostsSection> {
     }
 
     super.dispose();
+  }
+
+  void _save(PostModel post, CategoryModel? pastCategory) {
+    _pending.start(PanelAction.save);
+    postsStore.createOrUpdatePost(post, pastCategory);
+  }
+
+  void _togglePublished(PostModel post) {
+    _pending.start(post.isPublished ? PanelAction.unpublish : PanelAction.publish);
+    postsStore.createOrUpdatePost(
+      post.copyWith(
+        isPublished: !post.isPublished,
+        body: post.body?.copyWith(image: FileModel(url: post.body?.image.url)),
+      ),
+      null,
+    );
+  }
+
+  void _toggleHighlighted(PostModel post) {
+    _pending.start(post.isHighlighted ? PanelAction.unhighlight : PanelAction.highlight);
+    postsStore.createOrUpdatePost(
+      post.copyWith(
+        isHighlighted: !post.isHighlighted,
+        body: post.body?.copyWith(image: FileModel(url: post.body?.image.url)),
+      ),
+      null,
+    );
+  }
+
+  Future<void> _delete(PostModel post) async {
+    final title = post.body?.title ?? '';
+    final confirmed = await showConfirmDialog(
+      context,
+      title: 'Excluir esta publicação?',
+      message: title.isEmpty
+          ? 'Ela sai do site e do painel. Não dá para desfazer.'
+          : '“$title” sai do site e do painel. Não dá para desfazer.',
+    );
+    if (!confirmed) return;
+    _pending.start(PanelAction.delete);
+    postsStore.deletePost(post);
   }
 
   String? _summary(int? count) {
@@ -138,8 +178,7 @@ class _PostsSectionState extends State<PostsSection> {
                 showCreateOrUpdatePostDialog(
                   context,
                   categories: categoriesStore.items,
-                  onCreateOrUpdate: (post, pastCategory) =>
-                      postsStore.createOrUpdatePost(post, pastCategory),
+                  onCreateOrUpdate: _save,
                   postType: selectedPostType,
                   isLoading: postsStore.state is CrudLoadingState,
                 );
@@ -215,40 +254,19 @@ class _PostsSectionState extends State<PostsSection> {
                         return PostCard(
                           post: post,
                           index: index + 1,
-                          onPublish: () {
-                            postsStore.createOrUpdatePost(
-                              post.copyWith(
-                                isPublished: !post.isPublished,
-                                body: post.body?.copyWith(
-                                  image: FileModel(url: post.body?.image.url),
-                                ),
-                              ),
-                              null,
-                            );
-                          },
-                          onHighlight: () {
-                            postsStore.createOrUpdatePost(
-                              post.copyWith(
-                                isHighlighted: !post.isHighlighted,
-                                body: post.body?.copyWith(
-                                  image: FileModel(url: post.body?.image.url),
-                                ),
-                              ),
-                              null,
-                            );
-                          },
+                          onPublish: () => _togglePublished(post),
+                          onHighlight: () => _toggleHighlighted(post),
                           onEdit: () {
                             showCreateOrUpdatePostDialog(
                               context,
                               categories: categoriesStore.items,
-                              onCreateOrUpdate: (post, pastCategory) =>
-                                  postsStore.createOrUpdatePost(post, pastCategory),
+                              onCreateOrUpdate: _save,
                               post: post,
                               postType: post.type,
                               isLoading: postsStore.state is CrudLoadingState,
                             );
                           },
-                          onDelete: () => postsStore.deletePost(post),
+                          onDelete: () => _delete(post),
                           canEdit: canEdit,
                         );
                       },

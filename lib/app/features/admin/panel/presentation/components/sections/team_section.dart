@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/confirm_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/panel_action.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/panel_section_header.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
@@ -22,6 +24,24 @@ class _TeamSectionState extends State<TeamSection> {
   late final TeamStore teamStore = PanelSetup.getIt<TeamStore>();
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
   late final PanelCountsStore countsStore = PanelSetup.getIt<PanelCountsStore>();
+  final _pending = PendingPanelAction();
+
+  void _save(TeamMemberModel member) {
+    _pending.start(PanelAction.save);
+    teamStore.createOrUpdateItem(member);
+  }
+
+  Future<void> _delete(TeamMemberModel member) async {
+    final confirmed = await showConfirmDialog(
+      context,
+      title: 'Remover este membro?',
+      message: '“${member.name}” sai da equipe no site e do painel. Não dá para desfazer.',
+      confirmText: 'Remover',
+    );
+    if (!confirmed) return;
+    _pending.start(PanelAction.delete);
+    teamStore.deleteItem(member);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +62,24 @@ class _TeamSectionState extends State<TeamSection> {
             actionLabel: canEdit ? 'Novo membro' : null,
             onAction: () => showCreateOrUpdateTeamMemberDialog(
               context,
-              onCreateOrUpdate: (item) => teamStore.createOrUpdateItem(item),
+              onCreateOrUpdate: _save,
             ),
           ),
           store: teamStore,
+          pending: _pending,
+          messages: const {
+            PanelAction.save: 'Membro salvo.',
+            PanelAction.delete: 'Membro removido da equipe.',
+          },
           itemBuilder: (item, index) {
             return TeamMemberCard(
               member: item,
               index: index + 1,
-              onDelete: () => teamStore.deleteItem(item),
+              onDelete: () => _delete(item),
               onEdit: () {
                 showCreateOrUpdateTeamMemberDialog(
                   context,
-                  onCreateOrUpdate: (item) => teamStore.createOrUpdateItem(item),
+                  onCreateOrUpdate: _save,
                   member: item,
                 );
               },

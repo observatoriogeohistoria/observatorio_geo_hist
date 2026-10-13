@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
-import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
-import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/empty_list_message.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/panel_action.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -17,12 +15,16 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class CrudSection<T> extends StatefulWidget {
   final Widget header;
   final CrudStore<T> store;
+  final PendingPanelAction pending;
+  final Map<PanelAction, String> messages;
   final Widget Function(T item, int index) itemBuilder;
   final bool paginated;
 
   const CrudSection({
     required this.header,
     required this.store,
+    required this.pending,
+    required this.messages,
     required this.itemBuilder,
     this.paginated = false,
     super.key,
@@ -47,23 +49,16 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
     if (widget.paginated) _scrollController.addListener(_onScroll);
 
     _reactions = [
-      reaction((_) => widget.store.state, (state) {
-        if (state is CrudErrorState) {
-          final error = state.failure;
-          Messenger.showError(context, error.message);
-
-          if (error is Forbidden) authStore.logout();
-        }
-
-        if (state is CrudSuccessState) {
-          final message = (state as dynamic).message;
-
-          if (message.isNotEmpty) {
-            GoRouter.of(context).pop();
-            Messenger.showSuccess(context, message);
-          }
-        }
-      }),
+      reaction(
+        (_) => widget.store.state,
+        (state) => showPanelActionResult(
+          context,
+          state: state,
+          pending: widget.pending,
+          messages: widget.messages,
+          onForbidden: authStore.logout,
+        ),
+      ),
     ];
   }
 

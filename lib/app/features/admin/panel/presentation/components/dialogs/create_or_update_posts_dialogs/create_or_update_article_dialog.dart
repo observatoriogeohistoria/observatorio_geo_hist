@@ -162,13 +162,15 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppIconButton(
-                tooltip: 'Adicionar autor',
+                label: 'Adicionar autor',
+                tooltip: 'Adicionar autor: abre mais um campo de nome',
                 icon: Icons.add,
                 color: AppTheme.colors.accent,
                 onPressed: () => setState(() => _authorsControllers.add(TextEditingController())),
               ),
               AppIconButton(
-                tooltip: 'Remover autor',
+                label: 'Remover autor',
+                tooltip: 'Remover autor: apaga o último campo de nome',
                 icon: Icons.remove,
                 color: AppTheme.colors.accent,
                 onPressed: () {

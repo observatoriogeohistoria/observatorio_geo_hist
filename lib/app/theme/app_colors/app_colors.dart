@@ -51,4 +51,7 @@ class AppColors {
   Color success = const Color(0xFF1C6B34);
   Color successSurface = const Color(0xFFE4F3E8);
   Color info = const Color(0xFF1E5AA8);
+
+  /// Verde claro para o ícone sobre o aviso escuro; o [success] some no fundo [ink].
+  Color toastIcon = const Color(0xFF9FD8AE);
 }

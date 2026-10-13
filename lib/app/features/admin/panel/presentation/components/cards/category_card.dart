@@ -26,6 +26,7 @@ class CategoryCard extends StatelessWidget {
     final dimensions = AppTheme.dimensions;
     final components = dimensions.components;
     final typography = AppTheme.typography.of(context);
+    final hasPosts = category.numberOfPosts > 0;
 
     return AppCard(
       width: double.infinity,
@@ -65,20 +66,24 @@ class CategoryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   AppIconButton(
-                    tooltip: 'Editar categoria',
+                    label: 'Editar',
+                    tooltip: 'Editar: abre o formulário ao lado',
                     icon: Icons.edit,
                     color: colors.accent,
                     onPressed: onEdit,
                   ),
-                  if (category.numberOfPosts == 0) ...[
-                    SizedBox(height: components.panelCardActionsGap),
-                    AppIconButton(
-                      tooltip: 'Excluir categoria',
-                      icon: Icons.delete,
-                      color: colors.error,
-                      onPressed: onDelete,
-                    ),
-                  ],
+                  SizedBox(height: components.panelCardActionsGap),
+                  AppIconButton(
+                    label: 'Excluir',
+                    tooltip: hasPosts
+                        ? 'Só dá para excluir categoria sem publicações. '
+                            'Esta tem ${category.numberOfPosts}.'
+                        : 'Excluir: pede confirmação antes de apagar',
+                    icon: Icons.delete,
+                    color: colors.error,
+                    isDisabled: hasPosts,
+                    onPressed: onDelete,
+                  ),
                 ],
               ),
             ],

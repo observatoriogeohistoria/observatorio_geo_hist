@@ -62,14 +62,16 @@ class UserCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 AppIconButton(
-                  tooltip: 'Editar usuário',
+                  label: 'Editar',
+                  tooltip: 'Editar: abre o formulário ao lado',
                   color: colors.accent,
                   icon: Icons.edit,
                   onPressed: onEdit,
                 ),
                 SizedBox(height: components.panelCardActionsGap),
                 AppIconButton(
-                  tooltip: 'Excluir usuário',
+                  label: 'Excluir',
+                  tooltip: 'Excluir: pede confirmação antes de apagar',
                   color: colors.error,
                   icon: Icons.delete,
                   onPressed: onDelete,

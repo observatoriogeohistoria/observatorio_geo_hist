@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
+import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/view_image_dialog.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -66,7 +67,8 @@ class MediaCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 AppIconButton(
-                  tooltip: 'Ver imagem',
+                  label: 'Ver',
+                  tooltip: 'Ver: abre a imagem em tamanho maior',
                   icon: Icons.visibility,
                   color: colors.accent,
                   onPressed: () => showViewImageDialog(context, media),
@@ -74,18 +76,21 @@ class MediaCard extends StatelessWidget {
                 if (hasUrl) ...[
                   SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
-                    tooltip: 'Copiar link',
+                    label: 'Copiar link',
+                    tooltip: 'Copiar link: para colar no editor',
                     icon: Icons.copy,
                     color: colors.inkSecondary,
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: media.url!));
+                      if (context.mounted) Messenger.showSuccess(context, 'Link copiado.');
                     },
                   ),
                 ],
                 if (canEdit) ...[
                   SizedBox(height: components.panelCardActionsGap),
                   AppIconButton(
-                    tooltip: 'Excluir imagem',
+                    label: 'Excluir',
+                    tooltip: 'Excluir: pede confirmação antes de apagar',
                     icon: Icons.delete,
                     color: colors.error,
                     onPressed: onDelete,
