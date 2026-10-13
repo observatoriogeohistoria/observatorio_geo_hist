@@ -108,3 +108,4 @@ A seção Biblioteca passa a mostrar direto a lista de Geografia, sem os dois bl
   - Trocar de tipo de publicação limpa os filtros, como no protótipo; trocar a área da biblioteca mantém os filtros; sair da Biblioteca os zera, como hoje.
   - Erro ao abrir a lista mostra só a caixa de erro, sem o aviso flutuante. Erro ao carregar mais ou numa ação continua no aviso, com a lista à vista.
   - Ações da linha têm nome curto ("Excluir"); o item vem da linha, que é lida como grupo com o título.
+- 2026-10-13: na implementação, decidido sem a pessoa (modo autônomo): o Flutter web não gera `aria-pressed`. O segmentado é anunciado como grupo de rádio (marcado/desmarcado) e "Destaques" e o botão de destacar como chave (ligado/desligado), que dizem o mesmo estado.

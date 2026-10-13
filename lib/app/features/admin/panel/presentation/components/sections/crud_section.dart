@@ -1,34 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
+import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/empty_list_message.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list_footer.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list_skeleton.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list_states.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_section_scroll.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/panel_action.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
-import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
-import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
+/// Base das seções sem paginação no servidor (ou só "carregar ao rolar"): cuida dos estados,
+/// da barra de filtros e do rodapé. O desenho dos itens vem de [bodyBuilder], como sliver.
 class CrudSection<T> extends StatefulWidget {
-  final Widget header;
-  final CrudStore<T> store;
-  final PendingPanelAction pending;
-  final Map<PanelAction, String> messages;
-  final Widget Function(T item, int index) itemBuilder;
-  final bool paginated;
-
   const CrudSection({
     required this.header,
     required this.store,
     required this.pending,
     required this.messages,
-    required this.itemBuilder,
+    required this.empty,
+    required this.bodyBuilder,
     this.paginated = false,
+    this.isGrid = false,
+    this.filterBar,
+    this.filter,
+    this.onClearFilters,
     super.key,
   });
+
+  final Widget header;
+  final CrudStore<T> store;
+  final PendingPanelAction pending;
+  final Map<PanelAction, String> messages;
+  final PanelEmptyInfo empty;
+
+  /// Recebe os itens que passam no filtro e o rodapé, quando há algo para mostrar nele.
+  final Widget Function(List<T> items, Widget? footer) bodyBuilder;
+  final bool paginated;
+  final bool isGrid;
+
+  final Widget? filterBar;
+
+  /// Filtro feito na tela, sobre os itens já carregados. Nulo quando nenhum filtro está ativo.
+  final bool Function(T item)? filter;
+  final VoidCallback? onClearFilters;
 
   @override
   State<CrudSection<T>> createState() => _CrudSectionState<T>();
@@ -36,42 +52,53 @@ class CrudSection<T> extends StatefulWidget {
 
 class _CrudSectionState<T> extends State<CrudSection<T>> {
   late final AuthStore authStore = PanelSetup.getIt<AuthStore>();
-  late final ScrollController _scrollController = ScrollController();
+  final _scrollController = ScrollController();
 
   List<ReactionDisposer> _reactions = [];
+  bool _loadingFirstPage = false;
+  bool _firstPageFailed = false;
 
   @override
   void initState() {
     super.initState();
 
-    widget.store.getItems();
-
-    if (widget.paginated) _scrollController.addListener(_onScroll);
-
     _reactions = [
-      reaction(
-        (_) => widget.store.state,
-        (state) => showPanelActionResult(
-          context,
-          state: state,
-          pending: widget.pending,
-          messages: widget.messages,
-          onForbidden: authStore.logout,
-        ),
-      ),
+      reaction((_) => widget.store.state, _handleState, fireImmediately: false),
     ];
+
+    _load();
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      widget.store.loadMore();
+  void _load() => widget.store.getItems();
+
+  void _retry() {
+    setState(() => _firstPageFailed = false);
+    _load();
+  }
+
+  void _handleState(CrudState state) {
+    if (state is CrudLoadingState) _loadingFirstPage = !state.isRefreshing;
+
+    final isFirstPageError = state is CrudErrorState && _loadingFirstPage;
+    if (isFirstPageError) setState(() => _firstPageFailed = true);
+
+    showPanelActionResult(
+      context,
+      state: state,
+      pending: widget.pending,
+      messages: widget.messages,
+      onForbidden: authStore.logout,
+      isFirstPageLoad: isFirstPageError,
+    );
+
+    if (state is CrudSuccessState && widget.paginated) {
+      loadMoreIfNotScrollable(_scrollController, widget.store.loadMore);
     }
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-
     for (var reaction in _reactions) {
       reaction();
     }
@@ -80,44 +107,47 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final spacing = AppTheme.dimensions.spacing;
-    final rightPadding = EdgeInsets.only(right: spacing.s16);
-
     return Observer(
       builder: (_) {
-        final state = widget.store.state;
+        final store = widget.store;
+        final state = store.state;
+        final items = store.items.toList();
+        final filter = widget.filter;
+        final onClearFilters = widget.onClearFilters;
+        final isLoadingMore = state is CrudLoadingState && state.isRefreshing;
 
-        bool isRefreshing = state is CrudLoadingState && state.isRefreshing;
-        bool isLoading = state is CrudLoadingState && !state.isRefreshing;
-        bool isEmpty = state is CrudSuccessState && widget.store.items.isEmpty;
+        final Widget body;
+        if (_firstPageFailed && state is CrudErrorState) {
+          body = SliverToBoxAdapter(
+            child: PanelErrorState(message: state.failure.message, onRetry: _retry),
+          );
+        } else if (state is CrudInitialState ||
+            (state is CrudLoadingState && !state.isRefreshing)) {
+          body = PanelListSkeleton(isGrid: widget.isGrid);
+        } else if (items.isEmpty) {
+          body = SliverToBoxAdapter(child: PanelEmptyState(info: widget.empty));
+        } else {
+          final visible = filter == null ? items : items.where(filter).toList();
+          final clear = filter == null ? null : onClearFilters;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            widget.header,
-            if (isRefreshing)
-              Padding(
-                padding: rightPadding,
-                child: const LinearLoading(),
-              ),
-            Expanded(
-              child: isLoading
-                  ? const Center(child: CircularLoading())
-                  : isEmpty
-                      ? const EmptyListMessage(text: 'Nenhum item cadastrado.')
-                      : AppScrollbar(
-                          controller: _scrollController,
-                          child: ListView.separated(
-                            controller: _scrollController,
-                            physics: const ClampingScrollPhysics(),
-                            padding: EdgeInsets.only(bottom: spacing.s24),
-                            itemCount: widget.store.items.length,
-                            separatorBuilder: (_, i) => SizedBox(height: spacing.s16),
-                            itemBuilder: (_, i) => widget.itemBuilder(widget.store.items[i], i),
-                          ),
-                        ),
-            )
-          ],
+          if (visible.isEmpty && clear != null) {
+            body = SliverToBoxAdapter(child: PanelNoResultsState(onClearFilters: clear));
+          } else {
+            final showProgress = isLoadingMore;
+            final footer =
+                PanelListFooter.isNeeded(onClearFilters: clear, isLoadingMore: showProgress)
+                    ? PanelListFooter(onClearFilters: clear, isLoadingMore: showProgress)
+                    : null;
+            body = widget.bodyBuilder(visible, footer);
+          }
+        }
+
+        return PanelSectionScroll(
+          controller: _scrollController,
+          header: widget.header,
+          filterBar: widget.filterBar,
+          onNearEnd: widget.paginated ? store.loadMore : null,
+          body: body,
         );
       },
     );

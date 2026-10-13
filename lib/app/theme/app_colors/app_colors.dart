@@ -20,6 +20,8 @@ class AppColors {
   Color accentSoft = const Color(0xFFFFF0E6);
   Color accentSoftBorder = const Color(0xFFFFD2B8);
 
+  Color rowHover = const Color(0xFFFCFBF9);
+
   /// Acento a 25 %, que mantém [accentStrong] acima de 4,5:1.
   Color textSelection = const Color(0x40C94400);
 

@@ -415,6 +415,44 @@ class AppTextStyles {
         letterSpacingEm: 0,
       );
 
+  TextStyle get panelRowTitle => _display(
+        size: _size(mobile: 16.8, tablet: 16.8, desktop: 16.8),
+        weight: FontWeight.w600,
+        height: 1.3,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get panelRowMeta => _body(
+        size: _size(mobile: 13.5, tablet: 13.5, desktop: 13.5),
+        weight: FontWeight.w400,
+        height: 1.45,
+      );
+
+  TextStyle get panelRowInitials => _display(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w700,
+        height: 1,
+        letterSpacingEm: 0,
+      );
+
+  TextStyle get panelTileName => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w700,
+        height: 1.35,
+      );
+
+  TextStyle get panelListFoot => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w400,
+        height: 1.4,
+      );
+
+  TextStyle get panelSegment => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w600,
+        height: 1.2,
+      );
+
   TextStyle get panelDialogTitle => _display(
         size: _size(mobile: 20.8, tablet: 20.8, desktop: 20.8),
         weight: FontWeight.w700,

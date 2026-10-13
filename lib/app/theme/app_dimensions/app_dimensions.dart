@@ -724,6 +724,60 @@ class ComponentSizes {
   final double panelFiltersWidth = 300.0;
   final double panelLibraryDocIcon = 32.0;
 
+  final double panelMainPaddingBottom = 48.0;
+  final double panelRowPaddingV = 14.0;
+  final double panelRowPaddingH = 16.0;
+  final double panelRowPaddingMobile = 14.0;
+  final double panelRowGap = 16.0;
+  final double panelRowGapMobileV = 8.0;
+  final double panelRowGapMobileH = 12.0;
+  final double panelRowMetaGap = 3.0;
+  final double panelRowBadgeGap = 6.0;
+  final double panelRowActionsGap = 2.0;
+  final double panelRowActionsTop = 6.0;
+  final double panelRowDash = 4.0;
+  final double panelRowDashGap = 3.0;
+  final int panelRowTitleMaxLines = 2;
+  double panelThumbWidth(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 72, 88, 88);
+  final double panelThumbAspect = 16 / 10;
+  final double panelThumbIcon = 20.0;
+  final double panelLeadSize = 44.0;
+  final double panelLeadIcon = 20.0;
+  final double panelActionIcon = 20.0;
+
+  final double panelFilterPadding = 12.0;
+  final double panelFilterGap = 10.0;
+  final double panelFilterSearchMinWidth = 220.0;
+  final double panelFilterMarginBottom = 16.0;
+  final double panelControlHeight = 42.0;
+  final double panelSegmentPadding = 3.0;
+  final double panelSegmentButtonPaddingV = 8.0;
+  final double panelSegmentButtonPaddingH = 12.0;
+  final double panelToggleIcon = 16.0;
+  final double panelToggleGap = 6.0;
+
+  final double panelListFootMinHeight = 52.0;
+  final double panelListFootPaddingV = 10.0;
+  final double panelListFootPaddingH = 16.0;
+  final double panelLoadMoreTrigger = 200.0;
+
+  final double panelTileMinWidth = 170.0;
+  final double panelTileGap = 16.0;
+  final double panelTileAspect = 4 / 3;
+  final double panelTilePaddingH = 12.0;
+  final double panelTilePaddingTop = 10.0;
+  final double panelTileActionsPadding = 6.0;
+  final int panelGridColumnsMobile = 2;
+  final double panelMoreNoteTop = 20.0;
+
+  final int panelSkeletonRows = 4;
+  final double panelSkeletonTitleHeight = 16.0;
+  final double panelSkeletonMetaHeight = 12.0;
+  final double panelSkeletonTitleWidth = 0.7;
+  final double panelSkeletonTitleStep = 0.08;
+  final double panelSkeletonMetaWidth = 0.4;
+  final double panelSkeletonGap = 8.0;
+
   final double networkImageSkeletonHeight = 253.0;
   final double imageErrorIcon = 24.0;
 
@@ -828,6 +882,10 @@ class ShadowStyle {
 
   List<BoxShadow> get elevated => const [
         BoxShadow(color: Color(0x241F1B18), blurRadius: 36, offset: Offset(0, 14)),
+      ];
+
+  List<BoxShadow> get segment => const [
+        BoxShadow(color: Color(0x1F1F1B18), blurRadius: 3, offset: Offset(0, 1)),
       ];
 
   /// Animar até uma lista vazia mostra a sombra nítida por um instante; esmaecer a cor

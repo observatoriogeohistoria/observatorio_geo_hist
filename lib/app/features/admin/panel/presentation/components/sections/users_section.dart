@@ -8,9 +8,11 @@ import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/en
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/user_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_user_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/crud_section.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/user_row.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/users_store.dart';
 
 class UsersSection extends StatefulWidget {
@@ -43,6 +45,15 @@ class _UsersSectionState extends State<UsersSection> {
     usersStore.deleteItem(user);
   }
 
+  void _openForm([UserModel? user]) {
+    showCreateOrUpdateUserDialog(
+      context,
+      onCreate: (item, extra) => _save(item, extra: extra),
+      onUpdate: _save,
+      user: user,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -60,11 +71,7 @@ class _UsersSectionState extends State<UsersSection> {
               note: 'só a administração vê esta seção',
             ),
             actionLabel: canEdit ? 'Novo usuário' : null,
-            onAction: () => showCreateOrUpdateUserDialog(
-              context,
-              onCreate: (item, extra) => _save(item, extra: extra),
-              onUpdate: _save,
-            ),
+            onAction: _openForm,
           ),
           store: usersStore,
           pending: _pending,
@@ -72,21 +79,27 @@ class _UsersSectionState extends State<UsersSection> {
             PanelAction.save: 'Usuário salvo.',
             PanelAction.delete: 'Usuário excluído.',
           },
-          itemBuilder: (item, index) {
-            return UserCard(
-              user: item,
-              index: index + 1,
-              onDelete: () => _delete(item),
-              onEdit: () {
-                showCreateOrUpdateUserDialog(
-                  context,
-                  onCreate: (item, extra) => _save(item, extra: extra),
-                  onUpdate: _save,
-                  user: item,
-                );
-              },
-            );
-          },
+          empty: PanelEmptyInfo(
+            icon: Icons.person_outline,
+            title: 'Nenhum usuário ainda',
+            message: 'Crie um acesso para cada pessoa que vai cuidar do conteúdo.',
+            actionLabel: canEdit ? 'Novo usuário' : null,
+            onAction: _openForm,
+          ),
+          bodyBuilder: (items, footer) => PanelList(
+            itemCount: items.length,
+            footer: footer,
+            itemBuilder: (context, index) {
+              final user = items[index];
+              return UserRow(
+                key: ValueKey(user.id),
+                user: user,
+                canEdit: canEdit,
+                onEdit: () => _openForm(user),
+                onDelete: () => _delete(user),
+              );
+            },
+          ),
         );
       },
     );

@@ -22,16 +22,18 @@ class PendingPanelAction {
 }
 
 /// Só salvar vem de um diálogo; publicar, destacar e excluir partem da lista, sem nada para fechar.
+/// Erro ao abrir a lista ([isFirstPageLoad]) já aparece na caixa de erro, sem aviso.
 void showPanelActionResult(
   BuildContext context, {
   required CrudState state,
   required PendingPanelAction pending,
   required Map<PanelAction, String> messages,
   required VoidCallback onForbidden,
+  bool isFirstPageLoad = false,
 }) {
   if (state is CrudErrorState) {
-    pending.take();
-    Messenger.showError(context, state.failure.message);
+    final action = pending.take();
+    if (action != null || !isFirstPageLoad) Messenger.showError(context, state.failure.message);
     if (state.failure is Forbidden) onForbidden();
     return;
   }

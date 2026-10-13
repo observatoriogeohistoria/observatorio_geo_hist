@@ -7,9 +7,11 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stor
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/cards/team_member_card.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_team_member_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/crud_section.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/team_member_row.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list_states.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/team_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 
@@ -43,6 +45,10 @@ class _TeamSectionState extends State<TeamSection> {
     teamStore.deleteItem(member);
   }
 
+  void _openForm([TeamMemberModel? member]) {
+    showCreateOrUpdateTeamMemberDialog(context, onCreateOrUpdate: _save, member: member);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -60,10 +66,7 @@ class _TeamSectionState extends State<TeamSection> {
               note: 'quem tem descrição ganha página no site',
             ),
             actionLabel: canEdit ? 'Novo membro' : null,
-            onAction: () => showCreateOrUpdateTeamMemberDialog(
-              context,
-              onCreateOrUpdate: _save,
-            ),
+            onAction: _openForm,
           ),
           store: teamStore,
           pending: _pending,
@@ -71,21 +74,27 @@ class _TeamSectionState extends State<TeamSection> {
             PanelAction.save: 'Membro salvo.',
             PanelAction.delete: 'Membro removido da equipe.',
           },
-          itemBuilder: (item, index) {
-            return TeamMemberCard(
-              member: item,
-              index: index + 1,
-              onDelete: () => _delete(item),
-              onEdit: () {
-                showCreateOrUpdateTeamMemberDialog(
-                  context,
-                  onCreateOrUpdate: _save,
-                  member: item,
-                );
-              },
-              canEdit: canEdit,
-            );
-          },
+          empty: PanelEmptyInfo(
+            icon: Icons.groups_outlined,
+            title: 'Ninguém na equipe ainda',
+            message: 'Cadastre as pessoas do Observatório para que apareçam no site.',
+            actionLabel: canEdit ? 'Novo membro' : null,
+            onAction: _openForm,
+          ),
+          bodyBuilder: (items, footer) => PanelList(
+            itemCount: items.length,
+            footer: footer,
+            itemBuilder: (context, index) {
+              final member = items[index];
+              return TeamMemberRow(
+                key: ValueKey(member.id),
+                member: member,
+                canEdit: canEdit,
+                onEdit: () => _openForm(member),
+                onDelete: () => _delete(member),
+              );
+            },
+          ),
         );
       },
     );
