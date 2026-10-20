@@ -5,6 +5,7 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_butto
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/form/form_error_alert.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_selection_area.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -22,7 +23,7 @@ Future<void> showPanelSheet(BuildContext context, {required WidgetBuilder builde
           AppTheme.colors.footerBackground.withValues(alpha: components.panelDrawerScrimOpacity),
       traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
       transitionDuration: still ? Duration.zero : components.panelSheetSlide,
-      pageBuilder: (context, _, __) => builder(context),
+      pageBuilder: (context, _, __) => AppSelectionArea(child: Builder(builder: builder)),
       transitionBuilder: (context, animation, _, child) => SlideTransition(
         position: Tween(begin: const Offset(1, 0), end: Offset.zero)
             .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),

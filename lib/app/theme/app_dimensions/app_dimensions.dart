@@ -711,12 +711,13 @@ class ComponentSizes {
 
   final double panelCheckSize = 18.0;
   final double panelCheckGap = 8.0;
-  final double panelChecksGapH = 20.0;
-  final double panelChecksGapV = 8.0;
+  final double panelCheckRowPaddingH = 6.0;
+  final double panelCheckRowPaddingV = 4.0;
+  final double panelChecksGapH = 8.0;
+  final double panelChecksGapV = 0.0;
   final double panelCheckBoxMaxHeight = 220.0;
   final double panelCheckBoxPaddingV = 8.0;
-  final double panelCheckBoxPaddingH = 10.0;
-  final double panelCheckBoxRowPaddingV = 5.0;
+  final double panelCheckBoxPaddingH = 4.0;
 
   final double panelChoicePaddingV = 12.0;
   final double panelChoicePaddingH = 14.0;
@@ -804,6 +805,7 @@ class ComponentSizes {
   final double panelFilterFieldWidth = 240.0;
   final double panelControlHeight = 42.0;
   final double panelSegmentPadding = 3.0;
+  final double panelSegmentGap = 4.0;
   final double panelSegmentButtonPaddingH = 12.0;
   final double panelToggleIcon = 16.0;
   final double panelToggleGap = 6.0;

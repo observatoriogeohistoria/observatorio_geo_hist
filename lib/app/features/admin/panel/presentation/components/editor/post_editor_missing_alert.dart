@@ -67,6 +67,8 @@ class PostEditorMissingAlert extends StatelessWidget {
                                 onTap: () => onSelect(field),
                                 focusColor: Colors.transparent,
                                 hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                splashFactory: NoSplash.splashFactory,
                                 child: Padding(
                                   padding: EdgeInsets.only(top: components.formFieldLabelGap),
                                   child: Text.rich(

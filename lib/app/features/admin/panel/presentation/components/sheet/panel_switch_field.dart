@@ -33,7 +33,10 @@ class PanelSwitchField extends StatelessWidget {
           focusNode: focusNode,
           onTap: () => onChanged(!value),
           borderRadius: radius,
+          // Sem realce ao clicar: a linha vai até a borda e o próprio botão mostra a mudança.
           hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashFactory: NoSplash.splashFactory,
           focusColor: Colors.transparent,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,

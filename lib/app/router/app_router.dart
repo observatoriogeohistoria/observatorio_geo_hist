@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_selection_area.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
@@ -22,7 +23,6 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/coll
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/post_detailed_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/posts_page.dart';
 import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
-import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
@@ -174,7 +174,7 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.admin,
         builder: (BuildContext context, GoRouterState state) {
-          return const SigninPage();
+          return const AppSelectionArea(child: SigninPage());
         },
       ),
       GoRoute(
@@ -238,19 +238,14 @@ class AppRouter {
   // A mesma chave em todas as rotas do painel: trocar de seção ou de área atualiza a página
   // no lugar, sem recriar a moldura nem perder o foco.
   static Page<void> _panelPage(Widget child) {
-    return MaterialPage(key: const ValueKey('painel'), child: child);
+    return MaterialPage(key: const ValueKey('painel'), child: AppSelectionArea(child: child));
   }
 
   // A mesma chave nas duas rotas do editor: salvar uma publicação nova troca o endereço para o
   // de edição sem perder o que está na tela.
   static Page<void> _editorPage(Widget child) {
-    return MaterialPage(key: const ValueKey('editor'), child: child);
+    return MaterialPage(key: const ValueKey('editor'), child: AppSelectionArea(child: child));
   }
 
-  static Widget _selectable(Widget page) {
-    return DefaultSelectionStyle.merge(
-      selectionColor: AppTheme.colors.textSelection,
-      child: SelectionArea(child: page),
-    );
-  }
+  static Widget _selectable(Widget page) => AppSelectionArea(child: page);
 }

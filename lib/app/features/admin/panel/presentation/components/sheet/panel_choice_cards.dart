@@ -126,7 +126,11 @@ class _ChoiceCard<T> extends StatelessWidget {
             canRequestFocus: false,
             onTap: onTap,
             customBorder: RoundedRectangleBorder(borderRadius: radius),
-            hoverColor: selected ? Colors.transparent : colors.surface,
+            // Cor opaca nos dois estados: o realce guarda a opacidade da cor anterior, e trocar
+            // para transparente com o mouse em cima pintava o cartão de preto.
+            hoverColor: selected ? colors.accentSoft : colors.surface,
+            highlightColor: selected ? colors.accentSoft : colors.surface,
+            splashFactory: NoSplash.splashFactory,
             focusColor: Colors.transparent,
             child: Padding(
               padding: EdgeInsets.symmetric(

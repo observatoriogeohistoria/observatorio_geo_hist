@@ -153,28 +153,31 @@ class _EditorQuillState extends State<EditorQuill> {
                     label:
                         FormFieldFrame.semanticLabel(widget.label, isOptional: widget.isOptional),
                     hint: FormFieldFrame.semanticHint(error: error, helper: widget.helperText),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: widget.minHeight ?? 0),
-                      child: QuillEditor.basic(
-                        controller: widget.controller,
-                        focusNode: _focusNode,
-                        config: QuillEditorConfig(
-                          scrollable: false,
-                          expands: false,
-                          placeholder: widget.placeholder,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: components.richTextPaddingH,
-                            vertical: components.richTextPaddingV,
-                          ),
-                          // ignore: experimental_member_use
-                          onKeyPressed: _handleKey,
-                          customStyles: DefaultStyles(
-                            placeHolder: DefaultTextBlockStyle(
-                              styles.regular.copyWith(color: colors.inkSecondary),
-                              HorizontalSpacing.zero,
-                              VerticalSpacing.zero,
-                              VerticalSpacing.zero,
-                              null,
+                    // O editor tem seleção própria; a área de seleção da página disputaria o arrasto.
+                    child: SelectionContainer.disabled(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: widget.minHeight ?? 0),
+                        child: QuillEditor.basic(
+                          controller: widget.controller,
+                          focusNode: _focusNode,
+                          config: QuillEditorConfig(
+                            scrollable: false,
+                            expands: false,
+                            placeholder: widget.placeholder,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: components.richTextPaddingH,
+                              vertical: components.richTextPaddingV,
+                            ),
+                            // ignore: experimental_member_use
+                            onKeyPressed: _handleKey,
+                            customStyles: DefaultStyles(
+                              placeHolder: DefaultTextBlockStyle(
+                                styles.regular.copyWith(color: colors.inkSecondary),
+                                HorizontalSpacing.zero,
+                                VerticalSpacing.zero,
+                                VerticalSpacing.zero,
+                                null,
+                              ),
                             ),
                           ),
                         ),

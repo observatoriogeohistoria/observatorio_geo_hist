@@ -117,10 +117,14 @@ class _PanelCheckGroupState<T> extends State<PanelCheckGroup<T>> {
                   ),
                 ),
               )
-            : Wrap(
-                spacing: components.panelChecksGapH,
-                runSpacing: components.panelChecksGapV,
-                children: rows,
+            // Recuo do respiro das linhas, para a caixa seguir alinhada ao rótulo do campo.
+            : Transform.translate(
+                offset: Offset(-components.panelCheckRowPaddingH, 0),
+                child: Wrap(
+                  spacing: components.panelChecksGapH,
+                  runSpacing: components.panelChecksGapV,
+                  children: rows,
+                ),
               );
 
         return Semantics(
@@ -171,10 +175,13 @@ class _CheckRow extends StatelessWidget {
           onTap: onTap,
           borderRadius: radius,
           hoverColor: colors.surface,
+          highlightColor: colors.surface,
+          splashFactory: NoSplash.splashFactory,
           focusColor: Colors.transparent,
           child: Padding(
             padding: EdgeInsets.symmetric(
-              vertical: compact ? components.panelCheckBoxRowPaddingV : 0,
+              horizontal: components.panelCheckRowPaddingH,
+              vertical: components.panelCheckRowPaddingV,
             ),
             child: Row(
               mainAxisSize: compact ? MainAxisSize.max : MainAxisSize.min,

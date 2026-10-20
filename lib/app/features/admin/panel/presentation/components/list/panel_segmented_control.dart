@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/listing/library_filter_select.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PanelSegment<T> {
@@ -26,6 +27,47 @@ class PanelSegmentedControl<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (_naturalWidth(context) <= constraints.maxWidth) return _segments();
+
+        // Sem espaço para as opções lado a lado (no celular), vira uma lista de escolha.
+        return LibraryFilterSelect<T>(
+          semanticLabel: semanticLabel,
+          height: AppTheme.dimensions.components.panelControlHeight,
+          options: [
+            for (final segment in segments) LibraryFilterOption(segment.value, segment.label)
+          ],
+          labelBuilder: (option) => '$semanticLabel: ${option.label}',
+          value: value,
+          onSelected: (selected) {
+            if (selected != value) onChanged(selected);
+          },
+        );
+      },
+    );
+  }
+
+  double _naturalWidth(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+    final style = AppTheme.typography.of(context).panelSegment;
+    final textScaler = MediaQuery.textScalerOf(context);
+    var width =
+        2 * components.panelSegmentPadding + (segments.length - 1) * components.panelSegmentGap;
+    for (final segment in segments) {
+      final painter = TextPainter(
+        text: TextSpan(text: segment.label, style: style),
+        textDirection: TextDirection.ltr,
+        textScaler: textScaler,
+        maxLines: 1,
+      )..layout();
+      width += painter.width + 2 * components.panelSegmentButtonPaddingH;
+      painter.dispose();
+    }
+    return width;
+  }
+
+  Widget _segments() {
     final colors = AppTheme.colors;
     final components = AppTheme.dimensions.components;
 
@@ -43,6 +85,7 @@ class PanelSegmentedControl<T> extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: components.panelSegmentGap,
           children: [
             for (final segment in segments)
               _SegmentButton(

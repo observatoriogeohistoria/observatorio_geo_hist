@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/danger_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_selection_area.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 /// Devolve `true` só quando a pessoa confirma; Cancelar, Esc e clique fora devolvem `false`.
@@ -18,12 +19,14 @@ Future<bool> showConfirmDialog(
     barrierLabel: cancelText,
     barrierColor: AppTheme.colors.footerBackground
         .withValues(alpha: AppTheme.dimensions.components.panelDrawerScrimOpacity),
-    builder: (context) => ConfirmDialog(
-      title: title,
-      message: message,
-      confirmText: confirmText,
-      confirmIcon: confirmIcon,
-      cancelText: cancelText,
+    builder: (context) => AppSelectionArea(
+      child: ConfirmDialog(
+        title: title,
+        message: message,
+        confirmText: confirmText,
+        confirmIcon: confirmIcon,
+        cancelText: cancelText,
+      ),
     ),
   );
 
