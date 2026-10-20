@@ -35,7 +35,6 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stor
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/post_editor_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/labels/post_type_panel_labels.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/stores/sidebar_store.dart';
-import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class PostEditorPage extends StatefulWidget {
@@ -104,7 +103,6 @@ class _PostEditorPageState extends State<PostEditorPage> {
   List<ReactionDisposer> _reactions = [];
 
   bool _hasAccess = false;
-  bool _unsupported = false;
   PostType? _type;
   PostModel? _post;
   PostEditorForm? _form;
@@ -215,10 +213,6 @@ class _PostEditorPageState extends State<PostEditorPage> {
   void _setup(PostModel? post) {
     final type = post?.type ?? widget.type!;
     final form = postEditorFormFor(type, post?.body);
-    if (form == null) {
-      _unsupported = true;
-      return;
-    }
     final image =
         PostEditorImage(url: post?.body?.image.url, caption: postEditorCaptionOf(post?.body));
 
@@ -319,7 +313,7 @@ class _PostEditorPageState extends State<PostEditorPage> {
     final form = _form;
     final image = _image;
     final type = _type;
-    if (_unsupported || _saving != null || form == null || image == null || type == null) return;
+    if (_saving != null || form == null || image == null || type == null) return;
 
     setState(() => _submitted = true);
     if (!_formKey.currentState!.validate()) return _showMissing(action);
@@ -401,7 +395,6 @@ class _PostEditorPageState extends State<PostEditorPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_unsupported) return const PageNotFound();
     PostEditorPage._location = GoRouterState.of(context).uri.toString();
     final colors = AppTheme.colors;
 

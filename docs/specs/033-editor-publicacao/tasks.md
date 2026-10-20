@@ -36,11 +36,13 @@ Cada grupo de A a D fecha com `analyze` e `dart format` limpos e vira um commit 
   - Conferido no Chrome headless: JSON igual à base (fora `isPublished`, `isHighlighted`, `updatedAt` e a imagem trocada), avisos, troca de endereço sem entrada nova, mover de categoria com `pastCategory`, autores, remover imagem, Tab pelo texto. Digitar no Quill pelo CDP só funciona com a semântica desligada (`?sem=0`); escolher arquivo não foi conferido (sem Storage no app de teste).
 
 ## Grupo C: os outros 9 tipos (commit 3)
-- [ ] **C1.** Livro, filme e revista: campos e regras de hoje (categoria do tipo em `PanelSelectField`, ano, link; sinopse do filme no editor de texto e obrigatória). Arquivos: `editor/forms/book_editor_form.dart`, `film_editor_form.dart`, `magazine_editor_form.dart`. Atende: 9.
-- [ ] **C2.** Música, podcast e documento (letra opcional no editor de texto; descrição do documento no editor de texto e obrigatória; categoria do documento). Arquivos: `music_editor_form.dart`, `podcast_editor_form.dart`, `document_editor_form.dart`. Atende: 9, 11.
-- [ ] **C3.** Evento, produção acadêmica e pesquisa (abrangência e cidade do evento; categoria da produção; estado da pesquisa e legenda no cartão Imagem). Arquivos: `event_editor_form.dart`, `academic_production_editor_form.dart`, `search_editor_form.dart`. Atende: 9.
-- [ ] **C4.** `PostsSection` abre o editor para os 10 tipos; o diálogo de duas etapas deixa de ser chamado. Arquivos: `sections/posts_section.dart`. Atende: 1, 9, 13.
-- [ ] **C5.** Conferir cada tipo no app de teste: criar e editar com o JSON igual à linha de base; resumo com os campos do tipo; 390/768/1280 sem `overflow`; Tab passando pelos editores de texto. Atende: 2, 5, 9, 11.
+- [x] **C1.** Livro, filme e revista: campos e regras de hoje (categoria do tipo em `PanelSelectField`, ano, link; sinopse do filme no editor de texto e obrigatória). Arquivos: `editor/forms/book_editor_form.dart`, `film_editor_form.dart`, `magazine_editor_form.dart`. Atende: 9.
+- [x] **C2.** Música, podcast e documento (letra opcional no editor de texto; descrição do documento no editor de texto e obrigatória; categoria do documento). Arquivos: `music_editor_form.dart`, `podcast_editor_form.dart`, `document_editor_form.dart`. Atende: 9, 11.
+- [x] **C3.** Evento, produção acadêmica e pesquisa (abrangência e cidade do evento; categoria da produção; estado da pesquisa e legenda no cartão Imagem). Arquivos: `event_editor_form.dart`, `academic_production_editor_form.dart`, `search_editor_form.dart`. Atende: 9.
+- [x] **C4.** `PostsSection` abre o editor para os 10 tipos; o diálogo de duas etapas deixa de ser chamado. Arquivos: `sections/posts_section.dart`. Atende: 1, 9, 13.
+  - A seção já deixa de usar `_save` e o diálogo; os arquivos antigos saem no grupo D.
+- [x] **C5.** Conferir cada tipo no app de teste: criar e editar com o JSON igual à linha de base; resumo com os campos do tipo; 390/768/1280 sem `overflow`; Tab passando pelos editores de texto. Atende: 2, 5, 9, 11.
+  - Os 10 tipos editados sem mudança mandam o mesmo JSON da base, fora `updatedAt` (a revista troca a chamada vazia `""` por `null`, como o diálogo fazia). Novos dos 10 tipos em 390 e 768 sem rolagem horizontal; resumo do evento conferido.
 
 ## Grupo D: limpeza do diálogo antigo (commit 4)
 - [ ] **D1.** Apagar `create_or_update_post_dialog.dart`, `post_form_dialog.dart` e `create_or_update_posts_dialogs/`; tirar `saveInDialog` de `panel_action.dart` e da seção. Arquivos: os citados. Atende: 13.

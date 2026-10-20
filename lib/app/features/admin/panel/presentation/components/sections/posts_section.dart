@@ -11,7 +11,6 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/confirm_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/create_or_update_post_dialog.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list_footer.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_list_skeleton.dart';
@@ -183,11 +182,6 @@ class _PostsSectionState extends State<PostsSection> {
     _fetch();
   }
 
-  void _save(PostModel post, CategoryModel? pastCategory) {
-    _pending.start(PanelAction.saveInDialog);
-    postsStore.createOrUpdatePost(post, pastCategory);
-  }
-
   // A imagem vai como URL, para salvar não tentar enviá-la de novo.
   PostModel _keepImage(PostModel post) =>
       post.copyWith(body: post.body?.copyWith(image: FileModel(url: post.body?.image.url)));
@@ -224,22 +218,11 @@ class _PostsSectionState extends State<PostsSection> {
 
   void _openForm([PostModel? post]) {
     final type = post?.type ?? _type;
-    if (type == PostType.article) {
-      final id = post?.id;
-      GoRouter.of(context).go(
-        post == null || id == null
-            ? AppRoutes.panelPostNew(type.value)
-            : AppRoutes.panelPostEdit(post.categoryId, id),
-      );
-      return;
-    }
-    showCreateOrUpdatePostDialog(
-      context,
-      categories: categoriesStore.items,
-      onCreateOrUpdate: _save,
-      post: post,
-      postType: type,
-      isLoading: postsStore.state is CrudLoadingState,
+    final id = post?.id;
+    GoRouter.of(context).go(
+      post == null || id == null
+          ? AppRoutes.panelPostNew(type.value)
+          : AppRoutes.panelPostEdit(post.categoryId, id),
     );
   }
 
@@ -341,7 +324,6 @@ class _PostsSectionState extends State<PostsSection> {
             title: _type.panelPlural,
             summary: _summary(countsStore.counts.posts(_type)),
             actionLabel: canEdit ? _type.panelCreateLabel : null,
-            isActionDisabled: categoriesStore.state is CrudLoadingState,
             onAction: _openForm,
           ),
           filterBar: PostsFilterBar(
