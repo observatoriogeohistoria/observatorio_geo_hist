@@ -1,6 +1,6 @@
 # 032. Painel lateral para formulários curtos
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 8, item 8.4 (T-13)
 - **Protótipo:** aba "Painel", botões "Nova categoria", "Novo documento", "Novo membro", "Novo usuário" e "Editar" das linhas (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
@@ -114,3 +114,4 @@ Mesmo fluxo de hoje, decidido com a pessoa: "Escolher imagem" abre o seletor; de
   - Enquanto salva, o painel não fecha, para a resposta não chegar sem tela e não haver envio duplo.
   - Publicações continuam no diálogo atual até a 033, com o fechamento e o aviso de erro de hoje.
 - 2026-10-19: na implementação, decidido sem a pessoa (modo autônomo): a "Senha inicial" tem o botão de mostrar a senha, como no login; sobre a prévia da imagem aparece a etiqueta "Escolher imagem"/"Escolher foto", para lembrar que dá para trocar; enquanto salva, os campos ficam sem foco e sem clique (o efeito pedido, "não aceitam edição").
+- 2026-10-20: verificada com ressalvas ([verificacao.md](verificacao.md)). Todos os critérios passaram no build e no app de teste; Firestore e Storage de verdade e leitor de tela ficaram sem conferir. Corrigida a borda de erro da lista suspensa. Status decidido no fluxo autônomo.

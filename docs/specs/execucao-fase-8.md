@@ -10,7 +10,7 @@ As specs 029 a 033 já estavam aprovadas (#35). A etapa "Spec+plano" só cria o 
 | 029-login-redesenho | 8.1 | feito (13 critérios, 18 tarefas) | feito (2 commits) | feito (1 fix) | verificada com ressalvas |
 | 030-painel-estrutura | 8.2 | feito (15 critérios, 28 tarefas) | feito (3 commits + docs, após retomada) | feito (1 fix) | verificada com ressalvas |
 | 031-painel-listas | 8.3 | feito (14 critérios, 32 tarefas) | feito (4 commits + docs) | feito (3 fix, após retomada) | verificada com ressalvas |
-| 032-painel-lateral-formularios | 8.4 | feito (13 critérios, 24 tarefas) | pendente | pendente | |
+| 032-painel-lateral-formularios | 8.4 | feito (13 critérios, 24 tarefas) | feito (3 commits + docs) | feito (1 fix, após retomada) | verificada com ressalvas |
 | 033-editor-publicacao | 8.5 | pendente | pendente | pendente | |
 
 ## Decisões tomadas sem a pessoa
@@ -25,12 +25,15 @@ As specs 029 a 033 já estavam aprovadas (#35). A etapa "Spec+plano" só cria o 
 - (031) Segmentado anunciado como grupo de rádio e "Destaques" como chave (Flutter web não gera `aria-pressed`); falha ao carregar mais mostra botão "Carregar mais"; em 1280 o "Destaques" cai para a segunda linha.
 - (031) Buscas do painel não reservam espaço para o "Limpar" (`SearchField.keepClearSpace`, ligado por padrão no site), para a dica caber a 390 e 768 px.
 - (032) Endereço da categoria só leitura (é o id no Firestore); imagem/foto/PDF numa área nova com prévia, mantendo envio e endereço colado; escolhas obrigatórias com mensagem no campo; papel sem cartão marcado ao criar; painel não fecha enquanto salva; publicações seguem no diálogo até a 033.
+- (032) Membro sem foto passa a salvar (a spec diz que a foto é opcional; antes o campo exigia imagem); "Senha inicial" com mostrar senha; enquanto salva, os campos perdem foco e clique em vez de virar só leitura (só leitura quebrava a digitação no navegador).
 
 ## Ressalvas
 - (029) Login real com o Firebase e leitor de tela de verdade não conferidos (sem credenciais; nomes acessíveis só no código).
 - (030) Painel real com Firebase (contagens, exclusões, logout) e player de vídeo não conferidos; `/admin/painel/:tab` sem sessão ainda abre a moldura vazia, como antes (regra de acesso, fora do escopo).
 - (031) Painel real com Firebase (inclusive índices para combinações de filtros) e leitor de tela de verdade não conferidos.
+- (032) Salvar no Firestore e enviar ao Storage de verdade e leitor de tela de verdade não conferidos.
 
 ## Ocorrências
 - 2026-10-08: a implementação da 030 parou no limite de uso com alterações sem commit e tarefas sem marcar. Retomada em 2026-10-13 numa sessão nova a partir dessas alterações.
 - 2026-10-13: a verificação da 031 parou no limite de uso com correções sem commit e sem `verificacao.md`. Retomada em 2026-10-19 numa sessão nova a partir dessas alterações.
+- 2026-10-19: a verificação da 032 parou no limite de uso com uma correção sem commit e sem `verificacao.md`. Retomada em 2026-10-20 na mesma sessão de etapa.
