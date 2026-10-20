@@ -104,6 +104,7 @@ class _CategoriesSectionState extends State<CategoriesSection> {
               hint: 'Buscar categoria',
               semanticLabel: 'Buscar categoria',
               height: AppTheme.dimensions.components.panelControlHeight,
+              keepClearSpace: false,
               onSearch: (text) => setState(() => _query = foldForSearch(text)),
             ),
             filters: [

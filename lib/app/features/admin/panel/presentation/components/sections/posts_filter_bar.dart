@@ -49,6 +49,7 @@ class PostsFilterBar extends StatelessWidget {
         hint: 'Buscar por título',
         semanticLabel: 'Buscar por título',
         height: components.panelControlHeight,
+        keepClearSpace: false,
         onSearch: onSearch,
       ),
       filters: [

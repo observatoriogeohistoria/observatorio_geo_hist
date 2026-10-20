@@ -92,6 +92,7 @@ class _MediaSectionState extends State<MediaSection> {
               hint: 'Buscar pelo nome do arquivo',
               semanticLabel: 'Buscar pelo nome do arquivo',
               height: components.panelControlHeight,
+              keepClearSpace: false,
               onSearch: (text) => setState(() => _query = foldForSearch(text)),
             ),
           ),
