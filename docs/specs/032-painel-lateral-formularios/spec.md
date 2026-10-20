@@ -1,6 +1,6 @@
 # 032. Painel lateral para formulários curtos
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 8, item 8.4 (T-13)
 - **Protótipo:** aba "Painel", botões "Nova categoria", "Novo documento", "Novo membro", "Novo usuário" e "Editar" das linhas (link no CLAUDE.md)
 - **Criada em:** 2026-10-07

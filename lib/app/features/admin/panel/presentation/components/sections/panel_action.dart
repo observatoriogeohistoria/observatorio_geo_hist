@@ -59,5 +59,4 @@ void showPanelActionResult(
   }
 }
 
-/// O que o painel lateral mostra depois de esperar o store: a mensagem do erro, ou `null`.
 String? panelSaveError(CrudState state) => state is CrudErrorState ? state.failure.message : null;

@@ -10,7 +10,6 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Como a imagem: enviar o arquivo ([file]) ou colar o endereço.
 class PanelFileField extends StatefulWidget {
   const PanelFileField({
     required this.label,

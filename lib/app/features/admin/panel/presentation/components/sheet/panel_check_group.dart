@@ -10,8 +10,6 @@ class PanelCheckOption<T> {
   final String label;
 }
 
-/// Caixas de seleção com um rótulo de grupo. Com [boxed], ficam numa caixa de altura limitada
-/// e rolagem própria, para listas longas.
 class PanelCheckGroup<T> extends StatefulWidget {
   const PanelCheckGroup({
     required this.label,

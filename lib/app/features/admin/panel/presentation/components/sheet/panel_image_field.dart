@@ -17,7 +17,6 @@ const panelStorageDisabledMessage =
 FocusNode panelPickFocusTarget(FocusNode pick, FocusNode url) =>
     AppEnvironment.current.hasStorage ? pick : url;
 
-/// Duas formas de dar a imagem, como sempre foi: enviar um arquivo ([file]) ou colar o endereço.
 class PanelImageField extends StatefulWidget {
   const PanelImageField({
     required this.label,

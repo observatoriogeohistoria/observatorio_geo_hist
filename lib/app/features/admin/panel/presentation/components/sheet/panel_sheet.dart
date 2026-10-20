@@ -160,7 +160,7 @@ class _PanelSheetState extends State<PanelSheet> {
               ),
               child: Material(
                 type: MaterialType.transparency,
-                // Na ordem de leitura, o "×" no canto ficava fora da volta do Tab depois do "Salvar".
+                // Na ordem de leitura, o Tab depois do "Salvar" pulava o "×" do canto.
                 child: FocusTraversalGroup(
                   policy: WidgetOrderTraversalPolicy(),
                   child: Column(
