@@ -41,6 +41,16 @@ class PanelCheckGroup<T> extends StatefulWidget {
 class _PanelCheckGroupState<T> extends State<PanelCheckGroup<T>> {
   final _scrollController = ScrollController();
 
+  // O Form valida antes de reconstruir os campos; guardar a escolha aqui evita que a validação
+  // veja a marcação anterior e deixe o erro na tela.
+  late List<T> _selected = widget.selected;
+
+  @override
+  void didUpdateWidget(covariant PanelCheckGroup<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _selected = widget.selected;
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -48,9 +58,10 @@ class _PanelCheckGroupState<T> extends State<PanelCheckGroup<T>> {
   }
 
   void _toggle(FormFieldState<List<T>> field, T value) {
-    final next = widget.selected.contains(value)
-        ? widget.selected.where((item) => item != value).toList()
-        : [...widget.selected, value];
+    final next = _selected.contains(value)
+        ? _selected.where((item) => item != value).toList()
+        : [..._selected, value];
+    _selected = next;
     widget.onChanged(next);
     field.didChange(next);
   }
@@ -64,14 +75,14 @@ class _PanelCheckGroupState<T> extends State<PanelCheckGroup<T>> {
     return FormField<List<T>>(
       key: widget.formFieldKey,
       initialValue: widget.selected,
-      validator: (_) => widget.validator?.call(widget.selected),
+      validator: (_) => widget.validator?.call(_selected),
       builder: (field) {
         final error = field.errorText;
         final rows = [
           for (final (index, option) in widget.options.indexed)
             _CheckRow(
               label: option.label,
-              value: widget.selected.contains(option.value),
+              value: _selected.contains(option.value),
               focusNode: index == 0 ? widget.focusNode : null,
               compact: widget.boxed,
               onTap: () => _toggle(field, option.value),

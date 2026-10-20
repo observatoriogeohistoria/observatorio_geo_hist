@@ -3,7 +3,7 @@ import 'package:observatorio_geo_hist/app/core/components/form/form_field_frame.
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/listing/library_filter_select.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class PanelSelectField<T> extends StatelessWidget {
+class PanelSelectField<T> extends StatefulWidget {
   const PanelSelectField({
     required this.label,
     required this.options,
@@ -26,11 +26,28 @@ class PanelSelectField<T> extends StatelessWidget {
   final FocusNode? focusNode;
 
   @override
+  State<PanelSelectField<T>> createState() => _PanelSelectFieldState<T>();
+}
+
+class _PanelSelectFieldState<T> extends State<PanelSelectField<T>> {
+  // O Form valida antes de reconstruir os campos; guardar a escolha aqui evita que a validação
+  // veja a opção anterior e deixe o erro na tela.
+  late T? _value = widget.value;
+
+  @override
+  void didUpdateWidget(covariant PanelSelectField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _value = widget.value;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final label = widget.label;
+
     return FormField<T>(
-      key: formFieldKey,
-      initialValue: value,
-      validator: (_) => validator?.call(value),
+      key: widget.formFieldKey,
+      initialValue: _value,
+      validator: (_) => widget.validator?.call(_value),
       builder: (field) {
         final error = field.errorText;
 
@@ -39,14 +56,15 @@ class PanelSelectField<T> extends StatelessWidget {
           errorText: error,
           child: LibraryFilterSelect<T?>(
             semanticLabel: error == null ? label : '$label. $error',
-            options: options,
-            value: value,
-            focusNode: focusNode,
+            options: widget.options,
+            value: _value,
+            focusNode: widget.focusNode,
             hasError: error != null,
             height: AppTheme.dimensions.components.formFieldHeight,
             expand: true,
             onSelected: (choice) {
-              onSelected(choice);
+              _value = choice;
+              widget.onSelected(choice);
               field.didChange(choice);
             },
           ),
