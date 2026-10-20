@@ -4,7 +4,6 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_butt
 import 'package:observatorio_geo_hist/app/core/components/loading/linear_loading.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// "Limpar filtros", "Carregar mais" e o indicador de que mais itens estão chegando.
 class PanelListFooter extends StatelessWidget {
   const PanelListFooter({
     this.onClearFilters,

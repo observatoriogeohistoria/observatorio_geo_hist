@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Caixa branca com uma linha por item, separadas por traço fino, e o rodapé por último.
 class PanelList extends StatelessWidget {
   const PanelList({
     required this.itemCount,

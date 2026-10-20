@@ -421,6 +421,7 @@ class ComponentSizes {
   final double searchFieldIconInset = 14.0;
   final double searchFieldPaddingStart = 44.0;
   final double searchFieldPaddingEnd = 84.0;
+  final double searchFieldPaddingEndEmpty = 14.0;
   final double searchFieldClearInset = 8.0;
   final double searchFieldClearPaddingH = 10.0;
   final double searchFieldClearPaddingV = 6.0;

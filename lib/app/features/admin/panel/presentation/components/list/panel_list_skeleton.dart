@@ -4,7 +4,7 @@ import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/list/panel_grid.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Linhas ou blocos de grade cinzas enquanto a lista carrega. É um sliver.
+/// É um sliver.
 class PanelListSkeleton extends StatelessWidget {
   const PanelListSkeleton({this.isGrid = false, super.key});
 

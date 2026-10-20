@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Imagem ou ícone, título com meta, selos e ações. No celular vira cartão, com as ações
-/// numa faixa embaixo.
 class PanelListRow extends StatefulWidget {
   const PanelListRow({
     required this.leading,

@@ -51,6 +51,7 @@ class LibraryFilterBar extends StatelessWidget {
         hint: hint,
         semanticLabel: hint,
         height: components.panelControlHeight,
+        keepClearSpace: false,
         onSearch: (text) {
           set(_text(text));
           onChanged();

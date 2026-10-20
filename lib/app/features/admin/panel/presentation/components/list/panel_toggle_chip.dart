@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Filtro que liga e desliga, como "Destaques": ligado, fica escuro.
 class PanelToggleChip extends StatefulWidget {
   const PanelToggleChip({
     required this.label,
