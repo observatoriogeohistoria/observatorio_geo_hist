@@ -5,8 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Caixa branca acima da lista. A busca estica para ocupar o que sobra da linha; no celular,
-/// fica sozinha na primeira linha.
+/// A busca estica para ocupar o que sobra da linha; no celular, fica sozinha na primeira linha.
 class PanelFilterBar extends StatelessWidget {
   const PanelFilterBar({
     this.leading = const [],
