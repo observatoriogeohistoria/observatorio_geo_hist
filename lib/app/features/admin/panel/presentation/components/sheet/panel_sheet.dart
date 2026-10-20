@@ -12,18 +12,22 @@ Future<void> showPanelSheet(BuildContext context, {required WidgetBuilder builde
   final components = AppTheme.dimensions.components;
   final still = MediaQuery.disableAnimationsOf(context);
 
-  return showGeneralDialog<void>(
-    context: context,
-    barrierDismissible: true,
-    barrierLabel: 'Fechar sem salvar',
-    barrierColor:
-        AppTheme.colors.footerBackground.withValues(alpha: components.panelDrawerScrimOpacity),
-    transitionDuration: still ? Duration.zero : components.panelSheetSlide,
-    pageBuilder: (context, _, __) => builder(context),
-    transitionBuilder: (context, animation, _, child) => SlideTransition(
-      position: Tween(begin: const Offset(1, 0), end: Offset.zero)
-          .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
-      child: child,
+  // A rota é a do showGeneralDialog, montada aqui para o Tab dar a volta dentro do painel em vez
+  // de sair para o navegador, como é o padrão na web.
+  return Navigator.of(context, rootNavigator: true).push(
+    RawDialogRoute<void>(
+      barrierDismissible: true,
+      barrierLabel: 'Fechar sem salvar',
+      barrierColor:
+          AppTheme.colors.footerBackground.withValues(alpha: components.panelDrawerScrimOpacity),
+      traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
+      transitionDuration: still ? Duration.zero : components.panelSheetSlide,
+      pageBuilder: (context, _, __) => builder(context),
+      transitionBuilder: (context, animation, _, child) => SlideTransition(
+        position: Tween(begin: const Offset(1, 0), end: Offset.zero)
+            .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+        child: child,
+      ),
     ),
   );
 }
@@ -52,12 +56,9 @@ class PanelSheet extends StatefulWidget {
   /// Devolve a mensagem do erro, ou `null` quando salvou.
   final Future<String?> Function() onSave;
 
-  /// Constrói os campos abaixo do painel, para lerem [isSavingOf] e chamarem [submitOf].
+  /// Constrói os campos abaixo do painel, para o Enter chamar [submitOf].
   final WidgetBuilder builder;
   final bool canSave;
-
-  static bool isSavingOf(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<_PanelSheetScope>()?.isSaving ?? false;
 
   static void submitOf(BuildContext context) =>
       context.getInheritedWidgetOfExactType<_PanelSheetScope>()?.submit();
@@ -91,6 +92,7 @@ class _PanelSheetState extends State<PanelSheet> {
       return;
     }
 
+    final focused = FocusManager.instance.primaryFocus;
     setState(() {
       _saving = true;
       _submitted = true;
@@ -112,6 +114,7 @@ class _PanelSheetState extends State<PanelSheet> {
       _error = error;
     });
     if (error != null && _scrollController.hasClients) _scrollController.jumpTo(0);
+    if (focused != null && focused.context != null) focused.requestFocus();
   }
 
   void _focusFirstError() {
@@ -157,46 +160,54 @@ class _PanelSheetState extends State<PanelSheet> {
               ),
               child: Material(
                 type: MaterialType.transparency,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _header(context),
-                    divider,
-                    Expanded(
-                      child: Form(
-                        key: _formKey,
-                        autovalidateMode: _submitted
-                            ? AutovalidateMode.onUserInteraction
-                            : AutovalidateMode.disabled,
-                        child: Scrollbar(
-                          controller: _scrollController,
-                          child: SingleChildScrollView(
+                // Na ordem de leitura, o "×" no canto ficava fora da volta do Tab depois do "Salvar".
+                child: FocusTraversalGroup(
+                  policy: WidgetOrderTraversalPolicy(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _header(context),
+                      divider,
+                      Expanded(
+                        child: Form(
+                          key: _formKey,
+                          autovalidateMode: _submitted
+                              ? AutovalidateMode.onUserInteraction
+                              : AutovalidateMode.disabled,
+                          child: Scrollbar(
                             controller: _scrollController,
-                            padding: EdgeInsets.all(components.panelSheetBodyPadding),
-                            child: AbsorbPointer(
-                              absorbing: _saving,
-                              child: _PanelSheetScope(
-                                isSaving: _saving,
-                                submit: _submit,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    if (error != null) ...[
-                                      FormErrorAlert(message: error),
-                                      SizedBox(height: components.formFieldGap),
-                                    ],
-                                    Builder(builder: widget.builder),
-                                  ],
+                            child: SingleChildScrollView(
+                              controller: _scrollController,
+                              padding: EdgeInsets.all(components.panelSheetBodyPadding),
+                              // Trocar os campos para só leitura quebra a entrada de texto no
+                              // navegador; tirar o foco do corpo já impede a edição enquanto salva.
+                              child: ExcludeFocus(
+                                excluding: _saving,
+                                child: AbsorbPointer(
+                                  absorbing: _saving,
+                                  child: _PanelSheetScope(
+                                    submit: _submit,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        if (error != null) ...[
+                                          FormErrorAlert(message: error),
+                                          SizedBox(height: components.formFieldGap),
+                                        ],
+                                        Builder(builder: widget.builder),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    divider,
-                    _footer(isMobile),
-                  ],
+                      divider,
+                      _footer(isMobile),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -276,11 +287,10 @@ class _PanelSheetState extends State<PanelSheet> {
 }
 
 class _PanelSheetScope extends InheritedWidget {
-  const _PanelSheetScope({required this.isSaving, required this.submit, required super.child});
+  const _PanelSheetScope({required this.submit, required super.child});
 
-  final bool isSaving;
   final VoidCallback submit;
 
   @override
-  bool updateShouldNotify(_PanelSheetScope oldWidget) => isSaving != oldWidget.isSaving;
+  bool updateShouldNotify(_PanelSheetScope oldWidget) => false;
 }

@@ -117,7 +117,7 @@ class _LibrarySectionState extends State<LibrarySection> {
       state: state,
       pending: _pending,
       messages: const {
-        PanelAction.save: 'Documento salvo.',
+        PanelAction.saveInDialog: 'Documento salvo.',
         PanelAction.delete: 'Documento excluído.',
       },
       onForbidden: _authStore.logout,
@@ -153,7 +153,7 @@ class _LibrarySectionState extends State<LibrarySection> {
   }
 
   void _save(LibraryDocumentModel document, FileModel? file) {
-    _pending.start(PanelAction.save);
+    _pending.start(PanelAction.saveInDialog);
     _savePending = true;
     _libraryStore.createOrUpdateDocument(document, file);
   }

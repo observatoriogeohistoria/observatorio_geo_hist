@@ -49,6 +49,9 @@ class PanelImageField extends StatefulWidget {
 }
 
 class _PanelImageFieldState extends State<PanelImageField> {
+  // A etiqueta de trocar só aparece sobre uma imagem que carregou; na falha, fica o placeholder.
+  bool _previewFailed = false;
+
   static final _url = RegExp(r'^https?://');
 
   @override
@@ -66,7 +69,16 @@ class _PanelImageFieldState extends State<PanelImageField> {
   }
 
   void _refresh() {
-    if (mounted) setState(() {});
+    if (mounted) setState(() => _previewFailed = false);
+  }
+
+  Widget _failed(Widget placeholder) {
+    if (!_previewFailed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _previewFailed = true);
+      });
+    }
+    return placeholder;
   }
 
   Future<void> _pick(FormFieldState<FileModel> field) async {
@@ -93,7 +105,7 @@ class _PanelImageFieldState extends State<PanelImageField> {
           // Uma foto de câmera tem milhares de pixels; decodificar no tamanho da área não trava.
           cacheWidth: (constraints.maxWidth * MediaQuery.devicePixelRatioOf(context)).ceil(),
           excludeFromSemantics: true,
-          errorBuilder: (_, __, ___) => placeholder,
+          errorBuilder: (_, __, ___) => _failed(placeholder),
         ),
       );
     }
@@ -104,7 +116,7 @@ class _PanelImageFieldState extends State<PanelImageField> {
       url,
       fit: BoxFit.cover,
       excludeFromSemantics: true,
-      errorBuilder: (_, __, ___) => placeholder,
+      errorBuilder: (_, __, ___) => _failed(placeholder),
     );
   }
 
@@ -114,7 +126,6 @@ class _PanelImageFieldState extends State<PanelImageField> {
     final components = AppTheme.dimensions.components;
     final styles = AppTheme.typography.of(context);
     final hasStorage = AppEnvironment.current.hasStorage;
-    final locked = PanelSheet.isSavingOf(context);
     final pickedName = widget.file.value?.name;
 
     return FormField<FileModel>(
@@ -147,8 +158,8 @@ class _PanelImageFieldState extends State<PanelImageField> {
                       '$title',
                   semanticHint: FormFieldFrame.semanticHint(error: error, helper: pickedName),
                   previewBuilder: _preview,
-                  actionLabel: hasStorage ? widget.pickText : null,
-                  onTap: hasStorage && !locked ? () => _pick(field) : null,
+                  actionLabel: hasStorage && !_previewFailed ? widget.pickText : null,
+                  onTap: hasStorage ? () => _pick(field) : null,
                   focusNode: widget.focusNode,
                   square: widget.square,
                   hasError: error != null,
@@ -172,7 +183,6 @@ class _PanelImageFieldState extends State<PanelImageField> {
               hintText: 'https://',
               keyboardType: TextInputType.url,
               textInputAction: TextInputAction.done,
-              readOnly: locked,
               onSubmitted: (_) => PanelSheet.submitOf(context),
             ),
           ],

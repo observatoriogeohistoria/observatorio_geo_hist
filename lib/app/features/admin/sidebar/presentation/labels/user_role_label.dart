@@ -6,4 +6,10 @@ extension UserRoleLabel on UserRole {
         UserRole.editor => 'Edição',
         UserRole.viewer => 'Leitura',
       };
+
+  String get description => switch (this) {
+        UserRole.admin => 'Tudo, inclusive criar e remover usuários.',
+        UserRole.editor => 'Cria, edita e publica conteúdo.',
+        UserRole.viewer => 'Só vê o painel, sem alterar nada.',
+      };
 }

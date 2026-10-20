@@ -113,4 +113,4 @@ Mesmo fluxo de hoje, decidido com a pessoa: "Escolher imagem" abre o seletor; de
   - Papel sem cartão marcado ao criar; nome e e-mail do usuário continuam só leitura ao editar.
   - Enquanto salva, o painel não fecha, para a resposta não chegar sem tela e não haver envio duplo.
   - Publicações continuam no diálogo atual até a 033, com o fechamento e o aviso de erro de hoje.
-
+- 2026-10-19: na implementação, decidido sem a pessoa (modo autônomo): a "Senha inicial" tem o botão de mostrar a senha, como no login; sobre a prévia da imagem aparece a etiqueta "Escolher imagem"/"Escolher foto", para lembrar que dá para trocar; enquanto salva, os campos ficam sem foco e sem clique (o efeito pedido, "não aceitam edição").

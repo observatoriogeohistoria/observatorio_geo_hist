@@ -110,7 +110,7 @@ class _PostsSectionState extends State<PostsSection> {
       state: state,
       pending: _pending,
       messages: const {
-        PanelAction.save: 'Publicação salva.',
+        PanelAction.saveInDialog: 'Publicação salva.',
         PanelAction.delete: 'Publicação excluída.',
         PanelAction.publish: 'Publicado. Já aparece no site.',
         PanelAction.unpublish: 'Despublicado. Saiu do site.',
@@ -182,7 +182,7 @@ class _PostsSectionState extends State<PostsSection> {
   }
 
   void _save(PostModel post, CategoryModel? pastCategory) {
-    _pending.start(PanelAction.save);
+    _pending.start(PanelAction.saveInDialog);
     postsStore.createOrUpdatePost(post, pastCategory);
   }
 

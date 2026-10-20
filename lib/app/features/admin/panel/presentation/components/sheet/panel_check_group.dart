@@ -22,7 +22,6 @@ class PanelCheckGroup<T> extends StatefulWidget {
     this.validator,
     this.formFieldKey,
     this.focusNode,
-    this.enabled = true,
     super.key,
   });
 
@@ -36,7 +35,6 @@ class PanelCheckGroup<T> extends StatefulWidget {
 
   /// Vai para a primeira caixa.
   final FocusNode? focusNode;
-  final bool enabled;
 
   @override
   State<PanelCheckGroup<T>> createState() => _PanelCheckGroupState<T>();
@@ -78,7 +76,7 @@ class _PanelCheckGroupState<T> extends State<PanelCheckGroup<T>> {
               value: widget.selected.contains(option.value),
               focusNode: index == 0 ? widget.focusNode : null,
               compact: widget.boxed,
-              onTap: widget.enabled ? () => _toggle(field, option.value) : null,
+              onTap: () => _toggle(field, option.value),
             ),
         ];
 
@@ -140,15 +138,15 @@ class _CheckRow extends StatelessWidget {
     required this.label,
     required this.value,
     required this.compact,
+    required this.onTap,
     this.focusNode,
-    this.onTap,
   });
 
   final String label;
   final bool value;
   final bool compact;
   final FocusNode? focusNode;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +175,7 @@ class _CheckRow extends StatelessWidget {
                     dimension: components.panelCheckSize,
                     child: Checkbox(
                       value: value,
-                      onChanged: onTap == null ? null : (_) => onTap!(),
+                      onChanged: (_) => onTap(),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       visualDensity: VisualDensity.compact,
                       activeColor: colors.accent,

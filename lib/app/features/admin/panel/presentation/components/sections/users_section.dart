@@ -28,9 +28,10 @@ class _UsersSectionState extends State<UsersSection> {
   late final PanelCountsStore countsStore = PanelSetup.getIt<PanelCountsStore>();
   final _pending = PendingPanelAction();
 
-  void _save(UserModel user, {dynamic extra}) {
+  Future<String?> _save(UserModel user, {String? password}) async {
     _pending.start(PanelAction.save);
-    usersStore.createOrUpdateItem(user, extra: extra);
+    await usersStore.createOrUpdateItem(user, extra: password);
+    return panelSaveError(usersStore.state);
   }
 
   Future<void> _delete(UserModel user) async {
@@ -48,7 +49,7 @@ class _UsersSectionState extends State<UsersSection> {
   void _openForm([UserModel? user]) {
     showCreateOrUpdateUserDialog(
       context,
-      onCreate: (item, extra) => _save(item, extra: extra),
+      onCreate: (item, password) => _save(item, password: password),
       onUpdate: _save,
       user: user,
     );

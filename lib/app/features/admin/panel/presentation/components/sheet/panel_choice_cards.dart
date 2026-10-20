@@ -22,7 +22,6 @@ class PanelChoiceCards<T> extends StatelessWidget {
     this.validator,
     this.formFieldKey,
     this.focusNode,
-    this.enabled = true,
     super.key,
   });
 
@@ -35,7 +34,6 @@ class PanelChoiceCards<T> extends StatelessWidget {
 
   /// Vai para o primeiro cartão.
   final FocusNode? focusNode;
-  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +47,7 @@ class PanelChoiceCards<T> extends StatelessWidget {
         final error = field.errorText;
 
         void select(T? choice) {
-          if (!enabled || choice == null) return;
+          if (choice == null) return;
           onChanged(choice);
           field.didChange(choice);
         }
@@ -75,7 +73,7 @@ class PanelChoiceCards<T> extends StatelessWidget {
                       selected: option.value == value,
                       hasError: error != null,
                       focusNode: index == 0 ? focusNode : null,
-                      onTap: enabled ? () => select(option.value) : null,
+                      onTap: () => select(option.value),
                     ),
                   ],
                 ],
@@ -93,15 +91,15 @@ class _ChoiceCard<T> extends StatelessWidget {
     required this.option,
     required this.selected,
     required this.hasError,
+    required this.onTap,
     this.focusNode,
-    this.onTap,
   });
 
   final PanelChoice<T> option;
   final bool selected;
   final bool hasError;
   final FocusNode? focusNode;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +127,7 @@ class _ChoiceCard<T> extends StatelessWidget {
             onTap: onTap,
             customBorder: RoundedRectangleBorder(borderRadius: radius),
             hoverColor: selected ? Colors.transparent : colors.surface,
+            focusColor: Colors.transparent,
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: components.panelChoicePaddingH,
@@ -142,7 +141,6 @@ class _ChoiceCard<T> extends StatelessWidget {
                     child: Radio<T>(
                       value: option.value,
                       focusNode: focusNode,
-                      enabled: onTap != null,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       visualDensity: VisualDensity.compact,
                       fillColor: WidgetStateProperty.resolveWith(

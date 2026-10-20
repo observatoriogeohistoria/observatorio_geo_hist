@@ -55,7 +55,7 @@ class _MediaSectionState extends State<MediaSection> {
     showCreateMediaDialog(
       context,
       onCreate: (item) {
-        _pending.start(PanelAction.save);
+        _pending.start(PanelAction.saveInDialog);
         mediaStore.createOrUpdateItem(item);
       },
     );
@@ -99,7 +99,7 @@ class _MediaSectionState extends State<MediaSection> {
           store: mediaStore,
           pending: _pending,
           messages: const {
-            PanelAction.save: 'Imagem enviada.',
+            PanelAction.saveInDialog: 'Imagem enviada.',
             PanelAction.delete: 'Imagem excluída.',
           },
           paginated: true,

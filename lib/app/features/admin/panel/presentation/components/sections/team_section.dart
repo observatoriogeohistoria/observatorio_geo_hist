@@ -28,9 +28,10 @@ class _TeamSectionState extends State<TeamSection> {
   late final PanelCountsStore countsStore = PanelSetup.getIt<PanelCountsStore>();
   final _pending = PendingPanelAction();
 
-  void _save(TeamMemberModel member) {
+  Future<String?> _save(TeamMemberModel member) async {
     _pending.start(PanelAction.save);
-    teamStore.createOrUpdateItem(member);
+    await teamStore.createOrUpdateItem(member);
+    return panelSaveError(teamStore.state);
   }
 
   Future<void> _delete(TeamMemberModel member) async {
@@ -46,7 +47,7 @@ class _TeamSectionState extends State<TeamSection> {
   }
 
   void _openForm([TeamMemberModel? member]) {
-    showCreateOrUpdateTeamMemberDialog(context, onCreateOrUpdate: _save, member: member);
+    showCreateOrUpdateTeamMemberDialog(context, onSave: _save, member: member);
   }
 
   @override

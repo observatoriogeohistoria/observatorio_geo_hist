@@ -91,7 +91,6 @@ class _PanelFileFieldState extends State<PanelFileField> {
     final components = AppTheme.dimensions.components;
     final styles = AppTheme.typography.of(context);
     final hasStorage = AppEnvironment.current.hasStorage;
-    final locked = PanelSheet.isSavingOf(context);
     final name = _currentName;
 
     return FormField<FileModel>(
@@ -117,7 +116,7 @@ class _PanelFileFieldState extends State<PanelFileField> {
                 subtitle: name,
                 semanticLabel: '${widget.label}: $title',
                 semanticHint: FormFieldFrame.semanticHint(error: error, helper: name),
-                onTap: hasStorage && !locked ? () => _pick(field) : null,
+                onTap: hasStorage ? () => _pick(field) : null,
                 focusNode: widget.focusNode,
                 hasError: error != null,
               ),
@@ -139,7 +138,6 @@ class _PanelFileFieldState extends State<PanelFileField> {
               hintText: 'https://',
               keyboardType: TextInputType.url,
               textInputAction: TextInputAction.done,
-              readOnly: locked,
               onSubmitted: (_) => PanelSheet.submitOf(context),
             ),
           ],

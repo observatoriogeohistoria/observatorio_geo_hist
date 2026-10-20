@@ -10,7 +10,6 @@ class PanelSwitchField extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.focusNode,
-    this.enabled = true,
     super.key,
   });
 
@@ -19,7 +18,6 @@ class PanelSwitchField extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
   final FocusNode? focusNode;
-  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +25,13 @@ class PanelSwitchField extends StatelessWidget {
     final components = AppTheme.dimensions.components;
     final styles = AppTheme.typography.of(context);
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r8);
-    final onTap = enabled ? () => onChanged(!value) : null;
 
     return MergeSemantics(
       child: AppFocusRing(
         borderRadius: radius,
         child: InkWell(
           focusNode: focusNode,
-          onTap: onTap,
+          onTap: () => onChanged(!value),
           borderRadius: radius,
           hoverColor: Colors.transparent,
           focusColor: Colors.transparent,
@@ -55,7 +52,7 @@ class PanelSwitchField extends StatelessWidget {
               ExcludeFocus(
                 child: Switch(
                   value: value,
-                  onChanged: enabled ? onChanged : null,
+                  onChanged: onChanged,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   activeTrackColor: colors.accent,
                   activeThumbColor: colors.white,

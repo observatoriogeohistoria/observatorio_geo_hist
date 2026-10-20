@@ -46,9 +46,10 @@ class _CategoriesSectionState extends State<CategoriesSection> {
     super.dispose();
   }
 
-  void _save(CategoryModel category) {
+  Future<String?> _save(CategoryModel category) async {
     _pending.start(PanelAction.save);
-    categoriesStore.createOrUpdateItem(category);
+    await categoriesStore.createOrUpdateItem(category);
+    return panelSaveError(categoriesStore.state);
   }
 
   Future<void> _delete(CategoryModel category) async {
@@ -63,7 +64,7 @@ class _CategoriesSectionState extends State<CategoriesSection> {
   }
 
   void _openForm([CategoryModel? category]) {
-    showCreateOrUpdateCategoryDialog(context, category: category, onCreateOrUpdate: _save);
+    showCreateOrUpdateCategoryDialog(context, category: category, onSave: _save);
   }
 
   void _clearFilters() {
