@@ -21,6 +21,7 @@ class LibraryFilterSelect<T> extends StatefulWidget {
     this.labelBuilder,
     this.height,
     this.expand = false,
+    this.focusNode,
   });
 
   final String semanticLabel;
@@ -32,6 +33,7 @@ class LibraryFilterSelect<T> extends StatefulWidget {
   final String Function(LibraryFilterOption<T> option)? labelBuilder;
   final double? height;
   final bool expand;
+  final FocusNode? focusNode;
 
   @override
   State<LibraryFilterSelect<T>> createState() => _LibraryFilterSelectState<T>();
@@ -39,12 +41,14 @@ class LibraryFilterSelect<T> extends StatefulWidget {
 
 class _LibraryFilterSelectState<T> extends State<LibraryFilterSelect<T>> {
   final _controller = MenuController();
-  final _buttonFocus = FocusNode();
+  FocusNode? _ownFocus;
   final _selectedFocus = FocusNode();
+
+  FocusNode get _buttonFocus => widget.focusNode ?? (_ownFocus ??= FocusNode());
 
   @override
   void dispose() {
-    _buttonFocus.dispose();
+    _ownFocus?.dispose();
     _selectedFocus.dispose();
     super.dispose();
   }

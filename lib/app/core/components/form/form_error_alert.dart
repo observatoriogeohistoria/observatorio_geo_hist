@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-class LoginErrorAlert extends StatelessWidget {
-  const LoginErrorAlert({super.key, required this.message});
+class FormErrorAlert extends StatelessWidget {
+  const FormErrorAlert({super.key, required this.message});
 
   final String message;
 
@@ -21,8 +21,8 @@ class LoginErrorAlert extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: components.loginAlertPaddingH,
-            vertical: components.loginAlertPaddingV,
+            horizontal: components.formAlertPaddingH,
+            vertical: components.formAlertPaddingV,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,11 +30,11 @@ class LoginErrorAlert extends StatelessWidget {
               ExcludeSemantics(
                 child: Icon(
                   Icons.error_outline,
-                  size: components.loginAlertIcon,
+                  size: components.formAlertIcon,
                   color: colors.error,
                 ),
               ),
-              SizedBox(width: components.loginAlertGap),
+              SizedBox(width: components.formAlertGap),
               Expanded(
                 child: Text(
                   message,

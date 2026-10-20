@@ -325,6 +325,30 @@ class AppTextStyles {
         height: 1.4,
       );
 
+  TextStyle get formOptional => _body(
+        size: _size(mobile: 13, tablet: 13, desktop: 13),
+        weight: FontWeight.w500,
+        height: 1.4,
+      );
+
+  TextStyle get formHint => _body(
+        size: _size(mobile: 13.5, tablet: 13.5, desktop: 13.5),
+        weight: FontWeight.w400,
+        height: 1.45,
+      );
+
+  TextStyle get formOption => _body(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w400,
+        height: 1.4,
+      );
+
+  TextStyle get panelChoiceTitle => _body(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w700,
+        height: 1.35,
+      );
+
   TextStyle get formError => _body(
         size: _size(mobile: 14, tablet: 14, desktop: 14),
         weight: FontWeight.w500,

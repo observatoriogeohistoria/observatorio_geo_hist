@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/form_error_alert.dart';
 import 'package:observatorio_geo_hist/app/core/components/form/form_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
@@ -11,7 +12,6 @@ import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/components/back_to_site_link.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/components/login_brand_panel.dart';
-import 'package:observatorio_geo_hist/app/features/admin/login/presentation/components/login_error_alert.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/components/password_visibility_button.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
@@ -222,7 +222,7 @@ class _SigninPageState extends State<SigninPage> {
                     ),
                     SizedBox(height: components.loginCardFieldsTop),
                     if (errorMessage != null) ...[
-                      LoginErrorAlert(message: errorMessage),
+                      FormErrorAlert(message: errorMessage),
                       SizedBox(height: components.formFieldGap),
                     ],
                     FormTextField(

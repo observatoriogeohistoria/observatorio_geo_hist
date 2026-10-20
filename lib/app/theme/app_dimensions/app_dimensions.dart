@@ -605,6 +605,10 @@ class ComponentSizes {
   final int formErrorMaxLines = 4;
   final double formHintTop = 12.0;
   final double formHintMaxWidth = 480.0;
+  final double formAlertPaddingH = 14.0;
+  final double formAlertPaddingV = 12.0;
+  final double formAlertGap = 10.0;
+  final double formAlertIcon = 20.0;
 
   final double mailConfirmationPaddingV = 48.0;
   final double mailConfirmationPaddingH = 24.0;
@@ -693,6 +697,44 @@ class ComponentSizes {
   final double confirmDialogTextGap = 8.0;
   final double confirmDialogActionsTop = 20.0;
   final double confirmDialogActionsGap = 10.0;
+
+  final double panelSheetWidth = 460.0;
+  final double panelSheetHeaderPaddingV = 16.0;
+  final double panelSheetPaddingH = 20.0;
+  final double panelSheetBodyPadding = 20.0;
+  final double panelSheetFooterPaddingV = 14.0;
+  final double panelSheetFooterGap = 10.0;
+  final double panelSheetHeaderGap = 12.0;
+  final Duration panelSheetSlide = const Duration(milliseconds: 220);
+  final int panelDescriptionMinLines = 4;
+  final int panelDescriptionMaxLines = 8;
+
+  final double panelCheckSize = 18.0;
+  final double panelCheckGap = 8.0;
+  final double panelChecksGapH = 20.0;
+  final double panelChecksGapV = 8.0;
+  final double panelCheckBoxMaxHeight = 220.0;
+  final double panelCheckBoxPaddingV = 8.0;
+  final double panelCheckBoxPaddingH = 10.0;
+  final double panelCheckBoxRowPaddingV = 5.0;
+
+  final double panelChoicePaddingV = 12.0;
+  final double panelChoicePaddingH = 14.0;
+  final double panelChoiceGap = 12.0;
+  final double panelChoicesGap = 8.0;
+  final double panelRadioSize = 20.0;
+
+  final double panelSwitchGap = 16.0;
+  final double panelSwitchHintGap = 2.0;
+
+  final double panelDropAspect = 16 / 10;
+  final double panelDropSquare = 140.0;
+  final double panelDropIcon = 26.0;
+  final double panelDropGap = 4.0;
+  final double panelDropPadding = 12.0;
+  final double panelDropFieldGap = 10.0;
+  final double panelDropDash = 6.0;
+  final double panelDropDashGap = 4.0;
 
   final double tooltipMaxWidth = 260.0;
   final double tooltipPaddingV = 7.0;
@@ -795,10 +837,6 @@ class ComponentSizes {
   double loginCardPaddingV(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 32, 32);
   final double loginCardSubtitleGap = 6.0;
   final double loginCardFieldsTop = 24.0;
-  final double loginAlertPaddingH = 14.0;
-  final double loginAlertPaddingV = 12.0;
-  final double loginAlertGap = 10.0;
-  final double loginAlertIcon = 20.0;
   final double loginBackLinkTop = 20.0;
   final double loginBackLinkGap = 6.0;
 
@@ -873,6 +911,10 @@ class ShadowStyle {
 
   List<BoxShadow> get elevated => const [
         BoxShadow(color: Color(0x241F1B18), blurRadius: 36, offset: Offset(0, 14)),
+      ];
+
+  List<BoxShadow> get sheet => const [
+        BoxShadow(color: Color(0x2E1F1B18), blurRadius: 40, offset: Offset(-12, 0)),
       ];
 
   List<BoxShadow> get segment => const [
