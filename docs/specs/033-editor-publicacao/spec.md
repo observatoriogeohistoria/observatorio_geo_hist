@@ -1,6 +1,6 @@
 # 033. Editor de publicação em página própria
 
-- **Status:** aprovada
+- **Status:** implementada
 - **Item do planejamento:** Fase 8, item 8.5 (T-14)
 - **Protótipo:** aba "Editor" (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
@@ -141,3 +141,4 @@ Decidido com a pessoa: Tab e Shift+Tab saem do editor de texto para o próximo e
 - 2026-10-20 (implementação, modo autônomo):
   - O título fica num campo de uma linha, como no protótipo: Enter não quebra linha e o texto longo rola dentro do campo.
   - Os botões de ícone da barra de formatação do Quill mostram a dica no mouse e no foco, mas no leitor de tela o nome fica num nó em volta do botão, não no botão (limitação do pacote no Flutter web). Fica como ressalva.
+- 2026-10-20: implementada.

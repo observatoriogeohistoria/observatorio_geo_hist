@@ -32,8 +32,15 @@ class PostEditorLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final components = AppTheme.dimensions.components;
     final breakpoint = ScreenUtils.breakpointOf(context);
-    final mainColumn = FocusTraversalGroup(child: _column(main));
-    final sideColumn = FocusTraversalGroup(child: _column(side));
+    // Na ordem dos widgets: a ordem de leitura pula o "×" ao lado de cada autor.
+    final mainColumn = FocusTraversalGroup(
+      policy: WidgetOrderTraversalPolicy(),
+      child: _column(main),
+    );
+    final sideColumn = FocusTraversalGroup(
+      policy: WidgetOrderTraversalPolicy(),
+      child: _column(side),
+    );
 
     final content = breakpoint == Breakpoint.desktop
         ? Row(

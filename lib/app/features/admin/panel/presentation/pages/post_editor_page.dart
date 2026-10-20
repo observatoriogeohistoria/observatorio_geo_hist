@@ -418,35 +418,29 @@ class _PostEditorPageState extends State<PostEditorPage> {
           final barType = type ?? _backType;
 
           return FocusTraversalGroup(
-            policy: OrderedTraversalPolicy(),
+            policy: WidgetOrderTraversalPolicy(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                FocusTraversalOrder(
-                  order: const NumericFocusOrder(0),
-                  child: FocusTraversalGroup(
-                    child: PostEditorBar(
-                      type: barType,
-                      title: _isNew ? barType.editorNewTitle : barType.editorEditTitle,
-                      isLoaded: isReady,
-                      isNew: _isNew,
-                      isPublished: _post?.isPublished ?? false,
-                      savedAt: _post?.updatedAt ?? _post?.createdAt,
-                      saving: _saving,
-                      onBack: _goBack,
-                      onAction: _save,
-                    ),
+                FocusTraversalGroup(
+                  child: PostEditorBar(
+                    type: barType,
+                    title: _isNew ? barType.editorNewTitle : barType.editorEditTitle,
+                    isLoaded: isReady,
+                    isNew: _isNew,
+                    isPublished: _post?.isPublished ?? false,
+                    savedAt: _post?.updatedAt ?? _post?.createdAt,
+                    saving: _saving,
+                    onBack: _goBack,
+                    onAction: _save,
                   ),
                 ),
                 Expanded(
-                  child: FocusTraversalOrder(
-                    order: const NumericFocusOrder(1),
-                    child: failure != null
-                        ? _error(failure)
-                        : isReady
-                            ? _content(context)
-                            : PostEditorSkeleton(controller: _scrollController),
-                  ),
+                  child: failure != null
+                      ? _error(failure)
+                      : isReady
+                          ? _content(context)
+                          : PostEditorSkeleton(controller: _scrollController),
                 ),
               ],
             ),
