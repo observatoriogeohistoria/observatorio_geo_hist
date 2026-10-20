@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
@@ -47,13 +48,27 @@ class AppIconButton extends StatefulWidget {
 
 class _AppIconButtonState extends State<AppIconButton> {
   final _tooltipKey = GlobalKey<TooltipState>();
+  FocusNode? _ownFocusNode;
+  bool _focused = false;
+
+  FocusNode get _focusNode => widget.focusNode ?? (_ownFocusNode ??= FocusNode());
+
+  @override
+  void dispose() {
+    _ownFocusNode?.dispose();
+    super.dispose();
+  }
 
   void _handleFocusChange(bool hasFocus) {
+    setState(() => _focused = hasFocus);
     if (!hasFocus) {
       Tooltip.dismissAllToolTips();
       return;
     }
     if (FocusManager.instance.highlightMode != FocusHighlightMode.traditional) return;
+    // Com o leitor de tela a dica já vai no nome do botão, e abrir a camada dela tira o foco do
+    // navegador do botão.
+    if (SemanticsBinding.instance.semanticsEnabled) return;
 
     // Depois do quadro, para não ser fechada pelo botão que acabou de perder o foco.
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -84,6 +99,11 @@ class _AppIconButtonState extends State<AppIconButton> {
       label: label,
       tooltip: label == widget.tooltip ? null : widget.tooltip,
       onTap: disabled ? null : widget.onPressed,
+      // Sem o nó do IconButton, o foco precisa estar neste; senão, com o leitor de tela ligado,
+      // o navegador perde o foco ao chegar no botão.
+      focusable: true,
+      focused: _focused,
+      onFocus: _focusNode.requestFocus,
       excludeSemantics: true,
       child: Focus(
         canRequestFocus: false,
@@ -111,7 +131,7 @@ class _AppIconButtonState extends State<AppIconButton> {
             child: Opacity(
               opacity: disabled ? components.disabledOpacity : 1,
               child: IconButton(
-                focusNode: widget.focusNode,
+                focusNode: _focusNode,
                 padding: EdgeInsets.all(AppTheme.dimensions.spacing.s8),
                 constraints: BoxConstraints(minWidth: minTarget, minHeight: minTarget),
                 iconSize: widget.size,

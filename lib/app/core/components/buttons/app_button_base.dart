@@ -48,7 +48,15 @@ class AppButtonBase extends StatefulWidget {
 }
 
 class _AppButtonBaseState extends State<AppButtonBase> {
+  final _focusNode = FocusNode();
   bool _hovered = false;
+  bool _focused = false;
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,6 +179,11 @@ class _AppButtonBaseState extends State<AppButtonBase> {
       enabled: !inactive,
       label: widget.text,
       onTap: inactive ? null : widget.onPressed,
+      // Sem o nó do InkWell, o foco precisa estar neste; senão, com o leitor de tela ligado, o
+      // navegador perde o foco ao chegar no botão.
+      focusable: !inactive,
+      focused: _focused,
+      onFocus: inactive ? null : _focusNode.requestFocus,
       excludeSemantics: true,
       child: Opacity(
         opacity: widget.isDisabled ? 0.5 : 1,
@@ -184,7 +197,9 @@ class _AppButtonBaseState extends State<AppButtonBase> {
               side: BorderSide(color: border, width: AppTheme.dimensions.stroke.medium),
             ),
             child: InkWell(
+              focusNode: _focusNode,
               autofocus: widget.autofocus,
+              onFocusChange: (value) => setState(() => _focused = value),
               customBorder: RoundedRectangleBorder(borderRadius: radius),
               onTap: inactive ? null : widget.onPressed,
               onHover: (value) => setState(() => _hovered = value),
