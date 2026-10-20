@@ -111,7 +111,6 @@ class _PostsSectionState extends State<PostsSection> {
       state: state,
       pending: _pending,
       messages: const {
-        PanelAction.saveInDialog: 'Publicação salva.',
         PanelAction.delete: 'Publicação excluída.',
         PanelAction.publish: 'Publicado. Já aparece no site.',
         PanelAction.unpublish: 'Despublicado. Saiu do site.',

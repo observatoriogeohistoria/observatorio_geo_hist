@@ -45,10 +45,12 @@ Cada grupo de A a D fecha com `analyze` e `dart format` limpos e vira um commit 
   - Os 10 tipos editados sem mudança mandam o mesmo JSON da base, fora `updatedAt` (a revista troca a chamada vazia `""` por `null`, como o diálogo fazia). Novos dos 10 tipos em 390 e 768 sem rolagem horizontal; resumo do evento conferido.
 
 ## Grupo D: limpeza do diálogo antigo (commit 4)
-- [ ] **D1.** Apagar `create_or_update_post_dialog.dart`, `post_form_dialog.dart` e `create_or_update_posts_dialogs/`; tirar `saveInDialog` de `panel_action.dart` e da seção. Arquivos: os citados. Atende: 13.
-- [ ] **D2.** Apagar o que ficar sem uso, confirmando com `grep`: `app_text_field.dart`, `app_image_field.dart`, `app_dropdown_field.dart`, `panel_field_decoration.dart`, `switch_button.dart`, `form_label.dart`, `panel_dialog_title.dart` e tokens que só eles usavam (`panelEditor*Factor` e outros). Atende: 13, 15.
-- [ ] **D3.** Varredura do diff: nenhuma cor, fonte ou espaçamento solto; contraste de rótulos, "opcional", dicas e "Salvo pela última vez" em `inkSecondary` ou mais escuro (≥ 4,5:1 sobre `page` e `surface`). Atende: 14.
-- [ ] **D4.** Atualizar `docs/arquitetura-painel-admin.md` (editor, rotas, `PostEditorStore`, sair sem salvar, campos; tira o diálogo das publicações e o `saveInDialog`). Atende: 13.
+- [x] **D1.** Apagar `create_or_update_post_dialog.dart`, `post_form_dialog.dart` e `create_or_update_posts_dialogs/`; tirar `saveInDialog` de `panel_action.dart` e da seção. Arquivos: os citados. Atende: 13.
+- [x] **D2.** Apagar o que ficar sem uso, confirmando com `grep`: `app_text_field.dart`, `app_image_field.dart`, `app_dropdown_field.dart`, `panel_field_decoration.dart`, `switch_button.dart`, `form_label.dart`, `panel_dialog_title.dart` e tokens que só eles usavam (`panelEditor*Factor` e outros). Atende: 13, 15.
+  - Saíram também os tokens `panelFieldGap`, `panelFieldFocusedBorder`, `panelTabViewHeight` e `panelImagePreview*`; os `panelEditor*Factor` já tinham saído com o editor de texto. `right_aligned_dialog.dart` fica (usado pelo `view_image_dialog`).
+- [x] **D3.** Varredura do diff: nenhuma cor, fonte ou espaçamento solto; contraste de rótulos, "opcional", dicas e "Salvo pela última vez" em `inkSecondary` ou mais escuro (≥ 4,5:1 sobre `page` e `surface`). Atende: 14.
+  - Sem cor, fonte ou espaçamento solto; as alturas de várias linhas dos campos (`lines`) repetem as dos diálogos. "Salvo pela última vez", dicas e "opcional" em `inkSecondary` (6,9:1 no branco).
+- [x] **D4.** Atualizar `docs/arquitetura-painel-admin.md` (editor, rotas, `PostEditorStore`, sair sem salvar, campos; tira o diálogo das publicações e o `saveInDialog`). Atende: 13.
 
 ## Grupo E: conferência
 - [ ] **E1.** `fvm flutter analyze` sem problemas e `dart format --set-exit-if-changed` no projeto inteiro (cópia ASCII). Atende: 15.

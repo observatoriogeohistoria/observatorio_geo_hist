@@ -5,12 +5,11 @@ import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
 
-/// [save] vem do painel lateral, que mostra o erro e fecha sozinho; [saveInDialog], do diálogo
-/// das publicações, que fecha aqui e mostra o erro em aviso flutuante.
-enum PanelAction { save, saveInDialog, delete, publish, unpublish, highlight, unhighlight }
+/// [save] vem do painel lateral, que mostra o erro e fecha sozinho.
+enum PanelAction { save, delete, publish, unpublish, highlight, unhighlight }
 
 /// O store só diz que deu certo; quem disparou a ação guarda qual foi, para escolher o aviso
-/// e saber se há um diálogo para fechar.
+/// e saber se recarrega as contagens.
 class PendingPanelAction {
   PanelAction? _action;
 
@@ -47,14 +46,10 @@ void showPanelActionResult(
   final action = pending.take();
   if (action == null) return;
 
-  if (action == PanelAction.saveInDialog) Navigator.of(context, rootNavigator: true).pop();
-
   final message = messages[action];
   if (message != null) Messenger.showSuccess(context, message);
 
-  if (action == PanelAction.save ||
-      action == PanelAction.saveInDialog ||
-      action == PanelAction.delete) {
+  if (action == PanelAction.save || action == PanelAction.delete) {
     PanelSetup.getIt<PanelCountsStore>().refresh();
   }
 }

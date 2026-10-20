@@ -18,13 +18,14 @@ lib/app/features/admin/
 │   │   ├── models/                   # media_model, paginated_medias, panel_counts, user_model, user_permissions, user_role
 │   │   └── errors/                   # *_failures.dart de cada módulo
 │   └── presentation/
-│       ├── pages/panel_page.dart
-│       ├── stores/                   # um por módulo + crud_store (base) + panel_counts_store
+│       ├── pages/                    # panel_page, post_editor_page
+│       ├── stores/                   # um por módulo + crud_store (base) + panel_counts_store + post_editor_store
 │       └── components/
 │           ├── sections/             # uma seção por módulo + a linha de cada um (*_row), crud_section, panel_action
 │           ├── list/                 # peças comuns das listas: caixa, linha, grade, filtros, esqueleto e estados
-│           ├── dialogs/              # create_or_update_*, confirm_dialog + create_or_update_posts_dialogs/
-│           └── form_label, panel_top_bar, panel_user_badge, panel_section_header
+│           ├── dialogs/              # create_or_update_* (painel lateral), confirm_dialog, view_image_dialog
+│           ├── editor/               # página de publicação: barra, layout, coluna lateral, resumo + forms/ (um por tipo)
+│           └── panel_top_bar, panel_user_badge, panel_section_header
 └── sidebar/
     ├── sidebar_setup.dart
     └── presentation/                 # components/, stores/sidebar_store.dart, enums/sidebar_item.dart, labels/
@@ -83,13 +84,19 @@ A `CrudSection` monta categorias, equipe, usuários e mídias: chama `getItems`,
 
 **Estados**: esqueleto (`PanelListSkeleton`) ao abrir ou trocar de filtro; `PanelEmptyState` com o botão de criar para quem pode; `PanelNoResultsState` quando o filtro não acha nada; `PanelErrorState` com "Tentar de novo" quando a primeira página falha (sem aviso flutuante). Falha ao carregar mais vira aviso e deixa um "Carregar mais" no rodapé, em vez de tentar a cada rolada.
 
-**Avisos e confirmação**: o store só informa sucesso ou erro. Quem dispara a ação registra qual foi num `PendingPanelAction` (salvar, salvar no diálogo, excluir, publicar, despublicar, destacar, tirar do destaque), e o `showPanelActionResult` escolhe o texto do aviso e recarrega as contagens depois de salvar ou excluir. Em `save` (painel lateral) não fecha nada nem mostra erro: o painel cuida disso. Em `saveInDialog` (diálogo das publicações) fecha o diálogo no sucesso e mostra o erro em `Messenger.showError`, como as demais ações. `Forbidden` encerra a sessão. Toda exclusão passa antes por `showConfirmDialog`, que devolve `true` só quando a pessoa confirma.
+**Avisos e confirmação**: o store só informa sucesso ou erro. Quem dispara a ação registra qual foi num `PendingPanelAction` (salvar, excluir, publicar, despublicar, destacar, tirar do destaque), e o `showPanelActionResult` escolhe o texto do aviso e recarrega as contagens depois de salvar ou excluir. Em `save` (painel lateral) não fecha nada nem mostra erro: o painel cuida disso. `Forbidden` encerra a sessão. Toda exclusão passa antes por `showConfirmDialog`, que devolve `true` só quando a pessoa confirma.
 
 **Painel lateral**: categoria, documento, membro, usuário e envio de imagem abrem com `showPanelSheet` (`components/sheet/panel_sheet.dart`): desliza da direita (tela cheia abaixo de 600 px), com cabeçalho e pé fixos e o Tab em volta fechada. O formulário passa ao `PanelSheet` o título, a lista ordenada de campos (`PanelSheetField`: chave do `FormField` e foco) e um `onSave` que devolve `Future<String?>`. O `PanelSheet` valida, leva o foco ao primeiro campo com erro, mostra "Salvando…" sem deixar fechar nem editar, fecha só no sucesso e, no erro, mostra o `FormErrorAlert` no topo com o que foi digitado. Do lado da seção, `_save` dispara o store, espera e devolve `panelSaveError(store.state)`.
 
 **Campos do painel lateral**: texto com o `FormTextField` do site (`core/components/form/`, com "opcional", dica, só leitura e linhas); rótulo, dica e erro dos outros controles no `FormFieldFrame`. Em `components/sheet/`: `PanelCheckGroup` (caixas, soltas ou numa caixa com rolagem), `PanelChoiceCards` (escolha única em cartões), `PanelSwitchField`, `PanelSelectField` (sobre o `LibraryFilterSelect`), `PanelImageField` e `PanelFileField` (área tracejada `PanelDropArea` mais o campo do endereço; sem Storage, só o endereço) e as mensagens de `PanelValidators`. Enter num campo de uma linha chama `PanelSheet.submitOf(context)`.
 
 **Botões de ícone**: o `AppIconButton` recebe `label` (nome curto para o leitor de tela, como "Excluir") e `tooltip` (o que acontece), mostrado no mouse e no foco por teclado. Com `isDisabled` o botão continua focável, para a dica explicar por que não dá.
+
+**Editor de publicação**: criar e editar abrem a `PostEditorPage`, fora da moldura do painel, em `/admin/painel/publicacoes/nova?tipo=` e `/admin/painel/publicacoes/:categoria/:id/editar` (`AppRoutes.panelPostNew` e `panelPostEdit`). As duas rotas usam a mesma chave de página (`_editorPage`): salvar uma publicação nova (ou mudar a categoria) troca o endereço com `Router.neglect`, sem recriar a página nem criar entrada no histórico. A página confere a sessão como a `PanelPage` e manda `VIEWER` para a lista do tipo. O `PostEditorStore` (um por página) carrega pelo caminho direto (`PostsRepository.getPost`; documento ausente vira `PostNotFoundFailure`) e salva pelo `createOrUpdatePost`; a página escolhe o aviso conforme o botão (`PostEditorAction`: publicar, salvar rascunho, salvar alterações, despublicar).
+
+Cada tipo é um `PostEditorForm` em `editor/forms/` (`ChangeNotifier`): lista os campos na ordem da tela (`PostEditorField`, para o resumo do que falta), constrói os cartões da coluna principal (e um da lateral, como a Autoria do artigo) e monta o corpo. A coluna lateral (`PostEditorSide`: situação, destaque, área, categoria, imagem e legenda) é comum. Tudo fica num só `Form`; os editores de texto entram como `FormField` (`PostEditorRichText`), vazios pelo texto sem espaços.
+
+**Sair sem salvar**: qualquer alteração liga `PostEditorPage._unsaved`. O `onExit` das rotas do editor chama `PostEditorPage.confirmLeave`, que pergunta antes de sair (inclusive no voltar do navegador, que tem o endereço reposto se a pessoa continuar editando). Fechar ou recarregar a aba usa o `beforeunload` (`core/utils/browser/leave_guard.dart`), ligado só enquanto há alteração.
 
 Salvar um post com imagem:
 
@@ -129,9 +136,9 @@ Toda a autorização é no cliente. O repositório não tem `firestore.rules` ne
 4. Registrar em `PanelSetup`.
 5. Adicionar o valor em `SidebarItem` (`value` e `title`) e na navegação da sidebar.
 
-**Novo tipo de post**: criar o model do corpo em `core/models/`, o dialog em `dialogs/create_or_update_posts_dialogs/`, incluí-lo no `PostType` e dizer em `post_row_meta.dart` o que entra na meta da linha.
+**Novo tipo de post**: criar o model do corpo em `core/models/`, o formulário em `editor/forms/` (sobre o `PostEditorForm`) e registrá-lo em `post_editor_forms.dart`, incluí-lo no `PostType` e dizer em `post_row_meta.dart` o que entra na meta da linha.
 
-**Visual**: o painel usa os mesmos tokens do site (`AppTheme`), sem `num_extension`. Formulários novos usam o `PanelSheet` e os campos de `components/sheet/` (o `PanelFieldDecoration` e o `PanelDialogTitle` ficam para o diálogo das publicações), e a situação do item de `StatusBadge` (`core/components/chips/labels.dart`; texto e fundo, nunca só cor; tom `neutral` para o que não é destaque).
+**Visual**: o painel usa os mesmos tokens do site (`AppTheme`), sem `num_extension`. Formulários novos usam o `PanelSheet` e os campos de `components/sheet/`, e a situação do item de `StatusBadge` (`core/components/chips/labels.dart`; texto e fundo, nunca só cor; tom `neutral` para o que não é destaque).
 
 **Nova permissão**: adicionar o campo em `UserPermissions`, definir a regra no construtor de `UserModel` e usá-la na seção.
 

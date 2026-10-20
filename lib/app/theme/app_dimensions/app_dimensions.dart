@@ -765,13 +765,6 @@ class ComponentSizes {
 
   double panelDialogWidthFactor(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 1.0, 0.7, 0.5);
   double panelDialogPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 24);
-  final double panelFieldGap = 8.0;
-  final double panelFieldFocusedBorder = 2.0;
-
-  /// Altura fixa porque o TabBarView exige; cabe o campo de URL com a mensagem de erro.
-  final double panelTabViewHeight = 96.0;
-  final double panelImagePreviewHeight = 88.0;
-  final double panelImagePreviewAspect = 4 / 3;
 
   final double richTextToolbarPadding = 6.0;
   final double richTextButtonSize = 36.0;
