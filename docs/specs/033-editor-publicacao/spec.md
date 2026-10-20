@@ -1,6 +1,6 @@
 # 033. Editor de publicação em página própria
 
-- **Status:** implementada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 8, item 8.5 (T-14)
 - **Protótipo:** aba "Editor" (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
@@ -142,3 +142,4 @@ Decidido com a pessoa: Tab e Shift+Tab saem do editor de texto para o próximo e
   - O título fica num campo de uma linha, como no protótipo: Enter não quebra linha e o texto longo rola dentro do campo.
   - Os botões de ícone da barra de formatação do Quill mostram a dica no mouse e no foco, mas no leitor de tela o nome fica num nó em volta do botão, não no botão (limitação do pacote no Flutter web). Fica como ressalva.
 - 2026-10-20: implementada.
+- 2026-10-20 (verificação, modo autônomo): corrigidos o erro de área e categoria que ficava na tela, o foco por teclado nos botões com o leitor de tela e o título selecionado ao abrir. Ressalva: com a semântica ligada, os links Imagem e Categoria do resumo não levam o foco do navegador ao campo. Verificada com ressalvas.
