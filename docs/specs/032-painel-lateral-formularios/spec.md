@@ -21,16 +21,16 @@ Criar e editar categoria, documento da biblioteca, membro da equipe, usuário e 
 - **Corpo:** campos com rótulo em caixa normal acima do campo; "opcional" em cinza ao lado do rótulo quando o campo não é obrigatório; dica em cinza abaixo quando explica um efeito. Rola sozinho se não couber.
 - **Pé fixo:** "Cancelar" e "Salvar" (à direita). Enter num campo de uma linha envia.
 - **Ao abrir**, o foco vai para o primeiro campo. Esc, "×", "Cancelar" ou clique no fundo fecham sem salvar e o foco volta ao botão que abriu.
-- **Validação ao salvar:** mensagens abaixo de cada campo ("Preencha este campo.", "Informe um e-mail válido.", e as atuais para Lattes, ano e senha), foco no primeiro campo com erro.
-- **Salvando:** "Salvar" desabilitado com "Salvando…"; os campos não aceitam edição.
+- **Validação ao salvar:** mensagens abaixo de cada campo ("Preencha este campo.", "Informe um e-mail válido.", e as atuais para Lattes e senha), foco no primeiro campo com erro. As escolhas obrigatórias que hoje viram aviso flutuante passam a ter mensagem no campo: "Escolha o tipo de produção.", "Marque pelo menos uma categoria.", "Escolha o PDF ou cole o endereço.", "Escolha uma imagem ou cole o endereço." e "Escolha um papel."
+- **Salvando:** "Salvar" desabilitado com "Salvando…"; os campos não aceitam edição e o painel não fecha (Esc, "×", "Cancelar" e fundo esperam o fim do envio).
 - **Sucesso:** o painel fecha, a lista se atualiza e aparece o aviso curto (030).
 - **Erro:** o painel continua aberto, com o que foi digitado, e um aviso vermelho no topo do corpo com a mensagem do erro.
 
 ### Categoria
 - "Nome" (hoje "Título").
-- "Endereço" (hoje "Chave"), com a dica "Vira o fim do link: /publicacoes/geografia/{endereço}" mostrando o valor digitado.
+- "Endereço" (hoje "Chave"), só leitura como hoje (é gerado e identifica a categoria), com a dica "Vira o fim do link: /publicacoes/{área}/{endereço}" mostrando o endereço e a área marcada (Geografia quando nenhuma ou as duas).
 - "Descrição", várias linhas, dica "Aparece no topo da página da categoria."
-- "Imagem de fundo", com o campo de imagem de hoje.
+- "Imagem de fundo": área de imagem 16:10 com a imagem atual, "Escolher imagem" (onde há Storage) e o campo "Endereço da imagem", as mesmas duas formas de hoje (enviar ou colar o endereço).
 - "Áreas": caixas de seleção "História" e "Geografia" (no lugar dos interruptores).
 - Interruptor "Aceita colaboração", dica "Mostra o botão “Colabore” na página da categoria."
 
@@ -38,22 +38,22 @@ Criar e editar categoria, documento da biblioteca, membro da equipe, usuário e 
 - "Título", "Autor", "Instituição", "Ano" (dica `AAAA`).
 - "Tipo de produção": lista suspensa com Dissertação e Tese.
 - "Categorias": as 16 em caixas de seleção dentro de uma caixa com rolagem própria.
-- "Arquivo": área de escolha do PDF ("Escolher PDF"), mostrando o nome do arquivo escolhido ou atual.
+- "Arquivo": área de escolha do PDF ("Escolher PDF", com as extensões aceitas hoje), mostrando o nome do arquivo escolhido ou atual, e o campo "Endereço do arquivo" como hoje.
 - A área (Geografia ou História) é a que está aberta na lista, como hoje.
 
 ### Membro da equipe
 - "Nome"; "Função" (hoje "Papel"); "Currículo Lattes" opcional, dica do formato `https://lattes.cnpq.br/…`.
 - "Descrição" opcional, várias linhas, dica "Com descrição, a pessoa ganha página própria no site."
-- "Foto": área quadrada de escolha de imagem, mostrando a foto atual.
+- "Foto" opcional: área quadrada de escolha de imagem, mostrando a foto atual, com o campo "Endereço da imagem" como hoje.
 
 ### Usuário
-- "Nome"; "E-mail".
+- "Nome"; "E-mail". Ao editar, os dois continuam só leitura, como hoje.
 - "Senha inicial", só ao criar, com a dica "8 caracteres ou mais, com letra maiúscula, minúscula, número e caractere especial. Envie à pessoa por um canal seguro."
 - "Papel": três opções em cartões de escolha única, com título e explicação:
   - "Administração": "Tudo, inclusive criar e remover usuários."
   - "Edição": "Cria, edita e publica conteúdo."
   - "Leitura": "Só vê o painel, sem alterar nada."
-  O cartão escolhido fica com borda e fundo de acento.
+  O cartão escolhido fica com borda e fundo de acento. Ao criar, nenhum vem marcado (como hoje, o papel é obrigatório).
 
 ### Enviar imagem (Mídias)
 Mesmo fluxo de hoje, decidido com a pessoa: "Escolher imagem" abre o seletor; depois o nome do arquivo aparece (só leitura) e "Salvar" envia uma imagem. No dev sem Storage, a mensagem atual de envio desabilitado continua, e "Salvar" fica desabilitado.
@@ -84,7 +84,7 @@ Mesmo fluxo de hoje, decidido com a pessoa: "Escolher imagem" abre o seletor; de
 - [ ] Os cinco formulários abrem no painel lateral e reproduzem o protótipo em 390, 768 e 1280 px, sem `overflow` nem rolagem horizontal.
 - [ ] Cabeçalho e pé ficam fixos enquanto o corpo rola.
 - [ ] Criar e editar categoria, documento, membro e usuário salvam os mesmos dados de hoje; enviar imagem funciona onde há Storage.
-- [ ] Dica do endereço da categoria mostra o valor digitado.
+- [ ] Dica do endereço da categoria mostra o endereço e a área marcada.
 - [ ] Papel do usuário escolhido por cartões, com as três explicações; o valor salvo é o mesmo de antes.
 - [ ] Salvar vazio mostra as mensagens nos campos e foca o primeiro com erro.
 - [ ] Durante o envio aparece "Salvando…" e não há envio duplo.
@@ -106,3 +106,11 @@ Mesmo fluxo de hoje, decidido com a pessoa: "Escolher imagem" abre o seletor; de
 ## Histórico de mudanças
 - 2026-10-07: criada. Decidido com a pessoa manter o fluxo atual de envio de mídia (uma imagem), agora no painel lateral.
 - 2026-10-07: aprovada.
+- 2026-10-19: ajustes do plano, decididos sem a pessoa (modo autônomo):
+  - Endereço da categoria continua só leitura: é o id do documento no Firestore e o fim do link, gerado na criação. Torná-lo editável seria regra nova (formato, unicidade) e mudaria dados. A dica mostra o endereço atual e a área marcada; o critério 4 foi reescrito.
+  - Imagem de fundo, foto e arquivo do documento usam uma área nova com prévia e placeholder (pedida em "Estados"), mantendo as duas formas de hoje: enviar o arquivo ou colar o endereço. Sem Storage, só o endereço, com a mensagem atual.
+  - Escolhas obrigatórias que hoje geram aviso flutuante (tipo, categorias, arquivo, imagem, papel) ganham mensagem no campo; as obrigatoriedades são as mesmas. O ano continua só "Preencha este campo." e só dígitos, como hoje.
+  - Papel sem cartão marcado ao criar; nome e e-mail do usuário continuam só leitura ao editar.
+  - Enquanto salva, o painel não fecha, para a resposta não chegar sem tela e não haver envio duplo.
+  - Publicações continuam no diálogo atual até a 033, com o fechamento e o aviso de erro de hoje.
+

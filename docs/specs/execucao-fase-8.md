@@ -10,7 +10,7 @@ As specs 029 a 033 já estavam aprovadas (#35). A etapa "Spec+plano" só cria o 
 | 029-login-redesenho | 8.1 | feito (13 critérios, 18 tarefas) | feito (2 commits) | feito (1 fix) | verificada com ressalvas |
 | 030-painel-estrutura | 8.2 | feito (15 critérios, 28 tarefas) | feito (3 commits + docs, após retomada) | feito (1 fix) | verificada com ressalvas |
 | 031-painel-listas | 8.3 | feito (14 critérios, 32 tarefas) | feito (4 commits + docs) | feito (3 fix, após retomada) | verificada com ressalvas |
-| 032-painel-lateral-formularios | 8.4 | pendente | pendente | pendente | |
+| 032-painel-lateral-formularios | 8.4 | feito (13 critérios, 24 tarefas) | pendente | pendente | |
 | 033-editor-publicacao | 8.5 | pendente | pendente | pendente | |
 
 ## Decisões tomadas sem a pessoa
@@ -24,6 +24,7 @@ As specs 029 a 033 já estavam aprovadas (#35). A etapa "Spec+plano" só cria o 
 - (031) "Novo documento" no cabeçalho e resumo "N documentos em {área}"; usuários só com selo "Removido" (`isDeleted`); trocar de tipo limpa filtros, trocar de área mantém; sem "N de M" (paginação não dá o total filtrado); combinação de filtros sem índice mostra erro, sem criar índice.
 - (031) Segmentado anunciado como grupo de rádio e "Destaques" como chave (Flutter web não gera `aria-pressed`); falha ao carregar mais mostra botão "Carregar mais"; em 1280 o "Destaques" cai para a segunda linha.
 - (031) Buscas do painel não reservam espaço para o "Limpar" (`SearchField.keepClearSpace`, ligado por padrão no site), para a dica caber a 390 e 768 px.
+- (032) Endereço da categoria só leitura (é o id no Firestore); imagem/foto/PDF numa área nova com prévia, mantendo envio e endereço colado; escolhas obrigatórias com mensagem no campo; papel sem cartão marcado ao criar; painel não fecha enquanto salva; publicações seguem no diálogo até a 033.
 
 ## Ressalvas
 - (029) Login real com o Firebase e leitor de tela de verdade não conferidos (sem credenciais; nomes acessíveis só no código).
