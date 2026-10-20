@@ -736,6 +736,27 @@ class ComponentSizes {
   final double panelDropDash = 6.0;
   final double panelDropDashGap = 4.0;
 
+  double editorBarPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 24);
+  final double editorBarPaddingV = 10.0;
+  final double editorBarGapH = 14.0;
+  final double editorBarGapV = 8.0;
+  final double editorBarTitleGap = 10.0;
+  final double editorBarActionsGap = 8.0;
+  double editorPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 24);
+  final double editorMaxWidth = 1180.0;
+  final double editorSideWidth = 340.0;
+  final double editorColumnsGap = 20.0;
+  final double editorCardsGap = 16.0;
+  final double editorCardPadding = 20.0;
+  final double editorCardEyebrowGap = 14.0;
+  final double editorSkeletonTitleHeight = 28.0;
+  final double editorSkeletonLineHeight = 14.0;
+  final double editorSkeletonBlockHeight = 220.0;
+  final double editorSkeletonSideHeight = 120.0;
+  final double editorAuthorsGap = 8.0;
+  // Alinha o "×" ao campo, abaixo do rótulo "Autor N".
+  final double editorAuthorRemoveTop = 29.0;
+
   final double tooltipMaxWidth = 260.0;
   final double tooltipPaddingV = 7.0;
   final double tooltipPaddingH = 10.0;

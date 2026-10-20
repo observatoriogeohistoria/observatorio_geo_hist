@@ -25,6 +25,7 @@ abstract class PostsRepository {
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
   });
+  Future<Either<Failure, PostModel>> getPost(String categoryKey, String id);
   Future<Either<Failure, PostModel>> createOrUpdatePost(
     PostModel post,
     CategoryModel? pastCategory,
@@ -66,6 +67,19 @@ class PostsRepositoryImpl implements PostsRepository {
       return Left(AuthFailure.fromException(error));
     } catch (error) {
       return const Left(GetPostsFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, PostModel>> getPost(String categoryKey, String id) async {
+    try {
+      return Right(await _postsDatasource.getPost(categoryKey, id));
+    } on PostNotFoundException {
+      return const Left(PostNotFoundFailure());
+    } on FirebaseAuthException catch (error) {
+      return Left(AuthFailure.fromException(error));
+    } catch (error) {
+      return const Left(GetPostFailure());
     }
   }
 

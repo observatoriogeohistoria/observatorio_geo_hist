@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/form/form_field_frame.dart';
 import 'package:observatorio_geo_hist/app/core/components/form/form_text_field.dart';
@@ -29,6 +30,10 @@ class PanelImageField extends StatefulWidget {
     required this.urlFocusNode,
     this.isOptional = false,
     this.square = false,
+    this.requiredMessage = 'Escolha uma imagem ou cole o endereço.',
+    this.pickHint,
+    this.replaceText,
+    this.onRemove,
     super.key,
   });
 
@@ -42,6 +47,14 @@ class PanelImageField extends StatefulWidget {
   final FocusNode urlFocusNode;
   final bool isOptional;
   final bool square;
+  final String requiredMessage;
+
+  final String? pickHint;
+
+  final String? replaceText;
+
+  /// Com ele, uma imagem escolhida mostra "Remover" e o aviso do corte nos cards.
+  final VoidCallback? onRemove;
 
   @override
   State<PanelImageField> createState() => _PanelImageFieldState();
@@ -132,11 +145,18 @@ class _PanelImageFieldState extends State<PanelImageField> {
       validator: (_) {
         if (widget.isOptional) return null;
         final hasImage = widget.file.value != null || widget.urlController.text.isNotEmpty;
-        return hasImage ? null : 'Escolha uma imagem ou cole o endereço.';
+        return hasImage ? null : widget.requiredMessage;
       },
       builder: (field) {
         final error = field.errorText;
-        final title = hasStorage ? widget.pickText : 'Sem imagem';
+        final replaceText = widget.replaceText;
+        final title = !hasStorage
+            ? 'Sem imagem'
+            : _previewFailed && replaceText != null
+                ? replaceText
+                : widget.pickText;
+        final hasImage = widget.file.value != null || widget.urlController.text.isNotEmpty;
+        final onRemove = widget.onRemove;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -152,6 +172,7 @@ class _PanelImageFieldState extends State<PanelImageField> {
                 child: PanelDropArea(
                   icon: hasStorage ? Icons.file_upload_outlined : Icons.image_outlined,
                   title: title,
+                  subtitle: hasImage ? null : widget.pickHint,
                   semanticLabel:
                       '${FormFieldFrame.semanticLabel(widget.label, isOptional: widget.isOptional)}: '
                       '$title',
@@ -165,6 +186,26 @@ class _PanelImageFieldState extends State<PanelImageField> {
                 ),
               ),
             ),
+            if (onRemove != null && hasImage) ...[
+              SizedBox(height: components.formFieldLabelGap),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Cortada em 16:10 nos cards',
+                      style: styles.formHint.copyWith(color: colors.inkSecondary),
+                    ),
+                  ),
+                  AppTextButton.small(
+                    text: 'Remover',
+                    onPressed: () {
+                      onRemove();
+                      field.didChange(null);
+                    },
+                  ),
+                ],
+              ),
+            ],
             if (!hasStorage) ...[
               SizedBox(height: components.formFieldLabelGap),
               Text(

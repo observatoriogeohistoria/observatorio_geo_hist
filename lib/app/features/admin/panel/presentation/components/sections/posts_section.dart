@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
@@ -221,12 +223,22 @@ class _PostsSectionState extends State<PostsSection> {
   }
 
   void _openForm([PostModel? post]) {
+    final type = post?.type ?? _type;
+    if (type == PostType.article) {
+      final id = post?.id;
+      GoRouter.of(context).go(
+        post == null || id == null
+            ? AppRoutes.panelPostNew(type.value)
+            : AppRoutes.panelPostEdit(post.categoryId, id),
+      );
+      return;
+    }
     showCreateOrUpdatePostDialog(
       context,
       categories: categoriesStore.items,
       onCreateOrUpdate: _save,
       post: post,
-      postType: post?.type ?? _type,
+      postType: type,
       isLoading: postsStore.state is CrudLoadingState,
     );
   }

@@ -6,6 +6,7 @@ import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/panel_page.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/post_editor_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/contact_us_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_page.dart';
@@ -181,6 +182,32 @@ class AppRouter {
         redirect: (context, state) => AppRoutes.panelTab(SidebarItem.categories.value),
       ),
       GoRoute(
+        path: AppRoutes.panelPostNewPattern,
+        onExit: (context, state) => PostEditorPage.confirmLeave(context),
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          final type = PostType.fromString(
+            state.uri.queryParameters[AppRoutes.panelPostTypeParam],
+          );
+
+          final invalidRoute = type == null;
+          if (invalidRoute) return _editorPage(const PageNotFound());
+
+          return _editorPage(PostEditorPage.create(type: type));
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.panelPostEditPattern,
+        onExit: (context, state) => PostEditorPage.confirmLeave(context),
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return _editorPage(
+            PostEditorPage.edit(
+              categoryKey: state.pathParameters['categoria']!,
+              postId: state.pathParameters['id']!,
+            ),
+          );
+        },
+      ),
+      GoRoute(
         path: AppRoutes.panelTabPattern,
         pageBuilder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
@@ -212,6 +239,12 @@ class AppRouter {
   // no lugar, sem recriar a moldura nem perder o foco.
   static Page<void> _panelPage(Widget child) {
     return MaterialPage(key: const ValueKey('painel'), child: child);
+  }
+
+  // A mesma chave nas duas rotas do editor: salvar uma publicação nova troca o endereço para o
+  // de edição sem perder o que está na tela.
+  static Page<void> _editorPage(Widget child) {
+    return MaterialPage(key: const ValueKey('editor'), child: child);
   }
 
   static Widget _selectable(Widget page) {

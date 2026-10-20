@@ -18,6 +18,7 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/infra/repositorie
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/categories_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/media_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/post_editor_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/posts_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/team_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/users_store.dart';
@@ -55,6 +56,9 @@ class PanelSetup {
     );
     getIt.registerLazySingleton<PostsStore>(
       () => PostsStore(getIt<PostsRepository>()),
+    );
+    getIt.registerFactory<PostEditorStore>(
+      () => PostEditorStore(getIt<PostsRepository>()),
     );
 
     getIt.registerFactory<MediaDatasource>(

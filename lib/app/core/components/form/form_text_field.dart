@@ -28,6 +28,7 @@ class FormTextField extends StatefulWidget {
     this.inputFormatters,
     this.formFieldKey,
     this.autofocus = false,
+    this.style,
   });
 
   final String label;
@@ -56,6 +57,7 @@ class FormTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final GlobalKey<FormFieldState<String>>? formFieldKey;
   final bool autofocus;
+  final TextStyle? style;
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -133,7 +135,7 @@ class _FormTextFieldState extends State<FormTextField> {
             obscureText: widget.obscureText,
             minLines: singleLine ? 1 : widget.minLines ?? components.formMessageMinLines,
             maxLines: singleLine ? 1 : widget.maxLines ?? components.formMessageMaxLines,
-            style: styles.regular.copyWith(color: colors.ink),
+            style: (widget.style ?? styles.regular).copyWith(color: colors.ink),
             cursorColor: colors.accent,
             decoration: InputDecoration(
               isCollapsed: true,

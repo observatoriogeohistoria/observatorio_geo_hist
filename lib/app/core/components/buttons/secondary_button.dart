@@ -14,6 +14,7 @@ class SecondaryButton extends StatelessWidget {
     this.reserveTexts = const [],
     this.autofocus = false,
     this.expand = false,
+    this.isLoading = false,
     super.key,
   }) : size = ButtonSize.small;
 
@@ -26,6 +27,7 @@ class SecondaryButton extends StatelessWidget {
     this.reserveTexts = const [],
     this.autofocus = false,
     this.expand = false,
+    this.isLoading = false,
     super.key,
   }) : size = ButtonSize.medium;
 
@@ -38,6 +40,7 @@ class SecondaryButton extends StatelessWidget {
     this.reserveTexts = const [],
     this.autofocus = false,
     this.expand = false,
+    this.isLoading = false,
     super.key,
   }) : size = ButtonSize.big;
 
@@ -56,6 +59,8 @@ class SecondaryButton extends StatelessWidget {
 
   final bool expand;
 
+  final bool isLoading;
+
   @override
   Widget build(BuildContext context) {
     return AppButtonBase(
@@ -69,6 +74,7 @@ class SecondaryButton extends StatelessWidget {
       reserveTexts: reserveTexts,
       autofocus: autofocus,
       expand: expand,
+      isLoading: isLoading,
     );
   }
 }

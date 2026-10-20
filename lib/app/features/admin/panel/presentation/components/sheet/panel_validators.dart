@@ -4,12 +4,19 @@ class PanelValidators {
   const PanelValidators._();
 
   static const requiredMessage = 'Preencha este campo.';
+  static const titleMessage = 'Dê um título à publicação.';
+  static const textMessage = 'Escreva o texto da publicação.';
+  static const areaMessage = 'Marque pelo menos uma área.';
+  static const categoryMessage = 'Escolha a categoria.';
+  static const imageMessage = 'Escolha uma imagem. Ela aparece no card e no topo do post.';
 
   static final _email = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
   static final _password = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
   static final _url = RegExp(r'^https?://');
 
   static String? required(String? value) => value == null || value.isEmpty ? requiredMessage : null;
+
+  static String? title(String? value) => value == null || value.isEmpty ? titleMessage : null;
 
   static String? email(String? value) {
     if (value == null || value.isEmpty) return requiredMessage;

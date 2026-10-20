@@ -484,6 +484,27 @@ class AppTextStyles {
         letterSpacingEm: -0.02,
       );
 
+  TextStyle get editorBarTitle => _display(
+        size: _size(mobile: 18.4, tablet: 18.4, desktop: 18.4),
+        weight: FontWeight.w700,
+        height: 1.25,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get editorTitleField => _display(
+        size: _size(mobile: 22, tablet: 25.6, desktop: 25.6),
+        weight: FontWeight.w700,
+        height: 1.25,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get editorCardEyebrow => _body(
+        size: _size(mobile: 12.5, tablet: 12.5, desktop: 12.5),
+        weight: FontWeight.w700,
+        height: 1.4,
+        letterSpacingEm: 0.09,
+      );
+
   TextStyle get toast => _body(
         size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
         weight: FontWeight.w600,

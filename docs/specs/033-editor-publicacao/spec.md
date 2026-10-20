@@ -138,3 +138,6 @@ Decidido com a pessoa: Tab e Shift+Tab saem do editor de texto para o próximo e
   - Enter num campo de uma linha não salva: são quatro ações diferentes e nenhuma é a óbvia.
   - Depois de salvar uma publicação nova, o endereço troca para o de edição sem criar entrada nova no histórico do navegador.
   - A barra de formatação continua a do Quill (mesmos botões), com os tokens do tema, separadores entre grupos, dica de cada botão em português (tradução do pacote) e nome "Formatação do texto" no grupo.
+- 2026-10-20 (implementação, modo autônomo):
+  - O título fica num campo de uma linha, como no protótipo: Enter não quebra linha e o texto longo rola dentro do campo.
+  - Os botões de ícone da barra de formatação do Quill mostram a dica no mouse e no foco, mas no leitor de tela o nome fica num nó em volta do botão, não no botão (limitação do pacote no Flutter web). Fica como ressalva.
