@@ -232,7 +232,13 @@ class _PostEditorPageState extends State<PostEditorPage> {
     image.file.addListener(_markUnsaved);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) form.firstFocus.requestFocus();
+      if (!mounted) return;
+      form.firstFocus.requestFocus();
+      // No navegador o campo focado vem com o texto todo selecionado; digitar apagaria o título.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final editable = form.firstFocus.context?.findAncestorStateOfType<EditableTextState>();
+        editable?.widget.controller.selection = const TextSelection.collapsed(offset: 0);
+      });
     });
   }
 
