@@ -117,7 +117,7 @@ class _LibrarySectionState extends State<LibrarySection> {
       state: state,
       pending: _pending,
       messages: const {
-        PanelAction.saveInDialog: 'Documento salvo.',
+        PanelAction.save: 'Documento salvo.',
         PanelAction.delete: 'Documento excluído.',
       },
       onForbidden: _authStore.logout,
@@ -152,10 +152,11 @@ class _LibrarySectionState extends State<LibrarySection> {
     _fetch(reset: true);
   }
 
-  void _save(LibraryDocumentModel document, FileModel? file) {
-    _pending.start(PanelAction.saveInDialog);
+  Future<String?> _save(LibraryDocumentModel document, FileModel file) async {
+    _pending.start(PanelAction.save);
     _savePending = true;
-    _libraryStore.createOrUpdateDocument(document, file);
+    await _libraryStore.createOrUpdateDocument(document, file);
+    return panelSaveError(_libraryStore.manageState);
   }
 
   Future<void> _delete(LibraryDocumentModel document) async {
@@ -173,7 +174,7 @@ class _LibrarySectionState extends State<LibrarySection> {
     showCreateOrUpdateLibraryDocumentDialog(
       context,
       area: _area,
-      onCreateOrUpdate: _save,
+      onSave: _save,
       document: document,
     );
   }

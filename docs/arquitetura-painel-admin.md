@@ -83,7 +83,11 @@ A `CrudSection` monta categorias, equipe, usuários e mídias: chama `getItems`,
 
 **Estados**: esqueleto (`PanelListSkeleton`) ao abrir ou trocar de filtro; `PanelEmptyState` com o botão de criar para quem pode; `PanelNoResultsState` quando o filtro não acha nada; `PanelErrorState` com "Tentar de novo" quando a primeira página falha (sem aviso flutuante). Falha ao carregar mais vira aviso e deixa um "Carregar mais" no rodapé, em vez de tentar a cada rolada.
 
-**Avisos e confirmação**: o store só informa sucesso ou erro. Quem dispara a ação registra qual foi num `PendingPanelAction` (salvar, excluir, publicar, despublicar, destacar, tirar do destaque), e o `showPanelActionResult` escolhe o texto do aviso, fecha o diálogo só quando a ação foi salvar e recarrega as contagens depois de salvar ou excluir. Erros vão para `Messenger.showError`; `Forbidden` encerra a sessão. Toda exclusão passa antes por `showConfirmDialog`, que devolve `true` só quando a pessoa confirma.
+**Avisos e confirmação**: o store só informa sucesso ou erro. Quem dispara a ação registra qual foi num `PendingPanelAction` (salvar, salvar no diálogo, excluir, publicar, despublicar, destacar, tirar do destaque), e o `showPanelActionResult` escolhe o texto do aviso e recarrega as contagens depois de salvar ou excluir. Em `save` (painel lateral) não fecha nada nem mostra erro: o painel cuida disso. Em `saveInDialog` (diálogo das publicações) fecha o diálogo no sucesso e mostra o erro em `Messenger.showError`, como as demais ações. `Forbidden` encerra a sessão. Toda exclusão passa antes por `showConfirmDialog`, que devolve `true` só quando a pessoa confirma.
+
+**Painel lateral**: categoria, documento, membro, usuário e envio de imagem abrem com `showPanelSheet` (`components/sheet/panel_sheet.dart`): desliza da direita (tela cheia abaixo de 600 px), com cabeçalho e pé fixos e o Tab em volta fechada. O formulário passa ao `PanelSheet` o título, a lista ordenada de campos (`PanelSheetField`: chave do `FormField` e foco) e um `onSave` que devolve `Future<String?>`. O `PanelSheet` valida, leva o foco ao primeiro campo com erro, mostra "Salvando…" sem deixar fechar nem editar, fecha só no sucesso e, no erro, mostra o `FormErrorAlert` no topo com o que foi digitado. Do lado da seção, `_save` dispara o store, espera e devolve `panelSaveError(store.state)`.
+
+**Campos do painel lateral**: texto com o `FormTextField` do site (`core/components/form/`, com "opcional", dica, só leitura e linhas); rótulo, dica e erro dos outros controles no `FormFieldFrame`. Em `components/sheet/`: `PanelCheckGroup` (caixas, soltas ou numa caixa com rolagem), `PanelChoiceCards` (escolha única em cartões), `PanelSwitchField`, `PanelSelectField` (sobre o `LibraryFilterSelect`), `PanelImageField` e `PanelFileField` (área tracejada `PanelDropArea` mais o campo do endereço; sem Storage, só o endereço) e as mensagens de `PanelValidators`. Enter num campo de uma linha chama `PanelSheet.submitOf(context)`.
 
 **Botões de ícone**: o `AppIconButton` recebe `label` (nome curto para o leitor de tela, como "Excluir") e `tooltip` (o que acontece), mostrado no mouse e no foco por teclado. Com `isDisabled` o botão continua focável, para a dica explicar por que não dá.
 
@@ -121,13 +125,13 @@ Toda a autorização é no cliente. O repositório não tem `firestore.rules` ne
 
 1. Criar datasource, repository, model e failures em `panel/infra/`.
 2. Criar o store em `panel/presentation/stores/`, estendendo `CrudStore<T>`.
-3. Criar a seção (sobre a `CrudSection`), a linha (`*_row.dart`, sobre a `PanelListRow`) e o dialog em `panel/presentation/components/`.
+3. Criar a seção (sobre a `CrudSection`), a linha (`*_row.dart`, sobre a `PanelListRow`) e o formulário sobre o `PanelSheet` em `panel/presentation/components/dialogs/`.
 4. Registrar em `PanelSetup`.
 5. Adicionar o valor em `SidebarItem` (`value` e `title`) e na navegação da sidebar.
 
 **Novo tipo de post**: criar o model do corpo em `core/models/`, o dialog em `dialogs/create_or_update_posts_dialogs/`, incluí-lo no `PostType` e dizer em `post_row_meta.dart` o que entra na meta da linha.
 
-**Visual**: o painel usa os mesmos tokens do site (`AppTheme`), sem `num_extension`. Campos novos partem de `PanelFieldDecoration` (`core/components/field/`), diálogos de `PanelDialogTitle` e situação do item de `StatusBadge` (`core/components/chips/labels.dart`; texto e fundo, nunca só cor; tom `neutral` para o que não é destaque).
+**Visual**: o painel usa os mesmos tokens do site (`AppTheme`), sem `num_extension`. Formulários novos usam o `PanelSheet` e os campos de `components/sheet/` (o `PanelFieldDecoration` e o `PanelDialogTitle` ficam para o diálogo das publicações), e a situação do item de `StatusBadge` (`core/components/chips/labels.dart`; texto e fundo, nunca só cor; tom `neutral` para o que não é destaque).
 
 **Nova permissão**: adicionar o campo em `UserPermissions`, definir a regra no construtor de `UserModel` e usá-la na seção.
 

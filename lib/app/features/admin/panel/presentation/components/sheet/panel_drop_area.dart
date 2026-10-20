@@ -15,6 +15,7 @@ class PanelDropArea extends StatelessWidget {
     this.actionLabel,
     this.onTap,
     this.focusNode,
+    this.autofocus = false,
     this.square = false,
     this.hasError = false,
     super.key,
@@ -33,6 +34,7 @@ class PanelDropArea extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onTap;
   final FocusNode? focusNode;
+  final bool autofocus;
   final bool square;
   final bool hasError;
 
@@ -142,6 +144,7 @@ class PanelDropArea extends StatelessWidget {
           type: MaterialType.transparency,
           child: InkWell(
             focusNode: focusNode,
+            autofocus: autofocus,
             onTap: tap,
             customBorder: RoundedRectangleBorder(borderRadius: radius),
             focusColor: Colors.transparent,
