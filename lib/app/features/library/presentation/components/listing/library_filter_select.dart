@@ -22,6 +22,7 @@ class LibraryFilterSelect<T> extends StatefulWidget {
     this.height,
     this.expand = false,
     this.focusNode,
+    this.hasError = false,
   });
 
   final String semanticLabel;
@@ -34,6 +35,7 @@ class LibraryFilterSelect<T> extends StatefulWidget {
   final double? height;
   final bool expand;
   final FocusNode? focusNode;
+  final bool hasError;
 
   @override
   State<LibraryFilterSelect<T>> createState() => _LibraryFilterSelectState<T>();
@@ -131,6 +133,7 @@ class _LibraryFilterSelectState<T> extends State<LibraryFilterSelect<T>> {
         },
         height: widget.height,
         expand: widget.expand,
+        hasError: widget.hasError,
         child: Text(label, overflow: TextOverflow.ellipsis, maxLines: 1),
       ),
     );
@@ -196,6 +199,7 @@ class LibraryFilterButton extends StatefulWidget {
     this.focusNode,
     this.height,
     this.expand = false,
+    this.hasError = false,
   });
 
   final Widget child;
@@ -206,6 +210,7 @@ class LibraryFilterButton extends StatefulWidget {
   final FocusNode? focusNode;
   final double? height;
   final bool expand;
+  final bool hasError;
 
   @override
   State<LibraryFilterButton> createState() => _LibraryFilterButtonState();
@@ -234,7 +239,9 @@ class _LibraryFilterButtonState extends State<LibraryFilterButton> {
           shape: RoundedRectangleBorder(
             borderRadius: radius,
             side: BorderSide(
-              color: _hovered || widget.expanded ? colors.lineStrong : colors.line,
+              color: widget.hasError
+                  ? colors.error
+                  : (_hovered || widget.expanded ? colors.lineStrong : colors.line),
               width: components.libraryFilterBorder,
             ),
           ),

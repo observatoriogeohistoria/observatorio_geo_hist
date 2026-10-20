@@ -42,6 +42,7 @@ class PanelSelectField<T> extends StatelessWidget {
             options: options,
             value: value,
             focusNode: focusNode,
+            hasError: error != null,
             height: AppTheme.dimensions.components.formFieldHeight,
             expand: true,
             onSelected: (choice) {
