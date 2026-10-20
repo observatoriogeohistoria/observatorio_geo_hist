@@ -12,7 +12,6 @@ import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateDocumentDialog(
@@ -45,7 +44,7 @@ class CreateOrUpdateDocumentDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateDocumentDialogState extends State<CreateOrUpdateDocumentDialog> {
-  final StreamController<Completer<String>> _descriptionController = StreamController();
+  late final _descriptionController = EditorQuill.controllerFor(_initialBody?.description);
   final StreamController<Completer<FileModel?>> _imageController = StreamController();
 
   late final DocumentModel? _initialBody = widget.post.body as DocumentModel?;
@@ -54,18 +53,11 @@ class _CreateOrUpdateDocumentDialogState extends State<CreateOrUpdateDocumentDia
   late final _imageUrlController = TextEditingController(text: _initialBody?.image.url);
   late final _linkController = TextEditingController(text: _initialBody?.link);
 
-  late final String? _initialDescription = _initialBody?.description;
-
   late DocumentCategory? _selectedCategory = _initialBody?.category;
 
   bool get _isUpdate => widget.post.id != null;
 
-  Future<String> _getDescription() {
-    final completer = Completer<String>();
-    _descriptionController.add(completer);
-
-    return completer.future;
-  }
+  String _getDescription() => EditorQuill.toJson(_descriptionController);
 
   Future<FileModel?> _getImage() {
     final completer = Completer<FileModel?>();
@@ -76,7 +68,7 @@ class _CreateOrUpdateDocumentDialogState extends State<CreateOrUpdateDocumentDia
 
   @override
   void dispose() {
-    _descriptionController.close();
+    _descriptionController.dispose();
     _imageController.close();
     super.dispose();
   }
@@ -116,12 +108,10 @@ class _CreateOrUpdateDocumentDialogState extends State<CreateOrUpdateDocumentDia
             imageController: _imageController,
           ),
           SizedBox(height: AppTheme.dimensions.spacing.s16),
-          const FormLabel(text: 'Descrição'),
           EditorQuill(
-            saveController: _descriptionController,
-            initialContent: _initialDescription,
-            height: MediaQuery.sizeOf(context).height *
-                AppTheme.dimensions.components.panelEditorFactor,
+            controller: _descriptionController,
+            label: 'Descrição',
+            minHeight: AppTheme.dimensions.components.richTextMinHeightShort,
           ),
           SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
@@ -136,7 +126,7 @@ class _CreateOrUpdateDocumentDialogState extends State<CreateOrUpdateDocumentDia
   }
 
   Future<void> _onCreateOrUpdate() async {
-    String description = await _getDescription();
+    String description = _getDescription();
     FileModel? image = await _getImage();
 
     if (description.isEmpty) {

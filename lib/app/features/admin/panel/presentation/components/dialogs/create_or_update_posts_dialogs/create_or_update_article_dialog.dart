@@ -47,14 +47,11 @@ class CreateOrUpdateArticleDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialog> {
-  final StreamController<Completer<String>> _contentController = StreamController();
-  final StreamController<Completer<String>> _observationController = StreamController();
+  late final _contentController = EditorQuill.controllerFor(_initialBody?.content);
+  late final _observationController = EditorQuill.controllerFor(_initialBody?.observation);
   final StreamController<Completer<FileModel?>> _imageController = StreamController();
 
   late final ArticleModel? _initialBody = widget.post.body as ArticleModel?;
-
-  late final String? _initialContent = _initialBody?.content;
-  late final String? _initialObservation = _initialBody?.observation;
 
   late final _titleController = TextEditingController(text: _initialBody?.title);
   late final _subtitleController = TextEditingController(text: _initialBody?.subtitle);
@@ -68,19 +65,9 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
 
   bool get _isUpdate => widget.post.id != null;
 
-  Future<String> _getContent() async {
-    final complete = Completer<String>();
-    _contentController.add(complete);
+  String _getContent() => EditorQuill.toJson(_contentController);
 
-    return await complete.future;
-  }
-
-  Future<String> _getObservation() {
-    final complete = Completer<String>();
-    _observationController.add(complete);
-
-    return complete.future;
-  }
+  String _getObservation() => EditorQuill.toJson(_observationController);
 
   Future<FileModel?> _getImage() async {
     final completer = Completer<FileModel?>();
@@ -91,8 +78,8 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
 
   @override
   void dispose() {
-    _contentController.close();
-    _observationController.close();
+    _contentController.dispose();
+    _observationController.dispose();
     _imageController.close();
     super.dispose();
   }
@@ -181,20 +168,16 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
             ],
           ),
           SizedBox(height: AppTheme.dimensions.spacing.s16),
-          const FormLabel(text: 'Conteúdo'),
           EditorQuill(
-            saveController: _contentController,
-            initialContent: _initialContent,
-            height: MediaQuery.sizeOf(context).height *
-                AppTheme.dimensions.components.panelEditorTallFactor,
+            controller: _contentController,
+            label: 'Conteúdo',
+            minHeight: AppTheme.dimensions.components.richTextMinHeight,
           ),
           SizedBox(height: AppTheme.dimensions.spacing.s16),
-          const FormLabel(text: 'Observação'),
           EditorQuill(
-            saveController: _observationController,
-            initialContent: _initialObservation,
-            height: MediaQuery.sizeOf(context).height *
-                AppTheme.dimensions.components.panelEditorFactor,
+            controller: _observationController,
+            label: 'Observação',
+            minHeight: AppTheme.dimensions.components.richTextMinHeightShort,
           ),
         ],
       ),
@@ -202,8 +185,8 @@ class _CreateOrUpdateArticleDialogState extends State<CreateOrUpdateArticleDialo
   }
 
   Future<void> _onCreateOrUpdate() async {
-    String content = await _getContent();
-    String observation = await _getObservation();
+    String content = _getContent();
+    String observation = _getObservation();
     FileModel? image = await _getImage();
 
     if (content.isEmpty) {

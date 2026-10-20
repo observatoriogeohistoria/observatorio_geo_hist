@@ -12,7 +12,6 @@ import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateFilmDialog(
@@ -45,7 +44,7 @@ class CreateOrUpdateFilmDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
-  final StreamController<Completer<String>> _synopsisController = StreamController();
+  late final _synopsisController = EditorQuill.controllerFor(_initialBody?.synopsis);
   final StreamController<Completer<FileModel?>> _imageController = StreamController();
 
   late final FilmModel? _initialBody = widget.post.body as FilmModel?;
@@ -58,18 +57,11 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
   late final _countryController = TextEditingController(text: _initialBody?.country);
   late final _linkController = TextEditingController(text: _initialBody?.link);
 
-  late final String? _initialSynopsis = _initialBody?.synopsis;
-
   late FilmCategory? _selectedCategory = _initialBody?.category;
 
   bool get _isUpdate => widget.post.id != null;
 
-  Future<String> _getSynopsis() {
-    final complete = Completer<String>();
-    _synopsisController.add(complete);
-
-    return complete.future;
-  }
+  String _getSynopsis() => EditorQuill.toJson(_synopsisController);
 
   Future<FileModel?> _getImage() {
     final completer = Completer<FileModel?>();
@@ -80,7 +72,7 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
 
   @override
   void dispose() {
-    _synopsisController.close();
+    _synopsisController.dispose();
     _imageController.close();
     super.dispose();
   }
@@ -145,12 +137,10 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
             validator: Validators.isNotEmpty,
           ),
           SizedBox(height: AppTheme.dimensions.spacing.s16),
-          const FormLabel(text: 'Sinopse'),
           EditorQuill(
-            saveController: _synopsisController,
-            initialContent: _initialSynopsis,
-            height: MediaQuery.sizeOf(context).height *
-                AppTheme.dimensions.components.panelEditorFactor,
+            controller: _synopsisController,
+            label: 'Sinopse',
+            minHeight: AppTheme.dimensions.components.richTextMinHeightShort,
           ),
           SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
@@ -165,7 +155,7 @@ class _CreateOrUpdateFilmDialogState extends State<CreateOrUpdateFilmDialog> {
   }
 
   Future<void> _onCreateOrUpdate() async {
-    String synopsis = await _getSynopsis();
+    String synopsis = _getSynopsis();
     FileModel? image = await _getImage();
 
     if (synopsis.isEmpty) {

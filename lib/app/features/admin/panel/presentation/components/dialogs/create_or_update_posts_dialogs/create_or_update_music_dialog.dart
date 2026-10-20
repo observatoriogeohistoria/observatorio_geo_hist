@@ -11,7 +11,6 @@ import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/panel_dialog_title.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/form_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 void showCreateOrUpdateMusicDialog(
@@ -44,7 +43,7 @@ class CreateOrUpdateMusicDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
-  final StreamController<Completer<String>> _lyricsController = StreamController();
+  late final _lyricsController = EditorQuill.controllerFor(_initialBody?.lyrics);
   final StreamController<Completer<FileModel?>> _imageController = StreamController();
 
   late final MusicModel? _initialBody = widget.post.body as MusicModel?;
@@ -55,16 +54,9 @@ class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
   late final _descriptionController = TextEditingController(text: _initialBody?.description);
   late final _linkController = TextEditingController(text: _initialBody?.link);
 
-  late final String? _initialLyrics = _initialBody?.lyrics;
-
   bool get _isUpdate => widget.post.id != null;
 
-  Future<String> _getLyrics() {
-    final complete = Completer<String>();
-    _lyricsController.add(complete);
-
-    return complete.future;
-  }
+  String _getLyrics() => EditorQuill.toJson(_lyricsController);
 
   Future<FileModel?> _getImage() {
     final completer = Completer<FileModel?>();
@@ -75,7 +67,7 @@ class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
 
   @override
   void dispose() {
-    _lyricsController.close();
+    _lyricsController.dispose();
     _imageController.close();
     super.dispose();
   }
@@ -114,12 +106,10 @@ class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
             maxLines: 3,
           ),
           SizedBox(height: AppTheme.dimensions.spacing.s16),
-          const FormLabel(text: 'Letra'),
           EditorQuill(
-            saveController: _lyricsController,
-            initialContent: _initialLyrics,
-            height: MediaQuery.sizeOf(context).height *
-                AppTheme.dimensions.components.panelEditorShortFactor,
+            controller: _lyricsController,
+            label: 'Letra',
+            minHeight: AppTheme.dimensions.components.richTextMinHeightShort,
           ),
           SizedBox(height: AppTheme.dimensions.spacing.s16),
           AppTextField(
@@ -134,7 +124,7 @@ class _CreateOrUpdateMusicDialogState extends State<CreateOrUpdateMusicDialog> {
   }
 
   Future<void> _onCreateOrUpdate() async {
-    String lyrics = await _getLyrics();
+    String lyrics = _getLyrics();
     FileModel? image = await _getImage();
 
     if ((image?.isNull ?? true) && _imageUrlController.text.isEmpty) {

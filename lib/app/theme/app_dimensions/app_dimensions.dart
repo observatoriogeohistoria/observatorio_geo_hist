@@ -752,9 +752,14 @@ class ComponentSizes {
   final double panelImagePreviewHeight = 88.0;
   final double panelImagePreviewAspect = 4 / 3;
 
-  final double panelEditorTallFactor = 0.7;
-  final double panelEditorFactor = 0.4;
-  final double panelEditorShortFactor = 0.3;
+  final double richTextToolbarPadding = 6.0;
+  final double richTextButtonSize = 36.0;
+  final double richTextButtonGap = 2.0;
+  final double richTextIcon = 18.0;
+  final double richTextPaddingH = 18.0;
+  final double richTextPaddingV = 16.0;
+  final double richTextMinHeight = 280.0;
+  final double richTextMinHeightShort = 140.0;
 
   final double panelMainPaddingBottom = 48.0;
   final double panelRowPaddingV = 14.0;
