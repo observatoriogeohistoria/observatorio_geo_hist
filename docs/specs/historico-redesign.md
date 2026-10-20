@@ -1,6 +1,6 @@
 # Histórico do redesign
 
-Resumo das Fases 0 a 7, executadas de 2026-09-26 a 2026-10-07. Decisões e conferências de cada entrega estão no `spec.md` e no `verificacao.md` da spec; o registro detalhado de cada execução (`execucao-fase-N.md`) ficou no git até o commit que criou este arquivo.
+Resumo das Fases 0 a 8, executadas de 2026-09-26 a 2026-10-20. Decisões e conferências de cada entrega estão no `spec.md` e no `verificacao.md` da spec; o registro detalhado de cada execução (`execucao-fase-N.md`) ficou no git até o commit que criou este arquivo.
 
 | Fase | Período | Specs | PR |
 |---|---|---|---|
@@ -12,11 +12,14 @@ Resumo das Fases 0 a 7, executadas de 2026-09-26 a 2026-10-07. Decisões e confe
 | 5. Formulários, estados e tipos de post | 2026-10-05 a 10-06 | 018 a 022 | #27 |
 | 6. Painel e login nos tokens novos | 2026-10-06 | 023 a 026 | specs em #29, código em #31 |
 | 7. Limpeza de código, assets e pacotes | 2026-10-07 | 027, 028 | #32 |
+| 8. Login, painel e editor redesenhados | 2026-10-08 a 10-20 | 029 a 033 | specs em #35, código no PR da branch `refactor/redesign-fase-8` |
 
 ## Ressalvas em aberto
 - Leitor de tela real (VoiceOver/NVDA) não foi usado; só a árvore de semântica.
-- Painel e login: o que exige login (entrar, criar, editar, excluir, publicar) não foi conferido na tela (023 a 028).
-- No editor Quill do painel, o Tab faz recuo e prende a navegação por teclado (025, comportamento antigo, a decidir).
+- Painel e login: o que exige login (entrar, criar, editar, excluir, publicar, salvar no Firestore, enviar ao Storage) não foi conferido com o Firebase real (023 a 033). Na Fase 8 as telas foram conferidas num app de teste com dados falsos.
+- Com a semântica ligada, os links Imagem e Categoria do resumo do editor não levam o foco ao campo, por causa do `excludeSemantics` nos componentes compartilhados (033).
+- O nome dos botões da barra do Quill fica num nó em volta do botão, limitação do pacote (033).
+- `/admin/painel/:tab` sem sessão abre a moldura vazia, como antes (030, regra de acesso).
 - Links dentro do texto do post não recebem foco por teclado, por limite do Quill só leitura (012).
 - A seta do `PrimaryButton` não cresce com o texto a 200% (010).
 - Não conferidos no app, por falta de dados no ambiente: área da biblioteca sem documentos, "Nenhum documento encontrado", categoria sem "Colabore" e o erro dos Destaques (corrigido no código).
@@ -29,3 +32,5 @@ Resumo das Fases 0 a 7, executadas de 2026-09-26 a 2026-10-07. Decisões e confe
 - Offline, o Firestore responde com o cache vazio em vez de erro. Os datasources tratam consulta vazia vinda do cache como falha.
 - Depois da 028, builds locais antigos precisam de `fvm flutter clean` (registro de plugins com o `file_saver` removido).
 - O `build_runner` regera `library_document_store.g.dart` com quebras de linha diferentes das versionadas; o arquivo fica como está.
+- Digitar no Quill pelo Chrome headless só funciona com a semântica desligada.
+- Sem credenciais de teste, telas do painel são conferidas num app à parte no scratchpad que monta os widgets com dados falsos.
