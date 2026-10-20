@@ -11,7 +11,7 @@ As specs 029 a 033 já estavam aprovadas (#35). A etapa "Spec+plano" só cria o 
 | 030-painel-estrutura | 8.2 | feito (15 critérios, 28 tarefas) | feito (3 commits + docs, após retomada) | feito (1 fix) | verificada com ressalvas |
 | 031-painel-listas | 8.3 | feito (14 critérios, 32 tarefas) | feito (4 commits + docs) | feito (3 fix, após retomada) | verificada com ressalvas |
 | 032-painel-lateral-formularios | 8.4 | feito (13 critérios, 24 tarefas) | feito (3 commits + docs) | feito (1 fix, após retomada) | verificada com ressalvas |
-| 033-editor-publicacao | 8.5 | pendente | pendente | pendente | |
+| 033-editor-publicacao | 8.5 | feito (15 critérios, 33 tarefas) | pendente | pendente | |
 
 ## Decisões tomadas sem a pessoa
 - (geral) Sem credenciais de teste na conversa: telas que exigem login são conferidas num app de teste fora do repositório (scratchpad) que monta os widgets com dados falsos; o fluxo real com o Firebase fica sem conferir.
@@ -26,6 +26,7 @@ As specs 029 a 033 já estavam aprovadas (#35). A etapa "Spec+plano" só cria o 
 - (031) Buscas do painel não reservam espaço para o "Limpar" (`SearchField.keepClearSpace`, ligado por padrão no site), para a dica caber a 390 e 768 px.
 - (032) Endereço da categoria só leitura (é o id no Firestore); imagem/foto/PDF numa área nova com prévia, mantendo envio e endereço colado; escolhas obrigatórias com mensagem no campo; papel sem cartão marcado ao criar; painel não fecha enquanto salva; publicações seguem no diálogo até a 033.
 - (032) Membro sem foto passa a salvar (a spec diz que a foto é opcional; antes o campo exigia imagem); "Senha inicial" com mostrar senha; enquanto salva, os campos perdem foco e clique em vez de virar só leitura (só leitura quebrava a digitação no navegador).
+- (033) Editor confere a sessão na própria página (o `redirect` do roteador não muda, para não mandar ao login quem recarrega logado); legenda só em artigo e pesquisa; Enter em campo de uma linha não salva; publicação nova salva troca o endereço sem nova entrada no histórico; Tab sai do Quill pelo `onKeyPressed`, sem pacote novo.
 
 ## Ressalvas
 - (029) Login real com o Firebase e leitor de tela de verdade não conferidos (sem credenciais; nomes acessíveis só no código).
