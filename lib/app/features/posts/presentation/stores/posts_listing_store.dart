@@ -13,9 +13,6 @@ abstract class PostsListingStoreBase with Store {
 
   final FetchPostsRepository _repository;
 
-  /// Fecha linhas inteiras em 1, 2 e 3 colunas.
-  static const pageSize = 12;
-
   PostsListingScope? _scope;
 
   // Descarta respostas de uma busca ou escopo anterior que chegam atrasadas.
@@ -102,7 +99,7 @@ abstract class PostsListingStoreBase with Store {
           scope.category,
           postType: type,
           searchText: search,
-          limit: pageSize,
+          limit: scope.pageSize,
         ),
     ]);
     if (request != _request) return;
@@ -173,7 +170,7 @@ abstract class PostsListingStoreBase with Store {
       postType: type,
       searchText: searchText,
       startAfterDocument: block.cursor,
-      limit: pageSize,
+      limit: scope.pageSize,
     );
     if (request != _request) return;
 
