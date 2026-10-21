@@ -33,6 +33,7 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
   final Map<int, _RenderedPage> _rendered = {};
   late double _aspect = AppTheme.dimensions.components.libraryViewerA4Aspect;
   bool _rendering = false;
+  bool _retrying = false;
   int _load = 0;
 
   String get _url => widget.url?.trim() ?? '';
@@ -56,14 +57,18 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
     super.dispose();
   }
 
-  Future<void> _open() async {
+  Future<void> _open({bool retry = false}) async {
     final load = ++_load;
     _document?.close();
     _document = null;
     _rendered.clear();
     _rendering = false;
+    // Ao tentar de novo, o erro fica na tela com o botão carregando: trocar pelo visualizador
+    // vazio e voltar ao erro, se falhar outra vez, parecia uma piscada.
+    final retrying = retry && _status == _ViewerStatus.error;
     setState(() {
-      _status = _ViewerStatus.loading;
+      _retrying = retrying;
+      if (!retrying) _status = _ViewerStatus.loading;
       _page = 1;
       _pagesCount = null;
       _aspect = AppTheme.dimensions.components.libraryViewerA4Aspect;
@@ -87,9 +92,14 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
       _pagesCount = document.pagesCount;
       await _show(1);
     } catch (_) {
-      if (load == _load && mounted) setState(() => _status = _ViewerStatus.error);
+      if (load == _load && mounted) _fail();
     }
   }
+
+  void _fail() => setState(() {
+        _status = _ViewerStatus.error;
+        _retrying = false;
+      });
 
   // Alguns autores enviaram imagem no lugar do PDF, sem extensão no nome e servida como
   // octet-stream: só os primeiros bytes dizem o formato (JPEG, PNG, GIF, WebP).
@@ -119,6 +129,7 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
       _rendered[1] = (bytes: bytes, aspect: aspect);
       _aspect = aspect;
       _status = _ViewerStatus.ready;
+      _retrying = false;
     });
   }
 
@@ -142,11 +153,12 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
         setState(() {
           _aspect = rendered.aspect;
           _status = _ViewerStatus.ready;
+          _retrying = false;
         });
         return;
       }
     } catch (_) {
-      if (mounted && document == _document) setState(() => _status = _ViewerStatus.error);
+      if (mounted && document == _document) _fail();
     } finally {
       if (document == _document) _rendering = false;
     }
@@ -201,7 +213,11 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
           tone: StateMessageTone.error,
           title: 'Não foi possível exibir o documento',
           message: 'Use “Abrir documento” para ver o arquivo em outra aba.',
-          action: PrimaryButton.small(text: 'Tentar de novo', onPressed: _open),
+          action: PrimaryButton.small(
+            text: 'Tentar de novo',
+            onPressed: () => _open(retry: true),
+            isLoading: _retrying,
+          ),
         ),
       );
     } else {
