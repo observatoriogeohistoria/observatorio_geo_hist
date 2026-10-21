@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/arrow_link.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_inline.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
@@ -72,7 +71,7 @@ class _Section extends StatelessWidget {
     final more = ArrowLink(
       text: 'Ver todas as publicações',
       url: AppRoutes.publications,
-      onTap: () => GoRouter.of(context).go(AppRoutes.publications),
+      onTap: () => AppRoutes.open(context, AppRoutes.publications),
     );
 
     return ColoredBox(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/copy_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/inline_link.dart';
 import 'package:observatorio_geo_hist/app/core/components/form/mail_aside_card.dart';
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_strings.dart';
@@ -64,7 +65,9 @@ class CollaborateGuideCard extends StatelessWidget {
         ),
         const MailAsideItem(
           label: 'E-mail',
-          children: [InlineLink(text: AppStrings.email, url: AppStrings.emailUrl)],
+          children: [
+            CopyableInlineLink(text: AppStrings.email, url: AppStrings.emailUrl, subject: 'e-mail'),
+          ],
         ),
       ],
     );

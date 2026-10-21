@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/footer/footer.dart' deferred as footer;
 import 'package:observatorio_geo_hist/app/core/components/navbar/navbar.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/components/partners/partners_section.dart'
     deferred as partners;
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
@@ -20,6 +22,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_highlights_store.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_highlights_states.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/stores/fetch_team_store.dart';
+import 'package:observatorio_geo_hist/app/features/home/presentation/stores/states/fetch_team_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,6 +36,9 @@ class _HomePageState extends State<HomePage> {
   late final _fetchTeamStore = HomeSetup.getIt<FetchTeamStore>();
   late final _fetchHighlightsStore = HomeSetup.getIt<FetchHighlightsStore>();
   late final _fetchCategoriesStore = HomeSetup.getIt<FetchCategoriesStore>();
+
+  final _scrollController = ScrollController();
+  final _teamKey = GlobalKey();
 
   List<ReactionDisposer> _reactions = [];
 
@@ -53,10 +59,18 @@ class _HomePageState extends State<HomePage> {
     if (categoriesSettled && _highlightsNeedFetch) {
       _fetchHighlights();
     }
+
+    AppRoutes.teamRequest.addListener(_onTeamRequest);
+    if (AppRoutes.teamRequest.value) {
+      AppRoutes.teamRequest.value = false;
+      _scrollToTeam(animate: false);
+    }
   }
 
   @override
   void dispose() {
+    AppRoutes.teamRequest.removeListener(_onTeamRequest);
+    _scrollController.dispose();
     for (final reaction in _reactions) {
       reaction.reaction.dispose();
     }
@@ -68,6 +82,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppTheme.colors.white,
       body: CustomScrollView(
+        controller: _scrollController,
         slivers: [
           const NavbarSliver(),
           const SliverToBoxAdapter(child: HomeHero()),
@@ -89,6 +104,7 @@ class _HomePageState extends State<HomePage> {
           const SliverToBoxAdapter(child: PresentationVideoSection()),
           const SliverToBoxAdapter(child: OurHistorySummarySection()),
           SliverToBoxAdapter(
+            key: _teamKey,
             child: FutureBuilder(
               future: team.loadLibrary(),
               builder: (context, snapshot) {
@@ -137,6 +153,43 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Espera o quadro da navegação: se ela criar outra Home, quem atende é a nova, no initState.
+  Future<void> _onTeamRequest() async {
+    if (!AppRoutes.teamRequest.value) return;
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted || !AppRoutes.teamRequest.value) return;
+    AppRoutes.teamRequest.value = false;
+    _scrollToTeam();
+  }
+
+  // Os destaques ficam acima da equipe: rolar antes de eles chegarem deixaria a seção fora do
+  // lugar quando a altura deles mudasse.
+  Future<void> _scrollToTeam({bool animate = true}) async {
+    await Future.wait([highlights.loadLibrary(), team.loadLibrary()]);
+    await asyncWhen((_) => _highlightsSettled && _teamSettled);
+    await WidgetsBinding.instance.endOfFrame;
+
+    final target = _teamKey.currentContext?.findRenderObject();
+    if (!mounted || target == null || !_scrollController.hasClients) return;
+
+    final position = _scrollController.position;
+    final viewport = RenderAbstractViewport.of(target);
+    // A navbar fica presa no topo e cobriria o título da seção.
+    final offset =
+        (viewport.getOffsetToReveal(target, 0).offset - AppTheme.dimensions.components.navbarHeight)
+            .clamp(position.minScrollExtent, position.maxScrollExtent);
+
+    if (!animate || MediaQuery.disableAnimationsOf(context)) {
+      position.jumpTo(offset);
+    } else {
+      await position.animateTo(
+        offset,
+        duration: AppTheme.dimensions.components.scrollToSectionAnimation,
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   void _fetchHighlights() {
     _fetchHighlightsStore.fetchHighlights([
       ...(_fetchCategoriesStore.categories.geography),
@@ -154,6 +207,16 @@ class _HomePageState extends State<HomePage> {
         _fetchHighlightsStore.fetchedWithoutCategories && _hasCategories,
     };
   }
+
+  bool get _highlightsSettled => switch (_fetchHighlightsStore.state) {
+        FetchHighlightsSuccessState() || FetchHighlightsErrorState() => true,
+        _ => false,
+      };
+
+  bool get _teamSettled => switch (_fetchTeamStore.state) {
+        FetchTeamSuccessState() || FetchTeamErrorState() => true,
+        _ => false,
+      };
 
   bool get _hasCategories {
     final categories = _fetchCategoriesStore.categories;

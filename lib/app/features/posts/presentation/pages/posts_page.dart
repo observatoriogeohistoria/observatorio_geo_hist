@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_box.dart';
@@ -158,7 +157,7 @@ class _PostsPageState extends State<PostsPage> {
           action: category.hasCollaborateOption
               ? SecondaryButton.medium(
                   text: 'Colabore com esta categoria',
-                  onPressed: () => GoRouter.of(context).go(AppRoutes.collaborate),
+                  onPressed: () => AppRoutes.open(context, AppRoutes.collaborate),
                 )
               : null,
         );

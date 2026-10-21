@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/card/post_card_info.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/post_cover.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 import 'package:observatorio_geo_hist/app/core/components/image/fitted_network_image.dart';
 
@@ -26,7 +26,7 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   bool _hovered = false;
 
-  void _open() => GoRouter.of(context).go(widget.route);
+  void _open() => AppRoutes.open(context, widget.route);
 
   @override
   Widget build(BuildContext context) {

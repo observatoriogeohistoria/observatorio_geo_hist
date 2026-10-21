@@ -5,10 +5,13 @@ import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.d
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class BreadcrumbItem {
-  const BreadcrumbItem(this.label, {this.route});
+  const BreadcrumbItem(this.label, {this.route, this.onTap});
 
   final String label;
   final String? route;
+
+  /// Substitui a navegação padrão para [route], quando o destino precisa de algo além do endereço.
+  final void Function(BuildContext context)? onTap;
 }
 
 class Breadcrumbs extends StatelessWidget {
@@ -57,8 +60,8 @@ class Breadcrumbs extends StatelessWidget {
                       ),
                     (false, null) =>
                       Text(item.label, style: style.copyWith(color: colors.inkSecondary)),
-                    (false, final route?) =>
-                      _BreadcrumbLink(label: item.label, route: route, style: style),
+                    (false, final route?) => _BreadcrumbLink(
+                        label: item.label, route: route, onTap: item.onTap, style: style),
                   },
                 ),
               ],
@@ -70,10 +73,16 @@ class Breadcrumbs extends StatelessWidget {
 }
 
 class _BreadcrumbLink extends StatefulWidget {
-  const _BreadcrumbLink({required this.label, required this.route, required this.style});
+  const _BreadcrumbLink({
+    required this.label,
+    required this.route,
+    required this.style,
+    this.onTap,
+  });
 
   final String label;
   final String route;
+  final void Function(BuildContext context)? onTap;
   final TextStyle style;
 
   @override
@@ -83,7 +92,10 @@ class _BreadcrumbLink extends StatefulWidget {
 class _BreadcrumbLinkState extends State<_BreadcrumbLink> {
   bool _hovered = false;
 
-  void _open() => context.go(widget.route);
+  void _open() {
+    final onTap = widget.onTap;
+    onTap == null ? context.go(widget.route) : onTap(context);
+  }
 
   @override
   Widget build(BuildContext context) {

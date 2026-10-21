@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/date/date.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/highlights/select_highlights.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 import 'package:observatorio_geo_hist/app/core/components/image/fitted_network_image.dart';
 
@@ -37,7 +37,7 @@ class _HighlightCardState extends State<HighlightCard> {
     return '${parts.join('. ')}.';
   }
 
-  void _open() => GoRouter.of(context).go(highlightPath(_post));
+  void _open() => AppRoutes.open(context, highlightPath(_post));
 
   @override
   Widget build(BuildContext context) {

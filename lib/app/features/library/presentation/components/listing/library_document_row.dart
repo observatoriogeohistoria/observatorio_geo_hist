@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/chips/labels.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
@@ -62,9 +61,13 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
       ),
     );
 
+    // O fundo do hover não encosta nas linhas de separação.
     final line = DecoratedBox(
       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: colors.line))),
-      child: content,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: components.libraryDocHoverInset),
+        child: content,
+      ),
     );
 
     final type = _document.type?.value;
@@ -78,7 +81,7 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
       return Semantics(container: true, label: label, excludeSemantics: true, child: line);
     }
 
-    void open() => GoRouter.of(context).go(route);
+    void open() => AppRoutes.open(context, route);
 
     return Semantics(
       link: true,

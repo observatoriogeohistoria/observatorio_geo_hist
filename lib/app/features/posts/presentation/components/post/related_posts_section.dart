@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/arrow_link.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/models/article_model.dart';
@@ -51,7 +50,7 @@ class RelatedPostsSection extends StatelessWidget {
     final more = ArrowLink(
       text: 'Mais em ${category.title}',
       url: categoryRoute,
-      onTap: () => GoRouter.of(context).go(categoryRoute),
+      onTap: () => AppRoutes.open(context, categoryRoute),
     );
 
     return PageContent(

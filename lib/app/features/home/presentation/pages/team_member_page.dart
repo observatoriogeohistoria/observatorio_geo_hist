@@ -114,7 +114,7 @@ class _MemberContent extends StatelessWidget {
           child: Breadcrumbs(
             items: [
               const BreadcrumbItem('Início', route: AppRoutes.root),
-              const BreadcrumbItem('Equipe', route: AppRoutes.root),
+              const BreadcrumbItem('Equipe', route: AppRoutes.root, onTap: AppRoutes.openTeam),
               BreadcrumbItem(member.name),
             ],
           ),

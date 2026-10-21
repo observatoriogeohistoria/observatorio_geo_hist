@@ -53,6 +53,7 @@ class ComponentSizes {
   final double mobileMenuMaxWidth = 420.0;
 
   final Duration menuAnimation = const Duration(milliseconds: 160);
+  final Duration scrollToSectionAnimation = const Duration(milliseconds: 450);
 
   final double arrowLinkGap = 6.0;
   final double arrowLinkGapHover = 9.0;
@@ -386,6 +387,8 @@ class ComponentSizes {
   final double shareCopyGap = 6.0;
   final double shareRowGap = 4.0;
   final Duration shareFeedbackDuration = const Duration(milliseconds: 1800);
+  final double copyButtonIcon = 18.0;
+  final double copyButtonGap = 2.0;
 
   final double readingImageMaxHeight = 560.0;
   final double readingImageMarginVertical = 24.0;
@@ -544,6 +547,7 @@ class ComponentSizes {
 
   final double libraryDocPaddingV = 22.0;
   final double libraryDocPaddingH = 16.0;
+  final double libraryDocHoverInset = 8.0;
   final double libraryDocGapV = 8.0;
   final double libraryDocGapH = 24.0;
   final double libraryDocSideGap = 14.0;

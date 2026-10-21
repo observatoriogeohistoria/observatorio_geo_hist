@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/arrow_link.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/word_safe_text.dart';
@@ -82,7 +81,7 @@ class WhoWeAreSection extends StatelessWidget {
     );
   }
 
-  static void _openManifest(BuildContext context) => GoRouter.of(context).go(AppRoutes.manifesto);
+  static void _openManifest(BuildContext context) => AppRoutes.open(context, AppRoutes.manifesto);
 }
 
 class _Intro extends StatelessWidget {
