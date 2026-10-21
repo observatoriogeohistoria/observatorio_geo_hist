@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
@@ -37,7 +36,7 @@ class _LibraryAreaTileState extends State<LibraryAreaTile> {
 
   String get _route => AppRoutes.libraryArea(widget.area.routeKey);
 
-  void _open() => GoRouter.of(context).go(_route);
+  void _open() => AppRoutes.open(context, _route);
 
   @override
   Widget build(BuildContext context) {

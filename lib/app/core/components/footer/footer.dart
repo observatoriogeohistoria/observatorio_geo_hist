@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/copy_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/social_buttons.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/components/logo/app_logo.dart';
@@ -31,13 +31,13 @@ class Footer extends StatelessWidget {
       const _LinksColumn(title: 'Institucional', links: [
         _FooterLinkData('Manifesto', AppRoutes.manifesto),
         _FooterLinkData('Nossa história', AppRoutes.ourHistory),
-        _FooterLinkData('Equipe', AppRoutes.root),
+        _FooterLinkData('Equipe', AppRoutes.root, onTap: AppRoutes.openTeam),
         _FooterLinkData('Fale com a gente', AppRoutes.contact),
       ]),
       const _LinksColumn(title: 'Contato', links: [
-        _FooterLinkData(AppStrings.email, AppStrings.emailUrl),
-        _FooterLinkData(AppStrings.phoneOne, AppStrings.phoneOneUrl),
-        _FooterLinkData(AppStrings.phoneTwo, AppStrings.phoneTwoUrl),
+        _FooterLinkData(AppStrings.email, AppStrings.emailUrl, copySubject: 'e-mail'),
+        _FooterLinkData(AppStrings.phoneOne, AppStrings.phoneOneUrl, copySubject: 'telefone'),
+        _FooterLinkData(AppStrings.phoneTwo, AppStrings.phoneTwoUrl, copySubject: 'telefone'),
       ]),
     ];
 
@@ -136,11 +136,12 @@ class _BrandColumn extends StatelessWidget {
 }
 
 class _FooterLinkData {
-  const _FooterLinkData(this.label, this.url);
+  const _FooterLinkData(this.label, this.url, {this.onTap, this.copySubject});
 
   final String label;
-
   final String url;
+  final void Function(BuildContext context)? onTap;
+  final String? copySubject;
 }
 
 class _LinksColumn extends StatelessWidget {
@@ -164,17 +165,29 @@ class _LinksColumn extends StatelessWidget {
           ),
         ),
         SizedBox(height: spacing.s12),
-        for (final link in links) _FooterLink(label: link.label, url: link.url),
+        for (final link in links)
+          if (link.copySubject case final subject?)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(child: _FooterLink(label: link.label, url: link.url)),
+                SizedBox(width: AppTheme.dimensions.components.copyButtonGap),
+                CopyButton(value: link.label, subject: subject, onDark: true),
+              ],
+            )
+          else
+            _FooterLink(label: link.label, url: link.url, onTap: link.onTap),
       ],
     );
   }
 }
 
 class _FooterLink extends StatefulWidget {
-  const _FooterLink({required this.label, required this.url});
+  const _FooterLink({required this.label, required this.url, this.onTap});
 
   final String label;
   final String url;
+  final void Function(BuildContext context)? onTap;
 
   @override
   State<_FooterLink> createState() => _FooterLinkState();
@@ -185,7 +198,11 @@ class _FooterLinkState extends State<_FooterLink> {
 
   bool get _isRoute => widget.url.startsWith('/');
 
-  void _open() => _isRoute ? context.go(widget.url) : openUrl(widget.url, sameTab: true);
+  void _open() {
+    final onTap = widget.onTap;
+    if (onTap != null) return onTap(context);
+    _isRoute ? AppRoutes.open(context, widget.url) : openUrl(widget.url, sameTab: true);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
@@ -31,7 +30,7 @@ class _TeamMemberTileState extends State<TeamMemberTile> {
 
   String get _target => _hasPage ? AppRoutes.member(_member.id!) : _lattesUrl;
 
-  void _open() => _hasPage ? GoRouter.of(context).go(_target) : openUrl(_lattesUrl);
+  void _open() => _hasPage ? AppRoutes.open(context, _target) : openUrl(_lattesUrl);
 
   @override
   Widget build(BuildContext context) {

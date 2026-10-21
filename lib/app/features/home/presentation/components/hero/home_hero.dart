@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
@@ -111,11 +110,11 @@ class _HomeHeroState extends State<HomeHero> {
                       PrimaryButton.medium(
                         text: 'Explorar a biblioteca',
                         trailingIcon: Icons.arrow_forward,
-                        onPressed: () => GoRouter.of(context).go(AppRoutes.library),
+                        onPressed: () => AppRoutes.open(context, AppRoutes.library),
                       ),
                       SecondaryButton.medium(
                         text: 'Ler o manifesto',
-                        onPressed: () => GoRouter.of(context).go(AppRoutes.manifesto),
+                        onPressed: () => AppRoutes.open(context, AppRoutes.manifesto),
                       ),
                     ],
                   ),
@@ -165,7 +164,7 @@ class _HomeHeroState extends State<HomeHero> {
         semanticLabel: 'Biblioteca. Teses e dissertações',
         url: AppRoutes.library,
         layout: layout,
-        onTap: () => GoRouter.of(context).go(AppRoutes.library),
+        onTap: () => AppRoutes.open(context, AppRoutes.library),
       ),
     ];
 

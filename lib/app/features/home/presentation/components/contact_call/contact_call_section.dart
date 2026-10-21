@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
@@ -49,7 +48,7 @@ class ContactCallSection extends StatelessWidget {
     final button = PrimaryButton.medium(
       text: 'Fale com a gente',
       trailingIcon: Icons.arrow_forward,
-      onPressed: () => GoRouter.of(context).go(AppRoutes.contact),
+      onPressed: () => AppRoutes.open(context, AppRoutes.contact),
     );
 
     return PageContent(

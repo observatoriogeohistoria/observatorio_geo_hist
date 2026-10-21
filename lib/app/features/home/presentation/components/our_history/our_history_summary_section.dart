@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/arrow_link.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/word_safe_text.dart';
@@ -63,7 +62,7 @@ class OurHistorySummarySection extends StatelessWidget {
                   ArrowLink(
                     text: 'Ler a história completa',
                     url: AppRoutes.ourHistory,
-                    onTap: () => GoRouter.of(context).go(AppRoutes.ourHistory),
+                    onTap: () => AppRoutes.open(context, AppRoutes.ourHistory),
                   ),
                 ],
               ),

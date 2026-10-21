@@ -1,7 +1,9 @@
 const IMAGE =
   'https://png.pngtree.com/thumb_back/fh260/background/20230527/pngtree-nature-wallpapers-image_2683049.jpg';
 const BROKEN_IMAGE = 'https://example.com/imagem-que-nao-existe.jpg';
-const PDF = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+// O visualizador da biblioteca baixa o PDF pelo navegador: o servidor precisa liberar CORS.
+const PDF =
+  'https://raw.githubusercontent.com/mozilla/pdf.js/master/web/compressed.tracemonkey-pldi-09.pdf';
 
 const HISTORY = 'historia';
 const GEOGRAPHY = 'geografia';

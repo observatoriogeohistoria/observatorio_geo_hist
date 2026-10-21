@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/page_header.dart';
@@ -51,7 +50,7 @@ class ManifestPage extends StatelessWidget {
             child: PrimaryButton.medium(
               text: 'Fale com a gente',
               trailingIcon: Icons.arrow_forward,
-              onPressed: () => context.go(AppRoutes.contact),
+              onPressed: () => AppRoutes.open(context, AppRoutes.contact),
             ),
           ),
         ],

@@ -7,22 +7,26 @@ enum PostsListingStatus { initial, loading, success, empty, error }
 
 /// De onde vêm as publicações. Sem [category], vale para todas as categorias.
 class PostsListingScope extends Equatable {
-  const PostsListingScope({this.category, required this.types});
+  const PostsListingScope({this.category, required this.types, required this.pageSize});
 
+  // 12 e 6 fecham linhas inteiras em 1, 2 e 3 colunas. Em todas as publicações aparecem todos
+  // os tipos de uma vez, então cada bloco começa menor.
   factory PostsListingScope.ofCategory(CategoryModel category) =>
-      PostsListingScope(category: category, types: category.postsTypes);
+      PostsListingScope(category: category, types: category.postsTypes, pageSize: 12);
 
   /// Sem categoria não há ordem cadastrada: os tipos seguem a ordem alfabética do nome.
   factory PostsListingScope.all() => PostsListingScope(
         types: [...PostType.values]
           ..sort((a, b) => a.portuguesePlural.compareTo(b.portuguesePlural)),
+        pageSize: 6,
       );
 
   final CategoryModel? category;
   final List<PostType> types;
+  final int pageSize;
 
   @override
-  List<Object?> get props => [category?.key, category?.areas, types];
+  List<Object?> get props => [category?.key, category?.areas, types, pageSize];
 }
 
 class PostsTypeBlock {

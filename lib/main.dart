@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:observatorio_geo_hist/app/app_setup.dart';
 import 'package:observatorio_geo_hist/app/app_widget.dart';
 import 'package:observatorio_geo_hist/app/core/utils/browser/semantic_links.dart';
@@ -19,6 +20,8 @@ Future<void> main() async {
   AppSetup.setup();
 
   usePathUrlStrategy();
+  // Sem isso, o push não atualiza o endereço e a página do membro não pode ser compartilhada.
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   preventSemanticLinkNavigation();
   runApp(const AppWidget());
 }
