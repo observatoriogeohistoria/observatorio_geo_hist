@@ -11,11 +11,18 @@ class SearchField extends StatefulWidget {
     required this.hint,
     required this.onSearch,
     this.semanticLabel,
+    this.height,
+    this.keepClearSpace = true,
   });
 
   final TextEditingController controller;
   final String hint;
   final String? semanticLabel;
+  final double? height;
+
+  /// Falso deixa a dica usar o espaço do "Limpar" enquanto o campo está vazio, para não
+  /// cortá-la quando a busca é estreita.
+  final bool keepClearSpace;
 
   /// Chamado depois que a pessoa para de digitar, ao apertar Enter e ao limpar.
   final ValueChanged<String> onSearch;
@@ -90,7 +97,7 @@ class _SearchFieldState extends State<SearchField> {
     // A borda fica no contêiner: o InputDecorator não se estica até a altura pedida.
     return AnimatedContainer(
       duration: components.menuAnimation,
-      constraints: BoxConstraints(minHeight: components.searchFieldHeight),
+      constraints: BoxConstraints(minHeight: widget.height ?? components.searchFieldHeight),
       decoration: BoxDecoration(
         color: colors.page,
         borderRadius: radius,
@@ -125,7 +132,10 @@ class _SearchFieldState extends State<SearchField> {
                 border: InputBorder.none,
                 contentPadding: EdgeInsetsDirectional.only(
                   start: components.searchFieldPaddingStart - components.searchFieldBorder,
-                  end: components.searchFieldPaddingEnd - components.searchFieldBorder,
+                  end: (hasText || widget.keepClearSpace
+                          ? components.searchFieldPaddingEnd
+                          : components.searchFieldPaddingEndEmpty) -
+                      components.searchFieldBorder,
                 ),
               ),
             ),

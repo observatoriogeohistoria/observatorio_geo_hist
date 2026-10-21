@@ -57,6 +57,10 @@ abstract class LibraryStoreBase with Store {
     _lastYear = null;
   }
 
+  int _request = 0;
+
+  /// Com filtro novo (ou [reset]) começa da primeira página e ignora a resposta que ainda
+  /// estava a caminho; com os mesmos filtros, traz a próxima página.
   @action
   Future<void> fetchDocumentsByArea(
     DocumentArea area, {
@@ -66,24 +70,35 @@ abstract class LibraryStoreBase with Store {
     String? author,
     String? institution,
     int? year,
+    bool reset = false,
   }) async {
-    bool shouldReset = type != _lastType ||
-        categories != _lastCategories ||
+    final filtersChanged = reset ||
+        type != _lastType ||
+        !const ListEquality<DocumentCategory>().equals(categories, _lastCategories) ||
         title != _lastTitle ||
         author != _lastAuthor ||
         institution != _lastInstitution ||
         year != _lastYear;
 
-    if (shouldReset) {
+    if (fetchState is CrudLoadingState && !filtersChanged) return;
+
+    if (filtersChanged) {
       documentsByArea.clear();
       hasMore = {for (DocumentArea a in DocumentArea.values) a: true}.asObservable();
-
       _lastDocument = {for (DocumentArea a in DocumentArea.values) a: null};
+
+      _lastType = type;
+      _lastCategories = categories;
+      _lastTitle = title;
+      _lastAuthor = author;
+      _lastInstitution = institution;
+      _lastYear = year;
     }
 
     if (hasMore[area] == false) return;
 
-    fetchState = CrudLoadingState(isRefreshing: fetchState is! CrudInitialState && !shouldReset);
+    final request = ++_request;
+    fetchState = CrudLoadingState(isRefreshing: _lastDocument[area] != null);
 
     final query = LibraryDocumentsQuery(
       area: area,
@@ -98,6 +113,8 @@ abstract class LibraryStoreBase with Store {
 
     final result = await _repository.fetchDocuments(query);
 
+    if (request != _request) return;
+
     result.fold(
       (failure) {
         fetchState = CrudErrorState(failure);
@@ -108,13 +125,6 @@ abstract class LibraryStoreBase with Store {
 
         documentsByArea[area] = newDocs.asObservable();
         hasMore[area] = paginatedDocuments.hasMore;
-
-        _lastType = type;
-        _lastCategories = categories;
-        _lastTitle = title;
-        _lastAuthor = author;
-        _lastInstitution = institution;
-        _lastYear = year;
         _lastDocument[area] = paginatedDocuments.lastDocument;
 
         fetchState = CrudSuccessState();
@@ -122,6 +132,7 @@ abstract class LibraryStoreBase with Store {
     );
   }
 
+  /// Quem chamou recarrega a lista com os filtros que estão na tela.
   @action
   Future<void> createOrUpdateDocument(
     LibraryDocumentModel document,
@@ -133,12 +144,7 @@ abstract class LibraryStoreBase with Store {
 
     result.fold(
       (failure) => manageState = CrudErrorState(failure),
-      (data) {
-        manageState = CrudSuccessState(message: 'Documento criado/atualizado com sucesso');
-
-        reset();
-        fetchDocumentsByArea(data.area);
-      },
+      (_) => manageState = CrudSuccessState(message: 'Documento criado/atualizado com sucesso'),
     );
   }
 

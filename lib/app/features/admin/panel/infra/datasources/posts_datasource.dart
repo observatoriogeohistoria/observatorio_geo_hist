@@ -18,11 +18,16 @@ abstract class PostsDatasource {
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
   });
+  Future<PostModel> getPost(String categoryKey, String id);
   Future<PostModel> createOrUpdatePost(
     PostModel post,
     CategoryModel? pastCategory,
   );
   Future<void> deletePost(PostModel post);
+}
+
+class PostNotFoundException implements Exception {
+  const PostNotFoundException();
 }
 
 class PostsDatasourceImpl implements PostsDatasource {
@@ -113,6 +118,29 @@ class PostsDatasourceImpl implements PostsDatasource {
       );
     } catch (exception, stackTrace) {
       _loggerService.error('Error fetching posts: $exception', stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<PostModel> getPost(String categoryKey, String id) async {
+    try {
+      final categoryRef = _firestore.collection('posts').doc(categoryKey);
+      final postSnapshot = await categoryRef.collection('category_posts').doc(id).get();
+      final data = postSnapshot.data();
+      if (!postSnapshot.exists || data == null) throw const PostNotFoundException();
+
+      final categorySnapshot = await categoryRef.get();
+      final categoryData = categorySnapshot.data();
+      final post = PostModel.fromJson(data);
+
+      return categoryData == null
+          ? post
+          : post.copyWith(category: CategoryModel.fromJson(categoryData));
+    } on PostNotFoundException {
+      rethrow;
+    } catch (exception, stackTrace) {
+      _loggerService.error('Error fetching post: $exception', stackTrace: stackTrace);
       rethrow;
     }
   }

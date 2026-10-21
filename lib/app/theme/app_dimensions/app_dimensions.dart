@@ -28,6 +28,12 @@ class ComponentSizes {
 
   final double buttonIconScale = 1.15;
 
+  final double buttonSpinnerSize = 16.0;
+  final double buttonSpinnerStroke = 2.0;
+  final double buttonSpinnerTrackOpacity = 0.4;
+  // Com movimento reduzido o indicador fica parado; um quarto do círculo ainda lê como espera.
+  final double buttonSpinnerStaticValue = 0.25;
+
   final double logoMark = 34.0;
   final double logoName = 19.0;
   final double logoSubtitle = 11.5;
@@ -415,6 +421,7 @@ class ComponentSizes {
   final double searchFieldIconInset = 14.0;
   final double searchFieldPaddingStart = 44.0;
   final double searchFieldPaddingEnd = 84.0;
+  final double searchFieldPaddingEndEmpty = 14.0;
   final double searchFieldClearInset = 8.0;
   final double searchFieldClearPaddingH = 10.0;
   final double searchFieldClearPaddingV = 6.0;
@@ -491,6 +498,8 @@ class ComponentSizes {
   final double tagPaddingV = 2.0;
   final double badgePaddingH = 10.0;
   final double badgePaddingV = 4.0;
+  final double badgeIcon = 13.0;
+  final double badgeIconGap = 5.0;
 
   final double factsTop = 24.0;
   final double factsPaddingV = 20.0;
@@ -596,6 +605,10 @@ class ComponentSizes {
   final int formErrorMaxLines = 4;
   final double formHintTop = 12.0;
   final double formHintMaxWidth = 480.0;
+  final double formAlertPaddingH = 14.0;
+  final double formAlertPaddingV = 12.0;
+  final double formAlertGap = 10.0;
+  final double formAlertIcon = 20.0;
 
   final double mailConfirmationPaddingV = 48.0;
   final double mailConfirmationPaddingH = 24.0;
@@ -623,34 +636,201 @@ class ComponentSizes {
 
   final double cardHoverIcon = 56.0;
 
-  final double panelSidebarWidth = 304.0;
-  final double panelSidebarIcon = 28.0;
-  final double panelSidebarItemPadding = 16.0;
-  final double panelTopBarIcon = 28.0;
-  double panelContentPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 32);
-  final double panelSectionGap = 24.0;
-  final double panelCardPaddingH = 20.0;
-  final double panelCardPaddingV = 16.0;
-  final double panelCardActionsGap = 8.0;
-  final double panelCardTextGap = 4.0;
-  double panelMemberPhoto(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 64, 80, 96);
+  final double panelTopBarHeight = 64.0;
+  double panelTopBarPaddingStart(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 8, 20, 20);
+  double panelTopBarPaddingEnd(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 12, 20, 20);
+  double panelTopBarGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 6, 12, 12);
+  final double panelTopBarActionsGap = 10.0;
+
+  final double panelUserGap = 10.0;
+  final double panelUserDividerGap = 14.0;
+  final double panelAvatar = 36.0;
+
+  final double panelSidebarWidth = 248.0;
+  final double panelSidebarPaddingV = 16.0;
+  final double panelSidebarPaddingH = 12.0;
+  final double panelNavItemPaddingV = 9.0;
+  final double panelNavItemPaddingH = 12.0;
+  final double panelNavSubItemPaddingV = 6.0;
+  final double panelNavSubItemPaddingH = 10.0;
+  final double panelNavItemGap = 10.0;
+  final double panelNavItemSpacing = 2.0;
+  final double panelNavSubItemSpacing = 1.0;
+  final double panelNavIcon = 18.0;
+  final double panelNavCountGap = 8.0;
+
+  /// O recuo alinha a linha dos tipos com o centro do ícone de Publicações.
+  final double panelNavSubIndent = 21.0;
+  final double panelNavSubPaddingStart = 10.0;
+  final double panelNavSubPaddingTop = 2.0;
+  final double panelNavSubPaddingBottom = 6.0;
+
+  final double panelGroupLabelPaddingTop = 18.0;
+  final double panelGroupLabelPaddingTopFirst = 4.0;
+  final double panelGroupLabelPaddingBottom = 6.0;
+
+  final double panelDrawerMaxWidth = 300.0;
+  final double panelDrawerWidthFactor = 0.86;
+  final double panelDrawerScrimOpacity = 0.45;
+
+  double panelMainPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 32);
+  double panelMainPaddingTop(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 20, 28);
+
+  final double panelHeadTitleGap = 4.0;
+  final double panelHeadSummaryGap = 4.0;
+  final double panelHeadMarginBottom = 20.0;
+  final double panelHeadActionGap = 16.0;
+
+  final double toastMaxWidth = 560.0;
+  final double toastMargin = 16.0;
+  final double toastPaddingV = 12.0;
+  final double toastPaddingH = 18.0;
+  final double toastIcon = 18.0;
+  final double toastIconGap = 10.0;
+  final Duration toastDuration = const Duration(seconds: 3);
+
+  /// Erro fica mais tempo porque a mensagem é mais longa e precisa ser lida até o fim.
+  final Duration toastErrorDuration = const Duration(seconds: 8);
+
+  final double confirmDialogWidth = 420.0;
+  final double confirmDialogPadding = 24.0;
+  final double confirmDialogTextGap = 8.0;
+  final double confirmDialogActionsTop = 20.0;
+  final double confirmDialogActionsGap = 10.0;
+
+  final double panelSheetWidth = 460.0;
+  final double panelSheetHeaderPaddingV = 16.0;
+  final double panelSheetPaddingH = 20.0;
+  final double panelSheetBodyPadding = 20.0;
+  final double panelSheetFooterPaddingV = 14.0;
+  final double panelSheetFooterGap = 10.0;
+  final double panelSheetHeaderGap = 12.0;
+  final Duration panelSheetSlide = const Duration(milliseconds: 220);
+  final int panelDescriptionMinLines = 4;
+  final int panelDescriptionMaxLines = 8;
+
+  final double panelCheckSize = 18.0;
+  final double panelCheckGap = 8.0;
+  final double panelCheckRowPaddingH = 6.0;
+  final double panelCheckRowPaddingV = 4.0;
+  final double panelChecksGapH = 8.0;
+  final double panelChecksGapV = 0.0;
+  final double panelCheckBoxMaxHeight = 220.0;
+  final double panelCheckBoxPaddingV = 8.0;
+  final double panelCheckBoxPaddingH = 4.0;
+
+  final double panelChoicePaddingV = 12.0;
+  final double panelChoicePaddingH = 14.0;
+  final double panelChoiceGap = 12.0;
+  final double panelChoicesGap = 8.0;
+  final double panelRadioSize = 20.0;
+
+  final double panelSwitchGap = 16.0;
+  final double panelSwitchHintGap = 2.0;
+
+  final double panelDropAspect = 16 / 10;
+  final double panelDropSquare = 140.0;
+  final double panelDropIcon = 26.0;
+  final double panelDropGap = 4.0;
+  final double panelDropPadding = 12.0;
+  final double panelDropFieldGap = 10.0;
+  final double panelDropDash = 6.0;
+  final double panelDropDashGap = 4.0;
+
+  double editorBarPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 24);
+  final double editorBarPaddingV = 10.0;
+  final double editorBarGapH = 14.0;
+  final double editorBarGapV = 8.0;
+  final double editorBarTitleGap = 10.0;
+  final double editorBarActionsGap = 8.0;
+  double editorPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 24);
+  final double editorMaxWidth = 1180.0;
+  final double editorSideWidth = 340.0;
+  final double editorColumnsGap = 20.0;
+  final double editorCardsGap = 16.0;
+  final double editorCardPadding = 20.0;
+  final double editorCardEyebrowGap = 14.0;
+  final double editorSkeletonTitleHeight = 28.0;
+  final double editorSkeletonLineHeight = 14.0;
+  final double editorSkeletonBlockHeight = 220.0;
+  final double editorSkeletonSideHeight = 120.0;
+  final double editorAuthorsGap = 8.0;
+  // Alinha o "×" ao campo, abaixo do rótulo "Autor N".
+  final double editorAuthorRemoveTop = 29.0;
+
+  final double tooltipMaxWidth = 260.0;
+  final double tooltipPaddingV = 7.0;
+  final double tooltipPaddingH = 10.0;
+  final double tooltipOffset = 8.0;
+  final double disabledOpacity = 0.35;
 
   double panelDialogWidthFactor(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 1.0, 0.7, 0.5);
   double panelDialogPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 24);
-  final double panelFieldGap = 8.0;
-  final double panelFieldFocusedBorder = 2.0;
 
-  /// Altura fixa porque o TabBarView exige; cabe o campo de URL com a mensagem de erro.
-  final double panelTabViewHeight = 96.0;
-  final double panelImagePreviewHeight = 88.0;
-  final double panelImagePreviewAspect = 4 / 3;
+  final double richTextToolbarPadding = 6.0;
+  final double richTextButtonSize = 36.0;
+  final double richTextButtonGap = 2.0;
+  final double richTextIcon = 18.0;
+  final double richTextPaddingH = 18.0;
+  final double richTextPaddingV = 16.0;
+  final double richTextMinHeight = 280.0;
+  final double richTextMinHeightShort = 140.0;
 
-  final double panelEditorTallFactor = 0.7;
-  final double panelEditorFactor = 0.4;
-  final double panelEditorShortFactor = 0.3;
+  final double panelMainPaddingBottom = 48.0;
+  final double panelRowPaddingV = 14.0;
+  final double panelRowPaddingH = 16.0;
+  final double panelRowPaddingMobile = 14.0;
+  final double panelRowGap = 16.0;
+  final double panelRowGapMobileV = 8.0;
+  final double panelRowGapMobileH = 12.0;
+  final double panelRowMetaGap = 3.0;
+  final double panelRowBadgeGap = 6.0;
+  final double panelRowActionsGap = 2.0;
+  final double panelRowActionsTop = 6.0;
+  final double panelRowDash = 4.0;
+  final double panelRowDashGap = 3.0;
+  final int panelRowTitleMaxLines = 2;
+  double panelThumbWidth(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 72, 88, 88);
+  final double panelThumbAspect = 16 / 10;
+  final double panelThumbIcon = 20.0;
+  final double panelLeadSize = 44.0;
+  final double panelLeadIcon = 20.0;
+  final double panelActionIcon = 20.0;
 
-  final double panelFiltersWidth = 300.0;
-  final double panelLibraryDocIcon = 32.0;
+  final double panelFilterPadding = 12.0;
+  final double panelFilterGap = 10.0;
+  final double panelFilterSearchMinWidth = 220.0;
+  final double panelFilterMarginBottom = 16.0;
+  final double panelFilterSelectMaxWidth = 260.0;
+  final double panelFilterFieldWidth = 240.0;
+  final double panelControlHeight = 42.0;
+  final double panelSegmentPadding = 3.0;
+  final double panelSegmentGap = 4.0;
+  final double panelSegmentButtonPaddingH = 12.0;
+  final double panelToggleIcon = 16.0;
+  final double panelToggleGap = 6.0;
+
+  final double panelListFootMinHeight = 52.0;
+  final double panelListFootPaddingV = 10.0;
+  final double panelListFootPaddingH = 16.0;
+  final double panelLoadMoreTrigger = 200.0;
+
+  final double panelTileMinWidth = 170.0;
+  final double panelTileGap = 16.0;
+  final double panelTileAspect = 4 / 3;
+  final double panelTilePaddingH = 12.0;
+  final double panelTilePaddingTop = 10.0;
+  final double panelTileActionsPadding = 6.0;
+  final int panelGridColumnsMobile = 2;
+  final double panelMoreNoteTop = 20.0;
+
+  final int panelSkeletonRows = 4;
+  final double panelSkeletonTitleHeight = 16.0;
+  final double panelSkeletonMetaHeight = 12.0;
+  final double panelSkeletonTitleWidth = 0.7;
+  final double panelSkeletonTitleStep = 0.08;
+  final double panelSkeletonMetaWidth = 0.4;
+  final double panelSkeletonGap = 8.0;
 
   final double networkImageSkeletonHeight = 253.0;
   final double imageErrorIcon = 24.0;
@@ -658,8 +838,28 @@ class ComponentSizes {
   // Mais estreito que isso, "Erro ao carregar a imagem" quebra em linhas demais e não cabe.
   final double imageErrorMessageMinWidth = 160.0;
 
-  final double signinCardMaxWidth = 440.0;
-  double signinCardPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 32, 32);
+  final int loginBrandFlex = 5;
+  final int loginFormFlex = 6;
+  double loginBrandPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 40, 40);
+  double loginBrandPaddingV(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 40, 40);
+  double loginBrandGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 18, 40, 40);
+  final double loginEyebrowGap = 12.0;
+  final double loginBrandLeadGap = 14.0;
+  final double loginBrandTitleMaxWidthEm = 8.1;
+  final double loginBrandLeadMaxWidth = 340.0;
+  final double loginRingsStep = 31.0;
+  final double loginRingsStroke = 1.0;
+  final double loginRingsOpacity = 0.15;
+  double loginMainPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 32, 32);
+  double loginMainPaddingTop(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 48, 48);
+  final double loginMainPaddingBottom = 48.0;
+  final double loginCardMaxWidth = 400.0;
+  double loginCardPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 32, 32);
+  double loginCardPaddingV(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 32, 32);
+  final double loginCardSubtitleGap = 6.0;
+  final double loginCardFieldsTop = 24.0;
+  final double loginBackLinkTop = 20.0;
+  final double loginBackLinkGap = 6.0;
 
   double _byBreakpoint(
     Breakpoint breakpoint,
@@ -726,8 +926,20 @@ class ShadowStyle {
         BoxShadow(color: Color(0x1A1F1B18), blurRadius: 34, offset: Offset(0, 14)),
       ];
 
+  List<BoxShadow> get card => const [
+        BoxShadow(color: Color(0x0F1F1B18), blurRadius: 32, offset: Offset(0, 12)),
+      ];
+
   List<BoxShadow> get elevated => const [
         BoxShadow(color: Color(0x241F1B18), blurRadius: 36, offset: Offset(0, 14)),
+      ];
+
+  List<BoxShadow> get sheet => const [
+        BoxShadow(color: Color(0x2E1F1B18), blurRadius: 40, offset: Offset(-12, 0)),
+      ];
+
+  List<BoxShadow> get segment => const [
+        BoxShadow(color: Color(0x1F1F1B18), blurRadius: 3, offset: Offset(0, 1)),
       ];
 
   /// Animar até uma lista vazia mostra a sombra nítida por um instante; esmaecer a cor

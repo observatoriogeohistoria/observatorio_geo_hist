@@ -84,7 +84,8 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
       String? title,
       String? author,
       String? institution,
-      int? year}) {
+      int? year,
+      bool reset = false}) {
     return _$fetchDocumentsByAreaAsyncAction.run(() => super
         .fetchDocumentsByArea(area,
             type: type,
@@ -92,7 +93,8 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
             title: title,
             author: author,
             institution: institution,
-            year: year));
+            year: year,
+            reset: reset));
   }
 
   late final _$createOrUpdateDocumentAsyncAction =

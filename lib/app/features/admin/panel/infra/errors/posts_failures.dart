@@ -26,3 +26,19 @@ class DeletePostFailure extends Failure {
   @override
   List<Object> get props => [message];
 }
+
+class GetPostFailure extends Failure {
+  const GetPostFailure() : super('Não foi possível carregar a publicação. Verifique a conexão.');
+
+  @override
+  List<Object> get props => [message];
+}
+
+class PostNotFoundFailure extends Failure {
+  const PostNotFoundFailure()
+      : super(
+            'Esta publicação não existe mais. Ela pode ter sido excluída ou mudado de categoria.');
+
+  @override
+  List<Object> get props => [message];
+}

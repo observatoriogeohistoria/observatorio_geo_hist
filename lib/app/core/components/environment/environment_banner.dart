@@ -16,7 +16,7 @@ class EnvironmentBanner extends StatelessWidget {
         height: AppTheme.dimensions.components.environmentBannerHeight,
         child: Center(
           child: Text(
-            'Ambiente de Testes',
+            'Ambiente de testes',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

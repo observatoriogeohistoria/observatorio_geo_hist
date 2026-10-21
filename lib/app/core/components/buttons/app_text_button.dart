@@ -9,6 +9,7 @@ class AppTextButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.leadingIcon,
     super.key,
   }) : size = ButtonSize.small;
 
@@ -16,6 +17,7 @@ class AppTextButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.leadingIcon,
     super.key,
   }) : size = ButtonSize.medium;
 
@@ -23,6 +25,7 @@ class AppTextButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.leadingIcon,
     super.key,
   }) : size = ButtonSize.big;
 
@@ -30,6 +33,7 @@ class AppTextButton extends StatelessWidget {
   final void Function() onPressed;
   final ButtonSize size;
   final bool isDisabled;
+  final IconData? leadingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +43,7 @@ class AppTextButton extends StatelessWidget {
       text: text,
       onPressed: onPressed,
       isDisabled: isDisabled,
+      leadingIcon: leadingIcon,
     );
   }
 }

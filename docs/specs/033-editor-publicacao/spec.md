@@ -1,6 +1,6 @@
 # 033. Editor de publicação em página própria
 
-- **Status:** aprovada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 8, item 8.5 (T-14)
 - **Protótipo:** aba "Editor" (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
@@ -124,3 +124,22 @@ Decidido com a pessoa: Tab e Shift+Tab saem do editor de texto para o próximo e
 ## Histórico de mudanças
 - 2026-10-07: criada. Decidido com a pessoa: seguir o protótipo em Publicar/Salvar rascunho e destaque no editor, mesma validação para todos os botões, rotas `/nova?tipo=` e `/:categoria/:id/editar`, confirmação ao sair sem salvar e Tab saindo do editor de texto.
 - 2026-10-07: aprovada.
+- 2026-10-20 (plano, modo autônomo, sem a pessoa): conferida contra o código e o protótipo. Esclarecimentos, sem mudar o escopo:
+  - A lista "Outros 9 tipos" omitia campos que existem hoje e continuam: categoria do livro, do filme, da revista, do documento e da produção acadêmica; abrangência e cidade do evento; estado da pesquisa. Valem os campos e rótulos dos formulários atuais.
+  - O texto obrigatório (artigo, sinopse do filme, descrição do documento) passa a ser conferido pelo texto do editor sem espaços. Hoje a conferência olha o JSON do Quill, que nunca vem vazio, e a regra não funcionava; a spec já pedia a mensagem "Escreva o texto da publicação.". A letra da música continua opcional.
+  - A área de imagem mantém o campo "Endereço da imagem" de hoje (é o único jeito de pôr imagem sem Storage).
+  - Sair sem salvar cobre "← Voltar", o voltar do navegador e fechar ou recarregar a aba. A página do editor não tem o menu do painel, então "outro link do painel" é só o "← Voltar".
+  - O resumo diz "Para publicar, falta preencher:" no "Publicar" e "Para salvar, falta preencher:" nos outros três.
+  - Publicação inexistente: o tipo não é conhecido; o botão volta ao último tipo aberto no painel (ou Artigos), com o nome dele.
+  - Sem sessão, o endereço do editor vai para o login (`/admin`), como `/admin/painel`. `?tipo=` ausente ou inválido mostra a página não encontrada.
+- 2026-10-20 (plano, modo autônomo, decisões da opção recomendada):
+  - Sem sessão: a página do editor confere a sessão como as abas do painel (`PanelPage`) e manda para `/admin`. O `redirect` do roteador não muda, porque ao recarregar a sessão do Firebase ainda não voltou e ele mandaria para o login quem está logado.
+  - Legenda da imagem só existe no artigo e na pesquisa; nos dois fica no cartão Imagem, logo abaixo da área (na pesquisa sai da coluna principal).
+  - Enter num campo de uma linha não salva: são quatro ações diferentes e nenhuma é a óbvia.
+  - Depois de salvar uma publicação nova, o endereço troca para o de edição sem criar entrada nova no histórico do navegador.
+  - A barra de formatação continua a do Quill (mesmos botões), com os tokens do tema, separadores entre grupos, dica de cada botão em português (tradução do pacote) e nome "Formatação do texto" no grupo.
+- 2026-10-20 (implementação, modo autônomo):
+  - O título fica num campo de uma linha, como no protótipo: Enter não quebra linha e o texto longo rola dentro do campo.
+  - Os botões de ícone da barra de formatação do Quill mostram a dica no mouse e no foco, mas no leitor de tela o nome fica num nó em volta do botão, não no botão (limitação do pacote no Flutter web). Fica como ressalva.
+- 2026-10-20: implementada.
+- 2026-10-20 (verificação, modo autônomo): corrigidos o erro de área e categoria que ficava na tela, o foco por teclado nos botões com o leitor de tela e o título selecionado ao abrir. Ressalva: com a semântica ligada, os links Imagem e Categoria do resumo não levam o foco do navegador ao campo. Verificada com ressalvas.

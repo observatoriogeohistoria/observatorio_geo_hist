@@ -325,6 +325,30 @@ class AppTextStyles {
         height: 1.4,
       );
 
+  TextStyle get formOptional => _body(
+        size: _size(mobile: 13, tablet: 13, desktop: 13),
+        weight: FontWeight.w500,
+        height: 1.4,
+      );
+
+  TextStyle get formHint => _body(
+        size: _size(mobile: 13.5, tablet: 13.5, desktop: 13.5),
+        weight: FontWeight.w400,
+        height: 1.45,
+      );
+
+  TextStyle get formOption => _body(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w400,
+        height: 1.4,
+      );
+
+  TextStyle get panelChoiceTitle => _body(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w700,
+        height: 1.35,
+      );
+
   TextStyle get formError => _body(
         size: _size(mobile: 14, tablet: 14, desktop: 14),
         weight: FontWeight.w500,
@@ -336,6 +360,161 @@ class AppTextStyles {
         weight: FontWeight.w700,
         height: 1.12,
         letterSpacingEm: -0.02,
+      );
+
+  TextStyle get loginBrandTitle => _display(
+        size: _size(mobile: 26, tablet: 36, desktop: 44),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.03,
+      );
+
+  TextStyle get loginCardTitle => _display(
+        size: _size(mobile: 28, tablet: 28, desktop: 28),
+        weight: FontWeight.w700,
+        height: 1.12,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get loginLead => _body(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w400,
+        height: 1.55,
+      );
+
+  TextStyle get panelGroupLabel => _body(
+        size: _size(mobile: 12, tablet: 12, desktop: 12),
+        weight: FontWeight.w700,
+        height: 1.4,
+        letterSpacingEm: 0.09,
+      );
+
+  TextStyle get panelNavItem => _body(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w600,
+        height: 1.4,
+      );
+
+  TextStyle get panelNavSubItem => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w500,
+        height: 1.4,
+      );
+
+  TextStyle get panelCount => _body(
+        size: _size(mobile: 12.5, tablet: 12.5, desktop: 12.5),
+        weight: FontWeight.w600,
+        height: 1.4,
+      ).copyWith(fontFeatures: const [FontFeature.tabularFigures()]);
+
+  TextStyle get panelSectionTitle => _display(
+        size: _size(mobile: 25.6, tablet: 28, desktop: 33.6),
+        weight: FontWeight.w800,
+        height: 1.12,
+        letterSpacingEm: -0.03,
+      );
+
+  TextStyle get panelSectionSummary => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w400,
+        height: 1.5,
+      );
+
+  TextStyle get panelUserName => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w700,
+        height: 1.2,
+      );
+
+  TextStyle get panelUserRole => _body(
+        size: _size(mobile: 12.5, tablet: 12.5, desktop: 12.5),
+        weight: FontWeight.w400,
+        height: 1.4,
+      );
+
+  TextStyle get panelAvatarInitials => _display(
+        size: _size(mobile: 13, tablet: 13, desktop: 13),
+        weight: FontWeight.w700,
+        height: 1,
+        letterSpacingEm: 0,
+      );
+
+  TextStyle get panelRowTitle => _display(
+        size: _size(mobile: 16.8, tablet: 16.8, desktop: 16.8),
+        weight: FontWeight.w600,
+        height: 1.3,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get panelRowMeta => _body(
+        size: _size(mobile: 13.5, tablet: 13.5, desktop: 13.5),
+        weight: FontWeight.w400,
+        height: 1.45,
+      );
+
+  TextStyle get panelRowInitials => _display(
+        size: _size(mobile: 15, tablet: 15, desktop: 15),
+        weight: FontWeight.w700,
+        height: 1,
+        letterSpacingEm: 0,
+      );
+
+  TextStyle get panelTileName => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w700,
+        height: 1.35,
+      );
+
+  TextStyle get panelListFoot => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w400,
+        height: 1.4,
+      );
+
+  TextStyle get panelSegment => _body(
+        size: _size(mobile: 14, tablet: 14, desktop: 14),
+        weight: FontWeight.w600,
+        height: 1.2,
+      );
+
+  TextStyle get panelDialogTitle => _display(
+        size: _size(mobile: 20.8, tablet: 20.8, desktop: 20.8),
+        weight: FontWeight.w700,
+        height: 1.2,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get editorBarTitle => _display(
+        size: _size(mobile: 18.4, tablet: 18.4, desktop: 18.4),
+        weight: FontWeight.w700,
+        height: 1.25,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get editorTitleField => _display(
+        size: _size(mobile: 22, tablet: 25.6, desktop: 25.6),
+        weight: FontWeight.w700,
+        height: 1.25,
+        letterSpacingEm: -0.02,
+      );
+
+  TextStyle get editorCardEyebrow => _body(
+        size: _size(mobile: 12.5, tablet: 12.5, desktop: 12.5),
+        weight: FontWeight.w700,
+        height: 1.4,
+        letterSpacingEm: 0.09,
+      );
+
+  TextStyle get toast => _body(
+        size: _size(mobile: 14.5, tablet: 14.5, desktop: 14.5),
+        weight: FontWeight.w600,
+        height: 1.4,
+      );
+
+  TextStyle get tooltip => _body(
+        size: _size(mobile: 13, tablet: 13, desktop: 13),
+        weight: FontWeight.w600,
+        height: 1.35,
       );
 
   TextStyle get meta => _body(

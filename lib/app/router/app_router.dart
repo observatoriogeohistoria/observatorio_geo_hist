@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/text/app_selection_area.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/panel_page.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/post_editor_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/enums/sidebar_item.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/contact_us_page.dart';
 import 'package:observatorio_geo_hist/app/features/home/presentation/pages/home_page.dart';
@@ -15,14 +17,12 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/pages/team_
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_area_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_document_detailed_page.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_list_page.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/pages/library_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/all_posts_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/collaborate_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/post_detailed_page.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/pages/posts_page.dart';
 import 'package:observatorio_geo_hist/app/router/page_not_found.dart';
-import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
@@ -174,7 +174,7 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.admin,
         builder: (BuildContext context, GoRouterState state) {
-          return const SigninPage();
+          return const AppSelectionArea(child: SigninPage());
         },
       ),
       GoRoute(
@@ -182,37 +182,70 @@ class AppRouter {
         redirect: (context, state) => AppRoutes.panelTab(SidebarItem.categories.value),
       ),
       GoRoute(
+        path: AppRoutes.panelPostNewPattern,
+        onExit: (context, state) => PostEditorPage.confirmLeave(context),
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          final type = PostType.fromString(
+            state.uri.queryParameters[AppRoutes.panelPostTypeParam],
+          );
+
+          final invalidRoute = type == null;
+          if (invalidRoute) return _editorPage(const PageNotFound());
+
+          return _editorPage(PostEditorPage.create(type: type));
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.panelPostEditPattern,
+        onExit: (context, state) => PostEditorPage.confirmLeave(context),
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return _editorPage(
+            PostEditorPage.edit(
+              categoryKey: state.pathParameters['categoria']!,
+              postId: state.pathParameters['id']!,
+            ),
+          );
+        },
+      ),
+      GoRoute(
         path: AppRoutes.panelTabPattern,
-        builder: (BuildContext context, GoRouterState state) {
+        pageBuilder: (BuildContext context, GoRouterState state) {
           final tab = SidebarItem.fromString(state.pathParameters['tab']);
           final postType = PostType.fromString(
             state.uri.queryParameters[AppRoutes.panelPostTypeParam],
           );
 
           final invalidRoute = tab == null;
-          if (invalidRoute) return const PageNotFound();
+          if (invalidRoute) return _panelPage(const PageNotFound());
 
-          return PanelPage(tab: tab, postType: postType);
+          return _panelPage(PanelPage(tab: tab, postType: postType));
         },
       ),
       GoRoute(
         path: AppRoutes.panelLibraryAreaPattern,
-        builder: (BuildContext context, GoRouterState state) {
+        pageBuilder: (BuildContext context, GoRouterState state) {
           final area = DocumentArea.fromRouteKey(state.pathParameters['area']);
 
           final invalidRoute = area == null;
-          if (invalidRoute) return const PageNotFound();
+          if (invalidRoute) return _panelPage(const PageNotFound());
 
-          return LibraryListPage(area: area);
+          return _panelPage(PanelPage(tab: SidebarItem.library, libraryArea: area));
         },
       ),
     ],
   );
 
-  static Widget _selectable(Widget page) {
-    return DefaultSelectionStyle.merge(
-      selectionColor: AppTheme.colors.textSelection,
-      child: SelectionArea(child: page),
-    );
+  // A mesma chave em todas as rotas do painel: trocar de seção ou de área atualiza a página
+  // no lugar, sem recriar a moldura nem perder o foco.
+  static Page<void> _panelPage(Widget child) {
+    return MaterialPage(key: const ValueKey('painel'), child: AppSelectionArea(child: child));
   }
+
+  // A mesma chave nas duas rotas do editor: salvar uma publicação nova troca o endereço para o
+  // de edição sem perder o que está na tela.
+  static Page<void> _editorPage(Widget child) {
+    return MaterialPage(key: const ValueKey('editor'), child: AppSelectionArea(child: child));
+  }
+
+  static Widget _selectable(Widget page) => AppSelectionArea(child: page);
 }

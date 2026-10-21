@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/form_field_frame.dart';
 import 'package:observatorio_geo_hist/app/core/utils/validators/form_validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -15,6 +17,18 @@ class FormTextField extends StatefulWidget {
     this.autofillHints,
     this.textInputAction,
     this.onSubmitted,
+    this.hintText,
+    this.obscureText = false,
+    this.suffix,
+    this.isOptional = false,
+    this.helperText,
+    this.readOnly = false,
+    this.minLines,
+    this.maxLines,
+    this.inputFormatters,
+    this.formFieldKey,
+    this.autofocus = false,
+    this.style,
   });
 
   final String label;
@@ -28,6 +42,22 @@ class FormTextField extends StatefulWidget {
   final Iterable<String>? autofillHints;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onSubmitted;
+
+  final String? hintText;
+  final bool obscureText;
+
+  /// Fica dentro do campo, à direita, como o botão de mostrar a senha.
+  final Widget? suffix;
+
+  final bool isOptional;
+  final String? helperText;
+  final bool readOnly;
+  final int? minLines;
+  final int? maxLines;
+  final List<TextInputFormatter>? inputFormatters;
+  final GlobalKey<FormFieldState<String>>? formFieldKey;
+  final bool autofocus;
+  final TextStyle? style;
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -71,6 +101,7 @@ class _FormTextFieldState extends State<FormTextField> {
     final radius = BorderRadius.circular(AppTheme.dimensions.radii.r12);
 
     return FormField<String>(
+      key: widget.formFieldKey,
       initialValue: widget.controller.text,
       validator: (_) => widget.validator?.call(widget.controller.text),
       builder: (field) {
@@ -82,74 +113,66 @@ class _FormTextFieldState extends State<FormTextField> {
                 ? colors.accent
                 : colors.fieldBorder;
         final ringColor = hasError ? colors.errorSurface : colors.accentSoft;
+        final suffix = widget.suffix;
+        final singleLine = widget.obscureText || !widget.multiline;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // O nome do campo vai na semântica do próprio campo; o texto visível fica de fora.
-            ExcludeSemantics(
-              child: Text(widget.label, style: styles.formLabel.copyWith(color: colors.ink)),
-            ),
-            SizedBox(height: components.formFieldLabelGap),
-            AnimatedContainer(
-              duration: MediaQuery.disableAnimationsOf(context)
-                  ? Duration.zero
-                  : components.menuAnimation,
-              constraints: BoxConstraints(minHeight: components.formFieldHeight),
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                color: colors.page,
-                borderRadius: radius,
-                border: Border.all(color: borderColor, width: components.formFieldBorder),
-                boxShadow: [
-                  BoxShadow(
-                    color: _focused ? ringColor : ringColor.withValues(alpha: 0),
-                    spreadRadius: components.formFieldFocusRing,
-                  ),
-                ],
-              ),
-              child: Semantics(
-                label: widget.label,
-                hint: error,
-                validationResult:
-                    hasError ? SemanticsValidationResult.invalid : SemanticsValidationResult.none,
-                child: TextField(
-                  controller: widget.controller,
-                  focusNode: widget.focusNode,
-                  onChanged: field.didChange,
-                  onSubmitted: widget.onSubmitted,
-                  keyboardType: widget.multiline ? TextInputType.multiline : widget.keyboardType,
-                  textInputAction:
-                      widget.multiline ? TextInputAction.newline : widget.textInputAction,
-                  autofillHints: widget.autofillHints,
-                  minLines: widget.multiline ? components.formMessageMinLines : 1,
-                  maxLines: widget.multiline ? components.formMessageMaxLines : 1,
-                  style: styles.regular.copyWith(color: colors.ink),
-                  cursorColor: colors.accent,
-                  decoration: InputDecoration(
-                    isCollapsed: true,
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: components.formFieldPaddingH - components.formFieldBorder,
-                      vertical: components.formFieldPaddingV - components.formFieldBorder,
-                    ),
-                  ),
-                ),
+        final input = Semantics(
+          label: FormFieldFrame.semanticLabel(widget.label, isOptional: widget.isOptional),
+          hint: FormFieldFrame.semanticHint(error: error, helper: widget.helperText),
+          validationResult:
+              hasError ? SemanticsValidationResult.invalid : SemanticsValidationResult.none,
+          child: TextField(
+            controller: widget.controller,
+            focusNode: widget.focusNode,
+            autofocus: widget.autofocus,
+            readOnly: widget.readOnly,
+            onChanged: field.didChange,
+            onSubmitted: widget.onSubmitted,
+            keyboardType: singleLine ? widget.keyboardType : TextInputType.multiline,
+            textInputAction: singleLine ? widget.textInputAction : TextInputAction.newline,
+            autofillHints: widget.autofillHints,
+            inputFormatters: widget.inputFormatters,
+            obscureText: widget.obscureText,
+            minLines: singleLine ? 1 : widget.minLines ?? components.formMessageMinLines,
+            maxLines: singleLine ? 1 : widget.maxLines ?? components.formMessageMaxLines,
+            style: (widget.style ?? styles.regular).copyWith(color: colors.ink),
+            cursorColor: colors.accent,
+            decoration: InputDecoration(
+              isCollapsed: true,
+              border: InputBorder.none,
+              hintText: widget.hintText,
+              hintStyle: styles.regular.copyWith(color: colors.inkSecondary),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: components.formFieldPaddingH - components.formFieldBorder,
+                vertical: components.formFieldPaddingV - components.formFieldBorder,
               ),
             ),
-            if (hasError) ...[
-              SizedBox(height: components.formFieldLabelGap),
-              ExcludeSemantics(
-                child: Text(
-                  error,
-                  maxLines: components.formErrorMaxLines,
-                  overflow: TextOverflow.ellipsis,
-                  style: styles.formError.copyWith(color: colors.error),
+          ),
+        );
+
+        return FormFieldFrame(
+          label: widget.label,
+          isOptional: widget.isOptional,
+          helperText: widget.helperText,
+          errorText: error,
+          child: AnimatedContainer(
+            duration:
+                MediaQuery.disableAnimationsOf(context) ? Duration.zero : components.menuAnimation,
+            constraints: BoxConstraints(minHeight: components.formFieldHeight),
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+              color: widget.readOnly ? colors.surface : colors.page,
+              borderRadius: radius,
+              border: Border.all(color: borderColor, width: components.formFieldBorder),
+              boxShadow: [
+                BoxShadow(
+                  color: _focused ? ringColor : ringColor.withValues(alpha: 0),
+                  spreadRadius: components.formFieldFocusRing,
                 ),
-              ),
-            ],
-          ],
+              ],
+            ),
+            child: suffix == null ? input : Row(children: [Expanded(child: input), suffix]),
+          ),
         );
       },
     );

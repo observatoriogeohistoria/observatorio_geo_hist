@@ -20,6 +20,8 @@ class AppColors {
   Color accentSoft = const Color(0xFFFFF0E6);
   Color accentSoftBorder = const Color(0xFFFFD2B8);
 
+  Color rowHover = const Color(0xFFFCFBF9);
+
   /// Acento a 25 %, que mantém [accentStrong] acima de 4,5:1.
   Color textSelection = const Color(0x40C94400);
 
@@ -45,9 +47,13 @@ class AppColors {
   Color videoBackdrop = const Color(0xFF1C1917);
 
   Color error = const Color(0xFFB3261E);
+  Color errorStrong = const Color(0xFF8F1D17);
 
   Color errorSurface = const Color(0xFFFBE9E7);
   Color success = const Color(0xFF1C6B34);
   Color successSurface = const Color(0xFFE4F3E8);
   Color info = const Color(0xFF1E5AA8);
+
+  /// Verde claro para o ícone sobre o aviso escuro; o [success] some no fundo [ink].
+  Color toastIcon = const Color(0xFF9FD8AE);
 }

@@ -8,27 +8,10 @@ class SidebarStore = SidebarStoreBase with _$SidebarStore;
 
 abstract class SidebarStoreBase with Store {
   @observable
-  bool isCollapsed = false;
-
-  @observable
-  bool showPostsSubItems = false;
-
-  @observable
   SidebarItem selectedItem = SidebarItem.users;
 
   @observable
   PostType? selectedPostType;
-
-  @action
-  void toggleCollapse() {
-    isCollapsed = !isCollapsed;
-    if (isCollapsed) showPostsSubItems = false;
-  }
-
-  @action
-  void toggleShowPostsSubItems() {
-    showPostsSubItems = !showPostsSubItems;
-  }
 
   @action
   void selectItem(SidebarItem item) {

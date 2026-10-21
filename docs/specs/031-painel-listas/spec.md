@@ -1,6 +1,6 @@
 # 031. Listas do painel em linhas, mídias em grade e filtros em linha
 
-- **Status:** aprovada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 8, item 8.3 (T-13)
 - **Protótipo:** aba "Painel" (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
@@ -102,3 +102,12 @@ A seção Biblioteca passa a mostrar direto a lista de Geografia, sem os dois bl
 ## Histórico de mudanças
 - 2026-10-07: criada. Decidido com a pessoa: filtros da biblioteca em linha com "Mais filtros" para autor, instituição e ano.
 - 2026-10-07: aprovada.
+- 2026-10-13: ajustes do plano, decididos sem a pessoa (modo autônomo):
+  - Biblioteca: com a lista dentro da seção, o "Novo documento" vai para o cabeçalho (só para quem pode editar) e o resumo vira "N documentos em Geografia" (área aberta), como a 030 deixou combinado. `/admin/painel/biblioteca` mostra Geografia sem mudar o endereço.
+  - Usuários: o dado de removido existe (`isDeleted`) e o cartão de hoje já o mostra. Sai o selo "Usuário ativo"; fica só o selo "Removido" (vermelho) quando `isDeleted` é verdadeiro. Não é o ativo/inativo do protótipo, que segue fora do escopo.
+  - Trocar de tipo de publicação limpa os filtros, como no protótipo; trocar a área da biblioteca mantém os filtros; sair da Biblioteca os zera, como hoje.
+  - Erro ao abrir a lista mostra só a caixa de erro, sem o aviso flutuante. Erro ao carregar mais ou numa ação continua no aviso, com a lista à vista.
+  - Ações da linha têm nome curto ("Excluir"); o item vem da linha, que é lida como grupo com o título.
+- 2026-10-13: na implementação, decidido sem a pessoa (modo autônomo): o Flutter web não gera `aria-pressed`. O segmentado é anunciado como grupo de rádio (marcado/desmarcado) e "Destaques" e o botão de destacar como chave (ligado/desligado), que dizem o mesmo estado.
+- 2026-10-13: implementada. Também decidido na implementação: falha ao carregar mais deixa um "Carregar mais" no rodapé, para não repetir o pedido (e o aviso) a cada rolada; em 1280 o "Destaques" de Publicações cai para a segunda linha, porque os filtros com as medidas do protótipo passam da largura útil.
+- 2026-10-19: verificada com ressalvas ([verificacao.md](verificacao.md)). Todos os critérios passaram no build e no app de teste; painel real com o Firebase e leitor de tela de verdade ficaram sem conferir. Corrigidas as dicas cortadas das buscas do painel (biblioteca a 768, mídias a 390): enquanto vazia, a busca do painel usa o espaço do "Limpar". Status decidido no fluxo autônomo.

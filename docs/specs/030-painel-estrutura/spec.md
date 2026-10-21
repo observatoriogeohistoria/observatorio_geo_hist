@@ -1,6 +1,6 @@
 # 030. Estrutura do painel: barra superior, menu, avisos e confirmações
 
-- **Status:** aprovada
+- **Status:** verificada com ressalvas
 - **Item do planejamento:** Fase 8, item 8.2 (T-13, P-14)
 - **Protótipo:** aba "Painel" (link no CLAUDE.md)
 - **Criada em:** 2026-10-07
@@ -19,18 +19,18 @@ O painel ganha a moldura do protótipo: barra superior com quem está logado, me
 
 ### Barra superior
 Fundo branco com linha embaixo (deixa de ser laranja).
-- Esquerda: botão de menu (só abaixo de 1024), logo e "Observatório / Painel" (link para a primeira seção do painel).
+- Esquerda: botão de menu (só abaixo de 1024), logo e "Observatório / Painel" (link para a primeira seção do menu, Publicações → Artigos).
 - Direita: botão "Ver site" com ícone de link externo (abre a Home numa nova aba) e a pessoa logada: círculo com as iniciais do nome, nome e papel ("Administração", "Edição" ou "Leitura", para `ADMIN`, `EDITOR` e `VIEWER`).
 - Acima da barra, no dev, a faixa "Ambiente de testes" (029).
 
 ### Menu lateral
 Largura fixa, sempre aberto no desktop. **Sai o recolher** (decidido com a pessoa). Grupos com título em versalete cinza:
-- **Conteúdo:** Publicações; logo abaixo, sempre visíveis e recuados, os 10 tipos no plural ("Artigos", "Produções acadêmicas", "Livros", "Documentos", "Eventos", "Filmes", "Revistas", "Músicas", "Podcasts", "Pesquisas", na ordem de hoje); Categorias; Biblioteca.
+- **Conteúdo:** Publicações; logo abaixo, sempre visíveis e recuados, os 10 tipos no plural ("Artigos", "Produções acadêmicas", "Livros", "Documentos", "Eventos", "Filmes", "Revistas", "Músicas", "Podcasts", "Pesquisas", nesta ordem, a do protótipo); Categorias; Biblioteca.
 - **Arquivos e pessoas:** Mídias; Equipe.
 - **Administração:** Usuários. O grupo inteiro só aparece para quem pode ver Usuários (como hoje).
 - No pé, "Sair", em cinza.
 
-Cada item tem ícone, nome e, à direita, a **contagem** em cinza: publicações (total e por tipo), categorias, documentos da biblioteca (as duas áreas), membros da equipe e usuários. **Mídias fica sem número**, porque o Storage não informa o total sem listar tudo. Enquanto a contagem carrega, ou se ela falhar, o número não aparece (o item continua funcionando). As contagens se atualizam depois de criar ou excluir.
+Cada item tem ícone, nome e, à direita, a **contagem** em cinza: publicações (total e por tipo), categorias, documentos da biblioteca (as duas áreas), membros da equipe e usuários (sem contar os removidos). **Mídias fica sem número**, porque o Storage não informa o total sem listar tudo. Enquanto a contagem carrega, ou se ela falhar, o número não aparece (o item continua funcionando). As contagens se atualizam depois de criar ou excluir.
 
 Item atual com fundo `accentSoft` e texto `accentStrong`. Com um tipo selecionado, "Publicações" fica em `accentStrong` sem fundo e o tipo fica marcado. Clicar em "Publicações" abre "Artigos".
 
@@ -38,12 +38,12 @@ Item atual com fundo `accentSoft` e texto `accentStrong`. Com um tipo selecionad
 O botão de menu abre o menu por cima do conteúdo, com fundo escurecido. Fecha ao escolher um item, ao tocar fora ou com Esc. Ao abrir, o foco vai para o item atual; ao fechar sem escolher, volta ao botão de menu.
 
 ### Cabeçalho de seção
-Em todas as seções: sobretítulo laranja com o grupo ("Publicações", "Conteúdo", "Arquivos e pessoas", "Administração"), título grande (nome da seção ou do tipo), uma linha de resumo em cinza e, à direita, o botão principal com "+": "Novo artigo", "Nova produção", "Novo livro", "Novo documento", "Novo evento", "Novo filme", "Nova revista", "Nova música", "Novo podcast", "Nova pesquisa", "Nova categoria", "Novo documento" (biblioteca), "Enviar imagens" (mídias, abre o diálogo atual), "Novo membro", "Novo usuário". Quem só pode ver (`VIEWER`) não vê o botão.
+Em todas as seções: sobretítulo laranja com o grupo ("Publicações", "Conteúdo", "Arquivos e pessoas", "Administração"), título grande (nome da seção ou do tipo), uma linha de resumo em cinza e, à direita, o botão principal com "+": "Novo artigo", "Nova produção", "Novo livro", "Novo documento", "Novo evento", "Novo filme", "Nova revista", "Nova música", "Novo podcast", "Nova pesquisa", "Nova categoria", "Novo documento" (biblioteca), "Enviar imagens" (mídias, abre o diálogo atual), "Novo membro", "Novo usuário". Quem só pode ver (`VIEWER`) não vê o botão. Na Biblioteca, enquanto a seção mostrar os dois blocos de área (até a 031), o botão "Novo documento" fica na página da área, que continua com a barra própria; essa página já ganha a confirmação, os avisos curtos e as dicas desta spec.
 
 Resumos:
 - Tipo de publicação: "N no total" (ou "Nenhuma ainda").
 - Categorias: "N categorias · aparecem no menu de História e Geografia".
-- Biblioteca: "N documentos em Geografia" (área aberta).
+- Biblioteca: "N documentos" (soma das duas áreas). Quando a 031 abrir a lista dentro da seção, vira "N documentos em Geografia" (área aberta).
 - Mídias: "Imagens usadas nas publicações. Copie o link para usar no editor."
 - Equipe: "N pessoas · quem tem descrição ganha página no site".
 - Usuários: "N usuários · só a administração vê esta seção".
@@ -130,3 +130,6 @@ O nome acessível do botão é a ação curta ("Excluir"); a dica é a descriç�
 ## Histórico de mudanças
 - 2026-10-07: criada. Decidido com a pessoa tirar o recolher do menu e manter o diálogo atual de envio de mídia.
 - 2026-10-07: aprovada.
+- 2026-10-08: ajustes do plano, decididos sem a pessoa (modo autônomo): ordem dos tipos é a do protótipo (a de hoje é alfabética, então "na ordem de hoje" estava errado); logo leva a Publicações → Artigos; contagem de usuários ignora os removidos (`isDeleted`); até a 031, a Biblioteca resume "N documentos" (as duas áreas) e o "Novo documento" fica na página da área, que recebe confirmação, avisos e dicas.
+- 2026-10-13: ajustes da implementação, decididos sem a pessoa (modo autônomo): salvar publicação também mostra aviso curto ("Publicação salva."), que faltava na lista; a confirmação de remover membro usa o botão "Remover", combinando com o título; dicas dos botões de ícone fora da lista da spec ganharam texto no mesmo modelo ("Fechar: volta à lista de mídias", "Voltar: retorna à Biblioteca do painel", "Adicionar autor"/"Remover autor", "Fechar filtros"); o aviso de erro fica 8 s e tem botão de fechar.
+- 2026-10-13: verificada com ressalvas ([verificacao.md](verificacao.md)). Todos os critérios passaram no build e no app de teste; painel real com o Firebase, player de vídeo e leitor de tela de verdade ficaram sem conferir. Corrigido o erro de logout que lia o estado errado. Status decidido no fluxo autônomo.

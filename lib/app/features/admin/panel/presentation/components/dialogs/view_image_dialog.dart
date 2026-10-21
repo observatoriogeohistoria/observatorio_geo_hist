@@ -49,7 +49,8 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
             child: Padding(
               padding: EdgeInsets.all(AppTheme.dimensions.spacing.s8),
               child: AppIconButton(
-                tooltip: 'Fechar',
+                label: 'Fechar',
+                tooltip: 'Fechar: volta à lista de mídias',
                 icon: Icons.close,
                 color: AppTheme.colors.ink,
                 onPressed: () => GoRouter.of(context).pop(),

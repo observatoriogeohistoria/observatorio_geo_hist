@@ -2,99 +2,257 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/form_field_frame.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class EditorQuill extends StatefulWidget {
   const EditorQuill({
-    required this.saveController,
-    this.initialContent,
-    required this.height,
+    required this.controller,
+    required this.label,
+    this.focusNode,
+    this.errorText,
+    this.helperText,
+    this.isOptional = false,
+    this.placeholder,
+    this.minHeight,
+    this.onChanged,
     super.key,
   });
 
-  final StreamController<Completer<String>> saveController;
-  final String? initialContent;
-  final double height;
+  final QuillController controller;
+  final String label;
+  final FocusNode? focusNode;
+  final String? errorText;
+  final String? helperText;
+  final bool isOptional;
+  final String? placeholder;
+  final double? minHeight;
+  final VoidCallback? onChanged;
+
+  static QuillController controllerFor(String? json) {
+    return QuillController(
+      document: (json?.isNotEmpty ?? false)
+          ? Document.fromDelta(Delta.fromJson(jsonDecode(json!)))
+          : Document(),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
+  }
+
+  static String toJson(QuillController controller) =>
+      jsonEncode(controller.document.toDelta().toJson());
+
+  /// O documento sempre tem ao menos uma quebra de linha; vazio é sem texto visível.
+  static bool isEmpty(QuillController controller) =>
+      controller.document.toPlainText().trim().isEmpty;
 
   @override
   State<EditorQuill> createState() => _EditorQuillState();
 }
 
 class _EditorQuillState extends State<EditorQuill> {
-  late QuillController _controller;
-  final _focusNode = FocusNode();
+  FocusNode? _ownFocus;
+  StreamSubscription<DocChange>? _changes;
   bool _focused = false;
+
+  FocusNode get _focusNode => widget.focusNode ?? (_ownFocus ??= FocusNode());
 
   @override
   void initState() {
     super.initState();
+    _listen();
+  }
 
-    _controller = QuillController(
-      document: (widget.initialContent?.isNotEmpty ?? false)
-          ? Document.fromDelta(Delta.fromJson(jsonDecode(widget.initialContent!)))
-          : Document(),
-      selection: const TextSelection.collapsed(offset: 0),
-    );
+  @override
+  void didUpdateWidget(covariant EditorQuill oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) _listen();
+  }
 
-    widget.saveController.stream.listen((event) {
-      final content = _saveContent();
-      event.complete(content);
-    });
-
-    _focusNode.addListener(_handleFocus);
+  void _listen() {
+    _changes?.cancel();
+    _changes = widget.controller.document.changes.listen((_) => widget.onChanged?.call());
   }
 
   @override
   void dispose() {
-    _focusNode.removeListener(_handleFocus);
-    _focusNode.dispose();
+    _changes?.cancel();
+    _ownFocus?.dispose();
     super.dispose();
   }
 
-  void _handleFocus() {
-    if (_focused != _focusNode.hasFocus) setState(() => _focused = _focusNode.hasFocus);
+  // O Tab do Quill faz recuo e prende o foco; aqui ele segue a ordem da página. O recuo de
+  // lista continua nos botões da barra.
+  KeyEventResult? _handleKey(KeyEvent event, Node? _) {
+    if (event.logicalKey != LogicalKeyboardKey.tab) return null;
+    if (event is! KeyUpEvent) {
+      HardwareKeyboard.instance.isShiftPressed
+          ? _focusNode.previousFocus()
+          : _focusNode.nextFocus();
+    }
+    return KeyEventResult.handled;
   }
-
-  String _saveContent() => jsonEncode(_controller.document.toDelta().toJson());
 
   @override
   Widget build(BuildContext context) {
     final colors = AppTheme.colors;
     final components = AppTheme.dimensions.components;
+    final styles = AppTheme.typography.of(context);
+    final radius = AppTheme.dimensions.radii.r12;
+    final error = widget.errorText;
+    final hasError = error != null;
+    final borderColor = hasError
+        ? colors.error
+        : _focused
+            ? colors.accent
+            : colors.fieldBorder;
+    final ringColor = hasError ? colors.errorSurface : colors.accentSoft;
 
-    return Column(
-      children: [
-        QuillSimpleToolbar(
-          controller: _controller,
-          config: const QuillSimpleToolbarConfig(
-            showDividers: false,
-            showBackgroundColorButton: false,
-            showAlignmentButtons: true,
-            showCodeBlock: false,
-            showSearchButton: false,
-            showSubscript: false,
-            showSuperscript: false,
-          ),
-        ),
-        Container(
-          height: widget.height,
-          padding: EdgeInsets.all(components.formFieldPaddingH),
+    return FormFieldFrame(
+      label: widget.label,
+      isOptional: widget.isOptional,
+      helperText: widget.helperText,
+      errorText: error,
+      child: Focus(
+        canRequestFocus: false,
+        skipTraversal: true,
+        onFocusChange: (focused) => setState(() => _focused = focused),
+        child: DecoratedBox(
           decoration: BoxDecoration(
             color: colors.page,
-            borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r10),
-            border: Border.all(
-              width: _focused ? components.panelFieldFocusedBorder : components.formFieldBorder,
-              color: _focused ? colors.accent : colors.fieldBorder,
+            borderRadius: BorderRadius.circular(radius),
+            boxShadow: [
+              BoxShadow(
+                color: _focused ? ringColor : ringColor.withValues(alpha: 0),
+                spreadRadius: components.formFieldFocusRing,
+              ),
+            ],
+          ),
+          // A borda vai na frente, para o fundo da barra de formatação não cobri-la.
+          child: DecoratedBox(
+            position: DecorationPosition.foreground,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+              border: Border.all(color: borderColor, width: components.formFieldBorder),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(radius - components.formFieldBorder),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _toolbar(),
+                  Divider(
+                    height: AppTheme.dimensions.stroke.small,
+                    thickness: AppTheme.dimensions.stroke.small,
+                    color: colors.line,
+                  ),
+                  Semantics(
+                    container: true,
+                    label:
+                        FormFieldFrame.semanticLabel(widget.label, isOptional: widget.isOptional),
+                    hint: FormFieldFrame.semanticHint(error: error, helper: widget.helperText),
+                    // O editor tem seleção própria; a área de seleção da página disputaria o arrasto.
+                    child: SelectionContainer.disabled(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: widget.minHeight ?? 0),
+                        child: QuillEditor.basic(
+                          controller: widget.controller,
+                          focusNode: _focusNode,
+                          config: QuillEditorConfig(
+                            scrollable: false,
+                            expands: false,
+                            placeholder: widget.placeholder,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: components.richTextPaddingH,
+                              vertical: components.richTextPaddingV,
+                            ),
+                            // ignore: experimental_member_use
+                            onKeyPressed: _handleKey,
+                            customStyles: DefaultStyles(
+                              placeHolder: DefaultTextBlockStyle(
+                                styles.regular.copyWith(color: colors.inkSecondary),
+                                HorizontalSpacing.zero,
+                                VerticalSpacing.zero,
+                                VerticalSpacing.zero,
+                                null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          child: QuillEditor.basic(
-            controller: _controller,
-            focusNode: _focusNode,
+        ),
+      ),
+    );
+  }
+
+  Widget _toolbar() {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final size = components.richTextButtonSize;
+
+    ButtonStyle style({required bool selected}) => ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(selected ? colors.accentSoft : null),
+          foregroundColor: WidgetStatePropertyAll(selected ? colors.accentStrong : colors.ink),
+          overlayColor: WidgetStatePropertyAll(colors.line),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r8)),
+          ),
+          side: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.focused)
+                ? BorderSide(color: colors.accent, width: AppTheme.dimensions.stroke.medium)
+                : BorderSide.none,
+          ),
+        );
+
+    IconButtonData data({required bool selected}) => IconButtonData(
+          iconSize: components.richTextIcon,
+          constraints: BoxConstraints.tightFor(width: size, height: size),
+          padding: EdgeInsets.zero,
+          style: style(selected: selected),
+          color: selected ? colors.accentStrong : colors.ink,
+        );
+
+    // Sem nós próprios, a dica de cada botão (o nome dele) subiria para o grupo.
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: 'Formatação do texto',
+      child: FocusTraversalGroup(
+        child: ColoredBox(
+          color: colors.surface,
+          child: Padding(
+            padding: EdgeInsets.all(components.richTextToolbarPadding),
+            child: QuillSimpleToolbar(
+              controller: widget.controller,
+              config: QuillSimpleToolbarConfig(
+                showDividers: true,
+                sectionDividerColor: colors.line,
+                toolbarIconAlignment: WrapAlignment.start,
+                toolbarSectionSpacing: components.richTextButtonGap,
+                showBackgroundColorButton: false,
+                showAlignmentButtons: true,
+                showCodeBlock: false,
+                showSearchButton: false,
+                showSubscript: false,
+                showSuperscript: false,
+                iconTheme: QuillIconTheme(
+                  iconButtonUnselectedData: data(selected: false),
+                  iconButtonSelectedData: data(selected: true),
+                ),
+              ),
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

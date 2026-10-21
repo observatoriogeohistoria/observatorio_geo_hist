@@ -32,11 +32,17 @@ abstract class AppRoutes {
   static const panel = '$admin/painel';
   static const panelTabPattern = '$panel/:tab';
   static const panelLibraryAreaPattern = '$panel/$librarySegment/:area';
+  static const panelPostNewPattern = '$panel/$publicationsSegment/nova';
+  static const panelPostEditPattern = '$panel/$publicationsSegment/:categoria/:id/editar';
 
   static const panelPostTypeParam = 'tipo';
   static String panelTab(String tab) => '$panel/$tab';
   static String panelPosts(String postType) =>
       '${panelTab(publicationsSegment)}?$panelPostTypeParam=$postType';
+  static String panelPostNew(String postType) =>
+      '$panelPostNewPattern?$panelPostTypeParam=$postType';
+  static String panelPostEdit(String categoryKey, String id) =>
+      '$panel/$publicationsSegment/$categoryKey/$id/editar';
   static String panelLibraryArea(String areaKey) => '${panelTab(librarySegment)}/$areaKey';
 
   static const legacyManifest = '/manifest';
