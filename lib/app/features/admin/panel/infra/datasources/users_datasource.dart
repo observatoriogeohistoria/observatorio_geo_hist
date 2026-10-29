@@ -75,8 +75,10 @@ class UsersDatasourceImpl implements UsersDatasource {
     try {
       if (user.id == null) throw Exception('User ID is required');
 
+      // Soft delete: the security rules deny everything to isDeleted, and the panel keeps the
+      // person listed as removed.
       DocumentReference ref = _firestore.collection('users').doc(user.id);
-      await ref.delete();
+      await ref.update({'isDeleted': true});
     } catch (exception, stackTrace) {
       _loggerService.error('Error deleting user: $exception', stackTrace: stackTrace);
       rethrow;
