@@ -12,7 +12,6 @@ class HomeSetup {
   static final GetIt getIt = GetIt.instance;
 
   static void setup() {
-    // Fetch Team
     getIt.registerFactory<FetchTeamDatasource>(
       () => FetchTeamDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );
@@ -23,7 +22,6 @@ class HomeSetup {
       () => FetchTeamStore(getIt<FetchTeamRepository>()),
     );
 
-    // Fetch Highlights
     getIt.registerFactory<FetchHighlightsDatasource>(
       () => FetchHighlightsDatasourceImpl(getIt<FirebaseFirestore>(), getIt<LoggerService>()),
     );

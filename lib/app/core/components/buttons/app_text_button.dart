@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/mouse_region/app_mouse_region.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart';
 
-class AppTextButton extends StatefulWidget {
+export 'package:observatorio_geo_hist/app/core/components/buttons/app_button_base.dart'
+    show ButtonSize;
+
+class AppTextButton extends StatelessWidget {
   const AppTextButton.small({
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.leadingIcon,
     super.key,
   }) : size = ButtonSize.small;
 
@@ -16,6 +17,7 @@ class AppTextButton extends StatefulWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.leadingIcon,
     super.key,
   }) : size = ButtonSize.medium;
 
@@ -23,6 +25,7 @@ class AppTextButton extends StatefulWidget {
     required this.text,
     required this.onPressed,
     this.isDisabled = false,
+    this.leadingIcon,
     super.key,
   }) : size = ButtonSize.big;
 
@@ -30,69 +33,17 @@ class AppTextButton extends StatefulWidget {
   final void Function() onPressed;
   final ButtonSize size;
   final bool isDisabled;
-
-  @override
-  State<AppTextButton> createState() => _AppTextButtonState();
-}
-
-class _AppTextButtonState extends State<AppTextButton> {
-  bool _isHovering = false;
+  final IconData? leadingIcon;
 
   @override
   Widget build(BuildContext context) {
-    EdgeInsetsGeometry padding;
-    AppLabel buttonText;
-    Color buttonTextColor =
-        (widget.isDisabled || _isHovering) ? AppTheme.colors.gray : AppTheme.colors.orange;
-
-    switch (widget.size) {
-      case ButtonSize.small:
-        padding = EdgeInsets.all(AppTheme.dimensions.space.small.scale);
-
-        buttonText = AppLabel.small(
-          text: widget.text,
-          textAlign: TextAlign.center,
-          color: buttonTextColor,
-          notSelectable: true,
-        );
-
-        break;
-      case ButtonSize.medium:
-        padding = EdgeInsets.all(AppTheme.dimensions.space.medium.scale);
-
-        buttonText = AppLabel.medium(
-          text: widget.text,
-          textAlign: TextAlign.center,
-          color: buttonTextColor,
-          notSelectable: true,
-        );
-
-        break;
-      case ButtonSize.big:
-        padding = EdgeInsets.all(AppTheme.dimensions.space.medium.scale);
-
-        buttonText = AppLabel.big(
-          text: widget.text,
-          textAlign: TextAlign.center,
-          color: buttonTextColor,
-          notSelectable: true,
-        );
-
-        break;
-    }
-
-    return AppMouseRegion(
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      child: GestureDetector(
-        onTap: widget.isDisabled ? null : widget.onPressed,
-        child: Padding(
-          padding: padding,
-          child: buttonText,
-        ),
-      ),
+    return AppButtonBase(
+      kind: AppButtonKind.ghost,
+      size: size,
+      text: text,
+      onPressed: onPressed,
+      isDisabled: isDisabled,
+      leadingIcon: leadingIcon,
     );
   }
 }
-
-enum ButtonSize { small, medium, big }

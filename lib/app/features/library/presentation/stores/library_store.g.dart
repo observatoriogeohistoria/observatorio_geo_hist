@@ -41,22 +41,6 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
     });
   }
 
-  late final _$selectedDocumentAtom =
-      Atom(name: 'LibraryStoreBase.selectedDocument', context: context);
-
-  @override
-  Observable<LibraryDocumentModel?> get selectedDocument {
-    _$selectedDocumentAtom.reportRead();
-    return super.selectedDocument;
-  }
-
-  @override
-  set selectedDocument(Observable<LibraryDocumentModel?> value) {
-    _$selectedDocumentAtom.reportWrite(value, super.selectedDocument, () {
-      super.selectedDocument = value;
-    });
-  }
-
   late final _$documentsByAreaAtom =
       Atom(name: 'LibraryStoreBase.documentsByArea', context: context);
 
@@ -100,7 +84,8 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
       String? title,
       String? author,
       String? institution,
-      int? year}) {
+      int? year,
+      bool reset = false}) {
     return _$fetchDocumentsByAreaAsyncAction.run(() => super
         .fetchDocumentsByArea(area,
             type: type,
@@ -108,16 +93,8 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
             title: title,
             author: author,
             institution: institution,
-            year: year));
-  }
-
-  late final _$fetchDocumentBySlugAsyncAction =
-      AsyncAction('LibraryStoreBase.fetchDocumentBySlug', context: context);
-
-  @override
-  Future<void> fetchDocumentBySlug(String slug) {
-    return _$fetchDocumentBySlugAsyncAction
-        .run(() => super.fetchDocumentBySlug(slug));
+            year: year,
+            reset: reset));
   }
 
   late final _$createOrUpdateDocumentAsyncAction =
@@ -158,7 +135,6 @@ mixin _$LibraryStore on LibraryStoreBase, Store {
     return '''
 fetchState: ${fetchState},
 manageState: ${manageState},
-selectedDocument: ${selectedDocument},
 documentsByArea: ${documentsByArea},
 hasMore: ${hasMore}
     ''';

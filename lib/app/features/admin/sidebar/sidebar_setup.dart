@@ -5,7 +5,6 @@ class SidebarSetup {
   static final GetIt getIt = GetIt.instance;
 
   static void setup() {
-    // Sidebar Navigation
     getIt.registerLazySingleton<SidebarStore>(
       () => SidebarStore(),
     );

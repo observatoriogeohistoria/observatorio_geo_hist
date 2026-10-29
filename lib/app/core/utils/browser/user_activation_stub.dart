@@ -1,0 +1,1 @@
+bool hasUserActivation() => true;

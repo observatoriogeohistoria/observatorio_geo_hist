@@ -4,11 +4,24 @@ on:
   push:
     branches:
       - main
+    # Only what goes into the build or the Firestore indexes is worth publishing.
+    # Manual deploys (workflow_dispatch) ignore this filter.
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.claude/**'
+      - '.vscode/**'
+      - 'tool/**'
+      - '.github/workflows/ci.yml'
+      - 'analysis_options.yaml'
   workflow_dispatch:
 
 concurrency:
   group: deploy-prod
   cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
@@ -17,14 +30,27 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      with:
+        persist-credentials: false
+
+    # Before the site, so the new search never ships without its indexes. It only creates and updates:
+    # without --force, indexes that exist only in the project are not deleted.
+    - name: Publicar índices do Firestore
+      env:
+        FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      run: |
+        printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-sa.json"
+        GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json" \
+          npx --yes firebase-tools@15.34.2 deploy --only firestore:indexes \
+          --project observatorio-geo-hist --non-interactive
 
     - name: Ler versão do Flutter do .fvmrc
       id: fvm
       run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
 
     - name: Set up Flutter
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
       with:
         flutter-version: ${{ steps.fvm.outputs.version }}
         cache: true
@@ -33,10 +59,10 @@ jobs:
       run: flutter pub get
 
     - name: Build Flutter Web app
-      run: flutter build web --release
+      run: flutter build web --release --dart-define=APP_ENV=prod
 
     - name: Sync build/web to HostGator (produção)
-      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      uses: SamKirkland/FTP-Deploy-Action@d0aa83872616587eb552bc831bb9166b3f9c5ad5 # 4.3.0
       with:
         server: ${{ secrets.FTP_HOST }}
         username: ${{ secrets.FTP_USER }}
@@ -46,3 +72,11 @@ jobs:
         security: loose
         server-dir: ./
         local-dir: build/web/
+
+    # After the site: the rules deny the post query of the previous build, which doesn't filter on
+    # isPublished. The service account needs the Firebase Rules Admin role.
+    - name: Publicar regras do Firestore e do Storage
+      run: |
+        GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json" \
+          npx --yes firebase-tools@15.34.2 deploy --only firestore:rules,storage \
+          --project observatorio-geo-hist --non-interactive

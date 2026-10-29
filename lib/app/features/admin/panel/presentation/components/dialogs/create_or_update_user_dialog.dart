@@ -1,28 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_dropdown_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/form_text_field.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/presentation/components/password_visibility_button.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_role.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_choice_cards.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_sheet.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/labels/user_role_label.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-void showCreateOrUpdateUserDialog(
+Future<void> showCreateOrUpdateUserDialog(
   BuildContext context, {
-  required void Function(UserModel user, String password) onCreate,
-  required void Function(UserModel user) onUpdate,
+  required Future<String?> Function(UserModel user, String password) onCreate,
+  required Future<String?> Function(UserModel user) onUpdate,
   UserModel? user,
 }) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => CreateOrUpdateUserDialog(
-      onCreate: onCreate,
-      onUpdate: onUpdate,
-      user: user,
-    ),
+  return showPanelSheet(
+    context,
+    builder: (_) => CreateOrUpdateUserDialog(onCreate: onCreate, onUpdate: onUpdate, user: user),
   );
 }
 
@@ -34,8 +29,8 @@ class CreateOrUpdateUserDialog extends StatefulWidget {
     super.key,
   });
 
-  final void Function(UserModel user, String password) onCreate;
-  final void Function(UserModel user) onUpdate;
+  final Future<String?> Function(UserModel user, String password) onCreate;
+  final Future<String?> Function(UserModel user) onUpdate;
   final UserModel? user;
 
   @override
@@ -47,81 +42,125 @@ class _CreateOrUpdateUserDialogState extends State<CreateOrUpdateUserDialog> {
   late final _emailController = TextEditingController(text: widget.user?.email);
   final _passwordController = TextEditingController();
 
-  late UserRole? _selectedRole = widget.user?.role;
+  final _nameKey = GlobalKey<FormFieldState<String>>();
+  final _emailKey = GlobalKey<FormFieldState<String>>();
+  final _passwordKey = GlobalKey<FormFieldState<String>>();
+  final _roleKey = GlobalKey<FormFieldState<UserRole>>();
+
+  final _nameFocus = FocusNode();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _roleFocus = FocusNode();
+
+  late UserRole? _role = widget.user?.role;
+  bool _passwordVisible = false;
 
   bool get _isUpdate => widget.user != null;
 
   @override
-  Widget build(BuildContext context) {
-    return PostFormDialog(
-      onSubmit: _onCreateOrUpdate,
-      isUpdate: _isUpdate,
-      isFullScreen: false,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppTitle.medium(
-            text: _isUpdate ? 'Atualizar usuário' : 'Criar usuário',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-          AppTextField(
-            controller: _nameController,
-            labelText: 'Nome',
-            validator: Validators.isNotEmpty,
-            isDisabled: _isUpdate,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTextField(
-            controller: _emailController,
-            labelText: 'E-mail',
-            validator: Validators.isValidEmail,
-            isDisabled: _isUpdate,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          if (!_isUpdate) ...[
-            AppTextField(
-              controller: _passwordController,
-              labelText: 'Senha',
-              validator: Validators.isValidPassword,
-            ),
-            SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          ],
-          AppDropdownField<UserRole>(
-            hintText: 'Selecione um papel',
-            items: UserRole.values,
-            itemToString: (role) => role.toString(),
-            value: _selectedRole,
-            onChanged: (role) {
-              if (role == null) return;
-              setState(() => _selectedRole = UserRole.fromString(role));
-            },
-            validator: Validators.isNotEmpty,
-          ),
-        ],
-      ),
-    );
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    for (final node in [_nameFocus, _emailFocus, _passwordFocus, _roleFocus]) {
+      node.dispose();
+    }
+    super.dispose();
   }
 
-  void _onCreateOrUpdate() {
+  Future<String?> _save() {
     if (_isUpdate) {
-      widget.onUpdate(
+      return widget.onUpdate(
         widget.user!.copyWith(
           name: _nameController.text,
           email: _emailController.text,
-          role: _selectedRole,
+          role: _role,
         ),
-      );
-    } else {
-      widget.onCreate(
-        UserModel(
-          name: _nameController.text,
-          email: _emailController.text,
-          role: _selectedRole!,
-        ),
-        _passwordController.text,
       );
     }
+
+    return widget.onCreate(
+      UserModel(name: _nameController.text, email: _emailController.text, role: _role!),
+      _passwordController.text,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final gap = SizedBox(height: AppTheme.dimensions.components.formFieldGap);
+
+    return PanelSheet(
+      title: _isUpdate ? 'Editar usuário' : 'Novo usuário',
+      onSave: _save,
+      fields: [
+        PanelSheetField(_nameKey, _nameFocus),
+        PanelSheetField(_emailKey, _emailFocus),
+        if (!_isUpdate) PanelSheetField(_passwordKey, _passwordFocus),
+        PanelSheetField(_roleKey, _roleFocus),
+      ],
+      builder: (context) {
+        void submit(String _) => PanelSheet.submitOf(context);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            FormTextField(
+              label: 'Nome',
+              controller: _nameController,
+              focusNode: _nameFocus,
+              formFieldKey: _nameKey,
+              validator: PanelValidators.required,
+              autofocus: true,
+              readOnly: _isUpdate,
+              textInputAction: TextInputAction.done,
+              onSubmitted: submit,
+            ),
+            gap,
+            FormTextField(
+              label: 'E-mail',
+              controller: _emailController,
+              focusNode: _emailFocus,
+              formFieldKey: _emailKey,
+              validator: PanelValidators.email,
+              keyboardType: TextInputType.emailAddress,
+              readOnly: _isUpdate,
+              textInputAction: TextInputAction.done,
+              onSubmitted: submit,
+            ),
+            gap,
+            if (!_isUpdate) ...[
+              FormTextField(
+                label: 'Senha inicial',
+                controller: _passwordController,
+                focusNode: _passwordFocus,
+                formFieldKey: _passwordKey,
+                validator: PanelValidators.password,
+                obscureText: !_passwordVisible,
+                helperText: '8 caracteres ou mais, com letra maiúscula, minúscula, número e '
+                    'caractere especial. Envie à pessoa por um canal seguro.',
+                textInputAction: TextInputAction.done,
+                onSubmitted: submit,
+                suffix: PasswordVisibilityButton(
+                  visible: _passwordVisible,
+                  onPressed: () => setState(() => _passwordVisible = !_passwordVisible),
+                ),
+              ),
+              gap,
+            ],
+            PanelChoiceCards<UserRole>(
+              label: 'Papel',
+              options: [
+                for (final role in UserRole.values) PanelChoice(role, role.label, role.description),
+              ],
+              value: _role,
+              formFieldKey: _roleKey,
+              focusNode: _roleFocus,
+              validator: PanelValidators.choice('Escolha um papel.'),
+              onChanged: (role) => setState(() => _role = role),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -2,15 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Observatório",
+      "name": "Observatório (dev)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": [
-        "-d",
-        "chrome",
-        // "--web-experimental-hot-reload",
-      ]
+      "args": ["-d", "chrome", "--dart-define=APP_ENV=dev"]
     },
+    {
+      "name": "Observatório (prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": ["-d", "chrome", "--dart-define=APP_ENV=prod"]
+    }
   ]
 }

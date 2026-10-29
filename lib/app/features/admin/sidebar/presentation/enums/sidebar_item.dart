@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
+import 'package:observatorio_geo_hist/app/features/admin/sidebar/presentation/labels/post_type_panel_labels.dart';
+
+enum SidebarGroup {
+  content('Conteúdo'),
+  filesAndPeople('Arquivos e pessoas'),
+  administration('Administração');
+
+  const SidebarGroup(this.title);
+
+  final String title;
+}
 
 enum SidebarItem {
   users,
@@ -14,15 +26,15 @@ enum SidebarItem {
       case SidebarItem.users:
         return 'usuarios';
       case SidebarItem.media:
-        return 'mídias';
+        return 'midias';
       case SidebarItem.categories:
         return 'categorias';
       case SidebarItem.posts:
-        return 'posts';
+        return AppRoutes.publicationsSegment;
       case SidebarItem.team:
         return 'equipe';
       case SidebarItem.library:
-        return 'biblioteca';
+        return AppRoutes.librarySegment;
     }
   }
 
@@ -35,7 +47,7 @@ enum SidebarItem {
       case SidebarItem.categories:
         return 'Categorias';
       case SidebarItem.posts:
-        return 'Posts';
+        return 'Publicações';
       case SidebarItem.team:
         return 'Equipe';
       case SidebarItem.library:
@@ -43,56 +55,56 @@ enum SidebarItem {
     }
   }
 
+  SidebarGroup get group {
+    switch (this) {
+      case SidebarItem.posts:
+      case SidebarItem.categories:
+      case SidebarItem.library:
+        return SidebarGroup.content;
+      case SidebarItem.media:
+      case SidebarItem.team:
+        return SidebarGroup.filesAndPeople;
+      case SidebarItem.users:
+        return SidebarGroup.administration;
+    }
+  }
+
+  /// In posts the eyebrow is the section itself, because the title is the type.
+  String get eyebrow => this == SidebarItem.posts ? title : group.title;
+
   IconData get icon {
     switch (this) {
       case SidebarItem.users:
-        return Icons.people;
+        return Icons.person_outline;
       case SidebarItem.media:
-        return Icons.perm_media;
+        return Icons.image_outlined;
       case SidebarItem.categories:
-        return Icons.category;
+        return Icons.sell_outlined;
       case SidebarItem.posts:
-        return Icons.post_add_outlined;
+        return Icons.layers_outlined;
       case SidebarItem.team:
-        return Icons.workspaces;
+        return Icons.group_outlined;
       case SidebarItem.library:
-        return Icons.library_books;
+        return Icons.menu_book_outlined;
     }
   }
 
-  List<PostType> get subItems {
-    switch (this) {
-      case SidebarItem.users:
-        return [];
-      case SidebarItem.media:
-        return [];
-      case SidebarItem.categories:
-        return [];
-      case SidebarItem.posts:
-        final sorted = PostType.values.toList();
-        sorted.sort((a, b) => a.portuguese.compareTo(b.portuguese));
-
-        return sorted;
-      case SidebarItem.team:
-        return [];
-      case SidebarItem.library:
-        return [];
-    }
-  }
+  List<PostType> get subItems =>
+      this == SidebarItem.posts ? PostTypePanelLabels.menuOrder : const [];
 
   static SidebarItem? fromString(String? value) {
     switch (value) {
       case 'usuarios':
         return SidebarItem.users;
-      case 'mídias':
+      case 'midias':
         return SidebarItem.media;
       case 'categorias':
         return SidebarItem.categories;
-      case 'posts':
+      case AppRoutes.publicationsSegment:
         return SidebarItem.posts;
       case 'equipe':
         return SidebarItem.team;
-      case 'biblioteca':
+      case AppRoutes.librarySegment:
         return SidebarItem.library;
       default:
         return null;

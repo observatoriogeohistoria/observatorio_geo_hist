@@ -1,0 +1,36 @@
+<!doctype html>
+<!--
+  Square icon with the Observatório brand.
+  Parameter ?background=transparent (default) or ?background=white.
+  Used by generate.sh; the size comes from the Chrome window.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      /* Colors from AppColors (lib/app/theme/app_colors/app_colors.dart). */
+      :root {
+        --page: #ffffff;
+      }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+      body.white { background: var(--page); }
+      svg { display: block; width: 100%; height: 100%; }
+      /* On white the brand gets a margin so it doesn't touch iOS's rounded corners. */
+      body.white svg { width: 84%; height: 84%; margin: 8%; }
+    </style>
+  </head>
+  <body>
+    <!-- Same drawing as assets/images/logo.svg -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 34">
+      <circle cx="17" cy="17" r="16" fill="#C94400"/>
+      <circle cx="17" cy="17" r="10.5" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.4"/>
+      <circle cx="17" cy="17" r="5" fill="none" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="1.4"/>
+      <circle cx="17" cy="17" r="1.9" fill="#FFFFFF"/>
+    </svg>
+    <script>
+      if (new URLSearchParams(location.search).get("background") === "white") {
+        document.body.className = "white";
+      }
+    </script>
+  </body>
+</html>

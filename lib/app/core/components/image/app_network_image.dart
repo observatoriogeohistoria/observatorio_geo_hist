@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/image_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/skeleton/skeleton.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/core/utils/image/image.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 class AppNetworkImage extends StatelessWidget {
   const AppNetworkImage({
@@ -25,6 +25,11 @@ class AppNetworkImage extends StatelessWidget {
   final BoxFit fit;
 
   final bool noPlaceholder;
+
+  double get _skeletonHeight {
+    if (width.isFinite) return width;
+    return AppTheme.dimensions.components.networkImageSkeletonHeight;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +76,7 @@ class AppNetworkImage extends StatelessWidget {
               ? child
               : Skeleton(
                   width: width,
-                  height: height ?? 253.verticalSpacing,
+                  height: height ?? _skeletonHeight,
                 ),
         );
       },
@@ -79,7 +84,9 @@ class AppNetworkImage extends StatelessWidget {
         return SizedBox(
           width: width,
           height: height,
-          child: const ImageErrorContent(),
+          child: ImageErrorContent(
+            compact: width < AppTheme.dimensions.components.imageErrorMessageMinWidth,
+          ),
         );
       },
     );

@@ -1,39 +1,27 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_image_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/form_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
-import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/dialogs/post_form_dialog.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_image_field.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_sheet.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_validators.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-void showCreateOrUpdateTeamMemberDialog(
+Future<void> showCreateOrUpdateTeamMemberDialog(
   BuildContext context, {
-  required void Function(TeamMemberModel member) onCreateOrUpdate,
+  required Future<String?> Function(TeamMemberModel member) onSave,
   TeamMemberModel? member,
 }) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => CreateOrUpdateTeamMemberDialog(
-      onCreateOrUpdate: onCreateOrUpdate,
-      member: member,
-    ),
+  return showPanelSheet(
+    context,
+    builder: (_) => CreateOrUpdateTeamMemberDialog(onSave: onSave, member: member),
   );
 }
 
 class CreateOrUpdateTeamMemberDialog extends StatefulWidget {
-  const CreateOrUpdateTeamMemberDialog({
-    required this.onCreateOrUpdate,
-    this.member,
-    super.key,
-  });
+  const CreateOrUpdateTeamMemberDialog({required this.onSave, this.member, super.key});
 
-  final void Function(TeamMemberModel member) onCreateOrUpdate;
+  final Future<String?> Function(TeamMemberModel member) onSave;
   final TeamMemberModel? member;
 
   @override
@@ -41,90 +29,152 @@ class CreateOrUpdateTeamMemberDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateTeamMemberDialogState extends State<CreateOrUpdateTeamMemberDialog> {
-  final StreamController<Completer<FileModel?>> _imageController = StreamController();
-
   late final _nameController = TextEditingController(text: widget.member?.name);
-  late final _roleController = TextEditingController(text: widget.member?.role.toString());
-  late final _descriptionController = TextEditingController(text: widget.member?.description);
+  late final _roleController = TextEditingController(text: widget.member?.role);
   late final _lattesUrlController = TextEditingController(text: widget.member?.lattesUrl);
+  late final _descriptionController = TextEditingController(text: widget.member?.description);
   late final _imageUrlController = TextEditingController(text: widget.member?.image?.url);
+  final _image = ValueNotifier<FileModel?>(null);
+
+  final _nameKey = GlobalKey<FormFieldState<String>>();
+  final _roleKey = GlobalKey<FormFieldState<String>>();
+  final _lattesKey = GlobalKey<FormFieldState<String>>();
+  final _imageKey = GlobalKey<FormFieldState<FileModel>>();
+  final _imageUrlKey = GlobalKey<FormFieldState<String>>();
+
+  final _nameFocus = FocusNode();
+  final _roleFocus = FocusNode();
+  final _lattesFocus = FocusNode();
+  final _descriptionFocus = FocusNode();
+  final _imageFocus = FocusNode();
+  final _imageUrlFocus = FocusNode();
 
   bool get _isUpdate => widget.member != null;
 
   @override
-  Widget build(BuildContext context) {
-    return PostFormDialog(
-      onSubmit: _onCreateOrUpdate,
-      isUpdate: _isUpdate,
-      isFullScreen: false,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppTitle.medium(
-            text: _isUpdate ? 'Atualizar membro' : 'Criar membro',
-            color: AppTheme.colors.orange,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-          AppTextField(
-            controller: _nameController,
-            labelText: 'Nome',
-            validator: Validators.isNotEmpty,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTextField(
-            controller: _roleController,
-            labelText: 'Papel',
-            validator: Validators.isNotEmpty,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTextField(
-            controller: _lattesUrlController,
-            labelText: 'URL do Lattes',
-            validator: Validators.isValidUrlOrEmpty,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppTextField(
-            controller: _descriptionController,
-            labelText: 'Descrição',
-            minLines: 10,
-            maxLines: 10,
-          ),
-          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-          AppImageField(
-            imageUrlController: _imageUrlController,
-            imageController: _imageController,
-          ),
-        ],
-      ),
-    );
+  void dispose() {
+    for (final controller in [
+      _nameController,
+      _roleController,
+      _lattesUrlController,
+      _descriptionController,
+      _imageUrlController,
+    ]) {
+      controller.dispose();
+    }
+    for (final node in [
+      _nameFocus,
+      _roleFocus,
+      _lattesFocus,
+      _descriptionFocus,
+      _imageFocus,
+      _imageUrlFocus,
+    ]) {
+      node.dispose();
+    }
+    _image.dispose();
+    super.dispose();
   }
 
-  Future<FileModel?> _getImage() async {
-    final completer = Completer<FileModel?>();
-    _imageController.add(completer);
+  Future<String?> _save() {
+    final image = _image.value;
+    final imageUrl = _imageUrlController.text;
 
-    return completer.future;
-  }
-
-  Future<void> _onCreateOrUpdate() async {
-    FileModel? image = await _getImage();
-
-    widget.onCreateOrUpdate(
+    return widget.onSave(
       TeamMemberModel(
         id: widget.member?.id,
         name: _nameController.text,
         role: _roleController.text,
         lattesUrl: _lattesUrlController.text,
         description: _descriptionController.text,
-        image: (_imageUrlController.text.isNotEmpty || image != null)
-            ? FileModel(
-                url: _imageUrlController.text,
-                bytes: image?.bytes,
-                name: image?.name,
-              )
+        image: imageUrl.isNotEmpty || image != null
+            ? FileModel(url: imageUrl, bytes: image?.bytes, name: image?.name)
             : null,
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final components = AppTheme.dimensions.components;
+    final gap = SizedBox(height: components.formFieldGap);
+
+    return PanelSheet(
+      title: _isUpdate ? 'Editar membro' : 'Novo membro',
+      onSave: _save,
+      fields: [
+        PanelSheetField(_nameKey, _nameFocus),
+        PanelSheetField(_roleKey, _roleFocus),
+        PanelSheetField(_lattesKey, _lattesFocus),
+        PanelSheetField(_imageKey, panelPickFocusTarget(_imageFocus, _imageUrlFocus)),
+        PanelSheetField(_imageUrlKey, _imageUrlFocus),
+      ],
+      builder: (context) {
+        void submit(String _) => PanelSheet.submitOf(context);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            FormTextField(
+              label: 'Nome',
+              controller: _nameController,
+              focusNode: _nameFocus,
+              formFieldKey: _nameKey,
+              validator: PanelValidators.required,
+              autofocus: true,
+              textInputAction: TextInputAction.done,
+              onSubmitted: submit,
+            ),
+            gap,
+            FormTextField(
+              label: 'Função',
+              controller: _roleController,
+              focusNode: _roleFocus,
+              formFieldKey: _roleKey,
+              validator: PanelValidators.required,
+              textInputAction: TextInputAction.done,
+              onSubmitted: submit,
+            ),
+            gap,
+            FormTextField(
+              label: 'Currículo Lattes',
+              isOptional: true,
+              controller: _lattesUrlController,
+              focusNode: _lattesFocus,
+              formFieldKey: _lattesKey,
+              validator: PanelValidators.urlOrEmpty,
+              hintText: 'https://lattes.cnpq.br/…',
+              keyboardType: TextInputType.url,
+              textInputAction: TextInputAction.done,
+              onSubmitted: submit,
+            ),
+            gap,
+            FormTextField(
+              label: 'Descrição',
+              isOptional: true,
+              controller: _descriptionController,
+              focusNode: _descriptionFocus,
+              multiline: true,
+              minLines: components.panelDescriptionMinLines,
+              maxLines: components.panelDescriptionMaxLines,
+              helperText: 'Com descrição, a pessoa ganha página própria no site.',
+            ),
+            gap,
+            PanelImageField(
+              label: 'Foto',
+              pickText: 'Escolher foto',
+              isOptional: true,
+              square: true,
+              urlController: _imageUrlController,
+              file: _image,
+              formFieldKey: _imageKey,
+              urlFieldKey: _imageUrlKey,
+              focusNode: _imageFocus,
+              urlFocusNode: _imageUrlFocus,
+            ),
+          ],
+        );
+      },
     );
   }
 }

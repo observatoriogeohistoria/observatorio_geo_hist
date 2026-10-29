@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/buttons/app_icon_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
+import 'package:observatorio_geo_hist/app/core/components/error_content/image_error_content.dart';
 import 'package:observatorio_geo_hist/app/core/components/video_player/app_video_player.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/media_model.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
@@ -42,16 +43,16 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
       child: Stack(
         children: [
           _buildMediaContent(isVideo),
-          // SingleChildScrollView(
-          //   child: _buildMediaContent(isVideo),
-          // ),
           Positioned(
             top: 0,
             right: 0,
             child: Padding(
-              padding: EdgeInsets.all(AppTheme.dimensions.space.small.scale),
-              child: IconButton(
-                icon: const Icon(Icons.close),
+              padding: EdgeInsets.all(AppTheme.dimensions.spacing.s8),
+              child: AppIconButton(
+                label: 'Fechar',
+                tooltip: 'Fechar: volta à lista de mídias',
+                icon: Icons.close,
+                color: AppTheme.colors.ink,
                 onPressed: () => GoRouter.of(context).pop(),
               ),
             ),
@@ -66,6 +67,7 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
       return Image.memory(
         widget.media.bytes!,
         fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => const ImageErrorContent(),
       );
     }
 
@@ -77,6 +79,7 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
       return Image.network(
         widget.media.url!,
         fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => const ImageErrorContent(),
       );
     }
 

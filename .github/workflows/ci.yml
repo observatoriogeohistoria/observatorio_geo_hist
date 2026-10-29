@@ -10,26 +10,59 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
+  # The validate job is a required check: with paths-ignore on the trigger it never reported and
+  # docs-only PRs got stuck. So the filter lives here; a job skipped by `if` counts as passed.
+  mudancas:
+    runs-on: ubuntu-latest
+    outputs:
+      site: ${{ steps.filtro.outputs.site }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      with:
+        persist-credentials: false
+        fetch-depth: 0
+
+    - name: Ver se algo do site mudou
+      id: filtro
+      run: |
+        alterados=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
+          | grep -Ev '^(docs/|\.claude/|\.vscode/|tool/|\.github/workflows/deploy-[^/]*\.yml$)|\.md$' || true)
+        echo "site=$([ -n "$alterados" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
   validar:
+    needs: mudancas
+    if: needs.mudancas.outputs.site == 'true'
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      with:
+        persist-credentials: false
 
     - name: Ler versão do Flutter do .fvmrc
       id: fvm
       run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
 
     - name: Set up Flutter
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
       with:
         flutter-version: ${{ steps.fvm.outputs.version }}
         cache: true
 
     - name: Install dependencies
       run: flutter pub get
+
+    - name: Conferir formatação
+      run: |
+        find lib -name '*.dart' ! -name '*.g.dart' ! -name '*.freezed.dart' -print0 \
+          | xargs -0 dart format --output=none --set-exit-if-changed
 
     - name: Analyze
       run: flutter analyze --no-fatal-infos

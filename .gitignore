@@ -44,3 +44,6 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# Scripts em Node
+node_modules/

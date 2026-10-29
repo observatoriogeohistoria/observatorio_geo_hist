@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:observatorio_geo_hist/app/core/errors/offline_exception.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
@@ -25,6 +26,7 @@ class FetchCategoriesDatasourceImpl implements FetchCategoriesDatasource {
           await _firestore.collection('posts').where('areas', arrayContains: 'geografia').get();
 
       if (historyQuerySnapshot.docs.isEmpty && geographyQuerySnapshot.docs.isEmpty) {
+        if (historyQuerySnapshot.metadata.isFromCache) throw const OfflineException();
         return CategoriesByArea();
       }
 

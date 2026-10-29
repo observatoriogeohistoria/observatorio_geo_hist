@@ -19,10 +19,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<AuthFailure, UserModel>> login(String email, String password) async {
     try {
       final user = await _datasource.signIn(email, password);
+      if (user == null) return const Left(UserNotFound());
 
-      if (user != null) return Right(user);
-
-      return const Left(UserNotFound());
+      return _rejectRemoved(user);
     } on FirebaseAuthException catch (error) {
       return Left(AuthFailure.fromException(error));
     } catch (_) {
@@ -46,13 +45,22 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<AuthFailure, UserModel>> currentUser() async {
     try {
       final user = await _datasource.currentUser();
+      if (user == null) return const Left(UserNotFound());
 
-      if (user != null) return Right(user);
-      return const Left(UserNotFound());
+      return _rejectRemoved(user);
     } on FirebaseAuthException catch (error) {
       return Left(AuthFailure.fromException(error));
     } catch (_) {
       throw const Left(UserNotFound());
     }
+  }
+
+  // The Auth account of a removed user still signs in; without this the panel would open with
+  // every read denied by the security rules.
+  Future<Either<AuthFailure, UserModel>> _rejectRemoved(UserModel user) async {
+    if (!user.isDeleted) return Right(user);
+
+    await _datasource.signOut();
+    return const Left(UserDisabled());
   }
 }

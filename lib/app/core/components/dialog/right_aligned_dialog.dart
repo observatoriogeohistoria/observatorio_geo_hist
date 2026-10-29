@@ -17,31 +17,29 @@ class RightAlignedDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double getWidth() {
-      final isMobile = ScreenUtils.isMobile(context);
-      final isTablet = ScreenUtils.isTablet(context);
-
-      if (isMobile) {
-        return MediaQuery.of(context).size.width;
-      } else if (isTablet) {
-        return MediaQuery.of(context).size.width * 0.7;
-      } else {
-        return MediaQuery.of(context).size.width * 0.5;
-      }
-    }
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final breakpoint = ScreenUtils.breakpointOf(context);
+    final size = MediaQuery.sizeOf(context);
+    final radius = Radius.circular(AppTheme.dimensions.radii.r12);
 
     return Align(
       alignment: Alignment.centerRight,
       child: Material(
-        color: AppTheme.colors.lighterGray,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(AppTheme.dimensions.radius.large),
-          bottomLeft: Radius.circular(AppTheme.dimensions.radius.large),
+        color: colors.page,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.horizontal(left: radius),
         ),
+        clipBehavior: Clip.antiAlias,
         child: Container(
-          width: widthFollowsContent ? null : (width ?? getWidth()),
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(AppTheme.dimensions.space.large),
+          width: widthFollowsContent
+              ? null
+              : (width ?? size.width * components.panelDialogWidthFactor(breakpoint)),
+          height: size.height,
+          padding: EdgeInsets.all(components.panelDialogPadding(breakpoint)),
+          decoration: BoxDecoration(
+            border: Border(left: BorderSide(color: colors.line)),
+          ),
           child: child,
         ),
       ),

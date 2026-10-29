@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
+import 'package:observatorio_geo_hist/app/core/errors/offline_exception.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
@@ -23,6 +24,7 @@ class FetchHighlightsDatasourceImpl implements FetchHighlightsDatasource {
           .where('isHighlighted', isEqualTo: true);
 
       final snapshot = await query.get();
+      if (snapshot.docs.isEmpty && snapshot.metadata.isFromCache) throw const OfflineException();
 
       final posts = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;

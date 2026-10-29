@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
+import 'package:observatorio_geo_hist/app/core/utils/environment/app_environment.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
-import 'package:observatorio_geo_hist/firebase_options.dart';
 
 abstract class FirebaseAuthDatasource {
   Future<UserModel?> signIn(String email, String password);
@@ -19,23 +19,34 @@ class FirebaseAuthDatasourceImpl implements FirebaseAuthDatasource {
 
   FirebaseAuthDatasourceImpl(this._firebaseAuth, this._firestore, this._loggerService);
 
+  static const _userCreationAppName = 'UserCreation';
+
   @override
   Future<User?> createUser(String email, String password) async {
+    final auth = FirebaseAuth.instanceFor(app: await _userCreationApp());
+
     try {
-      final app = await Firebase.initializeApp(
-        name: 'TemporaryApp',
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-
-      final userCredential = await FirebaseAuth.instanceFor(app: app)
-          .createUserWithEmailAndPassword(email: email, password: password);
-      await app.delete();
-
+      final userCredential =
+          await auth.createUserWithEmailAndPassword(email: email, password: password);
       return userCredential.user;
     } catch (exception, stackTrace) {
       _loggerService.error('Error creating user: $exception', stackTrace: stackTrace);
       rethrow;
+    } finally {
+      await auth.signOut();
     }
+  }
+
+  // A secondary app keeps the admin signed in while the new account is created. It is reused,
+  // never deleted: FirebaseAuth caches its instance by app name and would keep the deleted one.
+  Future<FirebaseApp> _userCreationApp() async {
+    final existing = Firebase.apps.where((app) => app.name == _userCreationAppName);
+    if (existing.isNotEmpty) return existing.first;
+
+    return Firebase.initializeApp(
+      name: _userCreationAppName,
+      options: AppEnvironment.current.firebaseOptions,
+    );
   }
 
   @override

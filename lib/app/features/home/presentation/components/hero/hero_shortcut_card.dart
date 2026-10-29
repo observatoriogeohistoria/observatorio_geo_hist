@@ -1,0 +1,218 @@
+import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
+import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
+
+enum HeroShortcutLayout { horizontal, vertical }
+
+class HeroShortcutCard extends StatefulWidget {
+  const HeroShortcutCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.semanticLabel,
+    required this.onTap,
+    this.url,
+    this.layout = HeroShortcutLayout.horizontal,
+    this.focusNode,
+  });
+
+  final IconData icon;
+  final String title;
+  final String description;
+
+  final String semanticLabel;
+  final VoidCallback onTap;
+
+  final String? url;
+  final HeroShortcutLayout layout;
+
+  final FocusNode? focusNode;
+
+  @override
+  State<HeroShortcutCard> createState() => _HeroShortcutCardState();
+}
+
+class _HeroShortcutCardState extends State<HeroShortcutCard> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final spacing = AppTheme.dimensions.spacing;
+    final components = AppTheme.dimensions.components;
+    final shadows = AppTheme.dimensions.shadows;
+    final radius = BorderRadius.circular(AppTheme.dimensions.radii.r14);
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+
+    return Semantics(
+      button: widget.url == null,
+      link: widget.url != null,
+      linkUrl: widget.url == null ? null : Uri.parse(widget.url!),
+      label: widget.semanticLabel,
+      onTap: widget.onTap,
+      excludeSemantics: true,
+      child: AppFocusRing(
+        borderRadius: radius,
+        fit: StackFit.passthrough,
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(end: _hovered ? 1 : 0),
+          duration: reduceMotion ? Duration.zero : components.shortcutAnimation,
+          curve: Curves.easeOut,
+          builder: (context, t, child) => Transform.translate(
+            offset: Offset(0, reduceMotion ? 0 : -components.shortcutHoverLift * t),
+            child: DecoratedBox(
+              // No shadow at rest: even transparent, the blur is painted every frame.
+              decoration: BoxDecoration(
+                color: colors.page,
+                borderRadius: radius,
+                border: Border.all(
+                  color: Color.lerp(colors.line, colors.accent, t)!,
+                  width: AppTheme.dimensions.stroke.small,
+                ),
+                boxShadow: t == 0 ? null : shadows.fade(shadows.soft, t),
+              ),
+              child: child,
+            ),
+          ),
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              focusNode: widget.focusNode,
+              borderRadius: radius,
+              onTap: widget.onTap,
+              onHover: (value) => setState(() => _hovered = value),
+              hoverColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              mouseCursor: SystemMouseCursors.click,
+              child: Padding(
+                padding: EdgeInsets.all(spacing.s20),
+                child: switch (widget.layout) {
+                  HeroShortcutLayout.horizontal => _horizontal(context),
+                  HeroShortcutLayout.vertical => _vertical(context),
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _horizontal(BuildContext context) {
+    final spacing = AppTheme.dimensions.spacing;
+
+    return Row(
+      children: [
+        _IconBox(icon: widget.icon),
+        SizedBox(width: spacing.s16),
+        Expanded(child: _Texts(title: widget.title, description: widget.description)),
+        SizedBox(width: spacing.s12),
+        const _Arrow(),
+      ],
+    );
+  }
+
+  Widget _vertical(BuildContext context) {
+    final spacing = AppTheme.dimensions.spacing;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _IconBox(icon: widget.icon),
+        SizedBox(height: spacing.s16),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _Title(widget.title)),
+            SizedBox(width: spacing.s8),
+            const _Arrow(),
+          ],
+        ),
+        SizedBox(height: spacing.s4),
+        _Description(widget.description),
+      ],
+    );
+  }
+}
+
+class _IconBox extends StatelessWidget {
+  const _IconBox({required this.icon});
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+
+    return Container(
+      width: components.shortcutIconBox,
+      height: components.shortcutIconBox,
+      decoration: BoxDecoration(
+        color: colors.accentSoft,
+        borderRadius: BorderRadius.circular(AppTheme.dimensions.radii.r12),
+      ),
+      alignment: Alignment.center,
+      child: Icon(icon, size: components.shortcutIcon, color: colors.accent),
+    );
+  }
+}
+
+class _Texts extends StatelessWidget {
+  const _Texts({required this.title, required this.description});
+
+  final String title;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _Title(title),
+        SizedBox(height: AppTheme.dimensions.spacing.s4),
+        _Description(description),
+      ],
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        style: AppTheme.typography.of(context).h3.copyWith(color: AppTheme.colors.ink));
+  }
+}
+
+class _Description extends StatelessWidget {
+  const _Description(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        style: AppTheme.typography.of(context).small.copyWith(color: AppTheme.colors.inkSecondary));
+  }
+}
+
+class _Arrow extends StatelessWidget {
+  const _Arrow();
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.arrow_forward,
+      size: AppTheme.dimensions.components.navIcon,
+      color: AppTheme.colors.inkSecondary,
+    );
+  }
+}

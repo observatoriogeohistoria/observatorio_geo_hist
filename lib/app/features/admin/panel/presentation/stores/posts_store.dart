@@ -45,6 +45,12 @@ abstract class PostsStoreBase with Store {
 
   final Map<PostType, bool> _hasMore = {for (PostType type in PostType.values) type: true};
 
+  int _request = 0;
+
+  bool hasMore(PostType type) => _hasMore[type] ?? false;
+
+  /// With a new filter (or [reset]) starts from the first page and ignores the response still
+  /// on its way; with the same filters, fetches the next page.
   @action
   Future<void> getPosts(
     PostType type, {
@@ -53,24 +59,34 @@ abstract class PostsStoreBase with Store {
     CategoryModel? searchCategory,
     bool? isPublished,
     bool? isHighlighted,
+    bool reset = false,
   }) async {
-    if (state is CrudLoadingState) return;
-
-    if (searchText != _lastSearchText[type] ||
+    final normalizedSearchText = searchText?.toLowerCase();
+    final filtersChanged = reset ||
+        normalizedSearchText != _lastSearchText[type] ||
         searchArea != _lastSearchArea[type] ||
         searchCategory?.key != _lastSearchCategory[type]?.key ||
         isPublished != _lastIsPublished[type] ||
-        isHighlighted != _lastIsHighlighted[type]) {
+        isHighlighted != _lastIsHighlighted[type];
+
+    if (state is CrudLoadingState && !filtersChanged) return;
+
+    if (filtersChanged) {
       posts[type] = [];
       _hasMore[type] = true;
       _lastDocument[type] = null;
+      _lastSearchText[type] = normalizedSearchText;
+      _lastSearchArea[type] = searchArea;
+      _lastSearchCategory[type] = searchCategory;
+      _lastIsPublished[type] = isPublished;
+      _lastIsHighlighted[type] = isHighlighted;
     }
 
     if (_hasMore[type] == false) return;
 
+    final request = ++_request;
     state = CrudLoadingState(isRefreshing: _lastDocument[type] != null);
 
-    final normalizedSearchText = searchText?.toLowerCase();
     final result = await _postsRepository.getPosts(
       type,
       searchText: normalizedSearchText,
@@ -81,6 +97,8 @@ abstract class PostsStoreBase with Store {
       startAfterDocument: _lastDocument[type],
     );
 
+    if (request != _request) return;
+
     result.fold(
       (failure) => state = CrudErrorState(failure),
       (paginatedPosts) {
@@ -88,12 +106,6 @@ abstract class PostsStoreBase with Store {
         newPosts.addAll(paginatedPosts.posts);
 
         posts[type] = newPosts.asObservable();
-
-        _lastSearchText[type] = normalizedSearchText;
-        _lastSearchArea[type] = searchArea;
-        _lastSearchCategory[type] = searchCategory;
-        _lastIsPublished[type] = isPublished;
-        _lastIsHighlighted[type] = isHighlighted;
 
         _lastDocument[type] = paginatedPosts.lastDocument;
         _hasMore[type] = paginatedPosts.hasMore;

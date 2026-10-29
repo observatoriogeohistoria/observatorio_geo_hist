@@ -73,8 +73,9 @@ abstract class UsersStoreBase extends CrudStore<UserModel> with Store {
     result.fold(
       (failure) => state = CrudErrorState(failure),
       (_) {
-        items.removeWhere((u) => u.id == item.id);
-        state = CrudSuccessState(message: 'Usuário deletado com sucesso');
+        final index = items.indexWhere((u) => u.id == item.id);
+        if (index >= 0) items[index] = item.copyWith(isDeleted: true);
+        state = CrudSuccessState(message: 'Usuário removido com sucesso');
       },
     );
   }

@@ -1,41 +1,28 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/dialog/right_aligned_dialog.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_document_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_multiselect_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/form_text_field.dart';
 import 'package:observatorio_geo_hist/app/core/models/image_model.dart';
-import 'package:observatorio_geo_hist/app/core/models/states/crud_states.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
-import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
-import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_check_group.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_file_field.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_image_field.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_select_field.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_sheet.dart';
+import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_validators.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
-import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
-import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_store.dart';
+import 'package:observatorio_geo_hist/app/features/library/presentation/components/listing/library_filter_select.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-void showCreateOrUpdateLibraryDocumentDialog(
+Future<void> showCreateOrUpdateLibraryDocumentDialog(
   BuildContext context, {
   required DocumentArea area,
-  required void Function(LibraryDocumentModel document, FileModel? file) onCreateOrUpdate,
+  required Future<String?> Function(LibraryDocumentModel document, FileModel file) onSave,
   LibraryDocumentModel? document,
-  bool isLoading = false,
 }) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
+  return showPanelSheet(
+    context,
     builder: (_) => CreateOrUpdateLibraryDocumentDialog(
       area: area,
-      onCreateOrUpdate: onCreateOrUpdate,
+      onSave: onSave,
       document: document,
     ),
   );
@@ -44,13 +31,13 @@ void showCreateOrUpdateLibraryDocumentDialog(
 class CreateOrUpdateLibraryDocumentDialog extends StatefulWidget {
   const CreateOrUpdateLibraryDocumentDialog({
     required this.area,
-    required this.onCreateOrUpdate,
+    required this.onSave,
     this.document,
     super.key,
   });
 
   final DocumentArea area;
-  final void Function(LibraryDocumentModel document, FileModel? file) onCreateOrUpdate;
+  final Future<String?> Function(LibraryDocumentModel document, FileModel file) onSave;
   final LibraryDocumentModel? document;
 
   @override
@@ -59,229 +46,190 @@ class CreateOrUpdateLibraryDocumentDialog extends StatefulWidget {
 }
 
 class _CreateOrUpdateLibraryDocumentDialogState extends State<CreateOrUpdateLibraryDocumentDialog> {
-  late final _libraryStore = LibrarySetup.getIt<LibraryStore>();
+  late final _titleController = TextEditingController(text: widget.document?.title);
+  late final _authorController = TextEditingController(text: widget.document?.author);
+  late final _institutionController = TextEditingController(text: widget.document?.institution);
+  late final _yearController = TextEditingController(text: widget.document?.year.toString());
+  late final _documentUrlController = TextEditingController(text: widget.document?.documentUrl);
+  final _file = ValueNotifier<FileModel?>(null);
 
-  final StreamController<Completer<FileModel?>> _documentController = StreamController();
+  final _titleKey = GlobalKey<FormFieldState<String>>();
+  final _authorKey = GlobalKey<FormFieldState<String>>();
+  final _institutionKey = GlobalKey<FormFieldState<String>>();
+  final _yearKey = GlobalKey<FormFieldState<String>>();
+  final _typeKey = GlobalKey<FormFieldState<DocumentType>>();
+  final _categoriesKey = GlobalKey<FormFieldState<List<DocumentCategory>>>();
+  final _fileKey = GlobalKey<FormFieldState<FileModel>>();
+  final _fileUrlKey = GlobalKey<FormFieldState<String>>();
 
-  final _formKey = GlobalKey<FormState>();
-  final _scrollController = ScrollController();
+  final _titleFocus = FocusNode();
+  final _authorFocus = FocusNode();
+  final _institutionFocus = FocusNode();
+  final _yearFocus = FocusNode();
+  final _typeFocus = FocusNode();
+  final _categoriesFocus = FocusNode();
+  final _fileFocus = FocusNode();
+  final _fileUrlFocus = FocusNode();
 
-  late final TextEditingController _titleController =
-      TextEditingController(text: widget.document?.title);
-  late final TextEditingController _authorController =
-      TextEditingController(text: widget.document?.author);
-  late final TextEditingController _institutionController =
-      TextEditingController(text: widget.document?.institution);
-  late final TextEditingController _yearController =
-      TextEditingController(text: widget.document?.year.toString());
-  late final TextEditingController _slugController =
-      TextEditingController(text: widget.document?.slug);
-  late final TextEditingController _documentUrlController =
-      TextEditingController(text: widget.document?.documentUrl);
-
-  late DocumentType? _selectedType = widget.document?.type;
-  late List<DocumentCategory> _selectedCategories = widget.document?.categories ?? [];
+  late DocumentType? _type = widget.document?.type;
+  late List<DocumentCategory> _categories = [...?widget.document?.categories];
 
   bool get _isUpdate => widget.document != null;
 
-  Future<FileModel?> _getDocument() {
-    final completer = Completer<FileModel?>();
-    _documentController.add(completer);
-
-    return completer.future;
-  }
-
   @override
   void dispose() {
-    _documentController.close();
+    for (final controller in [
+      _titleController,
+      _authorController,
+      _institutionController,
+      _yearController,
+      _documentUrlController,
+    ]) {
+      controller.dispose();
+    }
+    for (final node in [
+      _titleFocus,
+      _authorFocus,
+      _institutionFocus,
+      _yearFocus,
+      _typeFocus,
+      _categoriesFocus,
+      _fileFocus,
+      _fileUrlFocus,
+    ]) {
+      node.dispose();
+    }
+    _file.dispose();
     super.dispose();
+  }
+
+  Future<String?> _save() {
+    final file = _file.value;
+    final documentUrl = _documentUrlController.text;
+
+    return widget.onSave(
+      LibraryDocumentModel(
+        id: widget.document?.id,
+        area: widget.area,
+        title: _titleController.text,
+        author: _authorController.text,
+        type: _type!,
+        categories: _categories,
+        institution: _institutionController.text,
+        year: int.tryParse(_yearController.text) ?? 0,
+        documentUrl: documentUrl,
+        createdAt: widget.document?.createdAt ?? DateTime.now(),
+      ),
+      FileModel(
+        url: documentUrl,
+        bytes: file?.bytes,
+        name: file?.name,
+        extension: file?.extension,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = ScreenUtils.isMobile(context);
-    final space = SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing);
+    final gap = SizedBox(height: AppTheme.dimensions.components.formFieldGap);
 
-    return Observer(
+    return PanelSheet(
+      title: _isUpdate ? 'Editar documento' : 'Novo documento',
+      onSave: _save,
+      fields: [
+        PanelSheetField(_titleKey, _titleFocus),
+        PanelSheetField(_authorKey, _authorFocus),
+        PanelSheetField(_institutionKey, _institutionFocus),
+        PanelSheetField(_yearKey, _yearFocus),
+        PanelSheetField(_typeKey, _typeFocus),
+        PanelSheetField(_categoriesKey, _categoriesFocus),
+        PanelSheetField(_fileKey, panelPickFocusTarget(_fileFocus, _fileUrlFocus)),
+        PanelSheetField(_fileUrlKey, _fileUrlFocus),
+      ],
       builder: (context) {
-        bool isLoading = _libraryStore.manageState is CrudLoadingState;
+        void submit(String _) => PanelSheet.submitOf(context);
 
-        return RightAlignedDialog(
-          width: isMobile ? MediaQuery.of(context).size.width : null,
-          child: Column(
-            children: [
-              Expanded(
-                child: AppScrollbar(
-                  controller: _scrollController,
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildTitle('Título'),
-                          space,
-                          AppTextField(
-                            controller: _titleController,
-                            hintText: 'Título',
-                            validator: Validators.isNotEmpty,
-                          ),
-                          space,
-                          _buildTitle('Autor'),
-                          space,
-                          AppTextField(
-                            controller: _authorController,
-                            hintText: 'Autor',
-                            validator: Validators.isNotEmpty,
-                          ),
-                          space,
-                          _buildTitle('Instituição'),
-                          space,
-                          AppTextField(
-                            controller: _institutionController,
-                            hintText: 'Instituição',
-                            validator: Validators.isNotEmpty,
-                          ),
-                          space,
-                          _buildTitle('Ano'),
-                          space,
-                          AppTextField(
-                            controller: _yearController,
-                            hintText: 'Ano',
-                            validator: Validators.isNotEmpty,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          ),
-                          space,
-                          _buildTitle('Documento'),
-                          space,
-                          AppDocumentField(
-                            documentUrlController: _documentUrlController,
-                            documentController: _documentController,
-                          ),
-                          space,
-                          _buildTitle('Slug'),
-                          space,
-                          AppTextField(
-                            controller: _slugController,
-                            hintText: 'Slug',
-                            validator: Validators.isNotEmpty,
-                          ),
-                          SizedBox(height: AppTheme.dimensions.space.medium.verticalSpacing),
-                          _buildTitle('Tipo de Produção'),
-                          space,
-                          AppMultiSelectField<DocumentType>(
-                            items: DocumentType.values,
-                            itemToString: (item) => item.value,
-                            selectedItems: _selectedType != null ? [_selectedType!] : [],
-                            onChanged: (types) {
-                              setState(() => _selectedType = types.isEmpty ? null : types.first);
-                            },
-                            isSingleSelect: true,
-                          ),
-                          space,
-                          _buildTitle('Categorias'),
-                          space,
-                          AppMultiSelectField<DocumentCategory>(
-                            items: DocumentCategory.values,
-                            itemToString: (item) => item.value,
-                            selectedItems: _selectedCategories,
-                            onChanged: (categories) {
-                              setState(() => _selectedCategories = categories);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: EdgeInsets.only(top: AppTheme.dimensions.space.large),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (!isLoading) ...[
-                        SecondaryButton.medium(
-                          text: 'Cancelar',
-                          onPressed: () => GoRouter.of(context).pop(),
-                        ),
-                        SizedBox(width: AppTheme.dimensions.space.medium.horizontalSpacing),
-                      ],
-                      PrimaryButton.medium(
-                        text: isLoading ? 'Aguarde...' : (_isUpdate ? 'Atualizar' : 'Criar'),
-                        onPressed: () {
-                          if (!_formKey.currentState!.validate()) return;
-                          _onSubmit();
-                        },
-                        isDisabled: isLoading,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+        FormTextField text(
+          String label,
+          TextEditingController controller,
+          GlobalKey<FormFieldState<String>> key,
+          FocusNode focusNode, {
+          bool autofocus = false,
+        }) {
+          return FormTextField(
+            label: label,
+            controller: controller,
+            focusNode: focusNode,
+            formFieldKey: key,
+            validator: PanelValidators.required,
+            autofocus: autofocus,
+            textInputAction: TextInputAction.done,
+            onSubmitted: submit,
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            text('Título', _titleController, _titleKey, _titleFocus, autofocus: true),
+            gap,
+            text('Autor', _authorController, _authorKey, _authorFocus),
+            gap,
+            text('Instituição', _institutionController, _institutionKey, _institutionFocus),
+            gap,
+            FormTextField(
+              label: 'Ano',
+              controller: _yearController,
+              focusNode: _yearFocus,
+              formFieldKey: _yearKey,
+              validator: PanelValidators.required,
+              hintText: 'AAAA',
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              textInputAction: TextInputAction.done,
+              onSubmitted: submit,
+            ),
+            gap,
+            PanelSelectField<DocumentType>(
+              label: 'Tipo de produção',
+              options: [
+                const LibraryFilterOption(null, 'Escolha o tipo'),
+                for (final type in [DocumentType.dissertacao, DocumentType.tese])
+                  LibraryFilterOption(type, type.value),
+              ],
+              value: _type,
+              formFieldKey: _typeKey,
+              focusNode: _typeFocus,
+              validator: PanelValidators.choice('Escolha o tipo de produção.'),
+              onSelected: (type) => setState(() => _type = type),
+            ),
+            gap,
+            PanelCheckGroup<DocumentCategory>(
+              label: 'Categorias',
+              boxed: true,
+              options: [
+                for (final category in DocumentCategory.values)
+                  PanelCheckOption(category, category.value),
+              ],
+              selected: _categories,
+              formFieldKey: _categoriesKey,
+              focusNode: _categoriesFocus,
+              validator: PanelValidators.choice('Marque pelo menos uma categoria.'),
+              onChanged: (categories) => setState(() => _categories = categories),
+            ),
+            gap,
+            PanelFileField(
+              label: 'Arquivo',
+              urlController: _documentUrlController,
+              file: _file,
+              formFieldKey: _fileKey,
+              urlFieldKey: _fileUrlKey,
+              focusNode: _fileFocus,
+              urlFocusNode: _fileUrlFocus,
+            ),
+          ],
         );
       },
     );
-  }
-
-  Widget _buildTitle(String title) {
-    return AppTitle.medium(
-      text: title,
-      color: AppTheme.colors.orange,
-    );
-  }
-
-  Future<void> _onSubmit() async {
-    if (_selectedType == null) {
-      _showErrorMessage('Selecione o tipo de produção');
-      return;
-    }
-
-    if (_selectedCategories.isEmpty) {
-      _showErrorMessage('Selecione as categorias');
-      return;
-    }
-
-    FileModel? file = await _getDocument();
-
-    if ((file?.isNull ?? true) && _documentUrlController.text.isEmpty) {
-      _showErrorMessage('Preencha o arquivo do documento');
-      return;
-    }
-
-    LibraryDocumentModel document = LibraryDocumentModel(
-      id: widget.document?.id,
-      area: widget.area,
-      title: _titleController.text,
-      author: _authorController.text,
-      type: _selectedType!,
-      categories: _selectedCategories,
-      institution: _institutionController.text,
-      year: int.tryParse(_yearController.text) ?? 0,
-      slug: _slugController.text,
-      documentUrl: _documentUrlController.text,
-      createdAt: widget.document?.createdAt ?? DateTime.now(),
-    );
-
-    FileModel fileModel = FileModel(
-      url: _documentUrlController.text,
-      bytes: file?.bytes,
-      name: file?.name,
-      extension: file?.extension,
-    );
-
-    widget.onCreateOrUpdate(document, fileModel);
-  }
-
-  void _showErrorMessage(String message) {
-    if (context.mounted) {
-      Messenger.showError(context, message);
-    }
   }
 }

@@ -19,15 +19,13 @@ abstract class FetchHighlightsStoreBase with Store {
   @observable
   FetchHighlightsState state = FetchHighlightsInitialState();
 
-  @observable
-  bool highlightsDialogWasShown = false;
-
-  @observable
-  bool highlightsDialogIsOpen = false;
+  /// Fetch done without categories: worth fetching again when they arrive.
+  bool fetchedWithoutCategories = false;
 
   @action
   Future<void> fetchHighlights(List<CategoryModel> categories) async {
     state = FetchHighlightsLoadingState();
+    fetchedWithoutCategories = categories.isEmpty;
 
     final result = await _repository.fetchHighlights(categories);
 
@@ -40,16 +38,5 @@ abstract class FetchHighlightsStoreBase with Store {
         state = FetchHighlightsSuccessState();
       },
     );
-  }
-
-  @action
-  void showHighlights() {
-    highlightsDialogWasShown = true;
-    highlightsDialogIsOpen = true;
-  }
-
-  @action
-  void hideHighlights() {
-    highlightsDialogIsOpen = false;
   }
 }

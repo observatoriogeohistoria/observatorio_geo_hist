@@ -4,58 +4,961 @@ class AppDimensions {
   AppDimensions._();
   static AppDimensions get instance => AppDimensions._();
 
-  DimensionStyle space = const DimensionStyle._(
-    mini: 4.0,
-    small: 8.0,
-    medium: 16.0,
-    large: 24.0,
-    huge: 32.0,
-    massive: 48.0,
-    immense: 64.0,
-    gigantic: 96.0,
-  );
-
-  DimensionStyle radius = const DimensionStyle._(
-    mini: 2.0,
-    small: 4.0,
-    medium: 8.0,
-    large: 12.0,
-    huge: 24.0,
-    massive: 48.0,
-    immense: 64.0,
-    gigantic: 100.0,
-  );
-
-  DimensionStyle stroke = const DimensionStyle._(
-    mini: 0.5,
-    small: 1.0,
-    medium: 2.0,
-    large: 3.0,
-    huge: 4.0,
-    massive: 5.0,
-    immense: 6.0,
-    gigantic: 7.0,
-  );
+  StrokeScale stroke = const StrokeScale._();
+  SpacingScale spacing = const SpacingScale._();
+  RadiiScale radii = const RadiiScale._();
+  ShadowStyle shadows = const ShadowStyle._();
+  FocusStyle focus = const FocusStyle._();
+  ComponentSizes components = const ComponentSizes._();
 }
 
-class DimensionStyle {
-  const DimensionStyle._({
-    required this.mini,
-    required this.small,
-    required this.medium,
-    required this.large,
-    required this.huge,
-    required this.massive,
-    required this.immense,
-    required this.gigantic,
-  });
+class ComponentSizes {
+  const ComponentSizes._();
 
-  final double mini;
-  final double small;
-  final double medium;
-  final double large;
-  final double huge;
-  final double massive;
-  final double immense;
-  final double gigantic;
+  final double navbarHeight = 68.0;
+
+  final double environmentBannerHeight = 32.0;
+
+  final double buttonMinHeightSmall = 40.0;
+  final double buttonMinHeightRegular = 44.0;
+
+  final double buttonTextSmall = 14.0;
+  final double buttonTextMedium = 16.0;
+  final double buttonTextBig = 18.0;
+
+  final double buttonIconScale = 1.15;
+
+  final double buttonSpinnerSize = 16.0;
+  final double buttonSpinnerStroke = 2.0;
+  final double buttonSpinnerTrackOpacity = 0.4;
+  // With reduced motion the indicator stays still; a quarter circle still reads as waiting.
+  final double buttonSpinnerStaticValue = 0.25;
+
+  final double logoMark = 34.0;
+  final double logoName = 19.0;
+  final double logoSubtitle = 11.5;
+
+  final double navItemText = 15.5;
+  final double navIcon = 20.0;
+
+  final double navbarOpacity = 0.94;
+  final double scrimOpacity = 0.4;
+
+  final double menuIconSize = 24.0;
+  final double minTapTarget = 44.0;
+
+  final double dropdownMinWidth = 260.0;
+  final double dropdownMaxWidth = 340.0;
+
+  final double mobileMenuMaxWidth = 420.0;
+
+  final Duration menuAnimation = const Duration(milliseconds: 160);
+  final Duration scrollToSectionAnimation = const Duration(milliseconds: 450);
+
+  final double arrowLinkGap = 6.0;
+  final double arrowLinkGapHover = 9.0;
+  final Duration arrowLinkAnimation = const Duration(milliseconds: 150);
+
+  double heroPaddingTop(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 48, 80, 104);
+
+  double heroPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 48, 64);
+
+  double heroShortcutsGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 36, 48, 60);
+
+  final double heroTitleGap = 14.0;
+
+  final double heroActionsGap = 30.0;
+
+  /// Flutter has no `text-wrap: balance`; 8.4 em reproduces the three-line break.
+  final double heroTitleMaxWidthEm = 8.4;
+
+  final double heroLeadMaxWidth = 770.0;
+
+  final double heroShortcutsStackTextScale = 1.3;
+
+  final double shortcutIconBox = 46.0;
+  final double shortcutIcon = 22.0;
+
+  final double shortcutHoverLift = 2.0;
+
+  final Duration shortcutAnimation = const Duration(milliseconds: 150);
+
+  final double categoriesDialogMaxWidth = 420.0;
+
+  final double heroRingAccentOpacity = 0.11;
+  final double heroRingInkOpacity = 0.06;
+  final double heroRingAccentStep = 27.0;
+  final double heroRingInkStep = 35.0;
+  final double heroRingFadeStart = 0.55;
+
+  final Offset heroRingAccentCenter = const Offset(0.86, 0.18);
+  final Offset heroRingInkCenter = const Offset(0.08, 1.10);
+
+  double sectionPaddingVertical(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 48, 72, 96);
+
+  final double sectionHeadGap = 28.0;
+
+  double featuredGridHeight(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 0, 400, 440);
+
+  final double featuredMainHeightMobile = 260.0;
+
+  final double featuredCompactThumbWidth = 112.0;
+  final double featuredCompactThumbAspectRatio = 4 / 3;
+  final double featuredCompactGap = 14.0;
+  final double featuredCompactTextGap = 4.0;
+
+  final double featuredGap = 16.0;
+
+  final int featuredMainFlex = 16;
+  final int featuredSideFlex = 10;
+
+  double featuredTextPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 24);
+
+  final double featuredTextGap = 8.0;
+
+  final double featuredTitleMaxWidthEm = 12.0;
+
+  final int featuredTitleMaxLines = 3;
+
+  /// Ensures 4.5:1 even with a white photo behind.
+  final double featuredScrimBottomOpacity = 0.88;
+  final double featuredScrimTextOpacity = 0.72;
+
+  final double featuredScrimFade = 72.0;
+
+  final double featuredPlaceholderIcon = 28.0;
+
+  final Duration featuredImageFade = const Duration(milliseconds: 200);
+
+  double whoWeAreGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 44, 72);
+
+  final int whoWeAreIntroFlex = 20;
+  final int whoWeAreAudienceFlex = 23;
+
+  final double whoWeAreStackTextScale = 1.3;
+
+  final double whoWeAreTitleGap = 10.0;
+  final double whoWeAreTextGap = 16.0;
+  final double whoWeAreLinkGap = 22.0;
+
+  final double whoWeAreTextMaxWidth = 560.0;
+
+  final double audienceListTop = 8.0;
+  final double audienceItemGap = 12.0;
+  final double audienceItemPadding = 18.0;
+  final double audienceIconGap = 16.0;
+  final double audienceTextGap = 2.0;
+
+  final double audienceIconBox = 44.0;
+  final double audienceIcon = 20.0;
+
+  double videoAspectRatio(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 1.6, 2.0, 2.0);
+
+  final double videoMaxHeight = 460.0;
+
+  double videoCaptionPaddingHorizontal(Breakpoint breakpoint) =>
+      _byBreakpoint(breakpoint, 20, 24, 24);
+  double videoCaptionPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 20, 20);
+
+  final int videoCaptionMaxLines = 2;
+
+  final double videoCaptionActionGap = 16.0;
+
+  final double videoCaptionScrimOpacity = 0.72;
+  final double videoCaptionScrimFade = 72.0;
+
+  final double videoPlayCircle = 46.0;
+  final double videoPlayIcon = 26.0;
+  final double videoPlayPadding = 10.0;
+  final double videoPlayPaddingEnd = 22.0;
+  final double videoPlayGap = 14.0;
+
+  final double videoPlayCircleMobile = 34.0;
+  final double videoPlayIconMobile = 20.0;
+  final double videoPlayPaddingMobile = 6.0;
+  final double videoPlayPaddingEndMobile = 16.0;
+  final double videoPlayGapMobile = 10.0;
+  final double videoPlayHoverScale = 1.03;
+  final Duration videoAnimation = const Duration(milliseconds: 150);
+
+  final double videoLoadingIndicator = 22.0;
+
+  final double videoRingStep = 31.0;
+  final double videoRingOpacity = 0.08;
+  final Offset videoRingCenter = const Offset(0.75, 0.35);
+
+  final double videoCoverAngleDegrees = 150.0;
+  final double videoCoverMidStop = 0.6;
+
+  final double videoControlsScrimOpacity = 0.72;
+  final double videoControlsScrimHeight = 72.0;
+
+  final double videoControlsScrimSolidFrom = 0.4;
+
+  final double videoControlsInset = 8.0;
+  final double videoControlIcon = 32.0;
+
+  final double videoErrorMaxWidth = 360.0;
+
+  final double ourHistorySummaryMaxWidth = 720.0;
+
+  final double ourHistoryTitleGap = 10.0;
+  final double ourHistoryBadgeGap = 20.0;
+  final double ourHistoryTextGap = 22.0;
+  final double ourHistoryLinkGap = 22.0;
+
+  final double milestoneBadgePaddingVertical = 8.0;
+  final double milestoneBadgePaddingHorizontal = 16.0;
+  final double milestoneBadgeIconGap = 10.0;
+  final double milestoneBadgeIcon = 16.0;
+
+  final double readingMaxWidth = 680.0;
+  final double readingParagraphGap = 20.0;
+
+  final double teamColumnMinWidth = 190.0;
+
+  final double teamColumnGap = 20.0;
+  final double teamRowGap = 28.0;
+
+  final int teamColumnsMobile = 2;
+  final double teamStackTextScale = 1.3;
+
+  final double memberAvatar = 76.0;
+  final double memberAvatarGap = 10.0;
+  final double memberTextGap = 4.0;
+
+  final double memberAvatarHoverScale = 1.05;
+  final Duration memberAnimation = const Duration(milliseconds: 150);
+
+  final double memberSkeletonBarHeight = 14.0;
+  final double memberSkeletonNameWidth = 0.7;
+  final double memberSkeletonRoleWidth = 0.5;
+
+  final double partnerColumnMinWidth = 150.0;
+  final double partnerColumnMinWidthSmall = 130.0;
+
+  final double partnerGap = 12.0;
+  final double partnerPadding = 12.0;
+
+  final int partnerColumnsMobile = 3;
+  final double partnerPaddingMobile = 6.0;
+
+  final double partnerLogoMaxWidth = 150.0;
+  final double partnerLogoAspectRatio = 280 / 186;
+
+  final double partnerRestOpacity = 0.55;
+  final double partnerHoverLift = 3.0;
+  final double partnerHoverScale = 1.05;
+  final Duration partnerAnimation = const Duration(milliseconds: 200);
+
+  double ctaPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 46, 56);
+
+  final double ctaTextGap = 8.0;
+  final double ctaButtonGap = 24.0;
+
+  final double ctaTitleMaxWidthEm = 14.3;
+  final double ctaTextMaxWidth = 533.0;
+
+  final double ctaStackTextScale = 1.3;
+
+  final double pageHeadPaddingTop = 28.0;
+  double pageHeadPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 32, 46, 56);
+  final double pageHeadTitleGap = 22.0;
+  final double pageHeadLeadGap = 14.0;
+
+  final double breadcrumbGap = 6.0;
+  final double breadcrumbIcon = 13.0;
+
+  final double readingPaddingTop = 40.0;
+  double readingPaddingBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 56, 64);
+
+  final double readingListNumberDiameter = 30.0;
+  final double readingListNumberColumn = 34.0;
+  final double readingListNumberGap = 14.0;
+  final double readingListItemGap = 14.0;
+  final double readingListNumberTopOffset = 3.0;
+  final double readingListMarginVertical = 25.0;
+
+  final double readingQuoteBar = 3.0;
+  final double readingQuotePaddingLeft = 22.0;
+  final double readingQuotePaddingVertical = 4.0;
+  final double readingQuoteMarginVertical = 29.0;
+
+  final double readingSubtitleMarginTop = 46.0;
+  final double readingSubtitleMarginBottom = 16.0;
+
+  final double readingBulletIndent = 22.0;
+  final double readingBulletDot = 6.0;
+  final double readingBulletItemGap = 7.0;
+  final double readingBulletListMarginVertical = 18.0;
+
+  final double readingFigureMaxWidth = 920.0;
+  final double readingFigureAspect = 21 / 9;
+  final double readingFigureCaptionGap = 10.0;
+  final double readingFigureMarginBottom = 40.0;
+  final double readingFigurePlaceholderIcon = 34.0;
+
+  final double memberPageMaxWidth = 920.0;
+  final double memberPortraitMaxWidth = 300.0;
+  final double memberPortraitStackedMaxWidth = 280.0;
+  final double memberPageStackBreak = 700.0;
+
+  double memberPageGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 38, 56);
+
+  final double memberPageTopGap = 12.0;
+  final double memberNameTopGap = 8.0;
+  final double memberNameBottomGap = 18.0;
+  final double memberLattesGap = 22.0;
+  final double memberPageBottomGap = 64.0;
+
+  final double memberPageSkeletonNameHeight = 40.0;
+  final double memberPageSkeletonCrumbsWidth = 0.3;
+  final double memberPageSkeletonLabelWidth = 0.25;
+  final double memberPageSkeletonNameWidth = 0.7;
+  final double memberPageSkeletonLastLineWidth = 0.6;
+
+  final double stateBoxPaddingVertical = 40.0;
+  final double stateBoxPaddingHorizontal = 20.0;
+  final double stateBoxIcon = 52.0;
+  final double stateBoxIconGlyph = 24.0;
+  final double stateBoxGap = 10.0;
+  final double stateBoxButtonGap = 6.0;
+  final double stateBoxTextMaxWidth = 380.0;
+
+  final Duration skeletonShimmer = const Duration(milliseconds: 1400);
+
+  final double notFoundActionsGap = 12.0;
+
+  final double postHeadMaxWidth = 820.0;
+
+  final double postTitleGap = 22.0;
+  final double postSubtitleGap = 14.0;
+  final double postBylineMarginTop = 26.0;
+  final double postBylinePaddingVertical = 18.0;
+  final double postBylineGap = 16.0;
+
+  final double postAuthorAvatar = 44.0;
+  final double postAuthorGap = 12.0;
+
+  final double postCoverMarginTop = 28.0;
+  final double postCoverAspect = 21 / 9;
+  final double postCoverCaptionGap = 10.0;
+
+  final double postBodyPaddingTop = 40.0;
+
+  final double workCoverWidth = 180.0;
+  final double workCoverAspect = 2 / 3;
+  final double workSquareAspect = 1.0;
+
+  /// Smaller corner on the left, like a book's spine.
+  BorderRadius get workCoverRadius => const BorderRadius.horizontal(
+        left: Radius.circular(6),
+        right: Radius.circular(12),
+      );
+  final double workPosterAspect = 16 / 9;
+  double workBlockGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 28, 36);
+  final int workPosterFlex = 11;
+  final int workDataFlex = 10;
+  final double workTitleGap = 12.0;
+  final double workActionTop = 22.0;
+  final double workShareMarginTop = 26.0;
+  final double workSharePaddingVertical = 18.0;
+
+  final double workListenPaddingV = 12.0;
+  final double workListenPaddingH = 16.0;
+  final double workListenGap = 14.0;
+  final double workListenPlay = 42.0;
+  final double workListenPlayIcon = 24.0;
+  final double workListenIcon = 20.0;
+
+  final double workDateBox = 100.0;
+  final double workDateColumn = 110.0;
+  final double workDateMonthGap = 6.0;
+
+  final double workStatusGap = 12.0;
+  final double workStatusPaddingH = 12.0;
+  final double workStatusPaddingV = 4.0;
+
+  final double shareIconButton = 38.0;
+  final double shareIcon = 22.0;
+  final double shareGap = 4.0;
+
+  final double shareLabelGap = 6.0;
+  final double shareCopyGap = 6.0;
+  final double shareRowGap = 4.0;
+  final Duration shareFeedbackDuration = const Duration(milliseconds: 1800);
+  final double copyButtonIcon = 18.0;
+  final double copyButtonGap = 2.0;
+
+  final double readingImageMaxHeight = 560.0;
+  final double readingImageMarginVertical = 24.0;
+  final double readingImagePlaceholderAspect = 16 / 10;
+
+  final double postNoteMarginTop = 40.0;
+  final double postNotePaddingVertical = 20.0;
+  final double postNotePaddingHorizontal = 24.0;
+  final double postNoteLabelGap = 6.0;
+  final double postNoteIconGap = 8.0;
+
+  final double postCardMinWidth = 300.0;
+  final int postCardMaxColumns = 3;
+  final double postCardGapH = 28.0;
+  final double postCardGapV = 36.0;
+  final double postCardInnerGap = 14.0;
+  final double postCardThumbAspect = 16 / 10;
+  final double postCardThumbLift = 4.0;
+  final int postCardTitleMaxLines = 3;
+  final int postCardSummaryMaxLines = 2;
+  final double postCardTitleGap = 4.0;
+  final Duration postCardAnimation = const Duration(milliseconds: 250);
+
+  final double postCardSkeletonLabelHeight = 14.0;
+  final double postCardSkeletonTitleHeight = 22.0;
+  final double postCardSkeletonLabelWidth = 0.3;
+  final double postCardSkeletonTitleWidth = 0.85;
+  final double postCardSkeletonMetaWidth = 0.55;
+
+  final double searchFieldHeight = 48.0;
+  final double searchFieldMinWidth = 320.0;
+  final double searchFieldMaxWidth = 520.0;
+  final double searchFieldIconInset = 14.0;
+  final double searchFieldPaddingStart = 44.0;
+  final double searchFieldPaddingEnd = 84.0;
+  final double searchFieldPaddingEndEmpty = 14.0;
+  final double searchFieldClearInset = 8.0;
+  final double searchFieldClearPaddingH = 10.0;
+  final double searchFieldClearPaddingV = 6.0;
+  final double searchFieldBorder = 1.5;
+  final double searchFieldFocusRing = 4.0;
+  final Duration searchDebounce = const Duration(milliseconds: 400);
+
+  final double chipPaddingH = 14.0;
+  final double chipPaddingV = 7.0;
+  final double chipGap = 8.0;
+  final double chipCountGap = 6.0;
+
+  final double listingToolbarPaddingTop = 24.0;
+  final double listingToolbarPaddingBottom = 8.0;
+  final double listingToolbarGap = 16.0;
+  final double listingCountPaddingTop = 4.0;
+  final double listingCountPaddingBottom = 20.0;
+  final double listingBlockPaddingTop = 20.0;
+  final double listingBlockPaddingBottom = 12.0;
+  final double listingBlockTitleGap = 20.0;
+  final double listingBlockCountGap = 10.0;
+  final double listingMorePaddingTop = 28.0;
+  final double listingMorePaddingBottom = 56.0;
+  final double listingMoreErrorGap = 12.0;
+  final double listingStatePaddingTop = 24.0;
+  final double listingStatePaddingBottom = 40.0;
+  final double listingBottomGap = 40.0;
+
+  final double pageHeadActionGap = 22.0;
+
+  final double pageHeadSkeletonCrumbsWidth = 0.3;
+  final double pageHeadSkeletonTitleWidth = 0.55;
+  final double pageHeadSkeletonLastLineWidth = 0.7;
+
+  final double postPlaceholderIcon = 34.0;
+
+  final double postSkeletonBarHeight = 14.0;
+  final double postSkeletonTitleHeight = 40.0;
+  final double postSkeletonCrumbsWidth = 0.35;
+  final double postSkeletonTitleLastWidth = 0.6;
+  final double postSkeletonSubtitleWidth = 0.8;
+  final double postSkeletonNameWidth = 0.3;
+  final double postSkeletonDateWidth = 0.2;
+  final double postSkeletonLastLineWidth = 0.6;
+  final int postSkeletonLines = 5;
+
+  final double supportPaddingVertical = 48.0;
+  final double supportColumnsBreak = 820.0;
+  final double supportColumnGapH = 64.0;
+  final double supportColumnGapV = 32.0;
+  final double supportLabelGap = 14.0;
+
+  final double socialPillPaddingH = 14.0;
+  final double socialPillPaddingV = 9.0;
+  final double socialPillGap = 8.0;
+  final double socialPillIcon = 18.0;
+
+  double areaTilePadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 30, 36);
+  final double areaTileGap = 14.0;
+  final double areaTileIconBox = 52.0;
+  final double areaTileIcon = 26.0;
+  final double areaTileStatsPaddingTop = 14.0;
+  final double areaTileStatsGap = 20.0;
+  final double areaTileLift = 3.0;
+  final double areaTileGridGap = 20.0;
+  final double areaTilesPaddingTop = 40.0;
+  final double areaTilesPaddingBottom = 72.0;
+  final double areaTileSkeletonWidth = 110.0;
+  final double areaTileSkeletonHeight = 16.0;
+  final Duration areaTileAnimation = const Duration(milliseconds: 200);
+
+  final double tagGap = 6.0;
+  final double tagPaddingH = 8.0;
+  final double tagPaddingV = 2.0;
+  final double badgePaddingH = 10.0;
+  final double badgePaddingV = 4.0;
+  final double badgeIcon = 13.0;
+  final double badgeIconGap = 5.0;
+
+  final double factsTop = 24.0;
+  final double factsPaddingV = 20.0;
+  final double factsGapV = 14.0;
+  final double factsGapH = 28.0;
+  final double factsMinColumn = 170.0;
+  final int factsMaxColumns = 4;
+  final double factLabelGap = 2.0;
+
+  final double libraryFiltersTop = 16.0;
+  final double libraryFilterGap = 10.0;
+  final double libraryFilterHeight = 42.0;
+  final double libraryFilterBorder = 1.5;
+  final double libraryFilterPaddingStart = 14.0;
+  final double libraryFilterPaddingEnd = 12.0;
+  final double libraryFilterIconGap = 8.0;
+  final double libraryFilterIcon = 18.0;
+  final double libraryFilterBadgePaddingH = 8.0;
+  final double libraryFilterBadgePaddingV = 1.0;
+  final double libraryYearFieldWidth = 96.0;
+  final int libraryYearDigits = 4;
+
+  final double libraryPanelMaxWidth = 360.0;
+  final double libraryPanelMaxHeight = 400.0;
+  final double libraryPanelOffset = 6.0;
+  final double libraryPanelElevation = 8.0;
+  final double libraryPanelPadding = 10.0;
+  final double libraryPanelItemPadding = 8.0;
+  final double libraryPanelFooterPaddingTop = 8.0;
+
+  final double libraryActiveRowTop = 14.0;
+  final double libraryActiveRowGap = 8.0;
+  final double libraryActiveChipPaddingStart = 14.0;
+  final double libraryActiveChipPaddingEnd = 6.0;
+  final double libraryActiveChipPaddingV = 5.0;
+  final double libraryActiveChipRemove = 24.0;
+  final double libraryActiveChipRemoveIcon = 15.0;
+  final double libraryActiveChipRemoveGap = 4.0;
+
+  final double libraryCountPaddingTop = 20.0;
+  final double libraryCountPaddingBottom = 8.0;
+
+  final double libraryDocPaddingV = 22.0;
+  final double libraryDocPaddingH = 16.0;
+  final double libraryDocHoverInset = 8.0;
+  final double libraryDocGapV = 8.0;
+  final double libraryDocGapH = 24.0;
+  final double libraryDocSideGap = 14.0;
+  final double libraryDocArrow = 20.0;
+  final double libraryDocStackBreak = 560.0;
+  final int libraryDocTitleMaxLines = 3;
+  final int libraryDocMaxCategories = 2;
+  final Duration libraryDocAnimation = const Duration(milliseconds: 150);
+
+  final int librarySkeletonRows = 5;
+  final double librarySkeletonTitleHeight = 20.0;
+  final double librarySkeletonTitleWidth = 0.7;
+  final double librarySkeletonMetaHeight = 14.0;
+  final double librarySkeletonMetaWidth = 0.45;
+  final double librarySkeletonTagWidth = 72.0;
+  final double librarySkeletonTagHeight = 18.0;
+
+  final double libraryDetailMaxWidth = 920.0;
+  final double libraryDetailBadgeTop = 22.0;
+  final double libraryDetailTitleTop = 12.0;
+  final double libraryDetailActionTop = 22.0;
+
+  final double libraryViewerMarginTop = 32.0;
+  double libraryViewerMarginBottom(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 40, 56, 64);
+  final double libraryViewerBarPaddingV = 8.0;
+  final double libraryViewerBarPaddingH = 14.0;
+  final double libraryViewerButton = 32.0;
+  final double libraryViewerButtonIcon = 20.0;
+  final double libraryViewerButtonGap = 6.0;
+  final double libraryViewerPageMaxWidth = 560.0;
+  final double libraryViewerPageWidthFactor = 0.86;
+  final double libraryViewerPageMargin = 24.0;
+  final double libraryViewerStatePadding = 20.0;
+
+  /// Width over height of an A4 sheet, used before the PDF's aspect ratio is known.
+  final double libraryViewerA4Aspect = 1 / 1.414;
+
+  final double libraryDetailSkeletonBadgeWidth = 96.0;
+  final double libraryDetailSkeletonBadgeHeight = 26.0;
+  final double libraryDetailSkeletonTitleHeight = 34.0;
+  final double libraryDetailSkeletonTitleGap = 10.0;
+  final double libraryDetailSkeletonTitleLastWidth = 0.6;
+  final double libraryDetailSkeletonLabelWidth = 64.0;
+  final double libraryDetailSkeletonLabelHeight = 12.0;
+  final double libraryDetailSkeletonValueWidth = 120.0;
+  final double libraryDetailSkeletonValueHeight = 18.0;
+  final double libraryDetailSkeletonButtonWidth = 200.0;
+  final double libraryDetailSkeletonViewerHeight = 320.0;
+
+  final double formFieldHeight = 48.0;
+  final double formFieldBorder = 1.5;
+  final double formFieldFocusRing = 4.0;
+  final double formFieldPaddingH = 14.0;
+  final double formFieldPaddingV = 12.0;
+  final double formFieldGap = 18.0;
+  final double formFieldLabelGap = 6.0;
+  final int formMessageMinLines = 6;
+  final int formMessageMaxLines = 12;
+  final int formErrorMaxLines = 4;
+  final double formHintTop = 12.0;
+  final double formHintMaxWidth = 480.0;
+  final double formAlertPaddingH = 14.0;
+  final double formAlertPaddingV = 12.0;
+  final double formAlertGap = 10.0;
+  final double formAlertIcon = 20.0;
+
+  final double mailConfirmationPaddingV = 48.0;
+  final double mailConfirmationPaddingH = 24.0;
+  final double mailConfirmationGap = 10.0;
+  final double mailConfirmationIcon = 56.0;
+  final double mailConfirmationIconGlyph = 26.0;
+  final double mailConfirmationTextMaxWidth = 440.0;
+  final double mailConfirmationButtonsTop = 8.0;
+  final double mailConfirmationButtonsGap = 10.0;
+
+  final double contactPaddingTop = 40.0;
+  final double contactPaddingBottom = 72.0;
+  double contactColumnsGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 48, 72);
+  final int contactFormFlex = 3;
+  final int contactInfoFlex = 2;
+  double contactInfoPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 24, 28);
+  final double contactInfoListTop = 18.0;
+  final double contactInfoLabelGap = 2.0;
+  final double contactInfoItemGap = 14.0;
+
+  final double loadingIndicatorSize = 32.0;
+
+  final double scrollbarThickness = 8.0;
+  final double scrollbarInset = 16.0;
+
+  final double cardHoverIcon = 56.0;
+
+  final double panelTopBarHeight = 64.0;
+  double panelTopBarPaddingStart(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 8, 20, 20);
+  double panelTopBarPaddingEnd(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 12, 20, 20);
+  double panelTopBarGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 6, 12, 12);
+  final double panelTopBarActionsGap = 10.0;
+
+  final double panelUserGap = 10.0;
+  final double panelUserDividerGap = 14.0;
+  final double panelAvatar = 36.0;
+
+  final double panelSidebarWidth = 248.0;
+  final double panelSidebarPaddingV = 16.0;
+  final double panelSidebarPaddingH = 12.0;
+  final double panelNavItemPaddingV = 9.0;
+  final double panelNavItemPaddingH = 12.0;
+  final double panelNavSubItemPaddingV = 6.0;
+  final double panelNavSubItemPaddingH = 10.0;
+  final double panelNavItemGap = 10.0;
+  final double panelNavItemSpacing = 2.0;
+  final double panelNavSubItemSpacing = 1.0;
+  final double panelNavIcon = 18.0;
+  final double panelNavCountGap = 8.0;
+
+  /// The indent aligns the types row with the center of the Publicações icon.
+  final double panelNavSubIndent = 21.0;
+  final double panelNavSubPaddingStart = 10.0;
+  final double panelNavSubPaddingTop = 2.0;
+  final double panelNavSubPaddingBottom = 6.0;
+
+  final double panelGroupLabelPaddingTop = 18.0;
+  final double panelGroupLabelPaddingTopFirst = 4.0;
+  final double panelGroupLabelPaddingBottom = 6.0;
+
+  final double panelDrawerMaxWidth = 300.0;
+  final double panelDrawerWidthFactor = 0.86;
+  final double panelDrawerScrimOpacity = 0.45;
+
+  double panelMainPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 32);
+  double panelMainPaddingTop(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 20, 28);
+
+  final double panelHeadTitleGap = 4.0;
+  final double panelHeadSummaryGap = 4.0;
+  final double panelHeadMarginBottom = 20.0;
+  final double panelHeadActionGap = 16.0;
+
+  final double toastMaxWidth = 560.0;
+  final double toastMargin = 16.0;
+  final double toastPaddingV = 12.0;
+  final double toastPaddingH = 18.0;
+  final double toastIcon = 18.0;
+  final double toastIconGap = 10.0;
+  final Duration toastDuration = const Duration(seconds: 3);
+
+  /// Errors stay longer because the message is longer and must be read to the end.
+  final Duration toastErrorDuration = const Duration(seconds: 8);
+
+  final double confirmDialogWidth = 420.0;
+  final double confirmDialogPadding = 24.0;
+  final double confirmDialogTextGap = 8.0;
+  final double confirmDialogActionsTop = 20.0;
+  final double confirmDialogActionsGap = 10.0;
+
+  final double panelSheetWidth = 460.0;
+  final double panelSheetHeaderPaddingV = 16.0;
+  final double panelSheetPaddingH = 20.0;
+  final double panelSheetBodyPadding = 20.0;
+  final double panelSheetFooterPaddingV = 14.0;
+  final double panelSheetFooterGap = 10.0;
+  final double panelSheetHeaderGap = 12.0;
+  final Duration panelSheetSlide = const Duration(milliseconds: 220);
+  final int panelDescriptionMinLines = 4;
+  final int panelDescriptionMaxLines = 8;
+
+  final double panelCheckSize = 18.0;
+  final double panelCheckGap = 8.0;
+  final double panelCheckRowPaddingH = 6.0;
+  final double panelCheckRowPaddingV = 4.0;
+  final double panelChecksGapH = 8.0;
+  final double panelChecksGapV = 0.0;
+  final double panelCheckBoxMaxHeight = 220.0;
+  final double panelCheckBoxPaddingV = 8.0;
+  final double panelCheckBoxPaddingH = 4.0;
+
+  final double panelChoicePaddingV = 12.0;
+  final double panelChoicePaddingH = 14.0;
+  final double panelChoiceGap = 12.0;
+  final double panelChoicesGap = 8.0;
+  final double panelRadioSize = 20.0;
+
+  final double panelSwitchGap = 16.0;
+  final double panelSwitchHintGap = 2.0;
+
+  final double panelDropAspect = 16 / 10;
+  final double panelDropSquare = 140.0;
+  final double panelDropIcon = 26.0;
+  final double panelDropGap = 4.0;
+  final double panelDropPadding = 12.0;
+  final double panelDropFieldGap = 10.0;
+  final double panelDropDash = 6.0;
+  final double panelDropDashGap = 4.0;
+
+  double editorBarPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 24);
+  final double editorBarPaddingV = 10.0;
+  final double editorBarGapH = 14.0;
+  final double editorBarGapV = 8.0;
+  final double editorBarTitleGap = 10.0;
+  final double editorBarActionsGap = 8.0;
+  double editorPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 16, 24);
+  final double editorMaxWidth = 1180.0;
+  final double editorSideWidth = 340.0;
+  final double editorColumnsGap = 20.0;
+  final double editorCardsGap = 16.0;
+  final double editorCardPadding = 20.0;
+  final double editorCardEyebrowGap = 14.0;
+  final double editorSkeletonTitleHeight = 28.0;
+  final double editorSkeletonLineHeight = 14.0;
+  final double editorSkeletonBlockHeight = 220.0;
+  final double editorSkeletonSideHeight = 120.0;
+  final double editorAuthorsGap = 8.0;
+  // Aligns the "×" with the field, below the "Autor N" label.
+  final double editorAuthorRemoveTop = 29.0;
+
+  final double tooltipMaxWidth = 260.0;
+  final double tooltipPaddingV = 7.0;
+  final double tooltipPaddingH = 10.0;
+  final double tooltipOffset = 8.0;
+  final double disabledOpacity = 0.35;
+
+  double panelDialogWidthFactor(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 1.0, 0.7, 0.5);
+  double panelDialogPadding(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 24, 24);
+
+  final double richTextToolbarPadding = 6.0;
+  final double richTextButtonSize = 36.0;
+  final double richTextButtonGap = 2.0;
+  final double richTextIcon = 18.0;
+  final double richTextPaddingH = 18.0;
+  final double richTextPaddingV = 16.0;
+  final double richTextMinHeight = 280.0;
+  final double richTextMinHeightShort = 140.0;
+
+  final double panelMainPaddingBottom = 48.0;
+  final double panelRowPaddingV = 14.0;
+  final double panelRowPaddingH = 16.0;
+  final double panelRowPaddingMobile = 14.0;
+  final double panelRowGap = 16.0;
+  final double panelRowGapMobileV = 8.0;
+  final double panelRowGapMobileH = 12.0;
+  final double panelRowMetaGap = 3.0;
+  final double panelRowBadgeGap = 6.0;
+  final double panelRowActionsGap = 2.0;
+  final double panelRowActionsTop = 6.0;
+  final double panelRowDash = 4.0;
+  final double panelRowDashGap = 3.0;
+  final int panelRowTitleMaxLines = 2;
+  double panelThumbWidth(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 72, 88, 88);
+  final double panelThumbAspect = 16 / 10;
+  final double panelThumbIcon = 20.0;
+  final double panelLeadSize = 44.0;
+  final double panelLeadIcon = 20.0;
+  final double panelActionIcon = 20.0;
+
+  final double panelFilterPadding = 12.0;
+  final double panelFilterGap = 10.0;
+  final double panelFilterSearchMinWidth = 220.0;
+  final double panelFilterMarginBottom = 16.0;
+  final double panelFilterSelectMaxWidth = 260.0;
+  final double panelFilterFieldWidth = 240.0;
+  final double panelControlHeight = 42.0;
+  final double panelSegmentPadding = 3.0;
+  final double panelSegmentGap = 4.0;
+  final double panelSegmentButtonPaddingH = 12.0;
+  final double panelToggleIcon = 16.0;
+  final double panelToggleGap = 6.0;
+
+  final double panelListFootMinHeight = 52.0;
+  final double panelListFootPaddingV = 10.0;
+  final double panelListFootPaddingH = 16.0;
+  final double panelLoadMoreTrigger = 200.0;
+
+  final double panelTileMinWidth = 170.0;
+  final double panelTileGap = 16.0;
+  final double panelTileAspect = 4 / 3;
+  final double panelTilePaddingH = 12.0;
+  final double panelTilePaddingTop = 10.0;
+  final double panelTileActionsPadding = 6.0;
+  final int panelGridColumnsMobile = 2;
+  final double panelMoreNoteTop = 20.0;
+
+  final int panelSkeletonRows = 4;
+  final double panelSkeletonTitleHeight = 16.0;
+  final double panelSkeletonMetaHeight = 12.0;
+  final double panelSkeletonTitleWidth = 0.7;
+  final double panelSkeletonTitleStep = 0.08;
+  final double panelSkeletonMetaWidth = 0.4;
+  final double panelSkeletonGap = 8.0;
+
+  final double networkImageSkeletonHeight = 253.0;
+  final double imageErrorIcon = 24.0;
+
+  // Any narrower and "Erro ao carregar a imagem" wraps into too many lines and doesn't fit.
+  final double imageErrorMessageMinWidth = 160.0;
+
+  final int loginBrandFlex = 5;
+  final int loginFormFlex = 6;
+  double loginBrandPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 40, 40);
+  double loginBrandPaddingV(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 40, 40);
+  double loginBrandGap(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 18, 40, 40);
+  final double loginEyebrowGap = 12.0;
+  final double loginBrandLeadGap = 14.0;
+  final double loginBrandTitleMaxWidthEm = 8.1;
+  final double loginBrandLeadMaxWidth = 340.0;
+  final double loginRingsStep = 31.0;
+  final double loginRingsStroke = 1.0;
+  final double loginRingsOpacity = 0.15;
+  double loginMainPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 16, 32, 32);
+  double loginMainPaddingTop(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 28, 48, 48);
+  final double loginMainPaddingBottom = 48.0;
+  final double loginCardMaxWidth = 400.0;
+  double loginCardPaddingH(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 20, 32, 32);
+  double loginCardPaddingV(Breakpoint breakpoint) => _byBreakpoint(breakpoint, 24, 32, 32);
+  final double loginCardSubtitleGap = 6.0;
+  final double loginCardFieldsTop = 24.0;
+  final double loginBackLinkTop = 20.0;
+  final double loginBackLinkGap = 6.0;
+
+  double _byBreakpoint(
+    Breakpoint breakpoint,
+    double mobile,
+    double tablet,
+    double desktop,
+  ) {
+    return switch (breakpoint) {
+      Breakpoint.mobile => mobile,
+      Breakpoint.tablet => tablet,
+      Breakpoint.desktop => desktop,
+    };
+  }
+}
+
+class SpacingScale {
+  const SpacingScale._();
+
+  final double s4 = 4.0;
+  final double s8 = 8.0;
+  final double s12 = 12.0;
+  final double s16 = 16.0;
+  final double s20 = 20.0;
+  final double s24 = 24.0;
+  final double s32 = 32.0;
+  final double s40 = 40.0;
+  final double s48 = 48.0;
+  final double s64 = 64.0;
+  final double s96 = 96.0;
+}
+
+class StrokeScale {
+  const StrokeScale._();
+
+  final double small = 1.0;
+  final double medium = 2.0;
+  final double large = 3.0;
+  final double huge = 4.0;
+}
+
+class RadiiScale {
+  const RadiiScale._();
+
+  final double r6 = 6.0;
+  final double r8 = 8.0;
+  final double r10 = 10.0;
+  final double r12 = 12.0;
+  final double r14 = 14.0;
+  final double r16 = 16.0;
+  final double r18 = 18.0;
+  final double r20 = 20.0;
+
+  final double pill = 999.0;
+}
+
+class ShadowStyle {
+  const ShadowStyle._();
+
+  List<BoxShadow> get soft => const [
+        BoxShadow(color: Color(0x141F1B18), blurRadius: 26, offset: Offset(0, 10)),
+      ];
+
+  List<BoxShadow> get lifted => const [
+        BoxShadow(color: Color(0x1A1F1B18), blurRadius: 34, offset: Offset(0, 14)),
+      ];
+
+  List<BoxShadow> get card => const [
+        BoxShadow(color: Color(0x0F1F1B18), blurRadius: 32, offset: Offset(0, 12)),
+      ];
+
+  List<BoxShadow> get elevated => const [
+        BoxShadow(color: Color(0x241F1B18), blurRadius: 36, offset: Offset(0, 14)),
+      ];
+
+  List<BoxShadow> get sheet => const [
+        BoxShadow(color: Color(0x2E1F1B18), blurRadius: 40, offset: Offset(-12, 0)),
+      ];
+
+  List<BoxShadow> get segment => const [
+        BoxShadow(color: Color(0x1F1F1B18), blurRadius: 3, offset: Offset(0, 1)),
+      ];
+
+  /// Animating to an empty list shows the sharp shadow for an instant; fading the color
+  /// makes it vanish along with the background. At rest, use `null`: a transparent shadow is still painted.
+  List<BoxShadow> fade(List<BoxShadow> shadows, double opacity) => [
+        for (final shadow in shadows)
+          shadow.copyWith(color: shadow.color.withValues(alpha: shadow.color.a * opacity)),
+      ];
+}
+
+class FocusStyle {
+  const FocusStyle._();
+
+  final double width = 3.0;
+  final double offset = 2.0;
+
+  Color get color => AppColors.instance.accent;
 }

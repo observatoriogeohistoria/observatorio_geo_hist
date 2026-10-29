@@ -1,0 +1,47 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'library_document_store.dart';
+
+// **************************************************************************
+// StoreGenerator
+// **************************************************************************
+
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
+
+mixin _$LibraryDocumentStore on LibraryDocumentStoreBase, Store {
+  late final _$stateAtom = Atom(name: 'LibraryDocumentStoreBase.state', context: context);
+
+  @override
+  LibraryDocumentState get state {
+    _$stateAtom.reportRead();
+    return super.state;
+  }
+
+  @override
+  set state(LibraryDocumentState value) {
+    _$stateAtom.reportWrite(value, super.state, () {
+      super.state = value;
+    });
+  }
+
+  late final _$fetchAsyncAction = AsyncAction('LibraryDocumentStoreBase.fetch', context: context);
+
+  @override
+  Future<void> fetch(String key) {
+    return _$fetchAsyncAction.run(() => super.fetch(key));
+  }
+
+  late final _$retryAsyncAction = AsyncAction('LibraryDocumentStoreBase.retry', context: context);
+
+  @override
+  Future<void> retry() {
+    return _$retryAsyncAction.run(() => super.retry());
+  }
+
+  @override
+  String toString() {
+    return '''
+state: ${state}
+    ''';
+  }
+}

@@ -9,11 +9,16 @@ import 'package:observatorio_geo_hist/app/features/posts/infra/errors/failures.d
 
 abstract class FetchPostsRepository {
   Future<Either<Failure, PaginatedPosts>> fetchPosts(
-    CategoryModel category, {
+    CategoryModel? category, {
     PostType? postType,
     String? searchText,
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
+  });
+  Future<Either<Failure, int>> countPosts({
+    CategoryModel? category,
+    PostType? postType,
+    String? searchText,
   });
   Future<Either<Failure, PostModel>> fetchPostById(String postId);
 }
@@ -25,7 +30,7 @@ class FetchPostsRepositoryImpl implements FetchPostsRepository {
 
   @override
   Future<Either<Failure, PaginatedPosts>> fetchPosts(
-    CategoryModel category, {
+    CategoryModel? category, {
     PostType? postType,
     String? searchText,
     DocumentSnapshot? startAfterDocument,
@@ -47,10 +52,30 @@ class FetchPostsRepositoryImpl implements FetchPostsRepository {
   }
 
   @override
+  Future<Either<Failure, int>> countPosts({
+    CategoryModel? category,
+    PostType? postType,
+    String? searchText,
+  }) async {
+    try {
+      final count = await _datasource.countPosts(
+        category: category,
+        postType: postType,
+        searchText: searchText,
+      );
+      return Right(count);
+    } catch (error) {
+      return const Left(CountPostsFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, PostModel>> fetchPostById(String postId) async {
     try {
       final post = await _datasource.fetchPostById(postId);
       return Right(post);
+    } on PostNotFoundException {
+      return const Left(PostNotFoundFailure());
     } catch (error) {
       return const Left(FetchPostByIdFailure());
     }

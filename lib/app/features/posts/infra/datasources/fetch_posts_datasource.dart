@@ -1,16 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:observatorio_geo_hist/app/core/errors/offline_exception.dart';
 import 'package:observatorio_geo_hist/app/core/infra/services/logger_service/logger_service.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/paginated/paginated_posts.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
+/// Missing or unpublished post: the public site treats it as not found.
+class PostNotFoundException implements Exception {
+  const PostNotFoundException();
+}
+
 abstract class FetchPostsDatasource {
+  /// Without [category], searches every category.
   Future<PaginatedPosts> fetchPosts(
-    CategoryModel category, {
+    CategoryModel? category, {
     PostType? postType,
     String? searchText,
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
+  });
+  Future<int> countPosts({
+    CategoryModel? category,
+    PostType? postType,
+    String? searchText,
   });
   Future<PostModel> fetchPostById(String postId);
 }
@@ -21,64 +33,59 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
 
   FetchPostsDatasourceImpl(this._firestore, this._loggerService);
 
+  // The count uses the same ordering as the list to reuse the same indexes.
+  Query _listingQuery(CategoryModel? category, PostType? postType, String? searchText) {
+    Query query =
+        _firestore.collectionGroup('category_posts').where('isPublished', isEqualTo: true);
+
+    if (category != null) {
+      query = query
+          .where('categoryId', isEqualTo: category.key)
+          .where('areas', arrayContains: category.areas.first.key);
+    }
+
+    if (postType != null) {
+      query = query.where('type', isEqualTo: postType.name);
+    }
+
+    final normalizedSearch = searchText?.trim().toLowerCase() ?? '';
+    if (normalizedSearch.isEmpty) return query.orderBy('createdAt', descending: true);
+
+    return query
+        .orderBy('body.title_lower')
+        .startAt([normalizedSearch]).endAt(['$normalizedSearch\uf8ff']);
+  }
+
   @override
   Future<PaginatedPosts> fetchPosts(
-    CategoryModel category, {
+    CategoryModel? category, {
     PostType? postType,
     String? searchText,
     DocumentSnapshot? startAfterDocument,
     int limit = 10,
   }) async {
     try {
-      // Start building the query from the 'category_posts' collection group
-      Query query = _firestore
-          .collectionGroup('category_posts')
-          .where('isPublished', isEqualTo: true)
-          .where('categoryId', isEqualTo: category.key)
-          .where('areas', arrayContains: category.areas.first.key);
+      Query query = _listingQuery(category, postType, searchText);
 
-      // Apply post type filter if provided
-      if (postType != null) {
-        query = query.where('type', isEqualTo: postType.name);
+      if (startAfterDocument != null) {
+        query = query.startAfterDocument(startAfterDocument);
       }
 
-      // Apply search filter if provided
-      if (searchText != null && searchText.isNotEmpty) {
-        final normalizedSearch = searchText.toLowerCase();
-        query = query
-            .orderBy('body.title_lower')
-            .startAt([normalizedSearch]).endAt(['$normalizedSearch\uf8ff']);
+      // One extra tells whether there's a next page without needing a click that comes back empty.
+      final snapshot = await query.limit(limit + 1).get();
+      if (snapshot.docs.isEmpty && snapshot.metadata.isFromCache) throw const OfflineException();
+      final hasMore = snapshot.docs.length > limit;
+      final docs = hasMore ? snapshot.docs.sublist(0, limit) : snapshot.docs;
 
-        // Pagination using startAfter on title can be added here if needed
-      } else {
-        // Default sort by creation date
-        query = query.orderBy('createdAt', descending: true);
-
-        // Apply pagination using document snapshot
-        if (startAfterDocument != null) {
-          query = query.startAfterDocument(startAfterDocument);
-        }
-      }
-
-      // Limit the number of results
-      query = query.limit(limit);
-
-      // Execute the query
-      final snapshot = await query.get();
-
-      // Convert documents to PostModel and attach the category
-      final posts = snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        final fromJson = PostModel.fromJson(data);
-
-        return fromJson.copyWith(category: category);
+      final posts = docs.map((doc) {
+        final post = PostModel.fromJson(doc.data() as Map<String, dynamic>);
+        return category == null ? post : post.copyWith(category: category);
       }).toList();
 
-      // Return paginated posts
       return PaginatedPosts(
         posts: posts,
-        lastDocument: snapshot.docs.isNotEmpty ? snapshot.docs.last : null,
-        hasMore: snapshot.docs.length == limit,
+        lastDocument: docs.isNotEmpty ? docs.last : null,
+        hasMore: hasMore,
       );
     } catch (exception) {
       _loggerService.error('Error fetching posts: $exception');
@@ -87,16 +94,36 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
   }
 
   @override
+  Future<int> countPosts({
+    CategoryModel? category,
+    PostType? postType,
+    String? searchText,
+  }) async {
+    try {
+      final snapshot = await _listingQuery(category, postType, searchText).count().get();
+      return snapshot.count ?? 0;
+    } catch (exception) {
+      _loggerService.error('Error counting posts: $exception');
+      rethrow;
+    }
+  }
+
+  @override
   Future<PostModel> fetchPostById(String postId) async {
     try {
-      Query query =
-          _firestore.collectionGroup('category_posts').where('id', isEqualTo: postId).limit(1);
+      // The security rules only allow public queries that filter on isPublished.
+      Query query = _firestore
+          .collectionGroup('category_posts')
+          .where('id', isEqualTo: postId)
+          .where('isPublished', isEqualTo: true)
+          .limit(1);
 
       final snapshot = await query.get();
-      if (snapshot.docs.isEmpty) throw Exception('Post not found');
+      if (snapshot.docs.isEmpty) throw const PostNotFoundException();
 
-      final data = snapshot.docs.first.data() as Map<String, dynamic>;
-      return PostModel.fromJson(data);
+      return PostModel.fromJson(snapshot.docs.first.data() as Map<String, dynamic>);
+    } on PostNotFoundException {
+      rethrow;
     } catch (exception) {
       _loggerService.error('Error fetching post by id: $exception');
       rethrow;

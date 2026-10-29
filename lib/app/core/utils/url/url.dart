@@ -10,12 +10,12 @@ String encodeUrlComponent(String url) {
   return Uri.encodeComponent(url);
 }
 
-Future<void> openUrl(String url) async {
-  final Uri uri = Uri.parse(url);
-
+/// `mailto:` and `tel:` use [sameTab] so they don't leave a blank tab behind.
+Future<void> openUrl(String url, {bool sameTab = false}) async {
   try {
+    final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      await launchUrl(uri, webOnlyWindowName: sameTab ? '_self' : null);
     } else {
       if (kDebugMode) print('Could not launch $url');
     }
@@ -39,9 +39,7 @@ String? getFileExtension(String? url) {
   String? extension;
 
   if (url != null && url.contains('.')) {
-    // Remove query params/fragments
     final cleanUrl = url.split('?').first.split('#').first;
-    // Pega a última parte após o ponto, se houver
     final parts = cleanUrl.split('.');
     if (parts.length > 1) {
       extension = parts.last;

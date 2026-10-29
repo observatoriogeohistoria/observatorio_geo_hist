@@ -12,7 +12,6 @@ class AdminSetup {
   static final GetIt getIt = GetIt.instance;
 
   static void setup() {
-    // Auth
     getIt.registerFactory<FirebaseAuthDatasource>(
       () => FirebaseAuthDatasourceImpl(
         getIt<FirebaseAuth>(),
@@ -27,10 +26,8 @@ class AdminSetup {
       () => AuthStore(getIt<AuthRepository>()),
     );
 
-    // Panel
     PanelSetup.setup();
 
-    // Sidebar Navigation
     SidebarSetup.setup();
   }
 }

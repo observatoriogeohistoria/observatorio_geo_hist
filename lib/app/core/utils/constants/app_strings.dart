@@ -7,6 +7,17 @@ Uberlândia/MG | CEP 38400-192''';
 
   static const String email = 'contato@observatoriogeohistoria.net.br';
 
+  static const String emailUrl = 'mailto:$email';
+
+  static const String footerAddress = '''Faculdade de Educação, sala 1G156 · UFU
+Av. João Naves de Ávila, 2121 · Santa Mônica
+Uberlândia/MG''';
+
+  static const String phoneOne = '34 3239-4163';
+  static const String phoneOneUrl = 'tel:+553432394163';
+  static const String phoneTwo = '34 3239-4212';
+  static const String phoneTwoUrl = 'tel:+553432394212';
+
   static const String facebook = 'https://www.facebook.com/observatoriogeohistoria';
 
   static const String instagram = 'https://www.instagram.com/observatoriogeohistoria/';
@@ -17,7 +28,11 @@ Uberlândia/MG | CEP 38400-192''';
 
   static const String shareOnFacebook = 'https://www.facebook.com/sharer/sharer.php?u=[URL]';
 
-  static const String shareOnTwitter = 'https://x.com/intent/post?text=[TEXT]&url=[URL]';
+  static const String shareOnX = 'https://x.com/intent/post?text=[TEXT]&url=[URL]';
+
+  static const String shareOnLinkedin = 'https://www.linkedin.com/sharing/share-offsite/?url=[URL]';
+
+  static const String shareOnTelegram = 'https://t.me/share/url?url=[URL]&text=[TEXT]';
 
   static const String shareOnWhatsapp = 'https://api.whatsapp.com/send?text=[TEXT]%20[URL]';
 

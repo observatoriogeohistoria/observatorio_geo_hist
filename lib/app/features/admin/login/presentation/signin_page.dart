@@ -3,16 +3,16 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/primary_button.dart';
-import 'package:observatorio_geo_hist/app/core/components/card/app_card.dart';
-import 'package:observatorio_geo_hist/app/core/components/field/app_text_field.dart';
-import 'package:observatorio_geo_hist/app/core/components/loading/circular_loading.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_label.dart';
-import 'package:observatorio_geo_hist/app/core/components/text/app_title.dart';
-import 'package:observatorio_geo_hist/app/core/utils/extensions/num_extension.dart';
-import 'package:observatorio_geo_hist/app/core/utils/messenger/messenger.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/form_error_alert.dart';
+import 'package:observatorio_geo_hist/app/core/components/form/form_text_field.dart';
+import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
-import 'package:observatorio_geo_hist/app/core/utils/validators/validators.dart';
+import 'package:observatorio_geo_hist/app/core/utils/validators/form_validators.dart';
 import 'package:observatorio_geo_hist/app/features/admin/admin_setup.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth_failure.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/presentation/components/back_to_site_link.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/presentation/components/login_brand_panel.dart';
+import 'package:observatorio_geo_hist/app/features/admin/login/presentation/components/password_visibility_button.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_state.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/stores/auth_store.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/infra/models/user_model.dart';
@@ -26,12 +26,25 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
+  static const _credentialsMessage =
+      'E-mail ou senha não conferem. Confira os dois e tente de novo.';
+
   late final _authStore = AdminSetup.getIt<AuthStore>();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
 
   final _formKey = GlobalKey<FormState>();
+
+  final _emailValidator = FormValidators.email('Informe o e-mail, como nome@exemplo.com.');
+  final _passwordValidator = FormValidators.required('Informe a senha.');
+
+  bool _attempted = false;
+
+  // The store keeps the last error even after leaving the page; only show what came from this screen.
+  bool _errorVisible = false;
 
   List<ReactionDisposer> _reactions = [];
 
@@ -44,14 +57,11 @@ class _SigninPageState extends State<SigninPage> {
     _reactions = [
       reaction((_) => _authStore.user, (UserModel? user) {
         if (user != null) {
-          GoRouter.of(context).go('/admin/painel');
+          GoRouter.of(context).go(AppRoutes.panel);
         }
       }),
-      reaction((_) => _authStore.state, (AuthState state) {
-        if (state.loginState is LoginStateError) {
-          final loginState = state.loginState as LoginStateError;
-          Messenger.showError(context, loginState.failure.message);
-        }
+      reaction((_) => _authStore.state.loginState, (LoginState state) {
+        if (state is LoginStateError) _handleError(state.failure);
       }),
     ];
   }
@@ -64,88 +74,198 @@ class _SigninPageState extends State<SigninPage> {
 
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
 
     super.dispose();
   }
 
+  bool get _isLoading => _authStore.state.loginState is LoginStateLoading;
+
+  void _submit() {
+    if (_isLoading) return;
+
+    setState(() {
+      _attempted = true;
+      _errorVisible = false;
+    });
+
+    if (!_formKey.currentState!.validate()) {
+      final emailInvalid = _emailValidator(_emailController.text) != null;
+      (emailInvalid ? _emailFocus : _passwordFocus).requestFocus();
+      return;
+    }
+
+    _authStore.login(_emailController.text.trim(), _passwordController.text);
+  }
+
+  // The fields already passed validation; without turning it off, clearing the password would show "Informe a senha.".
+  void _handleError(AuthFailure failure) {
+    setState(() {
+      _errorVisible = true;
+      _attempted = false;
+    });
+
+    if (_isCredentialsFailure(failure)) {
+      _passwordController.clear();
+      _formKey.currentState?.reset();
+      _passwordFocus.requestFocus();
+    }
+  }
+
+  bool _isCredentialsFailure(AuthFailure failure) =>
+      failure is InvalidCredentials || failure is UserNotFound || failure is WrongPassword;
+
+  String? get _errorMessage {
+    final state = _authStore.state.loginState;
+    if (!_errorVisible || state is! LoginStateError) return null;
+    return _isCredentialsFailure(state.failure) ? _credentialsMessage : state.failure.message;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final colors = AppTheme.colors;
+    final components = AppTheme.dimensions.components;
+    final breakpoint = ScreenUtils.breakpointOf(context);
+    final isMobile = breakpoint == Breakpoint.mobile;
 
-    bool isMobile = ScreenUtils.isMobile(context);
-    bool isTablet = ScreenUtils.isTablet(context);
+    final formArea = Padding(
+      padding: EdgeInsets.fromLTRB(
+        components.loginMainPaddingH(breakpoint),
+        components.loginMainPaddingTop(breakpoint),
+        components.loginMainPaddingH(breakpoint),
+        components.loginMainPaddingBottom,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: components.loginCardMaxWidth),
+          child: _buildCard(context, breakpoint),
+        ),
+      ),
+    );
 
     return Scaffold(
-      backgroundColor: AppTheme.colors.lighterGray,
-      body: SizedBox(
-        width: size.width,
-        child: Observer(builder: (context) {
-          final loginState = _authStore.state.loginState;
+      backgroundColor: colors.surface,
+      body: FocusTraversalGroup(
+        policy: WidgetOrderTraversalPolicy(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: isMobile
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [const LoginBrandPanel(compact: true), formArea],
+                      )
+                    : IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              flex: components.loginBrandFlex,
+                              child: const LoginBrandPanel(),
+                            ),
+                            Expanded(flex: components.loginFormFlex, child: formArea),
+                          ],
+                        ),
+                      ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 
-          return Center(
-            child: AppCard(
-              width: size.width * (isMobile ? 1 : (isTablet ? 0.5 : 0.3)),
-              padding: EdgeInsets.all(AppTheme.dimensions.space.large.scale),
-              margin: isMobile
-                  ? EdgeInsets.symmetric(
-                      horizontal: AppTheme.dimensions.space.medium.horizontalSpacing,
-                    )
-                  : EdgeInsets.zero,
-              borderColor: AppTheme.colors.gray,
-              child: Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+  Widget _buildCard(BuildContext context, Breakpoint breakpoint) {
+    final colors = AppTheme.colors;
+    final dimensions = AppTheme.dimensions;
+    final components = dimensions.components;
+    final styles = AppTheme.typography.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.page,
+        borderRadius: BorderRadius.circular(dimensions.radii.r18),
+        border: Border.all(color: colors.line, width: dimensions.stroke.small),
+        boxShadow: dimensions.shadows.card,
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: components.loginCardPaddingH(breakpoint),
+          vertical: components.loginCardPaddingV(breakpoint),
+        ),
+        child: Observer(
+          builder: (context) {
+            final isLoading = _isLoading;
+            final passwordVisible = _authStore.passwordVisible;
+            final errorMessage = _errorMessage;
+
+            return Form(
+              key: _formKey,
+              autovalidateMode: _attempted ? AutovalidateMode.always : AutovalidateMode.disabled,
+              child: AutofillGroup(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    AppTitle.big(
-                      text: 'LOGIN',
-                      color: AppTheme.colors.darkGray,
+                    Semantics(
+                      header: true,
+                      child:
+                          Text('Entrar', style: styles.loginCardTitle.copyWith(color: colors.ink)),
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                    AppTextField(
+                    SizedBox(height: components.loginCardSubtitleGap),
+                    Text(
+                      'Use o e-mail e a senha que a administração cadastrou para você.',
+                      style: styles.loginLead.copyWith(color: colors.inkSecondary),
+                    ),
+                    SizedBox(height: components.loginCardFieldsTop),
+                    if (errorMessage != null) ...[
+                      FormErrorAlert(message: errorMessage),
+                      SizedBox(height: components.formFieldGap),
+                    ],
+                    FormTextField(
+                      label: 'E-mail',
+                      hintText: 'nome@exemplo.com',
                       controller: _emailController,
-                      labelText: 'E-MAIL',
-                      hintText: 'exemplo@dominio.com',
-                      validator: Validators.isValidEmail,
+                      focusNode: _emailFocus,
+                      validator: _emailValidator,
+                      keyboardType: TextInputType.emailAddress,
+                      autofillHints: const [AutofillHints.email],
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (_) => _submit(),
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.large.verticalSpacing),
-                    AppTextField(
+                    SizedBox(height: components.formFieldGap),
+                    FormTextField(
+                      label: 'Senha',
                       controller: _passwordController,
-                      labelText: 'SENHA',
-                      obscureText: !_authStore.passwordVisible,
-                      validator: Validators.isValidPassword,
-                      suffixIcon: GestureDetector(
-                        onTap: _authStore.togglePasswordVisibility,
-                        child: _authStore.passwordVisible
-                            ? const Icon(Icons.visibility_off)
-                            : const Icon(Icons.visibility),
+                      focusNode: _passwordFocus,
+                      validator: _passwordValidator,
+                      obscureText: !passwordVisible,
+                      autofillHints: const [AutofillHints.password],
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) => _submit(),
+                      suffix: PasswordVisibilityButton(
+                        visible: passwordVisible,
+                        onPressed: _authStore.togglePasswordVisibility,
                       ),
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.small.verticalSpacing),
-                    AppLabel.small(
-                      text:
-                          'A senha deve contar com 8 caracteres, sendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
-                      color: AppTheme.colors.gray,
+                    SizedBox(height: components.formFieldGap),
+                    PrimaryButton.medium(
+                      text: isLoading ? 'Entrando…' : 'Entrar',
+                      isLoading: isLoading,
+                      expand: true,
+                      onPressed: _submit,
                     ),
-                    SizedBox(height: AppTheme.dimensions.space.huge.verticalSpacing),
-                    loginState is LoginStateLoading
-                        ? const CircularLoading()
-                        : PrimaryButton.medium(
-                            text: "ENTRAR",
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _authStore.login(_emailController.text, _passwordController.text);
-                              }
-                            },
-                          ),
+                    SizedBox(height: components.loginBackLinkTop),
+                    const Align(alignment: Alignment.centerLeft, child: BackToSiteLink()),
                   ],
                 ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ),
     );
   }
