@@ -1,6 +1,6 @@
 typedef FormValidator = String? Function(String? value);
 
-/// Regras dos formulários do site. Espaços nas pontas não contam.
+/// Rules for the site's forms. Leading and trailing spaces don't count.
 class FormValidators {
   const FormValidators._();
 

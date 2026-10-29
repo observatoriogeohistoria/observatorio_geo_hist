@@ -7,7 +7,7 @@ import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dar
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Quem chama devolve o foco ao elemento que abriu a janela quando o `Future` termina.
+/// The caller returns focus to the element that opened the dialog when the `Future` completes.
 Future<void> showAreaCategoriesDialog(
   BuildContext context, {
   required PostsAreas area,

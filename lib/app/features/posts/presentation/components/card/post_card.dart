@@ -72,8 +72,8 @@ class _PostCardState extends State<PostCard> {
                     builder: (context, t, child) => Transform.translate(
                       offset: Offset(0, reduceMotion ? 0 : -components.postCardThumbLift * t),
                       child: DecoratedBox(
-                        // Sombra transparente ainda custa o desfoque a cada quadro do scroll;
-                        // fora do hover não há sombra nenhuma.
+                        // A transparent shadow still costs the blur on every scroll frame;
+                        // outside hover there's no shadow at all.
                         decoration: BoxDecoration(
                           borderRadius: radius,
                           boxShadow: t == 0 ? null : shadows.fade(shadows.elevated, t),

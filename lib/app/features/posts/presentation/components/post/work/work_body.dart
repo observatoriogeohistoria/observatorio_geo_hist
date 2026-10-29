@@ -50,8 +50,8 @@ class WorkBody extends StatelessWidget {
               PostBreadcrumbs(area: area, category: category, typeLabel: info.typeLabel),
               SizedBox(height: components.postTitleGap),
               _WorkBlock(info: info),
-              // A linha de baixo da ficha já separa o compartilhar; duas seguidas
-              // pareciam uma faixa vazia.
+              // The details card's bottom line already separates the share row; two in a row
+              // looked like an empty strip.
               _ShareRow(
                 post: post,
                 joined: stacked && info.action == null && info.listen == null && info.hasSheet,
@@ -162,8 +162,8 @@ class _WorkData extends StatelessWidget {
       child: Text(info.title.trim(), style: styles.detailTitle.copyWith(color: colors.ink)),
     );
 
-    // Ao lado da capa, o Flutter ordena a leitura pela posição na tela e anunciava o botão
-    // antes da chamada da revista; o contêiner mantém a ordem da coluna.
+    // Next to the cover, Flutter orders reading by screen position and announced the button
+    // before the magazine's headline; the container keeps the column order.
     return Semantics(
       container: true,
       explicitChildNodes: true,
@@ -277,7 +277,7 @@ class _WorkTexts extends StatelessWidget {
       );
     }
 
-    // O subtítulo traz a própria margem de topo; descontá-la deixa o vão igual ao do artigo.
+    // The subtitle brings its own top margin; subtracting it makes the gap match the article's.
     return ReadingColumn(
       paddingTop: components.postBodyPaddingTop -
           (components.readingSubtitleMarginTop - components.readingParagraphGap),

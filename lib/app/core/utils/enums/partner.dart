@@ -1,6 +1,6 @@
 import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 
-/// A ordem do enum é a ordem de exibição no site.
+/// The enum order is the display order on the site.
 enum Partner {
   ufu(
     acronym: 'UFU',

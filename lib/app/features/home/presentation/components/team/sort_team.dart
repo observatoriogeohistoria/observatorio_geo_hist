@@ -13,7 +13,7 @@ String _sortKey(String name) {
   return buffer.toString();
 }
 
-/// Ordem alfabética sem diferenciar maiúsculas nem acentos. Nomes iguais mantêm a ordem recebida.
+/// Alphabetical order ignoring case and accents. Equal names keep the order received.
 List<TeamMemberModel> sortTeamByName(List<TeamMemberModel> team) {
   final indexed = [
     for (final (index, member) in team.indexed)
@@ -26,7 +26,7 @@ List<TeamMemberModel> sortTeamByName(List<TeamMemberModel> team) {
   return [for (final item in indexed) item.member];
 }
 
-/// Só quem tem descrição ganha página própria.
+/// Only members with a description get their own page.
 bool memberHasPage(TeamMemberModel member) {
   return member.id != null && (member.description?.trim().isNotEmpty ?? false);
 }

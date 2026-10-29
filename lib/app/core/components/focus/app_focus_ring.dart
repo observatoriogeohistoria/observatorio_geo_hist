@@ -16,7 +16,7 @@ class AppFocusRing extends StatefulWidget {
 
   final Color? color;
 
-  /// Use `StackFit.passthrough` quando o filho precisa ocupar a altura imposta pelo pai.
+  /// Use `StackFit.passthrough` when the child must fill the height imposed by the parent.
   final StackFit fit;
 
   @override

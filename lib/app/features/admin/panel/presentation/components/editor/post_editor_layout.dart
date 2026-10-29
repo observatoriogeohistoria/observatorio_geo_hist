@@ -32,7 +32,7 @@ class PostEditorLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final components = AppTheme.dimensions.components;
     final breakpoint = ScreenUtils.breakpointOf(context);
-    // Na ordem dos widgets: a ordem de leitura pula o "×" ao lado de cada autor.
+    // In widget order: the reading order skips the "×" next to each author.
     final mainColumn = FocusTraversalGroup(
       policy: WidgetOrderTraversalPolicy(),
       child: _column(main),

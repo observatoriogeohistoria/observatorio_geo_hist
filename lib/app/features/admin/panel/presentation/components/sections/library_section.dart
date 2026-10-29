@@ -82,7 +82,7 @@ class _LibrarySectionState extends State<LibrarySection> {
     if (oldWidget.area != widget.area) _fetch(reset: true);
   }
 
-  // Sair da Biblioteca zera os filtros; trocar de área, não.
+  // Leaving the Library resets the filters; switching area doesn't.
   @override
   void dispose() {
     _filterStore.reset();

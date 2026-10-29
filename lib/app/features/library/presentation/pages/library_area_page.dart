@@ -8,7 +8,7 @@ import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/listing/library_listing.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/stores/library_listing_store.dart';
 
-/// Página pública da área. O painel continua com a própria página, que tem as ações de edição.
+/// Public area page. The panel keeps its own page, which has the editing actions.
 class LibraryAreaPage extends StatefulWidget {
   const LibraryAreaPage({super.key, required this.area});
 
@@ -37,7 +37,7 @@ class _LibraryAreaPageState extends State<LibraryAreaPage> {
   Widget build(BuildContext context) {
     final name = widget.area.value;
 
-    // A chave por área volta ao topo e recria os campos ao trocar de área.
+    // The per-area key scrolls back to the top and recreates the fields when switching area.
     return ReadingPageScaffold(
       key: ValueKey(widget.area),
       header: PageHeader(

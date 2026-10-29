@@ -57,8 +57,8 @@ class Messenger {
     final maxWidth = min(components.toastMaxWidth, screenWidth - 2 * components.toastMargin);
     final chrome = 2 * components.toastPaddingH + components.toastIcon + components.toastIconGap;
 
-    // O SnackBar flutuante só centraliza com largura fixa; medir o texto deixa a caixa do
-    // tamanho da mensagem, como um aviso curto.
+    // The floating SnackBar only centers with a fixed width; measuring the text sizes the box to
+    // the message, like a short notice.
     final painter = TextPainter(
       text: TextSpan(text: message, style: style),
       textDirection: TextDirection.ltr,

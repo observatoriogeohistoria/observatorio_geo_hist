@@ -50,8 +50,8 @@ class _HomePageState extends State<HomePage> {
 
     _setupReactions();
 
-    // A reação só dispara quando as categorias mudam. Se já chegaram (volta de outra
-    // página) ou falharam, busca os destaques agora.
+    // The reaction only fires when categories change. If they already arrived (coming back from
+    // another page) or failed, fetches the highlights now.
     final categoriesSettled = switch (_fetchCategoriesStore.state) {
       FetchCategoriesSuccessState() || FetchCategoriesErrorState() => true,
       _ => false,
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Espera o quadro da navegação: se ela criar outra Home, quem atende é a nova, no initState.
+  // Waits for the navigation frame: if it creates another Home, the new one handles it, in initState.
   Future<void> _onTeamRequest() async {
     if (!AppRoutes.teamRequest.value) return;
     await WidgetsBinding.instance.endOfFrame;
@@ -162,8 +162,8 @@ class _HomePageState extends State<HomePage> {
     _scrollToTeam();
   }
 
-  // Os destaques ficam acima da equipe: rolar antes de eles chegarem deixaria a seção fora do
-  // lugar quando a altura deles mudasse.
+  // Highlights sit above the team: scrolling before they arrive would leave the section out of
+  // place when their height changed.
   Future<void> _scrollToTeam({bool animate = true}) async {
     await Future.wait([highlights.loadLibrary(), team.loadLibrary()]);
     await asyncWhen((_) => _highlightsSettled && _teamSettled);
@@ -174,7 +174,7 @@ class _HomePageState extends State<HomePage> {
 
     final position = _scrollController.position;
     final viewport = RenderAbstractViewport.of(target);
-    // A navbar fica presa no topo e cobriria o título da seção.
+    // The navbar is pinned to the top and would cover the section title.
     final offset =
         (viewport.getOffsetToReveal(target, 0).offset - AppTheme.dimensions.components.navbarHeight)
             .clamp(position.minScrollExtent, position.maxScrollExtent);
@@ -197,8 +197,8 @@ class _HomePageState extends State<HomePage> {
     ]);
   }
 
-  /// As categorias são buscadas de novo a cada navbar montada. Só refaz a busca se
-  /// ainda não buscou, se falhou ou se buscou sem categorias e agora elas existem.
+  /// Categories are fetched again on every navbar build. Only refetches if it
+  /// hasn't fetched yet, if it failed, or if it fetched without categories and now they exist.
   bool get _highlightsNeedFetch {
     return switch (_fetchHighlightsStore.state) {
       FetchHighlightsInitialState() || FetchHighlightsErrorState() => true,
@@ -228,7 +228,7 @@ class _HomePageState extends State<HomePage> {
       reaction((_) => _fetchCategoriesStore.categories, (_) {
         if (_highlightsNeedFetch) _fetchHighlights();
       }),
-      // Se as categorias falham, os destaques são buscados mesmo assim.
+      // If categories fail, highlights are fetched anyway.
       reaction((_) => _fetchCategoriesStore.state, (state) {
         if (state is FetchCategoriesErrorState &&
             _fetchHighlightsStore.state is FetchHighlightsInitialState) {

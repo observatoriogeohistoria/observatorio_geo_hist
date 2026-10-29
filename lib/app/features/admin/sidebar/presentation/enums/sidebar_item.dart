@@ -69,7 +69,7 @@ enum SidebarItem {
     }
   }
 
-  /// Nas publicações o sobretítulo é a própria seção, porque o título é o tipo.
+  /// In posts the eyebrow is the section itself, because the title is the type.
   String get eyebrow => this == SidebarItem.posts ? title : group.title;
 
   IconData get icon {

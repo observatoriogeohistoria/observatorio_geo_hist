@@ -18,7 +18,7 @@ class WorkImage {
   final WorkImageKind kind;
   final String url;
 
-  /// Só o cartaz usa: o "Assistir" sobre ele abre o link.
+  /// Only the poster uses it: the "Assistir" over it opens the link.
   final String link;
 }
 
@@ -88,13 +88,13 @@ class WorkInfo {
   final List<String> tags;
   final WorkImage? image;
 
-  /// Ocupa o lugar da imagem: o evento não mostra o cartaz.
+  /// Takes the image's place: events don't show the poster.
   final EventDay? date;
   final WorkAction? action;
   final WorkListen? listen;
   final WorkStatus? status;
 
-  /// Imagem com legenda abaixo do compartilhar, como a do artigo.
+  /// Image with caption below the share row, like the article's.
   final WorkFigure? figure;
   final List<WorkText> texts;
 

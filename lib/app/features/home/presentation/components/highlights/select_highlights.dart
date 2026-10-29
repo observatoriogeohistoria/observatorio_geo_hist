@@ -4,14 +4,14 @@ import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 
 const int maxHighlights = 3;
 
-/// Descarta posts incompletos e fica com os três mais recentes. O primeiro é o principal.
+/// Drops incomplete posts and keeps the three most recent. The first is the main one.
 List<PostModel> selectHighlights(List<PostModel> posts) {
   final complete = posts.where((post) {
     final id = post.id;
     return post.body != null && id != null && id.isNotEmpty && highlightArea(post) != null;
   }).toList();
 
-  // `sort` não é estável: o índice original desempata datas iguais ou nulas.
+  // `sort` isn't stable: the original index breaks ties between equal or null dates.
   final indexed = complete.indexed.toList()
     ..sort((a, b) {
       final dateA = a.$2.createdAt;
@@ -26,7 +26,7 @@ List<PostModel> selectHighlights(List<PostModel> posts) {
   return indexed.map((entry) => entry.$2).take(maxHighlights).toList();
 }
 
-/// A área da categoria do post ou, se a categoria não foi encontrada, a primeira do post.
+/// The area of the post's category or, if the category wasn't found, the post's first one.
 PostsAreas? highlightArea(PostModel post) {
   final categoryAreas = post.category?.areas ?? const <PostsAreas>[];
   if (categoryAreas.isNotEmpty) return categoryAreas.first;

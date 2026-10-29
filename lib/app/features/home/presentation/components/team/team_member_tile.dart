@@ -7,7 +7,7 @@ import 'package:observatorio_geo_hist/app/features/home/presentation/components/
 import 'package:observatorio_geo_hist/app/features/home/presentation/components/team/sort_team.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Com descrição, leva à página da pessoa; sem descrição e com Lattes, abre o currículo.
+/// With a description, leads to the person's page; without one and with Lattes, opens the CV.
 class TeamMemberTile extends StatefulWidget {
   const TeamMemberTile({super.key, required this.member});
 

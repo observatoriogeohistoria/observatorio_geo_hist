@@ -1,7 +1,7 @@
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 
-/// Cada número é `null` enquanto carrega ou quando a consulta falhou; o menu então não o mostra.
+/// Each number is `null` while loading or when the query failed; the menu then hides it.
 class PanelCounts {
   const PanelCounts({
     this.postsByType = const {},
@@ -23,7 +23,7 @@ class PanelCounts {
 
   int? get libraryTotal => _sumAll(DocumentArea.values.map((area) => libraryByArea[area]));
 
-  // Um total com parte faltando mostraria um número errado; melhor não mostrar.
+  // A total with a missing part would show a wrong number; better not to show it.
   static int? _sumAll(Iterable<int?> values) {
     var total = 0;
     for (final value in values) {

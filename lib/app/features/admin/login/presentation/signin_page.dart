@@ -43,7 +43,7 @@ class _SigninPageState extends State<SigninPage> {
 
   bool _attempted = false;
 
-  // O store guarda o último erro mesmo depois de sair da página; só mostra o que vier desta tela.
+  // The store keeps the last error even after leaving the page; only show what came from this screen.
   bool _errorVisible = false;
 
   List<ReactionDisposer> _reactions = [];
@@ -99,7 +99,7 @@ class _SigninPageState extends State<SigninPage> {
     _authStore.login(_emailController.text.trim(), _passwordController.text);
   }
 
-  // Os campos já passaram na validação; sem desligá-la, apagar a senha mostraria "Informe a senha.".
+  // The fields already passed validation; without turning it off, clearing the password would show "Informe a senha.".
   void _handleError(AuthFailure failure) {
     setState(() {
       _errorVisible = true;

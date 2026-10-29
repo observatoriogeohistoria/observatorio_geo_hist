@@ -4,7 +4,7 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_butt
 import 'package:observatorio_geo_hist/app/core/components/error_content/state_message_box.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Nada cadastrado ainda; o botão de criar só aparece para quem pode.
+/// Nothing created yet; the create button only shows for those who can.
 class PanelEmptyInfo {
   const PanelEmptyInfo({
     required this.icon,

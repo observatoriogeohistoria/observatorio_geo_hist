@@ -44,7 +44,7 @@ class PostEditorBar extends StatelessWidget {
   final VoidCallback onBack;
   final ValueChanged<PostEditorAction> onAction;
 
-  /// Sem a publicação carregada não há situação para mostrar nem o que salvar.
+  /// Without the post loaded there's no status to show nor anything to save.
   final bool isLoaded;
   final bool isPublished;
   final bool isNew;

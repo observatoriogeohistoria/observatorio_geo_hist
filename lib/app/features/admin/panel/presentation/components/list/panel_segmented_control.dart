@@ -10,7 +10,7 @@ class PanelSegment<T> {
   final String label;
 }
 
-/// Opções exclusivas lado a lado; o leitor de tela as trata como grupo de rádio.
+/// Exclusive options side by side; screen readers treat them as a radio group.
 class PanelSegmentedControl<T> extends StatelessWidget {
   const PanelSegmentedControl({
     required this.semanticLabel,
@@ -31,7 +31,7 @@ class PanelSegmentedControl<T> extends StatelessWidget {
       builder: (context, constraints) {
         if (_naturalWidth(context) <= constraints.maxWidth) return _segments();
 
-        // Sem espaço para as opções lado a lado (no celular), vira uma lista de escolha.
+        // With no room for the options side by side (on phones), it becomes a dropdown.
         return LibraryFilterSelect<T>(
           semanticLabel: semanticLabel,
           height: AppTheme.dimensions.components.panelControlHeight,
@@ -138,8 +138,8 @@ class _SegmentButton extends StatelessWidget {
               borderRadius: radius,
               splashFactory: NoSplash.splashFactory,
               focusColor: Colors.transparent,
-              // A mesma cor nos dois estados: trocar de cor com o mouse em cima pintava o
-              // realce de preto (o Flutter reaproveita a opacidade da cor anterior).
+              // Same color in both states: changing color on hover painted the
+              // highlight black (Flutter reuses the previous color's opacity).
               hoverColor: colors.page,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: components.panelSegmentButtonPaddingH),

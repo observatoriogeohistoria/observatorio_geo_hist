@@ -49,8 +49,8 @@ abstract class PostsStoreBase with Store {
 
   bool hasMore(PostType type) => _hasMore[type] ?? false;
 
-  /// Com filtro novo (ou [reset]) começa da primeira página e ignora a resposta que ainda
-  /// estava a caminho; com os mesmos filtros, traz a próxima página.
+  /// With a new filter (or [reset]) starts from the first page and ignores the response still
+  /// on its way; with the same filters, fetches the next page.
   @action
   Future<void> getPosts(
     PostType type, {

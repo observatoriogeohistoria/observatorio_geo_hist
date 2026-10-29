@@ -27,10 +27,10 @@ class PanelDropArea extends StatelessWidget {
   final String? semanticHint;
   final String? subtitle;
 
-  /// Ocupa a área toda, como `cover`; recebe o placeholder para mostrar quando falhar.
+  /// Fills the whole area, like `cover`; receives the placeholder to show on failure.
   final Widget? Function(Widget placeholder)? previewBuilder;
 
-  /// Etiqueta sobre a prévia, para lembrar que dá para trocar o arquivo.
+  /// Label over the preview, as a reminder that the file can be replaced.
   final String? actionLabel;
   final VoidCallback? onTap;
   final FocusNode? focusNode;

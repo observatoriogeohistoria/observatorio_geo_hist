@@ -32,13 +32,13 @@ class AppButtonBase extends StatefulWidget {
 
   final IconData? leadingIcon;
 
-  /// Textos que podem substituir [text]. O botão fica com a largura do maior, para não pular na troca.
+  /// Texts that may replace [text]. The button takes the width of the longest, so it doesn't jump on swap.
   final List<String> reserveTexts;
 
-  /// Ocupa a largura disponível, como no botão principal em tela estreita.
+  /// Fills the available width, like the primary button on narrow screens.
   final bool expand;
 
-  /// Diferente do desabilitado, não baixa a opacidade: o texto precisa manter o contraste.
+  /// Unlike disabled, it doesn't lower the opacity: the text must keep its contrast.
   final bool isLoading;
 
   final bool autofocus;
@@ -78,7 +78,7 @@ class _AppButtonBaseState extends State<AppButtonBase> {
           hovered ? colors.white : colors.ink,
           colors.ink
         ),
-      // Laranja forte também em repouso: sobre a superfície clara, o laranja normal fica abaixo de 4,5:1.
+      // Strong orange even at rest: on the light surface, the regular orange falls below 4.5:1.
       AppButtonKind.ghost => (
           hovered ? colors.accentSoft : Colors.transparent,
           colors.accentStrong,
@@ -179,8 +179,8 @@ class _AppButtonBaseState extends State<AppButtonBase> {
       enabled: !inactive,
       label: widget.text,
       onTap: inactive ? null : widget.onPressed,
-      // Sem o nó do InkWell, o foco precisa estar neste; senão, com o leitor de tela ligado, o
-      // navegador perde o foco ao chegar no botão.
+      // Without the InkWell's node, focus must sit on this one; otherwise, with a screen reader on, the
+      // browser loses focus when it reaches the button.
       focusable: !inactive,
       focused: _focused,
       onFocus: inactive ? null : _focusNode.requestFocus,

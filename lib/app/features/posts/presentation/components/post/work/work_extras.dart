@@ -5,8 +5,8 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/components
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/work/work_info.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Não é um player: o link leva a outro site (Spotify, YouTube…), e uma barra de
-/// progresso prometeria algo que a página não toca.
+/// Not a player: the link goes to another site (Spotify, YouTube…), and a progress bar
+/// would promise something the page doesn't play.
 class WorkListenButton extends StatefulWidget {
   const WorkListenButton({super.key, required this.listen, required this.title});
 
@@ -101,7 +101,7 @@ class _WorkListenButtonState extends State<WorkListenButton> {
   }
 }
 
-/// Decorativa: a "Data" da ficha lê a data inteira, com ano e intervalo.
+/// Decorative: the details' "Data" reads the full date, with year and range.
 class WorkDateBox extends StatelessWidget {
   const WorkDateBox({super.key, required this.date});
 

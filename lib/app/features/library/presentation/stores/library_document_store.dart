@@ -5,7 +5,7 @@ import 'package:observatorio_geo_hist/app/features/library/presentation/stores/s
 
 part 'library_document_store.g.dart';
 
-/// Um por página: o `LibraryStore` é do painel e não pode mudar.
+/// One per page: `LibraryStore` belongs to the panel and must not change.
 class LibraryDocumentStore = LibraryDocumentStoreBase with _$LibraryDocumentStore;
 
 abstract class LibraryDocumentStoreBase with Store {
@@ -18,7 +18,7 @@ abstract class LibraryDocumentStoreBase with Store {
 
   String? _key;
 
-  // Descarta a resposta de um endereço anterior quando a página troca no meio da busca.
+  // Drops the response for a previous URL when the page changes mid-fetch.
   int _request = 0;
 
   @action

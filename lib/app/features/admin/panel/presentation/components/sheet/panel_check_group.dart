@@ -31,7 +31,7 @@ class PanelCheckGroup<T> extends StatefulWidget {
   final String? Function(List<T>?)? validator;
   final GlobalKey<FormFieldState<List<T>>>? formFieldKey;
 
-  /// Vai para a primeira caixa.
+  /// Goes to the first checkbox.
   final FocusNode? focusNode;
 
   @override
@@ -41,8 +41,8 @@ class PanelCheckGroup<T> extends StatefulWidget {
 class _PanelCheckGroupState<T> extends State<PanelCheckGroup<T>> {
   final _scrollController = ScrollController();
 
-  // O Form valida antes de reconstruir os campos; guardar a escolha aqui evita que a validação
-  // veja a marcação anterior e deixe o erro na tela.
+  // Form validates before rebuilding the fields; keeping the choice here stops validation from
+  // seeing the previous selection and leaving the error on screen.
   late List<T> _selected = widget.selected;
 
   @override
@@ -117,7 +117,7 @@ class _PanelCheckGroupState<T> extends State<PanelCheckGroup<T>> {
                   ),
                 ),
               )
-            // Recuo do respiro das linhas, para a caixa seguir alinhada ao rótulo do campo.
+            // Offsets the rows' padding, so the checkbox stays aligned with the field label.
             : Transform.translate(
                 offset: Offset(-components.panelCheckRowPaddingH, 0),
                 child: Wrap(

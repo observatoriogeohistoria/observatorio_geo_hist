@@ -23,7 +23,7 @@ class LibraryCategoryFilter extends StatefulWidget {
 
   final List<DocumentCategory> categories;
 
-  /// Nulo sem contagem: as categorias aparecem sem números.
+  /// Null without a count: categories show without numbers.
   final Map<DocumentCategory, int>? counts;
   final List<DocumentCategory> selected;
   final ValueChanged<DocumentCategory> onToggle;
@@ -59,7 +59,7 @@ class _LibraryCategoryFilterState extends State<LibraryCategoryFilter> {
     });
   }
 
-  // O menu prende o Tab dentro dele; aqui o Tab sai do painel (as setas andam entre as caixas).
+  // The menu traps Tab inside it; here Tab leaves the panel (arrows move between the checkboxes).
   KeyEventResult _handlePanelKey(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent || event.logicalKey != LogicalKeyboardKey.tab) {
       return KeyEventResult.ignored;
@@ -96,7 +96,7 @@ class _LibraryCategoryFilterState extends State<LibraryCategoryFilter> {
       child: MenuAnchor(
         controller: _controller,
         childFocusNode: _buttonFocus,
-        // O clique fora só fecha o menu; sem isso, também abria o documento embaixo.
+        // A click outside only closes the menu; without this, it also opened the document underneath.
         consumeOutsideTap: true,
         onOpen: _handleOpen,
         onClose: () => setState(() {}),

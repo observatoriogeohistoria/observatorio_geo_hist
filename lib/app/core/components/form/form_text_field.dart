@@ -46,7 +46,7 @@ class FormTextField extends StatefulWidget {
   final String? hintText;
   final bool obscureText;
 
-  /// Fica dentro do campo, à direita, como o botão de mostrar a senha.
+  /// Sits inside the field, on the right, like the show-password button.
   final Widget? suffix;
 
   final bool isOptional;

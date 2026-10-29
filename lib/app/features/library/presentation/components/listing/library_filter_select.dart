@@ -30,7 +30,7 @@ class LibraryFilterSelect<T> extends StatefulWidget {
   final T value;
   final ValueChanged<T> onSelected;
 
-  /// Texto do botão para a opção escolhida; sem ele, vale o texto da opção.
+  /// Button text for the chosen option; without it, the option's text is used.
   final String Function(LibraryFilterOption<T> option)? labelBuilder;
   final double? height;
   final bool expand;
@@ -57,7 +57,7 @@ class _LibraryFilterSelectState<T> extends State<LibraryFilterSelect<T>> {
 
   void _toggle() => _controller.isOpen ? _controller.close() : _controller.open();
 
-  // Aberto pelo teclado, o foco entra no menu na opção atual; pelo mouse, fica onde está.
+  // Opened by keyboard, focus enters the menu on the current option; by mouse, it stays put.
   void _handleOpen() {
     if (!_buttonFocus.hasFocus) return;
     SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -65,7 +65,7 @@ class _LibraryFilterSelectState<T> extends State<LibraryFilterSelect<T>> {
     });
   }
 
-  // O menu prende o Tab dentro dele; aqui o Tab sai do menu (as setas andam entre as opções).
+  // The menu traps Tab inside it; here Tab leaves the menu (arrows move between the options).
   KeyEventResult _handleMenuKey(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent || event.logicalKey != LogicalKeyboardKey.tab) {
       return KeyEventResult.ignored;
@@ -90,7 +90,7 @@ class _LibraryFilterSelectState<T> extends State<LibraryFilterSelect<T>> {
     return MenuAnchor(
       controller: _controller,
       childFocusNode: _buttonFocus,
-      // O clique fora só fecha o menu; sem isso, também abria o documento embaixo.
+      // A click outside only closes the menu; without this, it also opened the document underneath.
       consumeOutsideTap: true,
       onOpen: _handleOpen,
       onClose: () => setState(() {}),

@@ -20,13 +20,13 @@ bool canNativeShare() {
   }
 }
 
-/// Precisa ser chamada direto do toque, sem `await` antes, ou o navegador recusa.
+/// Must be called straight from the tap, with no `await` before it, or the browser refuses.
 Future<NativeShareResult> nativeShare({required String title, required String url}) async {
   try {
     await web.window.navigator.share(web.ShareData(title: title, url: url)).toDart;
     return NativeShareResult.shared;
   } catch (error) {
-    // A pessoa fechou a folha: o navegador rejeita com `AbortError`.
+    // The person closed the sheet: the browser rejects with `AbortError`.
     if (error.toString().contains('AbortError')) return NativeShareResult.cancelled;
     return NativeShareResult.failed;
   }

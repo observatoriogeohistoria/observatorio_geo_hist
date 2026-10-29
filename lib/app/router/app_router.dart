@@ -151,7 +151,7 @@ class AppRouter {
           ),
         ],
       ),
-      // Endereços antigos em inglês, mantidos para não quebrar links já compartilhados.
+      // Old English URLs, kept so links already shared don't break.
       GoRoute(
         path: AppRoutes.legacyManifest,
         redirect: (context, state) => AppRoutes.manifesto,
@@ -235,14 +235,14 @@ class AppRouter {
     ],
   );
 
-  // A mesma chave em todas as rotas do painel: trocar de seção ou de área atualiza a página
-  // no lugar, sem recriar a moldura nem perder o foco.
+  // The same key on every panel route: switching section or area updates the page
+  // in place, without recreating the frame or losing focus.
   static Page<void> _panelPage(Widget child) {
     return MaterialPage(key: const ValueKey('painel'), child: AppSelectionArea(child: child));
   }
 
-  // A mesma chave nas duas rotas do editor: salvar uma publicação nova troca o endereço para o
-  // de edição sem perder o que está na tela.
+  // The same key on both editor routes: saving a new post switches the URL to the
+  // edit one without losing what's on screen.
   static Page<void> _editorPage(Widget child) {
     return MaterialPage(key: const ValueKey('editor'), child: AppSelectionArea(child: child));
   }

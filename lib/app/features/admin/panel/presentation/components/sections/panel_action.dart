@@ -5,11 +5,11 @@ import 'package:observatorio_geo_hist/app/features/admin/login/infra/errors/auth
 import 'package:observatorio_geo_hist/app/features/admin/panel/panel_setup.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/panel_counts_store.dart';
 
-/// [save] vem do painel lateral, que mostra o erro e fecha sozinho.
+/// [save] comes from the side panel, which shows the error and closes by itself.
 enum PanelAction { save, delete, publish, unpublish, highlight, unhighlight }
 
-/// O store só diz que deu certo; quem disparou a ação guarda qual foi, para escolher o aviso
-/// e saber se recarrega as contagens.
+/// The store only says it succeeded; whoever triggered the action keeps which one it was, to pick the notice
+/// and know whether to reload the counts.
 class PendingPanelAction {
   PanelAction? _action;
 
@@ -22,7 +22,7 @@ class PendingPanelAction {
   }
 }
 
-/// Erro ao abrir a lista ([isFirstPageLoad]) já aparece na caixa de erro, sem aviso.
+/// An error opening the list ([isFirstPageLoad]) already shows in the error box, with no notice.
 void showPanelActionResult(
   BuildContext context, {
   required CrudState state,

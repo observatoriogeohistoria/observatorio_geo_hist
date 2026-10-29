@@ -22,7 +22,7 @@ class PanelList extends StatelessWidget {
     final footer = this.footer;
     final count = itemCount + (footer == null ? 0 : 1);
 
-    // As linhas ficam dentro da borda, para o fundo ao passar o mouse não cobri-la.
+    // Rows sit inside the border, so the hover background doesn't cover it.
     return DecoratedSliver(
       decoration: BoxDecoration(
         color: colors.page,

@@ -24,7 +24,7 @@ class _PartnerLogoState extends State<PartnerLogo> {
     0, 0, 0, 1, 0, //
   ];
 
-  // Luminância Rec. 709, o mesmo cinza do `grayscale(1)` do CSS.
+  // Rec. 709 luminance, the same gray as CSS `grayscale(1)`.
   static const List<double> _grayscale = [
     0.2126, 0.7152, 0.0722, 0, 0, //
     0.2126, 0.7152, 0.0722, 0, 0, //
@@ -105,8 +105,8 @@ class _PartnerLogoState extends State<PartnerLogo> {
       ),
     );
 
-    // Tudo sai de um só valor animado para, em repouso, não pintar sombra transparente nem
-    // abrir camadas extras de opacidade: os logos ficam em páginas longas e pesavam no scroll.
+    // Everything comes from a single animated value so that, at rest, it doesn't paint a transparent shadow
+    // or open extra opacity layers: the logos sit on long pages and weighed on scrolling.
     return RepaintBoundary(
       child: TweenAnimationBuilder<double>(
         tween: Tween(end: active ? 1 : 0),
@@ -157,7 +157,7 @@ class _PartnerLogoState extends State<PartnerLogo> {
     );
   }
 
-  // A opacidade vai na própria matriz (linha do alfa) para não abrir mais uma camada.
+  // Opacity goes into the matrix itself (alpha row) to avoid opening another layer.
   List<double> _lerpMatrix(double t, double opacity) {
     return [
       for (var i = 0; i < _identity.length; i++)

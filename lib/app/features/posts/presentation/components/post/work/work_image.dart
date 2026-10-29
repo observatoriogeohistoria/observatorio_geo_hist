@@ -11,7 +11,7 @@ class WorkCover extends StatelessWidget {
   final String url;
   final String title;
 
-  /// Sem valor, a proporção de livro.
+  /// Without a value, a book's aspect ratio.
   final double? aspectRatio;
 
   @override

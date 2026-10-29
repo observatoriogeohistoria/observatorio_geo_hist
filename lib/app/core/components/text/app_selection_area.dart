@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Diálogos e painéis laterais abrem em outra rota, fora da área da página, e precisam da sua.
+/// Dialogs and side panels open on another route, outside the page's area, and need their own.
 class AppSelectionArea extends StatelessWidget {
   const AppSelectionArea({required this.child, super.key});
 

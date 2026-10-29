@@ -41,7 +41,7 @@ class MailForm extends StatefulWidget {
   /// Aceita `**negrito**`.
   final String hint;
 
-  /// Recebe os valores já aparados, na ordem de [fields].
+  /// Receives the values already trimmed, in the order of [fields].
   final MailDraft Function(List<String> values) buildDraft;
 
   final MailConfirmationTexts confirmationTexts;
@@ -105,7 +105,7 @@ class _MailFormState extends State<MailForm> {
     });
   }
 
-  // O foco direto não rola a página: o campo ficaria acima da tela ou sob a navbar fixa.
+  // Focusing directly doesn't scroll: the field would be above the screen or under the fixed navbar.
   void _focusField(int index) {
     _focusNodes[index].requestFocus();
     final fieldContext = _fieldKeys[index].currentContext;
@@ -132,7 +132,7 @@ class _MailFormState extends State<MailForm> {
 
     return Form(
       key: _formKey,
-      // Só depois da primeira tentativa; `onUserInteraction` deixaria de fora os campos ainda não tocados.
+      // Only after the first attempt; `onUserInteraction` would leave out fields not touched yet.
       autovalidateMode: _attempted ? AutovalidateMode.always : AutovalidateMode.disabled,
       child: AutofillGroup(
         child: Column(

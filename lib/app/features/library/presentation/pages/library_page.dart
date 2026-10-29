@@ -69,7 +69,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 );
               }
 
-              // Os dois cartões ficam com a altura do maior.
+              // Both cards take the height of the taller one.
               return IntrinsicHeight(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

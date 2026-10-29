@@ -12,7 +12,7 @@ class AppColors {
   Color line = const Color(0xFFE6E1DA);
   Color lineStrong = const Color(0xFFCFC8BE);
 
-  /// Borda de campo de formulário: único contorno do campo, precisa de 3:1 no branco (a [line] tem 1,3:1).
+  /// Form field border: the field's only outline, needs 3:1 on white ([line] has 1.3:1).
   Color fieldBorder = const Color(0xFF8A8178);
 
   Color accent = const Color(0xFFC94400);
@@ -22,7 +22,7 @@ class AppColors {
 
   Color rowHover = const Color(0xFFFCFBF9);
 
-  /// Acento a 25 %, que mantém [accentStrong] acima de 4,5:1.
+  /// Accent at 25 %, which keeps [accentStrong] above 4.5:1.
   Color textSelection = const Color(0x40C94400);
 
   Color footerBackground = const Color(0xFF1C1917);
@@ -54,6 +54,6 @@ class AppColors {
   Color successSurface = const Color(0xFFE4F3E8);
   Color info = const Color(0xFF1E5AA8);
 
-  /// Verde claro para o ícone sobre o aviso escuro; o [success] some no fundo [ink].
+  /// Light green for the icon on the dark notice; [success] disappears on the [ink] background.
   Color toastIcon = const Color(0xFF9FD8AE);
 }

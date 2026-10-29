@@ -17,7 +17,7 @@ class CopyButton extends StatefulWidget {
 
   final String value;
 
-  /// O que é copiado, em minúsculas ("e-mail", "telefone"): entra na dica e no aviso.
+  /// What gets copied, in lowercase ("e-mail", "telefone"): used in the tooltip and the notice.
   final String subject;
 
   final bool onDark;

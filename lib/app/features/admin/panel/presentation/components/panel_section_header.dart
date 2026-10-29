@@ -19,7 +19,7 @@ class PanelSectionHeader extends StatefulWidget {
   final String title;
   final String? summary;
 
-  /// Sem [actionLabel] ou [onAction] o botão não aparece (quem só pode ver, por exemplo).
+  /// Without [actionLabel] or [onAction] the button doesn't show (for view-only users, for example).
   final String? actionLabel;
   final IconData actionIcon;
   final VoidCallback? onAction;
@@ -38,7 +38,7 @@ class _PanelSectionHeaderState extends State<PanelSectionHeader> {
     _focusTitle();
   }
 
-  // Trocar de seção ou de tipo leva o foco ao título, para o leitor de tela anunciar onde se está.
+  // Switching section or type moves focus to the title, so the screen reader announces where you are.
   @override
   void didUpdateWidget(covariant PanelSectionHeader oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -125,7 +125,7 @@ class _PanelSectionHeaderState extends State<PanelSectionHeader> {
   }
 }
 
-/// "12 categorias · nota". Sem a contagem (carregando ou com falha) fica só a nota.
+/// "12 categorias · nota". Without the count (loading or failed) only the note remains.
 String? countSummary(int? count, String singular, String plural, {String? note}) {
   if (count == null) {
     if (note == null || note.isEmpty) return null;

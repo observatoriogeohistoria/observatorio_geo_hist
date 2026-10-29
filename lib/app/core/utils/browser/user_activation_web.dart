@@ -1,7 +1,7 @@
 import 'package:web/web.dart' as web;
 
-/// O navegador só deixa tocar com som logo depois de um clique ou tecla.
-/// Sem essa API, devolve `false` para o vídeo esperar um novo clique.
+/// The browser only allows playing with sound right after a click or key press.
+/// Without this API, returns `false` so the video waits for a new click.
 bool hasUserActivation() {
   try {
     return web.window.navigator.userActivation.isActive;

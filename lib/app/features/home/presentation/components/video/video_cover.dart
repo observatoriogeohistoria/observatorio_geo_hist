@@ -7,7 +7,7 @@ import 'package:observatorio_geo_hist/app/core/utils/constants/app_assets.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Usa `video-capa.webp` quando existe; senão, uma capa desenhada.
+/// Uses `video-cover.webp` when it exists; otherwise, a drawn cover.
 class VideoCover extends StatelessWidget {
   const VideoCover({super.key, this.child, this.action});
 
@@ -30,7 +30,7 @@ class VideoCover extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Cópia invisível da legenda: reserva o mesmo espaço no topo, para o centro ficar no centro.
+            // Invisible copy of the caption: reserves the same space at the top, so the center stays centered.
             ExcludeSemantics(child: Opacity(opacity: 0, child: _Caption(action: action))),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontal),
@@ -56,7 +56,7 @@ class _Caption extends StatelessWidget {
     final breakpoint = ScreenUtils.breakpointOf(context);
     final solid = colors.imageScrim.withValues(alpha: components.videoCaptionScrimOpacity);
 
-    // No celular, a legenda cobriria o título que a capa já traz. Ela segue só para o leitor de tela.
+    // On phones, the caption would cover the title the cover already has. It stays for screen readers only.
     if (breakpoint == Breakpoint.mobile && action != null) {
       return Padding(
         padding: EdgeInsets.fromLTRB(
@@ -137,7 +137,7 @@ class _Caption extends StatelessWidget {
 class _CoverBackground extends StatelessWidget {
   const _CoverBackground();
 
-  /// Consulta o manifesto uma vez, para não pedir um arquivo que não existe (e gerar 404).
+  /// Checks the manifest once, so it doesn't request a file that doesn't exist (and cause a 404).
   static final Future<bool> _hasCoverImage = AssetManifest.loadFromAssetBundle(rootBundle)
       .then((manifest) => manifest.listAssets().contains(AppAssets.videoCover))
       .catchError((Object _) => false);
@@ -177,7 +177,7 @@ class VideoCoverPainter extends CustomPainter {
     final stroke = AppTheme.dimensions.stroke.small;
     final rect = Offset.zero & size;
 
-    // Como no CSS: o ângulo vale em pixels e os cantos opostos ficam nas cores das pontas.
+    // As in CSS: the angle applies in pixels and opposite corners get the end colors.
     final angle = components.videoCoverAngleDegrees * math.pi / 180;
     final direction = Offset(math.sin(angle), -math.cos(angle));
     final length = (size.width * math.sin(angle)).abs() + (size.height * math.cos(angle)).abs();

@@ -13,8 +13,8 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/pos
 import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/states/posts_listing_states.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Não sabe de categoria: quem monta a página carrega o [store] com o escopo e diz a rota de
-/// cada post e os textos de vazio.
+/// Knows nothing about categories: the page loads [store] with the scope and provides each post's
+/// route and the empty-state texts.
 class PostsListing extends StatefulWidget {
   const PostsListing({
     super.key,
@@ -26,7 +26,7 @@ class PostsListing extends StatefulWidget {
 
   final PostsListingStore store;
 
-  /// Nulo quando não há como montar o endereço do post; ele fica fora da lista.
+  /// Null when the post's URL can't be built; it's left out of the list.
   final String? Function(PostModel post) routeFor;
 
   final String emptyTitle;
@@ -44,7 +44,7 @@ class _PostsListingState extends State<PostsListing> {
   @override
   void initState() {
     super.initState();
-    // A busca pode ser zerada pelo store (troca de categoria, "Limpar busca").
+    // The search may be cleared by the store (category switch, "Limpar busca").
     _disposeSync = reaction((_) => widget.store.searchText, (String text) {
       if (_searchController.text.trim() != text) _searchController.text = text;
     });

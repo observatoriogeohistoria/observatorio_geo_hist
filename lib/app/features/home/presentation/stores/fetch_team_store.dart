@@ -20,7 +20,7 @@ abstract class FetchTeamStoreBase with Store {
   @observable
   FetchTeamState state = FetchTeamInitialState();
 
-  /// Evita o esqueleto piscar ao voltar à Home.
+  /// Keeps the skeleton from flashing when coming back to the Home.
   bool get needsFetch => switch (state) {
         FetchTeamInitialState() || FetchTeamErrorState() => true,
         FetchTeamLoadingState() || FetchTeamSuccessState() => false,

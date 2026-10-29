@@ -63,8 +63,8 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
     _document = null;
     _rendered.clear();
     _rendering = false;
-    // Ao tentar de novo, o erro fica na tela com o botão carregando: trocar pelo visualizador
-    // vazio e voltar ao erro, se falhar outra vez, parecia uma piscada.
+    // On retry, the error stays on screen with the button loading: switching to the empty viewer
+    // and back to the error, if it failed again, looked like a flicker.
     final retrying = retry && _status == _ViewerStatus.error;
     setState(() {
       _retrying = retrying;
@@ -101,8 +101,8 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
         _retrying = false;
       });
 
-  // Alguns autores enviaram imagem no lugar do PDF, sem extensão no nome e servida como
-  // octet-stream: só os primeiros bytes dizem o formato (JPEG, PNG, GIF, WebP).
+  // Some authors uploaded an image instead of the PDF, with no extension in the name and served as
+  // octet-stream: only the first bytes tell the format (JPEG, PNG, GIF, WebP).
   static bool _isImage(Uint8List bytes) {
     bool startsWith(List<int> signature, [int offset = 0]) {
       if (bytes.length < offset + signature.length) return false;
@@ -133,7 +133,7 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
     });
   }
 
-  // Uma renderização por vez: cliques seguidos levam direto à última página pedida.
+  // One render at a time: repeated clicks go straight to the last requested page.
   Future<void> _show(int page) async {
     final document = _document;
     if (document == null) return;
@@ -167,7 +167,7 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
   Future<_RenderedPage> _render(PdfDocument document, int number) async {
     final page = await document.getPage(number);
     try {
-      // O dobro do tamanho em pontos mantém o texto nítido em telas de alta densidade.
+      // Twice the size in points keeps text sharp on high-density screens.
       final image = await page.render(
         width: page.width * 2,
         height: page.height * 2,
@@ -233,7 +233,7 @@ class _LibraryDocumentPdfViewerState extends State<LibraryDocumentPdfViewer> {
       label: 'Visualizador do documento',
       child: Container(
         decoration: BoxDecoration(color: colors.surface, borderRadius: radius),
-        // A borda vai por cima: por baixo, o fundo branco da barra apagava a curva dos cantos.
+        // The border goes on top: underneath, the bar's white background erased the rounded corners.
         foregroundDecoration: BoxDecoration(
           borderRadius: radius,
           border: Border.all(color: colors.line, width: AppTheme.dimensions.stroke.small),

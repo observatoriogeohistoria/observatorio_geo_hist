@@ -51,7 +51,7 @@ class _PostsSectionState extends State<PostsSection> {
   bool _loadingMore = false;
   bool _firstPageFailed = false;
 
-  // Depois de uma falha ao carregar mais, a próxima tentativa é pelo botão, não a cada rolada.
+  // After a failure loading more, the next attempt is via the button, not on every scroll.
   bool _loadMoreFailed = false;
 
   String _searchText = '';
@@ -181,7 +181,7 @@ class _PostsSectionState extends State<PostsSection> {
     _fetch();
   }
 
-  // A imagem vai como URL, para salvar não tentar enviá-la de novo.
+  // The image goes as a URL, so saving doesn't try to upload it again.
   PostModel _keepImage(PostModel post) =>
       post.copyWith(body: post.body?.copyWith(image: FileModel(url: post.body?.image.url)));
 

@@ -7,7 +7,7 @@ import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 import 'package:observatorio_geo_hist/app/core/components/image/fitted_network_image.dart';
 
-/// Ignora cores, fontes e tamanhos do editor, para não quebrar o contraste nem a escala de texto.
+/// Ignores the editor's colors, fonts and sizes, so contrast and text scaling don't break.
 class ReadingRichText extends StatefulWidget {
   const ReadingRichText(this.content, {super.key});
 
@@ -46,7 +46,7 @@ class ReadingRichText extends StatefulWidget {
 
 const _ignoredAttributes = {'color', 'background', 'font', 'size'};
 
-/// As linhas em branco do editor dobravam o vão entre parágrafos.
+/// The editor's blank lines doubled the gap between paragraphs.
 List<Map<String, dynamic>> _clean(List<Map<String, dynamic>> ops) {
   final result = <Map<String, dynamic>>[];
   var endsWithNewline = true;
@@ -129,7 +129,7 @@ class _ReadingRichTextState extends State<ReadingRichText> {
   Widget build(BuildContext context) {
     if (ReadingRichText.isEmpty(widget.content)) return const SizedBox.shrink();
 
-    // Na web o Quill cria um nó de foco próprio, que virava uma parada de Tab invisível.
+    // On the web Quill creates its own focus node, which became an invisible Tab stop.
     return FocusTraversalGroup(
       descendantsAreTraversable: false,
       child: QuillEditor(

@@ -27,7 +27,7 @@ class MemberPortrait extends StatelessWidget {
                 child: Text(
                   initialsOf(name),
                   maxLines: 1,
-                  // O quadrado tem tamanho fixo; ampliar as iniciais as faria vazar.
+                  // The square has a fixed size; scaling the initials would make them overflow.
                   textScaler: TextScaler.noScaling,
                   style: AppTheme.typography
                       .of(context)

@@ -22,7 +22,7 @@ class StateMessageBox extends StatelessWidget {
   final Widget? action;
   final StateMessageTone tone;
 
-  /// Só quando a caixa é o conteúdo principal da página; nas listagens ela fica abaixo do h1.
+  /// Only when the box is the page's main content; in listings it sits below the h1.
   final int? titleHeadingLevel;
 
   @override

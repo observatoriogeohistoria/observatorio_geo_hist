@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-// Cada bloco traz a própria margem. Lista e destaque somam acima só o que falta,
-// para não dobrar o vão que o parágrafo anterior já deixou.
+// Each block brings its own margin. Lists and callouts only add above what's missing,
+// so they don't double the gap the previous paragraph already left.
 
 class ReadingLead extends StatelessWidget {
   const ReadingLead(this.text, {super.key});

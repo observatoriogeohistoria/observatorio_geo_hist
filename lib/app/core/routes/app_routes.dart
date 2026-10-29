@@ -49,14 +49,14 @@ abstract class AppRoutes {
   static const legacyCategoryPattern = '/posts/:area/:category';
   static const legacyPostPattern = '$legacyCategoryPattern/:id';
 
-  /// Empilha a página nova: ao voltar, a anterior continua montada e na mesma posição de
-  /// rolagem. Navbar, logo e breadcrumbs usam `go`, que recomeça a pilha.
+  /// Pushes the new page: on back, the previous one stays mounted at the same scroll
+  /// position. Navbar, logo and breadcrumbs use `go`, which restarts the stack.
   static void open(BuildContext context, String route) {
     if (isCurrentRoute(context, route)) return;
     GoRouter.of(context).push(route);
   }
 
-  /// A Home escuta este pedido para rolar até a equipe, mesmo se já estiver aberta.
+  /// The Home listens to this request to scroll to the team, even if it's already open.
   static final teamRequest = ValueNotifier(false);
 
   static void openTeam(BuildContext context) {

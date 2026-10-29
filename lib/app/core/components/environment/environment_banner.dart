@@ -9,7 +9,7 @@ class EnvironmentBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     if (AppEnvironment.current.isProd) return const SizedBox.shrink();
 
-    // A faixa fica fora das páginas, sem Material acima; sem ele o texto herda o sublinhado de erro.
+    // The banner sits outside the pages, with no Material above; without one the text gets the error underline.
     return Material(
       color: AppTheme.colors.accent,
       child: SizedBox(

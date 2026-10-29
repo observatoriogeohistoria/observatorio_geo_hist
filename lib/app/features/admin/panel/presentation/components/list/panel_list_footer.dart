@@ -14,7 +14,7 @@ class PanelListFooter extends StatelessWidget {
 
   final VoidCallback? onClearFilters;
 
-  /// Sem ele, os próximos itens chegam ao rolar e o rodapé só mostra o indicador.
+  /// Without it, the next items arrive on scroll and the footer only shows the indicator.
   final VoidCallback? onLoadMore;
   final bool isLoadingMore;
 

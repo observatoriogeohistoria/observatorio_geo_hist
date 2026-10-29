@@ -11,7 +11,7 @@ import 'package:observatorio_geo_hist/app/features/library/presentation/componen
 import 'package:observatorio_geo_hist/app/features/library/presentation/stores/filter_documents_store.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Os filtros ficam no [FilterDocumentsStore]; cada mudança chama [onChanged] para recarregar.
+/// Filters live in [FilterDocumentsStore]; each change calls [onChanged] to reload.
 class LibraryFilterBar extends StatelessWidget {
   const LibraryFilterBar({
     required this.area,

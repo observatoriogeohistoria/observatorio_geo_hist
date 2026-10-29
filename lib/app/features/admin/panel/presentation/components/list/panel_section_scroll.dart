@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/scroll/app_scrollbar.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Cabeçalho, filtros e lista rolam juntos. [onNearEnd] avisa quando falta pouco para o fim.
+/// Header, filters and list scroll together. [onNearEnd] fires when the end is close.
 class PanelSectionScroll extends StatefulWidget {
   const PanelSectionScroll({
     required this.header,
@@ -16,7 +16,7 @@ class PanelSectionScroll extends StatefulWidget {
   final Widget header;
   final Widget? filterBar;
 
-  /// Um sliver: a lista, a grade, o esqueleto ou uma caixa de estado.
+  /// A sliver: the list, the grid, the skeleton or a state box.
   final Widget body;
   final VoidCallback? onNearEnd;
   final ScrollController? controller;
@@ -65,8 +65,8 @@ class _PanelSectionScrollState extends State<PanelSectionScroll> {
   Widget build(BuildContext context) {
     final filterBar = widget.filterBar;
 
-    // Em grupo, o Tab percorre a seção inteira antes de voltar ao menu, em vez de alternar
-    // entre os dois pela altura de cada item.
+    // As a group, Tab goes through the whole section before returning to the menu, instead of
+    // alternating between the two by each item's height.
     return FocusTraversalGroup(
       child: AppScrollbar(
         controller: _controller,
@@ -87,7 +87,7 @@ class _PanelSectionScrollState extends State<PanelSectionScroll> {
   }
 }
 
-/// Quando a primeira página não enche a tela, não há rolagem para pedir a próxima.
+/// When the first page doesn't fill the screen, there's no scroll to request the next one.
 void loadMoreIfNotScrollable(ScrollController controller, VoidCallback loadMore) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     if (!controller.hasClients) return;

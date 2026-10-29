@@ -8,7 +8,7 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/search_model.dart';
 import 'package:observatorio_geo_hist/app/core/utils/strings/strings.dart';
 
-/// "Área · Categoria" e, quando o tipo tem, quem fez e quando. Partes vazias somem.
+/// "Área · Categoria" and, when the type has them, who made it and when. Empty parts are dropped.
 String postRowMeta(PostModel post) {
   final body = post.body;
   final details = switch (body) {

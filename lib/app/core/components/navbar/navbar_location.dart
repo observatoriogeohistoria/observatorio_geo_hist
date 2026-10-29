@@ -8,7 +8,7 @@ enum NavbarSection { about, history, geography, library }
 class NavbarLocation {
   const NavbarLocation({this.section, this.categoryKey});
 
-  /// Na 404 não há `GoRouterState`, então usa o endereço do roteador.
+  /// The 404 has no `GoRouterState`, so it uses the router's location.
   factory NavbarLocation.of(BuildContext context) {
     try {
       return NavbarLocation.fromUri(GoRouterState.of(context).uri);

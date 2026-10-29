@@ -43,7 +43,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
 
   CategoryModel? _category;
 
-  /// A navbar recarrega as categorias a cada página, e isso não deve buscar o post de novo.
+  /// The navbar reloads categories on every page, and that must not refetch the post.
   String? _requested;
 
   String get _address => '${widget.area.key}/${widget.categoryKey}/${widget.postId}';
@@ -85,8 +85,8 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
     }
 
     _requested = null;
-    // A 404 monta outra navbar, que recarrega as categorias: só o primeiro carregamento
-    // mostra o esqueleto, senão a página alternaria sem parar.
+    // The 404 builds another navbar, which reloads categories: only the first load
+    // shows the skeleton, otherwise the page would flip back and forth endlessly.
     final resolved = _store.state is PostDetailNotFoundState;
     switch (_categoriesStore.state) {
       case FetchCategoriesSuccessState():
@@ -135,7 +135,7 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
             );
         }
 
-        // A chave por endereço volta ao topo ao abrir outro post pelo Leia também.
+        // The per-URL key scrolls back to the top when opening another post from "Leia também".
         return ReadingPageScaffold(
             key: ValueKey(_address), body: body, beforeFooter: const Support());
       },

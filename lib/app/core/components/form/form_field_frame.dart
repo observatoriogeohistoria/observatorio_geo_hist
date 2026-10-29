@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Os textos visíveis ficam fora da semântica: o controle anuncia [semanticLabel] e
-/// [semanticHint] no próprio nó.
+/// Visible texts stay out of semantics: the control announces [semanticLabel] and
+/// [semanticHint] on its own node.
 class FormFieldFrame extends StatelessWidget {
   const FormFieldFrame({
     super.key,

@@ -28,7 +28,7 @@ class MemberAvatar extends StatelessWidget {
                   child: Text(
                     initialsOf(name),
                     maxLines: 1,
-                    // O círculo tem tamanho fixo; ampliar as iniciais as faria vazar.
+                    // The circle has a fixed size; scaling the initials would make them overflow.
                     textScaler: TextScaler.noScaling,
                     style: AppTheme.typography
                         .of(context)

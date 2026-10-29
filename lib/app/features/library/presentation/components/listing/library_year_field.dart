@@ -7,7 +7,7 @@ class LibraryYearField extends StatefulWidget {
 
   final int? value;
 
-  /// Chamado só com o ano completo ou com o campo vazio.
+  /// Called only with a full year or an empty field.
   final ValueChanged<String> onChanged;
 
   @override
@@ -30,7 +30,7 @@ class _LibraryYearFieldState extends State<LibraryYearField> {
   void didUpdateWidget(covariant LibraryYearField oldWidget) {
     super.didUpdateWidget(oldWidget);
     final digits = AppTheme.dimensions.components.libraryYearDigits;
-    // O ano pode ser tirado pelo chip ou por "Limpar tudo"; um ano incompleto continua.
+    // The year may be removed by the chip or by "Limpar tudo"; an incomplete year stays.
     if (widget.value == null && _controller.text.length == digits) {
       _controller.clear();
     } else if (widget.value != null && _controller.text != '${widget.value}') {

@@ -5,16 +5,16 @@ import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
 enum PostsListingStatus { initial, loading, success, empty, error }
 
-/// De onde vêm as publicações. Sem [category], vale para todas as categorias.
+/// Where the posts come from. Without [category], applies to every category.
 class PostsListingScope extends Equatable {
   const PostsListingScope({this.category, required this.types, required this.pageSize});
 
-  // 12 e 6 fecham linhas inteiras em 1, 2 e 3 colunas. Em todas as publicações aparecem todos
-  // os tipos de uma vez, então cada bloco começa menor.
+  // 12 and 6 fill whole rows in 1, 2 and 3 columns. The all-posts page shows every type
+  // at once, so each block starts smaller.
   factory PostsListingScope.ofCategory(CategoryModel category) =>
       PostsListingScope(category: category, types: category.postsTypes, pageSize: 12);
 
-  /// Sem categoria não há ordem cadastrada: os tipos seguem a ordem alfabética do nome.
+  /// Without a category there's no stored order: types follow the alphabetical order of their names.
   factory PostsListingScope.all() => PostsListingScope(
         types: [...PostType.values]
           ..sort((a, b) => a.portuguesePlural.compareTo(b.portuguesePlural)),

@@ -3,8 +3,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
-/// As imagens chegam dos autores em tamanho original. Decodificá-las no tamanho em que
-/// aparecem evita travadas no scroll quando entram na tela e poupa memória.
+/// Images come from authors at original size. Decoding them at the size they're
+/// shown avoids scroll jank when they enter the screen and saves memory.
 class FittedNetworkImage extends StatelessWidget {
   const FittedNetworkImage(
     this.url, {
@@ -53,7 +53,7 @@ class FittedNetworkImage extends StatelessWidget {
     );
   }
 
-  // Arredonda para cima em degraus: redimensionar a janela não decodifica a imagem a cada pixel.
+  // Rounds up in steps: resizing the window doesn't decode the image at every pixel.
   static int _quantize(double pixels) => (pixels / 64).ceil() * 64;
 }
 
@@ -78,8 +78,8 @@ class _FittedImageKey {
   int get hashCode => Object.hash(providerKey, width, height, cover);
 }
 
-// O ResizeImage do Flutter não sabe preencher como o cover: com a largura fixa, uma imagem
-// mais larga que a caixa fica borrada. Aqui a escala sai do tamanho real da imagem.
+// Flutter's ResizeImage can't fill like cover: with a fixed width, an image wider
+// than the box gets blurry. Here the scale comes from the image's real size.
 class _FittedImage extends ImageProvider<_FittedImageKey> {
   const _FittedImage(this.image, {required this.width, required this.height, required this.cover});
 

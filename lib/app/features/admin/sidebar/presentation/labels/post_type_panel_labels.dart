@@ -1,6 +1,6 @@
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
-/// Rótulos do painel. O plural do site ("Filmes e Vídeos") fica longo demais para o menu.
+/// Panel labels. The site's plural ("Filmes e Vídeos") is too long for the menu.
 extension PostTypePanelLabels on PostType {
   static const List<PostType> menuOrder = [
     PostType.article,

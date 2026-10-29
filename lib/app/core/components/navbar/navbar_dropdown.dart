@@ -67,14 +67,14 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
     }
   }
 
-  /// Pedir foco ao escopo não basta: sem um filho focado, nada aparece marcado.
+  /// Requesting focus on the scope isn't enough: without a focused child, nothing shows as selected.
   void _focusFirstOption() {
     final policy = FocusTraversalGroup.maybeOfNode(_panelScope) ?? ReadingOrderTraversalPolicy();
     final first = policy.findFirstFocus(_panelScope, ignoreCurrentFocus: true);
     (first ?? _panelScope).requestFocus();
   }
 
-  /// O foco só anda depois que o painel sai da tela; antes disso, as opções ainda contam no Tab.
+  /// Focus only moves after the panel leaves the screen; before that, the options still count for Tab.
   void _closeAndMoveFocus({required bool backwards}) {
     _triggerFocus.requestFocus();
     _close();
@@ -189,7 +189,7 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
     final spacing = AppTheme.dimensions.spacing;
     final screen = MediaQuery.sizeOf(context);
     final maxWidth = components.dropdownMaxWidth.clamp(0.0, screen.width - spacing.s32).toDouble();
-    // Deixa o menu 8 px abaixo da linha da navbar.
+    // Puts the menu 8 px below the navbar line.
     final gapAboveMenu = spacing.s20;
     final maxHeight = (screen.height - components.navbarHeight - spacing.s20 - spacing.s16)
         .clamp(0.0, double.infinity);
@@ -221,7 +221,7 @@ class _NavbarDropdownState extends State<NavbarDropdown> {
                 curve: Curves.easeOut,
                 builder: (context, value, child) => Opacity(opacity: value, child: child),
                 child: Padding(
-                  // Vão transparente dentro da área do mouse, para o ponteiro chegar ao menu sem fechá-lo.
+                  // Transparent gap inside the hover area, so the pointer reaches the menu without closing it.
                   padding: EdgeInsets.only(top: gapAboveMenu),
                   child: FocusScope(
                     node: _panelScope,

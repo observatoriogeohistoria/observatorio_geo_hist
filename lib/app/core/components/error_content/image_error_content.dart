@@ -4,7 +4,7 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class ImageErrorContent extends StatelessWidget {
   const ImageErrorContent({this.compact = false, super.key});
 
-  /// Em espaço pequeno a frase não cabe; fica só o ícone, com a frase no tooltip.
+  /// In small spaces the sentence doesn't fit; only the icon stays, with the sentence in the tooltip.
   final bool compact;
 
   static const _message = 'Erro ao carregar a imagem';

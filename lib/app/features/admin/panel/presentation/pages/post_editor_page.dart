@@ -53,7 +53,7 @@ class PostEditorPage extends StatefulWidget {
   static final _unsaved = ValueNotifier<bool>(false);
   static String? _location;
 
-  /// Chamado pelo `onExit` das rotas do editor: o voltar, o voltar do navegador e os links.
+  /// Called by the editor routes' `onExit`: the back button, the browser's back and links.
   static Future<bool> confirmLeave(BuildContext context) async {
     if (!_unsaved.value) return true;
 
@@ -70,8 +70,8 @@ class PostEditorPage extends StatefulWidget {
       return true;
     }
 
-    // No voltar do navegador o endereço já mudou; sem isto ele ficaria na lista com o editor
-    // na tela.
+    // On browser back the URL has already changed; without this it would stay on the list with the editor
+    // on screen.
     final location = _location;
     final current = browserLocation();
     if (context.mounted && location != null && current != null && current != location) {
@@ -143,7 +143,7 @@ class _PostEditorPageState extends State<PostEditorPage> {
   @override
   void didUpdateWidget(covariant PostEditorPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Salvar uma publicação nova (ou mudar a categoria) troca o endereço sem recriar a página.
+    // Saving a new post (or changing its category) changes the URL without recreating the page.
     final isCurrent = widget.postId == null || widget.postId == _post?.id;
     if (!isCurrent) {
       _reset();
@@ -234,7 +234,7 @@ class _PostEditorPageState extends State<PostEditorPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       form.firstFocus.requestFocus();
-      // No navegador o campo focado vem com o texto todo selecionado; digitar apagaria o título.
+      // In the browser the focused field comes with all text selected; typing would erase the title.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final editable = form.firstFocus.context?.findAncestorStateOfType<EditableTextState>();
         editable?.widget.controller.selection = const TextSelection.collapsed(offset: 0);
@@ -253,7 +253,7 @@ class _PostEditorPageState extends State<PostEditorPage> {
     });
   }
 
-  // Depois de salvar a página troca o arquivo pelo endereço; isso não é alteração da pessoa.
+  // After saving, the page swaps the file for the URL; that's not a change made by the person.
   void _markUnsaved() {
     if (_saving == null) PostEditorPage._unsaved.value = true;
   }
@@ -366,7 +366,7 @@ class _PostEditorPageState extends State<PostEditorPage> {
         }
       },
       (saved) {
-        // A imagem enviada vira endereço, para salvar de novo não a enviar outra vez.
+        // The uploaded image becomes a URL, so saving again doesn't upload it once more.
         image.file.value = null;
         image.url.text = saved.body?.image.url ?? '';
         setState(() {
@@ -500,8 +500,8 @@ class _PostEditorPageState extends State<PostEditorPage> {
     final missing = _missing;
     final isSaving = _saving != null;
 
-    // Trocar os campos para só leitura quebra a entrada de texto no navegador; tirar o foco e
-    // o toque já impede a edição enquanto salva.
+    // Switching the fields to read-only breaks text input in the browser; taking away focus and
+    // pointer input already prevents editing while saving.
     return ExcludeFocus(
       excluding: isSaving,
       child: AbsorbPointer(

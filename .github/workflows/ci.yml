@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # O validar é check obrigatório: com paths-ignore no gatilho ele nunca reportava e PR só de
-  # docs ficava travado. Por isso o filtro fica aqui; job pulado por `if` conta como aprovado.
+  # The validate job is a required check: with paths-ignore on the trigger it never reported and
+  # docs-only PRs got stuck. So the filter lives here; a job skipped by `if` counts as passed.
   mudancas:
     runs-on: ubuntu-latest
     outputs:

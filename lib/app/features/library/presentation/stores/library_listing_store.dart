@@ -7,7 +7,7 @@ import 'package:observatorio_geo_hist/app/features/library/presentation/stores/s
 
 part 'library_listing_store.g.dart';
 
-/// Um por página: o painel continua com o próprio store e não divide estado com o site.
+/// One per page: the panel keeps its own store and doesn't share state with the site.
 class LibraryListingStore = LibraryListingStoreBase with _$LibraryListingStore;
 
 abstract class LibraryListingStoreBase with Store {
@@ -20,7 +20,7 @@ abstract class LibraryListingStoreBase with Store {
   DocumentArea? _area;
   DocumentSnapshot? _cursor;
 
-  // Descarta respostas de filtros ou áreas anteriores que chegam atrasadas.
+  // Drops late responses from previous filters or areas.
   int _request = 0;
   int _countsRequest = 0;
 
@@ -39,7 +39,7 @@ abstract class LibraryListingStoreBase with Store {
   @observable
   bool loadMoreFailed = false;
 
-  /// Nulos enquanto carregam ou se a contagem falhou: aí os números somem.
+  /// Null while loading or if the count failed: then the numbers disappear.
   @observable
   int? total;
 
@@ -70,7 +70,7 @@ abstract class LibraryListingStoreBase with Store {
   @computed
   bool get isSearching => searchText.isNotEmpty;
 
-  /// Em ordem alfabética, sem as que não têm documento na área. Sem contagem, todas.
+  /// Alphabetical, without the ones that have no document in the area. Without counts, all of them.
   @computed
   List<DocumentCategory> get visibleCategories {
     final counts = categoryCounts;
@@ -115,7 +115,7 @@ abstract class LibraryListingStoreBase with Store {
     return _fetch();
   }
 
-  /// Só filtra com o ano completo ou com o campo vazio.
+  /// Only filters with a full year or an empty field.
   @action
   Future<void> setYear(String text) {
     final digits = text.trim();

@@ -87,8 +87,8 @@ class _ShimmerPainter extends CustomPainter {
       oldDelegate.base != base || oldDelegate.highlight != highlight;
 }
 
-// O degradê tem quatro larguras do bloco e desliza até encostar nele, então a faixa
-// clara atravessa o bloco uma vez por ciclo e as pontas ficam na cor base.
+// The gradient is four block widths wide and slides until it touches the block, so the light
+// band crosses the block once per cycle and the ends stay in the base color.
 class _SlidingGradient extends GradientTransform {
   const _SlidingGradient(this.progress);
 

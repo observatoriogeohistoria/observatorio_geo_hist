@@ -30,7 +30,7 @@ class PostsFilterBar extends StatelessWidget {
   final PostsAreas? area;
   final ValueChanged<PostsAreas?> onAreaChanged;
 
-  /// Já filtradas pela área escolhida.
+  /// Already filtered by the chosen area.
   final List<CategoryModel> categories;
   final CategoryModel? category;
   final ValueChanged<CategoryModel?> onCategoryChanged;

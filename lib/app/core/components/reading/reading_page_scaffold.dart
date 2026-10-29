@@ -16,7 +16,7 @@ class ReadingPageScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppTheme.colors.page,
       body: FocusTraversalGroup(
-        // Mantém a navbar primeiro no Tab, mesmo com a página rolada.
+        // Keeps the navbar first in Tab order, even with the page scrolled.
         policy: OrderedTraversalPolicy(
           secondary: ReadingOrderTraversalPolicy(requestFocusCallback: _focusAndReveal),
           requestFocusCallback: _focusAndReveal,
@@ -26,7 +26,7 @@ class ReadingPageScaffold extends StatelessWidget {
             const FocusTraversalOrder(order: NumericFocusOrder(0), child: NavbarSliver()),
             if (header != null) SliverToBoxAdapter(child: header),
             SliverToBoxAdapter(child: body),
-            // SliverFillRemaining mediria a altura intrínseca, que o LayoutBuilder do Apoio não suporta.
+            // SliverFillRemaining would measure the intrinsic height, which the support section's LayoutBuilder doesn't allow.
             SliverLayoutBuilder(
               builder: (context, constraints) {
                 final remaining =
@@ -50,8 +50,8 @@ class ReadingPageScaffold extends StatelessWidget {
   }
 }
 
-// O padrão só rola no sentido do Tab: um link acima da tela ou sob a navbar fixa
-// recebia foco sem aparecer.
+// The default only scrolls in the Tab direction: a link above the screen or under the fixed navbar
+// got focus without showing up.
 void _focusAndReveal(
   FocusNode node, {
   ScrollPositionAlignmentPolicy? alignmentPolicy,

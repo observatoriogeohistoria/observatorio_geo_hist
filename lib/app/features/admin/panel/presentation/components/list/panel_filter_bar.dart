@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// A busca estica para ocupar o que sobra da linha; no celular, fica sozinha na primeira linha.
+/// The search stretches to fill the rest of the row; on phones, it sits alone on the first row.
 class PanelFilterBar extends StatelessWidget {
   const PanelFilterBar({
     this.leading = const [],
@@ -15,12 +15,12 @@ class PanelFilterBar extends StatelessWidget {
     super.key,
   });
 
-  /// Antes da busca, como a troca de área da biblioteca.
+  /// Before the search, like the library's area switch.
   final List<Widget> leading;
   final Widget? search;
   final List<Widget> filters;
 
-  /// Segunda linha, por exemplo os filtros extras da biblioteca.
+  /// Second row, for example the library's extra filters.
   final Widget? below;
 
   @override
@@ -98,7 +98,7 @@ class _FilterWrap extends MultiChildRenderObjectWidget {
 
 class _FilterWrapParentData extends ContainerBoxParentData<RenderBox> {}
 
-// O Wrap do Flutter não deixa um filho esticar; aqui a busca ganha a sobra da sua linha.
+// Flutter's Wrap won't let a child stretch; here the search takes the leftover of its row.
 class _RenderFilterWrap extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _FilterWrapParentData>,

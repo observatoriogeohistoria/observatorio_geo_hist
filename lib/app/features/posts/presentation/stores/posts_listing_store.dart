@@ -5,7 +5,7 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/sta
 
 part 'posts_listing_store.g.dart';
 
-/// Um por página: a listagem da categoria e a de todas as publicações não dividem estado.
+/// One per page: the category listing and the all-posts listing don't share state.
 class PostsListingStore = PostsListingStoreBase with _$PostsListingStore;
 
 abstract class PostsListingStoreBase with Store {
@@ -15,7 +15,7 @@ abstract class PostsListingStoreBase with Store {
 
   PostsListingScope? _scope;
 
-  // Descarta respostas de uma busca ou escopo anterior que chegam atrasadas.
+  // Drops late responses from a previous search or scope.
   int _request = 0;
 
   @observable
@@ -24,7 +24,7 @@ abstract class PostsListingStoreBase with Store {
   @observable
   List<PostsTypeBlock> blocks = const [];
 
-  /// Nulo enquanto carrega ou se a contagem falhou: aí os números somem.
+  /// Null while loading or if the count failed: then the numbers disappear.
   @observable
   Map<PostType, int>? counts;
 
