@@ -12,7 +12,6 @@ on:
       - '.claude/**'
       - '.vscode/**'
       - 'tool/**'
-      - 'hosting/**'
       - '.github/workflows/ci.yml'
       - 'analysis_options.yaml'
   workflow_dispatch:

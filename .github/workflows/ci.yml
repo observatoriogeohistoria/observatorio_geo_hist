@@ -32,7 +32,7 @@ jobs:
       id: filtro
       run: |
         alterados=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
-          | grep -Ev '^(docs/|\.claude/|\.vscode/|tool/|hosting/|\.github/workflows/deploy-[^/]*\.yml$)|\.md$' || true)
+          | grep -Ev '^(docs/|\.claude/|\.vscode/|tool/|\.github/workflows/deploy-[^/]*\.yml$)|\.md$' || true)
         echo "site=$([ -n "$alterados" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
 
   validar:
