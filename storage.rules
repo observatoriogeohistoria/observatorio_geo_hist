@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function hasRole(roles) {
+      let path = /databases/(default)/documents/users/$(request.auth.uid);
+      return request.auth != null
+        && firestore.exists(path)
+        && firestore.get(path).data.isDeleted == false
+        && firestore.get(path).data.role in roles;
+    }
+
+    function canEdit() {
+      return hasRole(['ADMIN', 'EDITOR']);
+    }
+
+    function isStaff() {
+      return hasRole(['ADMIN', 'EDITOR', 'VIEWER']);
+    }
+
+    // The largest file in the bucket today is an 80 MB PDF.
+    function fitsSizeLimit() {
+      return request.resource.size < 100 * 1024 * 1024;
+    }
+
+    match /media/{fileName} {
+      allow get: if true;
+      allow list: if isStaff();
+      allow create, update: if canEdit() && fitsSizeLimit();
+      allow delete: if canEdit();
+    }
+
+    match /library/{area}/{fileName} {
+      allow get: if true;
+      allow list: if isStaff();
+      allow create, update: if canEdit() && fitsSizeLimit();
+      allow delete: if canEdit();
+    }
+  }
+}

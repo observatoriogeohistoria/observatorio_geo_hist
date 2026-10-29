@@ -1,0 +1,58 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function profile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(roles) {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && profile().isDeleted == false
+        && profile().role in roles;
+    }
+
+    function isAdmin() {
+      return hasRole(['ADMIN']);
+    }
+
+    function canEdit() {
+      return hasRole(['ADMIN', 'EDITOR']);
+    }
+
+    function isStaff() {
+      return hasRole(['ADMIN', 'EDITOR', 'VIEWER']);
+    }
+
+    match /posts/{category} {
+      allow read: if true;
+      allow write: if canEdit();
+
+      match /category_posts/{postId} {
+        allow write: if canEdit();
+      }
+    }
+
+    // Drafts stay private: a public query is only allowed when it filters on isPublished == true.
+    match /{path=**}/category_posts/{postId} {
+      allow read: if resource.data.isPublished == true || isStaff();
+    }
+
+    match /team/{memberId} {
+      allow read: if true;
+      allow write: if canEdit();
+    }
+
+    match /library/{documentId} {
+      allow read: if true;
+      allow write: if canEdit();
+    }
+
+    // The login reads the user's own document; the panel counts users for every role.
+    match /users/{userId} {
+      allow read: if isStaff() || (request.auth != null && request.auth.uid == userId);
+      allow write: if isAdmin();
+    }
+  }
+}

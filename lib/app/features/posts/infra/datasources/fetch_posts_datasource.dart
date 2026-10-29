@@ -111,16 +111,17 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
   @override
   Future<PostModel> fetchPostById(String postId) async {
     try {
-      Query query =
-          _firestore.collectionGroup('category_posts').where('id', isEqualTo: postId).limit(1);
+      // The security rules only allow public queries that filter on isPublished.
+      Query query = _firestore
+          .collectionGroup('category_posts')
+          .where('id', isEqualTo: postId)
+          .where('isPublished', isEqualTo: true)
+          .limit(1);
 
       final snapshot = await query.get();
       if (snapshot.docs.isEmpty) throw const PostNotFoundException();
 
-      final data = snapshot.docs.first.data() as Map<String, dynamic>;
-      if (data['isPublished'] != true) throw const PostNotFoundException();
-
-      return PostModel.fromJson(data);
+      return PostModel.fromJson(snapshot.docs.first.data() as Map<String, dynamic>);
     } on PostNotFoundException {
       rethrow;
     } catch (exception) {

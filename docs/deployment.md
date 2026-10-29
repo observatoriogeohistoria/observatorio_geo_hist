@@ -26,16 +26,18 @@ Nada vai para a `main` sem passar pela `develop`.
 | Arquivo | Gatilho | O que faz |
 |---|---|---|
 | [ci.yml](../.github/workflows/ci.yml) | PR para `develop` ou `main` | `pub get`, conferência de formatação (`dart format`), `analyze` e `build web`. Não publica. |
-| `deploy-dev.yml` | push na `develop` ou manual | Build, `robots.txt` bloqueando indexação e FTP para o dev. |
-| `deploy-prod.yml` | push na `main` ou manual | Build e FTP para produção. |
+| `deploy-dev.yml` | push na `develop` ou manual | Índices, build, `robots.txt` bloqueando indexação, FTP para o dev e regras do Firestore. |
+| `deploy-prod.yml` | push na `main` ou manual | Índices, build, FTP para produção e regras do Firestore e do Storage. |
 
-Push que só mexe em arquivos fora do site (`docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `ci.yml`, `analysis_options.yaml`) não dispara deploy (`paths-ignore`). Para publicar mesmo assim, use o deploy manual. O CI segue a mesma ideia: PR só com `docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/` ou `deploy-*.yml` não roda validação.
+Push que só mexe em arquivos fora do site (`docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `hosting/`, `ci.yml`, `analysis_options.yaml`) não dispara deploy (`paths-ignore`). Para publicar mesmo assim, use o deploy manual. O CI segue a mesma ideia: PR só com `docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `hosting/` ou `deploy-*.yml` não roda validação.
 
 Comum aos três:
 
 - Versão do Flutter lida do `.fvmrc` com `jq`.
 - Só `build/web/` é enviado, em um único passo de FTP (`SamKirkland/FTP-Deploy-Action`, FTPS).
 - `concurrency` por ambiente: dois deploys do mesmo ambiente não rodam juntos.
+- Ações fixadas por SHA (com a versão em comentário) e `firebase-tools` em versão exata. Para atualizar, troque o SHA pelo da nova tag (`git ls-remote https://github.com/actions/checkout refs/tags/v4.4.0`).
+- `permissions: contents: read` e checkout com `persist-credentials: false`, para o token do GitHub não ficar gravado em `.git/config`. Um deploy antigo que enviava a raiz do repositório publicou esse arquivo, com o token, no servidor.
 
 ## Secrets e Environments
 
@@ -45,8 +47,8 @@ Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP
 
 - **`APP_ENV`**: o build recebe `--dart-define=APP_ENV=dev|prod`, lido em [app_environment.dart](../lib/app/core/utils/environment/app_environment.dart). No dev, o app mostra a faixa de aviso de ambiente de testes.
 - **Indexação**: o deploy de dev gera `robots.txt` com `Disallow: /`.
-- **Senha**: o dev fica atrás de senha (`.htpasswd`, pelo cPanel).
-- **`.htaccess`**: o app usa `usePathUrlStrategy`, então o servidor reescreve rotas desconhecidas para `index.html`. O `.htaccess` de cada ambiente (com a senha, no dev) fica só no servidor: o deploy apaga apenas arquivos que ele mesmo enviou.
+- **Senha**: o dev deve ficar atrás de senha (cPanel › *Privacidade de diretórios*, que grava o bloco no `.htaccess`).
+- **`.htaccess`**: as versões de referência ficam em [hosting/](../hosting/) e são copiadas à mão para o servidor (o deploy não envia o `.htaccess`, para não apagar a senha do dev). Elas reescrevem rotas desconhecidas para `index.html` (o app usa `usePathUrlStrategy`), forçam HTTPS com HSTS, mandam os cabeçalhos de segurança e bloqueiam arquivos ocultos (`.git`, `.ftp-deploy-sync-state.json`) e de backup (`.sql`, `.zip`, `.bak`...). Ao mudar o `.htaccess` no servidor, atualize o arquivo em `hosting/`.
 - **Cache**: os arquivos do Flutter mantêm o mesmo nome a cada build (`main.dart.js`, `assets/fonts/MaterialIcons-Regular.otf`...). Sem `Cache-Control`, o navegador reaproveita versões antigas por conta própria, e aparecem, por exemplo, ícones sumidos (fonte de ícones antiga com código novo). O `.htaccess` de cada ambiente deve mandar revalidar sempre (o servidor responde 304 quando nada mudou):
 
   ```apache
@@ -60,7 +62,7 @@ Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP
 
 Os índices compostos ficam em `firestore.indexes.json`, ligado no `firebase.json`, e são publicados pelos workflows de deploy (dev e produção) antes do site. O arquivo tem **todos** os índices do projeto: o deploy não apaga os que estiverem só no console, mas eles ficariam fora do controle do repositório. Ao criar um índice pelo console, exporte de novo (`firebase firestore:indexes --project observatorio-geo-hist > firestore.indexes.json`).
 
-**Segredo `FIREBASE_SERVICE_ACCOUNT`** (nos ambientes `DEV` e `PROD` do GitHub): JSON de uma conta de serviço do projeto correspondente com os papéis *Cloud Datastore Index Admin* e *Service Usage Consumer*. Sem ele, o deploy para no passo dos índices e o site não é publicado.
+**Segredo `FIREBASE_SERVICE_ACCOUNT`** (nos ambientes `DEV` e `PROD` do GitHub): JSON de uma conta de serviço do projeto correspondente com os papéis *Cloud Datastore Index Admin*, *Firebase Rules Admin* e *Service Usage Consumer*. Sem ele, o deploy para no passo dos índices e o site não é publicado.
 
 Para publicar à mão:
 
@@ -84,3 +86,16 @@ Sem eles, a página abre, mas a busca mostra "Não foi possível carregar". O í
 - **Deploy manual**: rode o workflow em *Actions* (`workflow_dispatch`), escolhendo a branch ou o commit.
 - **Rollback**: reverta o commit na `main` ou rode o workflow de um commit anterior.
 - **Falha no FTP**: reexecute o workflow. O deploy é idempotente.
+
+## Regras de segurança
+
+[firestore.rules](../firestore.rules) e [storage.rules](../storage.rules) ficam no repositório e são publicadas pelos workflows **depois** do FTP: as regras negam a busca de post do build anterior, que não filtrava `isPublished`, então publicar antes quebraria a página de post durante o envio. O dev publica só as do Firestore (não tem Storage). O que cada papel pode fazer está em [admin-panel.md](admin-panel.md).
+
+Para publicar à mão:
+
+```sh
+firebase deploy --only firestore:rules --project observatorio-geo-hist-dev
+firebase deploy --only firestore:rules,storage --project observatorio-geo-hist
+```
+
+Regra publicada pelo console é sobrescrita no próximo deploy: mude sempre o arquivo.
