@@ -1,6 +1,6 @@
 # Arquitetura do Painel Administrativo
 
-CMS do Observatório, em `lib/app/features/admin/`. Segue as camadas e o fluxo `Widget → Store → Repository → Datasource → Firebase` de [arquitetura.md](arquitetura.md).
+CMS do Observatório, em `lib/app/features/admin/`. Segue as camadas e o fluxo `Widget → Store → Repository → Datasource → Firebase` de [architecture.md](architecture.md).
 
 ## 1. Estrutura
 
@@ -72,7 +72,7 @@ Toda seção abre com o `PanelSectionHeader` (sobretítulo, título que recebe o
 
 A listagem de posts usa `collectionGroup('category_posts')`, com filtros por tipo, área e categoria, e paginação por `startAfterDocument`. A busca por título usa um intervalo sobre `body.title_lower`.
 
-**Storage**: bucket do projeto do ambiente (só produção tem Storage habilitado; ver [deploy-ambientes.md](deploy-ambientes.md)), arquivos em `media/{nome}_{id}.{extensão}`. `MediaDatasource.getMedias` lista 20 por vez (`ListOptions`) e devolve `PaginatedMedias` (`medias`, `nextPageToken`). O preview usa a URL, sem baixar os bytes. A imagem é enviada antes de salvar o post que a referencia. O [cors.json](../cors.json) define o CORS do bucket.
+**Storage**: bucket do projeto do ambiente (só produção tem Storage habilitado; ver [deployment.md](deployment.md)), arquivos em `media/{nome}_{id}.{extensão}`. `MediaDatasource.getMedias` lista 20 por vez (`ListOptions`) e devolve `PaginatedMedias` (`medias`, `nextPageToken`). O preview usa a URL, sem baixar os bytes. A imagem é enviada antes de salvar o post que a referencia. O [cors.json](../cors.json) define o CORS do bucket.
 
 ## 5. CRUD
 

@@ -1,21 +1,21 @@
 ---
 name: sdd-spec
-description: Cria a especificação (spec.md) de uma feature do redesign a partir de um item de docs/redesign/planejamento.md. Use quando a pessoa pedir para especificar, detalhar ou "começar" uma fase, seção ou tela (por exemplo "spec da Fase 0" ou "/sdd-spec 1.2"). Não escreve código.
-argument-hint: "<item do planejamento, ex.: Fase 0, 1.2, T-04>"
+description: Cria a especificação (spec.md) de uma feature a partir de um pedido ou de um item de docs/future-ideas.md. Use quando a pessoa pedir para especificar, detalhar ou "começar" uma feature ou tela (por exemplo "spec da busca geral" ou "/sdd-spec copiar citação"). Não escreve código.
+argument-hint: "<feature ou item de future-ideas.md, ex.: busca geral>"
 ---
 
 # sdd-spec
 
-Transforma um item do planejamento numa especificação clara e conferível. **Não escreve código** e **não cria plano técnico**.
+Transforma um pedido numa especificação clara e conferível. **Não escreve código** e **não cria plano técnico**.
 
 ## Antes de começar
-1. Leia `CLAUDE.md`, `docs/redesign/planejamento.md` e `docs/specs/README.md`.
-2. Identifique o item pedido em `$ARGUMENTS`. Se for ambíguo, pergunte qual.
-3. Veja `docs/specs/` para achar o próximo número (`NNN`) e conferir se já existe spec para o item. Se existir, pergunte se é para atualizar.
-4. Abra o **protótipo** (link em `CLAUDE.md`, aba correspondente) e leia o código atual dos arquivos citados no item, para descrever o que muda em relação ao que existe.
+1. Leia `CLAUDE.md`, `docs/specs/README.md` e, se o pedido vier de lá, o item em `docs/future-ideas.md`. As decisões de design estão em `docs/redesign-history.md`.
+2. Identifique o pedido em `$ARGUMENTS`. Se for ambíguo, pergunte.
+3. Ache o próximo número (`NNN`): o maior entre as pastas de `docs/specs/` e o histórico do git (`git log --all --name-only --format= -- docs/specs | grep -o 'specs/[0-9]*' | sort -u | tail -1`). Se já existir spec em andamento para o pedido, pergunte se é para atualizar.
+4. Se a tela existir no **protótipo** (link em `CLAUDE.md`), abra a aba correspondente. Leia o código atual que será afetado, para descrever o que muda em relação ao que existe.
 
 ## O que fazer
-1. Crie `docs/specs/NNN-nome-curto/spec.md` com o modelo abaixo. Escreva para quem vai revisar: frases curtas, sem jargão de implementação.
+1. Crie `docs/specs/NNN-short-name/spec.md` (nome em inglês) com o modelo abaixo. Escreva para quem vai revisar: frases curtas, sem jargão de implementação.
 2. Descreva **comportamento observável**, não estrutura de código. Nada de nomes de classes novas nem de arquitetura: isso é do plano.
 3. Escreva critérios de aceite que possam ser conferidos como "passou" ou "não passou" (com larguras 390, 768 e 1280 px quando houver layout).
 4. Tudo o que não estiver decidido vira **pergunta em aberto**. Não invente. Pergunte à pessoa (use `AskUserQuestion` quando forem poucas decisões objetivas) e registre as respostas na spec.
@@ -27,8 +27,8 @@ Transforma um item do planejamento numa especificação clara e conferível. **N
 # NNN. Título da feature
 
 - **Status:** rascunho
-- **Item do planejamento:** ex. Fase 1, seção 1.2
-- **Protótipo:** aba "Home" (link no CLAUDE.md)
+- **Origem:** pedido de AAAA-MM-DD ou item de future-ideas.md
+- **Protótipo:** aba "Home" (link no CLAUDE.md), se houver
 - **Criada em:** AAAA-MM-DD
 
 ## Objetivo
@@ -71,7 +71,5 @@ O que fica de fora de propósito.
 ```
 
 ## Regras
-- Uma spec cobre uma entrega que a pessoa consiga revisar de uma vez. Se o item for grande (uma fase inteira), proponha dividir em várias specs e pergunte.
-- Não copie o planejamento inteiro: referencie o item e detalhe só o necessário.
+- Uma spec cobre uma entrega que a pessoa consiga revisar de uma vez. Se o pedido for grande, proponha dividir em várias specs e pergunte.
 - Siga as regras de design do `CLAUDE.md` nos critérios de aceite (tokens, contraste, estados obrigatórios).
-- Atualize o item no `docs/redesign/planejamento.md` com a referência `→ specs/NNN-nome` só depois de a spec ser aprovada.

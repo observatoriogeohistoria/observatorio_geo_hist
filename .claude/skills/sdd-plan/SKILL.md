@@ -9,7 +9,7 @@ argument-hint: "<número da spec, ex.: 001>"
 Converte uma spec **aprovada** em plano técnico e tarefas ordenadas. **Não implementa.**
 
 ## Antes de começar
-1. Leia `CLAUDE.md`, `docs/arquitetura.md` e a spec em `docs/specs/$ARGUMENTS-*/spec.md`.
+1. Leia `CLAUDE.md`, `docs/architecture.md` (e `docs/admin-panel.md`, se for no painel) e a spec em `docs/specs/$ARGUMENTS-*/spec.md`.
 2. Confirme que o status é `aprovada` e que **não há perguntas em aberto**. Se não for o caso, pare e diga o que falta (sugira `/sdd-spec`).
 3. Explore o código que será tocado: leia os arquivos reais, não presuma. Veja como componentes parecidos já foram feitos e reaproveite.
 
