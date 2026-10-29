@@ -58,7 +58,7 @@ Toda seção abre com o `PanelSectionHeader` (sobretítulo, título que recebe o
 
 ## 4. Firebase
 
-**Authentication**: `FirebaseAuthDatasource` ([firebase_auth_datasource.dart](../lib/app/features/admin/login/infra/datasources/firebase_auth_datasource.dart)) expõe `signIn`, `signOut`, `createUser` e `currentUser`. Após o login, o `UserModel` vem de `users/{uid}`. Na criação de usuário, uma instância temporária (`TemporaryApp`) evita trocar a sessão do administrador.
+**Authentication**: `FirebaseAuthDatasource` ([firebase_auth_datasource.dart](../lib/app/features/admin/login/infra/datasources/firebase_auth_datasource.dart)) expõe `signIn`, `signOut`, `createUser` e `currentUser`. Após o login, o `UserModel` vem de `users/{uid}`. Na criação de usuário, um app secundário (`UserCreation`) evita trocar a sessão do administrador. Ele é reaproveitado e nunca apagado: o `FirebaseAuth` guarda a instância pelo nome do app, e recriá-lo fazia a segunda criação falhar.
 
 **Firestore**:
 
@@ -120,7 +120,16 @@ Salvar um post com imagem:
 - **Sidebar**: só mostra o grupo Administração (Usuários) com `canAccessUsersSection`.
 - **Seções**: habilitam a edição conforme a permissão. O `viewer` só visualiza.
 
-Toda a autorização é no cliente. O repositório não tem `firestore.rules` nem `storage.rules`: quem protege os dados são as regras do console do Firebase. Vale versioná-las.
+O que o cliente esconde é só interface: quem protege os dados são [firestore.rules](../firestore.rules) e [storage.rules](../storage.rules), publicadas pelos workflows de deploy (ver [deployment.md](deployment.md)). Elas leem o papel em `users/{uid}`, nunca de dado enviado pelo cliente:
+
+| Quem | Lê | Escreve |
+|---|---|---|
+| Qualquer pessoa | categorias, equipe, biblioteca, posts com `isPublished == true`, arquivos do Storage (sem listar) | nada |
+| `VIEWER` | tudo acima, rascunhos, `users`, listagem do Storage | nada |
+| `EDITOR` | igual ao `VIEWER` | posts, categorias, equipe, biblioteca, mídias (até 100 MB, só em `media/` e `library/`) |
+| `ADMIN` | igual ao `VIEWER` | tudo do `EDITOR` e `users` |
+
+Usuário com `isDeleted == true` perde tudo. Consulta pública em `category_posts` precisa filtrar `isPublished == true`, senão é negada inteira. Ao mudar as regras, teste no emulador (`firebase emulators:start --only firestore,storage`) antes do deploy.
 
 ## 7. Injeção de dependência
 
@@ -146,4 +155,5 @@ Toda a autorização é no cliente. O repositório não tem `firestore.rules` ne
 
 - `users_section.dart` habilita a edição com `canEditTeamSection`, não com permissão própria. Sem efeito hoje, pois só administradores acessam a aba.
 - `role` inválido em `users/` faz `UserRole.fromString` lançar exceção.
-- Usuários removidos recebem `isDeleted`, sem exclusão física.
+- Remover um usuário apaga o documento em `users/`, mas a conta do Auth continua: ela entra, mas não acessa nada. Para apagá-la, use o console (*Authentication › Usuários*).
+- A criação de usuários pelo cliente depende do cadastro público do Auth estar ligado. Quem tiver a chave pública do site também consegue criar conta, mas sem documento em `users/` ela não acessa nada.
