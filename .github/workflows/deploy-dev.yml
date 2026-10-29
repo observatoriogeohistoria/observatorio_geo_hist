@@ -12,7 +12,6 @@ on:
       - '.claude/**'
       - '.vscode/**'
       - 'tool/**'
-      - 'hosting/**'
       - '.github/workflows/ci.yml'
       - 'analysis_options.yaml'
   workflow_dispatch:
@@ -66,8 +65,8 @@ jobs:
       run: |
         printf 'User-agent: *\nDisallow: /\n' > build/web/robots.txt
 
-    # The .htaccess is not uploaded (its source is hosting/dev.htaccess): the password that cPanel
-    # adds to it lives only on the server, and the deploy only deletes files it uploaded itself.
+    # The .htaccess is not uploaded: it lives only on the server, with the password that cPanel
+    # adds to it, and the deploy only deletes files it uploaded itself.
     - name: Sync build/web to HostGator (dev)
       uses: SamKirkland/FTP-Deploy-Action@d0aa83872616587eb552bc831bb9166b3f9c5ad5 # 4.3.0
       with:

@@ -29,7 +29,7 @@ Nada vai para a `main` sem passar pela `develop`.
 | `deploy-dev.yml` | push na `develop` ou manual | Índices, build, `robots.txt` bloqueando indexação, FTP para o dev e regras do Firestore. |
 | `deploy-prod.yml` | push na `main` ou manual | Índices, build, FTP para produção e regras do Firestore e do Storage. |
 
-Push que só mexe em arquivos fora do site (`docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `hosting/`, `ci.yml`, `analysis_options.yaml`) não dispara deploy (`paths-ignore`). Para publicar mesmo assim, use o deploy manual. O CI segue a mesma ideia: PR só com `docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `hosting/` ou `deploy-*.yml` não roda validação.
+Push que só mexe em arquivos fora do site (`docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `ci.yml`, `analysis_options.yaml`) não dispara deploy (`paths-ignore`). Para publicar mesmo assim, use o deploy manual. O CI segue a mesma ideia: PR só com `docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/` ou `deploy-*.yml` não roda validação.
 
 Comum aos três:
 
@@ -47,8 +47,8 @@ Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP
 
 - **`APP_ENV`**: o build recebe `--dart-define=APP_ENV=dev|prod`, lido em [app_environment.dart](../lib/app/core/utils/environment/app_environment.dart). No dev, o app mostra a faixa de aviso de ambiente de testes.
 - **Indexação**: o deploy de dev gera `robots.txt` com `Disallow: /`.
-- **Senha**: o dev deve ficar atrás de senha (cPanel › *Privacidade de diretórios*, que grava o bloco no `.htaccess`).
-- **`.htaccess`**: as versões de referência ficam em [hosting/](../hosting/) e são copiadas à mão para o servidor (o deploy não envia o `.htaccess`, para não apagar a senha do dev). Elas reescrevem rotas desconhecidas para `index.html` (o app usa `usePathUrlStrategy`), forçam HTTPS com HSTS, mandam os cabeçalhos de segurança e bloqueiam arquivos ocultos (`.git`, `.ftp-deploy-sync-state.json`) e de backup (`.sql`, `.zip`, `.bak`...). Ao mudar o `.htaccess` no servidor, atualize o arquivo em `hosting/`.
+- **Senha**: o dev fica atrás de senha (cPanel › *Privacidade de diretórios*, que grava o bloco no `.htaccess`).
+- **`.htaccess`**: fica só no servidor da HostGator, na pasta de cada ambiente, e é editado à mão (o deploy não envia o `.htaccess`, para não apagar a senha do dev). Ele reescreve rotas desconhecidas para `index.html` (o app usa `usePathUrlStrategy`), força HTTPS com HSTS, manda os cabeçalhos de segurança e bloqueia arquivos ocultos (`.git`, `.ftp-deploy-sync-state.json`) e de backup (`.sql`, `.zip`, `.bak`...). Guarde uma cópia antes de mudá-lo.
 - **Cache**: os arquivos do Flutter mantêm o mesmo nome a cada build (`main.dart.js`, `assets/fonts/MaterialIcons-Regular.otf`...). Sem `Cache-Control`, o navegador reaproveita versões antigas por conta própria, e aparecem, por exemplo, ícones sumidos (fonte de ícones antiga com código novo). O `.htaccess` de cada ambiente deve mandar revalidar sempre (o servidor responde 304 quando nada mudou):
 
   ```apache
