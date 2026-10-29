@@ -17,7 +17,7 @@ class PanelSelectField<T> extends StatefulWidget {
 
   final String label;
 
-  /// A opção de valor `null` é a de "nada escolhido".
+  /// The option with a `null` value is the "nothing chosen" one.
   final List<LibraryFilterOption<T?>> options;
   final T? value;
   final ValueChanged<T?> onSelected;
@@ -30,8 +30,8 @@ class PanelSelectField<T> extends StatefulWidget {
 }
 
 class _PanelSelectFieldState<T> extends State<PanelSelectField<T>> {
-  // O Form valida antes de reconstruir os campos; guardar a escolha aqui evita que a validação
-  // veja a opção anterior e deixe o erro na tela.
+  // Form validates before rebuilding the fields; keeping the choice here stops validation from
+  // seeing the previous option and leaving the error on screen.
   late T? _value = widget.value;
 
   @override

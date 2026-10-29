@@ -34,7 +34,7 @@ class MediaDatasourceImpl implements MediaDatasource {
         String extension = ref.name.split('.').last;
         String url = await ref.getDownloadURL();
 
-        // Os bytes não são baixados na listagem: o preview usa a url.
+        // Bytes aren't downloaded in the listing: the preview uses the url.
         return MediaModel(id: id, name: name, extension: extension, url: url);
       }));
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Grade de blocos com largura mínima fixa, quantos couberem (dois no celular). É um sliver.
+/// Grid of tiles with a fixed minimum width, as many as fit (two on phones). It's a sliver.
 class PanelGrid extends StatelessWidget {
   const PanelGrid({required this.itemCount, required this.itemBuilder, super.key});
 
@@ -25,8 +25,8 @@ class PanelGrid extends StatelessWidget {
             : math.max(1, ((width + gap) / (components.panelTileMinWidth + gap)).floor());
         final rows = (itemCount / columns).ceil();
 
-        // Linhas de blocos em vez de SliverGrid: o bloco tem a altura do conteúdo, sem
-        // precisar fixar a proporção da célula.
+        // Rows of tiles instead of SliverGrid: each tile takes its content's height, without
+        // fixing the cell's aspect ratio.
         return SliverList.builder(
           itemCount: rows,
           itemBuilder: (context, row) => Padding(

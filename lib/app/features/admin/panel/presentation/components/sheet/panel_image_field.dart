@@ -14,7 +14,7 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 const panelStorageDisabledMessage =
     'Upload desabilitado no ambiente de testes (sem Storage configurado).';
 
-/// Sem Storage não há o que escolher: o foco de um erro na imagem vai para o endereço.
+/// Without Storage there's nothing to pick: focus for an image error goes to the URL field.
 FocusNode panelPickFocusTarget(FocusNode pick, FocusNode url) =>
     AppEnvironment.current.hasStorage ? pick : url;
 
@@ -53,7 +53,7 @@ class PanelImageField extends StatefulWidget {
 
   final String? replaceText;
 
-  /// Com ele, uma imagem escolhida mostra "Remover" e o aviso do corte nos cards.
+  /// With it, a picked image shows "Remover" and the cropping notice for cards.
   final VoidCallback? onRemove;
 
   @override
@@ -61,7 +61,7 @@ class PanelImageField extends StatefulWidget {
 }
 
 class _PanelImageFieldState extends State<PanelImageField> {
-  // A etiqueta de trocar só aparece sobre uma imagem que carregou; na falha, fica o placeholder.
+  // The replace label only shows over an image that loaded; on failure, the placeholder stays.
   bool _previewFailed = false;
 
   static final _url = RegExp(r'^https?://');
@@ -114,7 +114,7 @@ class _PanelImageFieldState extends State<PanelImageField> {
         builder: (context, constraints) => Image.memory(
           bytes,
           fit: BoxFit.cover,
-          // Uma foto de câmera tem milhares de pixels; decodificar no tamanho da área não trava.
+          // A camera photo has thousands of pixels; decoding at the area's size avoids jank.
           cacheWidth: (constraints.maxWidth * MediaQuery.devicePixelRatioOf(context)).ceil(),
           excludeFromSemantics: true,
           errorBuilder: (_, __, ___) => _failed(placeholder),

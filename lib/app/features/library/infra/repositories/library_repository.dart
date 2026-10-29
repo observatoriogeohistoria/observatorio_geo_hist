@@ -39,7 +39,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
     }
   }
 
-  // Links compartilhados antes da troca para o identificador ainda levam o slug.
+  // Links shared before the switch to ids still carry the slug.
   @override
   Future<Either<Failure, LibraryDocumentModel>> fetchDocumentByAddress(String key) async {
     try {

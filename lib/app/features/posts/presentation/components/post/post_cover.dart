@@ -13,7 +13,7 @@ class PostCover extends StatelessWidget {
   final String imageUrl;
   final String? caption;
 
-  /// Nome da imagem quando não há legenda.
+  /// Image name when there's no caption.
   final String semanticLabel;
 
   @override

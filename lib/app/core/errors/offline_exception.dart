@@ -1,4 +1,4 @@
-/// Consulta sem resposta do servidor: o Firestore offline devolve o cache vazio em vez de falhar.
+/// Query with no server response: offline, Firestore returns the empty cache instead of failing.
 class OfflineException implements Exception {
   const OfflineException();
 }

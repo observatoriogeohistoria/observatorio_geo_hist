@@ -42,7 +42,7 @@ class _PostsPageState extends State<PostsPage> {
   _CategoryState _state = _CategoryState.loading;
   CategoryModel? _category;
 
-  /// A navbar recarrega as categorias a cada página, e isso não deve recarregar a lista.
+  /// The navbar reloads categories on every page, and that must not reload the list.
   String? _requested;
 
   String get _address => '${widget.area.key}/${widget.categoryKey}';
@@ -86,8 +86,8 @@ class _PostsPageState extends State<PostsPage> {
     }
 
     _requested = null;
-    // A 404 monta outra navbar, que recarrega as categorias: sem isso, a página
-    // alternaria entre esqueleto e 404 sem parar.
+    // The 404 builds another navbar, which reloads categories: without this, the page
+    // would flip between skeleton and 404 endlessly.
     if (_state == _CategoryState.notFound) return;
     switch (_categoriesStore.state) {
       case FetchCategoriesSuccessState():
@@ -105,7 +105,7 @@ class _PostsPageState extends State<PostsPage> {
     _category = category;
     if (_initializing || !mounted) return;
 
-    // A navbar busca as categorias no próprio initState, ou seja, durante o build.
+    // The navbar fetches categories in its own initState, that is, during build.
     final scheduler = SchedulerBinding.instance;
     if (scheduler.schedulerPhase == SchedulerPhase.persistentCallbacks) {
       scheduler.addPostFrameCallback((_) {
@@ -169,7 +169,7 @@ class _PostsPageState extends State<PostsPage> {
         );
     }
 
-    // A chave por endereço volta ao topo ao trocar de categoria pelo menu.
+    // The per-URL key scrolls back to the top when switching category from the menu.
     return ReadingPageScaffold(
       key: ValueKey(_address),
       header: header,

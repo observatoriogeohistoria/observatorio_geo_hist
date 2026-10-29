@@ -20,7 +20,7 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
-  // A troca entre coluna e linha remontaria o formulário e apagaria o que foi digitado.
+  // Switching between column and row would remount the form and erase what was typed.
   final _formKey = GlobalKey();
 
   static const _lead =

@@ -45,7 +45,7 @@ class Footer extends StatelessWidget {
       Breakpoint.desktop => Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Marca e contato dividem a sobra, para o endereço e o e-mail não quebrarem.
+            // Brand and contact share the leftover space, so the address and e-mail don't wrap.
             Expanded(flex: 4, child: columns[0]),
             SizedBox(width: gap),
             columns[1],
@@ -55,7 +55,7 @@ class Footer extends StatelessWidget {
             Expanded(flex: 3, child: columns[3]),
           ],
         ),
-      // Sem LayoutBuilder: algumas páginas medem a altura do rodapé para prendê-lo na base.
+      // No LayoutBuilder: some pages measure the footer's height to pin it to the bottom.
       Breakpoint.tablet => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

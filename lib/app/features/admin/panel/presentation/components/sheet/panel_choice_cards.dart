@@ -11,8 +11,8 @@ class PanelChoice<T> {
   final String description;
 }
 
-/// Escolha única em cartões. O `RadioGroup` dá a navegação de rádio: Tab entra uma vez no
-/// grupo e as setas trocam a opção.
+/// Single choice in cards. `RadioGroup` provides radio navigation: Tab enters the group once
+/// and the arrows change the option.
 class PanelChoiceCards<T> extends StatelessWidget {
   const PanelChoiceCards({
     required this.label,
@@ -32,7 +32,7 @@ class PanelChoiceCards<T> extends StatelessWidget {
   final String? Function(T?)? validator;
   final GlobalKey<FormFieldState<T>>? formFieldKey;
 
-  /// Vai para o primeiro cartão.
+  /// Goes to the first card.
   final FocusNode? focusNode;
 
   @override
@@ -126,8 +126,8 @@ class _ChoiceCard<T> extends StatelessWidget {
             canRequestFocus: false,
             onTap: onTap,
             customBorder: RoundedRectangleBorder(borderRadius: radius),
-            // Cor opaca nos dois estados: o realce guarda a opacidade da cor anterior, e trocar
-            // para transparente com o mouse em cima pintava o cartão de preto.
+            // Opaque color in both states: the highlight keeps the previous color's opacity, and switching
+            // to transparent on hover painted the card black.
             hoverColor: selected ? colors.accentSoft : colors.surface,
             highlightColor: selected ? colors.accentSoft : colors.surface,
             splashFactory: NoSplash.splashFactory,
@@ -152,7 +152,7 @@ class _ChoiceCard<T> extends StatelessWidget {
                             ? colors.accent
                             : colors.fieldBorder,
                       ),
-                      // O cartão já mostra o foco e o passar do mouse.
+                      // The card already shows focus and hover.
                       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
                     ),
                   ),

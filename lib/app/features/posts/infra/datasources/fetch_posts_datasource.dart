@@ -5,13 +5,13 @@ import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
 import 'package:observatorio_geo_hist/app/core/models/paginated/paginated_posts.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 
-/// Post inexistente ou não publicado: o site público trata como não encontrado.
+/// Missing or unpublished post: the public site treats it as not found.
 class PostNotFoundException implements Exception {
   const PostNotFoundException();
 }
 
 abstract class FetchPostsDatasource {
-  /// Sem [category], busca em todas as categorias.
+  /// Without [category], searches every category.
   Future<PaginatedPosts> fetchPosts(
     CategoryModel? category, {
     PostType? postType,
@@ -33,7 +33,7 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
 
   FetchPostsDatasourceImpl(this._firestore, this._loggerService);
 
-  // A contagem usa a mesma ordenação da lista para aproveitar os mesmos índices.
+  // The count uses the same ordering as the list to reuse the same indexes.
   Query _listingQuery(CategoryModel? category, PostType? postType, String? searchText) {
     Query query =
         _firestore.collectionGroup('category_posts').where('isPublished', isEqualTo: true);
@@ -71,7 +71,7 @@ class FetchPostsDatasourceImpl implements FetchPostsDatasource {
         query = query.startAfterDocument(startAfterDocument);
       }
 
-      // Um a mais diz se existe próxima página sem precisar de um clique que volte vazio.
+      // One extra tells whether there's a next page without needing a click that comes back empty.
       final snapshot = await query.limit(limit + 1).get();
       if (snapshot.docs.isEmpty && snapshot.metadata.isFromCache) throw const OfflineException();
       final hasMore = snapshot.docs.length > limit;

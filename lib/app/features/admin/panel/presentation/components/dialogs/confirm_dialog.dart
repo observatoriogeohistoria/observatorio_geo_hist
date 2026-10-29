@@ -4,7 +4,7 @@ import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_butt
 import 'package:observatorio_geo_hist/app/core/components/text/app_selection_area.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Devolve `true` só quando a pessoa confirma; Cancelar, Esc e clique fora devolvem `false`.
+/// Returns `true` only when the person confirms; Cancel, Esc and clicking outside return `false`.
 Future<bool> showConfirmDialog(
   BuildContext context, {
   required String title,

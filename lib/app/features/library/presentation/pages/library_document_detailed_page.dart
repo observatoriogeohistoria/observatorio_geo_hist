@@ -25,7 +25,7 @@ class LibraryDocumentDetailedPage extends StatefulWidget {
 
   final DocumentArea area;
 
-  /// Identificador do documento ou, em links antigos, o slug.
+  /// Document id or, in old links, the slug.
   final String documentKey;
 
   @override
@@ -56,7 +56,7 @@ class _LibraryDocumentDetailedPageState extends State<LibraryDocumentDetailedPag
         final breakpoint = ScreenUtils.breakpointOf(context);
         final components = AppTheme.dimensions.components;
 
-        // Links antigos podem trazer a área errada: as migalhas seguem a do documento.
+        // Old links may carry the wrong area: the breadcrumbs follow the document's.
         final area = state is LibraryDocumentSuccessState ? state.document.area : widget.area;
 
         final Widget content;
@@ -85,7 +85,7 @@ class _LibraryDocumentDetailedPageState extends State<LibraryDocumentDetailedPag
             return const PageNotFound();
         }
 
-        // A chave por endereço volta ao topo ao abrir outro documento.
+        // The per-URL key scrolls back to the top when opening another document.
         return ReadingPageScaffold(
           key: ValueKey(widget.documentKey),
           body: _DocumentFrame(

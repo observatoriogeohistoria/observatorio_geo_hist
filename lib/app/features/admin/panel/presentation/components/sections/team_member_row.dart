@@ -24,7 +24,7 @@ class TeamMemberRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = AppTheme.colors;
     final iconSize = AppTheme.dimensions.components.panelActionIcon;
-    // Quem tem descrição ganha página própria no site.
+    // Members with a description get their own page on the site.
     final hasPage = member.description?.trim().isNotEmpty ?? false;
     final hasLattes = member.lattesUrl?.trim().isNotEmpty ?? false;
 

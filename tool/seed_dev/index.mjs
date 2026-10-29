@@ -1,5 +1,5 @@
-// Grava (ou apaga, com --clean) dados de teste no Firestore do dev.
-// Sem --write só mostra o que faria.
+// Writes (or deletes, with --clean) test data in the dev Firestore.
+// Without --write it only shows what it would do.
 import { readFileSync } from 'node:fs';
 import { initializeApp, applicationDefault } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
@@ -12,7 +12,7 @@ const args = process.argv.slice(2);
 const write = args.includes('--write');
 const clean = args.includes('--clean');
 
-// O projeto é fixo, mas uma chave de produção apontada por engano falharia só na hora de gravar.
+// The project is fixed, but a production key passed by mistake would only fail when writing.
 const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 if (!keyPath) {
   console.error('Defina GOOGLE_APPLICATION_CREDENTIALS com a chave da conta de serviço do dev.');
@@ -55,7 +55,7 @@ async function seedRefsInDatabase() {
 }
 
 async function commitInBatches(operations, apply) {
-  // O Firestore aceita até 500 operações por lote.
+  // Firestore accepts up to 500 operations per batch.
   for (let start = 0; start < operations.length; start += 400) {
     const batch = db.batch();
     for (const operation of operations.slice(start, start + 400)) apply(batch, operation);
@@ -89,6 +89,6 @@ if (!write) {
   process.exit(0);
 }
 
-// set sem merge: rodar de novo devolve cada documento de teste ao estado do script.
+// set without merge: running again resets each test document to the script's state.
 await commitInBatches(writes, (batch, { ref, data }) => batch.set(ref, data));
 console.log(`${writes.length} documentos gravados.`);

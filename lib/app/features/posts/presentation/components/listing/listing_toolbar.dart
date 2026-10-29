@@ -18,12 +18,12 @@ class ListingToolbar extends StatelessWidget {
     required this.onSelectType,
   });
 
-  /// Mantém o campo (e o foco) quando os chips mudam a disposição da barra.
+  /// Keeps the field (and focus) when the chips change the bar's layout.
   final GlobalKey searchKey;
   final TextEditingController controller;
   final ValueChanged<String> onSearch;
 
-  /// Vazio esconde os chips.
+  /// Empty hides the chips.
   final List<PostType> types;
   final Map<PostType, int>? counts;
   final PostType? selectedType;
@@ -87,7 +87,7 @@ class ListingToolbar extends StatelessWidget {
           width - chipsWidth - components.listingToolbarGap,
         );
 
-        // A busca encolhe até o mínimo para os chips caberem ao lado; abaixo disso, descem.
+        // The search shrinks down to its minimum so the chips fit beside it; below that, they wrap.
         if (searchWidth >= components.searchFieldMinWidth) {
           return Row(
             children: [

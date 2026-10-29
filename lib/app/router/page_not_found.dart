@@ -37,7 +37,7 @@ class PageNotFound extends StatelessWidget {
             title: 'Não encontramos esta página',
             titleHeadingLevel: 1,
             message: 'O endereço pode ter mudado ou o conteúdo foi removido.',
-            // A ordem de leitura da página pulava do primeiro botão para o rodapé.
+            // The page's reading order jumped from the first button to the footer.
             action: FocusTraversalGroup(
               policy: WidgetOrderTraversalPolicy(),
               child: Wrap(

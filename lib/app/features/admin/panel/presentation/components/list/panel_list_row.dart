@@ -17,7 +17,7 @@ class PanelListRow extends StatefulWidget {
   final String? meta;
   final List<Widget> badges;
 
-  /// Vazia para quem só pode ver: a coluna de ações nem é montada.
+  /// Empty for view-only users: the actions column isn't even built.
   final List<Widget> actions;
 
   @override
@@ -147,7 +147,7 @@ class _PanelListRowState extends State<PanelListRow> {
       );
     }
 
-    // O título vira o nome do grupo, para o leitor dizer de qual item são as ações.
+    // The title becomes the group's name, so the screen reader says which item the actions belong to.
     return Semantics(
       container: true,
       explicitChildNodes: true,

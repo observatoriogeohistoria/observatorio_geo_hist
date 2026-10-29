@@ -59,8 +59,8 @@ abstract class LibraryStoreBase with Store {
 
   int _request = 0;
 
-  /// Com filtro novo (ou [reset]) começa da primeira página e ignora a resposta que ainda
-  /// estava a caminho; com os mesmos filtros, traz a próxima página.
+  /// With a new filter (or [reset]) starts from the first page and ignores the response still
+  /// on its way; with the same filters, fetches the next page.
   @action
   Future<void> fetchDocumentsByArea(
     DocumentArea area, {
@@ -132,7 +132,7 @@ abstract class LibraryStoreBase with Store {
     );
   }
 
-  /// Quem chamou recarrega a lista com os filtros que estão na tela.
+  /// The caller reloads the list with the filters currently on screen.
   @action
   Future<void> createOrUpdateDocument(
     LibraryDocumentModel document,

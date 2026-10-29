@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-/// Texto do editor rico (delta do Quill) em uma linha simples. O que não é delta volta como veio.
+/// Rich editor text (Quill delta) as a single plain line. Anything that isn't a delta comes back as is.
 String plainTextFromRich(String content) {
   final text = content.trim();
   if (text.isEmpty) return '';

@@ -11,8 +11,8 @@ import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/comp
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sections/panel_action.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/stores/crud_store.dart';
 
-/// Base das seções sem paginação no servidor (ou só "carregar ao rolar"): cuida dos estados,
-/// da barra de filtros e do rodapé. O desenho dos itens vem de [bodyBuilder], como sliver.
+/// Base for sections without server pagination (or just "load on scroll"): handles states,
+/// the filter bar and the footer. Items are drawn by [bodyBuilder], as a sliver.
 class CrudSection<T> extends StatefulWidget {
   const CrudSection({
     required this.header,
@@ -35,14 +35,14 @@ class CrudSection<T> extends StatefulWidget {
   final Map<PanelAction, String> messages;
   final PanelEmptyInfo empty;
 
-  /// Recebe os itens que passam no filtro e o rodapé, quando há algo para mostrar nele.
+  /// Receives the items that pass the filter and the footer, when there's something to show in it.
   final Widget Function(List<T> items, Widget? footer) bodyBuilder;
   final bool paginated;
   final bool isGrid;
 
   final Widget? filterBar;
 
-  /// Filtro feito na tela, sobre os itens já carregados. Nulo quando nenhum filtro está ativo.
+  /// Filter applied on screen, over the items already loaded. Null when no filter is active.
   final bool Function(T item)? filter;
   final VoidCallback? onClearFilters;
 
@@ -59,7 +59,7 @@ class _CrudSectionState<T> extends State<CrudSection<T>> {
   bool _firstPageFailed = false;
   bool _loadingMore = false;
 
-  // Depois de uma falha ao carregar mais, a próxima tentativa é pelo botão, não a cada rolada.
+  // After a failure loading more, the next attempt is via the button, not on every scroll.
   bool _loadMoreFailed = false;
 
   @override

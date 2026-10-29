@@ -3,7 +3,9 @@
 Site do Observatório do Ensino de História e Geografia (UFU). Flutter Web com Firebase (Firestore, Auth e Storage). Estado com MobX, injeção com GetIt, rotas com GoRouter, erros com `Either` (fpdart).
 
 ## Idioma
-Texto de interface, documentação, comentários e mensagens de commit em **português do Brasil**. Nomes de código em inglês, como já é no projeto.
+- **Inglês:** nomes de arquivos e pastas (inclusive dos docs), código e comentários no código (Dart, workflows, scripts).
+- **Português do Brasil:** textos do site, documentação (`*.md`) e mensagens de commit.
+- Rotas são texto do site: continuam em português (ver Arquitetura).
 
 ## Estilo de escrita e de código
 - **Sempre evite prolixidade**, em respostas, docs, comentários e mensagens de commit. Seja direto, sem repetir o que já foi dito.
@@ -12,7 +14,7 @@ Texto de interface, documentação, comentários e mensagens de commit em **port
   - contorno de limitação do Flutter, de pacote ou do navegador (ex.: foco do Quill, altura intrínseca);
   - motivo de um número ou cor que parece arbitrário (ex.: contraste mínimo).
 - Quando comentar: uma ou duas linhas, em tom de conversa, dizendo o **porquê**. Nunca o quê.
-- **Não comente:** o que o nome já diz (campos, tokens, getters), cabeçalhos de seção, a classe inteira em prosa, padrões repetidos (ficam em [docs/arquitetura.md](docs/arquitetura.md)) nem código desativado.
+- **Não comente:** o que o nome já diz (campos, tokens, getters), cabeçalhos de seção, a classe inteira em prosa, padrões repetidos (ficam em [docs/architecture.md](docs/architecture.md)) nem código desativado.
 - **Nunca cite spec, fase, protótipo ou seletor CSS** (`spec 012`, `.feat`, "aba Post"). Isso envelhece; o histórico fica nos docs e no git.
 
 ## Comandos
@@ -36,11 +38,11 @@ find lib -name '*.dart' ! -name '*.g.dart' ! -name '*.freezed.dart' -print0 | xa
 ```
 
 ## Cuidados com o git
-- **Push na `main` publica o site** e push na `develop` publica o dev (GitHub Actions, por FTP). Nunca faça push sem pedido explícito. Detalhes em [docs/deploy-ambientes.md](docs/deploy-ambientes.md).
+- **Push na `main` publica o site** e push na `develop` publica o dev (GitHub Actions, por FTP). Nunca faça push sem pedido explícito. Detalhes em [docs/deployment.md](docs/deployment.md).
 - Só faça commit quando for pedido. Mensagens no formato `tipo: descrição` (`feat`, `fix`, `refactor`, `docs`, `chore`), em português.
 
 ## Arquitetura
-Leia [docs/arquitetura.md](docs/arquitetura.md) antes de mexer em uma feature e [docs/arquitetura-painel-admin.md](docs/arquitetura-painel-admin.md) para o painel.
+Leia [docs/architecture.md](docs/architecture.md) antes de mexer em uma feature e [docs/admin-panel.md](docs/admin-panel.md) para o painel.
 
 Resumo: `lib/app/features/{feature}/` com `infra/` (datasources, repositories, models, errors) e `presentation/` (pages, components, stores). Código compartilhado em `lib/app/core/`. Fluxo: Widget → Store → Repository → Datasource → Firebase, com `Either<Failure, T>` na volta. Cada feature registra dependências no seu `*_setup.dart`.
 
@@ -48,12 +50,9 @@ Convenções: arquivos em `snake_case`; sufixos `*_datasource`, `*_repository`, 
 
 **Rotas sempre em português**, minúsculas, sem acento e com hífen (`/nossa-historia`, `/publicacoes/:area/:category`), inclusive no painel e nos parâmetros de consulta (`?tipo=`). Todos os caminhos saem de `AppRoutes` (constantes `*Pattern` no roteador e funções para montar o endereço); não escreva rota solta no código. Ao renomear uma rota pública, mantenha a antiga redirecionando para a nova.
 
-## Redesign do site público (em andamento)
-- **Fonte de verdade:** [docs/redesign/planejamento.md](docs/redesign/planejamento.md) (decisões, fases, telas, ideias futuras).
-- **Protótipo navegável:** https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH. É a referência visual. Confira cada tela nele antes de implementar.
-- **Escopo:** o site público e, na Fase 8, o redesenho do login e do painel administrativo (abas Login, Painel e Editor do protótipo), sem mudar dados nem permissões. Geoensine e modo escuro estão fora.
+## Design
+O redesign terminou em 2026-10-20. Decisões, ressalvas em aberto e lições em [docs/redesign-history.md](docs/redesign-history.md); o que ficou para depois em [docs/future-ideas.md](docs/future-ideas.md). O protótipo navegável (https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH) segue como referência visual: confira a tela nele antes de mexer.
 
-### Regras de design ao implementar
 - Use os tokens de `lib/app/theme/` (`AppTheme.colors`, `.dimensions`, `.typography`). **Não escreva cores, tamanhos de fonte ou espaçamentos soltos no código.** Se faltar um token, crie-o no tema.
 - Componentes novos usam tamanhos fixos por faixa de largura (celular < 600, tablet 600–1023, desktop ≥ 1024) e largura máxima de conteúdo. Nada escala pelo tamanho da tela.
 - Texto secundário nunca em cinza claro: contraste mínimo de 4,5:1 (a regra vale para texto e para ícones informativos).
@@ -65,9 +64,9 @@ Convenções: arquivos em `snake_case`; sufixos `*_datasource`, `*_repository`, 
 ## Desenvolvimento guiado por especificação (SDD)
 Para features de mais ou menos meio dia para cima, siga o fluxo abaixo. Correções pequenas dispensam spec.
 
-1. `/sdd-spec <item do planejamento>` cria `docs/specs/NNN-nome/spec.md` e para para aprovação.
+1. `/sdd-spec <descrição ou item de future-ideas.md>` cria `docs/specs/NNN-name/spec.md` e para para aprovação.
 2. `/sdd-plan <NNN>` cria `plan.md` e `tasks.md` a partir da spec aprovada.
 3. `/sdd-implement <NNN>` executa as tarefas em ordem, marcando o progresso.
 4. `/sdd-verify <NNN>` confere o resultado contra os critérios de aceite.
 
-Detalhes em [docs/specs/README.md](docs/specs/README.md). A spec é a fonte do que será feito: se a implementação precisar divergir, atualize a spec antes.
+Detalhes em [docs/specs/README.md](docs/specs/README.md). A spec é a fonte do que será feito: se a implementação precisar divergir, atualize a spec antes. Depois do merge, o resumo vai para o histórico e a pasta da spec sai do repositório (fica no git).

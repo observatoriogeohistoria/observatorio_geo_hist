@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Texto com trechos `**assim**` em negrito, para os textos de apoio virem prontos de fora.
+/// Text with `**like this**` parts in bold, so supporting texts come ready from outside.
 class MarkedText extends StatelessWidget {
   const MarkedText(this.text, {super.key, required this.style, this.textAlign});
 

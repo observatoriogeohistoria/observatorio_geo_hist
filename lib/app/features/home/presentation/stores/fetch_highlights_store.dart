@@ -19,7 +19,7 @@ abstract class FetchHighlightsStoreBase with Store {
   @observable
   FetchHighlightsState state = FetchHighlightsInitialState();
 
-  /// Busca feita sem categorias: vale buscar de novo quando elas chegarem.
+  /// Fetch done without categories: worth fetching again when they arrive.
   bool fetchedWithoutCategories = false;
 
   @action

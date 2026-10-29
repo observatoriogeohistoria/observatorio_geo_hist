@@ -3,7 +3,7 @@ class EventDay {
 
   final int day;
 
-  /// Abreviado e em minúsculas ("nov").
+  /// Abbreviated and lowercase ("nov").
   final String month;
 }
 
@@ -29,8 +29,8 @@ final _written = RegExp(
   r'^(\d{1,2})\s*[º°ªo]?(?:(?:\s*[,–-]\s*|\s+(?:e|a|até)\s+)\d{1,2}\s*[º°ªo]?)*\s+de\s+([a-z]+)',
 );
 
-/// A data do evento é texto livre no painel; só o começo é lido ("14/11[/2026]",
-/// "14 de novembro", "06 a 10 de julho" pelo primeiro dia), e o resto fica sem caixa.
+/// The event date is free text in the panel; only the start is read ("14/11[/2026]",
+/// "14 de novembro", "06 a 10 de julho" by its first day), and anything else gets no box.
 EventDay? eventDayOf(String date) {
   final text = date.trim().toLowerCase().replaceAll('ç', 'c');
 

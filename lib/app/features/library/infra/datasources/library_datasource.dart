@@ -138,7 +138,7 @@ class LibraryDatasourceImpl implements LibraryDatasource {
 
   @override
   Future<LibraryDocumentModel?> fetchDocumentById(String id) async {
-    // Com `/` o Firestore leria o texto como caminho de outra coleção.
+    // With `/` Firestore would read the text as another collection's path.
     if (id.isEmpty || id.contains('/')) return null;
 
     final snapshot = await _firestore.collection('library').doc(id).get();
@@ -148,7 +148,7 @@ class LibraryDatasourceImpl implements LibraryDatasource {
     return LibraryDocumentModel.fromJson(data).copyWith(id: snapshot.id);
   }
 
-  // A contagem usa a mesma ordenação da lista para aproveitar os mesmos índices.
+  // The count uses the same ordering as the list to reuse the same indexes.
   Query _listingQuery(LibraryListingQuery listing) {
     Query query = _baseQuery(area: listing.area.value);
 
@@ -173,7 +173,7 @@ class LibraryDatasourceImpl implements LibraryDatasource {
           .where(field, isLessThanOrEqualTo: '$search\uf8ff');
     }
 
-    // Com busca, a ordem continua por data: os índices da busca em firestore.indexes.json seguem isso.
+    // With search, ordering stays by date: the search indexes in firestore.indexes.json follow that.
     return query.orderBy('createdAt', descending: true);
   }
 
@@ -185,7 +185,7 @@ class LibraryDatasourceImpl implements LibraryDatasource {
         query = query.startAfterDocument(listing.startAfterDocument!);
       }
 
-      // Um a mais diz se existe próxima página sem precisar de um clique que volte vazio.
+      // One extra tells whether there's a next page without needing a click that comes back empty.
       final snapshot = await query.limit(listing.limit + 1).get();
       if (snapshot.docs.isEmpty && snapshot.metadata.isFromCache) throw const OfflineException();
       final hasMore = snapshot.docs.length > listing.limit;
@@ -268,7 +268,7 @@ class LibraryDatasourceImpl implements LibraryDatasource {
 
         final extension = file.extension ?? '';
         final ref = _storage.ref('library/${document.area.bucketKey}/$documentId.$extension');
-        // Sem o tipo, o Storage entrega o arquivo como download em vez de abri-lo na aba.
+        // Without the content type, Storage serves the file as a download instead of opening it in the tab.
         await ref.putData(file.bytes!, SettableMetadata(contentType: _contentType(extension)));
 
         url = await ref.getDownloadURL();
@@ -301,7 +301,7 @@ class LibraryDatasourceImpl implements LibraryDatasource {
       if (url == null || url.isEmpty) return;
 
       try {
-        // Arquivos antigos levam o slug no nome; pelo endereço salvo dá para achar todos.
+        // Old files carry the slug in their name; the saved URL is enough to find them all.
         await _storage.refFromURL(url).delete();
       } catch (exception, stackTrace) {
         _loggerService.error('Error deleting document file: $exception', stackTrace: stackTrace);

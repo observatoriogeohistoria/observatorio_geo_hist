@@ -7,7 +7,7 @@ import 'package:observatorio_geo_hist/app/features/posts/presentation/stores/sta
 
 part 'post_detail_store.g.dart';
 
-/// Um por página, para não mexer na lista que a página da categoria guarda.
+/// One per page, so it doesn't touch the list the category page keeps.
 class PostDetailStore = PostDetailStoreBase with _$PostDetailStore;
 
 abstract class PostDetailStoreBase with Store {
@@ -23,7 +23,7 @@ abstract class PostDetailStoreBase with Store {
   @observable
   ObservableList<PostModel> related = ObservableList<PostModel>();
 
-  // Descarta respostas de uma busca anterior quando o post muda no meio dela.
+  // Drops responses from a previous fetch when the post changes mid-fetch.
   int _request = 0;
 
   @action

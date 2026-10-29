@@ -17,10 +17,10 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class Sidebar extends StatelessWidget {
   const Sidebar({this.isDrawer = false, this.onNavigate, super.key});
 
-  /// Na gaveta o foco vai para o item atual ao abrir.
+  /// In the drawer, focus goes to the current item on open.
   final bool isDrawer;
 
-  /// Chamado depois de escolher um item, para a página fechar a gaveta.
+  /// Called after picking an item, so the page closes the drawer.
   final VoidCallback? onNavigate;
 
   @override
@@ -180,7 +180,7 @@ class Sidebar extends StatelessWidget {
       SidebarItem.library => counts.libraryTotal,
       SidebarItem.team => counts.team,
       SidebarItem.users => counts.users,
-      // O Storage não informa o total sem listar todos os arquivos.
+      // Storage doesn't report the total without listing every file.
       SidebarItem.media => null,
     };
   }

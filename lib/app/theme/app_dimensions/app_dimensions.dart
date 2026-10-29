@@ -31,7 +31,7 @@ class ComponentSizes {
   final double buttonSpinnerSize = 16.0;
   final double buttonSpinnerStroke = 2.0;
   final double buttonSpinnerTrackOpacity = 0.4;
-  // Com movimento reduzido o indicador fica parado; um quarto do círculo ainda lê como espera.
+  // With reduced motion the indicator stays still; a quarter circle still reads as waiting.
   final double buttonSpinnerStaticValue = 0.25;
 
   final double logoMark = 34.0;
@@ -69,7 +69,7 @@ class ComponentSizes {
 
   final double heroActionsGap = 30.0;
 
-  /// Sem `text-wrap: balance` no Flutter, 8,4 em reproduz a quebra em três linhas.
+  /// Flutter has no `text-wrap: balance`; 8.4 em reproduces the three-line break.
   final double heroTitleMaxWidthEm = 8.4;
 
   final double heroLeadMaxWidth = 770.0;
@@ -120,7 +120,7 @@ class ComponentSizes {
 
   final int featuredTitleMaxLines = 3;
 
-  /// Garante 4,5:1 mesmo com foto branca por trás.
+  /// Ensures 4.5:1 even with a white photo behind.
   final double featuredScrimBottomOpacity = 0.88;
   final double featuredScrimTextOpacity = 0.72;
 
@@ -350,7 +350,7 @@ class ComponentSizes {
   final double workCoverAspect = 2 / 3;
   final double workSquareAspect = 1.0;
 
-  /// Canto menor à esquerda, como a lombada de um livro.
+  /// Smaller corner on the left, like a book's spine.
   BorderRadius get workCoverRadius => const BorderRadius.horizontal(
         left: Radius.circular(6),
         right: Radius.circular(12),
@@ -582,7 +582,7 @@ class ComponentSizes {
   final double libraryViewerPageMargin = 24.0;
   final double libraryViewerStatePadding = 20.0;
 
-  /// Largura sobre altura de uma folha A4, usada antes de saber a proporção do PDF.
+  /// Width over height of an A4 sheet, used before the PDF's aspect ratio is known.
   final double libraryViewerA4Aspect = 1 / 1.414;
 
   final double libraryDetailSkeletonBadgeWidth = 96.0;
@@ -663,7 +663,7 @@ class ComponentSizes {
   final double panelNavIcon = 18.0;
   final double panelNavCountGap = 8.0;
 
-  /// O recuo alinha a linha dos tipos com o centro do ícone de Publicações.
+  /// The indent aligns the types row with the center of the Publicações icon.
   final double panelNavSubIndent = 21.0;
   final double panelNavSubPaddingStart = 10.0;
   final double panelNavSubPaddingTop = 2.0;
@@ -693,7 +693,7 @@ class ComponentSizes {
   final double toastIconGap = 10.0;
   final Duration toastDuration = const Duration(seconds: 3);
 
-  /// Erro fica mais tempo porque a mensagem é mais longa e precisa ser lida até o fim.
+  /// Errors stay longer because the message is longer and must be read to the end.
   final Duration toastErrorDuration = const Duration(seconds: 8);
 
   final double confirmDialogWidth = 420.0;
@@ -759,7 +759,7 @@ class ComponentSizes {
   final double editorSkeletonBlockHeight = 220.0;
   final double editorSkeletonSideHeight = 120.0;
   final double editorAuthorsGap = 8.0;
-  // Alinha o "×" ao campo, abaixo do rótulo "Autor N".
+  // Aligns the "×" with the field, below the "Autor N" label.
   final double editorAuthorRemoveTop = 29.0;
 
   final double tooltipMaxWidth = 260.0;
@@ -839,7 +839,7 @@ class ComponentSizes {
   final double networkImageSkeletonHeight = 253.0;
   final double imageErrorIcon = 24.0;
 
-  // Mais estreito que isso, "Erro ao carregar a imagem" quebra em linhas demais e não cabe.
+  // Any narrower and "Erro ao carregar a imagem" wraps into too many lines and doesn't fit.
   final double imageErrorMessageMinWidth = 160.0;
 
   final int loginBrandFlex = 5;
@@ -946,8 +946,8 @@ class ShadowStyle {
         BoxShadow(color: Color(0x1F1F1B18), blurRadius: 3, offset: Offset(0, 1)),
       ];
 
-  /// Animar até uma lista vazia mostra a sombra nítida por um instante; esmaecer a cor
-  /// faz ela sumir junto com o fundo. Em repouso, use `null`: sombra transparente ainda é pintada.
+  /// Animating to an empty list shows the sharp shadow for an instant; fading the color
+  /// makes it vanish along with the background. At rest, use `null`: a transparent shadow is still painted.
   List<BoxShadow> fade(List<BoxShadow> shadows, double opacity) => [
         for (final shadow in shadows)
           shadow.copyWith(color: shadow.color.withValues(alpha: shadow.color.a * opacity)),

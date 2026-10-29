@@ -12,7 +12,7 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
 enum _VideoState { cover, loading, playing, error }
 
-/// Nada é baixado ao abrir a página: o player só é montado depois de "Assistir".
+/// Nothing is downloaded when the page opens: the player is only built after "Assistir".
 class PresentationVideoSection extends StatefulWidget {
   const PresentationVideoSection({super.key});
 
@@ -21,26 +21,26 @@ class PresentationVideoSection extends StatefulWidget {
 }
 
 class _PresentationVideoSectionState extends State<PresentationVideoSection> {
-  /// O código do player começa a baixar já, para "Assistir" não esperar.
+  /// The player code starts downloading right away, so "Assistir" doesn't wait.
   late final Future<void> _playerLibrary = video_player.loadLibrary();
 
   _VideoState _state = _VideoState.cover;
   bool _playerMounted = false;
 
-  /// Muda a cada tentativa, para "Tentar de novo" criar um player novo.
+  /// Changes on every attempt, so "Tentar de novo" builds a new player.
   int _attempt = 0;
 
-  /// Se "Assistir" foi ativado pelo teclado, o foco segue para os controles do player.
+  /// If "Assistir" was activated by keyboard, focus moves on to the player controls.
   final FocusNode _playButtonFocus = FocusNode(debugLabel: 'Assistir');
   bool _focusControls = false;
 
-  /// O navegador recusou tocar sozinho: o player volta pausado, esperando um clique.
+  /// The browser refused autoplay: the player comes back paused, waiting for a click.
   bool _autoplayBlocked = false;
 
   @override
   void initState() {
     super.initState();
-    // Erro no código do player só importa depois de "Assistir".
+    // An error in the player code only matters after "Assistir".
     _playerLibrary.ignore();
   }
 

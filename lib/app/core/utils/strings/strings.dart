@@ -29,7 +29,7 @@ const _accents = {
   'ú': 'u', 'ù': 'u', 'û': 'u', 'ü': 'u', 'ç': 'c', //
 };
 
-/// Para comparar buscas feitas na tela sem ligar para maiúsculas e acentos.
+/// For comparing on-screen searches ignoring case and accents.
 String foldForSearch(String text) {
   final lower = text.trim().toLowerCase();
   final buffer = StringBuffer();

@@ -16,7 +16,7 @@ class FilterChipButton extends StatefulWidget {
   final bool selected;
   final VoidCallback onPressed;
 
-  /// Largura que o chip vai ocupar, para decidir se cabe ao lado de outro elemento.
+  /// Width the chip will take, to decide whether it fits next to another element.
   static double measure(BuildContext context, String label, int? count) {
     final components = AppTheme.dimensions.components;
     final style = AppTheme.typography.of(context).chip;

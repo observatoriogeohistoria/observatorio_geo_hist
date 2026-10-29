@@ -50,7 +50,7 @@ class OurHistorySummarySection extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: components.ourHistoryBadgeGap),
-                  // Espaço rígido e \u2060 mantêm "· 2016–2018" inteiro na mesma linha.
+                  // A non-breaking space and ⁠ keep "· 2016–2018" together on the same line.
                   const MilestoneBadge(
                       text: 'Projeto financiado pela FAPEMIG ·\u00a02016\u2060–\u20602018'),
                   SizedBox(height: components.ourHistoryTextGap),

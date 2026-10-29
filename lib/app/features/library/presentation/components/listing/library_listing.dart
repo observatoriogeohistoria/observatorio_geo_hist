@@ -35,7 +35,7 @@ class _LibraryListingState extends State<LibraryListing> {
   @override
   void initState() {
     super.initState();
-    // A busca pode ser zerada pelo store ("Limpar tudo", troca de área).
+    // The search may be cleared by the store ("Limpar tudo", area switch).
     _disposeSync = reaction((_) => widget.store.searchText, (String text) {
       if (_searchController.text.trim() != text) _searchController.text = text;
     });
@@ -273,7 +273,7 @@ class _Results extends StatelessWidget {
   }
 }
 
-/// Conteúdo que avança sobre a margem para o fundo da linha no hover passar do texto.
+/// Content that extends over the margin so the row's hover background goes past the text.
 class _Bleed extends StatelessWidget {
   const _Bleed({required this.child});
 

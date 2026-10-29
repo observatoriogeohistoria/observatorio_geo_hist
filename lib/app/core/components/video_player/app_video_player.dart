@@ -29,16 +29,16 @@ class AppVideoPlayer extends StatefulWidget {
 
   final VoidCallback? onInitialized;
 
-  /// Quando informado, o player também acompanha o estado real do vídeo.
+  /// When provided, the player also tracks the video's real state.
   final VoidCallback? onError;
 
   final Widget? loadingPlaceholder;
 
-  /// Avaliada quando o vídeo fica pronto: `true` começa a tocar; senão, fica pausado.
+  /// Evaluated when the video is ready: `true` starts playing; otherwise, it stays paused.
   final bool Function()? shouldStartPlaying;
 
-  /// Chamado no lugar de [onError] se o navegador recusar tocar sozinho. Depois disso
-  /// o controller fica inutilizável: quem usa deve montar um player novo.
+  /// Called instead of [onError] if the browser refuses autoplay. After that
+  /// the controller is unusable: the caller must build a new player.
   final VoidCallback? onAutoplayBlocked;
 
   final bool autofocusControls;
@@ -63,7 +63,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
 
   bool get _followsController => widget.onError != null || widget.onAutoplayBlocked != null;
 
-  /// Um erro antes de o vídeo avançar é o navegador recusando tocar sozinho.
+  /// An error before the video advances is the browser refusing autoplay.
   bool _autoStartPending = false;
 
   @override
@@ -150,7 +150,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
             child: Stack(
               children: [
                 VideoPlayer(_controller),
-                // Por cima do vídeo porque, na web, o elemento de vídeo ficaria com o toque.
+                // On top of the video because, on the web, the video element would take the tap.
                 Positioned.fill(
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
@@ -215,7 +215,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   void _togglePlayPause() {
     if (!mounted) return;
     setState(() {
-      // Muda antes da chamada: o controller avisa os ouvintes ainda dentro de `play()`/`pause()`.
+      // Changes before the call: the controller notifies listeners while still inside `play()`/`pause()`.
       _isPlaying = !_isPlaying;
       _isPlaying ? _controller.play() : _controller.pause();
     });

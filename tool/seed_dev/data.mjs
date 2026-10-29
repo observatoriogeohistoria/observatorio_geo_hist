@@ -1,14 +1,14 @@
 const IMAGE =
   'https://png.pngtree.com/thumb_back/fh260/background/20230527/pngtree-nature-wallpapers-image_2683049.jpg';
 const BROKEN_IMAGE = 'https://example.com/imagem-que-nao-existe.jpg';
-// O visualizador da biblioteca baixa o PDF pelo navegador: o servidor precisa liberar CORS.
+// The library viewer downloads the PDF in the browser: the server must allow CORS.
 const PDF =
   'https://raw.githubusercontent.com/mozilla/pdf.js/master/web/compressed.tracemonkey-pldi-09.pdf';
 
 const HISTORY = 'historia';
 const GEOGRAPHY = 'geografia';
 
-// O conteúdo rico do painel é um Delta do Quill gravado como texto.
+// The panel's rich content is a Quill Delta stored as text.
 const delta = (...ops) => JSON.stringify(ops);
 const paragraph = (text) => ({ insert: `${text}\n` });
 const line = (text, attributes) => [{ insert: text }, { insert: '\n', attributes }];
@@ -470,7 +470,7 @@ const posts = [
   },
 ];
 
-// Datas espaçadas de um dia mantêm a ordem da lista (mais novo primeiro) previsível.
+// Dates one day apart keep the list order (newest first) predictable.
 const now = Date.now();
 export const seedPosts = posts.map((post, index) => {
   const date = new Date(now - index * 24 * 60 * 60 * 1000).toISOString();
@@ -582,7 +582,7 @@ export const seedLibrary = library.map((doc, index) => ({
   createdAt: new Date(now - index * 24 * 60 * 60 * 1000).toISOString(),
 }));
 
-// Só quem tem descrição ganha página; sem descrição, o card leva ao Lattes, se houver.
+// Only members with a description get a page; without one, the card leads to Lattes, if any.
 export const seedTeam = [
   {
     id: 'seed-membro-coordenadora',

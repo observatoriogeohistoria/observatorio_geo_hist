@@ -117,7 +117,7 @@ class _PanelPageState extends State<PanelPage> {
     _scaffoldKey.currentState?.closeDrawer();
   }
 
-  // Fechar sem escolher devolve o foco ao botão de menu; escolhendo, ele vai ao título da seção.
+  // Closing without choosing returns focus to the menu button; choosing sends it to the section title.
   void _onDrawerChanged(bool isOpen) {
     setState(() => _isDrawerOpen = isOpen);
     if (isOpen) return;

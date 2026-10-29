@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-    # Só o que entra no build ou nos índices do Firestore justifica publicar.
-    # O deploy manual (workflow_dispatch) ignora esse filtro.
+    # Only what goes into the build or the Firestore indexes is worth publishing.
+    # Manual deploys (workflow_dispatch) ignore this filter.
     paths-ignore:
       - 'docs/**'
       - '**.md'
@@ -29,8 +29,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Antes do site, para a busca nova não chegar sem os índices. Só cria e atualiza:
-    # sem --force, índices que existam só no projeto não são apagados.
+    # Before the site, so the new search never ships without its indexes. It only creates and updates:
+    # without --force, indexes that exist only in the project are not deleted.
     - name: Publicar índices do Firestore
       env:
         FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

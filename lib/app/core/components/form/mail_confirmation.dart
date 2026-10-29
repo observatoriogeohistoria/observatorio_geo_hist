@@ -59,8 +59,8 @@ class _MailConfirmationState extends State<MailConfirmation> {
   @override
   void initState() {
     super.initState();
-    // O botão que abriu a confirmação sumiu; sem isso o foco do teclado ficaria perdido.
-    // A caixa é mais curta que o formulário, então o topo dela pode ficar sob a navbar.
+    // The button that opened the confirmation is gone; without this keyboard focus would be lost.
+    // The box is shorter than the form, so its top may end up under the navbar.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _titleFocus.requestFocus();

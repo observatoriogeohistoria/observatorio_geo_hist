@@ -39,7 +39,7 @@ abstract class PostEditorStoreBase with Store {
     );
   }
 
-  /// Quem chama decide o aviso, porque ele depende do botão usado.
+  /// The caller picks the notice, because it depends on the button used.
   @action
   Future<Either<Failure, PostModel>> save(PostModel post, CategoryModel? pastCategory) async {
     isSaving = true;

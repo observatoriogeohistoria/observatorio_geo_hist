@@ -20,11 +20,11 @@ class SearchField extends StatefulWidget {
   final String? semanticLabel;
   final double? height;
 
-  /// Falso deixa a dica usar o espaço do "Limpar" enquanto o campo está vazio, para não
-  /// cortá-la quando a busca é estreita.
+  /// False lets the hint use the "Limpar" space while the field is empty, so it isn't
+  /// cut off when the search is narrow.
   final bool keepClearSpace;
 
-  /// Chamado depois que a pessoa para de digitar, ao apertar Enter e ao limpar.
+  /// Called after the person stops typing, on Enter and on clear.
   final ValueChanged<String> onSearch;
 
   @override
@@ -94,7 +94,7 @@ class _SearchFieldState extends State<SearchField> {
     final hasText = widget.controller.text.isNotEmpty;
     final textStyle = styles.regular.copyWith(color: colors.ink);
 
-    // A borda fica no contêiner: o InputDecorator não se estica até a altura pedida.
+    // The border lives on the container: InputDecorator doesn't stretch to the requested height.
     return AnimatedContainer(
       duration: components.menuAnimation,
       constraints: BoxConstraints(minHeight: widget.height ?? components.searchFieldHeight),

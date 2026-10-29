@@ -1,5 +1,5 @@
-/// Mesmas regras de `Validators`, que não ignoram espaços nas pontas como as do site; só as
-/// mensagens são outras.
+/// Same rules as `Validators`, which don't ignore leading and trailing spaces like the site's; only the
+/// messages differ.
 class PanelValidators {
   const PanelValidators._();
 
@@ -33,7 +33,7 @@ class PanelValidators {
     return _url.hasMatch(value) ? null : 'URL inválida';
   }
 
-  /// Para escolhas obrigatórias (tipo, papel, categorias), que não têm texto a validar.
+  /// For required choices (type, role, categories), which have no text to validate.
   static String? Function(T?) choice<T>(String message) {
     return (value) {
       if (value == null) return message;

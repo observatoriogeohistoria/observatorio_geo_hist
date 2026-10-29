@@ -25,9 +25,12 @@ Para compilar: `fvm flutter build web --release`.
 
 ## Deploy
 
-A cada push na `main`, o GitHub Actions ([deploy.yml](.github/workflows/deploy.yml)) compila o app web e envia os arquivos por FTP para a HostGator. A versão do Flutter no workflow deve ser a mesma do `.fvmrc`.
+Push na `develop` publica o ambiente de testes e push na `main` publica produção, pelo GitHub Actions (FTP para a HostGator). Detalhes em [docs/deployment.md](docs/deployment.md).
 
 ## Documentação
 
-- [Arquitetura do projeto](docs/arquitetura.md): camadas, features, rotas e dados no Firestore
-- [Arquitetura do painel administrativo](docs/arquitetura-painel-admin.md): CRUD, autenticação e permissões
+- [Arquitetura do projeto](docs/architecture.md): camadas, features, rotas e dados no Firestore
+- [Painel administrativo](docs/admin-panel.md): CRUD, autenticação e permissões
+- [Deploy](docs/deployment.md): ambientes, workflows e índices do Firestore
+- [Histórico do redesign](docs/redesign-history.md) e [ideias futuras](docs/future-ideas.md)
+- [Especificações (SDD)](docs/specs/README.md)

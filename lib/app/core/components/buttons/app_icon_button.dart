@@ -23,23 +23,23 @@ class AppIconButton extends StatefulWidget {
   final Color color;
   final void Function() onPressed;
 
-  /// Descrição do que acontece, mostrada no mouse e no foco por teclado.
+  /// What happens, shown on hover and on keyboard focus.
   final String tooltip;
 
-  /// Nome curto para o leitor de tela ("Excluir"); sem ele, vale o [tooltip].
+  /// Short name for screen readers ("Delete"); without it, [tooltip] is used.
   final String? label;
 
   final double size;
 
   final FocusNode? focusNode;
 
-  /// Sobre fundo de acento, o anel padrão some; use uma cor que contraste com o fundo.
+  /// On an accent background the default ring disappears; use a color that contrasts with it.
   final Color? focusRingColor;
 
-  /// Continua focável para a pessoa chegar por Tab e ler na dica por que não dá.
+  /// Stays focusable so people can Tab to it and read in the tooltip why it's unavailable.
   final bool isDisabled;
 
-  /// Para botões que ligam e desligam (destacar): o leitor anuncia se está ligado.
+  /// For toggle buttons (highlight): the screen reader announces whether it's on.
   final bool? isToggled;
 
   @override
@@ -66,17 +66,17 @@ class _AppIconButtonState extends State<AppIconButton> {
       return;
     }
     if (FocusManager.instance.highlightMode != FocusHighlightMode.traditional) return;
-    // Com o leitor de tela a dica já vai no nome do botão, e abrir a camada dela tira o foco do
-    // navegador do botão.
+    // With a screen reader the tooltip is already in the button's name, and opening its overlay takes
+    // the browser's focus off the button.
     if (SemanticsBinding.instance.semanticsEnabled) return;
 
-    // Depois do quadro, para não ser fechada pelo botão que acabou de perder o foco.
+    // After the frame, so it isn't closed by the button that just lost focus.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _tooltipKey.currentState?.ensureTooltipVisible();
     });
   }
 
-  // O Esc só é consumido quando havia dica aberta; senão segue para a gaveta ou o diálogo.
+  // Esc is only consumed when a tooltip was open; otherwise it goes on to the drawer or dialog.
   KeyEventResult _handleKey(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent || event.logicalKey != LogicalKeyboardKey.escape) {
       return KeyEventResult.ignored;
@@ -99,8 +99,8 @@ class _AppIconButtonState extends State<AppIconButton> {
       label: label,
       tooltip: label == widget.tooltip ? null : widget.tooltip,
       onTap: disabled ? null : widget.onPressed,
-      // Sem o nó do IconButton, o foco precisa estar neste; senão, com o leitor de tela ligado,
-      // o navegador perde o foco ao chegar no botão.
+      // Without the IconButton's node, focus must sit on this one; otherwise, with a screen reader on,
+      // the browser loses focus when it reaches the button.
       focusable: true,
       focused: _focused,
       onFocus: _focusNode.requestFocus,

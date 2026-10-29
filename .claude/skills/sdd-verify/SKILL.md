@@ -1,6 +1,6 @@
 ---
 name: sdd-verify
-description: Confere uma spec implementada contra seus critérios de aceite e o protótipo, e gera docs/specs/NNN-*/verificacao.md. Use quando a pessoa pedir para verificar, validar ou revisar uma implementação (por exemplo "/sdd-verify 001" ou "confere se a Fase 0 está pronta").
+description: Confere uma spec implementada contra seus critérios de aceite e o protótipo, e gera docs/specs/NNN-*/verification.md. Use quando a pessoa pedir para verificar, validar ou revisar uma implementação (por exemplo "/sdd-verify 001" ou "confere se a Fase 0 está pronta").
 argument-hint: "<número da spec, ex.: 001>"
 ---
 
@@ -18,12 +18,12 @@ Confere o resultado com evidência, critério por critério. **Não corrige** o 
 2. **Compilação:** `fvm flutter build web --release` conclui sem erro (use quando a spec mexe em rotas, assets ou dependências; caso contrário, o `analyze` basta).
 3. **Cada critério de aceite** da spec: marque `passou`, `não passou` ou `não conferido`, com a evidência (arquivo e linha, saída de comando ou o que foi visto na tela). Não escreva "passou" sem ter verificado.
 4. **Telas:** rode o app (skill `run`, ou `fvm flutter run -d chrome`) e olhe em 390, 768 e 1280 px, comparando com a aba do protótipo. Confira estados de carregamento, vazio, erro e sem imagem. Abra ao menos uma vez em modo debug (`flutter run`): o build release esconde asserções de layout. Se não for possível abrir o app, diga isso e marque os critérios visuais como `não conferido`.
-5. **Regras do `CLAUDE.md`:** procure no código alterado cores, tamanhos de fonte e espaçamentos soltos, `GestureDetector` sem foco/semântica, textos secundários com pouco contraste e comentários fora das regras (que dizem o quê, repetem o nome, citam spec, fase ou protótipo, ou código desativado). Remova os que sobrarem.
+5. **Regras do `CLAUDE.md`:** procure no código alterado cores, tamanhos de fonte e espaçamentos soltos, `GestureDetector` sem foco/semântica, textos secundários com pouco contraste e comentários fora das regras (em português, que dizem o quê, repetem o nome, citam spec, fase ou protótipo, ou código desativado). Remova os que sobrarem.
 6. **Regressões:** para componentes compartilhados (navbar, rodapé, botões etc.), abra ao menos uma outra tela que os use e confirme que continua funcionando.
 7. **Fora do escopo:** confirme que nada da lista "Fora do escopo" foi alterado.
 
 ## Saída
-Crie `verificacao.md` na pasta da spec:
+Crie `verification.md` na pasta da spec:
 
 ```markdown
 # Verificação da NNN. Título
@@ -50,4 +50,4 @@ O que não foi possível verificar e por quê.
 
 Depois:
 - Mostre um resumo curto com as pendências e **pergunte** o que a pessoa quer corrigir.
-- Se o resultado for `aprovada` (ou `aprovada com ressalvas` que a pessoa aceite), mude o status da spec para `verificada` e marque o item no `docs/redesign/planejamento.md` com `→ specs/NNN-nome` e "concluído".
+- Se o resultado for `aprovada` (ou `aprovada com ressalvas` que a pessoa aceite), mude o status da spec para `verificada` e lembre o passo "Depois do merge" de `docs/specs/README.md` (levar regras e ressalvas aos docs e apagar a pasta da spec).

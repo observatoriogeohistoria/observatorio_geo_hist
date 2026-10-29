@@ -16,7 +16,7 @@ abstract class PanelCountsStoreBase with Store {
 
   bool? _includeUsers;
 
-  /// Não repete a consulta quando o usuário volta igual; depois de criar ou excluir, use [refresh].
+  /// Doesn't repeat the query when the same user comes back; after creating or deleting, use [refresh].
   @action
   Future<void> load({required bool includeUsers}) async {
     if (_includeUsers == includeUsers) return;
@@ -24,7 +24,7 @@ abstract class PanelCountsStoreBase with Store {
     counts = await _repository.getCounts(includeUsers: includeUsers);
   }
 
-  /// Depois de criar ou excluir. Os números antigos ficam até chegarem os novos.
+  /// After creating or deleting. The old numbers stay until the new ones arrive.
   @action
   Future<void> refresh() async {
     final includeUsers = _includeUsers;

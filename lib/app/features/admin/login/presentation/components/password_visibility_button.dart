@@ -15,7 +15,7 @@ class PasswordVisibilityButton extends StatefulWidget {
 class _PasswordVisibilityButtonState extends State<PasswordVisibilityButton> {
   final _tooltipKey = GlobalKey<TooltipState>();
 
-  // O Tooltip do Flutter só abre com mouse ou toque; pelo teclado a dica precisa ser chamada.
+  // Flutter's Tooltip only opens on mouse or touch; from the keyboard it has to be triggered.
   void _handleFocus(bool hasFocus) {
     if (!hasFocus) {
       Tooltip.dismissAllToolTips();

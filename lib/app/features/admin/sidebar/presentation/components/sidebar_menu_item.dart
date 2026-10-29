@@ -20,7 +20,7 @@ class SidebarMenuItem extends StatefulWidget {
   final VoidCallback onTap;
   final IconData? icon;
 
-  /// Some enquanto carrega ou quando a contagem falhou.
+  /// Hidden while loading or when the count failed.
   final int? count;
 
   final bool isCurrent;

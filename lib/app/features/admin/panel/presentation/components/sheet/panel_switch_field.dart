@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/core/components/focus/app_focus_ring.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// A linha inteira alterna, para o título e a dica serem área de clique e um só ponto no Tab.
+/// The whole row toggles, so the title and hint are click targets and a single Tab stop.
 class PanelSwitchField extends StatelessWidget {
   const PanelSwitchField({
     required this.title,
@@ -33,7 +33,7 @@ class PanelSwitchField extends StatelessWidget {
           focusNode: focusNode,
           onTap: () => onChanged(!value),
           borderRadius: radius,
-          // Sem realce ao clicar: a linha vai até a borda e o próprio botão mostra a mudança.
+          // No splash on click: the row reaches the edge and the switch itself shows the change.
           hoverColor: Colors.transparent,
           highlightColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,

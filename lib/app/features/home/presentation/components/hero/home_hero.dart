@@ -76,7 +76,7 @@ class _HomeHeroState extends State<HomeHero> {
                   Semantics(
                     header: true,
                     child: ConstrainedBox(
-                      // Em "em" para acompanhar o texto ampliado; senão, as palavras quebram no meio.
+                      // In "em" to follow scaled text; otherwise, words break in the middle.
                       constraints: BoxConstraints(
                         maxWidth: MediaQuery.textScalerOf(context).scale(styles.display.fontSize!) *
                             components.heroTitleMaxWidthEm,

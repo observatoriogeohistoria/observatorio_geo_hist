@@ -21,7 +21,7 @@ class LibraryAreaTile extends StatefulWidget {
 
   final DocumentArea area;
 
-  /// Nulo sem contagem: a linha de números some (ou vira esqueleto, se [loading]).
+  /// Null without a count: the numbers line disappears (or becomes a skeleton, if [loading]).
   final Map<DocumentType, int>? counts;
   final bool loading;
 

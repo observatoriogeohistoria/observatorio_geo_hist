@@ -20,7 +20,7 @@ Future<void> main() async {
   AppSetup.setup();
 
   usePathUrlStrategy();
-  // Sem isso, o push não atualiza o endereço e a página do membro não pode ser compartilhada.
+  // Without this, push doesn't update the URL and the member page can't be shared.
   GoRouter.optionURLReflectsImperativeAPIs = true;
   preventSemanticLinkNavigation();
   runApp(const AppWidget());

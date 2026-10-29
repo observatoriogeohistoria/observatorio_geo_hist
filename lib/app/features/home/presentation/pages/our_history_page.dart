@@ -37,7 +37,7 @@ class OurHistoryPage extends StatelessWidget {
     'Para tanto, valorizamos e incentivamos a participação de todos e contamos com o poder multiplicador de cada pessoa, seja ela pesquisador, professor ou estudante.',
   ];
 
-  /// Arredonda a largura para não decodificar a foto de novo a cada pixel de redimensionamento.
+  /// Rounds the width so the photo isn't decoded again at every pixel of resizing.
   static int _photoCacheWidth(BuildContext context) {
     const step = 256;
     final maxWidth = AppTheme.dimensions.components.readingFigureMaxWidth;
@@ -69,7 +69,7 @@ class OurHistoryPage extends StatelessWidget {
             ),
             semanticLabel: 'Foto de grupo dos pesquisadores do Observatório',
             caption: 'Foto: Antônio César Ortega',
-            // Puxa o recorte para cima para não cortar os rostos da foto de grupo.
+            // Pulls the crop up so the faces in the group photo aren't cut off.
             alignment: const Alignment(0, -0.7),
           ),
           ReadingColumn(

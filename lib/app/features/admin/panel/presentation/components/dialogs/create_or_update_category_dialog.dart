@@ -57,7 +57,7 @@ class _CreateOrUpdateCategoryDialogState extends State<CreateOrUpdateCategoryDia
 
   bool get _isUpdate => widget.category != null;
 
-  // Nas duas áreas, ou em nenhuma, a dica mostra o link da Geografia.
+  // In both areas, or in neither, the hint shows the Geografia link.
   PostsAreas get _linkArea => _areas.length == 1 ? _areas.first : PostsAreas.geography;
 
   @override

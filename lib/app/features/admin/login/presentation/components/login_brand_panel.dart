@@ -9,7 +9,7 @@ import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 class LoginBrandPanel extends StatelessWidget {
   const LoginBrandPanel({super.key, this.compact = false});
 
-  /// No celular a marca vira uma faixa: só logo, sobretítulo e título.
+  /// On phones the brand becomes a strip: only logo, eyebrow and title.
   final bool compact;
 
   static const _title = 'Publique no Observatório.';
@@ -25,8 +25,8 @@ class LoginBrandPanel extends StatelessWidget {
     return column - 2 * components.loginBrandPaddingH(breakpoint);
   }
 
-  // A coluna fica estreita perto de 600 px e "Observatório." quebraria no meio. A largura sai
-  // da tela porque a página mede a altura das colunas, e LayoutBuilder não informa altura intrínseca.
+  // The column gets narrow near 600 px and "Observatório." would break mid-word. The width comes
+  // from the screen because the page measures column heights, and LayoutBuilder can't report intrinsic height.
   TextStyle _fitLongestWord(BuildContext context, TextStyle style, double maxWidth) {
     final painter = TextPainter(
       textDirection: Directionality.of(context),
@@ -123,7 +123,7 @@ class LoginBrandPanel extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: compact ? MainAxisSize.min : MainAxisSize.max,
               children: [
-                // Perto de 600 px a coluna fica mais estreita que o logo com o subtítulo.
+                // Near 600 px the column gets narrower than the logo with its subtitle.
                 const FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerLeft,

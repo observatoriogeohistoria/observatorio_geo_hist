@@ -10,7 +10,7 @@ String encodeUrlComponent(String url) {
   return Uri.encodeComponent(url);
 }
 
-/// `mailto:` e `tel:` usam [sameTab] para não deixar uma aba em branco.
+/// `mailto:` and `tel:` use [sameTab] so they don't leave a blank tab behind.
 Future<void> openUrl(String url, {bool sameTab = false}) async {
   try {
     final uri = Uri.parse(url);

@@ -87,7 +87,7 @@ class StatusBadge extends StatelessWidget {
         .tag
         .copyWith(color: foreground, fontWeight: FontWeight.w700);
 
-    // Borda transparente nos tons coloridos, para todos os selos terem a mesma altura.
+    // Transparent border on the colored tones, so every badge has the same height.
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: components.badgePaddingH,

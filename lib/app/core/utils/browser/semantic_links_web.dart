@@ -2,8 +2,8 @@ import 'dart:js_interop';
 
 import 'package:web/web.dart' as web;
 
-/// O navegador seguiria sozinho os `<a href>` da semântica, recarregando a página.
-/// Quem navega é o `onTap` do próprio link.
+/// The browser would follow the semantics `<a href>`s on its own, reloading the page.
+/// The link's own `onTap` does the navigation.
 void preventSemanticLinkNavigation() {
   web.document.addEventListener(
     'click',

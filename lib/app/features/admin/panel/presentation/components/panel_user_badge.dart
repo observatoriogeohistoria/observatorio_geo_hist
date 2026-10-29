@@ -28,7 +28,7 @@ class PanelUserBadge extends StatelessWidget {
           child: Text(
             initialsOf(user.name),
             maxLines: 1,
-            // O círculo tem tamanho fixo; ampliar as iniciais as faria vazar.
+            // The circle has a fixed size; scaling the initials would make them overflow.
             textScaler: TextScaler.noScaling,
             style: styles.panelAvatarInitials.copyWith(color: colors.accentStrong),
           ),

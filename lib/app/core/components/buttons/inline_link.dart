@@ -31,7 +31,7 @@ class _InlineLinkState extends State<InlineLink> {
   @override
   Widget build(BuildContext context) {
     final colors = AppTheme.colors;
-    // Acento forte: o acento normal fica abaixo de 4,5:1 sobre a superfície.
+    // Strong accent: the regular accent falls below 4.5:1 on the surface.
     final color = _hovered ? colors.ink : colors.accentStrong;
     final style = (widget.style ?? AppTheme.typography.of(context).regular).copyWith(
       color: color,

@@ -216,7 +216,7 @@ class _HighlightCardState extends State<HighlightCard> {
                             components.featuredTitleMaxWidthEm
                         : double.infinity,
                   ),
-                  // Com texto ampliado, corta em menos linhas em vez de vazar.
+                  // With scaled text, truncates to fewer lines instead of overflowing.
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final lineHeight =

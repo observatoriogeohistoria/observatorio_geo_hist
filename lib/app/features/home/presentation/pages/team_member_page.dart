@@ -37,7 +37,7 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
   @override
   void initState() {
     super.initState();
-    // Busca só aqui: buscar no build ou numa reação repetia leituras na 404.
+    // Fetches only here: fetching in build or in a reaction repeated reads on the 404.
     if (_fetchTeamStore.needsFetch) _fetchTeamStore.fetchTeam();
   }
 

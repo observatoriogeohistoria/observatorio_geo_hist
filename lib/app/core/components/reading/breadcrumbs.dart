@@ -10,7 +10,7 @@ class BreadcrumbItem {
   final String label;
   final String? route;
 
-  /// Substitui a navegação padrão para [route], quando o destino precisa de algo além do endereço.
+  /// Replaces the default navigation for [route], when the destination needs more than the URL.
   final void Function(BuildContext context)? onTap;
 }
 
@@ -36,7 +36,7 @@ class Breadcrumbs extends StatelessWidget {
         runSpacing: components.breadcrumbGap,
         children: [
           for (final (index, item) in items.indexed)
-            // A seta vai junto do item seguinte para não sobrar sozinha no fim da linha.
+            // The arrow goes with the next item so it isn't left alone at the end of the line.
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [

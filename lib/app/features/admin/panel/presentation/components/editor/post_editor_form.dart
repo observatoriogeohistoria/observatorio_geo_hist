@@ -10,7 +10,7 @@ import 'package:observatorio_geo_hist/app/features/library/presentation/componen
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/components/sheet/panel_validators.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Um campo na ordem da tela, para o resumo do que falta levar o foco e a rolagem até ele.
+/// A field in screen order, so the missing-fields summary can move focus and scroll to it.
 class PostEditorField {
   const PostEditorField(this.key, this.label, this.focusNode);
 
@@ -19,7 +19,7 @@ class PostEditorField {
   final FocusNode? focusNode;
 }
 
-/// Imagem e legenda ficam na coluna lateral, comum a todos os tipos, mas entram no corpo.
+/// Image and caption live in the side column, shared by all types, but go into the body.
 class PostEditorImage {
   PostEditorImage({String? url, String? caption})
       : url = TextEditingController(text: url),
@@ -38,8 +38,8 @@ class PostEditorImage {
   }
 }
 
-/// Avisa a página de mudanças na estrutura (`notifyListeners`, para redesenhar) e no conteúdo
-/// ([onEdited], para saber que há o que salvar).
+/// Notifies the page of structure changes (`notifyListeners`, to rebuild) and content changes
+/// ([onEdited], to know there's something to save).
 abstract class PostEditorForm extends ChangeNotifier {
   VoidCallback? onEdited;
 
@@ -52,7 +52,7 @@ abstract class PostEditorForm extends ChangeNotifier {
 
   List<PostEditorField> get mainFields;
 
-  /// Campos do cartão próprio do tipo na coluna lateral, que vem depois da imagem.
+  /// Fields of the type's own card in the side column, which comes after the image.
   List<PostEditorField> get sideFields => const [];
 
   List<Widget> buildMain(BuildContext context);
@@ -107,7 +107,7 @@ abstract class PostEditorForm extends ChangeNotifier {
   PostEditorRich rich(String label, String? initial, {bool isRequired = true}) =>
       PostEditorRich(this, label, richText(initial), focus(), isRequired: isRequired);
 
-  // Só o texto conta como alteração: o controlador também avisa ao mover o cursor.
+  // Only text counts as a change: the controller also notifies when the cursor moves.
   TextEditingController text(String? initial) {
     final controller = TextEditingController(text: initial);
     var last = controller.text;
@@ -214,7 +214,7 @@ class PostEditorInput {
   final String? hintText;
   final TextInputType? keyboardType;
 
-  /// Com valor, o campo é de várias linhas e começa com essa altura.
+  /// With a value, the field is multiline and starts at that height.
   final int? lines;
 
   final key = GlobalKey<FormFieldState<String>>();

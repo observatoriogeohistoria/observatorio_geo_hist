@@ -61,7 +61,7 @@ class _LibraryDocumentRowState extends State<LibraryDocumentRow> {
       ),
     );
 
-    // O fundo do hover não encosta nas linhas de separação.
+    // The hover background doesn't touch the separator lines.
     final line = DecoratedBox(
       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: colors.line))),
       child: Padding(

@@ -44,7 +44,7 @@ class EditorQuill extends StatefulWidget {
   static String toJson(QuillController controller) =>
       jsonEncode(controller.document.toDelta().toJson());
 
-  /// O documento sempre tem ao menos uma quebra de linha; vazio é sem texto visível.
+  /// The document always has at least one line break; empty means no visible text.
   static bool isEmpty(QuillController controller) =>
       controller.document.toPlainText().trim().isEmpty;
 
@@ -83,8 +83,8 @@ class _EditorQuillState extends State<EditorQuill> {
     super.dispose();
   }
 
-  // O Tab do Quill faz recuo e prende o foco; aqui ele segue a ordem da página. O recuo de
-  // lista continua nos botões da barra.
+  // Quill's Tab indents and traps focus; here it follows the page order. List indenting
+  // is still available in the toolbar buttons.
   KeyEventResult? _handleKey(KeyEvent event, Node? _) {
     if (event.logicalKey != LogicalKeyboardKey.tab) return null;
     if (event is! KeyUpEvent) {
@@ -130,7 +130,7 @@ class _EditorQuillState extends State<EditorQuill> {
               ),
             ],
           ),
-          // A borda vai na frente, para o fundo da barra de formatação não cobri-la.
+          // The border goes in front, so the toolbar background doesn't cover it.
           child: DecoratedBox(
             position: DecorationPosition.foreground,
             decoration: BoxDecoration(
@@ -153,7 +153,7 @@ class _EditorQuillState extends State<EditorQuill> {
                     label:
                         FormFieldFrame.semanticLabel(widget.label, isOptional: widget.isOptional),
                     hint: FormFieldFrame.semanticHint(error: error, helper: widget.helperText),
-                    // O editor tem seleção própria; a área de seleção da página disputaria o arrasto.
+                    // The editor has its own selection; the page's selection area would fight over dragging.
                     child: SelectionContainer.disabled(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(minHeight: widget.minHeight ?? 0),
@@ -221,7 +221,7 @@ class _EditorQuillState extends State<EditorQuill> {
           color: selected ? colors.accentStrong : colors.ink,
         );
 
-    // Sem nós próprios, a dica de cada botão (o nome dele) subiria para o grupo.
+    // Without their own nodes, each button's tooltip (its name) would bubble up to the group.
     return Semantics(
       container: true,
       explicitChildNodes: true,

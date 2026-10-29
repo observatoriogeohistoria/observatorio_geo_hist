@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// Se a palavra mais longa não cabe, diminui a fonte só o necessário em vez de quebrá-la.
+/// If the longest word doesn't fit, shrinks the font just enough instead of breaking it.
 class WordSafeText extends StatelessWidget {
   const WordSafeText(this.text, {super.key, required this.style});
 

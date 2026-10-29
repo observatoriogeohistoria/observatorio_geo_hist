@@ -13,8 +13,8 @@ Future<void> showPanelSheet(BuildContext context, {required WidgetBuilder builde
   final components = AppTheme.dimensions.components;
   final still = MediaQuery.disableAnimationsOf(context);
 
-  // A rota é a do showGeneralDialog, montada aqui para o Tab dar a volta dentro do painel em vez
-  // de sair para o navegador, como é o padrão na web.
+  // This is showGeneralDialog's route, built here so Tab wraps around inside the panel instead
+  // of escaping to the browser, as is the default on the web.
   return Navigator.of(context, rootNavigator: true).push(
     RawDialogRoute<void>(
       barrierDismissible: true,
@@ -33,7 +33,7 @@ Future<void> showPanelSheet(BuildContext context, {required WidgetBuilder builde
   );
 }
 
-/// Um campo do formulário, na ordem da tela, para levar o foco ao primeiro com erro.
+/// A form field, in screen order, to move focus to the first one with an error.
 class PanelSheetField {
   const PanelSheetField(this.key, this.focusNode);
 
@@ -54,10 +54,10 @@ class PanelSheet extends StatefulWidget {
   final String title;
   final List<PanelSheetField> fields;
 
-  /// Devolve a mensagem do erro, ou `null` quando salvou.
+  /// Returns the error message, or `null` when saved.
   final Future<String?> Function() onSave;
 
-  /// Constrói os campos abaixo do painel, para o Enter chamar [submitOf].
+  /// Builds the fields below the panel, so Enter calls [submitOf].
   final WidgetBuilder builder;
   final bool canSave;
 
@@ -103,7 +103,7 @@ class _PanelSheetState extends State<PanelSheet> {
     final error = await widget.onSave();
     if (!mounted) return;
 
-    // Se a sessão caiu e a tela mudou por baixo, a rota já não é a atual: fechar tiraria outra.
+    // If the session dropped and the screen changed underneath, the route is no longer current: closing would pop another.
     final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
     if (error == null && isCurrent) {
       Navigator.of(context).pop();
@@ -161,7 +161,7 @@ class _PanelSheetState extends State<PanelSheet> {
               ),
               child: Material(
                 type: MaterialType.transparency,
-                // Na ordem de leitura, o Tab depois do "Salvar" pulava o "×" do canto.
+                // In reading order, Tab after "Salvar" skipped the "×" in the corner.
                 child: FocusTraversalGroup(
                   policy: WidgetOrderTraversalPolicy(),
                   child: Column(
@@ -180,8 +180,8 @@ class _PanelSheetState extends State<PanelSheet> {
                             child: SingleChildScrollView(
                               controller: _scrollController,
                               padding: EdgeInsets.all(components.panelSheetBodyPadding),
-                              // Trocar os campos para só leitura quebra a entrada de texto no
-                              // navegador; tirar o foco do corpo já impede a edição enquanto salva.
+                              // Switching the fields to read-only breaks text input in the
+                              // browser; taking focus off the body already prevents editing while saving.
                               child: ExcludeFocus(
                                 excluding: _saving,
                                 child: AbsorbPointer(

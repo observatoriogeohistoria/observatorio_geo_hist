@@ -79,7 +79,7 @@ class _PanelFileFieldState extends State<PanelFileField> {
     if (widget.file.value != null) return _pickedName;
     final url = widget.urlController.text;
     if (url.isEmpty) return null;
-    // No Storage o nome vem codificado no fim do caminho ("biblioteca%2Fnome.pdf").
+    // In Storage the name comes encoded at the end of the path ("biblioteca%2Fnome.pdf").
     final last = Uri.tryParse(url)?.pathSegments.lastOrNull ?? url;
     return last.split('/').last;
   }

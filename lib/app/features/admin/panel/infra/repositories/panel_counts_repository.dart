@@ -34,7 +34,7 @@ class PanelCountsRepositoryImpl implements PanelCountsRepository {
     );
   }
 
-  // Cada contagem falha sozinha: o datasource já registrou o erro, e só aquele número some.
+  // Each count fails on its own: the datasource already logged the error, and only that number disappears.
   Future<int?> _orNull(Future<int> count) async {
     try {
       return await count;

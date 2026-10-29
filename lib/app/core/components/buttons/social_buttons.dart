@@ -13,8 +13,8 @@ class SocialButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // O Ink pinta no Material mais próximo: sem um aqui, o fundo dos botões ficava no lugar
-    // antigo quando o rodapé descia depois de a página carregar.
+    // Ink paints on the nearest Material: without one here, the buttons' background stayed in the old
+    // spot when the footer moved down after the page loaded.
     return Material(
       type: MaterialType.transparency,
       child: Row(

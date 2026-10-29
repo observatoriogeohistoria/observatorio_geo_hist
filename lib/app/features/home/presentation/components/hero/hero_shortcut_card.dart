@@ -62,7 +62,7 @@ class _HeroShortcutCardState extends State<HeroShortcutCard> {
           builder: (context, t, child) => Transform.translate(
             offset: Offset(0, reduceMotion ? 0 : -components.shortcutHoverLift * t),
             child: DecoratedBox(
-              // Sem sombra em repouso: mesmo transparente, o desfoque é pintado a cada quadro.
+              // No shadow at rest: even transparent, the blur is painted every frame.
               decoration: BoxDecoration(
                 color: colors.page,
                 borderRadius: radius,

@@ -1,6 +1,34 @@
 # Histórico do redesign
 
-Resumo das Fases 0 a 8, executadas de 2026-09-26 a 2026-10-20. Decisões e conferências de cada entrega estão no `spec.md` e no `verificacao.md` da spec; o registro detalhado de cada execução (`execucao-fase-N.md`) ficou no git até o commit que criou este arquivo.
+Redesenho do site público, do login e do painel, executado de 2026-09-26 a 2026-10-20 em 33 specs (001 a 033). O planejamento, as specs e as verificações saíram do repositório depois do merge e estão na tag `redesign-specs`:
+
+```sh
+git show redesign-specs:docs/redesign/planejamento.md
+git ls-tree -r --name-only redesign-specs docs/specs
+```
+
+- **Protótipo navegável:** https://claude.ai/artifact/PimRbbQyUDbqrapiv8HseH. Continua sendo a referência visual.
+- **Fora do escopo:** Geoensine, modo escuro e mudanças de dados, permissões ou regras do painel.
+
+## Decisões de design
+
+| Tema | Decisão |
+|---|---|
+| Público | Professores, pesquisadores e estudantes, em desktop e celular |
+| Fontes | Bricolage Grotesque nos títulos e Figtree no texto, embutidas nos assets (no lugar da Dosis) |
+| Cor | Laranja `#C94400` como acento, neutros quentes, rodapé escuro em colunas |
+| Logo | Círculos concêntricos em laranja, em `assets/images/logo.svg` |
+| Imagens | Vêm dos autores sem proporção garantida: proporção fixa 16:10 com `cover`, degradê só sob o título, placeholder sem imagem |
+| Categorias | Ficam como estão no menu de posts e nas 16 da biblioteca, sem agrupar. Na biblioteca, seleção livre de várias |
+| Biblioteca | Entrada por área (Geografia e História), com contagem. Tipos só Tese e Dissertação |
+| Fale com a gente | Continua abrindo o programa de e-mail (`mailto:`), com validação e "Copiar mensagem" na confirmação |
+| Colabore | Fora do rodapé. Só no cabeçalho da categoria, conforme `hasCollaborateOption` |
+| Parceiros | A mesma lista de 9 na Home e no post |
+| Post | Sem tempo de leitura. Um layout-base com blocos por tipo (10 tipos). Compartilhar por link, WhatsApp, Facebook, X, LinkedIn, Telegram e e-mail, além do nativo no celular |
+| Painel | Todo botão só de ícone tem dica dizendo o que acontece. Botão indisponível explica o motivo |
+| Editor | Página própria em `/admin/painel/publicacoes/:categoria/:id/editar`, no lugar do diálogo em duas etapas |
+
+## Fases
 
 | Fase | Período | Specs | PR |
 |---|---|---|---|
@@ -12,7 +40,7 @@ Resumo das Fases 0 a 8, executadas de 2026-09-26 a 2026-10-20. Decisões e confe
 | 5. Formulários, estados e tipos de post | 2026-10-05 a 10-06 | 018 a 022 | #27 |
 | 6. Painel e login nos tokens novos | 2026-10-06 | 023 a 026 | specs em #29, código em #31 |
 | 7. Limpeza de código, assets e pacotes | 2026-10-07 | 027, 028 | #32 |
-| 8. Login, painel e editor redesenhados | 2026-10-08 a 10-20 | 029 a 033 | specs em #35, código no PR da branch `refactor/redesign-fase-8` |
+| 8. Login, painel e editor redesenhados | 2026-10-08 a 10-20 | 029 a 033 | specs em #35, código em #37, ajustes em #38 |
 
 ## Ressalvas em aberto
 - Leitor de tela real (VoiceOver/NVDA) não foi usado; só a árvore de semântica.

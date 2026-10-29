@@ -5,7 +5,7 @@ class MailDraft {
   final String subject;
   final String body;
 
-  // Montado à mão: `Uri(queryParameters:)` troca espaço por `+`, que alguns programas mostram literalmente.
+  // Built by hand: `Uri(queryParameters:)` turns spaces into `+`, which some mail apps show literally.
   String get mailtoUrl =>
       'mailto:$to?subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}';
 

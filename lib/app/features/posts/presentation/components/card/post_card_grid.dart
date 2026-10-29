@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:observatorio_geo_hist/app/theme/app_theme.dart';
 
-/// Colunas de no mínimo [ComponentSizes.postCardMinWidth], até três.
+/// Columns of at least [ComponentSizes.postCardMinWidth], up to three.
 class PostCardGrid extends StatelessWidget {
   const PostCardGrid({super.key, required this.children});
 
@@ -30,7 +30,7 @@ class PostCardGrid extends StatelessWidget {
         final columns = columnsFor(constraints.maxWidth);
         final rows = (children.length / columns).ceil();
 
-        // Linhas com Row e Expanded, e não GridView: cada card tem a altura do próprio texto.
+        // Rows with Row and Expanded, not GridView: each card takes its own text's height.
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

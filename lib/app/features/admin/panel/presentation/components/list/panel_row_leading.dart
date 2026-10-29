@@ -80,7 +80,7 @@ class PanelAvatar extends StatelessWidget {
       ),
     );
 
-    // As iniciais ficam por baixo: sem foto, ou se ela falhar, são o que aparece.
+    // Initials sit underneath: with no photo, or if it fails, they're what shows.
     return ExcludeSemantics(
       child: Container(
         width: size,
