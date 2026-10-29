@@ -155,5 +155,5 @@ Usuário com `isDeleted == true` perde tudo. Consulta pública em `category_post
 
 - `users_section.dart` habilita a edição com `canEditTeamSection`, não com permissão própria. Sem efeito hoje, pois só administradores acessam a aba.
 - `role` inválido em `users/` faz `UserRole.fromString` lançar exceção.
-- Remover um usuário apaga o documento em `users/`, mas a conta do Auth continua: ela entra, mas não acessa nada. Para apagá-la, use o console (*Authentication › Usuários*).
+- Remover um usuário grava `isDeleted: true` em `users/{uid}`: ele continua na lista com o selo "Removido", as regras negam tudo a ele e o login o recusa ("Usuário desabilitado"). A conta do Auth continua existindo, então o mesmo e-mail não pode ser cadastrado de novo pelo painel; para isso, apague a conta no console (*Authentication › Usuários*) e o documento em `users/`.
 - A criação de usuários pelo cliente depende do cadastro público do Auth estar ligado. Quem tiver a chave pública do site também consegue criar conta, mas sem documento em `users/` ela não acessa nada.

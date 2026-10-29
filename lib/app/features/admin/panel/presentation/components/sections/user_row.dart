@@ -48,14 +48,15 @@ class UserRow extends StatelessWidget {
             size: iconSize,
             onPressed: onEdit,
           ),
-          AppIconButton(
-            label: 'Excluir',
-            tooltip: 'Excluir: pede confirmação antes de apagar',
-            icon: Icons.delete_outline,
-            color: colors.error,
-            size: iconSize,
-            onPressed: onDelete,
-          ),
+          if (!user.isDeleted)
+            AppIconButton(
+              label: 'Excluir',
+              tooltip: 'Excluir: pede confirmação antes de apagar',
+              icon: Icons.delete_outline,
+              color: colors.error,
+              size: iconSize,
+              onPressed: onDelete,
+            ),
         ],
       ],
     );
