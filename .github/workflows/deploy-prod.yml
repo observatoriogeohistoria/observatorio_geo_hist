@@ -61,6 +61,13 @@ jobs:
     - name: Build Flutter Web app
       run: flutter build web --release --dart-define=APP_ENV=prod
 
+    # The versioned .htaccess replaces the server's copy: it must exist in the build and not carry
+    # the dev password or cPanel blocks.
+    - name: Conferir o .htaccess
+      run: |
+        test -f build/web/.htaccess
+        ! grep -qE 'AuthType|AuthUserFile|AddHandler|Require all granted' build/web/.htaccess
+
     - name: Sync build/web to HostGator (produção)
       uses: SamKirkland/FTP-Deploy-Action@d0aa83872616587eb552bc831bb9166b3f9c5ad5 # 4.3.0
       with:

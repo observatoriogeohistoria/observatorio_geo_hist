@@ -26,8 +26,8 @@ Nada vai para a `main` sem passar pela `develop`.
 | Arquivo | Gatilho | O que faz |
 |---|---|---|
 | [ci.yml](../.github/workflows/ci.yml) | PR para `develop` ou `main` | `pub get`, conferência de formatação (`dart format`), `analyze` e `build web`. Não publica. |
-| `deploy-dev.yml` | push na `develop` ou manual | Índices, build, `robots.txt` bloqueando indexação, FTP para o dev e regras do Firestore. |
-| `deploy-prod.yml` | push na `main` ou manual | Índices, build, FTP para produção e regras do Firestore e do Storage. |
+| `deploy-dev.yml` | push na `develop` ou manual | Índices, build, `robots.txt` bloqueando indexação, senha no `.htaccess`, FTP para o dev e regras do Firestore. |
+| `deploy-prod.yml` | push na `main` ou manual | Índices, build, conferência do `.htaccess`, FTP para produção e regras do Firestore e do Storage. |
 
 Push que só mexe em arquivos fora do site (`docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `ci.yml`, `analysis_options.yaml`) não dispara deploy (`paths-ignore`). Para publicar mesmo assim, use o deploy manual. O CI segue a mesma ideia: PR só com `docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/` ou `deploy-*.yml` não roda validação.
 
@@ -41,21 +41,17 @@ Comum aos três:
 
 ## Secrets e Environments
 
-Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP_USER` e `FTP_PASSWORD`. Cada usuário FTP é restrito à pasta do próprio ambiente, então o dev não consegue sobrescrever produção. Em `PROD`, dá para exigir aprovação manual (*Required reviewers*) antes do deploy.
+Cada deploy usa um *Environment* do GitHub (`DEV` e `PROD`) com `FTP_HOST`, `FTP_USER` e `FTP_PASSWORD`. O ambiente `DEV` tem ainda a **variável** (não segredo) `HTPASSWD_PATH`: caminho absoluto do `.htpasswd` no servidor, fora da pasta pública. Sem ela o deploy de dev falha em vez de publicar aberto. Cada usuário FTP é restrito à pasta do próprio ambiente, então o dev não consegue sobrescrever produção. Em `PROD`, dá para exigir aprovação manual (*Required reviewers*) antes do deploy.
 
 ## Diferenças entre dev e produção
 
 - **`APP_ENV`**: o build recebe `--dart-define=APP_ENV=dev|prod`, lido em [app_environment.dart](../lib/app/core/utils/environment/app_environment.dart). No dev, o app mostra a faixa de aviso de ambiente de testes.
 - **Indexação**: o deploy de dev gera `robots.txt` com `Disallow: /`.
-- **Senha**: o dev fica atrás de senha (cPanel › *Privacidade de diretórios*, que grava o bloco no `.htaccess`).
-- **`.htaccess`**: fica só no servidor da HostGator, na pasta de cada ambiente, e é editado à mão (o deploy não envia o `.htaccess`, para não apagar a senha do dev). Ele reescreve rotas desconhecidas para `index.html` (o app usa `usePathUrlStrategy`), força HTTPS com HSTS, manda os cabeçalhos de segurança e bloqueia arquivos ocultos (`.git`, `.ftp-deploy-sync-state.json`) e de backup (`.sql`, `.zip`, `.bak`...). Guarde uma cópia antes de mudá-lo.
-- **Cache**: os arquivos do Flutter mantêm o mesmo nome a cada build (`main.dart.js`, `assets/fonts/MaterialIcons-Regular.otf`...). Sem `Cache-Control`, o navegador reaproveita versões antigas por conta própria, e aparecem, por exemplo, ícones sumidos (fonte de ícones antiga com código novo). O `.htaccess` de cada ambiente deve mandar revalidar sempre (o servidor responde 304 quando nada mudou):
-
-  ```apache
-  <IfModule mod_headers.c>
-    Header set Cache-Control "no-cache"
-  </IfModule>
-  ```
+- **Senha**: só o dev tem. O workflow acrescenta ao `.htaccess` do build `AuthType`, `AuthName`, `AuthUserFile` (de `HTPASSWD_PATH`) e `Require valid-user`, mais `X-Robots-Tag: noindex, nofollow`. O `.htpasswd` fica no servidor, fora do repositório e da pasta pública; para trocar a senha ou os usuários, edite-o por lá.
+- **`.htaccess`**: versionado em [web/.htaccess](../web/.htaccess), igual nos dois ambientes, e **enviado a cada deploy: substitui o do servidor**. Ele reescreve rotas desconhecidas para `index.html` (o app usa `usePathUrlStrategy`), redireciona `http` e `www` para `https://` sem `www` (301, um só salto), manda HSTS e cabeçalhos de segurança, bloqueia arquivos ocultos (`.git`, `.ftp-deploy-sync-state.json`; `.well-known` fica aberto), comprime texto e manda `Cache-Control: no-cache` em tudo. Guarde uma cópia do que está no servidor antes do primeiro deploy com ele.
+  - **Não ponha nele** blocos gerados pelo cPanel (handler de PHP, *Privacidade de diretórios*): o próximo deploy os apagaria. O site é Flutter, sem PHP. A senha do dev entra só pelo workflow.
+  - **Não ponha `<FilesMatch ...>` com `Require all granted`**: no dev liberaria JS, imagens e fontes sem senha (o workflow reprova o deploy se achar).
+- **Cache**: os arquivos do Flutter mantêm o mesmo nome a cada build (`main.dart.js`, `assets/fonts/MaterialIcons-Regular.otf`...). Sem `Cache-Control`, o navegador reaproveita versões antigas, e aparecem, por exemplo, ícones sumidos. O `.htaccess` manda revalidar sempre (o servidor responde 304 quando nada mudou).
 - **Firebase**: o `APP_ENV` escolhe o projeto (`observatorio-geo-hist-dev` no dev, `observatorio-geo-hist` em produção), então Firestore, Auth e Storage do dev são separados de produção. O dev não tem Storage habilitado (`AppEnvironment.hasStorage`): lá o painel não lista mídias e recusa enviar ou apagar arquivos de mídia e da biblioteca. Arquivos já gravados com URL de produção continuam abrindo, só para leitura.
 
 ## Índices do Firestore
