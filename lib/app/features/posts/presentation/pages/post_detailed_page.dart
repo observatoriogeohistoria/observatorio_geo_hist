@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_box.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_meta/page_meta_scope.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/components/support/support.dart';
 import 'package:observatorio_geo_hist/app/core/models/category_model.dart';
@@ -9,6 +10,7 @@ import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dar
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/seo/route_meta.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/post/article_body.dart';
@@ -135,9 +137,16 @@ class _PostDetailedPageState extends State<PostDetailedPage> {
             );
         }
 
+        final meta = state is PostDetailSuccessState
+            ? RouteMeta.post(state.post, fallbackArea: widget.area)
+            : RouteMeta.postLoading(widget.area, widget.categoryKey, widget.postId);
+
         // The per-URL key scrolls back to the top when opening another post from "Leia também".
-        return ReadingPageScaffold(
-            key: ValueKey(_address), body: body, beforeFooter: const Support());
+        return PageMetaScope(
+          meta: meta,
+          child: ReadingPageScaffold(
+              key: ValueKey(_address), body: body, beforeFooter: const Support()),
+        );
       },
     );
   }
