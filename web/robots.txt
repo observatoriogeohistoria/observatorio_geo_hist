@@ -1,0 +1,4 @@
+# Production only: the dev deploy replaces this file with "Disallow: /".
+User-agent: *
+Disallow: /admin
+Allow: /
