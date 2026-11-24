@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_box.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_meta/page_meta_scope.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/screen/screen_utils.dart';
+import 'package:observatorio_geo_hist/app/core/utils/seo/route_meta.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/document/library_document_header.dart';
@@ -85,29 +87,35 @@ class _LibraryDocumentDetailedPageState extends State<LibraryDocumentDetailedPag
             return const PageNotFound();
         }
 
+        final meta = state is LibraryDocumentSuccessState
+            ? RouteMeta.libraryDocument(state.document, fallbackKey: widget.documentKey)
+            : RouteMeta.libraryDocumentLoading(widget.area, widget.documentKey);
+
         // The per-URL key scrolls back to the top when opening another document.
-        return ReadingPageScaffold(
-          key: ValueKey(widget.documentKey),
-          body: _DocumentFrame(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: bottom),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Breadcrumbs(
-                    items: [
-                      const BreadcrumbItem('Início', route: AppRoutes.root),
-                      const BreadcrumbItem('Biblioteca', route: AppRoutes.library),
-                      BreadcrumbItem(area.value, route: AppRoutes.libraryArea(area.routeKey)),
-                      const BreadcrumbItem('Documento'),
+        return PageMetaScope(
+            meta: meta,
+            child: ReadingPageScaffold(
+              key: ValueKey(widget.documentKey),
+              body: _DocumentFrame(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: bottom),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Breadcrumbs(
+                        items: [
+                          const BreadcrumbItem('Início', route: AppRoutes.root),
+                          const BreadcrumbItem('Biblioteca', route: AppRoutes.library),
+                          BreadcrumbItem(area.value, route: AppRoutes.libraryArea(area.routeKey)),
+                          const BreadcrumbItem('Documento'),
+                        ],
+                      ),
+                      content,
                     ],
                   ),
-                  content,
-                ],
+                ),
               ),
-            ),
-          ),
-        );
+            ));
       },
     );
   }

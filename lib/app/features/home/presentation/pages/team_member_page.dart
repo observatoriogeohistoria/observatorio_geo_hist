@@ -3,10 +3,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_box.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_meta/page_meta_scope.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/reading_blocks.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
+import 'package:observatorio_geo_hist/app/core/utils/seo/route_meta.dart';
 import 'package:observatorio_geo_hist/app/core/utils/url/url.dart';
 import 'package:observatorio_geo_hist/app/features/home/home_setup.dart';
 import 'package:observatorio_geo_hist/app/features/home/infra/models/team_model.dart';
@@ -60,7 +62,12 @@ class _TeamMemberPageState extends State<TeamMemberPage> {
             body = _MemberContent(member: member!);
         }
 
-        return ReadingPageScaffold(body: _MemberFrame(child: body));
+        return PageMetaScope(
+          meta: member == null
+              ? RouteMeta.memberLoading(widget.memberId)
+              : RouteMeta.member(member, widget.memberId),
+          child: ReadingPageScaffold(body: _MemberFrame(child: body)),
+        );
       },
     );
   }

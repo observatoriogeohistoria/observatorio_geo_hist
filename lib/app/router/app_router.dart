@@ -1,10 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_meta/page_meta_scope.dart';
 import 'package:observatorio_geo_hist/app/core/components/text/app_selection_area.dart';
 import 'package:observatorio_geo_hist/app/core/models/post_model.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/seo/route_meta.dart';
 import 'package:observatorio_geo_hist/app/features/admin/login/presentation/signin_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/panel_page.dart';
 import 'package:observatorio_geo_hist/app/features/admin/panel/presentation/pages/post_editor_page.dart';
@@ -43,7 +45,7 @@ class AppRouter {
           GoRoute(
             path: AppRoutes.root,
             builder: (BuildContext context, GoRouterState state) {
-              return const HomePage();
+              return const PageMetaScope(meta: RouteMeta.home, child: HomePage());
             },
           ),
           GoRoute(
@@ -60,7 +62,7 @@ class AppRouter {
           GoRoute(
             path: AppRoutes.publications,
             builder: (BuildContext context, GoRouterState state) {
-              return const AllPostsPage();
+              return PageMetaScope(meta: RouteMeta.publications, child: const AllPostsPage());
             },
           ),
           GoRoute(
@@ -97,31 +99,31 @@ class AppRouter {
           GoRoute(
             path: AppRoutes.contact,
             builder: (BuildContext context, GoRouterState state) {
-              return const ContactUsPage();
+              return PageMetaScope(meta: RouteMeta.contact, child: const ContactUsPage());
             },
           ),
           GoRoute(
             path: AppRoutes.collaborate,
             builder: (BuildContext context, GoRouterState state) {
-              return const CollaboratePage();
+              return PageMetaScope(meta: RouteMeta.collaborate, child: const CollaboratePage());
             },
           ),
           GoRoute(
             path: AppRoutes.manifesto,
             builder: (BuildContext context, GoRouterState state) {
-              return const ManifestPage();
+              return PageMetaScope(meta: RouteMeta.manifesto, child: const ManifestPage());
             },
           ),
           GoRoute(
             path: AppRoutes.ourHistory,
             builder: (BuildContext context, GoRouterState state) {
-              return const OurHistoryPage();
+              return PageMetaScope(meta: RouteMeta.ourHistory, child: const OurHistoryPage());
             },
           ),
           GoRoute(
             path: AppRoutes.library,
             builder: (BuildContext context, GoRouterState state) {
-              return const LibraryPage();
+              return PageMetaScope(meta: RouteMeta.library, child: const LibraryPage());
             },
           ),
           GoRoute(
