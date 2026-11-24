@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_meta/page_meta_scope.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/page_header.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
 import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
+import 'package:observatorio_geo_hist/app/core/utils/seo/route_meta.dart';
 import 'package:observatorio_geo_hist/app/features/library/infra/models/library_document_model.dart';
 import 'package:observatorio_geo_hist/app/features/library/library_setup.dart';
 import 'package:observatorio_geo_hist/app/features/library/presentation/components/listing/library_listing.dart';
@@ -38,19 +40,21 @@ class _LibraryAreaPageState extends State<LibraryAreaPage> {
     final name = widget.area.value;
 
     // The per-area key scrolls back to the top and recreates the fields when switching area.
-    return ReadingPageScaffold(
-      key: ValueKey(widget.area),
-      header: PageHeader(
-        breadcrumbs: [
-          const BreadcrumbItem('Início', route: AppRoutes.root),
-          const BreadcrumbItem('Biblioteca', route: AppRoutes.library),
-          BreadcrumbItem(name),
-        ],
-        title: name,
-        lead: 'Teses e dissertações sobre o ensino de $name, de várias instituições e '
-            'pesquisadores.',
-      ),
-      body: LibraryListing(store: _store, area: widget.area),
-    );
+    return PageMetaScope(
+        meta: RouteMeta.libraryArea(widget.area),
+        child: ReadingPageScaffold(
+          key: ValueKey(widget.area),
+          header: PageHeader(
+            breadcrumbs: [
+              const BreadcrumbItem('Início', route: AppRoutes.root),
+              const BreadcrumbItem('Biblioteca', route: AppRoutes.library),
+              BreadcrumbItem(name),
+            ],
+            title: name,
+            lead: 'Teses e dissertações sobre o ensino de $name, de várias instituições e '
+                'pesquisadores.',
+          ),
+          body: LibraryListing(store: _store, area: widget.area),
+        ));
   }
 }
