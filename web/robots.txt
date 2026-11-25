@@ -2,3 +2,4 @@
 User-agent: *
 Disallow: /admin
 Allow: /
+Sitemap: https://observatoriogeohistoria.net.br/sitemap.xml
