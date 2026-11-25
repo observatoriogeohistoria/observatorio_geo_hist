@@ -98,7 +98,7 @@ abstract class RouteMeta {
     final area = post.areas.isEmpty ? fallbackArea : post.areas.first;
     final path = AppRoutes.post(area.key, post.categoryId, post.id ?? '');
     if (body == null) return postLoading(area, post.categoryId, post.id ?? '');
-    return _titled(body.title, _postDescription(post), path);
+    return _titled(body.title, postDescription(post), path);
   }
 
   static PageMeta postLoading(PostsAreas area, String categoryKey, String postId) => _titled(
@@ -148,7 +148,7 @@ abstract class RouteMeta {
         AppRoutes.member(memberId),
       );
 
-  static String _postDescription(PostModel post) {
+  static String postDescription(PostModel post) {
     final body = post.body;
     final text = switch (body) {
       final ArticleModel article =>

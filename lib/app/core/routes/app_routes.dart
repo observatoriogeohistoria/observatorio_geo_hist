@@ -17,6 +17,14 @@ abstract class AppRoutes {
   static const postPattern = '$categoryPattern/:id';
   static String category(String areaKey, String categoryKey) =>
       '$publications/$areaKey/$categoryKey';
+
+  // Static copies of long listings live at `.../pagina/N` for search engines; the app opens the
+  // listing itself.
+  static const pageSegment = 'pagina';
+  static const categoryPagePattern = '$categoryPattern/$pageSegment/:page';
+  static String categoryPage(String areaKey, String categoryKey, int page) => page <= 1
+      ? category(areaKey, categoryKey)
+      : '${category(areaKey, categoryKey)}/$pageSegment/$page';
   static String post(String areaKey, String categoryKey, String postId) =>
       '${category(areaKey, categoryKey)}/$postId';
 
@@ -25,6 +33,9 @@ abstract class AppRoutes {
   static const libraryAreaPattern = '$library/:area';
   static const libraryDocumentPattern = '$libraryAreaPattern/documento/:id';
   static String libraryArea(String areaKey) => '$library/$areaKey';
+  static const libraryAreaPagePattern = '$libraryAreaPattern/$pageSegment/:page';
+  static String libraryAreaPage(String areaKey, int page) =>
+      page <= 1 ? libraryArea(areaKey) : '${libraryArea(areaKey)}/$pageSegment/$page';
   static String libraryDocument(String areaKey, String id) =>
       '${libraryArea(areaKey)}/documento/$id';
 

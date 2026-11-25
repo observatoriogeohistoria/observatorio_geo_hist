@@ -95,3 +95,31 @@ firebase deploy --only firestore:rules,storage --project observatorio-geo-hist
 ```
 
 Regra publicada pelo console é sobrescrita no próximo deploy: mude sempre o arquivo.
+
+## Páginas pré-geradas (prerender)
+
+O app é uma página só, então o Google não veria o texto de cada rota sem executar o Flutter. Depois do build, o gerador (`tool/seo/`) lê o Firestore pela API REST pública e grava um HTML por rota ao lado do `index.html` (`/contato` vira `contato.html`; `/publicacoes/historia/12/abc` vira `publicacoes/historia/12/abc.html`). Cada página tem título, descrição, canonical, Open Graph, JSON-LD e um bloco de texto fora da tela, que o app remove no primeiro quadro. As regras do `.htaccess` servem `/x` por `x.html`.
+
+```sh
+fvm flutter build web --release --dart-define=APP_ENV=prod
+fvm flutter test tool/seo/generate_seo.dart --dart-define=APP_ENV=prod   # dev: APP_ENV=dev
+fvm flutter test tool/seo                                                # testes do gerador
+tool/seo/check_htaccess.sh prod                                          # Apache local sobre build/web
+```
+
+- **Produção:** páginas sem `noindex` e `sitemap.xml`. **Dev:** `noindex, nofollow` em cada página e sem sitemap.
+- **Falha fechada:** erro de leitura do Firestore (3 tentativas), coleção vazia, post ou documento que não converte, tag ausente no `index.html` ou arquivo do build que seria sobrescrito interrompem o comando. Rode de novo só sobre um build novo (`rm -rf build/web` antes de `flutter build web`).
+- **Listagens:** categorias e áreas da biblioteca saem em páginas de 50 itens (`/pagina/2`, `/pagina/3`…). No app, esses endereços levam à listagem normal.
+- **`lastmod` do sitemap:** `updatedAt` nos posts e `createdAt` nos documentos da biblioteca (que não têm `updatedAt`). Páginas sem data ficam sem `lastmod`.
+- **Tamanho (produção, 2026-11-24):** 1.083 páginas (443 posts, 602 documentos, 25 listagens, 6 membros, 7 fixas), em cerca de 10 s. A conta da HostGator tinha 58.558 inodes em uso, sem limite.
+
+### Quando reavaliar
+
+Revise a abordagem se **qualquer um** acontecer: cerca de **10 mil páginas**, deploy acima de **15 minutos** ou **aviso de inodes** da HostGator. Saídas, da mais barata para a mais cara:
+
+1. Parar de gerar as listagens além da primeira página e deixar os itens só no sitemap.
+2. Gerar só o que mudou desde o último deploy.
+3. Renderizar sob demanda no servidor (PHP ou regra de reescrita) em vez de arquivos.
+4. Mudar para hospedagem com pré-renderização (por exemplo, Firebase Hosting).
+
+Nada disso está implementado.
