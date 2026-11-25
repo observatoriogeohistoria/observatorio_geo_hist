@@ -20,7 +20,7 @@ future-ideas    spec.md                     plan.md        código +           v
 Em cada etapa a skill **para** e espera a sua aprovação antes de seguir.
 
 ## Regras
-- Numeração sequencial de três dígitos, seguindo a última usada (a 033 foi a última do redesign; a próxima é a 034). O nome é curto, em inglês e `kebab-case`.
+- Numeração sequencial de três dígitos, seguindo a última usada (a 034 foi a última, do prerender; a próxima é a 035). O nome é curto, em inglês e `kebab-case`.
 - A spec tem um **status** no topo: `rascunho`, `aprovada`, `implementada` ou `verificada`.
 - Uma spec só vai para o plano com **zero perguntas em aberto** e status `aprovada`.
 - Se, durante a implementação, algo precisar divergir da spec, **atualize a spec primeiro** (e registre em "Histórico de mudanças"), depois o código.
