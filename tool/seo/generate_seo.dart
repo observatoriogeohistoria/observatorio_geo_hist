@@ -20,8 +20,17 @@ import 'site_writer.dart';
 const String _prodOrigin = 'https://observatoriogeohistoria.net.br';
 const String _devOrigin = 'https://dev.observatoriogeohistoria.net.br';
 
+const Map<PageKind, String> _kindLabels = {
+  PageKind.home: 'início',
+  PageKind.fixed: 'fixas',
+  PageKind.collection: 'listagens',
+  PageKind.post: 'publicações',
+  PageKind.document: 'documentos',
+  PageKind.member: 'membros',
+};
+
 void main() {
-  test('generates the pages for search engines', () async {
+  test('gera as páginas para os buscadores', () async {
     // flutter test blocks real network by default.
     HttpOverrides.global = null;
 
@@ -51,7 +60,8 @@ void main() {
     // ignore: avoid_print
     print([
       'Páginas para o Google (${options.projectId}): ${result.pages} no total',
-      for (final kind in PageKind.values) '  ${kind.name}: ${result.pagesByKind[kind] ?? 0}',
+      for (final kind in PageKind.values)
+        '  ${_kindLabels[kind]}: ${result.pagesByKind[kind] ?? 0}',
       result.sitemap ? '  com sitemap.xml' : '  sem sitemap.xml',
       for (final warning in catalog.warnings) '  aviso: $warning',
     ].join('\n'));
