@@ -4,14 +4,15 @@ on:
   push:
     branches:
       - develop
-    # Only what goes into the build or the Firestore indexes is worth publishing.
+    # Only what goes into the build, the generated pages or the Firestore indexes is worth publishing.
     # Manual deploys (workflow_dispatch) ignore this filter.
     paths-ignore:
       - 'docs/**'
       - '**.md'
       - '.claude/**'
       - '.vscode/**'
-      - 'tool/**'
+      - 'tool/web_icons/**'
+      - 'tool/seed_dev/**'
       - '.github/workflows/ci.yml'
       - 'analysis_options.yaml'
   workflow_dispatch:
@@ -64,6 +65,24 @@ jobs:
     - name: Bloquear indexação do ambiente de dev
       run: |
         printf 'User-agent: *\nDisallow: /\n' > build/web/robots.txt
+
+    # The generator copies build/web/index.html into every page, so the tag has to go before it
+    # runs or dev would count visits.
+    - name: Remover o Analytics do dev
+      run: |
+        perl -0pi -e 's{<!-- Google tag \(gtag\.js\) -->.*?</script>\s*<script>.*?</script>}{}s' build/web/index.html
+        ! grep -q 'googletagmanager' build/web/index.html || { echo "O snippet do gtag continua no index.html."; exit 1; }
+
+    - name: Gerar páginas
+      run: flutter test tool/seo/generate_seo.dart --dart-define=APP_ENV=dev
+
+    - name: Conferir as páginas geradas (dev)
+      run: |
+        achados=$(grep -rl 'googletagmanager' build/web || true)
+        test -z "$achados" || { echo "Páginas com Analytics no dev:"; echo "$achados"; exit 1; }
+        ! test -e build/web/sitemap.xml || { echo "O dev não pode ter sitemap.xml."; exit 1; }
+        sem_noindex=$(find build/web -name '*.html' -print0 | xargs -0 grep -L 'noindex, nofollow' || true)
+        test -z "$sem_noindex" || { echo "Páginas sem noindex no dev:"; echo "$sem_noindex"; exit 1; }
 
     # The dev .htaccess is the versioned one plus the password and X-Robots-Tag. Without the
     # variable the deploy fails instead of publishing dev open.

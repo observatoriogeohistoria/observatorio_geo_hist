@@ -25,11 +25,11 @@ Nada vai para a `main` sem passar pela `develop`.
 
 | Arquivo | Gatilho | O que faz |
 |---|---|---|
-| [ci.yml](../.github/workflows/ci.yml) | PR para `develop` ou `main` | `pub get`, conferência de formatação (`dart format`), `analyze` e `build web`. Não publica. |
-| `deploy-dev.yml` | push na `develop` ou manual | Índices, build, `robots.txt` bloqueando indexação, senha no `.htaccess`, FTP para o dev e regras do Firestore. |
-| `deploy-prod.yml` | push na `main` ou manual | Índices, build, conferência do `.htaccess`, FTP para produção e regras do Firestore e do Storage. |
+| [ci.yml](../.github/workflows/ci.yml) | PR para `develop` ou `main` | `pub get`, conferência de formatação (`dart format`), `analyze`, testes do gerador (`flutter test tool/seo`) e `build web`. Não publica. |
+| `deploy-dev.yml` | push na `develop` ou manual | Índices, build, `robots.txt` bloqueando indexação, remoção do Analytics, páginas pré-geradas (`noindex`) e suas conferências, senha no `.htaccess`, FTP para o dev e regras do Firestore. |
+| `deploy-prod.yml` | push na `main` ou manual | Índices, build, páginas pré-geradas e `sitemap.xml` com suas conferências, conferência do `.htaccess`, FTP para produção e regras do Firestore e do Storage. |
 
-Push que só mexe em arquivos fora do site (`docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/`, `ci.yml`, `analysis_options.yaml`) não dispara deploy (`paths-ignore`). Para publicar mesmo assim, use o deploy manual. O CI segue a mesma ideia: PR só com `docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/` ou `deploy-*.yml` não roda validação.
+Push que só mexe em arquivos fora do site (`docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/web_icons/`, `tool/seed_dev/`, `ci.yml`, `analysis_options.yaml`) não dispara deploy (`paths-ignore`). `tool/seo/` dispara, porque muda o site publicado. Para publicar mesmo assim, use o deploy manual. O CI segue a mesma ideia: PR só com `docs/`, `*.md`, `.claude/`, `.vscode/`, `tool/web_icons/`, `tool/seed_dev/` ou `deploy-*.yml` não roda validação.
 
 Comum aos três:
 
@@ -113,6 +113,19 @@ tool/seo/check_htaccess.sh prod                                          # Apach
 - **`lastmod` do sitemap:** `updatedAt` nos posts e `createdAt` nos documentos da biblioteca (que não têm `updatedAt`). Páginas sem data ficam sem `lastmod`.
 - **Tamanho (produção, 2026-11-24):** 1.083 páginas (443 posts, 602 documentos, 25 listagens, 6 membros, 7 fixas), em cerca de 10 s. A conta da HostGator tinha 58.558 inodes em uso, sem limite.
 
+### No deploy
+
+Os dois deploys têm um passo **Gerar páginas** depois do build e antes do FTP. Se ele ou uma conferência falhar, o deploy para ali e nada é enviado. As regras do Firestore continuam sendo publicadas só depois do FTP.
+
+- **Dev:** antes de gerar, o snippet do gtag é removido do `build/web/index.html` (o gerador copia esse arquivo para cada página; sem isso o dev contaria visitas). Depois de gerar, o deploy falha, listando os arquivos, se algum arquivo de `build/web` citar `googletagmanager`, se existir `sitemap.xml` ou se alguma página `.html` estiver sem `noindex`.
+- **Produção:** o deploy falha se `sitemap.xml` não existir ou estiver vazio, ou se alguma página `.html` tiver `noindex`.
+
+### Regerar sem commit (agendamento)
+
+O conteúdo do Firestore muda sem commit, então páginas e sitemap ficam velhos até o próximo deploy. O `deploy-prod.yml` traz, **comentados**, um `schedule` (a cada 3 dias, 06:00 UTC) e o job `keepalive`. O GitHub desativa workflows agendados depois de 60 dias sem atividade no repositório; o `keepalive` reativa o workflow pela API a cada execução, com `actions: write` só nesse job (`GITHUB_TOKEN`, sem segredo novo). Agendamento só roda na branch padrão.
+
+Para ativar, depois do primeiro deploy de produção com o gerador: descomente o bloco `schedule:` e o job `keepalive:` no fim do arquivo. Se o ambiente `PROD` exigir aprovação (*Required reviewers*), a execução agendada ficará esperando por ela.
+
 ### Quando reavaliar
 
 Revise a abordagem se **qualquer um** acontecer: cerca de **10 mil páginas**, deploy acima de **15 minutos** ou **aviso de inodes** da HostGator. Saídas, da mais barata para a mais cara:
@@ -123,3 +136,7 @@ Revise a abordagem se **qualquer um** acontecer: cerca de **10 mil páginas**, d
 4. Mudar para hospedagem com pré-renderização (por exemplo, Firebase Hosting).
 
 Nada disso está implementado.
+
+## Pendências manuais
+
+- [ ] Ativar o `schedule` e o `keepalive` do `deploy-prod.yml` depois do primeiro deploy de produção com o gerador (ver "Regerar sem commit").

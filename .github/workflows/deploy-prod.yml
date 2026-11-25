@@ -4,17 +4,23 @@ on:
   push:
     branches:
       - main
-    # Only what goes into the build or the Firestore indexes is worth publishing.
+    # Only what goes into the build, the generated pages or the Firestore indexes is worth publishing.
     # Manual deploys (workflow_dispatch) ignore this filter.
     paths-ignore:
       - 'docs/**'
       - '**.md'
       - '.claude/**'
       - '.vscode/**'
-      - 'tool/**'
+      - 'tool/web_icons/**'
+      - 'tool/seed_dev/**'
       - '.github/workflows/ci.yml'
       - 'analysis_options.yaml'
   workflow_dispatch:
+  # Enable after the first production deploy with the generator. Firestore content changes without
+  # a commit, so the pages and the sitemap have to be regenerated now and then. Also uncomment the
+  # keepalive job at the end of the file.
+  # schedule:
+  #   - cron: '0 6 */3 * *'
 
 concurrency:
   group: deploy-prod
@@ -61,6 +67,15 @@ jobs:
     - name: Build Flutter Web app
       run: flutter build web --release --dart-define=APP_ENV=prod
 
+    - name: Gerar páginas
+      run: flutter test tool/seo/generate_seo.dart --dart-define=APP_ENV=prod
+
+    - name: Conferir as páginas geradas (produção)
+      run: |
+        test -s build/web/sitemap.xml || { echo "sitemap.xml ausente ou vazio."; exit 1; }
+        com_noindex=$(grep -rl 'noindex' --include='*.html' build/web || true)
+        test -z "$com_noindex" || { echo "Páginas com noindex em produção:"; echo "$com_noindex"; exit 1; }
+
     # The versioned .htaccess replaces the server's copy: it must exist in the build and not carry
     # the dev password or cPanel blocks.
     - name: Conferir o .htaccess
@@ -87,3 +102,16 @@ jobs:
         GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json" \
           npx --yes firebase-tools@15.34.2 deploy --only firestore:rules,storage \
           --project observatorio-geo-hist --non-interactive
+
+  # Enable together with `schedule`. GitHub disables scheduled workflows after 60 days without
+  # repository activity; this job turns the workflow back on. actions: write only here.
+  # keepalive:
+  #   if: github.event_name == 'schedule'
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     actions: write
+  #   steps:
+  #   - name: Reativar o workflow agendado
+  #     env:
+  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     run: gh api --method PUT "repos/$GITHUB_REPOSITORY/actions/workflows/deploy-prod.yml/enable"
