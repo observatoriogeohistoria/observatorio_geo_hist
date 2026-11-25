@@ -112,6 +112,8 @@ tool/seo/check_htaccess.sh prod                                          # Apach
 - **Listagens:** categorias e áreas da biblioteca saem em páginas de 50 itens (`/pagina/2`, `/pagina/3`…). No app, esses endereços levam à listagem normal.
 - **`lastmod` do sitemap:** `updatedAt` nos posts e `createdAt` nos documentos da biblioteca (que não têm `updatedAt`). Páginas sem data ficam sem `lastmod`.
 - **Tamanho (produção, 2026-11-24):** 1.083 páginas (443 posts, 602 documentos, 25 listagens, 6 membros, 7 fixas), em cerca de 10 s. A conta da HostGator tinha 58.558 inodes em uso, sem limite.
+- **Primeiro deploy de produção com o gerador (2026-11-25):** 1.206 arquivos locais contra 92 no servidor; gerar as páginas levou 12 s e o envio por FTP, 15 min 23 s (22,7 kB/s, quase tudo é custo por arquivo), 18 min 16 s no total. O inode final ainda não foi conferido.
+- **Só o primeiro é lento:** o `FTP-Deploy-Action` guarda o hash de cada arquivo em `.ftp-deploy-sync-state.json` no servidor e, nos deploys seguintes, envia só o que mudou, novo ou apagado. As páginas não têm data nem nada que varie, então uma página só é reenviada quando o conteúdo muda. Os deploys normais mexem em `main.dart.js` e poucos arquivos mais, e em um deploy sem commit de conteúdo só entram as páginas editadas no Firestore desde o último. O estado é por servidor: se o arquivo sumir, o próximo deploy volta a enviar tudo.
 
 ### No deploy
 
@@ -174,7 +176,7 @@ Não faz parte do deploy; é manual, depois da validação de produção.
 
 ### Quando reavaliar
 
-Revise a abordagem se **qualquer um** acontecer: cerca de **10 mil páginas**, deploy acima de **15 minutos** ou **aviso de inodes** da HostGator. Saídas, da mais barata para a mais cara:
+Revise a abordagem se **qualquer um** acontecer: cerca de **10 mil páginas**, deploy **incremental** acima de **15 minutos** (o primeiro, que envia tudo, não conta) ou **aviso de inodes** da HostGator. Saídas, da mais barata para a mais cara:
 
 1. Parar de gerar as listagens além da primeira página e deixar os itens só no sitemap.
 2. Gerar só o que mudou desde o último deploy.
@@ -188,4 +190,4 @@ Nada disso está implementado.
 - [ ] Ativar o `schedule` e o `keepalive` do `deploy-prod.yml` depois do primeiro deploy de produção com o gerador (ver "Regerar sem commit").
 - [ ] Rodar as listas de "Validação depois do deploy" no dev e em produção.
 - [ ] Enviar o `sitemap.xml` e pedir a inspeção de URL no Search Console.
-- [ ] Anotar em "Tamanho" os números do primeiro deploy de produção (páginas, tempo do passo, inodes).
+- [ ] Conferir os inodes da HostGator depois do primeiro deploy e anotar em "Tamanho".
