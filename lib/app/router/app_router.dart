@@ -153,6 +153,17 @@ class AppRouter {
           ),
         ],
       ),
+      GoRoute(
+        path: AppRoutes.categoryPagePattern,
+        redirect: (context, state) => AppRoutes.category(
+          state.pathParameters['area']!,
+          state.pathParameters['category']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.libraryAreaPagePattern,
+        redirect: (context, state) => AppRoutes.libraryArea(state.pathParameters['area']!),
+      ),
       // Old English URLs, kept so links already shared don't break.
       GoRoute(
         path: AppRoutes.legacyManifest,
