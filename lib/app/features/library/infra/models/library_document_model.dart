@@ -11,7 +11,6 @@ class LibraryDocumentModel extends Equatable {
   final String? documentUrl;
   final String? institution;
   final int? year;
-  final String? status;
   final DateTime? createdAt;
 
   const LibraryDocumentModel({
@@ -24,7 +23,6 @@ class LibraryDocumentModel extends Equatable {
     this.documentUrl,
     this.institution,
     this.year,
-    this.status,
     this.createdAt,
   });
 
@@ -39,7 +37,6 @@ class LibraryDocumentModel extends Equatable {
         documentUrl,
         institution,
         year,
-        status,
         createdAt,
       ];
 
@@ -58,7 +55,6 @@ class LibraryDocumentModel extends Equatable {
       documentUrl: json['documentUrl'],
       institution: json['institution'],
       year: json['year'] != null ? int.tryParse(json['year'].toString()) : null,
-      status: json['status'],
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
     );
   }
@@ -77,7 +73,6 @@ class LibraryDocumentModel extends Equatable {
       'institution': institution,
       'institution_lower': institution?.toLowerCase(),
       'year': year,
-      'status': status,
       'createdAt': createdAt?.toIso8601String(),
     };
   }
@@ -92,7 +87,6 @@ class LibraryDocumentModel extends Equatable {
     String? documentUrl,
     String? institution,
     int? year,
-    String? status,
     DateTime? createdAt,
   }) {
     return LibraryDocumentModel(
@@ -105,7 +99,6 @@ class LibraryDocumentModel extends Equatable {
       documentUrl: documentUrl ?? this.documentUrl,
       institution: institution ?? this.institution,
       year: year ?? this.year,
-      status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
     );
   }

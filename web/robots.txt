@@ -1,0 +1,5 @@
+# Production only: the dev deploy replaces this file with "Disallow: /".
+User-agent: *
+Disallow: /admin
+Allow: /
+Sitemap: https://observatoriogeohistoria.net.br/sitemap.xml

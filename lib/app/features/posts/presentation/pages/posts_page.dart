@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:observatorio_geo_hist/app/core/components/buttons/secondary_button.dart';
 import 'package:observatorio_geo_hist/app/core/components/error_content/state_error_box.dart';
 import 'package:observatorio_geo_hist/app/core/components/page_content/page_content.dart';
+import 'package:observatorio_geo_hist/app/core/components/page_meta/page_meta_scope.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/breadcrumbs.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/page_header.dart';
 import 'package:observatorio_geo_hist/app/core/components/reading/reading_page_scaffold.dart';
@@ -13,6 +14,7 @@ import 'package:observatorio_geo_hist/app/core/routes/app_routes.dart';
 import 'package:observatorio_geo_hist/app/core/stores/fetch_categories_store.dart';
 import 'package:observatorio_geo_hist/app/core/stores/states/fetch_categories_states.dart';
 import 'package:observatorio_geo_hist/app/core/utils/enums/posts_areas.dart';
+import 'package:observatorio_geo_hist/app/core/utils/seo/route_meta.dart';
 import 'package:observatorio_geo_hist/app/features/posts/posts_setup.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/listing/category_page_skeleton.dart';
 import 'package:observatorio_geo_hist/app/features/posts/presentation/components/listing/posts_listing.dart';
@@ -170,10 +172,15 @@ class _PostsPageState extends State<PostsPage> {
     }
 
     // The per-URL key scrolls back to the top when switching category from the menu.
-    return ReadingPageScaffold(
-      key: ValueKey(_address),
-      header: header,
-      body: body,
+    return PageMetaScope(
+      meta: category == null
+          ? RouteMeta.categoryLoading(widget.area, widget.categoryKey)
+          : RouteMeta.category(widget.area, category),
+      child: ReadingPageScaffold(
+        key: ValueKey(_address),
+        header: header,
+        body: body,
+      ),
     );
   }
 }
