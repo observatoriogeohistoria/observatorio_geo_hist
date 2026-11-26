@@ -124,9 +124,7 @@ Os dois deploys têm um passo **Gerar páginas** depois do build e antes do FTP.
 
 ### Regerar sem commit (agendamento)
 
-O conteúdo do Firestore muda sem commit, então páginas e sitemap ficam velhos até o próximo deploy. O `deploy-prod.yml` traz, **comentados**, um `schedule` (a cada 3 dias, 06:00 UTC) e o job `keepalive`. O GitHub desativa workflows agendados depois de 60 dias sem atividade no repositório; o `keepalive` reativa o workflow pela API a cada execução, com `actions: write` só nesse job (`GITHUB_TOKEN`, sem segredo novo). Agendamento só roda na branch padrão.
-
-Para ativar, depois do primeiro deploy de produção com o gerador: descomente o bloco `schedule:` e o job `keepalive:` no fim do arquivo. Se o ambiente `PROD` exigir aprovação (*Required reviewers*), a execução agendada ficará esperando por ela.
+O conteúdo do Firestore muda sem commit, então páginas e sitemap ficam velhos até o próximo deploy. O `deploy-prod.yml` roda a cada 3 dias (`schedule`, 06:00 UTC), regenerando páginas e sitemap e reenviando só o que mudou. O GitHub desativa workflows agendados depois de 60 dias sem atividade no repositório; o job `keepalive` reativa o workflow pela API a cada execução, com `actions: write` só nele (`GITHUB_TOKEN`, sem segredo novo). Agendamento só roda na branch padrão. Se o ambiente `PROD` exigir aprovação (*Required reviewers*), a execução agendada fica esperando por ela.
 
 ### Validação depois do deploy
 
@@ -187,7 +185,7 @@ Nada disso está implementado.
 
 ## Pendências manuais
 
-- [ ] Ativar o `schedule` e o `keepalive` do `deploy-prod.yml` depois do primeiro deploy de produção com o gerador (ver "Regerar sem commit").
-- [ ] Rodar as listas de "Validação depois do deploy" no dev e em produção.
+- [x] `schedule` e `keepalive` do `deploy-prod.yml` ativos (ver "Regerar sem commit").
+- [x] Checklist de produção rodado em 2026-11-25. O do dev ainda precisa da senha.
 - [ ] Enviar o `sitemap.xml` e pedir a inspeção de URL no Search Console.
 - [ ] Conferir os inodes da HostGator depois do primeiro deploy e anotar em "Tamanho".
