@@ -1,4 +1,4 @@
-name: Deploy Flutter Web (produção)
+name: Deploy do site (produção)
 
 on:
   push:
@@ -16,11 +16,10 @@ on:
       - '.github/workflows/ci.yml'
       - 'analysis_options.yaml'
   workflow_dispatch:
-  # Enable after the first production deploy with the generator. Firestore content changes without
-  # a commit, so the pages and the sitemap have to be regenerated now and then. Also uncomment the
-  # keepalive job at the end of the file.
-  # schedule:
-  #   - cron: '0 6 */3 * *'
+  # Firestore content changes without a commit, so the pages and the sitemap are regenerated now
+  # and then. Scheduled runs only happen on the default branch.
+  schedule:
+    - cron: '0 6 */3 * *'
 
 concurrency:
   group: deploy-prod
@@ -35,7 +34,7 @@ jobs:
     environment: PROD
 
     steps:
-    - name: Checkout code
+    - name: Baixar o código
       uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       with:
         persist-credentials: false
@@ -55,16 +54,16 @@ jobs:
       id: fvm
       run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
 
-    - name: Set up Flutter
+    - name: Configurar o Flutter
       uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
       with:
         flutter-version: ${{ steps.fvm.outputs.version }}
         cache: true
 
-    - name: Install dependencies
+    - name: Instalar dependências
       run: flutter pub get
 
-    - name: Build Flutter Web app
+    - name: Compilar o app Flutter Web
       run: flutter build web --release --dart-define=APP_ENV=prod
 
     - name: Gerar páginas
@@ -80,10 +79,11 @@ jobs:
     # the dev password or cPanel blocks.
     - name: Conferir o .htaccess
       run: |
-        test -f build/web/.htaccess
-        ! grep -qE 'AuthType|AuthUserFile|AddHandler|Require all granted' build/web/.htaccess
+        test -f build/web/.htaccess || { echo ".htaccess ausente no build."; exit 1; }
+        ! grep -qE 'AuthType|AuthUserFile|AddHandler|Require all granted' build/web/.htaccess \
+          || { echo ".htaccess com senha do dev ou bloco do cPanel."; exit 1; }
 
-    - name: Sync build/web to HostGator (produção)
+    - name: Enviar build/web para a HostGator (produção)
       uses: SamKirkland/FTP-Deploy-Action@d0aa83872616587eb552bc831bb9166b3f9c5ad5 # 4.3.0
       with:
         server: ${{ secrets.FTP_HOST }}
@@ -103,15 +103,15 @@ jobs:
           npx --yes firebase-tools@15.34.2 deploy --only firestore:rules,storage \
           --project observatorio-geo-hist --non-interactive
 
-  # Enable together with `schedule`. GitHub disables scheduled workflows after 60 days without
-  # repository activity; this job turns the workflow back on. actions: write only here.
-  # keepalive:
-  #   if: github.event_name == 'schedule'
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     actions: write
-  #   steps:
-  #   - name: Reativar o workflow agendado
-  #     env:
-  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     run: gh api --method PUT "repos/$GITHUB_REPOSITORY/actions/workflows/deploy-prod.yml/enable"
+  # GitHub disables scheduled workflows after 60 days without repository activity; this job turns
+  # the workflow back on. actions: write only here.
+  keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+    - name: Reativar o workflow agendado
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh api --method PUT "repos/$GITHUB_REPOSITORY/actions/workflows/deploy-prod.yml/enable"

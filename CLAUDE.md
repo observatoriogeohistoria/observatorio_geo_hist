@@ -5,6 +5,7 @@ Site do Observatório do Ensino de História e Geografia (UFU). Flutter Web com 
 ## Idioma
 - **Inglês:** nomes de arquivos e pastas (inclusive dos docs), código e comentários no código (Dart, workflows, scripts).
 - **Português do Brasil:** textos do site, documentação (`*.md`) e mensagens de commit.
+- **Workflows:** nomes de workflow e de step e as mensagens que o step imprime (`echo`) em português; comentários e ids de job (`deploy`, `validar`) em inglês. Ids de job não mudam: o nome do job é o check obrigatório dos rulesets.
 - Rotas são texto do site: continuam em português (ver Arquitetura).
 
 ## Estilo de escrita e de código

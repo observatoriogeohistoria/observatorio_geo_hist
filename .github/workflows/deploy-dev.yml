@@ -1,4 +1,4 @@
-name: Deploy Flutter Web (dev)
+name: Deploy do site (dev)
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
     environment: DEV
 
     steps:
-    - name: Checkout code
+    - name: Baixar o código
       uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       with:
         persist-credentials: false
@@ -50,16 +50,16 @@ jobs:
       id: fvm
       run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
 
-    - name: Set up Flutter
+    - name: Configurar o Flutter
       uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
       with:
         flutter-version: ${{ steps.fvm.outputs.version }}
         cache: true
 
-    - name: Install dependencies
+    - name: Instalar dependências
       run: flutter pub get
 
-    - name: Build Flutter Web app
+    - name: Compilar o app Flutter Web
       run: flutter build web --release --dart-define=APP_ENV=dev
 
     - name: Bloquear indexação do ambiente de dev
@@ -96,7 +96,7 @@ jobs:
         printf '\nAuthType Basic\nAuthName "Obs Geo Hist | Ambiente de Testes"\nAuthUserFile "%s"\nRequire valid-user\n' "$HTPASSWD_PATH" >> build/web/.htaccess
         grep -q '^Require valid-user$' build/web/.htaccess
 
-    - name: Sync build/web to HostGator (dev)
+    - name: Enviar build/web para a HostGator (dev)
       uses: SamKirkland/FTP-Deploy-Action@d0aa83872616587eb552bc831bb9166b3f9c5ad5 # 4.3.0
       with:
         server: ${{ secrets.FTP_HOST }}
