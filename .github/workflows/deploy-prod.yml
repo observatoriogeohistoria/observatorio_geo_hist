@@ -16,11 +16,10 @@ on:
       - '.github/workflows/ci.yml'
       - 'analysis_options.yaml'
   workflow_dispatch:
-  # Enable after the first production deploy with the generator. Firestore content changes without
-  # a commit, so the pages and the sitemap have to be regenerated now and then. Also uncomment the
-  # keepalive job at the end of the file.
-  # schedule:
-  #   - cron: '0 6 */3 * *'
+  # Firestore content changes without a commit, so the pages and the sitemap are regenerated now
+  # and then. Scheduled runs only happen on the default branch.
+  schedule:
+    - cron: '0 6 */3 * *'
 
 concurrency:
   group: deploy-prod
@@ -104,15 +103,15 @@ jobs:
           npx --yes firebase-tools@15.34.2 deploy --only firestore:rules,storage \
           --project observatorio-geo-hist --non-interactive
 
-  # Enable together with `schedule`. GitHub disables scheduled workflows after 60 days without
-  # repository activity; this job turns the workflow back on. actions: write only here.
-  # keepalive:
-  #   if: github.event_name == 'schedule'
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     actions: write
-  #   steps:
-  #   - name: Reativar o workflow agendado
-  #     env:
-  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     run: gh api --method PUT "repos/$GITHUB_REPOSITORY/actions/workflows/deploy-prod.yml/enable"
+  # GitHub disables scheduled workflows after 60 days without repository activity; this job turns
+  # the workflow back on. actions: write only here.
+  keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+    - name: Reativar o workflow agendado
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh api --method PUT "repos/$GITHUB_REPOSITORY/actions/workflows/deploy-prod.yml/enable"
