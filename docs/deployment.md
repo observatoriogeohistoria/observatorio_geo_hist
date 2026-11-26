@@ -152,7 +152,7 @@ Só leitura. Use `DEV=https://dev.observatoriogeohistoria.net.br`, `PROD=https:/
    - Cole a URL no [Teste de resultados da pesquisa](https://search.google.com/test/rich-results) e na [validação do Schema.org](https://validator.schema.org/): sem erros.
    - `curl -s $PROD/<rota> | grep -c noindex` → `0`.
 4. **Redirecionamentos (um salto só):** `curl -sI http://observatoriogeohistoria.net.br/contato`, `http://www.…/contato` e `https://www.…/contato` → `301` com `Location: https://observatoriogeohistoria.net.br/contato`. `curl -sI $PROD/contato/` → `301` para `/contato`. `curl -sIL` mostra um único `301`.
-5. **Arquivo `.html`:** `curl -sI $PROD/contato` → `200` e `content-type: text/html`; `curl -s $PROD/contato | grep -c 'id="seo-content"'` → `1`. `curl -sI $PROD/.htaccess` → `404`.
+5. **Arquivo `.html`:** `curl -sI $PROD/contato` → `200` e `content-type: text/html`; `curl -s $PROD/contato | grep -c 'id="seo-content"'` → `1`. `curl -sI $PROD/.htaccess` → `403` (o Apache bloqueia antes da regra do `.htaccess`; `404` também serve). Nunca `200`.
 6. **Hidratação sem piscar:** abra uma publicação em janela anônima, com *Slow 4G* nas ferramentas do navegador. O texto não aparece fora do lugar antes do app (o bloco é invisível), a tela de carregamento sai e `document.getElementById('seo-content')` → `null`. Confira também o app em `/` e navegue entre rotas.
 7. **Google Analytics:** a aba *Rede* carrega `googletagmanager.com` em produção.
 
